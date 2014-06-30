@@ -14,7 +14,7 @@ MAIN=output/main.o \
 DHCP=output/plugins/dhcp.o \
 	output/plugins/dhcp.so
 
-all: prepare everything
+all: prepare everything package
 
 everything: output/main output/plugins/dhcp.so
 
@@ -28,12 +28,24 @@ prepare:
 	if [ ! -d output ]; then mkdir output; fi
 	if [ ! -d output/plugins ]; then mkdir output/plugins; fi
 
+package:
+	if [ ! -d package ]; then mkdir package; fi
+	if [ ! -d package/plugins ]; then mkdir package/plugins; fi
+	cp output/main package/
+	cp output/plugins/*.so package/plugins/
+
 clean:
 	rm -rf $(MAIN)
 	rm -rf $(DHCP)
 	rm -rf output
 
-.PHONY: all everything prepare main plugins dhcp
+allclean:
+	rm -rf $(MAIN)
+	rm -rf $(DHCP)
+	rm -rf output
+	rm -rf package
+
+.PHONY: all everything prepare package main plugins dhcp
 
 #Main
 output/main.o: main/Main.c
