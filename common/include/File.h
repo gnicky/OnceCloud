@@ -6,5 +6,7 @@ int IsDirectoryExist(const char * path);
 unsigned long GetFileSize(const char * fileName);
 int CreateDirectory(const char * path);
 int CreateDirectoryIfNotExist(const char * path);
+int ReadAllText(const char * fileName, char * fileContent);
+int WriteAllText(const char * fileName, const char * fileContent);
 
 #endif
