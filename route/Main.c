@@ -2,7 +2,7 @@
 
 int Activate(int count, char * values [])
 {
-	printf("Activating DHCP Plugin\n");
+	printf("Activating Route Plugin\n");
 	printf("Count: %d\n",count);
 	printf("Values:\n");
 	int i=0;
