@@ -11,6 +11,15 @@ int ActivatePlugin(char * pluginName, int count, char * values [])
 	char pluginPath[256]="plugins/";
 	strcat(pluginPath,pluginName);
 	strcat(pluginPath,".so");	
+
+	FILE * file=NULL;
+	if((file=fopen(pluginPath,"rb"))==NULL)
+	{
+		fprintf(stderr,"Error: Cannot find plugin %s\n",pluginName);
+		return -1;
+	}
+	fclose(file);
+
 	PluginHandle=dlopen(pluginPath,RTLD_LAZY);
 	ErrorMessage=dlerror();
 	if(ErrorMessage!=NULL)
