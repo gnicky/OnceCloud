@@ -34,3 +34,22 @@ unsigned long GetFileSize(const char * fileName)
 	}
 	return (unsigned long)fileStatus.st_size;
 }
+
+int CreateDirectory(const char * path)
+{
+	int status=mkdir(path,S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
+
+int CreateDirectoryIfNotExist(const char * path)
+{
+	if(IsDirectoryExist(path))
+	{
+		return TRUE;
+	}
+	return CreateDirectory(path);
+}

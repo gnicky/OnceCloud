@@ -4,5 +4,7 @@
 int IsFileExist(const char * path);
 int IsDirectoryExist(const char * path);
 unsigned long GetFileSize(const char * fileName);
+int CreateDirectory(const char * path);
+int CreateDirectoryIfNotExist(const char * path);
 
 #endif
