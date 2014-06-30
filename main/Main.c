@@ -36,7 +36,9 @@ int ActivatePlugin(char * pluginName, int count, char * values [])
 		return -1;
 	}
 
+	fprintf(stderr,"Info: Activating plugin \"%s\"\n",pluginName);
 	int returnValue=PluginFunction(count,values);
+	fprintf(stderr,"Info: Plugin \"%s\" returns %d\n",pluginName,returnValue);
 
 	dlclose(PluginHandle);
 	ErrorMessage=dlerror();

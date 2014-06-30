@@ -1,23 +1,25 @@
 CC=gcc
 LD=gcc
 
-CFLAGS=-Wall -Werror -c
-CLIBFLAGS=-Wall -Werror -c -fpic
+CFLAGS=-Wall -Werror -c -Icommon/include/
+CLIBFLAGS=-Wall -Werror -c -fpic -Icommon/include/
 LDFLAGS=-Wall -Werror
 LDLIBFLAGS=-Wall -Werror -shared -lc
 
 DLFLAGS=-ldl
 
-MAIN=output/main.o \
+COMMON=output/common-File.o
+
+MAIN=output/main-Main.o \
 	output/main
 
-DHCP=output/plugins/dhcp.o \
+DHCP=output/plugins/dhcp-Main.o \
 	output/plugins/dhcp.so
 
-FIREWALL=output/plugins/firewall.o \
+FIREWALL=output/plugins/firewall-Main.o \
 	output/plugins/firewall.so
 
-ROUTE=output/plugins/route.o \
+ROUTE=output/plugins/route-Main.o \
 	output/plugins/route.so
 
 all: prepare everything package
@@ -62,33 +64,39 @@ allclean:
 
 .PHONY: all everything prepare package main plugins dhcp firewall route
 
+#Common
+output/common-File.o: common/File.c
+	$(CC) $(CLIBFLAGS) -o $@ $<
+
 #Main
-output/main.o: main/Main.c
+output/main-Main.o: main/Main.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-output/main: output/main.o
+output/main: output/main-Main.o
 	$(LD) $(LDFLAGS) $(DLFLAGS) -o $@ $^
 
 #Plugins
 #DHCP
-output/plugins/dhcp.o: dhcp/Main.c
+output/plugins/dhcp-Main.o: dhcp/Main.c \
+	common/include/File.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/dhcp.so: output/plugins/dhcp.o
+output/plugins/dhcp.so: output/plugins/dhcp-Main.o \
+	output/common-File.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
-output/plugins/firewall.o: firewall/Main.c
+output/plugins/firewall-Main.o: firewall/Main.c
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/firewall.so: output/plugins/firewall.o
+output/plugins/firewall.so: output/plugins/firewall-Main.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Route
-output/plugins/route.o: route/Main.c
+output/plugins/route-Main.o: route/Main.c
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/route.so: output/plugins/route.o
+output/plugins/route.so: output/plugins/route-Main.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 

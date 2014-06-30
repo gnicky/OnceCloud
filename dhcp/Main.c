@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include "File.h"
 
 int Activate(int count, char * values [])
 {
-	printf("Activating DHCP Plugin\n");
+	printf("DHCP Plugin\n");
 	printf("Count: %d\n",count);
 	printf("Values:\n");
 	int i=0;
