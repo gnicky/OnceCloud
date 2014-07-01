@@ -1,0 +1,19 @@
+DHCP插件使用说明
+
+DHCP插件用于配置Linux系统中的DHCP服务（dhcpd），需要系统中安装有DHCP服务。
+（CentOS系统可使用yum install dhcp安装DHCP服务）
+
+1 初始化配置文件：
+初始化配置文件将覆盖现有配置，用于配置新的DHCP服务器或重置损坏的配置。
+用法：netsh dhcp init [子网网络号] [子网掩码] [网关地址] [DNS地址] [地址池起始IP] [地址池结束IP] [默认租期（秒）] [最大租期（秒）]
+
+2 绑定地址：
+添加静态地址绑定。
+用法：netsh dhcp bind [IP地址] [MAC地址]
+
+3 解除地址绑定：
+解除静态地址绑定。
+用法：netsh dhcp unbind [IP地址] [MAC地址]
+
+注：完成配置之后需要运行service dhcpd restart重启dhcpd以使配置生效。
+
