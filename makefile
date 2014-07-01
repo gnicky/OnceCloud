@@ -42,7 +42,8 @@ prepare:
 	if [ ! -d output/plugins ]; then mkdir output/plugins; fi
 
 package:
-	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh plugins/dhcp.so plugins/firewall.so plugins/route.so
+	cp -r doc output/
+	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh doc plugins/dhcp.so plugins/firewall.so plugins/route.so
 
 clean:
 	rm -rf $(NETSH)

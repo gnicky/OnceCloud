@@ -8,14 +8,14 @@ char * ErrorMessage=NULL;
 
 int ActivatePlugin(char * pluginName, int count, char * values [])
 {
-	char pluginPath[256]="plugins/";
+	char pluginPath[256]="/usr/local/netsh/plugins/";
 	strcat(pluginPath,pluginName);
 	strcat(pluginPath,".so");	
 
 	FILE * file=NULL;
 	if((file=fopen(pluginPath,"rb"))==NULL)
 	{
-		fprintf(stderr,"Error: Cannot find plugin %s\n",pluginName);
+		printf("Error: Cannot find plugin %s\n",pluginName);
 		return -1;
 	}
 	fclose(file);
@@ -24,7 +24,7 @@ int ActivatePlugin(char * pluginName, int count, char * values [])
 	ErrorMessage=dlerror();
 	if(ErrorMessage!=NULL)
 	{
-		fprintf(stderr,"Error: %s\n",ErrorMessage);
+		printf("Error: %s\n",ErrorMessage);
 		return -1;
 	}
 
@@ -32,7 +32,7 @@ int ActivatePlugin(char * pluginName, int count, char * values [])
 	ErrorMessage=dlerror();
 	if(ErrorMessage!=NULL)
 	{
-		fprintf(stderr,"Error: %s\n",ErrorMessage);
+		printf("Error: %s\n",ErrorMessage);
 		return -1;
 	}
 
@@ -42,7 +42,7 @@ int ActivatePlugin(char * pluginName, int count, char * values [])
 	ErrorMessage=dlerror();
 	if(ErrorMessage!=NULL)
 	{
-		fprintf(stderr,"Error: %s\n",ErrorMessage);
+		printf("Error: %s\n",ErrorMessage);
 		return -1;
 	}
 	return returnValue;
@@ -52,8 +52,10 @@ int main(int argc, char * argv [])
 {
 	if(argc<2)
 	{
-		fprintf(stderr,"Error: Missing required arguments.\n");
-		return -1;
+		printf("Error: Please specify plugin to activate.\n");
+		printf("Available plugins now:\n");
+		printf("\tdhcp\n\tfirewall\n\troute\n");
+		return 1;
 	}
 	char * pluginName=argv[1];
 	return ActivatePlugin(pluginName,argc-2,&(argv[2]));
