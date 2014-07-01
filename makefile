@@ -10,8 +10,8 @@ DLFLAGS=-ldl
 
 COMMON=output/common-File.o
 
-MAIN=output/main-Main.o \
-	output/main
+NETSH=output/netsh-Main.o \
+	output/netsh
 
 DHCP=output/plugins/dhcp-Main.o \
 	output/plugins/dhcp.so
@@ -24,10 +24,10 @@ ROUTE=output/plugins/route-Main.o \
 
 all: prepare everything package
 
-everything: output/main \
+everything: output/netsh \
 	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/route.so
 
-main: output/main
+netsh: output/netsh
 
 plugin: output/plugins/dhcp.so
 
@@ -44,18 +44,18 @@ prepare:
 package:
 	if [ ! -d package ]; then mkdir package; fi
 	if [ ! -d package/plugins ]; then mkdir package/plugins; fi
-	cp output/main package/
+	cp output/netsh package/
 	cp output/plugins/*.so package/plugins/
 
 clean:
-	rm -rf $(MAIN)
+	rm -rf $(NETSH)
 	rm -rf $(DHCP)
 	rm -rf $(FIREWALL)
 	rm -rf $(ROUTE)
 	rm -rf output
 
 allclean:
-	rm -rf $(MAIN)
+	rm -rf $(NETSH)
 	rm -rf $(DHCP)
 	rm -rf $(FIREWALL)
 	rm -rf $(ROUTE)
@@ -68,11 +68,11 @@ allclean:
 output/common-File.o: common/File.c
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-#Main
-output/main-Main.o: main/Main.c
+#Net Shell
+output/netsh-Main.o: netsh/Main.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-output/main: output/main-Main.o
+output/netsh: output/netsh-Main.o
 	$(LD) $(LDFLAGS) $(DLFLAGS) -o $@ $^
 
 #Plugins
