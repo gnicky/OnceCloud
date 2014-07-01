@@ -1,0 +1,7 @@
+Net Shell使用说明
+
+格式：netsh [插件名] [参数...]
+
+参数说明：
+插件名：/usr/local/netsh/plugins目录下的插件文件（*.so文件）名称，Net Shell将激活指定的插件
+参数：需要传递给指定插件的参数
