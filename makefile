@@ -29,7 +29,7 @@ everything: output/netsh \
 
 netsh: output/netsh
 
-plugin: output/plugins/dhcp.so
+plugin: output/plugins/dhcp.so output/plugins/firewall.so output/plugins/route.so
 
 dhcp: output/plugins/dhcp.so
 
@@ -41,11 +41,8 @@ prepare:
 	if [ ! -d output ]; then mkdir output; fi
 	if [ ! -d output/plugins ]; then mkdir output/plugins; fi
 
-package: prepare everything
-	if [ ! -d package ]; then mkdir package; fi
-	if [ ! -d package/plugins ]; then mkdir package/plugins; fi
-	cp output/netsh package/
-	cp output/plugins/*.so package/plugins/
+package:
+	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh plugins/dhcp.so plugins/firewall.so plugins/route.so
 
 clean:
 	rm -rf $(NETSH)
@@ -54,15 +51,7 @@ clean:
 	rm -rf $(ROUTE)
 	rm -rf output
 
-allclean:
-	rm -rf $(NETSH)
-	rm -rf $(DHCP)
-	rm -rf $(FIREWALL)
-	rm -rf $(ROUTE)
-	rm -rf output
-	rm -rf package
-
-.PHONY: all everything prepare package main plugins dhcp firewall route
+.PHONY: all everything prepare package clean netsh plugins dhcp firewall route
 
 #Common
 output/common-File.o: common/File.c
