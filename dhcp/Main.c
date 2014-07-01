@@ -3,6 +3,8 @@
 #include <memory.h>
 #include "File.h"
 
+#define BUFFER_SIZE 65536
+
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
 void GenerateConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)
@@ -27,8 +29,9 @@ void GenerateConfiguration(char * buffer, const char * ipAddress, const char * h
 void PrintUsage()
 {
 	printf("Usage:\n");
-	printf("Bind IP and MAC:\n\tnetsh dhcp bind [IP] [MAC]\n");
-	printf("Unbind IP:\n\tnetsh dhcp unbind [IP] [MAC]\n");
+	printf("Init config:\n\tnetsh dhcp init [subnet] [netmask] [routers] [dns] [range start] [range end] [default lease time] [max lease time]\n");
+	printf("Bind IP and MAC:\n\tnetsh dhcp bind [ip] [mac]\n");
+	printf("Unbind IP:\n\tnetsh dhcp unbind [ip] [mac]\n");
 }
 
 int Bind(const char * ipAddress, const char * hardwareAddress)
@@ -125,6 +128,59 @@ int Unbind(const char * ipAddress, const char * hardwareAddress)
 	return 0;
 }
 
+void GenerateInitialConfiguration(char * buffer, const char * subnet, const char * netmask, const char * routers, const char * dns
+	, const char * rangeStart, const char * rangeEnd, const char * defaultLease, const char * maxLease)
+{
+	buffer[0]='\0';
+	strcat(buffer,"ddns-update-style interim;\n");
+	strcat(buffer,"ignore client-updates;\n");
+	strcat(buffer,"\n");
+
+	strcat(buffer,"subnet ");
+	strcat(buffer,subnet);
+	strcat(buffer," netmask ");
+	strcat(buffer,netmask);
+	strcat(buffer," {\n");
+
+	strcat(buffer,"\toption routers ");
+	strcat(buffer,routers);
+	strcat(buffer,";\n");
+
+	strcat(buffer,"\toption subnet-mask ");
+	strcat(buffer,netmask);
+	strcat(buffer,";\n");
+
+	strcat(buffer,"\toption domain-name-servers ");
+	strcat(buffer,dns);
+	strcat(buffer,";\n");
+
+	strcat(buffer,"\trange dynamic-bootp ");
+	strcat(buffer,rangeStart);
+	strcat(buffer," ");
+	strcat(buffer,rangeEnd);
+	strcat(buffer,";\n");
+
+	strcat(buffer,"\tdefault-lease-time ");
+	strcat(buffer,defaultLease);
+	strcat(buffer,";\n");
+
+	strcat(buffer,"\tmax-lease-time ");
+	strcat(buffer,maxLease);
+	strcat(buffer,";\n");
+
+	strcat(buffer,"}\n");
+}
+
+int Init(const char * subnet, const char * netmask, const char * routers, const char * dns
+	, const char * rangeStart, const char * rangeEnd, const char * defaultLease, const char * maxLease)
+{
+	char * fileContent=malloc(BUFFER_SIZE);
+	GenerateInitialConfiguration(fileContent,subnet,netmask,routers,dns,rangeStart,rangeEnd,defaultLease,maxLease);
+	WriteAllText(DhcpdConfigurationFileName,fileContent);
+	free(fileContent);
+	return 0;
+}
+
 int Activate(int count, char * values [])
 {
 	if(count==3)
@@ -136,6 +192,13 @@ int Activate(int count, char * values [])
 		if(strcmp(values[0],"unbind")==0)
 		{
 			return Unbind(values[1],values[2]);
+		}
+	}
+	if(count==9)
+	{
+		if(strcmp(values[0],"init")==0)
+		{
+			return Init(values[1],values[2],values[3],values[4],values[5],values[6],values[7],values[8]);
 		}
 	}
 

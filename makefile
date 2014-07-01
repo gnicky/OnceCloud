@@ -41,7 +41,7 @@ prepare:
 	if [ ! -d output ]; then mkdir output; fi
 	if [ ! -d output/plugins ]; then mkdir output/plugins; fi
 
-package:
+package: prepare everything
 	if [ ! -d package ]; then mkdir package; fi
 	if [ ! -d package/plugins ]; then mkdir package/plugins; fi
 	cp output/netsh package/
