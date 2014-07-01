@@ -1,4 +1,4 @@
-Net Shell安装步骤
+Net Shell手动安装步骤
 
 1 创建文件夹：
 	mkdir -p /usr/local/netsh

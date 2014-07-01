@@ -44,6 +44,8 @@ prepare:
 package:
 	cp -r doc output/
 	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh doc plugins/dhcp.so plugins/firewall.so plugins/route.so
+	cat installer/installer.sh output/netsh.tar.gz > output/netsh-installer
+	chmod +x output/netsh-installer
 
 clean:
 	rm -rf $(NETSH)
