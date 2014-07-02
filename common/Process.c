@@ -4,6 +4,23 @@
 
 #include <Type.h>
 
+int SetInput(char * buffer, const char * commandLine)
+{
+	FILE * write=NULL;
+
+	write=popen(commandLine,"w");
+	if(write==NULL)
+	{
+		return FALSE;
+	}
+
+	int length=strlen(buffer);
+	fwrite(buffer,sizeof(char),length,write);
+
+	pclose(write);
+	return TRUE;
+}
+
 int GetOutput(char * buffer, const char * commandLine)
 {
 	buffer[0]='\0';
