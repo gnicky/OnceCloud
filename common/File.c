@@ -5,9 +5,7 @@
 #include <memory.h>
 #include <sys/stat.h>
 
-#define TRUE 1
-#define FALSE 0
-#define BUFFER_SIZE 65536
+#include <Type.h>
 
 int IsFileExist(const char * path)
 {

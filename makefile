@@ -57,7 +57,12 @@ clean:
 .PHONY: all everything prepare package clean netsh plugins dhcp firewall route
 
 #Common
-output/common-File.o: common/File.c
+output/common-File.o: common/File.c common/include/File.h \
+	common/include/Type.h
+	$(CC) $(CLIBFLAGS) -o $@ $<
+
+output/common-Process.o: common/Process.c common/include/Process.h \
+	common/include/Type.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 #Net Shell
@@ -85,10 +90,12 @@ output/plugins/firewall.so: output/plugins/firewall-Main.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Route
-output/plugins/route-Main.o: route/Main.c
+output/plugins/route-Main.o: route/Main.c \
+	common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/route.so: output/plugins/route-Main.o
+output/plugins/route.so: output/plugins/route-Main.o \
+	output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 
