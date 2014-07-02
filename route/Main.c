@@ -16,6 +16,31 @@ void LoadConfiguration(char * buffer)
 	GetOutput(buffer,"iptables-save");
 }
 
+void SaveConfiguration(char * buffer)
+{
+	SetInput(buffer,"iptables-restore");
+}
+
+void GeneratePreRoutingRule(char * buffer, const char * internal, const char * external)
+{
+	buffer[0]='\0';
+	strcat(buffer,"-A PREROUTING -d ");
+	strcat(buffer,external);
+	strcat(buffer,"/32 -j DNAT --to-destination ");
+	strcat(buffer,internal);
+	strcat(buffer,"\n");
+}
+
+void GeneratePostRoutingRule(char * buffer, const char * internal, const char * external)
+{
+	buffer[0]='\0';
+	strcat(buffer,"-A POSTROUTING -s ");
+	strcat(buffer,internal);
+	strcat(buffer,"/32 -j SNAT --to-source ");
+	strcat(buffer,external);
+	strcat(buffer,"\n");
+}
+
 int AddNat(const char * internal, const char * external)
 {
 	char savedChar;
@@ -68,23 +93,12 @@ int AddNat(const char * internal, const char * external)
 
 	// End of the rule
 
-	char preRoutingRule[1000]={0};
-	char postRoutingRule[1000]={0};
-	
-	strcat(preRoutingRule,"-A PREROUTING -d ");
-	strcat(preRoutingRule,external);
-	strcat(preRoutingRule,"/32 -j DNAT --to-destination ");
-	strcat(preRoutingRule,internal);
-	strcat(preRoutingRule,"\n");
-
-	strcat(postRoutingRule,"-A POSTROUTING -s ");
-	strcat(postRoutingRule,internal);
-	strcat(postRoutingRule,"/32 -j SNAT --to-source ");
-	strcat(postRoutingRule,external);
-	strcat(postRoutingRule,"\n");
-
 	if(!exist)
 	{
+		char preRoutingRule[1000]={0};
+		char postRoutingRule[1000]={0};
+		GeneratePreRoutingRule(preRoutingRule,internal,external);
+		GeneratePostRoutingRule(postRoutingRule,internal,external);
 		strcat(newConfiguration,preRoutingRule);
 		strcat(newConfiguration,postRoutingRule);
 	}
@@ -98,6 +112,7 @@ int AddNat(const char * internal, const char * external)
 		printf("%c",newConfiguration[i]);
 	}	
 	
+	SaveConfiguration(newConfiguration);
 	
 	free(newConfiguration);
 	free(originalConfiguration);
