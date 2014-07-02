@@ -22,7 +22,11 @@ FIREWALL=output/plugins/firewall-Main.o \
 ROUTE=output/plugins/route-Main.o \
 	output/plugins/route.so
 
-all: prepare everything package
+all: do_prepare everything do_package do_install
+
+package: do_prepare everything do_package
+
+install: do_prepare everything do_package do_install
 
 everything: output/netsh \
 	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/route.so
@@ -37,15 +41,18 @@ firewall: output/plugins/firewall.so
 
 route: output/plugins/route.so
 
-prepare:
+do_prepare:
 	if [ ! -d output ]; then mkdir output; fi
 	if [ ! -d output/plugins ]; then mkdir output/plugins; fi
 
-package:
+do_package:
 	cp -r doc output/
 	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh doc plugins/dhcp.so plugins/firewall.so plugins/route.so
 	cat installer/installer.sh output/netsh.tar.gz > output/netsh-installer
 	chmod +x output/netsh-installer
+
+do_install:
+	output/netsh-installer
 
 clean:
 	rm -rf $(NETSH)
