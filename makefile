@@ -98,11 +98,11 @@ output/plugins/firewall.so: output/plugins/firewall-Main.o
 
 #Route
 output/plugins/route-Main.o: route/Main.c \
-	common/include/Process.h
+	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 output/plugins/route.so: output/plugins/route-Main.o \
-	output/common-Process.o
+	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 

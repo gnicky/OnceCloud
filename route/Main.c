@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <memory.h>
 
+#include "File.h"
 #include "Process.h"
 
 void PrintUsage()
@@ -19,6 +20,7 @@ void LoadConfiguration(char * buffer)
 void SaveConfiguration(char * buffer)
 {
 	SetInput(buffer,"iptables-restore");
+	WriteAllText("/etc/sysconfig/iptables",buffer);
 }
 
 void GeneratePreRoutingRule(char * buffer, const char * internal, const char * external)
