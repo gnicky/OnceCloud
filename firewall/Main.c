@@ -132,8 +132,8 @@ int AddRule(const char * protocol, const char * internal, const char * external,
 
 	// Check existance here
 	
-	char outbound[1000];
-	char inbound[1000];
+	char outbound[1000]={0};
+	char inbound[1000]={0};
 	GenerateOutboundRule(outbound,protocol,internal,external,port);
 	GenerateInboundRule(inbound,protocol,internal,external,port);
 	
@@ -176,6 +176,70 @@ int AddRule(const char * protocol, const char * internal, const char * external,
 
 int RemoveRule(const char * protocol, const char * internal, const char * external, const char * port)
 {
+	char savedChar;
+	char * originalConfiguration=malloc(1048576);
+	char * newConfiguration=malloc(1048576);
+	newConfiguration[0]='\0';
+
+	LoadConfiguration(originalConfiguration);
+	char * filterStart=strstr(originalConfiguration,"*filter");
+
+	if(filterStart==NULL)
+	{
+		free(newConfiguration);
+		free(originalConfiguration);
+		return 0;
+	}
+
+	savedChar=*filterStart;
+	*filterStart='\0';
+	strcat(newConfiguration,originalConfiguration);
+	*filterStart=savedChar;
+
+	char * ruleStart=strstr(filterStart,":OUTPUT");
+	ruleStart=strstr(ruleStart,"\n");
+	savedChar=*ruleStart;
+	*ruleStart='\0';
+	strcat(newConfiguration,filterStart);
+	*ruleStart=savedChar;
+
+	// From the start of the rule
+
+	char outbound[1000];
+	char inbound[1000];
+	GenerateOutboundRule(outbound,protocol,internal,external,port);
+	GenerateInboundRule(inbound,protocol,internal,external,port);
+
+	strcat(newConfiguration,"\n");
+	char * position=ruleStart+1;
+
+	while(strstr(position,"COMMIT")!=NULL && strstr(position,"COMMIT")!=position)
+	{
+		if(strstr(position,outbound)==position
+			|| strstr(position,inbound)==position)
+		{
+			position=strstr(position,"\n");
+			position=position+strlen("\n");
+		}
+		else
+		{
+			char * lineEnd=strstr(position,"\n");
+			*lineEnd='\0';
+			strcat(newConfiguration,position);
+			strcat(newConfiguration,"\n");
+			*lineEnd='\n';
+			position=lineEnd;
+			position=position+strlen("\n");
+		}
+	}
+
+	char * ruleEnd=position;
+	strcat(newConfiguration,ruleEnd);
+
+	SaveConfiguration(newConfiguration);
+
+	free(newConfiguration);
+	free(originalConfiguration);
 	return 0;
 }
 
@@ -205,6 +269,13 @@ int Activate(int count, char * values [])
 		if(strcmp(command,"remove")==0)
 		{
 			return RemoveRule(protocol,internal,external,port);
+		}
+	}
+	if(count==1)
+	{
+		if(strcmp(values[0],"init")==0)
+		{
+			return InitFirewallRule();
 		}
 	}
 
