@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <memory.h>
 
 #include "File.h"
@@ -90,23 +91,86 @@ void GenerateInboundRule(char * buffer, const char * protocol, const char * inte
 
 int AddRule(const char * protocol, const char * internal, const char * external, const char * port)
 {
-	char buffer[1000];
+	char savedChar;
+	char * originalConfiguration=malloc(1048576);
+	char * newConfiguration=malloc(1048576);
+	newConfiguration[0]='\0';
+
+	LoadConfiguration(originalConfiguration);
+
+	char * filterStart=strstr(originalConfiguration,"*filter");
+	if(filterStart==NULL)
+	{
+		strcat(originalConfiguration,"*filter\n");
+		strcat(originalConfiguration,":INPUT ACCEPT [28:1848]\n");
+		strcat(originalConfiguration,":FORWARD ACCEPT [0:0]\n");
+		strcat(originalConfiguration,":OUTPUT ACCEPT [15:1444]\n");
+		strcat(originalConfiguration,"COMMIT\n");
+		filterStart=strstr(originalConfiguration,"*filter");
+	}
+
+	savedChar=*filterStart;
+	*filterStart='\0';
+	strcat(newConfiguration,originalConfiguration);
+	*filterStart=savedChar;
+
+	char * ruleStart=strstr(filterStart,":OUTPUT");
+	ruleStart=strstr(ruleStart,"\n");
+	ruleStart=ruleStart+strlen("\n");
+
+	savedChar=*ruleStart;
+	*ruleStart='\0';
+	strcat(newConfiguration,filterStart);
+	*ruleStart=savedChar;
+
+	// Start of the filter chain
+	
+	char * ruleEnd=strstr(ruleStart,"COMMIT");
+	savedChar=*ruleEnd;
+	*ruleEnd='\0';
+	strcat(newConfiguration,ruleStart);
+
+	// Check existance here
+	
 	char outbound[1000];
 	char inbound[1000];
-	buffer[0]='\0';
 	GenerateOutboundRule(outbound,protocol,internal,external,port);
 	GenerateInboundRule(inbound,protocol,internal,external,port);
-	strcat(buffer,outbound);
-	strcat(buffer,"\n");
-	strcat(buffer,inbound);
-	strcat(buffer,"\n");
-
-	int length=strlen(buffer);
-	int i=0;
-	for(i=0;i<length;i++)
+	
+	int outboundExist=0;
+	int inboundExist=0;
+	char * outboundPosition=strstr(ruleStart,outbound);
+	char * inboundPosition=strstr(ruleStart,inbound);
+	if(outboundPosition!=NULL)
 	{
-		printf("%c",buffer[i]);
+		outboundExist=1;
 	}
+	if(inboundPosition!=NULL)
+	{
+		inboundExist=1;
+	}
+
+	*ruleEnd=savedChar;
+
+	// End of the filter chain
+
+	if(!outboundExist)
+	{
+		strcat(newConfiguration,outbound);
+		strcat(newConfiguration,"\n");
+	}
+	if(!inboundExist)
+	{
+		strcat(newConfiguration,inbound);
+		strcat(newConfiguration,"\n");
+	}
+
+	strcat(newConfiguration,ruleEnd);
+
+	SaveConfiguration(newConfiguration);
+
+	free(newConfiguration);
+	free(originalConfiguration);
 	return 0;
 }
 
@@ -136,11 +200,11 @@ int Activate(int count, char * values [])
 
 		if(strcmp(command,"add")==0)
 		{
-			AddRule(protocol,internal,external,port);
+			return AddRule(protocol,internal,external,port);
 		}
 		if(strcmp(command,"remove")==0)
 		{
-			RemoveRule(protocol,internal,external,port);
+			return RemoveRule(protocol,internal,external,port);
 		}
 	}
 
