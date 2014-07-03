@@ -8,6 +8,7 @@
 void PrintUsage()
 {
 	printf("Usage:\n");
+	printf("Init firewall:\n\tnetsh firewall init\n");
 	printf("Add Rule:\n\tnetsh firewall add <tcp|udp> <internal ip/netmask]> [external ip/netmask]] <port>\n");
 	printf("Remove Rule:\n\tnetsh firewall remove <tcp|udp> <internal ip/netmask]> [external ip/netmask]] <port>\n");
 }
