@@ -19,8 +19,8 @@ DHCP=output/plugins/dhcp-Main.o \
 FIREWALL=output/plugins/firewall-Main.o \
 	output/plugins/firewall.so
 
-ROUTE=output/plugins/route-Main.o \
-	output/plugins/route.so
+NAT=output/plugins/nat-Main.o \
+	output/plugins/nat.so
 
 all: do_prepare everything do_package do_install
 
@@ -29,17 +29,7 @@ package: do_prepare everything do_package
 install: do_prepare everything do_package do_install
 
 everything: output/netsh \
-	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/route.so
-
-netsh: output/netsh
-
-plugin: output/plugins/dhcp.so output/plugins/firewall.so output/plugins/route.so
-
-dhcp: output/plugins/dhcp.so
-
-firewall: output/plugins/firewall.so
-
-route: output/plugins/route.so
+	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/nat.so
 
 do_prepare:
 	if [ ! -d output ]; then mkdir output; fi
@@ -47,7 +37,7 @@ do_prepare:
 
 do_package:
 	cp -r doc output/
-	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh doc plugins/dhcp.so plugins/firewall.so plugins/route.so
+	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh doc plugins/dhcp.so plugins/firewall.so plugins/nat.so
 	cat installer/installer.sh output/netsh.tar.gz > output/netsh-installer
 	chmod +x output/netsh-installer
 
@@ -58,10 +48,10 @@ clean:
 	rm -rf $(NETSH)
 	rm -rf $(DHCP)
 	rm -rf $(FIREWALL)
-	rm -rf $(ROUTE)
+	rm -rf $(NAT)
 	rm -rf output
 
-.PHONY: all everything prepare package clean netsh plugins dhcp firewall route
+.PHONY: all everything prepare package clean
 
 #Common
 output/common-File.o: common/File.c common/include/File.h \
@@ -96,12 +86,12 @@ output/plugins/firewall-Main.o: firewall/Main.c
 output/plugins/firewall.so: output/plugins/firewall-Main.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
-#Route
-output/plugins/route-Main.o: route/Main.c \
+#NAT
+output/plugins/nat-Main.o: nat/Main.c \
 	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/route.so: output/plugins/route-Main.o \
+output/plugins/nat.so: output/plugins/nat-Main.o \
 	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 

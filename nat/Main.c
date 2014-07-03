@@ -8,8 +8,8 @@
 void PrintUsage()
 {
 	printf("Usage:\n");
-	printf("Add NAT:\n\tnetsh route add [internal ip] [external ip]\n");
-	printf("Remove NAT:\n\tnetsh route remove [internal ip] [external ip]\n");
+	printf("Add NAT:\n\tnetsh nat add [internal ip] [external ip]\n");
+	printf("Remove NAT:\n\tnetsh nat remove [internal ip] [external ip]\n");
 }
 
 void LoadConfiguration(char * buffer)
@@ -20,6 +20,8 @@ void LoadConfiguration(char * buffer)
 void SaveConfiguration(char * buffer)
 {
 	SetInput(buffer,"iptables-restore");
+	WriteAllText("/etc/sysconfig/iptables",buffer);
+	GetOutput(buffer,"iptables-save");
 	WriteAllText("/etc/sysconfig/iptables",buffer);
 }
 

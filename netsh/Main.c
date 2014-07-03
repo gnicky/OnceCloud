@@ -54,7 +54,7 @@ int main(int argc, char * argv [])
 	{
 		printf("Error: Please specify plugin to activate.\n");
 		printf("Available plugins now:\n");
-		printf("\tdhcp\n\tfirewall\n\troute\n");
+		printf("\tdhcp\n\tfirewall\n\tnat\n");
 		return 1;
 	}
 	char * pluginName=argv[1];
