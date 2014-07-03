@@ -58,11 +58,11 @@ int Activate(int count, char * values [])
 			port=values[4];
 		}
 
-		if(strcmp(values[0],"add")==0)
+		if(strcmp(command,"add")==0)
 		{
 			AddRule(protocol,internal,external,port);
 		}
-		if(strcmp(values[0],"remove")==0)
+		if(strcmp(command,"remove")==0)
 		{
 			RemoveRule(protocol,internal,external,port);
 		}
