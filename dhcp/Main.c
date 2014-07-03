@@ -29,9 +29,9 @@ void GenerateConfiguration(char * buffer, const char * ipAddress, const char * h
 void PrintUsage()
 {
 	printf("Usage:\n");
-	printf("Init config:\n\tnetsh dhcp init [subnet] [netmask] [routers] [dns] [range start] [range end] [default lease time] [max lease time]\n");
-	printf("Bind IP and MAC:\n\tnetsh dhcp bind [ip] [mac]\n");
-	printf("Unbind IP:\n\tnetsh dhcp unbind [ip] [mac]\n");
+	printf("Init config:\n\tnetsh dhcp init <subnet> <netmask> <routers> <dns> <range start> <range end> <default lease time> <max lease time>\n");
+	printf("Bind IP and MAC:\n\tnetsh dhcp bind <ip> <mac>\n");
+	printf("Unbind IP:\n\tnetsh dhcp unbind <ip> <mac>\n");
 }
 
 int Bind(const char * ipAddress, const char * hardwareAddress)

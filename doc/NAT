@@ -1,0 +1,10 @@
+NAT插件使用说明
+
+NAT插件用于添加静态的转发规则，将内网IP发布到指定的外网IP。
+
+1 添加转发规则
+	netsh nat add <内网IP> <外网IP>
+
+2 删除转发规则
+	netsh nat remove <内网IP> <外网IP>
+

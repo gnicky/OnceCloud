@@ -8,8 +8,8 @@
 void PrintUsage()
 {
 	printf("Usage:\n");
-	printf("Add NAT:\n\tnetsh nat add [internal ip] [external ip]\n");
-	printf("Remove NAT:\n\tnetsh nat remove [internal ip] [external ip]\n");
+	printf("Add NAT:\n\tnetsh nat add <internal ip> <external ip>\n");
+	printf("Remove NAT:\n\tnetsh nat remove <internal ip> <external ip>\n");
 }
 
 void LoadConfiguration(char * buffer)
