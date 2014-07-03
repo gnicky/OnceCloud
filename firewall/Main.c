@@ -243,6 +243,52 @@ int RemoveRule(const char * protocol, const char * internal, const char * extern
 	return 0;
 }
 
+int InitFirewallRule()
+{
+	char * originalConfiguration=malloc(1048576);
+	char * initialConfiguration=malloc(1048576);
+	initialConfiguration[0]='\0';
+
+	LoadConfiguration(originalConfiguration);
+
+	char * filterStart=strstr(originalConfiguration,"*filter");
+	if(filterStart==NULL)
+	{
+		strcat(initialConfiguration,originalConfiguration);
+	}
+	else
+	{
+		*filterStart='\0';
+		strcat(initialConfiguration,originalConfiguration);		
+		char * filterEnd=strstr(filterStart+1,"COMMIT\n")+strlen("COMMIT\n");
+		strcat(initialConfiguration,filterEnd);
+	}
+	
+	// Initialize "filter" table - DEFAULT ALL DROP
+	strcat(initialConfiguration,"*filter\n");
+	strcat(initialConfiguration,":INPUT DROP [0:0]\n");
+	strcat(initialConfiguration,":FORWARD DROP [0:0]\n");
+	strcat(initialConfiguration,":OUTPUT DROP [0:0]\n");
+
+	// Rules
+	// Allow Local Loopback
+	strcat(initialConfiguration,"-A INPUT -i lo -j ACCEPT\n");
+	strcat(initialConfiguration,"-A OUTPUT -o lo -j ACCEPT\n");
+	// Allow SSH Connection
+	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
+	// Allow Established Connection
+	strcat(initialConfiguration,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(initialConfiguration,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(initialConfiguration,"-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(initialConfiguration,"COMMIT\n");
+
+	SaveConfiguration(initialConfiguration);
+
+	free(originalConfiguration);
+	free(initialConfiguration);
+	return 0;
+}
+
 int Activate(int count, char * values [])
 {
 	if(count==4 || count==5)
