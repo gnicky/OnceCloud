@@ -1,14 +1,73 @@
 #include <stdio.h>
+#include <memory.h>
+
+#include "File.h"
+#include "Process.h"
+
+void PrintUsage()
+{
+	printf("Usage:\n");
+	printf("Add Rule:\n\tnetsh firewall add <tcp|udp> <internal ip[/netmask]> [external ip[/netmask]] <port>\n");
+	printf("Remove Rule:\n\tnetsh firewall remove <tcp|udp> <internal ip[/netmask]> [external ip[/netmask]] <port>\n");
+}
+
+void LoadConfiguration(char * buffer)
+{
+	GetOutput(buffer,"iptables-save");
+}
+
+void SaveConfiguration(char * buffer)
+{
+	SetInput(buffer,"iptables-restore");
+	WriteAllText("/etc/sysconfig/iptables",buffer);
+	GetOutput(buffer,"iptables-save");
+	WriteAllText("/etc/sysconfig/iptables",buffer);
+}
+
+void GenerateFirewallRule(char * buffer, const char * protocol, const char * internal, const char * external, const char * port)
+{
+
+}
+
+int AddRule(const char * protocol, const char * internal, const char * external, const char * port)
+{
+	return 0;
+}
+
+int RemoveRule(const char * protocol, const char * internal, const char * external, const char * port)
+{
+	return 0;
+}
 
 int Activate(int count, char * values [])
 {
-	printf("Firewall Plugin\n");
-	printf("Count: %d\n",count);
-	printf("Values:\n");
-	int i=0;
-	for(i=0;i<count;i++)
+	if(count==4 || count==5)
 	{
-		printf("Argument %d: %s\n",i+1,values[i]);
+		char * command=values[0];
+		char * protocol=values[1];
+		char * internal=values[2];
+		char * external=NULL;
+		char * port=NULL;
+		if(count==4)
+		{
+			port=values[3];
+		}
+		if(count==5)
+		{
+			external=values[3];
+			port=values[4];
+		}
+
+		if(strcmp(values[0],"add")==0)
+		{
+			AddRule(protocol,internal,external,port);
+		}
+		if(strcmp(values[0],"remove")==0)
+		{
+			RemoveRule(protocol,internal,external,port);
+		}
 	}
-	return 0;
+
+	PrintUsage();
+	return 1;
 }

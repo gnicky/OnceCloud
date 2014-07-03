@@ -80,10 +80,12 @@ output/plugins/dhcp.so: output/plugins/dhcp-Main.o \
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
-output/plugins/firewall-Main.o: firewall/Main.c
+output/plugins/firewall-Main.o: firewall/Main.c \
+	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/firewall.so: output/plugins/firewall-Main.o
+output/plugins/firewall.so: output/plugins/firewall-Main.o \
+	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #NAT
