@@ -3,7 +3,7 @@
 #include <dlfcn.h>
 
 void * PluginHandle=NULL;
-int (* PluginFunction) (int argc, char * argv [])=NULL;
+int (* PluginFunction) (int count, char * values [])=NULL;
 char * ErrorMessage=NULL;
 
 int ActivatePlugin(char * pluginName, int count, char * values [])
