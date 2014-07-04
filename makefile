@@ -7,11 +7,15 @@ LDFLAGS=-Wall -Werror
 LDLIBFLAGS=-Wall -Werror -shared -lc
 
 DLFLAGS=-ldl
+PTHREADFLAGS=-pthread
 
-COMMON=output/common-File.o
+COMMON=output/common-File.o output/common-Process.o output/common-Mongoose.o
 
 NETSH=output/netsh-Main.o \
 	output/netsh
+
+NETD=output/netd-Main.o \
+	output/netd
 
 DHCP=output/plugins/dhcp-Main.o \
 	output/plugins/dhcp.so
@@ -28,7 +32,7 @@ package: do_prepare everything do_package
 
 install: do_prepare everything do_package do_install
 
-everything: output/netsh \
+everything: output/netsh output/netd \
 	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/nat.so
 
 do_prepare:
@@ -37,7 +41,7 @@ do_prepare:
 
 do_package:
 	cp -r doc output/
-	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh doc plugins/dhcp.so plugins/firewall.so plugins/nat.so
+	tar --create --file=output/netsh.tar.gz --gzip --directory=output netsh netd doc plugins/dhcp.so plugins/firewall.so plugins/nat.so
 	cat installer/installer.sh output/netsh.tar.gz > output/netsh-installer
 	chmod +x output/netsh-installer
 
@@ -62,12 +66,24 @@ output/common-Process.o: common/Process.c common/include/Process.h \
 	common/include/Type.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
+output/common-Mongoose.o: common/Mongoose.c common/include/Mongoose.h
+	$(CC) $(CLIBFLAGS) $(PTHREADFLAGS) -o $@ $<
+
 #Net Shell
 output/netsh-Main.o: netsh/Main.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 output/netsh: output/netsh-Main.o
 	$(LD) $(LDFLAGS) $(DLFLAGS) -o $@ $^
+
+#Net Daemon
+output/netd-Main.o: netd/Main.c \
+	common/include/Mongoose.h
+	$(CC) $(CLIBFLAGS) $(PTHREADFLAGS) -o $@ $<
+
+output/netd: output/netd-Main.o \
+	output/common-Mongoose.o
+	$(LD) $(LDFLAGS) $(DLFLAGS) $(PTHREADFLAGS) -o $@ $^
 
 #Plugins
 #DHCP
