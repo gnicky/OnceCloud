@@ -87,7 +87,7 @@ output/netd: output/netd-Main.o \
 
 #Plugins
 #DHCP
-output/plugins/dhcp-Main.o: dhcp/Main.c \
+output/plugins/dhcp-Main.o: plugins/dhcp/Main.c \
 	common/include/File.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
@@ -96,7 +96,7 @@ output/plugins/dhcp.so: output/plugins/dhcp-Main.o \
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
-output/plugins/firewall-Main.o: firewall/Main.c \
+output/plugins/firewall-Main.o: plugins/firewall/Main.c \
 	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
@@ -105,7 +105,7 @@ output/plugins/firewall.so: output/plugins/firewall-Main.o \
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #NAT
-output/plugins/nat-Main.o: nat/Main.c \
+output/plugins/nat-Main.o: plugins/nat/Main.c \
 	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
