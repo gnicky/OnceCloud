@@ -78,24 +78,156 @@ void DestroyPlugins()
 	DestroyPlugin(&FirewallPlugin);	
 }
 
+static int HandleDhcpGetRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"DHCP GET<br/>");
+	DhcpPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleDhcpPostRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"DHCP POST<br/>");
+	DhcpPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleDhcpPutRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"DHCP PUT<br/>");
+	DhcpPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleDhcpDeleteRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"DHCP DELETE<br/>");
+	DhcpPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
 static int HandleDhcpRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"DHCP");
-	DhcpPlugin.Activate(0,NULL);
+	mg_printf_data(connection,"DHCP<br/>");
+	if(strcmp(connection->request_method,"GET")==0)
+	{
+		return HandleDhcpGetRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"POST")==0)
+	{
+		return HandleDhcpPostRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"PUT")==0)
+	{
+		return HandleDhcpPutRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"DELETE")==0)
+	{
+		return HandleDhcpDeleteRequest(connection,event);
+	}
+	mg_printf_data(connection,"Unsupported method.<br/>");
+	return MG_TRUE;
+}
+
+static int HandleNatGetRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"NAT GET<br/>");
+	NatPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleNatPostRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"NAT POST<br/>");
+	NatPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleNatPutRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"NAT PUT<br/>");
+	NatPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleNatDeleteRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"NAT DELETE<br/>");
+	NatPlugin.Activate(0,NULL);
 	return MG_TRUE;
 }
 
 static int HandleNatRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"NAT");
-	NatPlugin.Activate(0,NULL);
+	mg_printf_data(connection,"NAT<br/>");
+	if(strcmp(connection->request_method,"GET")==0)
+	{
+		return HandleNatGetRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"POST")==0)
+	{
+		return HandleNatPostRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"PUT")==0)
+	{
+		return HandleNatPutRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"DELETE")==0)
+	{
+		return HandleNatDeleteRequest(connection,event);
+	}
+	mg_printf_data(connection,"Unsupported method.<br/>");
+	return MG_TRUE;
+}
+
+static int HandleFirewallGetRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"Firewall GET<br/>");
+	FirewallPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleFirewallPostRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"Firewall POST<br/>");
+	FirewallPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleFirewallPutRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"Firewall PUT<br/>");
+	FirewallPlugin.Activate(0,NULL);
+	return MG_TRUE;
+}
+
+static int HandleFirewallDeleteRequest(struct mg_connection * connection, enum mg_event event)
+{
+	mg_printf_data(connection,"Firewall DELETE<br/>");
+	FirewallPlugin.Activate(0,NULL);
 	return MG_TRUE;
 }
 
 static int HandleFirewallRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"Firewall");
-	FirewallPlugin.Activate(0,NULL);
+	mg_printf_data(connection,"Firewall<br/>");
+	if(strcmp(connection->request_method,"GET")==0)
+	{
+		return HandleFirewallGetRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"POST")==0)
+	{
+		return HandleFirewallPostRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"PUT")==0)
+	{
+		return HandleFirewallPutRequest(connection,event);
+	}
+	if(strcmp(connection->request_method,"DELETE")==0)
+	{
+		return HandleFirewallDeleteRequest(connection,event);
+	}
+	mg_printf_data(connection,"Unsupported method.<br/>");
 	return MG_TRUE;
 }
 
