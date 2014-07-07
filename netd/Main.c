@@ -80,6 +80,7 @@ void DestroyPlugins()
 
 static int HandleDhcpGetRequest(struct mg_connection * connection, enum mg_event event)
 {
+	// Get list
 	char content[10000];
 	content[0]='\0';
 	strcat(content,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
@@ -106,8 +107,10 @@ static int HandleDhcpGetRequest(struct mg_connection * connection, enum mg_event
 
 static int HandleDhcpPostRequest(struct mg_connection * connection, enum mg_event event)
 {
+	// Add binding
 	const char * ipAddress=mg_get_header(connection,"x-bws-ip-address");
 	const char * hardwareAddress=mg_get_header(connection,"x-bws-hardware-address");
+
 	if(ipAddress==NULL || hardwareAddress==NULL)
 	{
 		char ErrorMessage[]=
@@ -141,14 +144,59 @@ static int HandleDhcpPostRequest(struct mg_connection * connection, enum mg_even
 
 static int HandleDhcpPutRequest(struct mg_connection * connection, enum mg_event event)
 {
-	// Same as POST
-	return HandleDhcpPostRequest(connection,event);
+	// Initialize configuration
+	const char * subnet=mg_get_header(connection,"x-bws-subnet");
+	const char * netmask=mg_get_header(connection,"x-bws-netmask");
+	const char * router=mg_get_header(connection,"x-bws-router");
+	const char * dns=mg_get_header(connection,"x-bws-dns");
+	const char * rangeStart=mg_get_header(connection,"x-bws-range-start");
+	const char * rangeEnd=mg_get_header(connection,"x-bws-range-end");
+	const char * defaultLease=mg_get_header(connection,"x-bws-default-lease");
+	const char * maxLease=mg_get_header(connection,"x-bws-max-lease");
+
+	if(subnet==NULL || netmask==NULL || router==NULL || dns==NULL || rangeStart==NULL || rangeEnd==NULL || defaultLease==NULL || maxLease==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify Sub-network Address, Sub-network Mask, Router, DNS, Range and Lease Time.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("subnet: %s\n",subnet);
+	printf("netmask: %s\n",netmask);
+	printf("router: %s\n",router);
+	printf("dns: %s\n",dns);
+	printf("rangeStart: %s\n",rangeStart);
+	printf("rangeEnd: %s\n",rangeEnd);
+	printf("defaultLease: %s\n",defaultLease);
+	printf("maxLease: %s\n",maxLease);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Initialize configuration
+	// DhcpPlugin.Activate(0,NULL);
+
+	return MG_TRUE;
 }
 
 static int HandleDhcpDeleteRequest(struct mg_connection * connection, enum mg_event event)
 {
+	// Remove binding
 	const char * ipAddress=mg_get_header(connection,"x-bws-ip-address");
 	const char * hardwareAddress=mg_get_header(connection,"x-bws-hardware-address");
+
 	if(ipAddress==NULL || hardwareAddress==NULL)
 	{
 		char ErrorMessage[]=
