@@ -246,40 +246,128 @@ static int HandleDhcpRequest(struct mg_connection * connection, enum mg_event ev
 	{
 		return HandleDhcpDeleteRequest(connection,event);
 	}
+	mg_send_data(connection,"",0);
 	return MG_TRUE;
 }
 
 static int HandleNatGetRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"NAT GET<br/>");
-	NatPlugin.Activate(0,NULL);
+	// Get list
+	char content[10000];
+	content[0]='\0';
+	strcat(content,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	strcat(content,"<ListAllBindingsResult>\n");
+	strcat(content,"\t<Binding>\n");
+	strcat(content,"\t\t<InternalIP>192.168.1.10</InternalIP>\n");
+	strcat(content,"\t\t<ExternalIP>8.8.8.8</ExternalIP>\n");
+	strcat(content,"\t</Binding>\n");
+	strcat(content,"</ListAllBindingsResult>\n");
+
+	int length=strlen(content);
+	char textLength[50];
+	sprintf(textLength,"%d",length);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Type","application/xml");
+	mg_send_header(connection,"Content-Length",textLength);
+	mg_send_data(connection,content,length);
+
+	// TODO: Add list method in DHCP plugin
+	// NatPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleNatPostRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"NAT POST<br/>");
-	NatPlugin.Activate(0,NULL);
+	// Add binding
+	const char * internalIPAddress=mg_get_header(connection,"x-bws-internal-ip-address");
+	const char * externalIPAddress=mg_get_header(connection,"x-bws-external-ip-address");
+
+	if(internalIPAddress==NULL || externalIPAddress==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify internal IP Address and external IP Address.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("Internal IP Address: %s\n",internalIPAddress);
+	printf("External IP Address: %s\n",externalIPAddress);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Add new binding
+	// NatPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleNatPutRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"NAT PUT<br/>");
-	NatPlugin.Activate(0,NULL);
+	// Initialize configuration
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Initialize configuration
+	// NatPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleNatDeleteRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"NAT DELETE<br/>");
-	NatPlugin.Activate(0,NULL);
+	// Remove binding
+	const char * internalIPAddress=mg_get_header(connection,"x-bws-internal-ip-address");
+	const char * externalIPAddress=mg_get_header(connection,"x-bws-external-ip-address");
+
+	if(internalIPAddress==NULL || externalIPAddress==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify internal IP Address and external IP Address.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("Internal IP Address: %s\n",internalIPAddress);
+	printf("External IP Address: %s\n",externalIPAddress);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Remove binding
+	// NatPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleNatRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"NAT<br/>");
 	if(strcmp(connection->request_method,"GET")==0)
 	{
 		return HandleNatGetRequest(connection,event);
@@ -296,7 +384,7 @@ static int HandleNatRequest(struct mg_connection * connection, enum mg_event eve
 	{
 		return HandleNatDeleteRequest(connection,event);
 	}
-	mg_printf_data(connection,"Unsupported method.<br/>");
+	mg_send_data(connection,"",0);
 	return MG_TRUE;
 }
 
@@ -330,7 +418,6 @@ static int HandleFirewallDeleteRequest(struct mg_connection * connection, enum m
 
 static int HandleFirewallRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"Firewall<br/>");
 	if(strcmp(connection->request_method,"GET")==0)
 	{
 		return HandleFirewallGetRequest(connection,event);
@@ -347,7 +434,7 @@ static int HandleFirewallRequest(struct mg_connection * connection, enum mg_even
 	{
 		return HandleFirewallDeleteRequest(connection,event);
 	}
-	mg_printf_data(connection,"Unsupported method.<br/>");
+	mg_send_data(connection,"",0);
 	return MG_TRUE;
 }
 
