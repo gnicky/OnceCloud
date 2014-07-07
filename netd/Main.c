@@ -80,35 +80,108 @@ void DestroyPlugins()
 
 static int HandleDhcpGetRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"DHCP GET<br/>");
-	DhcpPlugin.Activate(0,NULL);
+	char content[10000];
+	content[0]='\0';
+	strcat(content,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	strcat(content,"<ListAllBindingsResult>\n");
+	strcat(content,"\t<Binding>\n");
+	strcat(content,"\t\t<IPAddress>192.168.1.10</IPAddress>\n");
+	strcat(content,"\t\t<HardwareAddress>12:34:56:78:90:AB:CD</HardwareAddress>\n");
+	strcat(content,"\t</Binding>\n");
+	strcat(content,"</ListAllBindingsResult>\n");
+
+	int length=strlen(content);
+	char textLength[50];
+	sprintf(textLength,"%d",length);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Type","application/xml");
+	mg_send_header(connection,"Content-Length",textLength);
+	mg_send_data(connection,content,length);
+
+	// TODO: Add list method in DHCP plugin
+	// DhcpPlugin.Activate(0,NULL);
 	return MG_TRUE;
 }
 
 static int HandleDhcpPostRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"DHCP POST<br/>");
-	DhcpPlugin.Activate(0,NULL);
+	const char * ipAddress=mg_get_header(connection,"x-bws-ip-address");
+	const char * hardwareAddress=mg_get_header(connection,"x-bws-hardware-address");
+	if(ipAddress==NULL || hardwareAddress==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify IP Address and Hardware Address.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("IP Address: %s\n",ipAddress);
+	printf("Hardware Address: %s\n",hardwareAddress);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Add new binding
+	// DhcpPlugin.Activate(0,NULL);
+	
 	return MG_TRUE;
 }
 
 static int HandleDhcpPutRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"DHCP PUT<br/>");
-	DhcpPlugin.Activate(0,NULL);
-	return MG_TRUE;
+	// Same as POST
+	return HandleDhcpPostRequest(connection,event);
 }
 
 static int HandleDhcpDeleteRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"DHCP DELETE<br/>");
-	DhcpPlugin.Activate(0,NULL);
+	const char * ipAddress=mg_get_header(connection,"x-bws-ip-address");
+	const char * hardwareAddress=mg_get_header(connection,"x-bws-hardware-address");
+	if(ipAddress==NULL || hardwareAddress==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify IP Address and Hardware Address.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("IP Address: %s\n",ipAddress);
+	printf("Hardware Address: %s\n",hardwareAddress);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Remove binding
+	// DhcpPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleDhcpRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"DHCP<br/>");
 	if(strcmp(connection->request_method,"GET")==0)
 	{
 		return HandleDhcpGetRequest(connection,event);
@@ -125,7 +198,6 @@ static int HandleDhcpRequest(struct mg_connection * connection, enum mg_event ev
 	{
 		return HandleDhcpDeleteRequest(connection,event);
 	}
-	mg_printf_data(connection,"Unsupported method.<br/>");
 	return MG_TRUE;
 }
 
@@ -237,7 +309,6 @@ static int EventHandler(struct mg_connection * connection, enum mg_event event)
 
 	if(event==MG_REQUEST)
 	{
-		mg_printf_data(connection,"Hello! Requested URI is [%s]",connection->uri);
 		if(strcmp(connection->uri,"/DHCP")==0)
 		{
 			return HandleDhcpRequest(connection,event);
