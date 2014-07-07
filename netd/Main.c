@@ -390,29 +390,127 @@ static int HandleNatRequest(struct mg_connection * connection, enum mg_event eve
 
 static int HandleFirewallGetRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"Firewall GET<br/>");
-	FirewallPlugin.Activate(0,NULL);
+	// Get list
+	char content[10000];
+	content[0]='\0';
+	strcat(content,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	strcat(content,"<ListAllRulesResult>\n");
+	strcat(content,"\t<Rule>\n");
+	strcat(content,"\t\t<Protocol>tcp</Protocol>\n");
+	strcat(content,"\t\t<InternalIPRange>192.168.1.0/24</InternalIPRange>\n");
+	strcat(content,"\t\t<ExternalIPRange>0.0.0.0/0</ExternalIPRange>\n");
+	strcat(content,"\t\t<Port>22</Port>\n");
+	strcat(content,"\t</Rule>\n");
+	strcat(content,"</ListAllRulesResult>\n");
+
+	int length=strlen(content);
+	char textLength[50];
+	sprintf(textLength,"%d",length);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Type","application/xml");
+	mg_send_header(connection,"Content-Length",textLength);
+	mg_send_data(connection,content,length);
+
+	// TODO: Add list method in Firewall plugin
+	// FirewallPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleFirewallPostRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"Firewall POST<br/>");
-	FirewallPlugin.Activate(0,NULL);
+	// Add rule
+	const char * protocol=mg_get_header(connection,"x-bws-protocol");
+	const char * internalIPRange=mg_get_header(connection,"x-bws-internal-ip-range");
+	const char * externalIPRange=mg_get_header(connection,"x-bws-external-ip-range");
+	const char * port=mg_get_header(connection,"x-bws-port");
+
+	if(protocol==NULL || internalIPRange==NULL || port==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify Protocol, Internal IP Range and Port.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("Protocol: %s\n",protocol);
+	printf("Internal IP Range: %s\n",internalIPRange);
+	printf("External IP Range: %s\n",externalIPRange);
+	printf("Port: %s\n",port);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Add new rule
+	// FirewallPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleFirewallPutRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"Firewall PUT<br/>");
-	FirewallPlugin.Activate(0,NULL);
+	// Initialize configuration
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Initialize configuration
+	// FirewallPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
 static int HandleFirewallDeleteRequest(struct mg_connection * connection, enum mg_event event)
 {
-	mg_printf_data(connection,"Firewall DELETE<br/>");
-	FirewallPlugin.Activate(0,NULL);
+	// Remove rule
+	const char * protocol=mg_get_header(connection,"x-bws-protocol");
+	const char * internalIPRange=mg_get_header(connection,"x-bws-internal-ip-range");
+	const char * externalIPRange=mg_get_header(connection,"x-bws-external-ip-range");
+	const char * port=mg_get_header(connection,"x-bws-port");
+
+	if(protocol==NULL || internalIPRange==NULL || port==NULL)
+	{
+		char ErrorMessage[]=
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			"<Error>\n\tPlease specify Protocol, Internal IP Range and Port.\n</Error>\n";
+
+		int length=strlen(ErrorMessage);
+		char textLength[50];
+		sprintf(textLength,"%d",length);
+
+		mg_send_status(connection,400);
+		mg_send_header(connection,"Content-Type","application/xml");
+		mg_send_header(connection,"Content-Length",textLength);
+		mg_send_data(connection,ErrorMessage,length);
+
+		return MG_TRUE;
+	}
+
+	printf("Protocol: %s\n",protocol);
+	printf("Internal IP Range: %s\n",internalIPRange);
+	printf("External IP Range: %s\n",externalIPRange);
+	printf("Port: %s\n",port);
+
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+
+	// TODO: Remove rule
+	// FirewallPlugin.Activate(0,NULL);
+
 	return MG_TRUE;
 }
 
