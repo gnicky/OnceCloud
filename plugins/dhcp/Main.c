@@ -3,6 +3,8 @@
 #include <memory.h>
 #include "File.h"
 
+#include "PluginInterface.h"
+
 #define BUFFER_SIZE 65536
 
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
