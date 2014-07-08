@@ -9,8 +9,6 @@
 int InitPlugin();
 struct PluginMetadata GetMetadata();
 
-int HandleCommandLine(int count, char * values []);
-
 int HandleGetRequest(struct mg_connection * connection, enum mg_event event);
 int HandleHeadRequest(struct mg_connection * connection, enum mg_event event);
 int HandlePostRequest(struct mg_connection * connection, enum mg_event event);
