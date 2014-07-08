@@ -21,6 +21,36 @@ int Destroy()
 	return 0;
 }
 
+int HandleGetRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("GET Firewall\n");
+	return MG_FALSE;
+}
+
+int HandleHeadRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("HEAD Firewall\n");
+	return MG_FALSE;
+}
+
+int HandlePostRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("POST FIrewall\n");
+	return MG_FALSE;
+}
+
+int HandlePutRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("PUT FIrewall\n");
+	return MG_FALSE;
+}
+
+int HandleDeleteRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("DELETE Firewall\n");
+	return MG_FALSE;
+}
+
 void PrintUsage()
 {
 	printf("Usage:\n");

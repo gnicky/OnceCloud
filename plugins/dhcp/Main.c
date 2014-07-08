@@ -24,6 +24,36 @@ int Destroy()
 	return 0;
 }
 
+int HandleGetRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("GET DHCP\n");
+	return MG_FALSE;
+}
+
+int HandleHeadRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("HEAD DHCP\n");
+	return MG_FALSE;
+}
+
+int HandlePostRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("POST DHCP\n");
+	return MG_FALSE;
+}
+
+int HandlePutRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("PUT DHCP\n");
+	return MG_FALSE;
+}
+
+int HandleDeleteRequest(struct mg_connection * connection, enum mg_event event)
+{
+	printf("DELETE DHCP\n");
+	return MG_FALSE;
+}
+
 void GenerateConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)
 {
 	buffer[0]='\0';

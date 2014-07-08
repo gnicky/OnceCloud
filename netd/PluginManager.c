@@ -154,6 +154,51 @@ struct Plugin DoLoadPlugin(const char * path)
 		exit(1);
 	}
 
+	*(void **)(&(plugin.HandleGetRequest))=dlsym(handle,"HandleGetRequest");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"HandleGetRequest\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
+	*(void **)(&(plugin.HandleHeadRequest))=dlsym(handle,"HandleHeadRequest");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"HandleHeadRequest\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
+	*(void **)(&(plugin.HandlePostRequest))=dlsym(handle,"HandlePostRequest");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"HandlePostRequest\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
+	*(void **)(&(plugin.HandlePutRequest))=dlsym(handle,"HandlePutRequest");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"HandlePutRequest\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
+	*(void **)(&(plugin.HandleDeleteRequest))=dlsym(handle,"HandleDeleteRequest");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"HandleDeleteRequest\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
 	printf("Plugin file loaded: %s\n",plugin.Path);
 	printf("Name=%s, Version=%s\n\n",plugin.Name,plugin.Version);
 	return plugin;
