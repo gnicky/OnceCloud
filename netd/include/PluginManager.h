@@ -3,8 +3,9 @@
 
 #define MAX_PLUGIN_COUNT 100
 
-struct Plugin Plugins[MAX_PLUGIN_COUNT];
-
 void LoadPlugins();
+void UnloadPlugins();
+
+struct Plugin * FindPlugin(const char * pluginName);
 
 #endif

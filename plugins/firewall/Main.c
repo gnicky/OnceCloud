@@ -4,6 +4,10 @@
 
 #include "File.h"
 #include "Process.h"
+#include "PluginInterface.h"
+
+const char * PluginName="Firewall";
+const char * PluginVersion="1.0.0.0";
 
 void PrintUsage()
 {

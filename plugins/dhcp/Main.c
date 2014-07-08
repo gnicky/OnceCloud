@@ -7,6 +7,9 @@
 
 #define BUFFER_SIZE 65536
 
+const char * PluginName="DHCP";
+const char * PluginVersion="1.0.0.0";
+
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
 void GenerateConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)

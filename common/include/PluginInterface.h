@@ -5,9 +5,11 @@
 
 #include "Mongoose.h"
 
-int InitPlugin();
-const char * GetPluginName();
-const char * GetPluginVersion();
+extern const char * PluginName;
+extern const char * PluginVersion;
+
+int Initialize();
+int Destroy();
 
 int HandleGetRequest(struct mg_connection * connection, enum mg_event event);
 int HandleHeadRequest(struct mg_connection * connection, enum mg_event event);

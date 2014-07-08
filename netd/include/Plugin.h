@@ -11,6 +11,9 @@ struct Plugin
 	char Name[100];
 	char Version[100];
 
+	int (* Initialize) ();
+	int (* Destroy) ();
+
 	int (* HandleGetRequest) (struct mg_connection * connection, enum mg_event event);
 	int (* HandleHeadRequest) (struct mg_connection * connection, enum mg_event event);
 	int (* HandlePostRequest) (struct mg_connection * connection, enum mg_event event);

@@ -2,14 +2,18 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <errno.h>
+#include <dlfcn.h>
 
 #include "Plugin.h"
 #include "PluginManager.h"
 
 const char * PluginBasePath="/usr/local/netd/plugins";
 
-int ListFiles(const char * path, const char * suffix, char * buffer []);
+struct Plugin Plugins[MAX_PLUGIN_COUNT];
+int PluginCount;
 
+int ListFiles(const char * path, const char * suffix, char * buffer []);
+struct Plugin DoLoadPlugin(const char * path);
 
 void LoadPlugins()
 {
@@ -24,9 +28,10 @@ void LoadPlugins()
 	}
 
 	count=ListFiles(PluginBasePath,".so",pluginFileNames);
+	PluginCount=count;
 	for(i=0;i<count;i++)
 	{
-		printf("%s\n",pluginFileNames[i]);
+		Plugins[i]=DoLoadPlugin(pluginFileNames[i]);
 	}
 
 	for(i=0;i<MAX_PLUGIN_COUNT;i++)
@@ -34,6 +39,78 @@ void LoadPlugins()
 		free(pluginFileNames[i]);
 	}
 	free(pluginFileNames);
+}
+
+void UnloadPlugins()
+{
+	
+}
+
+struct Plugin DoLoadPlugin(const char * path)
+{
+	char * error=NULL;
+
+	FILE * file=NULL;
+	if((file=fopen(path,"rb"))==NULL)
+	{
+		printf("Error: Cannot open plugin file %s. ",path);
+		printf("(%s)\n",strerror(errno));
+		printf("Halt.\n");
+		exit(1);
+	}
+	fclose(file);
+
+	void * handle=dlopen(path,RTLD_LAZY);
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot load plugin file %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
+	const char ** name=(const char **)dlsym(handle,"PluginName");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot read plugin name from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+	
+	const char ** version=(const char **)dlsym(handle,"PluginVersion");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot read plugin version from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
+
+	struct Plugin plugin;
+	memset(&plugin,0,sizeof(struct Plugin));
+
+	plugin.Handle=handle;
+	strcpy(plugin.Path,path);
+	strcpy(plugin.Name,*name);
+	strcpy(plugin.Version,*version);
+
+	printf("Plugin file loaded: %s\n",plugin.Path);
+	printf("Name=%s, Version=%s\n\n",plugin.Name,plugin.Version);
+	return plugin;
+}
+
+struct Plugin * FindPlugin(const char * pluginName)
+{
+	int i=0;
+	for(i=0;i<PluginCount;i++)
+	{
+		if(strcmp(Plugins[i].Name,pluginName)==0)
+		{
+			return &(Plugins[i]);
+		}
+	}
+	return NULL;
 }
 
 int ListFiles(const char * path, const char * suffix, char ** buffer)
