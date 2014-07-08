@@ -6,6 +6,8 @@ CLIBFLAGS=-Wall -Werror -c -fpic -Icommon/include/
 LDFLAGS=-Wall -Werror
 LDLIBFLAGS=-Wall -Werror -shared -lc
 
+NETDFLAGS=-Inetd/include/
+
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
 
@@ -69,9 +71,14 @@ output/common-Mongoose.o: common/Mongoose.c common/include/Mongoose.h
 #Net Daemon
 output/netd-Main.o: netd/Main.c \
 	common/include/Mongoose.h
-	$(CC) $(CLIBFLAGS) $(PTHREADFLAGS) -o $@ $<
+	$(CC) $(CLIBFLAGS) $(NETDFLAGS) $(PTHREADFLAGS) -o $@ $<
 
-output/netd: output/netd-Main.o \
+output/netd-PluginManager.o: netd/PluginManager.c netd/include/PluginManager.h \
+	netd/include/Plugin.h \
+	common/include/PluginInterface.h common/include/Mongoose.h
+	$(CC) $(CLIBFLAGS) $(NETDFLAGS) $(PTHREADFLAGS) -o $@ $<
+
+output/netd: output/netd-Main.o output/netd-PluginManager.o \
 	output/common-Mongoose.o
 	$(LD) $(LDFLAGS) $(DLFLAGS) $(PTHREADFLAGS) -o $@ $^
 
