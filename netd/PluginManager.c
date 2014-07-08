@@ -14,6 +14,10 @@ int PluginCount;
 
 int ListFiles(const char * path, const char * suffix, char * buffer []);
 struct Plugin DoLoadPlugin(const char * path);
+void LoadPlugins();
+void UnloadPlugins();
+void InitializePlugins();
+void DestroyPlugins();
 
 void LoadPlugins()
 {
@@ -39,11 +43,48 @@ void LoadPlugins()
 		free(pluginFileNames[i]);
 	}
 	free(pluginFileNames);
+
+	InitializePlugins();
 }
 
 void UnloadPlugins()
 {
-	
+	char * error=NULL;
+	int i=0;
+
+	DestroyPlugins();
+
+	for(i=0;i<PluginCount;i++)
+	{
+		dlclose(Plugins[i].Handle);
+		if((error=dlerror())!=NULL)
+		{
+			printf("Error: Cannot destroy plugin %s. ",Plugins[i].Name);
+			printf("(%s)\n",error);
+			printf("Halt.\n");
+			exit(1);
+		}
+	}
+}
+
+void InitializePlugins()
+{
+	int i=0;
+
+	for(i=0;i<PluginCount;i++)
+	{
+		Plugins[i].Initialize();
+	}
+}
+
+void DestroyPlugins()
+{
+	int i=0;
+
+	for(i=0;i<PluginCount;i++)
+	{
+		Plugins[i].Destroy();
+	}
 }
 
 struct Plugin DoLoadPlugin(const char * path)
@@ -94,6 +135,24 @@ struct Plugin DoLoadPlugin(const char * path)
 	strcpy(plugin.Path,path);
 	strcpy(plugin.Name,*name);
 	strcpy(plugin.Version,*version);
+
+	*(void **)(&(plugin.Initialize))=dlsym(handle,"Initialize");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"Initialize\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}	
+
+	*(void **)(&(plugin.Destroy))=dlsym(handle,"Destroy");
+	if((error=dlerror())!=NULL)
+	{
+		printf("Error: Cannot get function \"Destroy\" from %s. ",path);
+		printf("(%s)\n",error);
+		printf("Halt.\n");
+		exit(1);
+	}
 
 	printf("Plugin file loaded: %s\n",plugin.Path);
 	printf("Name=%s, Version=%s\n\n",plugin.Name,plugin.Version);

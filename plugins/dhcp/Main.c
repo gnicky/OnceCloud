@@ -12,6 +12,18 @@ const char * PluginVersion="1.0.0.0";
 
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
+int Initialize()
+{
+	printf("Initialize dhcp plugin.\n");
+	return 0;
+}
+
+int Destroy()
+{
+	printf("Destroy dhcp plugin.\n");
+	return 0;
+}
+
 void GenerateConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)
 {
 	buffer[0]='\0';

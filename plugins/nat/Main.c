@@ -9,6 +9,18 @@
 const char * PluginName="NAT";
 const char * PluginVersion="1.0.0.0";
 
+int Initialize()
+{
+	printf("Initialize nat plugin.\n");
+	return 0;
+}
+
+int Destroy()
+{
+	printf("Destroy nat plugin.\n");
+	return 0;
+}
+
 void PrintUsage()
 {
 	printf("Usage:\n");
