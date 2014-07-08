@@ -24,32 +24,48 @@ int Destroy()
 int HandleGetRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("GET NAT\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandleHeadRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("HEAD NAT\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandlePostRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("POST NAT\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandlePutRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("PUT NAT\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandleDeleteRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("DELETE NAT\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
+
 void PrintUsage()
 {
 	printf("Usage:\n");

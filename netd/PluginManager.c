@@ -101,7 +101,7 @@ struct Plugin DoLoadPlugin(const char * path)
 	}
 	fclose(file);
 
-	void * handle=dlopen(path,RTLD_LAZY);
+	void * handle=dlopen(path,RTLD_NOW);
 	if((error=dlerror())!=NULL)
 	{
 		printf("Error: Cannot load plugin file %s. ",path);
@@ -199,8 +199,6 @@ struct Plugin DoLoadPlugin(const char * path)
 		exit(1);
 	}
 
-	printf("Plugin file loaded: %s\n",plugin.Path);
-	printf("Name=%s, Version=%s\n\n",plugin.Name,plugin.Version);
 	return plugin;
 }
 

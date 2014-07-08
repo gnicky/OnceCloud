@@ -40,7 +40,7 @@ do_prepare:
 
 do_package:
 	cp -r doc output/
-	tar --create --file=output/netd.tar.gz --gzip --directory=output netd doc plugins/dhcp.so plugins/firewall.so plugins/nat.so
+	tar --create --file=output/netd.tar.gz --gzip --directory=output netd doc plugins
 	cat installer/installer.sh output/netd.tar.gz > output/netd-installer
 	chmod +x output/netd-installer
 
@@ -49,6 +49,7 @@ do_install:
 
 clean:
 	rm -rf $(NETD)
+	rm -rf $(COMMON)
 	rm -rf $(DHCP)
 	rm -rf $(FIREWALL)
 	rm -rf $(NAT)
@@ -84,30 +85,30 @@ output/netd: output/netd-Main.o output/netd-PluginManager.o \
 
 #Plugins
 #DHCP
-output/plugins/dhcp-Main.o: plugins/dhcp/Main.c \
+output/plugins-dhcp-Main.o: plugins/dhcp/Main.c \
 	common/include/File.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/dhcp.so: output/plugins/dhcp-Main.o \
-	output/common-File.o
+output/plugins/dhcp.so: output/plugins-dhcp-Main.o \
+	output/common-File.o output/common-Mongoose.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
-output/plugins/firewall-Main.o: plugins/firewall/Main.c \
+output/plugins-firewall-Main.o: plugins/firewall/Main.c \
 	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/firewall.so: output/plugins/firewall-Main.o \
-	output/common-File.o output/common-Process.o
+output/plugins/firewall.so: output/plugins-firewall-Main.o \
+	output/common-File.o output/common-Process.o output/common-Mongoose.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #NAT
-output/plugins/nat-Main.o: plugins/nat/Main.c \
+output/plugins-nat-Main.o: plugins/nat/Main.c \
 	common/include/File.h common/include/Process.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/nat.so: output/plugins/nat-Main.o \
-	output/common-File.o output/common-Process.o
+output/plugins/nat.so: output/plugins-nat-Main.o \
+	output/common-File.o output/common-Process.o output/common-Mongoose.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 

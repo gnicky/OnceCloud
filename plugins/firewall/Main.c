@@ -24,31 +24,46 @@ int Destroy()
 int HandleGetRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("GET Firewall\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandleHeadRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("HEAD Firewall\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandlePostRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("POST FIrewall\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandlePutRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("PUT FIrewall\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 int HandleDeleteRequest(struct mg_connection * connection, enum mg_event event)
 {
 	printf("DELETE Firewall\n");
-	return MG_FALSE;
+	mg_send_status(connection,200);
+	mg_send_header(connection,"Content-Length","0");
+	mg_send_data(connection,"",0);
+	return MG_TRUE;
 }
 
 void PrintUsage()
