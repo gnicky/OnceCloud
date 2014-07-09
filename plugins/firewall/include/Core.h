@@ -5,7 +5,7 @@
 
 int AddRule(const char * protocol, const char * internal, const char * external, const char * port);
 int RemoveRule(const char * protocol, const char * internal, const char * external, const char * port);
-int InitFirewallRule();
+int InitializeFirewallRule();
 int ListFirewallRule(struct FirewallRule * buffer, int * count);
 
 #endif

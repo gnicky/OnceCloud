@@ -228,7 +228,7 @@ int RemoveRule(const char * protocol, const char * internal, const char * extern
 	return 0;
 }
 
-int InitializeFirewall()
+int InitializeFirewallRule()
 {
 	char * originalConfiguration=malloc(1048576);
 	char * initialConfiguration=malloc(1048576);
@@ -290,36 +290,47 @@ int ListFirewallRule(struct FirewallRule * buffer, int * count)
 	{
 		char * filterEnd=strstr(filterStart,"COMMIT\n");
 		*filterEnd='\0';
-		char * ruleStart=strstr(configuration,"-A FORWARD ");
-		char * position=NULL;
-		while((position=strstr(ruleStart,"-A FORWARD "))!=NULL)
+		char * ruleStart=strstr(filterStart,"-A FORWARD ");
+		if(ruleStart!=NULL)
 		{
-			char * lineEnd=strstr(ruleStart,"\n");
-			*lineEnd='\0';
-			if(strstr(position,"--sport ")!=NULL)
+			char * position=NULL;
+			while((position=strstr(ruleStart,"-A FORWARD "))!=NULL)
 			{
-				char protocol[10];
-				char internalIPRange[30];
-				char externalIPRange[30];
-				char port[10];
+				char * lineEnd=strstr(ruleStart,"\n");
+				*lineEnd='\0';
+				if(strstr(position,"--sport ")!=NULL)
+				{
+					char protocol[10];
+					char internalIPRange[30];
+					char externalIPRange[30];
+					char port[10];
 
-				sscanf(strstr(position,"-s "),"-s %s ",internalIPRange);
-				sscanf(strstr(position,"-d "),"-d %s ",externalIPRange);
-				sscanf(strstr(position,"-p "),"-p %s ",protocol);
-				sscanf(strstr(position,"--sport "),"--sport %s ",port);
-				
-				strcpy(buffer[i].Protocol,protocol);
-				strcpy(buffer[i].InternalIPRange,internalIPRange);
-				strcpy(buffer[i].ExternalIPRange,externalIPRange);
-				strcpy(buffer[i].Port,port);
+					sscanf(strstr(position,"-s "),"-s %s ",internalIPRange);
+					if(strstr(position,"-d ")!=NULL)
+					{
+						sscanf(strstr(position,"-d "),"-d %s ",externalIPRange);
+					}
+					else
+					{
+						externalIPRange[0]='\0';
+					}
+					sscanf(strstr(position,"-p "),"-p %s ",protocol);
+					sscanf(strstr(position,"--sport "),"--sport %s ",port);
 
-				i++;
+					strcpy(buffer[i].Protocol,protocol);
+					strcpy(buffer[i].InternalIPRange,internalIPRange);
+					strcpy(buffer[i].ExternalIPRange,externalIPRange);
+					strcpy(buffer[i].Port,port);
+
+					i++;
+				}
+				*lineEnd='\n';
+				ruleStart=strstr(position,"\n")+1;
 			}
-			*lineEnd='\n';
-			ruleStart=strstr(position,"\n")+1;
 		}
 	}
 
+	*count=i;
 	free(configuration);
 	return 0;
 }
