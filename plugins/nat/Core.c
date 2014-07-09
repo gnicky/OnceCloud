@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <memory.h>
 
 #include "File.h"
@@ -36,6 +37,16 @@ void GeneratePostRoutingRule(char * buffer, const char * internal, const char * 
 	strcat(buffer,external);
 }
 
+void GenerateDefaultConfiguration(char * buffer)
+{
+	buffer[0]='\0';
+	strcat(buffer,"*nat\n");
+	strcat(buffer,":PREROUTING ACCEPT [0:0]\n");
+	strcat(buffer,":POSTROUTING ACCEPT [0:0]\n");
+	strcat(buffer,":OUTPUT ACCEPT [0:0]\n");
+	strcat(buffer,"COMMIT\n");
+}
+
 int AddNat(const char * internal, const char * external)
 {
 	char savedChar;
@@ -47,11 +58,10 @@ int AddNat(const char * internal, const char * external)
 	char * natStart=strstr(originalConfiguration,"*nat");
 	if(natStart==NULL)
 	{
-		strcat(originalConfiguration,"*nat\n");
-		strcat(originalConfiguration,":PREROUTING ACCEPT [0:0]\n");
-		strcat(originalConfiguration,":POSTROUTING ACCEPT [0:0]\n");
-		strcat(originalConfiguration,":OUTPUT ACCEPT [0:0]\n");
-		strcat(originalConfiguration,"COMMIT\n");
+		char * defaultConfiguration=malloc(1000);
+		GenerateDefaultConfiguration(defaultConfiguration);
+		strcat(originalConfiguration,defaultConfiguration);
+		free(defaultConfiguration);
 		natStart=strstr(originalConfiguration,"*nat");
 	}
 
@@ -187,6 +197,34 @@ int ListNatEntry(struct NatEntry * buffer, int * count)
 
 int InitializeNat()
 {
-	// TODO
+	char * originalConfiguration=malloc(1048576);
+	char * newConfiguration=malloc(1048576);
+	newConfiguration[0]='\0';
+
+	char * defaultConfiguration=malloc(1000);
+	GenerateDefaultConfiguration(defaultConfiguration);
+	
+	LoadConfiguration(originalConfiguration);
+	char * natStart=strstr(originalConfiguration,"*nat");
+	if(natStart==NULL)
+	{
+		strcat(newConfiguration,originalConfiguration);
+		strcat(newConfiguration,defaultConfiguration);
+	}
+	else
+	{
+		char * natEnd=strstr(natStart,"COMMIT\n");
+		*natStart='\0';
+		strcat(newConfiguration,originalConfiguration);
+		strcat(newConfiguration,defaultConfiguration);
+		strcat(newConfiguration,natEnd+strlen("COMMIT\n"));
+	}
+
+	SaveConfiguration(newConfiguration);
+
+	free(originalConfiguration);
+	free(newConfiguration);
+	free(defaultConfiguration);
+
 	return 0;
 }
