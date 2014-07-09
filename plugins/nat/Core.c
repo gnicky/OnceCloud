@@ -190,8 +190,34 @@ int RemoveNat(const char * internal, const char * external)
 
 int ListNatEntry(struct NatEntry * buffer, int * count)
 {
-	// TODO
-	*count=0;
+	char * configuration=malloc(1048576);
+	LoadConfiguration(configuration);
+
+	int i=0;
+	char * natStart=strstr(configuration,"*nat");
+	if(natStart!=NULL)
+	{
+		char * natEnd=strstr(configuration,"COMMIT\n");
+		*natEnd='\0';
+		char * position=NULL;
+		while((position=strstr(natStart,"-A POSTROUTING -s "))!=NULL)
+		{
+			char internal[30];
+			char external[30];
+			char * lineEnd=strstr(natStart,"\n");
+			*lineEnd='\0';
+			sscanf(position,"-A POSTROUTING -s %s -j SNAT --to-source %s",internal,external);
+			char * stop=strstr(internal,"/");
+			*stop='\0';
+			strcpy(buffer[i].InternalIPAddress,internal);
+			strcpy(buffer[i].ExternalIPAddress,external);
+			*lineEnd='\n';
+			i++;
+			natStart=strstr(position,"\n")+1;
+		}
+	}
+	*count=i;
+	free(configuration);
 	return 0;
 }
 
