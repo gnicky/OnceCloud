@@ -1,77 +1,8 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
 
 #include "File.h"
 #include "Process.h"
-#include "PluginInterface.h"
-
-const char * PluginName="NAT";
-const char * PluginVersion="1.0.0.0";
-
-int Initialize()
-{
-	printf("Initialize nat plugin.\n");
-	return 0;
-}
-
-int Destroy()
-{
-	printf("Destroy nat plugin.\n");
-	return 0;
-}
-
-int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("GET NAT\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("HEAD NAT\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("POST NAT\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("PUT NAT\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("DELETE NAT\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-void PrintUsage()
-{
-	printf("Usage:\n");
-	printf("Add NAT:\n\tnetsh nat add <internal ip> <external ip>\n");
-	printf("Remove NAT:\n\tnetsh nat remove <internal ip> <external ip>\n");
-}
 
 void LoadConfiguration(char * buffer)
 {
@@ -138,7 +69,7 @@ int AddNat(const char * internal, const char * external)
 	*ruleStart=savedChar;
 
 	// Start of the rule
-	
+
 	char * ruleEnd=strstr(ruleStart,"COMMIT");
 	savedChar=*ruleEnd;
 	*ruleEnd='\0';
@@ -167,11 +98,11 @@ int AddNat(const char * internal, const char * external)
 		strcat(newConfiguration,postRoutingRule);
 		strcat(newConfiguration,"\n");
 	}
-	
+
 	strcat(newConfiguration,ruleEnd);
 
 	SaveConfiguration(newConfiguration);
-	
+
 	free(newConfiguration);
 	free(originalConfiguration);
 	return 0;
@@ -207,7 +138,7 @@ int RemoveNat(const char * internal, const char * external)
 	*ruleStart=savedChar;
 
 	// From the start of the rule
-	
+
 	char preRoutingRule[1000]={0};
 	char postRoutingRule[1000]={0};
 	GeneratePreRoutingRule(preRoutingRule,internal,external);
@@ -245,22 +176,3 @@ int RemoveNat(const char * internal, const char * external)
 	free(originalConfiguration);
 	return 0;
 }
-
-int Activate(int count, char * values [])
-{
-	if(count==3)
-	{
-		if(strcmp(values[0],"add")==0)
-		{
-			return AddNat(values[1],values[2]);
-		}
-		if(strcmp(values[0],"remove")==0)
-		{
-			return RemoveNat(values[1],values[2]);
-		}
-	}
-
-	PrintUsage();
-	return 1;
-}
-

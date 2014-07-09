@@ -8,23 +8,10 @@ LDLIBFLAGS=-Wall -Werror -shared -lc
 
 NETDFLAGS=-Inetd/include/
 DHCPFLAGS=-Iplugins/dhcp/include/
+NATFLAGS=-Iplugins/nat/include/
 
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
-
-COMMON=output/common-File.o output/common-Process.o output/common-Mongoose.o
-
-NETD=output/netd-Main.o \
-	output/netd
-
-DHCP=output/plugins/dhcp-Main.o \
-	output/plugins/dhcp.so
-
-FIREWALL=output/plugins/firewall-Main.o \
-	output/plugins/firewall.so
-
-NAT=output/plugins/nat-Main.o \
-	output/plugins/nat.so
 
 all: do_prepare everything do_package do_install
 
@@ -49,11 +36,6 @@ do_install:
 	output/netd-installer
 
 clean:
-	rm -rf $(NETD)
-	rm -rf $(COMMON)
-	rm -rf $(DHCP)
-	rm -rf $(FIREWALL)
-	rm -rf $(NAT)
 	rm -rf output
 
 .PHONY: all everything prepare package clean
@@ -102,6 +84,19 @@ output/plugins/dhcp.so: output/plugins-dhcp-Api.o output/plugins-dhcp-Core.o \
 	output/common-File.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
+#NAT
+output/plugins-nat-Api.o: plugins/nat/Api.c \
+	common/include/PluginInterface.h
+	$(CC) $(CLIBFLAGS) $(NATFLAGS) -o $@ $<
+
+output/plugins-nat-Core.o: plugins/nat/Core.c \
+	common/include/File.h common/include/Process.h
+	$(CC) $(CLIBFLAGS) $(NATFLAGS) -o $@ $<
+
+output/plugins/nat.so: output/plugins-nat-Api.o output/plugins-nat-Core.o \
+	output/common-File.o output/common-Process.o
+	$(LD) $(LDLIBFLAGS) -o $@ $^
+
 #Firewall
 output/plugins-firewall-Main.o: plugins/firewall/Main.c \
 	common/include/File.h common/include/Process.h
@@ -110,14 +105,4 @@ output/plugins-firewall-Main.o: plugins/firewall/Main.c \
 output/plugins/firewall.so: output/plugins-firewall-Main.o \
 	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
-
-#NAT
-output/plugins-nat-Main.o: plugins/nat/Main.c \
-	common/include/File.h common/include/Process.h
-	$(CC) $(CLIBFLAGS) -o $@ $<
-
-output/plugins/nat.so: output/plugins-nat-Main.o \
-	output/common-File.o output/common-Process.o
-	$(LD) $(LDLIBFLAGS) -o $@ $^
-
 
