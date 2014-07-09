@@ -105,7 +105,7 @@ int main(int argc, char * argv [])
 	struct mg_server * server;
 
 	server=mg_create_server(NULL,EventHandler);
-	mg_set_option(server,"listening_port","8080");
+	mg_set_option(server,"listening_port","9090");
 
 	printf("Starting on port %s\n",mg_get_option(server, "listening_port"));
 	while(1)

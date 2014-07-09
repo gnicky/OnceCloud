@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "PluginInterface.h"
+#include "Core.h"
 
 
 const char * PluginName="Firewall";

@@ -4,6 +4,7 @@
 
 #include "File.h"
 #include "Process.h"
+#include "FirewallRule.h"
 
 void LoadConfiguration(char * buffer)
 {
@@ -275,5 +276,50 @@ int InitializeFirewall()
 
 	free(originalConfiguration);
 	free(initialConfiguration);
+	return 0;
+}
+
+int ListFirewallRule(struct FirewallRule * buffer, int * count)
+{
+	char * configuration=malloc(1048576);
+	LoadConfiguration(configuration);
+
+	int i=0;
+	char * filterStart=strstr(configuration,"*filter");
+	if(filterStart!=NULL)
+	{
+		char * filterEnd=strstr(filterStart,"COMMIT\n");
+		*filterEnd='\0';
+		char * ruleStart=strstr(configuration,"-A FORWARD ");
+		char * position=NULL;
+		while((position=strstr(ruleStart,"-A FORWARD "))!=NULL)
+		{
+			char * lineEnd=strstr(ruleStart,"\n");
+			*lineEnd='\0';
+			if(strstr(position,"--sport ")!=NULL)
+			{
+				char protocol[10];
+				char internalIPRange[30];
+				char externalIPRange[30];
+				char port[10];
+
+				sscanf(strstr(position,"-s "),"-s %s ",internalIPRange);
+				sscanf(strstr(position,"-d "),"-d %s ",externalIPRange);
+				sscanf(strstr(position,"-p "),"-p %s ",protocol);
+				sscanf(strstr(position,"--sport "),"--sport %s ",port);
+				
+				strcpy(buffer[i].Protocol,protocol);
+				strcpy(buffer[i].InternalIPRange,internalIPRange);
+				strcpy(buffer[i].ExternalIPRange,externalIPRange);
+				strcpy(buffer[i].Port,port);
+
+				i++;
+			}
+			*lineEnd='\n';
+			ruleStart=strstr(position,"\n")+1;
+		}
+	}
+
+	free(configuration);
 	return 0;
 }
