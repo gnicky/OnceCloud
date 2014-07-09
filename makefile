@@ -89,11 +89,15 @@ output/netd: output/netd-Main.o output/netd-PluginManager.o output/netd-HttpHelp
 
 #Plugins
 #DHCP
-output/plugins-dhcp-Main.o: plugins/dhcp/Main.c \
+output/plugins-dhcp-Api.o: plugins/dhcp/Api.c \
+	common/include/PluginInterface.h
+	$(CC) $(CLIBFLAGS) -o $@ $<
+
+output/plugins-dhcp-Core.o: plugins/dhcp/Core.c \
 	common/include/File.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/plugins/dhcp.so: output/plugins-dhcp-Main.o \
+output/plugins/dhcp.so: output/plugins-dhcp-Api.o output/plugins-dhcp-Core.o \
 	output/common-File.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
