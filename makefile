@@ -9,6 +9,7 @@ LDLIBFLAGS=-Wall -Werror -shared -lc
 NETDFLAGS=-Inetd/include/
 DHCPFLAGS=-Iplugins/dhcp/include/
 NATFLAGS=-Iplugins/nat/include/
+FIREWALLFLAGS=-Iplugins/firewall/include/
 
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
@@ -98,11 +99,15 @@ output/plugins/nat.so: output/plugins-nat-Api.o output/plugins-nat-Core.o \
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
-output/plugins-firewall-Main.o: plugins/firewall/Main.c \
-	common/include/File.h common/include/Process.h
-	$(CC) $(CLIBFLAGS) -o $@ $<
+output/plugins-firewall-Api.o: plugins/firewall/Api.c \
+	common/include/PluginInterface.h
+	$(CC) $(CLIBFLAGS) $(FIREWALLFLAGS) -o $@ $<
 
-output/plugins/firewall.so: output/plugins-firewall-Main.o \
+output/plugins-firewall-Core.o: plugins/firewall/Core.c \
+	common/include/File.h common/include/Process.h
+	$(CC) $(CLIBFLAGS) $(FIREWALLFLAGS) -o $@ $<
+
+output/plugins/firewall.so: output/plugins-firewall-Api.o output/plugins-firewall-Core.o  \
 	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 

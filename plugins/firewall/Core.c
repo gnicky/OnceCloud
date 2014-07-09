@@ -4,75 +4,6 @@
 
 #include "File.h"
 #include "Process.h"
-#include "PluginInterface.h"
-
-const char * PluginName="Firewall";
-const char * PluginVersion="1.0.0.0";
-
-int Initialize()
-{
-	printf("Initialize firewall plugin.\n");
-	return 0;
-}
-
-int Destroy()
-{
-	printf("Destroy firewall plugin.\n");
-	return 0;
-}
-
-int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("GET Firewall\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("HEAD Firewall\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("POST Firewall\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("PUT Firewall\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("DELETE Firewall\n");
-	// mg_send_status(connection,200);
-	// mg_send_header(connection,"Content-Length","0");
-	// mg_send_data(connection,"",0);
-	return TRUE;
-}
-
-void PrintUsage()
-{
-	printf("Usage:\n");
-	printf("Init firewall:\n\tnetsh firewall init\n");
-	printf("Add Rule:\n\tnetsh firewall add <tcp|udp> <internal ip/netmask]> [external ip/netmask]] <port>\n");
-	printf("Remove Rule:\n\tnetsh firewall remove <tcp|udp> <internal ip/netmask]> [external ip/netmask]] <port>\n");
-}
 
 void LoadConfiguration(char * buffer)
 {
@@ -161,15 +92,6 @@ int AddRule(const char * protocol, const char * internal, const char * external,
 	LoadConfiguration(originalConfiguration);
 
 	char * filterStart=strstr(originalConfiguration,"*filter");
-	if(filterStart==NULL)
-	{
-		strcat(originalConfiguration,"*filter\n");
-		strcat(originalConfiguration,":INPUT ACCEPT [28:1848]\n");
-		strcat(originalConfiguration,":FORWARD ACCEPT [0:0]\n");
-		strcat(originalConfiguration,":OUTPUT ACCEPT [15:1444]\n");
-		strcat(originalConfiguration,"COMMIT\n");
-		filterStart=strstr(originalConfiguration,"*filter");
-	}
 
 	savedChar=*filterStart;
 	*filterStart='\0';
@@ -305,7 +227,7 @@ int RemoveRule(const char * protocol, const char * internal, const char * extern
 	return 0;
 }
 
-int InitFirewallRule()
+int InitializeFirewall()
 {
 	char * originalConfiguration=malloc(1048576);
 	char * initialConfiguration=malloc(1048576);
@@ -336,8 +258,13 @@ int InitFirewallRule()
 	// Allow Local Loopback
 	strcat(initialConfiguration,"-A INPUT -i lo -j ACCEPT\n");
 	strcat(initialConfiguration,"-A OUTPUT -o lo -j ACCEPT\n");
+	// Allow Ping
+	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT\n");
+	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
 	// Allow SSH Connection
 	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
+	// Allow Netd
+	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 9090 -j ACCEPT\n");
 	// Allow Established Connection
 	strcat(initialConfiguration,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
 	strcat(initialConfiguration,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
@@ -349,44 +276,4 @@ int InitFirewallRule()
 	free(originalConfiguration);
 	free(initialConfiguration);
 	return 0;
-}
-
-int Activate(int count, char * values [])
-{
-	if(count==4 || count==5)
-	{
-		char * command=values[0];
-		char * protocol=values[1];
-		char * internal=values[2];
-		char * external=NULL;
-		char * port=NULL;
-		if(count==4)
-		{
-			port=values[3];
-		}
-		if(count==5)
-		{
-			external=values[3];
-			port=values[4];
-		}
-
-		if(strcmp(command,"add")==0)
-		{
-			return AddRule(protocol,internal,external,port);
-		}
-		if(strcmp(command,"remove")==0)
-		{
-			return RemoveRule(protocol,internal,external,port);
-		}
-	}
-	if(count==1)
-	{
-		if(strcmp(values[0],"init")==0)
-		{
-			return InitFirewallRule();
-		}
-	}
-
-	PrintUsage();
-	return 1;
 }
