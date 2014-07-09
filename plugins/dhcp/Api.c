@@ -20,26 +20,6 @@ int Destroy()
 	return 0;
 }
 
-int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	printf("GET DHCP\n");
-
-	int entryCount=0;
-	struct DhcpEntry dhcpEntry[300];
-
-	ListDhcpEntry(dhcpEntry,&entryCount);
-
-	char * buffer=malloc(65536);
-	GenerateDhcpEntryList(buffer,dhcpEntry,entryCount);
-
-	response->StatusCode=200;
-	response->SetHeader(response,"Content-Type","application/xml");
-	response->SetContent(response,buffer);
-
-	free(buffer);
-	return TRUE;
-}
-
 void GenerateDhcpEntryList(char * buffer, struct DhcpEntry * dhcpEntry, int count)
 {
 	int i=0;
@@ -62,10 +42,26 @@ void GenerateDhcpEntryList(char * buffer, struct DhcpEntry * dhcpEntry, int coun
 	strcat(buffer,"</ListAllBindingsResult>\n");
 }
 
+int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
+{
+	int entryCount=0;
+	struct DhcpEntry dhcpEntry[300];
+
+	ListDhcpEntry(dhcpEntry,&entryCount);
+
+	char * buffer=malloc(65536);
+	GenerateDhcpEntryList(buffer,dhcpEntry,entryCount);
+
+	response->StatusCode=200;
+	response->SetHeader(response,"Content-Type","application/xml");
+	response->SetContent(response,buffer);
+
+	free(buffer);
+	return TRUE;
+}
+
 int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("HEAD DHCP\n");
-
 	int entryCount=0;
 	struct DhcpEntry dhcpEntry[300];
 
@@ -84,8 +80,6 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("POST DHCP\n");
-
 	const char * ipAddress=request->GetHeader(request,"x-bws-ip-address");
 	const char * hardwareAddress=request->GetHeader(request,"x-bws-hardware-address");
 
@@ -112,8 +106,6 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("PUT DHCP\n");
-
 	const char * subnet=request->GetHeader(request,"x-bws-subnet");
 	const char * netmask=request->GetHeader(request,"x-bws-netmask");
 	const char * router=request->GetHeader(request,"x-bws-router");
@@ -145,8 +137,6 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("DELETE DHCP\n");
-
 	const char * ipAddress=request->GetHeader(request,"x-bws-ip-address");
 	const char * hardwareAddress=request->GetHeader(request,"x-bws-hardware-address");
 

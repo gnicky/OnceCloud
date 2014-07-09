@@ -46,8 +46,6 @@ void GenerateNatEntryList(char * buffer, struct NatEntry * natEntry, int count)
 
 int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("GET NAT\n");
-
 	int entryCount=0;
 	struct NatEntry natEntry[300];
 
@@ -66,8 +64,6 @@ int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("HEAD NAT\n");
-
 	int entryCount=0;
 	struct NatEntry natEntry[300];
 
@@ -86,8 +82,6 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("POST NAT\n");
-
 	const char * internalIPAddress=request->GetHeader(request,"x-bws-internal-ip-address");
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
 
@@ -114,8 +108,6 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("PUT NAT\n");
-
 	InitializeNat();
 
 	response->StatusCode=200;
@@ -127,8 +119,6 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	printf("DELETE NAT\n");
-
 	const char * internalIPAddress=request->GetHeader(request,"x-bws-internal-ip-address");
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
 
