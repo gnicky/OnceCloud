@@ -90,7 +90,7 @@ output/plugins-dhcp-Main.o: plugins/dhcp/Main.c \
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 output/plugins/dhcp.so: output/plugins-dhcp-Main.o \
-	output/common-File.o output/common-Mongoose.o
+	output/common-File.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
@@ -99,7 +99,7 @@ output/plugins-firewall-Main.o: plugins/firewall/Main.c \
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 output/plugins/firewall.so: output/plugins-firewall-Main.o \
-	output/common-File.o output/common-Process.o output/common-Mongoose.o
+	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #NAT
@@ -108,7 +108,7 @@ output/plugins-nat-Main.o: plugins/nat/Main.c \
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 output/plugins/nat.so: output/plugins-nat-Main.o \
-	output/common-File.o output/common-Process.o output/common-Mongoose.o
+	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 
