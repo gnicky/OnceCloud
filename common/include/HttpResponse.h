@@ -8,7 +8,7 @@ struct HttpResponse
 	int StatusCode;
 	char * Content;
 
-	HttpHeader Headers[30];
+	struct HttpHeader Headers[30];
 	int HeaderCount;
 };
 

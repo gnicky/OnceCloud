@@ -1,5 +1,6 @@
 #include <memory.h>
 
+#include "Mongoose.h"
 #include "Plugin.h"
 #include "PluginManager.h"
 
@@ -24,25 +25,28 @@ static int EventHandler(struct mg_connection * connection, enum mg_event event)
 		struct Plugin * plugin=FindPlugin(pluginName);
 		if(plugin!=NULL)
 		{
+			struct HttpRequest * request=NULL;
+			struct HttpResponse * response=NULL;
+
 			if(strcmp(connection->request_method,"GET")==0)
 			{
-				return plugin->HandleGetRequest(connection,event);
+				plugin->HandleGetRequest(request,response);
 			}
 			if(strcmp(connection->request_method,"HEAD")==0)
 			{
-				return plugin->HandleHeadRequest(connection,event);
+				plugin->HandleHeadRequest(request,response);
 			}
 			if(strcmp(connection->request_method,"POST")==0)
 			{
-				return plugin->HandlePostRequest(connection,event);
+				plugin->HandlePostRequest(request,response);
 			}
 			if(strcmp(connection->request_method,"PUT")==0)
 			{
-				return plugin->HandlePutRequest(connection,event);
+				plugin->HandlePutRequest(request,response);
 			}
 			if(strcmp(connection->request_method,"DELETE")==0)
 			{
-				return plugin->HandleDeleteRequest(connection,event);
+				plugin->HandleDeleteRequest(request,response);
 			}
 
 			// 405 Method not allowed

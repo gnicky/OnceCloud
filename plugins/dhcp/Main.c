@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
-#include <dlfcn.h>
 
 #include "File.h"
+#include "Type.h"
 
 #include "PluginInterface.h"
 
@@ -26,49 +26,49 @@ int Destroy()
 	return 0;
 }
 
-int HandleGetRequest(struct mg_connection * connection, enum mg_event event)
+int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
 	printf("GET DHCP\n");
-	mg_send_status(connection,200);
-	mg_send_header(connection,"Content-Length","0");
-	mg_send_data(connection,"",0);
-	return MG_TRUE;
+	// mg_send_status(connection,200);
+	// mg_send_header(connection,"Content-Length","0");
+	// mg_send_data(connection,"",0);
+	return TRUE;
 }
 
-int HandleHeadRequest(struct mg_connection * connection, enum mg_event event)
+int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
 	printf("HEAD DHCP\n");
-	mg_send_status(connection,200);
-	mg_send_header(connection,"Content-Length","0");
-	mg_send_data(connection,"",0);
-	return MG_TRUE;
+	// mg_send_status(connection,200);
+	// mg_send_header(connection,"Content-Length","0");
+	// mg_send_data(connection,"",0);
+	return TRUE;
 }
 
-int HandlePostRequest(struct mg_connection * connection, enum mg_event event)
+int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
 	printf("POST DHCP\n");
-	mg_send_status(connection,200);
-	mg_send_header(connection,"Content-Length","0");
-	mg_send_data(connection,"",0);
-	return MG_TRUE;
+	// mg_send_status(connection,200);
+	// mg_send_header(connection,"Content-Length","0");
+	// mg_send_data(connection,"",0);
+	return TRUE;
 }
 
-int HandlePutRequest(struct mg_connection * connection, enum mg_event event)
+int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
 	printf("PUT DHCP\n");
-	mg_send_status(connection,200);
-	mg_send_header(connection,"Content-Length","0");
-	mg_send_data(connection,"",0);
-	return MG_TRUE;
+	// mg_send_status(connection,200);
+	// mg_send_header(connection,"Content-Length","0");
+	// mg_send_data(connection,"",0);
+	return TRUE;
 }
 
-int HandleDeleteRequest(struct mg_connection * connection, enum mg_event event)
+int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
 	printf("DELETE DHCP\n");
-	mg_send_status(connection,200);
-	mg_send_header(connection,"Content-Length","0");
-	mg_send_data(connection,"",0);
-	return MG_TRUE;
+	// mg_send_status(connection,200);
+	// mg_send_header(connection,"Content-Length","0");
+	// mg_send_data(connection,"",0);
+	return TRUE;
 }
 
 void GenerateConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)

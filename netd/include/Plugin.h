@@ -1,7 +1,8 @@
 #ifndef _PLUGIN_H_
 #define _PLUGIN_H
 
-#include "Mongoose.h"
+#include "HttpRequest.h"
+#include "HttpResponse.h"
 
 struct Plugin
 {
@@ -14,11 +15,11 @@ struct Plugin
 	int (* Initialize) ();
 	int (* Destroy) ();
 
-	int (* HandleGetRequest) (struct mg_connection * connection, enum mg_event event);
-	int (* HandleHeadRequest) (struct mg_connection * connection, enum mg_event event);
-	int (* HandlePostRequest) (struct mg_connection * connection, enum mg_event event);
-	int (* HandlePutRequest) (struct mg_connection * connection, enum mg_event event);
-	int (* HandleDeleteRequest) (struct mg_connection * connection, enum mg_event event);
+	int (* HandleGetRequest) (struct HttpRequest * request, struct HttpResponse * response);
+	int (* HandleHeadRequest) (struct HttpRequest * request, struct HttpResponse * response);
+	int (* HandlePostRequest) (struct HttpRequest * request, struct HttpResponse * response);
+	int (* HandlePutRequest) (struct HttpRequest * request, struct HttpResponse * response);
+	int (* HandleDeleteRequest) (struct HttpRequest * request, struct HttpResponse * response);
 };
 
 #endif
