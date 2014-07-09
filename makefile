@@ -7,6 +7,7 @@ LDFLAGS=-Wall -Werror
 LDLIBFLAGS=-Wall -Werror -shared -lc
 
 NETDFLAGS=-Inetd/include/
+DHCPFLAGS=-Iplugins/dhcp/include/
 
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
@@ -91,11 +92,11 @@ output/netd: output/netd-Main.o output/netd-PluginManager.o output/netd-HttpHelp
 #DHCP
 output/plugins-dhcp-Api.o: plugins/dhcp/Api.c \
 	common/include/PluginInterface.h
-	$(CC) $(CLIBFLAGS) -o $@ $<
+	$(CC) $(CLIBFLAGS) $(DHCPFLAGS) -o $@ $<
 
 output/plugins-dhcp-Core.o: plugins/dhcp/Core.c \
 	common/include/File.h
-	$(CC) $(CLIBFLAGS) -o $@ $<
+	$(CC) $(CLIBFLAGS) $(DHCPFLAGS) -o $@ $<
 
 output/plugins/dhcp.so: output/plugins-dhcp-Api.o output/plugins-dhcp-Core.o \
 	output/common-File.o

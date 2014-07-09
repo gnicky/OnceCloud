@@ -4,6 +4,8 @@
 
 #include "Type.h"
 #include "File.h"
+#include "DhcpEntry.h"
+#include "Core.h"
 
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
@@ -57,6 +59,7 @@ int Bind(const char * ipAddress, const char * hardwareAddress)
 	strcat(newFileContent,position+1);
 
 	WriteAllText(DhcpdConfigurationFileName,newFileContent);	
+	system("service dhcpd restart");
 
 	free(newFileContent);
 	free(fileContent);
@@ -108,6 +111,7 @@ int Unbind(const char * ipAddress, const char * hardwareAddress)
 		strcat(newFileContent,hostEntryEnd+strlen("\t}\n"));
 
 		WriteAllText(DhcpdConfigurationFileName,newFileContent);
+		system("service dhcpd restart");
 
 		free(newFileContent);
 	}
@@ -134,7 +138,7 @@ void GenerateInitialConfiguration(char * buffer, const char * subnet, const char
 	strcat(buffer,netmask);
 	strcat(buffer," {\n");
 
-	strcat(buffer,"\toption router ");
+	strcat(buffer,"\toption routers ");
 	strcat(buffer,router);
 	strcat(buffer,";\n");
 
@@ -169,6 +173,44 @@ int InitializeConfiguration(const char * subnet, const char * netmask, const cha
 	char * fileContent=malloc(BUFFER_SIZE);
 	GenerateInitialConfiguration(fileContent,subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLease,maxLease);
 	WriteAllText(DhcpdConfigurationFileName,fileContent);
+	system("service dhcpd restart");
+
 	free(fileContent);
+	return 0;
+}
+
+int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
+{
+	int i=0;
+
+	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
+	char * fileContent=malloc(fileSize);
+	ReadAllText(DhcpdConfigurationFileName,fileContent);
+
+	char * hostEntryStart=fileContent;
+	while((hostEntryStart=strstr(hostEntryStart,"\thost "))!=NULL)
+	{
+		char * position=NULL;
+		if((position=strstr(hostEntryStart,"hardware ethernet "))!=NULL)
+		{
+			char * hardwareAddressStart=position+strlen("hardware ethernet ");
+			char * hardwareAddressEnd=strstr(hardwareAddressStart,";");
+			*hardwareAddressEnd='\0';
+			strcpy(buffer[i].HardwareAddress,hardwareAddressStart);
+			*hardwareAddressEnd=';';
+		}
+		if((position=strstr(hostEntryStart,"fixed-address "))!=NULL)
+		{
+			char * ipAddressStart=position+strlen("fixed-address ");
+			char * ipAddressEnd=strstr(ipAddressStart,";");
+			*ipAddressEnd='\0';
+			strcpy(buffer[i].IPAddress,ipAddressStart);
+			*ipAddressEnd=';';
+		}
+		i++;
+		hostEntryStart=hostEntryStart+strlen("\thost ");
+	}
+	*count=i;
+
 	return 0;
 }
