@@ -3,7 +3,8 @@
 
 struct HttpHeader
 {
-
+	char * Name;
+	char * Value;
 };
 
 #endif

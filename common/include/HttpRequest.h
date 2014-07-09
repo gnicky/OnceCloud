@@ -5,14 +5,16 @@
 
 struct HttpRequest
 {
-	const char * Method;
-	const char * Uri;
-	const char * QueryString;
+	char * Method;
+	char * Uri;
+	char * QueryString;
 
 	struct HttpHeader Headers[30];
 	int HeaderCount;
 
-	const char * Content;
+	char * Content;
+
+	const char * (* GetHeader) (struct HttpRequest * request, const char * name);
 };
 
 #endif
