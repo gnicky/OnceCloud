@@ -3,6 +3,7 @@
 
 #include "File.h"
 #include "Process.h"
+#include "NatEntry.h"
 
 void LoadConfiguration(char * buffer)
 {
@@ -174,5 +175,18 @@ int RemoveNat(const char * internal, const char * external)
 
 	free(newConfiguration);
 	free(originalConfiguration);
+	return 0;
+}
+
+int ListNatEntry(struct NatEntry * buffer, int * count)
+{
+	// TODO
+	*count=0;
+	return 0;
+}
+
+int InitializeNat()
+{
+	// TODO
 	return 0;
 }
