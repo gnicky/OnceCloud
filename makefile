@@ -10,6 +10,7 @@ NETDFLAGS=-Inetd/include/
 DHCPFLAGS=-Iplugins/dhcp/include/
 NATFLAGS=-Iplugins/nat/include/
 FIREWALLFLAGS=-Iplugins/firewall/include/
+LIMITFLAGS=-Iplugins/limit/include/
 
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
@@ -21,7 +22,8 @@ package: do_prepare everything do_package
 install: do_prepare everything do_package do_install
 
 everything: output/netd \
-	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/nat.so
+	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/nat.so \
+	output/plugins/limit.so
 
 do_prepare:
 	if [ ! -d output ]; then mkdir output; fi
@@ -111,3 +113,13 @@ output/plugins/firewall.so: output/plugins-firewall-Api.o output/plugins-firewal
 	output/common-File.o output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
+#Limit
+output/plugins-limit-Api.o: plugins/limit/Api.c \
+	common/include/PluginInterface.h
+	$(CC) $(CLIBFLAGS) $(LIMITFLAGS) -o $@ $<
+
+output/plugins-limit-Core.o: plugins/limit/Core.c
+	$(CC) $(CLIBFLAGS) $(LIMITFLAGS) -o $@ $<
+
+output/plugins/limit.so: output/plugins-limit-Api.o output/plugins-limit-Core.o
+	$(LD) $(LDLIBFLAGS) -o $@ $^
