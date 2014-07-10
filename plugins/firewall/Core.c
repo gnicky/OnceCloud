@@ -354,10 +354,10 @@ int InitializeFirewall()
 	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
 
 	// Allow DNS
-	strcat(initialConfiguration,"-A INPUT -p udp --dport 53 -j ACCEPT\n");
-	strcat(initialConfiguration,"-A INPUT -p tcp --dport 53 -j ACCEPT\n");
-	strcat(initialConfiguration,"-A OUTPUT -p udp --sport 53 -j ACCEPT\n");
-	strcat(initialConfiguration,"-A OUTPUT -p tcp --sport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A INPUT -p udp --sport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A INPUT -p tcp --sport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A OUTPUT -p udp --dport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A OUTPUT -p tcp --dport 53 -j ACCEPT\n");
 
 	// Allow Netd
 	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 9090 -j ACCEPT\n");
