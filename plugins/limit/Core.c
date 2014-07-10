@@ -38,12 +38,12 @@ void AddLimitFilter(const char * interface, const char * flowId)
 	system(commandLine);
 }
 
-void AddLimitIP(const char * interface, const char * gateway, const char * ip, const char * classId)
+void AddLimitIP(const char * interface, const char * gateway, const char * ip, const char * flowId)
 {
-	printf("Add Limit IP [Interface=%s; Gateway=%s; IP=%s; ClassId=%s]\n",interface,gateway,ip,classId);
+	printf("Add Limit IP [Interface=%s; Gateway=%s; IP=%s; FlowId=%s]\n",interface,gateway,ip,flowId);
 
 	char commandLine[1000];
-	sprintf(commandLine,"ip route add %s dev %s via %s realm %s",ip,interface,gateway,classId);
+	sprintf(commandLine,"ip route add %s dev %s via %s realm %s",ip,interface,gateway,flowId);
 	printf("Command: %s\n",commandLine);
 	system(commandLine);
 }

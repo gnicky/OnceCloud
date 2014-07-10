@@ -3,7 +3,7 @@
 
 void AddLimitClass(const char * interface, const char * classId, const char * speed);
 void AddLimitFilter(const char * interface, const char * flowId);
-void AddLimitIP(const char * interface, const char * gateway, const char * ip, const char * classId);
+void AddLimitIP(const char * interface, const char * gateway, const char * ip, const char * flowId);
 
 void RemoveLimitClass(const char * interface, const char * classId);
 void RemoveLimitFilter(const char * interface, const char * flowId);

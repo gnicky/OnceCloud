@@ -126,11 +126,11 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 		const char * interface=request->GetHeader(request,"x-bws-interface");
 		const char * gateway=request->GetHeader(request,"x-bws-gateway");
 		const char * ip=request->GetHeader(request,"x-bws-ip");
-		const char * classId=request->GetHeader(request,"x-bws-class-id");
+		const char * flowId=request->GetHeader(request,"x-bws-flow-id");
 
-		if(interface!=NULL && gateway!=NULL && ip!=NULL && classId!=NULL)
+		if(interface!=NULL && gateway!=NULL && ip!=NULL && flowId!=NULL)
 		{
-			AddLimitIP(interface,gateway,ip,classId);
+			AddLimitIP(interface,gateway,ip,flowId);
 
 			response->StatusCode=200;
 			response->SetContent(response,"");

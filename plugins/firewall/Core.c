@@ -6,6 +6,9 @@
 #include "Process.h"
 #include "FirewallRule.h"
 
+int DoAddRule(const char * rule);
+int DoRemoveRule(const char * rule);
+
 void LoadConfiguration(char * buffer)
 {
 	GetOutput(buffer,"iptables-save");
@@ -83,7 +86,91 @@ void GenerateInboundRule(char * buffer, const char * protocol, const char * inte
 	strcat(buffer,"-j ACCEPT");
 }
 
+void GenerateInboundPingRule(char * buffer, const char * target, const char * from)
+{
+	buffer[0]='\0';
+
+	strcat(buffer,"-A FORWARD ");
+
+	if(from!=NULL)
+	{
+		strcat(buffer,"-s ");
+		strcat(buffer,from);
+		strcat(buffer," ");
+	}
+
+	strcat(buffer,"-d ");
+	strcat(buffer,target);
+	strcat(buffer," ");
+
+	strcat(buffer,"-p icmp --icmp-type echo-request ");
+	strcat(buffer,"-j ACCEPT");
+}
+
+void GenerateOutboundPingRule(char * buffer, const char * target, const char * from)
+{
+	buffer[0]='\0';
+
+	strcat(buffer,"-A FORWARD ");
+
+	strcat(buffer,"-s ");
+	strcat(buffer,target);
+	strcat(buffer," ");
+
+	if(from!=NULL)
+	{
+		strcat(buffer,"-d ");
+		strcat(buffer,from);
+		strcat(buffer," ");
+	}
+
+	strcat(buffer,"-p icmp --icmp-type echo-reply ");
+	strcat(buffer,"-j ACCEPT");
+}
+
+int AllowPing(const char * target, const char * from)
+{
+	char outbound[1000]={0};
+	char inbound[1000]={0};
+
+	GenerateOutboundPingRule(outbound,target,from);
+	GenerateInboundPingRule(inbound,target,from);
+
+	DoAddRule(outbound);
+	DoAddRule(inbound);
+
+	return 0;
+}
+
+int DenyPing(const char * target, const char * from)
+{
+	char outbound[1000]={0};
+	char inbound[1000]={0};
+
+	GenerateOutboundPingRule(outbound,target,from);
+	GenerateInboundPingRule(inbound,target,from);
+
+	DoRemoveRule(outbound);
+	DoRemoveRule(inbound);
+
+	return 0;
+}
+
 int AddRule(const char * protocol, const char * internal, const char * external, const char * port)
+{
+	char outbound[1000]={0};
+	char inbound[1000]={0};
+
+	GenerateOutboundRule(outbound,protocol,internal,external,port);
+	GenerateInboundRule(inbound,protocol,internal,external,port);
+
+	DoAddRule(outbound);
+	DoAddRule(inbound);	
+
+	return 0;
+}
+
+int DoAddRule(const char * rule)
 {
 	char savedChar;
 	char * originalConfiguration=malloc(1048576);
@@ -117,36 +204,20 @@ int AddRule(const char * protocol, const char * internal, const char * external,
 
 	// Check existance here
 	
-	char outbound[1000]={0};
-	char inbound[1000]={0};
-	GenerateOutboundRule(outbound,protocol,internal,external,port);
-	GenerateInboundRule(inbound,protocol,internal,external,port);
-	
-	int outboundExist=0;
-	int inboundExist=0;
-	char * outboundPosition=strstr(ruleStart,outbound);
-	char * inboundPosition=strstr(ruleStart,inbound);
-	if(outboundPosition!=NULL)
+	int exist=0;
+	char * rulePosition=strstr(ruleStart,rule);
+	if(rulePosition!=NULL)
 	{
-		outboundExist=1;
-	}
-	if(inboundPosition!=NULL)
-	{
-		inboundExist=1;
+		exist=1;
 	}
 
 	*ruleEnd=savedChar;
 
 	// End of the filter chain
 
-	if(!outboundExist)
+	if(!exist)
 	{
-		strcat(newConfiguration,outbound);
-		strcat(newConfiguration,"\n");
-	}
-	if(!inboundExist)
-	{
-		strcat(newConfiguration,inbound);
+		strcat(newConfiguration,rule);
 		strcat(newConfiguration,"\n");
 	}
 
@@ -160,6 +231,20 @@ int AddRule(const char * protocol, const char * internal, const char * external,
 }
 
 int RemoveRule(const char * protocol, const char * internal, const char * external, const char * port)
+{
+	char outbound[1000]={0};
+	char inbound[1000]={0};
+
+	GenerateOutboundRule(outbound,protocol,internal,external,port);
+	GenerateInboundRule(inbound,protocol,internal,external,port);
+
+	DoRemoveRule(outbound);
+	DoRemoveRule(inbound);	
+
+	return 0;
+}
+
+int DoRemoveRule(const char * rule)
 {
 	char savedChar;
 	char * originalConfiguration=malloc(1048576);
@@ -190,18 +275,12 @@ int RemoveRule(const char * protocol, const char * internal, const char * extern
 
 	// From the start of the rule
 
-	char outbound[1000];
-	char inbound[1000];
-	GenerateOutboundRule(outbound,protocol,internal,external,port);
-	GenerateInboundRule(inbound,protocol,internal,external,port);
-
 	strcat(newConfiguration,"\n");
 	char * position=ruleStart+1;
 
 	while(strstr(position,"COMMIT")!=NULL && strstr(position,"COMMIT")!=position)
 	{
-		if(strstr(position,outbound)==position
-			|| strstr(position,inbound)==position)
+		if(strstr(position,rule)==position)
 		{
 			position=strstr(position,"\n");
 			position=position+strlen("\n");
@@ -228,7 +307,7 @@ int RemoveRule(const char * protocol, const char * internal, const char * extern
 	return 0;
 }
 
-int InitializeFirewallRule()
+int InitializeFirewall()
 {
 	char * originalConfiguration=malloc(1048576);
 	char * initialConfiguration=malloc(1048576);
@@ -259,9 +338,12 @@ int InitializeFirewallRule()
 	// Allow Local Loopback
 	strcat(initialConfiguration,"-A INPUT -i lo -j ACCEPT\n");
 	strcat(initialConfiguration,"-A OUTPUT -o lo -j ACCEPT\n");
-	// Allow Ping
+	// Allow Outbound Ping
 	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT\n");
 	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
+	// Allow Inbound Ping
+	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-request -j ACCEPT\n");	
+	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
 	// Allow SSH Connection
 	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
 	// Allow Netd
@@ -276,6 +358,58 @@ int InitializeFirewallRule()
 
 	free(originalConfiguration);
 	free(initialConfiguration);
+	return 0;
+}
+
+int ListPingRule(struct PingRule * buffer, int * count)
+{
+	char * configuration=malloc(1048576);
+	LoadConfiguration(configuration);
+
+	int i=0;
+	char * filterStart=strstr(configuration,"*filter");
+	if(filterStart!=NULL)
+	{
+		char * filterEnd=strstr(filterStart,"COMMIT\n");
+		*filterEnd='\0';
+		char * ruleStart=strstr(filterStart,"-A FORWARD ");
+		if(ruleStart!=NULL)
+		{
+			char * position=NULL;
+			while((position=strstr(ruleStart,"-A FORWARD "))!=NULL)
+			{
+				char * lineEnd=strstr(ruleStart,"\n");
+				*lineEnd='\0';
+				if(strstr(position,"--icmp-type echo-request")!=NULL)
+				{
+					char targetIPRange[30];
+					char fromIPRange[30];
+
+					if(strstr(position,"-s ")!=NULL)
+					{
+						sscanf(strstr(position,"-s "),"-s %s ",fromIPRange);
+					}
+					else
+					{
+						fromIPRange[0]='\0';
+					}
+
+					sscanf(strstr(position,"-d "),"-d %s ",targetIPRange);
+					targetIPRange[0]='\0';
+					
+					strcpy(buffer[i].targetIPRange,targetIPRange);
+					strcpy(buffer[i].fromIPRange,fromIPRange);
+
+					i++;
+				}
+				*lineEnd='\n';
+				ruleStart=strstr(position,"\n")+1;
+			}
+		}
+	}
+
+	*count=i;
+	free(configuration);
 	return 0;
 }
 
