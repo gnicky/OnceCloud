@@ -118,8 +118,10 @@ output/plugins-limit-Api.o: plugins/limit/Api.c \
 	common/include/PluginInterface.h
 	$(CC) $(CLIBFLAGS) $(LIMITFLAGS) -o $@ $<
 
-output/plugins-limit-Core.o: plugins/limit/Core.c
+output/plugins-limit-Core.o: plugins/limit/Core.c \
+	common/include/Process.h
 	$(CC) $(CLIBFLAGS) $(LIMITFLAGS) -o $@ $<
 
-output/plugins/limit.so: output/plugins-limit-Api.o output/plugins-limit-Core.o
+output/plugins/limit.so: output/plugins-limit-Api.o output/plugins-limit-Core.o \
+	output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^

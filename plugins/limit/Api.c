@@ -93,12 +93,12 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	if(strcmp(request->QueryString,"class")==0)
 	{
 		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * id=request->GetHeader(request,"x-bws-id");
+		const char * classId=request->GetHeader(request,"x-bws-class-id");
 		const char * speed=request->GetHeader(request,"x-bws-speed");
 
-		if(interface!=NULL && id!=NULL && speed!=NULL)
+		if(interface!=NULL && classId!=NULL && speed!=NULL)
 		{
-			AddLimitClass(interface,id,speed);
+			AddLimitClass(interface,classId,speed);
 
 			response->StatusCode=200;
 			response->SetContent(response,"");
@@ -126,11 +126,11 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 		const char * interface=request->GetHeader(request,"x-bws-interface");
 		const char * gateway=request->GetHeader(request,"x-bws-gateway");
 		const char * ip=request->GetHeader(request,"x-bws-ip");
-		const char * id=request->GetHeader(request,"x-bws-id");
+		const char * classId=request->GetHeader(request,"x-bws-class-id");
 
-		if(interface!=NULL && gateway!=NULL && ip!=NULL && id!=NULL)
+		if(interface!=NULL && gateway!=NULL && ip!=NULL && classId!=NULL)
 		{
-			AddLimitIP(interface,gateway,ip,id);
+			AddLimitIP(interface,gateway,ip,classId);
 
 			response->StatusCode=200;
 			response->SetContent(response,"");
@@ -189,11 +189,26 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	if(strcmp(request->QueryString,"class")==0)
 	{
 		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * id=request->GetHeader(request,"x-bws-id");
+		const char * classId=request->GetHeader(request,"x-bws-class-id");
 
-		if(interface!=NULL && id!=NULL)
+		if(interface!=NULL && classId!=NULL)
 		{
-			RemoveLimitClass(interface,id);
+			RemoveLimitClass(interface,classId);
+
+			response->StatusCode=200;
+			response->SetContent(response,"");
+			return TRUE;
+		}
+	}
+
+	if(strcmp(request->QueryString,"filter")==0)
+	{
+		const char * interface=request->GetHeader(request,"x-bws-interface");
+		const char * flowId=request->GetHeader(request,"x-bws-flow-id");
+
+		if(interface!=NULL && flowId!=NULL)
+		{
+			RemoveLimitFilter(interface,flowId);
 
 			response->StatusCode=200;
 			response->SetContent(response,"");
