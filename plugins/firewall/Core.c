@@ -5,6 +5,7 @@
 #include "File.h"
 #include "Process.h"
 #include "FirewallRule.h"
+#include "Core.h"
 
 int DoAddRule(const char * rule);
 int DoRemoveRule(const char * rule);
@@ -103,7 +104,8 @@ void GenerateInboundPingRule(char * buffer, const char * target, const char * fr
 	strcat(buffer,target);
 	strcat(buffer," ");
 
-	strcat(buffer,"-p icmp --icmp-type echo-request ");
+	// echo request
+	strcat(buffer,"-p icmp -m icmp --icmp-type 8 ");
 	strcat(buffer,"-j ACCEPT");
 }
 
@@ -124,7 +126,8 @@ void GenerateOutboundPingRule(char * buffer, const char * target, const char * f
 		strcat(buffer," ");
 	}
 
-	strcat(buffer,"-p icmp --icmp-type echo-reply ");
+	// echo reply
+	strcat(buffer,"-p icmp -m icmp --icmp-type 0 ");
 	strcat(buffer,"-j ACCEPT");
 }
 
@@ -380,7 +383,7 @@ int ListPingRule(struct PingRule * buffer, int * count)
 			{
 				char * lineEnd=strstr(ruleStart,"\n");
 				*lineEnd='\0';
-				if(strstr(position,"--icmp-type echo-request")!=NULL)
+				if(strstr(position,"--icmp-type 8")!=NULL)
 				{
 					char targetIPRange[30];
 					char fromIPRange[30];
@@ -395,10 +398,9 @@ int ListPingRule(struct PingRule * buffer, int * count)
 					}
 
 					sscanf(strstr(position,"-d "),"-d %s ",targetIPRange);
-					targetIPRange[0]='\0';
 					
-					strcpy(buffer[i].targetIPRange,targetIPRange);
-					strcpy(buffer[i].fromIPRange,fromIPRange);
+					strcpy(buffer[i].TargetIPRange,targetIPRange);
+					strcpy(buffer[i].FromIPRange,fromIPRange);
 
 					i++;
 				}

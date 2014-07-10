@@ -2,6 +2,7 @@
 #define _CORE_H_
 
 #include "FirewallRule.h"
+#include "PingRule.h"
 
 int AddRule(const char * protocol, const char * internal, const char * external, const char * port);
 int RemoveRule(const char * protocol, const char * internal, const char * external, const char * port);
@@ -12,6 +13,6 @@ int DenyPing(const char * target, const char * from);
 int InitializeFirewall();
 
 int ListFirewallRule(struct FirewallRule * buffer, int * count);
-int ListPingRule(struct PingRule * buffer, int * count)
+int ListPingRule(struct PingRule * buffer, int * count);
 
 #endif
