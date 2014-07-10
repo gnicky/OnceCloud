@@ -341,16 +341,27 @@ int InitializeFirewall()
 	// Allow Local Loopback
 	strcat(initialConfiguration,"-A INPUT -i lo -j ACCEPT\n");
 	strcat(initialConfiguration,"-A OUTPUT -o lo -j ACCEPT\n");
+
 	// Allow Outbound Ping
 	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT\n");
 	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
+
 	// Allow Inbound Ping
 	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-request -j ACCEPT\n");	
 	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
+
 	// Allow SSH Connection
 	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
+
+	// Allow DNS
+	strcat(initialConfiguration,"-A INPUT -p udp --dport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A INPUT -p tcp --dport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A OUTPUT -p udp --sport 53 -j ACCEPT\n");
+	strcat(initialConfiguration,"-A OUTPUT -p tcp --sport 53 -j ACCEPT\n");
+
 	// Allow Netd
 	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 9090 -j ACCEPT\n");
+
 	// Allow Established Connection
 	strcat(initialConfiguration,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
 	strcat(initialConfiguration,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
