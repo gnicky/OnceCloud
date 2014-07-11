@@ -9,6 +9,7 @@
 
 int DoAddRule(const char * rule);
 int DoRemoveRule(const char * rule);
+void GenerateDefaultConfiguration(char * buffer);
 
 void LoadConfiguration(char * buffer)
 {
@@ -184,6 +185,15 @@ int DoAddRule(const char * rule)
 
 	char * filterStart=strstr(originalConfiguration,"*filter");
 
+	if(filterStart==NULL)
+	{
+		char * defaultConfiguration=malloc(1000);
+		GenerateDefaultConfiguration(defaultConfiguration);
+		strcat(originalConfiguration,defaultConfiguration);
+		free(defaultConfiguration);
+		filterStart=strstr(originalConfiguration,"*filter");
+	}
+
 	savedChar=*filterStart;
 	*filterStart='\0';
 	strcat(newConfiguration,originalConfiguration);
@@ -310,6 +320,48 @@ int DoRemoveRule(const char * rule)
 	return 0;
 }
 
+void GenerateDefaultConfiguration(char * buffer)
+{
+	buffer[0]='\0';
+
+	// Initialize "filter" table - DEFAULT ALL DROP
+	strcat(buffer,"*filter\n");
+	strcat(buffer,":INPUT DROP [0:0]\n");
+	strcat(buffer,":FORWARD DROP [0:0]\n");
+	strcat(buffer,":OUTPUT DROP [0:0]\n");
+
+	// Rules
+	// Allow Local Loopback
+	strcat(buffer,"-A INPUT -i lo -j ACCEPT\n");
+	strcat(buffer,"-A OUTPUT -o lo -j ACCEPT\n");
+
+	// Allow Outbound Ping
+	strcat(buffer,"-A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT\n");
+	strcat(buffer,"-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
+
+	// Allow Inbound Ping
+	strcat(buffer,"-A INPUT -p icmp --icmp-type echo-request -j ACCEPT\n");	
+	strcat(buffer,"-A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
+
+	// Allow SSH Connection
+	strcat(buffer,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
+
+	// Allow DNS
+	strcat(buffer,"-A INPUT -p udp --sport 53 -j ACCEPT\n");
+	strcat(buffer,"-A INPUT -p tcp --sport 53 -j ACCEPT\n");
+	strcat(buffer,"-A OUTPUT -p udp --dport 53 -j ACCEPT\n");
+	strcat(buffer,"-A OUTPUT -p tcp --dport 53 -j ACCEPT\n");
+
+	// Allow Netd
+	strcat(buffer,"-A INPUT -p tcp -m tcp --dport 9090 -j ACCEPT\n");
+
+	// Allow Established Connection
+	strcat(buffer,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(buffer,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(buffer,"-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(buffer,"COMMIT\n");
+}
+
 int InitializeFirewall()
 {
 	char * originalConfiguration=malloc(1048576);
@@ -330,46 +382,14 @@ int InitializeFirewall()
 		char * filterEnd=strstr(filterStart+1,"COMMIT\n")+strlen("COMMIT\n");
 		strcat(initialConfiguration,filterEnd);
 	}
-	
-	// Initialize "filter" table - DEFAULT ALL DROP
-	strcat(initialConfiguration,"*filter\n");
-	strcat(initialConfiguration,":INPUT DROP [0:0]\n");
-	strcat(initialConfiguration,":FORWARD DROP [0:0]\n");
-	strcat(initialConfiguration,":OUTPUT DROP [0:0]\n");
 
-	// Rules
-	// Allow Local Loopback
-	strcat(initialConfiguration,"-A INPUT -i lo -j ACCEPT\n");
-	strcat(initialConfiguration,"-A OUTPUT -o lo -j ACCEPT\n");
-
-	// Allow Outbound Ping
-	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT\n");
-	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
-
-	// Allow Inbound Ping
-	strcat(initialConfiguration,"-A INPUT -p icmp --icmp-type echo-request -j ACCEPT\n");	
-	strcat(initialConfiguration,"-A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT\n");
-
-	// Allow SSH Connection
-	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\n");
-
-	// Allow DNS
-	strcat(initialConfiguration,"-A INPUT -p udp --sport 53 -j ACCEPT\n");
-	strcat(initialConfiguration,"-A INPUT -p tcp --sport 53 -j ACCEPT\n");
-	strcat(initialConfiguration,"-A OUTPUT -p udp --dport 53 -j ACCEPT\n");
-	strcat(initialConfiguration,"-A OUTPUT -p tcp --dport 53 -j ACCEPT\n");
-
-	// Allow Netd
-	strcat(initialConfiguration,"-A INPUT -p tcp -m tcp --dport 9090 -j ACCEPT\n");
-
-	// Allow Established Connection
-	strcat(initialConfiguration,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
-	strcat(initialConfiguration,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
-	strcat(initialConfiguration,"-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
-	strcat(initialConfiguration,"COMMIT\n");
+	char * defaultConfiguration=malloc(1000);
+	GenerateDefaultConfiguration(defaultConfiguration);
+	strcat(initialConfiguration,defaultConfiguration);
 
 	SaveConfiguration(initialConfiguration);
 
+	free(defaultConfiguration);
 	free(originalConfiguration);
 	free(initialConfiguration);
 	return 0;

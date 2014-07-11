@@ -56,6 +56,7 @@ int AddNat(const char * internal, const char * external)
 
 	LoadConfiguration(originalConfiguration);
 	char * natStart=strstr(originalConfiguration,"*nat");
+
 	if(natStart==NULL)
 	{
 		char * defaultConfiguration=malloc(1000);
