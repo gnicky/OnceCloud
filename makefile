@@ -56,6 +56,9 @@ output/common-Process.o: common/Process.c common/include/Process.h \
 output/common-Mongoose.o: common/Mongoose.c common/include/Mongoose.h
 	$(CC) $(CLIBFLAGS) $(PTHREADFLAGS) -o $@ $<
 
+output/common-Frozen.o: common/Frozen.c common/include/Frozen.h
+	$(CC) $(CLIBFLAGS) -o $@ $<
+
 #Net Daemon
 output/netd-Main.o: netd/Main.c \
 	common/include/Mongoose.h
@@ -129,7 +132,7 @@ output/plugins/limit.so: output/plugins-limit-Api.o output/plugins-limit-Core.o 
 
 #LoadBalancer
 output/plugins-loadbalancer-Api.o: plugins/loadbalancer/Api.c \
-	common/include/PluginInterface.h
+	common/include/PluginInterface.h common/include/Frozen.h
 	$(CC) $(CLIBFLAGS) $(LOADBALANCERFLAGS) -o $@ $<
 
 output/plugins-loadbalancer-Core.o: plugins/loadbalancer/Core.c \
@@ -137,6 +140,6 @@ output/plugins-loadbalancer-Core.o: plugins/loadbalancer/Core.c \
 	$(CC) $(CLIBFLAGS) $(LOADBALANCERFLAGS) -o $@ $<
 
 output/plugins/loadbalancer.so: output/plugins-loadbalancer-Api.o output/plugins-loadbalancer-Core.o \
-	output/common-File.o
+	output/common-File.o output/common-Frozen.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
