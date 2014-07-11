@@ -1,10 +1,10 @@
 CC=gcc
 LD=gcc
 
-CFLAGS=-Wall -Werror -c -Icommon/include/
-CLIBFLAGS=-Wall -Werror -c -fpic -Icommon/include/
-LDFLAGS=-Wall -Werror
-LDLIBFLAGS=-Wall -Werror -shared -lc
+CFLAGS=-g -Wall -Werror -c -Icommon/include/
+CLIBFLAGS=-g -Wall -Werror -c -fpic -Icommon/include/
+LDFLAGS=-g -Wall -Werror
+LDLIBFLAGS=-g -Wall -Werror -shared -lc
 
 NETDFLAGS=-Inetd/include/
 DHCPFLAGS=-Iplugins/dhcp/include/
