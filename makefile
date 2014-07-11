@@ -11,6 +11,7 @@ DHCPFLAGS=-Iplugins/dhcp/include/
 NATFLAGS=-Iplugins/nat/include/
 FIREWALLFLAGS=-Iplugins/firewall/include/
 LIMITFLAGS=-Iplugins/limit/include/
+LOADBALANCERFLAGS=-Iplugins/loadbalancer/include/
 
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
@@ -23,7 +24,7 @@ install: do_prepare everything do_package do_install
 
 everything: output/netd \
 	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/nat.so \
-	output/plugins/limit.so
+	output/plugins/limit.so output/plugins/loadbalancer.so
 
 do_prepare:
 	if [ ! -d output ]; then mkdir output; fi
@@ -125,3 +126,17 @@ output/plugins-limit-Core.o: plugins/limit/Core.c \
 output/plugins/limit.so: output/plugins-limit-Api.o output/plugins-limit-Core.o \
 	output/common-Process.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
+
+#LoadBalancer
+output/plugins-loadbalancer-Api.o: plugins/loadbalancer/Api.c \
+	common/include/PluginInterface.h
+	$(CC) $(CLIBFLAGS) $(LOADBALANCERFLAGS) -o $@ $<
+
+output/plugins-loadbalancer-Core.o: plugins/loadbalancer/Core.c \
+	common/include/File.h
+	$(CC) $(CLIBFLAGS) $(LOADBALANCERFLAGS) -o $@ $<
+
+output/plugins/loadbalancer.so: output/plugins-loadbalancer-Api.o output/plugins-loadbalancer-Core.o \
+	output/common-File.o
+	$(LD) $(LDLIBFLAGS) -o $@ $^
+

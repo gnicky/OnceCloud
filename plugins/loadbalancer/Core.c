@@ -2,30 +2,7 @@
 #include <stdlib.h>
 #include <memory.h>
 
-struct Rule
-{
-	char Port[10];
-	char IPAddress[20];
-};
-
-struct Listener
-{
-	char Port[10];
-	char Protocol[10];
-	int Policy;
-
-	int RuleCount;
-	struct Rule Rules[100];
-};
-
-struct Configuration
-{
-	int WorkerProcesses;
-	int WorkerConnections;
-
-	int ListenerCount;
-	struct Listener Listeners[100];
-};
+#include "Configuration.h"
 
 void InitializeConfiguration(char * buffer, int workerProcesses, int workerConnections)
 {
@@ -107,7 +84,7 @@ void GenerateConfiguration(char * buffer, struct Configuration * configuration)
 	AppendListeners(buffer,configuration->ListenerCount,configuration->Listeners);
 }
 
-int main(int argc, char * argv [])
+int Test()
 {
 	struct Configuration configuration;
 	configuration.WorkerProcesses=5;
