@@ -141,7 +141,6 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 			AllowPing(targetIPRange,fromIPRange);
 
 			response->StatusCode=200;
-			response->SetHeader(response,"Content-Length","0");
 			response->SetContent(response,"");
 
 			return TRUE;
@@ -168,7 +167,6 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	AddRule(protocol,internalIPRange,externalIPRange,port);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;
@@ -179,7 +177,6 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 	InitializeFirewall();
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;
@@ -209,7 +206,6 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 			DenyPing(targetIPRange,fromIPRange);
 
 			response->StatusCode=200;
-			response->SetHeader(response,"Content-Length","0");
 			response->SetContent(response,"");
 
 			return TRUE;
@@ -236,7 +232,6 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	RemoveRule(protocol,internalIPRange,externalIPRange,port);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;

@@ -25,7 +25,7 @@ void GenerateDhcpEntryList(char * buffer, struct DhcpEntry * dhcpEntry, int coun
 	int i=0;
 	buffer[0]='\0';
 	strcat(buffer,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-	strcat(buffer,"<ListAllBindingsResult>\n");
+	strcat(buffer,"<ListBindingsResult>\n");
 	strcat(buffer,"\t<Bindings>\n");
 	for(i=0;i<count;i++)
 	{
@@ -39,7 +39,7 @@ void GenerateDhcpEntryList(char * buffer, struct DhcpEntry * dhcpEntry, int coun
 		strcat(buffer,"\t\t</Binding>\n");
 	}
 	strcat(buffer,"\t</Bindings>\n");
-	strcat(buffer,"</ListAllBindingsResult>\n");
+	strcat(buffer,"</ListBindingsResult>\n");
 }
 
 int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
@@ -62,19 +62,9 @@ int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	int entryCount=0;
-	struct DhcpEntry dhcpEntry[300];
-
-	ListDhcpEntry(dhcpEntry,&entryCount);
-
-	char * buffer=malloc(65536);
-	GenerateDhcpEntryList(buffer,dhcpEntry,entryCount);
-
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Type","application/xml");
-	response->SetContent(response,buffer);
+	response->SetContent(response,"");
 
-	free(buffer);
 	return TRUE;
 }
 
@@ -98,7 +88,6 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	Bind(ipAddress,hardwareAddress);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;
@@ -130,7 +119,6 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 	InitializeConfiguration(subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLease,maxLease);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 	return TRUE;
 }
@@ -155,7 +143,6 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	Unbind(ipAddress,hardwareAddress);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;

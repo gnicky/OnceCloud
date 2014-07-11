@@ -27,7 +27,7 @@ void GenerateNatEntryList(char * buffer, struct NatEntry * natEntry, int count)
 	int i=0;
 	buffer[0]='\0';
 	strcat(buffer,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-	strcat(buffer,"<ListAllBindingsResult>\n");
+	strcat(buffer,"<ListBindingsResult>\n");
 	strcat(buffer,"\t<Bindings>\n");
 	for(i=0;i<count;i++)
 	{
@@ -41,7 +41,7 @@ void GenerateNatEntryList(char * buffer, struct NatEntry * natEntry, int count)
 		strcat(buffer,"\t\t</Binding>\n");
 	}
 	strcat(buffer,"\t</Bindings>\n");
-	strcat(buffer,"</ListAllBindingsResult>\n");
+	strcat(buffer,"</ListBindingsResult>\n");
 }
 
 int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
@@ -64,19 +64,9 @@ int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	int entryCount=0;
-	struct NatEntry natEntry[300];
-
-	ListNatEntry(natEntry,&entryCount);
-
-	char * buffer=malloc(65536);
-	GenerateNatEntryList(buffer,natEntry,entryCount);
-
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Type","application/xml");
-	response->SetContent(response,buffer);
+	response->SetContent(response,"");
 
-	free(buffer);
 	return TRUE;
 }
 
@@ -100,7 +90,6 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	AddNat(internalIPAddress,externalIPAddress);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;
@@ -111,7 +100,6 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 	InitializeNat();
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;
@@ -137,7 +125,6 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	RemoveNat(internalIPAddress,externalIPAddress);
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Length","0");
 	response->SetContent(response,"");
 
 	return TRUE;

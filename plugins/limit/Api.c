@@ -49,29 +49,8 @@ int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * interface=request->GetHeader(request,"x-bws-interface");
-	if(interface==NULL)
-	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify ethernet interface.\n</Error>\n";
-
-		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
-		return TRUE;		
-	}
-
-	char * buffer=malloc(1048576);
-	buffer[0]='\0';
-
-	ShowLimitConfiguration(buffer,interface);
-
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Type","text/plain");
-	response->SetContent(response,buffer);
-
-	free(buffer);
+	response->SetContent(response,"");
 
 	return TRUE;
 }
@@ -125,7 +104,7 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	{
 		const char * interface=request->GetHeader(request,"x-bws-interface");
 		const char * gateway=request->GetHeader(request,"x-bws-gateway");
-		const char * ip=request->GetHeader(request,"x-bws-ip");
+		const char * ip=request->GetHeader(request,"x-bws-ip-address");
 		const char * flowId=request->GetHeader(request,"x-bws-flow-id");
 
 		if(interface!=NULL && gateway!=NULL && ip!=NULL && flowId!=NULL)
@@ -220,7 +199,7 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	{
 		const char * interface=request->GetHeader(request,"x-bws-interface");
 		const char * gateway=request->GetHeader(request,"x-bws-gateway");
-		const char * ip=request->GetHeader(request,"x-bws-ip");
+		const char * ip=request->GetHeader(request,"x-bws-ip-address");
 
 		if(interface!=NULL && gateway!=NULL && ip!=NULL)
 		{
