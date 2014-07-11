@@ -90,3 +90,8 @@ void SaveConfiguration(struct Configuration * configuration)
 	free(buffer);
 }
 
+void RestartService()
+{
+	system("pkill nginx");
+	system("/usr/local/nginx/sbin/nginx");	
+}

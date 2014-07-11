@@ -4,5 +4,6 @@
 #include "Configuration.h"
 
 void SaveConfiguration(struct Configuration * configuration);
+void RestartService();
 
 #endif

@@ -75,20 +75,59 @@ int ParseRequest(const char * json, struct Configuration * configuration)
 		memcpy(configuration->Listeners[i].Policy,token->ptr,token->len);
 		configuration->Listeners[i].Policy[token->len]='\0';
 
+		while(1)
+		{
+			char ruleIndex[100];
+
+			sprintf(ruleIndex,"%s.rules[%d]",listenerIndex,j);
+			token=find_json_token(object,ruleIndex);
+			if(token==NULL)
+			{
+				break;
+			}
+
+			sprintf(temp,"%s.port",ruleIndex);
+			token=find_json_token(object,temp);
+			if(token==NULL)
+			{
+				return 1;
+			}	
+			memcpy(configuration->Listeners[i].Rules[j].Port,token->ptr,token->len);
+			configuration->Listeners[i].Rules[j].Port[token->len]='\0';
+
+			sprintf(temp,"%s.ip",ruleIndex);
+			token=find_json_token(object,temp);
+			if(token==NULL)
+			{
+				return 1;
+			}	
+			memcpy(configuration->Listeners[i].Rules[j].IPAddress,token->ptr,token->len);
+			configuration->Listeners[i].Rules[j].IPAddress[token->len]='\0';
+
+			j++;
+		}
+
+		configuration->Listeners[i].RuleCount=j;
 		i++;
 	}
+
 	configuration->ListenerCount=i;
 
- 	printf("WorkerProcesses: %s\n", configuration->WorkerProcesses);
-	printf("WorkerConnections: %s\n",configuration->WorkerConnections);
-	printf("ListenerCount: %d\n",configuration->ListenerCount);
-	printf("\n");
+	printf("Parsing completed.\n");
+ 	printf("WorkerProcesses=%s\n", configuration->WorkerProcesses);
+	printf("WorkerConnections=%s\n",configuration->WorkerConnections);
+	printf("ListenerCount=%d\n",configuration->ListenerCount);
 	for(i=0;i<configuration->ListenerCount;i++)
 	{
 		printf("Listener[%d].Port=%s\n",i,configuration->Listeners[i].Port);
 		printf("Listener[%d].Protocol=%s\n",i,configuration->Listeners[i].Protocol);
 		printf("Listener[%d].Policy=%s\n",i,configuration->Listeners[i].Policy);
-		printf("\n");
+		printf("Listener[%d].RuleCount=%d\n",i,configuration->Listeners[i].RuleCount);
+		for(j=0;j<configuration->Listeners[i].RuleCount;j++)
+		{
+			printf("Listener[%d].Rule[%d].Port=%s\n",i,j,configuration->Listeners[i].Rules[j].Port);
+			printf("Listener[%d].Rule[%d].IPAddress=%s\n",i,j,configuration->Listeners[i].Rules[j].IPAddress);
+		}
 	}
 
  	free(object);
@@ -132,8 +171,8 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	// TODO
-
+/*
+// Sample JSON 	
 	char * json=	
 		"{\n"
 		"\t\"workerProcesses\":5,\n"
@@ -174,19 +213,31 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 		"\t\t}\n"
 		"\t]\n"
 		"}\n";
+*/
+
+	if(request->Content==NULL)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+
+		return TRUE;
+	}
 
 	struct Configuration configuration;
-	int ret=ParseRequest(json,&configuration);
+	int ret=ParseRequest(request->Content,&configuration);
 	if(ret!=0)
 	{
 		response->StatusCode=400;
 		response->SetContent(response,"");
+
+		return TRUE;
 	}
-	// SaveConfiguration(struct Configuration * configuration);
+
+	SaveConfiguration(&configuration);
+	RestartService();
 
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Type","application/json");
-	response->SetContent(response,json);
+	response->SetContent(response,"");
 
 	return TRUE;
 }
