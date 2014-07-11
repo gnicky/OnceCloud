@@ -5,8 +5,8 @@
 
 struct Configuration
 {
-	int WorkerProcesses;
-	int WorkerConnections;
+	char WorkerProcesses[10];
+	char WorkerConnections[10];
 
 	int ListenerCount;
 	struct Listener Listeners[100];

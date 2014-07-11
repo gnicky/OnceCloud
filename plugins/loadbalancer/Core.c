@@ -3,16 +3,19 @@
 #include <memory.h>
 
 #include "Configuration.h"
+#include "File.h"
 
-void InitializeConfiguration(char * buffer, int workerProcesses, int workerConnections)
+const char * NginxConfigurationFile="/usr/local/nginx/conf/nginx.conf";
+
+void InitializeConfiguration(char * buffer, const char * workerProcesses, const char * workerConnections)
 {
 	buffer[0]='\0';
 	char temp[1000];
-	sprintf(temp,"worker_processes %d;\n\n",workerProcesses);
+	sprintf(temp,"worker_processes %s;\n\n",workerProcesses);
 	strcat(buffer,temp);
 
 	sprintf(temp,"events {\n"
-		"\tworker_connections %d;\n"
+		"\tworker_connections %s;\n"
 		"}\n",workerConnections);
 	strcat(buffer,temp);
 }
@@ -25,7 +28,7 @@ void DoAppendListener(char * buffer, struct Listener * listener)
 	strcat(buffer," {\n");
 	strcat(buffer,"\tupstream cluster {\n");
 
-	if(strcmp(listener->Protocol,"http")==0 && listener->Policy==1)
+	if(strcmp(listener->Protocol,"http")==0 && strcmp(listener->Policy,"1")==0)
 	{
 		strcat(buffer,"\t\tfair;\n\n");
 	}
@@ -78,41 +81,12 @@ void AppendListeners(char * buffer, int count, struct Listener * listeners)
 	}
 }
 
-void GenerateConfiguration(char * buffer, struct Configuration * configuration)
+void SaveConfiguration(struct Configuration * configuration)
 {
+	char * buffer=malloc(1048576);
 	InitializeConfiguration(buffer,configuration->WorkerProcesses,configuration->WorkerConnections);
 	AppendListeners(buffer,configuration->ListenerCount,configuration->Listeners);
-}
-
-int Test()
-{
-	struct Configuration configuration;
-	configuration.WorkerProcesses=5;
-	configuration.WorkerConnections=1000;
-	configuration.ListenerCount=2;
-
-	strcpy(configuration.Listeners[0].Port,"80");
-	strcpy(configuration.Listeners[0].Protocol,"http");
-	configuration.Listeners[0].Policy=1;
-	configuration.Listeners[0].RuleCount=2;
-	strcpy(configuration.Listeners[0].Rules[0].Port,"8080");
-	strcpy(configuration.Listeners[0].Rules[0].IPAddress,"10.0.0.1");
-	strcpy(configuration.Listeners[0].Rules[1].Port,"8090");
-	strcpy(configuration.Listeners[0].Rules[1].IPAddress,"10.0.0.2");
-
-	strcpy(configuration.Listeners[1].Port,"443");
-	strcpy(configuration.Listeners[1].Protocol,"tcp");
-	configuration.Listeners[1].Policy=0;
-	configuration.Listeners[1].RuleCount=2;
-	strcpy(configuration.Listeners[1].Rules[0].Port,"9080");
-	strcpy(configuration.Listeners[1].Rules[0].IPAddress,"10.0.0.3");
-	strcpy(configuration.Listeners[1].Rules[1].Port,"9090");
-	strcpy(configuration.Listeners[1].Rules[1].IPAddress,"10.0.0.4");
-
-	char * buffer=malloc(1048576);
-	GenerateConfiguration(buffer,&configuration);
-	printf("%s\n",buffer);
+	WriteAllText(NginxConfigurationFile,buffer);
 	free(buffer);
-
-	return 0;
 }
+

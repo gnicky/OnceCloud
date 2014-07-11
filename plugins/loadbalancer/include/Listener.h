@@ -7,7 +7,7 @@ struct Listener
 {
 	char Port[10];
 	char Protocol[10];
-	int Policy;
+	char Policy[10];
 
 	int RuleCount;
 	struct Rule Rules[100];

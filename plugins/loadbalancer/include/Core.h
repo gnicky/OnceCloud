@@ -3,6 +3,6 @@
 
 #include "Configuration.h"
 
-void GenerateConfiguration(char * buffer, struct Configuration * configuration);
+void SaveConfiguration(struct Configuration * configuration);
 
 #endif
