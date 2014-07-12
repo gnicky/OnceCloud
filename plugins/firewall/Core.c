@@ -32,12 +32,20 @@ void GenerateOutboundRule(char * buffer, const char * protocol, const char * int
 
 	strcat(buffer,"-s ");
 	strcat(buffer,internal);
+	if(strstr(internal,"/")==NULL)
+	{
+		strcat(buffer,"/32");
+	}
 	strcat(buffer," ");
-
+	
 	if(external!=NULL)
 	{
 		strcat(buffer,"-d ");
 		strcat(buffer,external);
+		if(strstr(external,"/")==NULL)
+		{
+			strcat(buffer,"/32");
+		}
 		strcat(buffer," ");
 	}
 
@@ -66,11 +74,19 @@ void GenerateInboundRule(char * buffer, const char * protocol, const char * inte
 	{
 		strcat(buffer,"-s ");
 		strcat(buffer,external);
+		if(strstr(external,"/")==NULL)
+		{
+			strcat(buffer,"/32");
+		}
 		strcat(buffer," ");
 	}
 
 	strcat(buffer,"-d ");
 	strcat(buffer,internal);
+	if(strstr(internal,"/")==NULL)
+	{
+		strcat(buffer,"/32");
+	}
 	strcat(buffer," ");
 
 	strcat(buffer,"-p ");
@@ -479,7 +495,7 @@ int ListFirewallRule(struct FirewallRule * buffer, int * count)
 					}
 					else
 					{
-						externalIPRange[0]='\0';
+						strcpy(externalIPRange,"0.0.0.0/0");
 					}
 					sscanf(strstr(position,"-p "),"-p %s ",protocol);
 					sscanf(strstr(position,"--sport "),"--sport %s ",port);
