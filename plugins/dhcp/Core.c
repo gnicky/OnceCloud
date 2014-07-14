@@ -217,6 +217,30 @@ int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
 
 int GenerateConfiguration(struct DhcpConfiguration * configuration)
 {
+	int i=0;
+	char * fileContent=malloc(1048576);
+	GenerateInitialConfiguration(fileContent,configuration->Subnet,configuration->Netmask,configuration->Router
+		,configuration->DNS,configuration->RangeStart,configuration->RangeEnd,configuration->DefaultLease
+		,configuration->MaxLease);
+
+	char * position=strstr(fileContent,"\n}");
+	*position='\0';
+	strcat(fileContent,"\n");
+
+	char temp[1000];
+	for(i=0;i<configuration->HostCount;i++)
+	{
+		GenerateHostConfiguration(temp,configuration->Hosts[i].IPAddress,configuration->Hosts[i].HardwareAddress);
+		strcat(fileContent,temp);
+	}
+
+	strcat(fileContent,"}\n");
+
+	WriteAllText(DhcpdConfigurationFileName,fileContent);
+
+	system("service dhcpd restart > /dev/null");
+
+	free(fileContent);
 	return 0;
 }
 

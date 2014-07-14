@@ -79,7 +79,7 @@ output/netd: output/netd-Main.o output/netd-PluginManager.o output/netd-HttpHelp
 #Plugins
 #DHCP
 output/plugins-dhcp-Api.o: plugins/dhcp/Api.c \
-	common/include/PluginInterface.h
+	common/include/PluginInterface.h common/include/Frozen.h
 	$(CC) $(CLIBFLAGS) $(DHCPFLAGS) -o $@ $<
 
 output/plugins-dhcp-Core.o: plugins/dhcp/Core.c \
@@ -87,7 +87,7 @@ output/plugins-dhcp-Core.o: plugins/dhcp/Core.c \
 	$(CC) $(CLIBFLAGS) $(DHCPFLAGS) -o $@ $<
 
 output/plugins/dhcp.so: output/plugins-dhcp-Api.o output/plugins-dhcp-Core.o \
-	output/common-File.o
+	output/common-File.o output/common-Frozen.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #NAT

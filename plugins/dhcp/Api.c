@@ -4,6 +4,8 @@
 
 #include "PluginInterface.h"
 #include "Core.h"
+#include "DhcpConfiguration.h"
+#include "Frozen.h"
 
 const char * PluginName="DHCP";
 const char * PluginVersion="1.0.0.0";
@@ -93,33 +95,140 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	return TRUE;
 }
 
+int ReadTextValue(struct json_token * object, const char * key, char * buffer)
+{
+	const struct json_token * token;
+	token=find_json_token(object,key);
+	if(token==NULL)
+	{
+		return 1;
+	}
+	memcpy(buffer,token->ptr,token->len);
+	buffer[token->len]='\0';
+	return 0;
+}
+
+int ParseRequest(const char * json, struct DhcpConfiguration * configuration)
+{
+	struct json_token * object;
+	const struct json_token * token;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return 1;
+	}
+
+	int status;
+
+	status=ReadTextValue(object,"subnet",configuration->Subnet);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"netmask",configuration->Netmask);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"router",configuration->Router);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"dns",configuration->DNS);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"rangeStart",configuration->RangeStart);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"rangeEnd",configuration->RangeEnd);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"defaultLease",configuration->DefaultLease);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"maxLease",configuration->MaxLease);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	int i=0;
+	while(1)
+	{
+		char hostIndex[100];
+		char temp[100];
+
+		sprintf(hostIndex,"hosts[%d]",i);
+		token=find_json_token(object,hostIndex);
+		if(token==NULL)
+		{
+			break;
+		}
+
+		sprintf(temp,"%s.ipAddress",hostIndex);
+		status=ReadTextValue(object,temp,configuration->Hosts[i].IPAddress);
+		if(status!=0)
+		{
+			return 1;
+		}
+		
+		sprintf(temp,"%s.hardwareAddress",hostIndex);
+		status=ReadTextValue(object,temp,configuration->Hosts[i].HardwareAddress);
+		if(status!=0)
+		{
+			return 1;
+		}
+
+		i++;
+	}
+
+	configuration->HostCount=i;
+
+	return 0;
+}
+
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * subnet=request->GetHeader(request,"x-bws-subnet");
-	const char * netmask=request->GetHeader(request,"x-bws-netmask");
-	const char * router=request->GetHeader(request,"x-bws-router");
-	const char * dns=request->GetHeader(request,"x-bws-dns");
-	const char * rangeStart=request->GetHeader(request,"x-bws-range-start");
-	const char * rangeEnd=request->GetHeader(request,"x-bws-range-end");
-	const char * defaultLease=request->GetHeader(request,"x-bws-default-lease");
-	const char * maxLease=request->GetHeader(request,"x-bws-max-lease");
-
-	if(subnet==NULL || netmask==NULL || router==NULL || dns==NULL || rangeStart==NULL || rangeEnd==NULL || defaultLease==NULL || maxLease==NULL)
+	if(request->Content==NULL)
 	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify Sub-network Address, Sub-network Mask, Router, DNS, Range and Lease Time.\n</Error>\n";
-
 		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
+		response->SetContent(response,"");
+
 		return TRUE;
 	}
 
-	InitializeConfiguration(subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLease,maxLease);
+	struct DhcpConfiguration configuration;
+	int ret=ParseRequest(request->Content,&configuration);
+	if(ret!=0)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+
+		return TRUE;
+	}
+
+	GenerateConfiguration(&configuration);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
+
 	return TRUE;
 }
 
