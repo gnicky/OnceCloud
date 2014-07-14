@@ -517,3 +517,8 @@ int ListFirewallRule(struct FirewallRule * buffer, int * count)
 	free(configuration);
 	return 0;
 }
+
+int SetFirewallRules(const char * fromIPAddress, int ruleCount, struct Rule * rules)
+{
+	return 0;
+}

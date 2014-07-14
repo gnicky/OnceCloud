@@ -174,6 +174,8 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
+	// TODO
+	
 	InitializeFirewall();
 
 	response->StatusCode=200;

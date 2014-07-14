@@ -105,7 +105,7 @@ output/plugins/nat.so: output/plugins-nat-Api.o output/plugins-nat-Core.o \
 
 #Firewall
 output/plugins-firewall-Api.o: plugins/firewall/Api.c \
-	common/include/PluginInterface.h
+	common/include/PluginInterface.h common/include/Frozen.h
 	$(CC) $(CLIBFLAGS) $(FIREWALLFLAGS) -o $@ $<
 
 output/plugins-firewall-Core.o: plugins/firewall/Core.c \
@@ -113,7 +113,7 @@ output/plugins-firewall-Core.o: plugins/firewall/Core.c \
 	$(CC) $(CLIBFLAGS) $(FIREWALLFLAGS) -o $@ $<
 
 output/plugins/firewall.so: output/plugins-firewall-Api.o output/plugins-firewall-Core.o  \
-	output/common-File.o output/common-Process.o
+	output/common-File.o output/common-Process.o output/common-Frozen.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Limit
