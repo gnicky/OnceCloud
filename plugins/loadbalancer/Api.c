@@ -15,6 +15,10 @@ int ParseRequest(const char * json, struct Configuration * configuration)
 	const struct json_token * token;
 
  	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return 1;
+	}
 
  	token=find_json_token(object,"workerProcesses");
 	if(token==NULL)
