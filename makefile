@@ -31,8 +31,7 @@ do_prepare:
 	if [ ! -d output/plugins ]; then mkdir output/plugins; fi
 
 do_package:
-	cp -r doc output/
-	tar --create --file=output/netd.tar.gz --gzip --directory=output netd doc plugins
+	tar --create --file=output/netd.tar.gz --gzip --directory=output netd plugins
 	cat installer/installer.sh output/netd.tar.gz > output/netd-installer
 	chmod +x output/netd-installer
 
