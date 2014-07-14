@@ -3,10 +3,10 @@
 
 struct Rule
 {
-	char Protocol[10];
+	char Protocol[20];
 	int StartPort;
 	int EndPort;
-	char ToIPAddress[10];
+	char ToIPAddress[20];
 };
 
 #endif

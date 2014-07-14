@@ -4,6 +4,7 @@
 
 #include "PluginInterface.h"
 #include "Core.h"
+#include "Frozen.h"
 
 const char * PluginName="Firewall";
 const char * PluginVersion="1.0.0.0";
@@ -172,12 +173,117 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	return TRUE;
 }
 
+int ReadTextValue(struct json_token * object, const char * key, char * buffer)
+{
+	const struct json_token * token;
+	token=find_json_token(object,key);
+	if(token==NULL)
+	{
+		return 1;
+	}
+	memcpy(buffer,token->ptr,token->len);
+	buffer[token->len]='\0';
+	return 0;
+}
+
+int ParseRequest(const char * json, struct FirewallConfiguration * configuration)
+{
+	struct json_token * object;
+	const struct json_token * token;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return 1;
+	}
+
+	int status;
+	status=ReadTextValue(object,"IP",configuration->FromIPAddress);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	int i=0;
+	while(1)
+	{
+		char ruleIndex[100];
+		char temp[100];
+
+		sprintf(ruleIndex,"rules[%d]",i);
+		token=find_json_token(object,ruleIndex);
+		if(token==NULL)
+		{
+			break;
+		}
+
+		sprintf(temp,"%s.protocol",ruleIndex);
+		status=ReadTextValue(object,temp,configuration->Rules[i].Protocol);
+		if(status!=0)
+		{
+			return 1;
+		}
+
+		sprintf(temp,"%s.IP",ruleIndex);
+		status=ReadTextValue(object,temp,configuration->Rules[i].ToIPAddress);
+		if(status!=0)
+		{
+			return 1;
+		}
+
+		if(strcmp(configuration->Rules[i].Protocol,"tcp")==0 || strcmp(configuration->Rules[i].Protocol,"udp")==0)
+		{
+			char number[100];
+
+			sprintf(temp,"%s.startPort",ruleIndex);
+			status=ReadTextValue(object,temp,number);
+			sscanf(number,"%d",&(configuration->Rules[i].StartPort));
+			if(status!=0)
+			{
+				return 1;
+			}
+		
+			sprintf(temp,"%s.endPort",ruleIndex);
+			status=ReadTextValue(object,temp,number);
+			sscanf(number,"%d",&(configuration->Rules[i].EndPort));
+			if(status!=0)
+			{
+				return 1;
+			}		
+		}
+		
+
+		i++;
+	}
+
+	configuration->RuleCount=i;
+
+	free(object);
+	return 0;
+}
+
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	// TODO
-	
-	InitializeFirewall();
+	if(request->Content==NULL)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
 
+		return TRUE;
+	}
+
+	struct FirewallConfiguration configuration;
+	int ret=ParseRequest(request->Content,&configuration);
+	if(ret!=0)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+
+		return TRUE;
+	}
+
+	SetFirewallRules(&configuration);
+	
 	response->StatusCode=200;
 	response->SetContent(response,"");
 
