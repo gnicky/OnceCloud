@@ -200,6 +200,7 @@ int ParseRequest(const char * json, struct DhcpConfiguration * configuration)
 	}
 
 	configuration->HostCount=i;
+	free(object);
 
 	return 0;
 }
