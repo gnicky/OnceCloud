@@ -9,7 +9,7 @@
 
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
-void GenerateConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)
+void GenerateHostConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)
 {
 	buffer[0]='\0';
 
@@ -54,7 +54,7 @@ int Bind(const char * ipAddress, const char * hardwareAddress)
 	strcat(newFileContent,"\n");
 
 	char buffer[1000];
-	GenerateConfiguration(buffer,ipAddress,hardwareAddress);
+	GenerateHostConfiguration(buffer,ipAddress,hardwareAddress);
 	strcat(newFileContent,buffer);
 	strcat(newFileContent,position+1);
 
@@ -214,3 +214,9 @@ int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
 
 	return 0;
 }
+
+int GenerateConfiguration(struct DhcpConfiguration * configuration)
+{
+	return 0;
+}
+

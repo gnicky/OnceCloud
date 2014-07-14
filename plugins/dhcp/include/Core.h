@@ -2,6 +2,9 @@
 #define _CORE_H_
 
 #include "DhcpEntry.h"
+#include "DhcpConfiguration.h"
+
+int GenerateConfiguration(struct DhcpConfiguration * configuration);
 
 int Bind(const char * ipAddress, const char * hardwareAddress);
 int Unbind(const char * ipAddress, const char * hardwareAddress);
