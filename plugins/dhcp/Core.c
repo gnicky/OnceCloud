@@ -28,12 +28,12 @@ void GenerateHostConfiguration(char * buffer, const char * ipAddress, const char
 	strcat(buffer,"\t}\n");
 }
 
-int Bind(const char * ipAddress, const char * hardwareAddress)
+void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 {
 	if(!IsFileExist(DhcpdConfigurationFileName))
 	{
 		printf("[Error] File is not exist: %s\n",DhcpdConfigurationFileName);
-		return 1;
+		exit(1);
 	}
 
 	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
@@ -44,12 +44,13 @@ int Bind(const char * ipAddress, const char * hardwareAddress)
 	if(position==NULL)
 	{
 		printf("[Error] Malformed configuration file.\n");
-		return 1;
+		exit(1);
 	}
 	*position='\0';
 
 	char * newFileContent=malloc(fileSize+1000);
 	memset(newFileContent,0,fileSize+1000);
+
 	strcat(newFileContent,fileContent);
 	strcat(newFileContent,"\n");
 
@@ -59,19 +60,35 @@ int Bind(const char * ipAddress, const char * hardwareAddress)
 	strcat(newFileContent,position+1);
 
 	WriteAllText(DhcpdConfigurationFileName,newFileContent);	
-	system("service dhcpd restart");
 
 	free(newFileContent);
 	free(fileContent);
+}
+
+int Bind(const char * ipAddress, const char * hardwareAddress)
+{
+	DoAddHostEntry(ipAddress,hardwareAddress);
+	system("service dhcpd restart");
 	return 0;
 }
 
-int Unbind(const char * ipAddress, const char * hardwareAddress)
+int AddBindings(int hostsCount, struct Host * hosts)
+{
+	int i=0;
+	for(i=0;i<hostsCount;i++)
+	{
+		DoAddHostEntry(hosts[i].IPAddress,hosts[i].HardwareAddress);
+	}
+	system("service dhcpd restart");
+	return 0;
+}
+
+void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 {
 	if(!IsFileExist(DhcpdConfigurationFileName))
 	{
 		printf("[Error] File is not exist: %s\n",DhcpdConfigurationFileName);
-		return 1;
+		exit(1);
 	}
 
 	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
@@ -121,6 +138,23 @@ int Unbind(const char * ipAddress, const char * hardwareAddress)
 	}
 
 	free(fileContent);
+}
+
+int Unbind(const char * ipAddress, const char * hardwareAddress)
+{
+	DoRemoveHostEntry(ipAddress,hardwareAddress);
+	system("service dhcpd restart");
+	return 0;
+}
+
+int RemoveBindings(int hostsCount, struct Host * hosts)
+{
+	int i=0;
+	for(i=0;i<hostsCount;i++)
+	{
+		DoRemoveHostEntry(hosts[i].IPAddress,hosts[i].HardwareAddress);
+	}
+	system("service dhcpd restart");
 	return 0;
 }
 

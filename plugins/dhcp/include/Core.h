@@ -8,6 +8,8 @@ int GenerateConfiguration(struct DhcpConfiguration * configuration);
 
 int Bind(const char * ipAddress, const char * hardwareAddress);
 int Unbind(const char * ipAddress, const char * hardwareAddress);
+int AddBindings(int hostsCount, struct Host * hosts);
+int RemoveBindings(int hostsCount, struct Host * hosts);
 int InitializeConfiguration(const char * subnet, const char * netmask, const char * router, const char * dns
 	, const char * rangeStart, const char * rangeEnd, const char * defaultLease, const char * maxLease);
 int ListDhcpEntry(struct DhcpEntry * buffer, int * count);
