@@ -10,6 +10,8 @@
 const char * PluginName="DHCP";
 const char * PluginVersion="1.0.0.0";
 
+int ParseHostsList(const char * json, int * hostsCount, struct Host * hosts);
+
 void GenerateDhcpEntryList(char * buffer, struct DhcpEntry * dhcpEntry, int count);
 
 int Initialize()
@@ -72,22 +74,27 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * ipAddress=request->GetHeader(request,"x-bws-ip-address");
-	const char * hardwareAddress=request->GetHeader(request,"x-bws-hardware-address");
-
-	if(ipAddress==NULL || hardwareAddress==NULL)
+	if(request->Content==NULL)
 	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify IP Address and Hardware Address.\n</Error>\n";
-
 		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
+		response->SetContent(response,"");
+
 		return TRUE;
 	}
 
-	Bind(ipAddress,hardwareAddress);
+	int hostsCount;
+	struct Host hosts[300];
+
+	int ret=ParseHostsList(request->Content,&hostsCount,hosts);
+	if(ret!=0)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+
+		return TRUE;
+	}
+
+	AddBindings(hostsCount,hosts);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
@@ -108,7 +115,59 @@ int ReadTextValue(struct json_token * object, const char * key, char * buffer)
 	return 0;
 }
 
-int ParseRequest(const char * json, struct DhcpConfiguration * configuration)
+int ParseHostsList(const char * json, int * hostsCount, struct Host * hosts)
+{
+	struct json_token * object;
+	const struct json_token * token;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		printf("NULL\n");
+		return 1;
+	}
+
+	int status;
+	int i=0;
+
+	while(1)
+	{
+		char hostIndex[100];
+		char temp[100];
+
+		sprintf(hostIndex,"hosts[%d]",i);
+		token=find_json_token(object,hostIndex);
+		if(token==NULL)
+		{
+			break;
+		}
+
+		sprintf(temp,"%s.ipAddress",hostIndex);
+		status=ReadTextValue(object,temp,hosts[i].IPAddress);
+		if(status!=0)
+		{
+			printf("IPAddr\n");
+			return 1;
+		}
+		
+		sprintf(temp,"%s.hardwareAddress",hostIndex);
+		status=ReadTextValue(object,temp,hosts[i].HardwareAddress);
+		if(status!=0)
+		{
+			printf("HARD\n");
+			return 1;
+		}
+		
+		i++;
+	}
+
+	*hostsCount=i;
+	free(object);
+
+	return 0;
+}
+
+int ParseDhcpConfiguration(const char * json, struct DhcpConfiguration * configuration)
 {
 	struct json_token * object;
 	const struct json_token * token;
@@ -216,7 +275,7 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 	}
 
 	struct DhcpConfiguration configuration;
-	int ret=ParseRequest(request->Content,&configuration);
+	int ret=ParseDhcpConfiguration(request->Content,&configuration);
 	if(ret!=0)
 	{
 		response->StatusCode=400;
@@ -235,22 +294,27 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * ipAddress=request->GetHeader(request,"x-bws-ip-address");
-	const char * hardwareAddress=request->GetHeader(request,"x-bws-hardware-address");
-
-	if(ipAddress==NULL || hardwareAddress==NULL)
+	if(request->Content==NULL)
 	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify IP Address and Hardware Address.\n</Error>\n";
-
 		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
+		response->SetContent(response,"");
+
 		return TRUE;
 	}
 
-	Unbind(ipAddress,hardwareAddress);
+	int hostsCount;
+	struct Host hosts[300];
+
+	int ret=ParseHostsList(request->Content,&hostsCount,hosts);
+	if(ret!=0)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+
+		return TRUE;
+	}
+
+	RemoveBindings(hostsCount,hosts);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");

@@ -36,9 +36,20 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 		exit(1);
 	}
 
-	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
-	char * fileContent=malloc(fileSize+1);
+	char * fileContent=malloc(1048576);
 	ReadAllText(DhcpdConfigurationFileName,fileContent);
+
+	char temp[1000];
+	sprintf(temp,"fixed-address %s",ipAddress);
+	if(strstr(fileContent,temp)!=NULL)
+	{
+		return;
+	}
+	sprintf(temp,"hardware ethernet %s",hardwareAddress);
+	if(strstr(fileContent,temp)!=NULL)
+	{
+		return;
+	}
 
 	char * position=strstr(fileContent,"\n}");
 	if(position==NULL)
@@ -48,8 +59,8 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	}
 	*position='\0';
 
-	char * newFileContent=malloc(fileSize+1000);
-	memset(newFileContent,0,fileSize+1000);
+	char * newFileContent=malloc(1048576);
+	newFileContent[0]='\0';
 
 	strcat(newFileContent,fileContent);
 	strcat(newFileContent,"\n");
@@ -68,7 +79,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 int Bind(const char * ipAddress, const char * hardwareAddress)
 {
 	DoAddHostEntry(ipAddress,hardwareAddress);
-	system("service dhcpd restart");
+	system("service dhcpd restart > /dev/null");
 	return 0;
 }
 
@@ -79,7 +90,7 @@ int AddBindings(int hostsCount, struct Host * hosts)
 	{
 		DoAddHostEntry(hosts[i].IPAddress,hosts[i].HardwareAddress);
 	}
-	system("service dhcpd restart");
+	system("service dhcpd restart > /dev/null");
 	return 0;
 }
 
@@ -91,8 +102,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 		exit(1);
 	}
 
-	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
-	char * fileContent=malloc(fileSize);
+	char * fileContent=malloc(1048576);
 	ReadAllText(DhcpdConfigurationFileName,fileContent);
 
 	char * hostEntryStart=fileContent;
@@ -120,15 +130,15 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 	if(hostEntryStart!=NULL && hostEntryEnd!=NULL)
 	{
 		// Found
-		char * newFileContent=malloc(fileSize);
-		memset(newFileContent,0,fileSize);
+		char * newFileContent=malloc(1048576);
+		newFileContent[0]='\0';
 
 		*hostEntryStart='\0';
 		strcat(newFileContent,fileContent);
 		strcat(newFileContent,hostEntryEnd+strlen("\t}\n"));
 
 		WriteAllText(DhcpdConfigurationFileName,newFileContent);
-		system("service dhcpd restart");
+		system("service dhcpd restart > /dev/null");
 
 		free(newFileContent);
 	}
@@ -143,7 +153,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 int Unbind(const char * ipAddress, const char * hardwareAddress)
 {
 	DoRemoveHostEntry(ipAddress,hardwareAddress);
-	system("service dhcpd restart");
+	system("service dhcpd restart > /dev/null");
 	return 0;
 }
 
@@ -154,7 +164,7 @@ int RemoveBindings(int hostsCount, struct Host * hosts)
 	{
 		DoRemoveHostEntry(hosts[i].IPAddress,hosts[i].HardwareAddress);
 	}
-	system("service dhcpd restart");
+	system("service dhcpd restart > /dev/null");
 	return 0;
 }
 
@@ -207,7 +217,7 @@ int InitializeConfiguration(const char * subnet, const char * netmask, const cha
 	char * fileContent=malloc(BUFFER_SIZE);
 	GenerateInitialConfiguration(fileContent,subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLease,maxLease);
 	WriteAllText(DhcpdConfigurationFileName,fileContent);
-	system("service dhcpd restart");
+	system("service dhcpd restart > /dev/null");
 
 	free(fileContent);
 	return 0;
