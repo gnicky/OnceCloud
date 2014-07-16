@@ -37,6 +37,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	}
 
 	char * fileContent=malloc(1048576);
+	memset(fileContent,0,1048576);
 	ReadAllText(DhcpdConfigurationFileName,fileContent);
 
 	char temp[1000];
@@ -103,6 +104,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 	}
 
 	char * fileContent=malloc(1048576);
+	memset(fileContent,0,1048576);
 	ReadAllText(DhcpdConfigurationFileName,fileContent);
 
 	char * hostEntryStart=fileContent;
@@ -227,8 +229,8 @@ int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
 {
 	int i=0;
 
-	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
-	char * fileContent=malloc(fileSize);
+	char * fileContent=malloc(1048576);
+	memset(fileContent,0,1048576);
 	ReadAllText(DhcpdConfigurationFileName,fileContent);
 
 	char * hostEntryStart=fileContent;
@@ -255,6 +257,7 @@ int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
 		hostEntryStart=hostEntryStart+strlen("\thost ");
 	}
 	*count=i;
+	free(fileContent);
 
 	return 0;
 }
