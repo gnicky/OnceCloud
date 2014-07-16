@@ -548,41 +548,45 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 
 	int i=0;
 	int j=0;
-	for(i=0;i<configuration->RuleCount;i++)
+	int k=0;
+	for(k=0;k<configuration->IPCount;k++)
 	{
-		char outbound[1000];
-		char inbound[1000];
+		char * internal=configuration->FromIPAddress[k];
+		for(i=0;i<configuration->RuleCount;i++)
+		{
+			char outbound[1000];
+			char inbound[1000];
 
-		char * protocol=configuration->Rules[i].Protocol;
-		char * internal=configuration->FromIPAddress;
-		char * external=configuration->Rules[i].ToIPAddress;
-		if(strlen(external)==0)
-		{
-			external=NULL;
-		}
-
-		if(strcmp(protocol,"icmp")==0)
-		{
-			GenerateOutboundPingRule(outbound,internal,external);
-			GenerateInboundPingRule(inbound,internal,external);
-			strcat(newConfiguration,outbound);
-			strcat(newConfiguration,"\n");
-			strcat(newConfiguration,inbound);
-			strcat(newConfiguration,"\n");
-		}
-		else if(strcmp(protocol,"tcp")==0 || strcmp(protocol,"udp")==0)
-		{
-			for(j=configuration->Rules[i].StartPort;j<=configuration->Rules[i].EndPort;j++)
+			char * protocol=configuration->Rules[i].Protocol;
+			char * external=configuration->Rules[i].ToIPAddress;
+			if(strlen(external)==0)
 			{
-				char port[100];
-				sprintf(port,"%d",j);
+				external=NULL;
+			}
 
-				GenerateOutboundRule(outbound,protocol,internal,external,port);
-				GenerateInboundRule(inbound,protocol,internal,external,port);
+			if(strcmp(protocol,"icmp")==0)
+			{
+				GenerateOutboundPingRule(outbound,internal,external);
+				GenerateInboundPingRule(inbound,internal,external);
 				strcat(newConfiguration,outbound);
 				strcat(newConfiguration,"\n");
 				strcat(newConfiguration,inbound);
 				strcat(newConfiguration,"\n");
+			}
+			else if(strcmp(protocol,"tcp")==0 || strcmp(protocol,"udp")==0)
+			{
+				for(j=configuration->Rules[i].StartPort;j<=configuration->Rules[i].EndPort;j++)
+				{
+					char port[100];
+					sprintf(port,"%d",j);
+
+					GenerateOutboundRule(outbound,protocol,internal,external,port);
+					GenerateInboundRule(inbound,protocol,internal,external,port);
+					strcat(newConfiguration,outbound);
+					strcat(newConfiguration,"\n");
+					strcat(newConfiguration,inbound);
+					strcat(newConfiguration,"\n");
+				}
 			}
 		}
 	}

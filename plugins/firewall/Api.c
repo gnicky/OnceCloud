@@ -198,13 +198,27 @@ int ParseRequest(const char * json, struct FirewallConfiguration * configuration
 	}
 
 	int status;
-	status=ReadTextValue(object,"IP",configuration->FromIPAddress);
-	if(status!=0)
-	{
-		return 1;
-	}
-
 	int i=0;
+	while(1)
+	{
+		char ipIndex[100];
+		sprintf(ipIndex,"IP[%d]",i);
+		token=find_json_token(object,ipIndex);
+		if(token==NULL)
+		{
+			break;
+		}
+
+		status=ReadTextValue(object,ipIndex,configuration->FromIPAddress[i]);
+		if(status!=0)
+		{
+			return 1;
+		}
+		i++;
+	}
+	configuration->IPCount=i;
+
+	i=0;
 	while(1)
 	{
 		char ruleIndex[100];

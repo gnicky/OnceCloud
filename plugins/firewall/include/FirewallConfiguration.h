@@ -3,9 +3,12 @@
 
 #include "Rule.h"
 
+#define IP_LENGTH 30
+
 struct FirewallConfiguration
 {
-	char FromIPAddress[20];
+	int IPCount;
+	char FromIPAddress[255][IP_LENGTH];
 	int RuleCount;
 	struct Rule Rules[255];
 };
