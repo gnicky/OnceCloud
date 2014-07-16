@@ -37,7 +37,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	}
 
 	int fileSize=(int)GetFileSize(DhcpdConfigurationFileName);
-	char * fileContent=malloc(fileSize);
+	char * fileContent=malloc(fileSize+1);
 	ReadAllText(DhcpdConfigurationFileName,fileContent);
 
 	char * position=strstr(fileContent,"\n}");
