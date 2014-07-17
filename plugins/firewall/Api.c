@@ -278,9 +278,11 @@ int ParseRequest(const char * json, struct FirewallConfiguration * configuration
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	if(request->Content==NULL)
+	if(request->Content==NULL || strlen(request->Content)==0)
 	{
-		response->StatusCode=400;
+		InitializeFirewall();
+
+		response->StatusCode=200;
 		response->SetContent(response,"");
 
 		return TRUE;

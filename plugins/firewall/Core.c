@@ -310,7 +310,12 @@ int DoRemoveRule(const char * rule)
 
 	while(strstr(position,"COMMIT")!=NULL && strstr(position,"COMMIT")!=position)
 	{
-		if(strstr(position,rule)==position)
+		char * end=strstr(position,"\n");
+		*end='\0';
+		char temp[1000];
+		strcpy(temp,position);
+		*end='\n';
+		if(strstr(temp,rule)!=NULL)
 		{
 			position=strstr(position,"\n");
 			position=position+strlen("\n");
@@ -521,37 +526,14 @@ int ListFirewallRule(struct FirewallRule * buffer, int * count)
 
 int SetFirewallRules(struct FirewallConfiguration * configuration)
 {
-	char * originalConfiguration=malloc(1048576);
-	char * newConfiguration=malloc(1048576);
-	newConfiguration[0]='\0';
-
-	LoadConfiguration(originalConfiguration);
-
-	char * filterStart=strstr(originalConfiguration,"*filter");
-	if(filterStart==NULL)
-	{
-		strcat(newConfiguration,originalConfiguration);
-	}
-	else
-	{
-		*filterStart='\0';
-		strcat(newConfiguration,originalConfiguration);
-		char * filterEnd=strstr(filterStart+1,"COMMIT\n")+strlen("COMMIT\n");
-		strcat(newConfiguration,filterEnd);
-	}
-
-	char * defaultConfiguration=malloc(1000);
-	GenerateDefaultConfiguration(defaultConfiguration);
-	char * rulesEnd=strstr(defaultConfiguration,"COMMIT\n");
-	*rulesEnd='\0';
-	strcat(newConfiguration,defaultConfiguration);
-
 	int i=0;
 	int j=0;
 	int k=0;
+
 	for(k=0;k<configuration->IPCount;k++)
 	{
 		char * internal=configuration->FromIPAddress[k];
+		DoRemoveRule(internal);
 		for(i=0;i<configuration->RuleCount;i++)
 		{
 			char outbound[1000];
@@ -568,10 +550,8 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 			{
 				GenerateOutboundPingRule(outbound,internal,external);
 				GenerateInboundPingRule(inbound,internal,external);
-				strcat(newConfiguration,outbound);
-				strcat(newConfiguration,"\n");
-				strcat(newConfiguration,inbound);
-				strcat(newConfiguration,"\n");
+				DoAddRule(outbound);
+				DoAddRule(inbound);
 			}
 			else if(strcmp(protocol,"tcp")==0 || strcmp(protocol,"udp")==0)
 			{
@@ -582,21 +562,12 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 
 					GenerateOutboundRule(outbound,protocol,internal,external,port);
 					GenerateInboundRule(inbound,protocol,internal,external,port);
-					strcat(newConfiguration,outbound);
-					strcat(newConfiguration,"\n");
-					strcat(newConfiguration,inbound);
-					strcat(newConfiguration,"\n");
+					DoAddRule(outbound);
+					DoAddRule(inbound);
 				}
 			}
 		}
 	}
 
-	strcat(newConfiguration,"COMMIT\n");
-
-	SaveConfiguration(newConfiguration);
-
-	free(defaultConfiguration);
-	free(originalConfiguration);
-	free(newConfiguration);
 	return 0;
 }
