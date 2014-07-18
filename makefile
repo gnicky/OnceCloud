@@ -65,7 +65,7 @@ output/netd-Main.o: netd/Main.c \
 
 output/netd-PluginManager.o: netd/PluginManager.c netd/include/PluginManager.h \
 	netd/include/Plugin.h \
-	common/include/PluginInterface.h
+	common/include/PluginInterface.h common/include/File.h
 	$(CC) $(CLIBFLAGS) $(NETDFLAGS) -o $@ $<
 
 output/netd-HttpHelper.o: netd/HttpHelper.c netd/include/HttpHelper.h \
@@ -73,7 +73,7 @@ output/netd-HttpHelper.o: netd/HttpHelper.c netd/include/HttpHelper.h \
 	$(CC) $(CLIBFLAGS) $(NETDFLAGS) -o $@ $<
 
 output/netd: output/netd-Main.o output/netd-PluginManager.o output/netd-HttpHelper.o \
-	output/common-Mongoose.o
+	output/common-Mongoose.o output/common-File.o
 	$(LD) $(LDFLAGS) $(DLFLAGS) $(PTHREADFLAGS) -o $@ $^
 
 #Plugins

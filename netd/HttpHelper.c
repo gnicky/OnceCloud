@@ -2,17 +2,19 @@
 #include <memory.h>
 
 #include "HttpHelper.h"
+
+#include "HttpHeader.h"
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 
-void FreeHttpHeaders(struct HttpHeader headers[], int headerCount);
+static const char * GetRequestHeader(struct HttpRequest * request, const char * name);
 
-const char * GetRequestHeader(struct HttpRequest * request, const char * name);
+static void SetResponseHeader(struct HttpResponse * response, const char * name, const char * value);
+static void SetResponseContent(struct HttpResponse * response, const char * content);
 
-void SetResponseHeader(struct HttpResponse * response, const char * name, const char * value);
-void SetResponseContent(struct HttpResponse * response, const char * content);
+static void FreeHttpHeaders(struct HttpHeader headers[], int headerCount);
 
-const char * GetRequestHeader(struct HttpRequest * request, const char * name)
+static const char * GetRequestHeader(struct HttpRequest * request, const char * name)
 {
 	int i=0;
 	for(i=0;i<request->HeaderCount;i++)
@@ -25,7 +27,7 @@ const char * GetRequestHeader(struct HttpRequest * request, const char * name)
 	return NULL;
 }
 
-void SetResponseHeader(struct HttpResponse * response, const char * name, const char * value)
+static void SetResponseHeader(struct HttpResponse * response, const char * name, const char * value)
 {
 	int i=0;
 	int exist=0;
@@ -50,7 +52,7 @@ void SetResponseHeader(struct HttpResponse * response, const char * name, const 
 	}
 }
 
-void SetResponseContent(struct HttpResponse * response, const char * content)
+static void SetResponseContent(struct HttpResponse * response, const char * content)
 {
 	if(response->Content!=NULL)
 	{
@@ -65,7 +67,7 @@ void SetResponseContent(struct HttpResponse * response, const char * content)
 	response->SetHeader(response,"Content-Length",textLength);
 }
 
-void FreeHttpHeaders(struct HttpHeader headers[], int headerCount)
+static void FreeHttpHeaders(struct HttpHeader headers[], int headerCount)
 {
 	int i=0;
 	for(i=0;i<headerCount;i++)
