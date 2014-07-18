@@ -38,7 +38,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 
 	char * fileContent=malloc(1048576);
 	memset(fileContent,0,1048576);
-	ReadAllText(DhcpdConfigurationFileName,fileContent);
+	ReadFile(DhcpdConfigurationFileName,fileContent);
 
 	char temp[1000];
 	sprintf(temp,"fixed-address %s",ipAddress);
@@ -71,7 +71,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	strcat(newFileContent,buffer);
 	strcat(newFileContent,position+1);
 
-	WriteAllText(DhcpdConfigurationFileName,newFileContent);	
+	WriteFile(DhcpdConfigurationFileName,newFileContent);	
 
 	free(newFileContent);
 	free(fileContent);
@@ -105,7 +105,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 
 	char * fileContent=malloc(1048576);
 	memset(fileContent,0,1048576);
-	ReadAllText(DhcpdConfigurationFileName,fileContent);
+	ReadFile(DhcpdConfigurationFileName,fileContent);
 
 	char * hostEntryStart=fileContent;
 	char * hostEntryEnd=NULL;
@@ -139,7 +139,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 		strcat(newFileContent,fileContent);
 		strcat(newFileContent,hostEntryEnd+strlen("\t}\n"));
 
-		WriteAllText(DhcpdConfigurationFileName,newFileContent);
+		WriteFile(DhcpdConfigurationFileName,newFileContent);
 		system("service dhcpd restart > /dev/null");
 
 		free(newFileContent);
@@ -218,7 +218,7 @@ int InitializeConfiguration(const char * subnet, const char * netmask, const cha
 {
 	char * fileContent=malloc(BUFFER_SIZE);
 	GenerateInitialConfiguration(fileContent,subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLease,maxLease);
-	WriteAllText(DhcpdConfigurationFileName,fileContent);
+	WriteFile(DhcpdConfigurationFileName,fileContent);
 	system("service dhcpd restart > /dev/null");
 
 	free(fileContent);
@@ -231,7 +231,7 @@ int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
 
 	char * fileContent=malloc(1048576);
 	memset(fileContent,0,1048576);
-	ReadAllText(DhcpdConfigurationFileName,fileContent);
+	ReadFile(DhcpdConfigurationFileName,fileContent);
 
 	char * hostEntryStart=fileContent;
 	while((hostEntryStart=strstr(hostEntryStart,"\thost "))!=NULL)
@@ -283,7 +283,7 @@ int GenerateConfiguration(struct DhcpConfiguration * configuration)
 
 	strcat(fileContent,"}\n");
 
-	WriteAllText(DhcpdConfigurationFileName,fileContent);
+	WriteFile(DhcpdConfigurationFileName,fileContent);
 
 	system("service dhcpd restart > /dev/null");
 

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <memory.h>
@@ -58,7 +57,7 @@ int CreateDirectoryIfNotExist(const char * path)
 	return CreateDirectory(path);
 }
 
-int ReadAllText(const char * fileName, char * fileContent)
+int ReadFile(const char * fileName, char * fileContent)
 {
 	int expectedReadCount;
 	int actualReadCount;
@@ -82,7 +81,7 @@ int ReadAllText(const char * fileName, char * fileContent)
 	return TRUE;
 }
 
-int WriteAllText(const char * fileName, const char * fileContent)
+int WriteFile(const char * fileName, const char * fileContent)
 {
 	FILE * file=NULL;
 	int expectedWriteCount;

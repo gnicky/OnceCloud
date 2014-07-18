@@ -86,7 +86,7 @@ void SaveConfiguration(struct Configuration * configuration)
 	char * buffer=malloc(1048576);
 	InitializeConfiguration(buffer,configuration->WorkerProcesses,configuration->WorkerConnections);
 	AppendListeners(buffer,configuration->ListenerCount,configuration->Listeners);
-	WriteAllText(NginxConfigurationFile,buffer);
+	WriteFile(NginxConfigurationFile,buffer);
 	free(buffer);
 }
 

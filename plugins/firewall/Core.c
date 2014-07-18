@@ -20,9 +20,9 @@ void LoadConfiguration(char * buffer)
 void SaveConfiguration(char * buffer)
 {
 	SetInput(buffer,"iptables-restore");
-	WriteAllText("/etc/sysconfig/iptables",buffer);
+	WriteFile("/etc/sysconfig/iptables",buffer);
 	GetOutput(buffer,"iptables-save");
-	WriteAllText("/etc/sysconfig/iptables",buffer);
+	WriteFile("/etc/sysconfig/iptables",buffer);
 }
 
 void GenerateOutboundRule(char * buffer, const char * protocol, const char * internal, const char * external, const char * port)
