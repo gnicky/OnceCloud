@@ -8,6 +8,7 @@
 #include "Plugin.h"
 #include "File.h"
 #include "PluginManager.h"
+#include "Type.h"
 
 static const char * PluginBasePath="/usr/local/netd/plugins";
 
@@ -32,7 +33,12 @@ void LoadPlugins()
 		pluginFileNames[i]=malloc(256);
 	}
 
-	count=ListFiles(PluginBasePath,".so",pluginFileNames);
+	int status;
+	status=ListFiles(PluginBasePath,".so",&count,pluginFileNames);
+	if(status!=TRUE)
+	{
+		exit(1);
+	}
 	PluginCount=count;
 	for(i=0;i<count;i++)
 	{

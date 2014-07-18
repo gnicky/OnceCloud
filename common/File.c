@@ -1,15 +1,20 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <memory.h>
 #include <errno.h>
 #include <sys/stat.h>
 
-#include <Type.h>
+#include "Type.h"
+#include "Logger.h"
 
 int IsFileExist(const char * path)
 {
+	if(path==NULL)
+	{
+		return FALSE;
+	}
+
 	if(access(path,F_OK)==0)
 	{
 		return TRUE;
@@ -19,24 +24,35 @@ int IsFileExist(const char * path)
 
 int IsDirectoryExist(const char * path)
 {
+	if(path==NULL)
+	{
+		return FALSE;
+	}
+
 	DIR * pointer=opendir(path);
 	if(pointer==NULL)
 	{
+		WriteLog(LOG_ERR,strerror(errno));
 		return FALSE;
 	}
 	closedir(pointer);
 	return TRUE;
 }
 
-unsigned long GetFileSize(const char * fileName)
+int GetFileSize(const char * fileName)
 {
+	if(fileName==NULL)
+	{
+		return -1;
+	}
+
 	struct stat fileStatus;
 	if(stat(fileName,&fileStatus)<0)
 	{
-		// TODO: More error handling
+		WriteLog(LOG_ERR,strerror(errno));
 		return -1;
 	}
-	return (unsigned long)fileStatus.st_size;
+	return (int)fileStatus.st_size;
 }
 
 int CreateDirectory(const char * path)
@@ -44,7 +60,7 @@ int CreateDirectory(const char * path)
 	int status=mkdir(path,S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH);
 	if(status!=0)
 	{
-		// TODO: More error handling
+		WriteLog(LOG_ERR,strerror(errno));
 		return FALSE;
 	}
 	return TRUE;
@@ -68,7 +84,7 @@ int ReadFile(const char * fileName, char * fileContent)
 	file=fopen(fileName,"r");
 	if(file==NULL)
 	{
-		// TODO: More error handling
+		WriteLog(LOG_ERR,strerror(errno));	
 		return FALSE;
 	}
 
@@ -92,7 +108,7 @@ int WriteFile(const char * fileName, const char * fileContent)
 	file=fopen(fileName,"w");
 	if(file==NULL)
 	{
-		// TODO: More error handling
+		WriteLog(LOG_ERR,strerror(errno));
 		return FALSE;
 	}
 
@@ -108,7 +124,7 @@ int WriteFile(const char * fileName, const char * fileContent)
 }
 
 
-int ListFiles(const char * path, const char * suffix, char ** buffer)
+int ListFiles(const char * path, const char * suffix, int * count, char ** buffer)
 {
 	int i=0;
 	DIR * directory=NULL;
@@ -117,10 +133,8 @@ int ListFiles(const char * path, const char * suffix, char ** buffer)
 	directory=opendir(path);
 	if(directory==NULL)
 	{
-		printf("Error: Cannot open directory %s. ",path);
-		printf("(%s)\n",strerror(errno));
-		printf("Halt.\n");
-		exit(1);
+		WriteLog(LOG_ERR,strerror(errno));
+		return FALSE;
 	}
 
 	while((entry=readdir(directory))!=NULL)
@@ -145,5 +159,6 @@ int ListFiles(const char * path, const char * suffix, char ** buffer)
 	}
 
 	closedir(directory);
-	return i;
+	*count=i;
+	return TRUE;
 }
