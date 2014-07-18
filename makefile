@@ -51,6 +51,9 @@ output/common-File.o: common/File.c common/include/File.h \
 output/common-Frozen.o: common/Frozen.c common/include/Frozen.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
+output/common-Logger.o: common/Logger.c common/include/Logger.h
+	$(CC) $(CLIBFLAGS) -o $@ $<
+
 output/common-Mongoose.o: common/Mongoose.c common/include/Mongoose.h
 	$(CC) $(CLIBFLAGS) $(PTHREADFLAGS) -o $@ $<
 
@@ -60,7 +63,7 @@ output/common-Process.o: common/Process.c common/include/Process.h \
 
 #Net Daemon
 output/netd-Main.o: netd/Main.c \
-	common/include/Mongoose.h
+	common/include/Mongoose.h common/include/Logger.h
 	$(CC) $(CLIBFLAGS) $(NETDFLAGS) $(PTHREADFLAGS) -o $@ $<
 
 output/netd-PluginManager.o: netd/PluginManager.c netd/include/PluginManager.h \
@@ -73,7 +76,7 @@ output/netd-HttpHelper.o: netd/HttpHelper.c netd/include/HttpHelper.h \
 	$(CC) $(CLIBFLAGS) $(NETDFLAGS) -o $@ $<
 
 output/netd: output/netd-Main.o output/netd-PluginManager.o output/netd-HttpHelper.o \
-	output/common-Mongoose.o output/common-File.o
+	output/common-Mongoose.o output/common-File.o output/common-Logger.o
 	$(LD) $(LDFLAGS) $(DLFLAGS) $(PTHREADFLAGS) -o $@ $^
 
 #Plugins

@@ -4,6 +4,7 @@
 #include "Plugin.h"
 #include "PluginManager.h"
 #include "HttpHelper.h"
+#include "Logger.h"
 
 static int EventHandler(struct mg_connection * connection, enum mg_event event)
 {
@@ -107,7 +108,7 @@ int main(int argc, char * argv [])
 	server=mg_create_server(NULL,EventHandler);
 	mg_set_option(server,"listening_port","9090");
 
-	printf("Starting on port %s\n",mg_get_option(server, "listening_port"));
+	WriteLog(LOG_INFO,"Starting on port %s",mg_get_option(server, "listening_port"));
 	while(1)
 	{
 		mg_poll_server(server,1000);
