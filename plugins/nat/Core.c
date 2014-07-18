@@ -8,14 +8,14 @@
 
 void LoadConfiguration(char * buffer)
 {
-	GetOutput(buffer,"iptables-save");
+	GetProcessOutput(buffer,"iptables-save");
 }
 
 void SaveConfiguration(char * buffer)
 {
-	SetInput(buffer,"iptables-restore");
+	SetProcessInput(buffer,"iptables-restore");
 	WriteFile("/etc/sysconfig/iptables",buffer);
-	GetOutput(buffer,"iptables-save");
+	GetProcessOutput(buffer,"iptables-save");
 	WriteFile("/etc/sysconfig/iptables",buffer);
 }
 

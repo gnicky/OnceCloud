@@ -110,21 +110,21 @@ void ShowLimitConfiguration(char * buffer, const char * interface)
 	buffer[0]='\0';
 	strcat(buffer,"======qdisc========\n");
 	sprintf(commandLine,"tc qdisc ls dev %s",interface);
-	GetOutput(outputBuffer,commandLine);
+	GetProcessOutput(outputBuffer,commandLine);
 	strcat(buffer,outputBuffer);
 
 	strcat(buffer,"======class========\n");
 	sprintf(commandLine,"tc class ls dev %s",interface);
-	GetOutput(outputBuffer,commandLine);
+	GetProcessOutput(outputBuffer,commandLine);
 	strcat(buffer,outputBuffer);
 
 	strcat(buffer,"======filter=======\n");
 	sprintf(commandLine,"tc filter ls dev %s",interface);
-	GetOutput(outputBuffer,commandLine);
+	GetProcessOutput(outputBuffer,commandLine);
 	strcat(buffer,outputBuffer);
 
 	strcat(buffer,"======ip route=====\n");
 	sprintf(commandLine,"ip route");
-	GetOutput(outputBuffer,commandLine);
+	GetProcessOutput(outputBuffer,commandLine);
 	strcat(buffer,outputBuffer);
 }

@@ -48,14 +48,14 @@ output/common-File.o: common/File.c common/include/File.h \
 	common/include/Type.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
-output/common-Process.o: common/Process.c common/include/Process.h \
-	common/include/Type.h
+output/common-Frozen.o: common/Frozen.c common/include/Frozen.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 output/common-Mongoose.o: common/Mongoose.c common/include/Mongoose.h
 	$(CC) $(CLIBFLAGS) $(PTHREADFLAGS) -o $@ $<
 
-output/common-Frozen.o: common/Frozen.c common/include/Frozen.h
+output/common-Process.o: common/Process.c common/include/Process.h \
+	common/include/Type.h
 	$(CC) $(CLIBFLAGS) -o $@ $<
 
 #Net Daemon

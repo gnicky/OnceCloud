@@ -1,10 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <memory.h>
 
 #include <Type.h>
 
-int SetInput(char * buffer, const char * commandLine)
+int SetProcessInput(char * buffer, const char * commandLine)
 {
 	FILE * write=NULL;
 
@@ -21,7 +20,7 @@ int SetInput(char * buffer, const char * commandLine)
 	return TRUE;
 }
 
-int GetOutput(char * buffer, const char * commandLine)
+int GetProcessOutput(char * buffer, const char * commandLine)
 {
 	buffer[0]='\0';
 	FILE * read=NULL;
