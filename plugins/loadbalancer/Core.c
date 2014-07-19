@@ -6,6 +6,7 @@
 #include "File.h"
 
 const char * NginxConfigurationFile="/usr/local/nginx/conf/nginx.conf";
+const char * NginxProgramFile="/usr/local/nginx/sbin/nginx";
 
 void InitializeConfiguration(char * buffer, const char * workerProcesses, const char * workerConnections)
 {
@@ -28,9 +29,16 @@ void DoAppendListener(char * buffer, struct Listener * listener)
 	strcat(buffer," {\n");
 	strcat(buffer,"\tupstream cluster {\n");
 
-	if(strcmp(listener->Protocol,"http")==0 && strcmp(listener->Policy,"1")==0)
+	if(strcmp(listener->Protocol,"http")==0)
 	{
-		strcat(buffer,"\t\tfair;\n\n");
+		if(strcmp(listener->Policy,"0")==0)
+		{
+			strcat(buffer,"\t\tsticky;\n\n");
+		}
+		else if(strcmp(listener->Policy,"1")==0)
+		{
+			strcat(buffer,"\t\tfair;\n\n");
+		}		
 	}
 
 	for(i=0;i<listener->RuleCount;i++)
@@ -92,6 +100,6 @@ void SaveConfiguration(struct Configuration * configuration)
 
 void RestartService()
 {
-	system("pkill nginx");
-	system("/usr/local/nginx/sbin/nginx");	
+	char temp[1000];
+	sprintf(temp,"%s -s reload",NginxProgramFile);
 }
