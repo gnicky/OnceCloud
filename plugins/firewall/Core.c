@@ -350,7 +350,7 @@ void GenerateDefaultConfiguration(char * buffer)
 	strcat(buffer,"*filter\n");
 	strcat(buffer,":INPUT DROP [0:0]\n");
 	strcat(buffer,":FORWARD DROP [0:0]\n");
-	strcat(buffer,":OUTPUT DROP [0:0]\n");
+	strcat(buffer,":OUTPUT ACCEPT [0:0]\n");
 
 	// Rules
 	// Allow Local Loopback
@@ -378,9 +378,10 @@ void GenerateDefaultConfiguration(char * buffer)
 	strcat(buffer,"-A INPUT -p tcp -m tcp --dport 9090 -j ACCEPT\n");
 
 	// Allow Established Connection
-	strcat(buffer,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
-	strcat(buffer,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
-	strcat(buffer,"-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	// strcat(buffer,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	// strcat(buffer,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	// strcat(buffer,"-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+
 	strcat(buffer,"COMMIT\n");
 }
 
