@@ -90,7 +90,7 @@ output/plugins-dhcp-Core.o: plugins/dhcp/Core.c \
 	$(CC) $(CLIBFLAGS) $(DHCPFLAGS) -o $@ $<
 
 output/plugins/dhcp.so: output/plugins-dhcp-Api.o output/plugins-dhcp-Core.o \
-	output/common-File.o output/common-Frozen.o
+	output/common-File.o output/common-Frozen.o output/common-Logger.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #NAT
@@ -103,7 +103,7 @@ output/plugins-nat-Core.o: plugins/nat/Core.c \
 	$(CC) $(CLIBFLAGS) $(NATFLAGS) -o $@ $<
 
 output/plugins/nat.so: output/plugins-nat-Api.o output/plugins-nat-Core.o \
-	output/common-File.o output/common-Process.o
+	output/common-File.o output/common-Process.o output/common-Logger.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Firewall
@@ -116,7 +116,7 @@ output/plugins-firewall-Core.o: plugins/firewall/Core.c \
 	$(CC) $(CLIBFLAGS) $(FIREWALLFLAGS) -o $@ $<
 
 output/plugins/firewall.so: output/plugins-firewall-Api.o output/plugins-firewall-Core.o  \
-	output/common-File.o output/common-Process.o output/common-Frozen.o
+	output/common-File.o output/common-Process.o output/common-Frozen.o output/common-Logger.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
 #Limit
@@ -142,6 +142,6 @@ output/plugins-loadbalancer-Core.o: plugins/loadbalancer/Core.c \
 	$(CC) $(CLIBFLAGS) $(LOADBALANCERFLAGS) -o $@ $<
 
 output/plugins/loadbalancer.so: output/plugins-loadbalancer-Api.o output/plugins-loadbalancer-Core.o \
-	output/common-File.o output/common-Frozen.o
+	output/common-File.o output/common-Frozen.o output/common-Logger.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
