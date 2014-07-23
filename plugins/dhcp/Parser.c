@@ -67,61 +67,110 @@ struct DhcpConfiguration
 	int SubnetConfigurationCount;
 };
 
-void ReadDhcpConfiguration(char * fileContent, struct DhcpConfiguration * configuration)
+struct SplitResult
 {
-	// Read All Global Configuration
-	char * subnetStart=strstr(fileContent,"subnet ");
-	char * lineStart=fileContent;
-	char * lineEnd=strstr(lineStart,"\n");
+	char * Delimiter;
+	char ** Content;
+	int Count;
+};
+
+struct SplitResult * Split(const char * source, const char * delimiter)
+{
+	char * temp=malloc(strlen(source)+1);
+	strcpy(temp,source);
+
+	// Get Count
 	int i=0;
-	while(lineEnd<subnetStart)
+	char * current=temp;
+	char * result=NULL;
+	char * lastPosition=NULL;
+	while((result=strtok_r(current,delimiter,&lastPosition))!=NULL)
 	{
-		*lineEnd='\0';
-		
-		int number;
-		number=sscanf(lineStart,"%s %s;",configuration->GlobalConfiguration[i].Key,configuration->GlobalConfiguration[i].Value);
-		printf("%s\n",configuration->GlobalConfiguration[i].Value);
-		if(number==2)
+		i++;
+		current=NULL;
+	}
+
+	struct SplitResult * ret=malloc(sizeof(struct SplitResult));
+	ret->Count=i;
+	ret->Delimiter=malloc(strlen(delimiter)+1);
+	strcpy(ret->Delimiter,delimiter);
+
+	// Split
+	char ** content=malloc(sizeof(char *)*(ret->Count));
+	i=0;
+	current=temp;
+	result=NULL;
+	lastPosition=NULL;
+	strcpy(temp,source);
+	while((result=strtok_r(current,delimiter,&lastPosition))!=NULL)
+	{	
+		content[i]=malloc(strlen(result)+1);
+		strcpy(content[i],result);
+		i++;
+		current=NULL;	
+	}
+
+	ret->Content=content;
+
+	free(temp);
+	return ret;
+}
+
+void FreeSplitResult(struct SplitResult * result)
+{
+	free(result->Delimiter);
+	int i=0;
+	for(i=0;i<result->Count;i++)
+	{
+		free(result->Content[i]);
+	}
+	free(result);
+}
+
+void ParseAllGlobalConfiguration(struct SplitResult * result, struct DhcpConfiguration * configuration)
+{
+	int status;
+	int i;
+	int flags=REG_EXTENDED;
+	regmatch_t matchResult[3];
+	const size_t matchCount=3;
+	regex_t regex;
+	const char * pattern="^(.*?) (.*?);$";
+	regcomp(&regex,pattern,flags);
+	for(i=0;i<result->Count;i++)
+	{
+		status=regexec(&regex,result->Content[i],matchCount,matchResult,0);
+		if(status==REG_NOMATCH)
 		{
-			i++;
+			break;
 		}
-	
-		*lineEnd='\n';
-		lineStart=lineEnd+1;
-		lineEnd=strstr(lineStart,"\n");	
+		else if(status==0)
+		{
+			memcpy(configuration->GlobalConfiguration[i].Key
+				,result->Content[i]+matchResult[1].rm_so,matchResult[1].rm_eo-matchResult[1].rm_so);
+			memcpy(configuration->GlobalConfiguration[i].Value
+				,result->Content[i]+matchResult[2].rm_so,matchResult[2].rm_eo-matchResult[2].rm_so);
+			configuration->GlobalConfiguration[i].Key[matchResult[1].rm_eo-matchResult[1].rm_so]='\0';
+			configuration->GlobalConfiguration[i].Value[matchResult[2].rm_eo-matchResult[2].rm_so]='\0';
+		}
 	}
 	configuration->GlobalConfigurationCount=i;
+}
 
-	i=0;
-	char * subnetEnd=strstr(subnetStart+strlen("subnet "),"subnet ");
-	while(subnetStart!=NULL)
+void ReadDhcpConfiguration(char * fileContent, struct DhcpConfiguration * configuration)
+{
+	int count=0;
+	int i=0;
+	struct SplitResult * result=Split(fileContent,"\n");
+	printf("Content:\n");
+	for(i=0;i<result->Count;i++)
 	{
-		if(subnetEnd!=NULL)
-		{
-			*subnetEnd='\0';
-		}
-
-		int number;
-		number=sscanf(subnetStart,"subnet %s netmask %s {",configuration->SubnetConfiguration[i].SubnetAddress,configuration->SubnetConfiguration[i].Netmask);
-		if(number==2)
-		{
-			i++;
-			char * position=strstr(subnetStart,"option routers");
-			printf("%s\n",position);
-			sscanf(position,"option routers %s;",configuration->SubnetConfiguration[i].Routers);
-			
-		}
-		if(subnetEnd!=NULL)
-		{
-			*subnetEnd='s';
-		}
-		subnetStart=subnetEnd;
-		if(subnetStart!=NULL)
-		{
-			subnetEnd=strstr(subnetStart+strlen("subnet "),"subnet ");
-		}
+		printf("%s\n",result->Content[i]);
 	}
-	configuration->SubnetConfigurationCount=i;
+
+	ParseAllGlobalConfiguration(result,configuration);
+
+	FreeSplitResult(result);
 }
 
 void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
@@ -163,6 +212,7 @@ int main(int argc, char * argv [])
 	fileContent[fileSize]='\0';
 
 	struct DhcpConfiguration configuration;
+	memset(&configuration,0,sizeof(struct DhcpConfiguration));
 	ReadDhcpConfiguration(fileContent,&configuration);
 
 	int i=0;
