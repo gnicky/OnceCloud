@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <memory.h>
+#include <regex.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -53,6 +54,9 @@ struct SubnetConfiguration
 {
 	char SubnetAddress[50];
 	char Netmask[50];
+	char Routers[50];
+	char SubnetMask[50];
+	char DomainNameServers[50];
 };
 
 struct DhcpConfiguration
@@ -76,6 +80,7 @@ void ReadDhcpConfiguration(char * fileContent, struct DhcpConfiguration * config
 		
 		int number;
 		number=sscanf(lineStart,"%s %s;",configuration->GlobalConfiguration[i].Key,configuration->GlobalConfiguration[i].Value);
+		printf("%s\n",configuration->GlobalConfiguration[i].Value);
 		if(number==2)
 		{
 			i++;
@@ -97,10 +102,14 @@ void ReadDhcpConfiguration(char * fileContent, struct DhcpConfiguration * config
 		}
 
 		int number;
-		number=sscanf(subnetStart,"subnet %s netmask %s",configuration->SubnetConfiguration[i].SubnetAddress,configuration->SubnetConfiguration[i].Netmask);
+		number=sscanf(subnetStart,"subnet %s netmask %s {",configuration->SubnetConfiguration[i].SubnetAddress,configuration->SubnetConfiguration[i].Netmask);
 		if(number==2)
 		{
 			i++;
+			char * position=strstr(subnetStart,"option routers");
+			printf("%s\n",position);
+			sscanf(position,"option routers %s;",configuration->SubnetConfiguration[i].Routers);
+			
 		}
 		if(subnetEnd!=NULL)
 		{
@@ -133,7 +142,12 @@ void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
 	for(i=0;i<configuration->SubnetConfigurationCount;i++)
 	{
 		char temp[1000];
-		sprintf(temp,"subnet %s netmask %s {\n}\n",configuration->SubnetConfiguration[i].SubnetAddress,configuration->SubnetConfiguration[i].Netmask);
+		sprintf(temp,"subnet %s netmask %s {\n",configuration->SubnetConfiguration[i].SubnetAddress,configuration->SubnetConfiguration[i].Netmask);
+		strcat(fileContent,temp);
+		sprintf(temp,"\toption routers %s;\n",configuration->SubnetConfiguration[i].Routers);
+		strcat(fileContent,temp);
+		sprintf(temp,"}\n\n");
+		strcat(fileContent,temp);
 	}
 
 	printf("%s",fileContent);
