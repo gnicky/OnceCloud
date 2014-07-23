@@ -131,15 +131,12 @@ void ParseAllGlobalConfiguration(struct SplitResult * result, struct DhcpConfigu
 {
 	int status;
 	int i;
-	int flags=REG_EXTENDED;
 	regmatch_t matchResult[3];
-	const size_t matchCount=3;
 	regex_t regex;
-	const char * pattern="^(.*?) (.*?);$";
-	regcomp(&regex,pattern,flags);
+	regcomp(&regex,"^(\\S*) (.*?);$",REG_EXTENDED);
 	for(i=0;i<result->Count;i++)
 	{
-		status=regexec(&regex,result->Content[i],matchCount,matchResult,0);
+		status=regexec(&regex,result->Content[i],3,matchResult,0);
 		if(status==REG_NOMATCH)
 		{
 			break;
@@ -157,18 +154,78 @@ void ParseAllGlobalConfiguration(struct SplitResult * result, struct DhcpConfigu
 	configuration->GlobalConfigurationCount=i;
 }
 
+void ParseAllSubnetConfiguration(struct SplitResult * result, struct DhcpConfiguration * configuration)
+{
+	int status;
+	int i;
+	regmatch_t subnetDefinition[3];
+	regmatch_t optionMatch[3];
+	regex_t subnetDefinitionPattern;
+	regex_t optionPattern;
+	regcomp(&subnetDefinitionPattern,"^subnet (\\S*?) netmask (\\S*?) \\{$",REG_EXTENDED);
+	regcomp(&optionPattern,"^\toption (\\S*?) (.*);",REG_EXTENDED);
+	int j=0;
+	int k;
+	for(i=0;i<result->Count;)
+	{
+		// Parse Subnet definition
+		status=regexec(&subnetDefinitionPattern,result->Content[i],3,subnetDefinition,0);
+		if(status==REG_NOMATCH)
+		{
+			i++;
+			continue;
+		}
+		else if(status==0)
+		{
+			memcpy(configuration->SubnetConfiguration[j].SubnetAddress
+				,result->Content[i]+subnetDefinition[1].rm_so,subnetDefinition[1].rm_eo-subnetDefinition[1].rm_so);
+			memcpy(configuration->SubnetConfiguration[j].Netmask
+				,result->Content[i]+subnetDefinition[2].rm_so,subnetDefinition[2].rm_eo-subnetDefinition[2].rm_so);
+			configuration->SubnetConfiguration[j].SubnetAddress[subnetDefinition[1].rm_eo-subnetDefinition[1].rm_so]='\0';
+			configuration->SubnetConfiguration[j].Netmask[subnetDefinition[2].rm_eo-subnetDefinition[2].rm_so]='\0';
+			i++;
+			// Parse options
+			while(1)
+			{
+				status=regexec(&optionPattern,result->Content[i],3,optionMatch,0);
+				if(status==REG_NOMATCH)
+				{
+					i++;
+					break;
+				}
+				else if(status==0)
+				{
+					char key[100]={0};
+					char value[100]={0};
+					memcpy(key,result->Content[i]+optionMatch[1].rm_so,optionMatch[1].rm_eo-optionMatch[1].rm_so);
+					memcpy(value,result->Content[i]+optionMatch[2].rm_so,optionMatch[2].rm_eo-optionMatch[2].rm_so);
+					key[optionMatch[1].rm_eo-optionMatch[1].rm_so]='\0';
+					value[optionMatch[2].rm_eo-optionMatch[2].rm_so]='\0';
+					if(strcmp(key,"routers")==0)
+					{
+						strcpy(configuration->SubnetConfiguration[j].Routers,value);
+					}
+					else if(strcmp(key,"subnet-mask")==0)
+					{
+						strcpy(configuration->SubnetConfiguration[j].SubnetMask,value);
+					}
+					i++;
+				}
+			}
+			j++;
+		}
+	}
+	configuration->SubnetConfigurationCount=j;
+}
+
 void ReadDhcpConfiguration(char * fileContent, struct DhcpConfiguration * configuration)
 {
 	int count=0;
 	int i=0;
 	struct SplitResult * result=Split(fileContent,"\n");
-	printf("Content:\n");
-	for(i=0;i<result->Count;i++)
-	{
-		printf("%s\n",result->Content[i]);
-	}
 
 	ParseAllGlobalConfiguration(result,configuration);
+	ParseAllSubnetConfiguration(result,configuration);
 
 	FreeSplitResult(result);
 }
@@ -195,6 +252,8 @@ void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
 		strcat(fileContent,temp);
 		sprintf(temp,"\toption routers %s;\n",configuration->SubnetConfiguration[i].Routers);
 		strcat(fileContent,temp);
+		sprintf(temp,"\toption subnet-mask %s;\n",configuration->SubnetConfiguration[i].SubnetMask);
+		strcat(fileContent,temp);
 		sprintf(temp,"}\n\n");
 		strcat(fileContent,temp);
 	}
@@ -214,21 +273,6 @@ int main(int argc, char * argv [])
 	struct DhcpConfiguration configuration;
 	memset(&configuration,0,sizeof(struct DhcpConfiguration));
 	ReadDhcpConfiguration(fileContent,&configuration);
-
-	int i=0;
-	printf("Global Configuration:\n");
-	for(i=0;i<configuration.GlobalConfigurationCount;i++)
-	{
-		printf("Key: %s, Value: %s\n",configuration.GlobalConfiguration[i].Key,configuration.GlobalConfiguration[i].Value);
-	}
-
-	printf("\n");
-
-	for(i=0;i<configuration.SubnetConfigurationCount;i++)
-	{
-		printf("Subnet: %s Netmask: %s\n",configuration.SubnetConfiguration[i].SubnetAddress,configuration.SubnetConfiguration[i].Netmask);
-	}
-
 	SaveDhcpConfiguration(&configuration);
 
 	return 0;
