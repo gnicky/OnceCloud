@@ -229,3 +229,22 @@ int ListFiles(const char * path, const char * suffix, int * count, char ** buffe
 	*count=i;
 	return TRUE;
 }
+
+int RemoveFile(const char * fileName)
+{
+	if(fileName==NULL)
+	{
+		WriteLog(LOG_ERR,"RemoveFile: Argument null: fileName");
+		return FALSE;
+	}
+
+	int status=remove(fileName);
+	if(status!=0)
+	{
+		WriteLog(LOG_ERR,"RemoveFile: Cannot remove file %s (%s)",fileName,strerror(errno));
+		return FALSE;
+	}
+
+	return TRUE;
+}
+

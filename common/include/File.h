@@ -14,4 +14,6 @@ int ListFiles(const char * path, const char * suffix, int * count, char ** buffe
 int ReadFile(const char * fileName, char * fileContent);
 int WriteFile(const char * fileName, const char * fileContent);
 
+int RemoveFile(const char * fileName);
+
 #endif
