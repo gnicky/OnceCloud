@@ -47,7 +47,70 @@ void GenerateDefaultConfiguration(char * buffer)
 	strcat(buffer,"COMMIT\n");
 }
 
-int AddNat(const char * internal, const char * external)
+void RemoveIPAddress(const char * interface, const char * address)
+{
+	int i=0;
+	char fileName[1000];
+	for(i=0;i<255;i++)
+	{	
+		sprintf(fileName,"/etc/sysconfig/network-scripts/ifcfg-%s:%d",interface,i);
+		if(!IsFileExist(fileName))
+		{
+			continue;
+		}
+		int fileSize=GetFileSize(fileName);
+		char * fileContent=malloc(fileSize+1);
+		ReadFile(fileName,fileContent);
+		fileContent[fileSize]='\0';
+		char keyword[1000];
+		sprintf(keyword,"IPADDR=\"%s\"",address);
+		char * position=strstr(fileContent,keyword);
+		if(position!=NULL)
+		{
+			char temp[100]={0};
+			sprintf(temp,"ifdown %s:%d",interface,i);
+			system(temp);
+			free(fileContent);
+			RemoveFile(fileName);
+			return;
+		}
+		free(fileContent);
+	}
+}
+
+void AddIPAddress(const char * interface, const char * address)
+{
+	int i=0;
+	char fileName[1000];
+	for(i=0;i<255;i++)
+	{
+		sprintf(fileName,"/etc/sysconfig/network-scripts/ifcfg-%s:%d",interface,i);
+		if(!IsFileExist(fileName))
+		{
+			break;
+		}
+	}
+
+	printf("FileName: %s\n",fileName);
+
+	char temp[1000]={0};
+	char fileContent[1000]={0};
+	sprintf(temp,"DEVICE=\"%s:%d\"\n",interface,i);
+	strcat(fileContent,temp);
+	sprintf(temp,"IPADDR=\"%s\"\n",address);
+	strcat(fileContent,temp);
+	sprintf(temp,"NETMASK=\"255.255.255.255\"\n");
+	strcat(fileContent,temp);
+	sprintf(temp,"ONBOOT=\"yes\"\n");
+	strcat(fileContent,temp);
+
+	WriteFile(fileName,fileContent);
+
+	sprintf(temp,"ifup %s:%d",interface,i);
+	system(temp);
+}
+
+int AddNat(const char * internal, const char * external, const char * interface)
 {
 	char savedChar;
 	char * originalConfiguration=malloc(1048576);
@@ -115,12 +178,15 @@ int AddNat(const char * internal, const char * external)
 
 	SaveConfiguration(newConfiguration);
 
+	RemoveIPAddress(interface,external);
+	AddIPAddress(interface,external);
+
 	free(newConfiguration);
 	free(originalConfiguration);
 	return 0;
 }
 
-int RemoveNat(const char * internal, const char * external)
+int RemoveNat(const char * internal, const char * external, const char * interface)
 {
 	char savedChar;
 	char * originalConfiguration=malloc(1048576);
@@ -182,6 +248,7 @@ int RemoveNat(const char * internal, const char * external)
 	char * ruleEnd=position;
 	strcat(newConfiguration,ruleEnd);
 
+	RemoveIPAddress(interface,external);
 	SaveConfiguration(newConfiguration);
 
 	free(newConfiguration);

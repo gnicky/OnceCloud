@@ -4,8 +4,8 @@
 #include "NatEntry.h"
 
 int ListNatEntry(struct NatEntry * buffer, int * count);
-int AddNat(const char * internal, const char * external);
-int RemoveNat(const char * internal, const char * external);
+int AddNat(const char * internal, const char * external, const char * interface);
+int RemoveNat(const char * internal, const char * external, const char * interface);
 int InitializeNat();
 
 #endif

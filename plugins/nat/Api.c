@@ -74,12 +74,13 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 {
 	const char * internalIPAddress=request->GetHeader(request,"x-bws-internal-ip-address");
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
+	const char * externalInterface=request->GetHeader(request,"x-bws-external-interface");
 
 	if(internalIPAddress==NULL || externalIPAddress==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify Internal IP Address and External IP Address.\n</Error>\n";
+			"<Error>\n\tPlease specify Internal IP Address, External IP Address and External Interface.\n</Error>\n";
 
 		response->StatusCode=400;
 		response->SetHeader(response,"Content-Type","application/xml");
@@ -87,7 +88,7 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 		return TRUE;
 	}
 
-	AddNat(internalIPAddress,externalIPAddress);
+	AddNat(internalIPAddress,externalIPAddress,externalInterface);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
@@ -109,12 +110,13 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 {
 	const char * internalIPAddress=request->GetHeader(request,"x-bws-internal-ip-address");
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
+	const char * externalInterface=request->GetHeader(request,"x-bws-external-interface");
 
 	if(internalIPAddress==NULL || externalIPAddress==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify Internal IP Address and External IP Address.\n</Error>\n";
+			"<Error>\n\tPlease specify Internal IP Address, External IP Address and External Interface.\n</Error>\n";
 
 		response->StatusCode=400;
 		response->SetHeader(response,"Content-Type","application/xml");
@@ -122,7 +124,7 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 		return TRUE;
 	}
 
-	RemoveNat(internalIPAddress,externalIPAddress);
+	RemoveNat(internalIPAddress,externalIPAddress,externalInterface);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
