@@ -102,4 +102,5 @@ void RestartService()
 {
 	char temp[1000];
 	sprintf(temp,"%s -s reload",NginxProgramFile);
+	system(temp);
 }
