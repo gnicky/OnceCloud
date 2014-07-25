@@ -83,6 +83,7 @@ static int EventHandler(struct mg_connection * connection, enum mg_event event)
 		}
 		else
 		{
+			WriteLog(LOG_INFO,"Cannot find plugin %s, sending 404.",pluginName);
 			// 404 Not Found
 			mg_send_status(connection,404);
 			mg_send_header(connection,"Content-Length","0");

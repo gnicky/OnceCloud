@@ -9,6 +9,7 @@
 #include "File.h"
 #include "PluginManager.h"
 #include "Type.h"
+#include "Logger.h"
 
 static const char * PluginBasePath="/usr/local/netd/plugins";
 
@@ -37,6 +38,7 @@ void LoadPlugins()
 	status=ListFiles(PluginBasePath,".so",&count,pluginFileNames);
 	if(status!=TRUE)
 	{
+		WriteLog(LOG_ERR,"Cannot list plugin files. Exiting.");
 		exit(1);
 	}
 	PluginCount=count;
@@ -66,9 +68,7 @@ void UnloadPlugins()
 		dlclose(Plugins[i].Handle);
 		if((error=dlerror())!=NULL)
 		{
-			printf("Error: Cannot destroy plugin %s. ",Plugins[i].Name);
-			printf("(%s)\n",error);
-			printf("Halt.\n");
+			WriteLog(LOG_ERR,"Cannot destroy plugin %s (%s). Exiting.",Plugins[i].Name,error);
 			exit(1);
 		}
 	}
@@ -101,9 +101,7 @@ struct Plugin DoLoadPlugin(const char * path)
 	FILE * file=NULL;
 	if((file=fopen(path,"rb"))==NULL)
 	{
-		printf("Error: Cannot open plugin file %s. ",path);
-		printf("(%s)\n",strerror(errno));
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot open plugin file %s (%s). Exiting.",path,strerror(errno));
 		exit(1);
 	}
 	fclose(file);
@@ -111,27 +109,21 @@ struct Plugin DoLoadPlugin(const char * path)
 	void * handle=dlopen(path,RTLD_NOW);
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot load plugin file %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot load plugin file %s (%s). Exiting.",path,error);
 		exit(1);
 	}
 
 	const char ** name=(const char **)dlsym(handle,"PluginName");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot read plugin name from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot read plugin name from %s. Exiting.",path);
 		exit(1);
 	}
 	
 	const char ** version=(const char **)dlsym(handle,"PluginVersion");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot read plugin version from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot read plugin version from %s. Exiting.",path);
 		exit(1);
 	}
 
@@ -146,65 +138,53 @@ struct Plugin DoLoadPlugin(const char * path)
 	*(void **)(&(plugin.Initialize))=dlsym(handle,"Initialize");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"Initialize\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"Initialize\" from %s. Exiting.",path);
 		exit(1);
 	}	
 
 	*(void **)(&(plugin.Destroy))=dlsym(handle,"Destroy");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"Destroy\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"Destroy\" from %s. Exiting.",path);
 		exit(1);
 	}
 
 	*(void **)(&(plugin.HandleGetRequest))=dlsym(handle,"HandleGetRequest");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"HandleGetRequest\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"HandleGetRequest\" from %s. Exiting.",path);
 		exit(1);
 	}
 
 	*(void **)(&(plugin.HandleHeadRequest))=dlsym(handle,"HandleHeadRequest");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"HandleHeadRequest\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"HandleHeadRequest\" from %s. Exiting.",path);
 		exit(1);
 	}
 
 	*(void **)(&(plugin.HandlePostRequest))=dlsym(handle,"HandlePostRequest");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"HandlePostRequest\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"HandlePostRequest\" from %s. Exiting.",path);
 		exit(1);
 	}
 
 	*(void **)(&(plugin.HandlePutRequest))=dlsym(handle,"HandlePutRequest");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"HandlePutRequest\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"HandlePutRequest\" from %s. Exiting.",path);
 		exit(1);
 	}
 
 	*(void **)(&(plugin.HandleDeleteRequest))=dlsym(handle,"HandleDeleteRequest");
 	if((error=dlerror())!=NULL)
 	{
-		printf("Error: Cannot get function \"HandleDeleteRequest\" from %s. ",path);
-		printf("(%s)\n",error);
-		printf("Halt.\n");
+		WriteLog(LOG_ERR,"Cannot get function \"HandleDeleteRequest\" from %s. Exiting.",path);
 		exit(1);
 	}
+
+	WriteLog(LOG_INFO,"Plugin loaded: %s (%s)",plugin.Name,plugin.Version);
 
 	return plugin;
 }
