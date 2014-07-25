@@ -81,6 +81,7 @@ void InitializePlugins()
 	for(i=0;i<PluginCount;i++)
 	{
 		Plugins[i].Initialize();
+		WriteLog(LOG_INFO,"Plugin initialized: %s (%s)",Plugins[i].Name,Plugins[i].Version);		
 	}
 }
 
@@ -91,6 +92,7 @@ void DestroyPlugins()
 	for(i=0;i<PluginCount;i++)
 	{
 		Plugins[i].Destroy();
+		WriteLog(LOG_INFO,"Plugin destroyed: %s (%s)",Plugins[i].Name,Plugins[i].Version);		
 	}
 }
 

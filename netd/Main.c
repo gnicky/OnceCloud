@@ -1,10 +1,14 @@
 #include <memory.h>
+#include <signal.h>
+#include <stdlib.h>
 
 #include "Mongoose.h"
 #include "Plugin.h"
 #include "PluginManager.h"
 #include "HttpHelper.h"
 #include "Logger.h"
+
+int Exiting=0;
 
 static int EventHandler(struct mg_connection * connection, enum mg_event event)
 {
@@ -99,9 +103,36 @@ static int EventHandler(struct mg_connection * connection, enum mg_event event)
 	return result;
 }
 
+void Interrupt(int signal)
+{
+	WriteLog(LOG_INFO,"Asked to interrupt. Exiting.");
+	Exiting=1;
+}
+
+void Terminate(int signal)
+{
+	WriteLog(LOG_INFO,"Asked to terminate. Exiting.");
+	Exiting=1;
+}
+
+void OnSegmentationFault(int signal)
+{
+	WriteLog(LOG_ERR,"Segmentation fault detected. Aborting.");
+	abort();
+}
+
 
 int main(int argc, char * argv [])
 {
+	signal(SIGINT,Interrupt);
+	signal(SIGTERM,Terminate);
+	signal(SIGSEGV,OnSegmentationFault);
+
+	WriteLog(LOG_INFO,"Net Daemon started.");
+
+	Exiting=0;
+
+	WriteLog(LOG_INFO,"Loading plugins...");
 	LoadPlugins();
 
 	struct mg_server * server;
@@ -109,14 +140,19 @@ int main(int argc, char * argv [])
 	server=mg_create_server(NULL,EventHandler);
 	mg_set_option(server,"listening_port","9090");
 
-	WriteLog(LOG_INFO,"Starting on port %s",mg_get_option(server, "listening_port"));
-	while(1)
+	WriteLog(LOG_INFO,"Server started. Listening on port %s",mg_get_option(server, "listening_port"));
+	while(!Exiting)
 	{
 		mg_poll_server(server,1000);
 	}
 
 	mg_destroy_server(&server);
+	WriteLog(LOG_INFO,"Server stopped.");
 
+	WriteLog(LOG_INFO,"Unloading plugins...");
 	UnloadPlugins();
+
+	WriteLog(LOG_INFO,"Net Daemon stopped.");
+
 	return 0;
 }
