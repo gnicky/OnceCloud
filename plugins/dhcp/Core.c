@@ -6,6 +6,7 @@
 #include "File.h"
 #include "DhcpEntry.h"
 #include "Core.h"
+#include "Logger.h"
 
 const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
@@ -32,7 +33,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 {
 	if(!IsFileExist(DhcpdConfigurationFileName))
 	{
-		printf("[Error] File is not exist: %s\n",DhcpdConfigurationFileName);
+		WriteLog(LOG_ERR,"DHCP configuration file is not exist: %s. Exiting.",DhcpdConfigurationFileName);
 		exit(1);
 	}
 
@@ -55,7 +56,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	char * position=strstr(fileContent,"\n}");
 	if(position==NULL)
 	{
-		printf("[Error] Malformed configuration file.\n");
+		WriteLog(LOG_ERR,"Malformed configuration file %s. Exiting.",DhcpdConfigurationFileName);
 		exit(1);
 	}
 	*position='\0';
@@ -99,7 +100,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 {
 	if(!IsFileExist(DhcpdConfigurationFileName))
 	{
-		printf("[Error] File is not exist: %s\n",DhcpdConfigurationFileName);
+		WriteLog(LOG_ERR,"DHCP configuration file is not exist: %s. Exiting.",DhcpdConfigurationFileName);
 		exit(1);
 	}
 
