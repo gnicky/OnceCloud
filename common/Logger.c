@@ -5,6 +5,7 @@
 #include <time.h>
 #include <syslog.h>
 #include <time.h>
+#include <errno.h>
 
 #define MAX_LINE_SIZE 1024
 
@@ -47,6 +48,17 @@ void WriteLog(int priority, const char * format, ...)
 		,LogLevel[priority]);
 
 	strcat(log,message);
+	char fileName[100]={0};
+	sprintf(fileName,"/usr/local/netd/log/log-%04d-%02d-%02d.log",(1900+localTime->tm_year),(1+localTime->tm_mon),localTime->tm_mday);
+
+	FILE * logFile=fopen(fileName,"at");
+	if(logFile==NULL)
+	{
+		printf("Cannot open log file: %s (%s). Exiting.\n",fileName,strerror(errno));
+		exit(1);
+	}
+	fprintf(logFile,"%s\n",log);
+	fclose(logFile);
 
 	puts(log);
 }
