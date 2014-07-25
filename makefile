@@ -12,6 +12,7 @@ NATFLAGS=-Iplugins/nat/include/
 FIREWALLFLAGS=-Iplugins/firewall/include/
 LIMITFLAGS=-Iplugins/limit/include/
 LOADBALANCERFLAGS=-Iplugins/loadbalancer/include/
+ROUTEFLAGS=-Iplugins/route/include/
 
 DLFLAGS=-ldl
 PTHREADFLAGS=-pthread
@@ -23,7 +24,7 @@ package: do_prepare everything do_package
 install: do_prepare everything do_package do_install
 
 everything: output/netd \
-	output/plugins/dhcp.so output/plugins/firewall.so \
+	output/plugins/dhcp.so output/plugins/firewall.so output/plugins/route.so \
 	output/plugins/nat.so output/plugins/limit.so output/plugins/loadbalancer.so
 
 do_prepare:
@@ -143,5 +144,18 @@ output/plugins-loadbalancer-Core.o: plugins/loadbalancer/Core.c \
 
 output/plugins/loadbalancer.so: output/plugins-loadbalancer-Api.o output/plugins-loadbalancer-Core.o \
 	output/common-File.o output/common-Frozen.o output/common-Logger.o
+	$(LD) $(LDLIBFLAGS) -o $@ $^
+
+#Route
+output/plugins-route-Api.o: plugins/route/Api.c \
+	common/include/PluginInterface.h
+	$(CC) $(CLIBFLAGS) $(ROUTEFLAGS) -o $@ $<
+
+output/plugins-route-Core.o: plugins/route/Core.c \
+	common/include/File.h
+	$(CC) $(CLIBFLAGS) $(ROUTEFLAGS) -o $@ $<
+
+output/plugins/route.so: output/plugins-route-Api.o output/plugins-route-Core.o \
+	output/common-File.o output/common-Logger.o
 	$(LD) $(LDLIBFLAGS) -o $@ $^
 
