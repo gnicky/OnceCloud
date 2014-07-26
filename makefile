@@ -52,7 +52,10 @@ do_install:
 clean:
 	$(NETD_INSTALL)rm -rf output
 
-.PHONY: all everything prepare package clean
+dep:
+	$(CC) -MM netd/*.c -Icommon/include/ $(NETDFLAGS)
+
+.PHONY: all everything prepare package clean dep
 
 #Common
 output/common-File.o: common/File.c common/include/File.h \
