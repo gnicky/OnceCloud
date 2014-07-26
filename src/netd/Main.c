@@ -103,16 +103,21 @@ static int EventHandler(struct mg_connection * connection, enum mg_event event)
 	return result;
 }
 
-void Interrupt(int signal)
+void OnInterrupt(int signal)
 {
 	WriteLog(LOG_INFO,"Asked to interrupt. Exiting.");
 	Exiting=1;
 }
 
-void Terminate(int signal)
+void OnTerminate(int signal)
 {
 	WriteLog(LOG_INFO,"Asked to terminate. Exiting.");
 	Exiting=1;
+}
+
+void OnHangup(int signal)
+{
+	WriteLog(LOG_INFO,"Asked to hang up. Ignored.");
 }
 
 void OnSegmentationFault(int signal)
@@ -124,9 +129,10 @@ void OnSegmentationFault(int signal)
 
 int main(int argc, char * argv [])
 {
-	signal(SIGINT,Interrupt);
-	signal(SIGTERM,Terminate);
+	signal(SIGINT,OnInterrupt);
+	signal(SIGTERM,OnTerminate);
 	signal(SIGSEGV,OnSegmentationFault);
+	signal(SIGHUP,OnHangup);
 
 	WriteLog(LOG_INFO,"Net Daemon started.");
 
