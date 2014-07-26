@@ -76,7 +76,7 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
 	const char * externalInterface=request->GetHeader(request,"x-bws-external-interface");
 
-	if(internalIPAddress==NULL || externalIPAddress==NULL)
+	if(internalIPAddress==NULL || externalIPAddress==NULL || externalInterface==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -112,7 +112,7 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
 	const char * externalInterface=request->GetHeader(request,"x-bws-external-interface");
 
-	if(internalIPAddress==NULL || externalIPAddress==NULL)
+	if(internalIPAddress==NULL || externalIPAddress==NULL || externalInterface==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
