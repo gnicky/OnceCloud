@@ -1,0 +1,277 @@
+# Net Daemon Makefile
+
+CC=gcc
+LD=gcc
+
+NETD_CC=$(QUIET_CC)$(CC)
+NETD_LD=$(QUIET_LD)$(LD)
+NETD_INSTALL=$(QUIET_INSTALL)$(INSTALL)
+
+CFLAGS=-g -Wall -Werror -c
+CLIBFLAGS=-g -Wall -Werror -c -fpic
+LDFLAGS=-g -Wall -Werror
+LDLIBFLAGS=-g -Wall -Werror -shared -lc
+
+DLFLAGS=-ldl
+PTHREADFLAGS=-pthread
+
+CCCOLOR="\033[34m"
+LINKCOLOR="\033[34;1m"
+SRCCOLOR="\033[33m"
+BINCOLOR="\033[37;1m"
+MAKECOLOR="\033[32;1m"
+ENDCOLOR="\033[0m"
+
+ifndef V
+QUIET_CC = @printf '    %b %b\n' $(CCCOLOR)COMPILE$(ENDCOLOR) $(SRCCOLOR)$@$(ENDCOLOR) 1>&2;
+QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
+# QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
+endif
+
+NETD_MAIN=netd/netd
+NETD_PLUGINS=$(NETD_DHCP_PLUGIN) $(NETD_FIREWALL_PLUGIN) $(NETD_LIMIT_PLUGIN) \
+	$(NETD_LOADBALANCER_PLUGIN) $(NETD_NAT_PLUGIN) $(NETD_ROUTE_PLUGIN)
+
+# Plugins
+NETD_DHCP_PLUGIN=plugins/dhcp/dhcp.so
+NETD_FIREWALL_PLUGIN=plugins/firewall/firewall.so
+NETD_LIMIT_PLUGIN=plugins/limit/limit.so
+NETD_LOADBALANCER_PLUGIN=plugins/loadbalancer/loadbalancer.so
+NETD_NAT_PLUGIN=plugins/nat/nat.so
+NETD_ROUTE_PLUGIN=plugins/route/route.so
+
+NETD_MAIN_INCLUDE=-Inetd/include/
+NETD_COMMON_INCLUDE=-Icommon/include/
+
+# Plugins
+NETD_DHCP_PLUGIN_INCLUDE=-Iplugins/dhcp/include/
+NETD_FIREWALL_PLUGIN_INCLUDE=-Iplugins/firewall/include/
+NETD_LIMIT_PLUGIN_INCLUDE=-Iplugins/limit/include/
+NETD_LOADBALANCER_PLUGIN_INCLUDE=-Iplugins/loadbalancer/include/
+NETD_NAT_PLUGIN_INCLUDE=-Iplugins/nat/include/
+NETD_ROUTE_PLUGIN_INCLUDE=-Iplugins/route/include/
+
+NETD_OBJECTS=$(NETD_MAIN_OBJECTS) $(NETD_COMMON_OBJECTS) \
+	$(NETD_DHCP_PLUGIN_OBJECTS) $(NETD_FIREWALL_PLUGIN_OBJECTS) $(NETD_LIMIT_PLUGIN_OBJECTS) \
+	$(NETD_LOADBALANCER_PLUGIN_OBJECTS) $(NETD_NAT_PLUGIN_OBJECTS) $(NETD_ROUTE_PLUGIN_OBJECTS)
+
+all: $(NETD_MAIN) $(NETD_PLUGINS)
+.PHONY: all
+
+main: $(NETD_MAIN)
+.PHONY: main
+
+# Plugins
+plugins: $(NETD_PLUGINS)
+.PHONY: plugins
+
+clean:
+	rm -rf $(NETD_OBJECTS)
+.PHONY: clean
+
+veryclean: clean
+	rm -rf $(NETD_MAIN)
+	rm -rf $(NETD_PLUGINS)
+.PHONY: veryclean
+
+PREFIX=/usr/local
+INSTALL_BIN=$(PREFIX)/netd
+INSTALL=install
+
+install: all
+	@mkdir -p $(INSTALL_BIN)
+	@mkdir -p $(INSTALL_BIN)/sbin
+	@mkdir -p $(INSTALL_BIN)/plugins
+	@mkdir -p $(INSTALL_BIN)/log
+	@$(NETD_INSTALL) netd/netd $(INSTALL_BIN)/sbin
+	@$(NETD_INSTALL) $(NETD_PLUGINS) $(INSTALL_BIN)/plugins
+	@chmod +x $(INSTALL_BIN)/sbin/netd
+	@ln -sf $(INSTALL_BIN)/sbin/netd /bin/netd
+
+depend:
+	@echo "# Dependencies"
+	@echo "# Netd Main"
+	@$(CC) -MM netd/*.c $(NETD_COMMON_INCLUDE) $(NETD_MAIN_INCLUDE)
+	@echo "# Common"
+	@$(CC) -MM common/*.c $(NETD_COMMON_INCLUDE)
+	# Plugins
+	@echo "# DHCP Plugin"
+	@$(CC) -MM plugins/dhcp/*.c $(NETD_COMMON_INCLUDE) $(NETD_DHCP_PLUGIN_INCLUDE)
+	@echo "# Firewall Plugin"
+	@$(CC) -MM plugins/firewall/*.c $(NETD_COMMON_INCLUDE) $(NETD_FIREWALL_PLUGIN_INCLUDE)
+	@echo "# Limit Plugin"
+	@$(CC) -MM plugins/limit/*.c $(NETD_COMMON_INCLUDE) $(NETD_LIMIT_PLUGIN_INCLUDE)
+	@echo "# Loadbalancer Plugin"
+	@$(CC) -MM plugins/loadbalancer/*.c $(NETD_COMMON_INCLUDE) $(NETD_LOADBALANCER_PLUGIN_INCLUDE)
+	@echo "# Nat Plugin"
+	@$(CC) -MM plugins/nat/*.c $(NETD_COMMON_INCLUDE) $(NETD_NAT_PLUGIN_INCLUDE)
+	@echo "# Route Plugin"
+	@$(CC) -MM plugins/route/*.c $(NETD_COMMON_INCLUDE) $(NETD_ROUTE_PLUGIN_INCLUDE)
+
+# Dependencies
+# Netd Main
+netd/HttpHelper.o: netd/HttpHelper.c netd/include/HttpHelper.h \
+	common/include/HttpRequest.h common/include/HttpHeader.h \
+	common/include/HttpResponse.h common/include/Mongoose.h \
+	common/include/HttpHeader.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_MAIN_INCLUDE) $(PTHREADFLAGS) -o $@ $<
+
+netd/Main.o: netd/Main.c common/include/Mongoose.h netd/include/Plugin.h \
+	common/include/HttpRequest.h common/include/HttpHeader.h \
+	common/include/HttpResponse.h netd/include/PluginManager.h \
+	netd/include/HttpHelper.h common/include/Logger.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_MAIN_INCLUDE) $(PTHREADFLAGS) -o $@ $<
+
+netd/PluginManager.o: netd/PluginManager.c netd/include/Plugin.h \
+	common/include/HttpRequest.h common/include/HttpHeader.h \
+	common/include/HttpResponse.h common/include/File.h \
+	netd/include/PluginManager.h common/include/Type.h \
+	common/include/Logger.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_MAIN_INCLUDE) $(PTHREADFLAGS) -o $@ $<
+
+NETD_MAIN_OBJECTS=netd/HttpHelper.o netd/Main.o netd/PluginManager.o
+
+netd/netd: netd/HttpHelper.o netd/Main.o netd/PluginManager.o \
+	common/File.o common/Logger.o common/Mongoose.o
+	$(NETD_LD) $(LDFLAGS) $(DLFLAGS) $(PTHREADFLAGS) -o $@ $^
+
+# Common
+common/File.o: common/File.c common/include/Type.h common/include/Logger.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
+
+common/Frozen.o: common/Frozen.c common/include/Frozen.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
+
+common/Logger.o: common/Logger.c
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
+
+common/Mongoose.o: common/Mongoose.c common/include/Mongoose.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
+
+common/Process.o: common/Process.c common/include/Type.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
+
+NETD_COMMON_OBJECTS=common/File.o common/Frozen.o common/Logger.o common/Mongoose.o common/Process.o
+
+# Plugins
+# DHCP Plugin
+plugins/dhcp/Api.o: plugins/dhcp/Api.c common/include/PluginInterface.h \
+	common/include/Type.h common/include/HttpRequest.h \
+	common/include/HttpHeader.h common/include/HttpResponse.h \
+	plugins/dhcp/include/Core.h plugins/dhcp/include/DhcpEntry.h \
+	plugins/dhcp/include/DhcpConfiguration.h plugins/dhcp/include/Host.h \
+	plugins/dhcp/include/DhcpConfiguration.h common/include/Frozen.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_DHCP_PLUGIN_INCLUDE) -o $@ $<	
+
+plugins/dhcp/Core.o: plugins/dhcp/Core.c common/include/Type.h common/include/File.h \
+	plugins/dhcp/include/DhcpEntry.h plugins/dhcp/include/Core.h \
+	plugins/dhcp/include/DhcpEntry.h \
+	plugins/dhcp/include/DhcpConfiguration.h plugins/dhcp/include/Host.h \
+	common/include/Logger.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_DHCP_PLUGIN_INCLUDE) -o $@ $<	
+
+plugins/dhcp/Parser.o: plugins/dhcp/Parser.c common/include/Type.h \
+	common/include/File.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_DHCP_PLUGIN_INCLUDE) -o $@ $<	
+
+NETD_DHCP_PLUGIN_OBJECTS=plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o
+
+plugins/dhcp/dhcp.so: plugins/dhcp/Api.o plugins/dhcp/Core.o \
+	common/File.o common/Frozen.o common/Logger.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
+
+# Firewall Plugin
+plugins/firewall/Api.o: plugins/firewall/Api.c common/include/PluginInterface.h \
+	common/include/Type.h common/include/HttpRequest.h \
+	common/include/HttpHeader.h common/include/HttpResponse.h \
+	plugins/firewall/include/Core.h plugins/firewall/include/FirewallRule.h \
+	plugins/firewall/include/PingRule.h plugins/firewall/include/Rule.h \
+	plugins/firewall/include/FirewallConfiguration.h common/include/Frozen.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_FIREWALL_PLUGIN_INCLUDE) -o $@ $<
+
+plugins/firewall/Core.o: plugins/firewall/Core.c common/include/File.h \
+	common/include/Process.h plugins/firewall/include/FirewallRule.h \
+	plugins/firewall/include/Core.h plugins/firewall/include/FirewallRule.h \
+	plugins/firewall/include/PingRule.h plugins/firewall/include/Rule.h \
+	plugins/firewall/include/FirewallConfiguration.h \
+	plugins/firewall/include/FirewallConfiguration.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_FIREWALL_PLUGIN_INCLUDE) -o $@ $<
+
+NETD_FIREWALL_PLUGIN_OBJECTS=plugins/firewall/Api.o plugins/firewall/Core.o
+
+plugins/firewall/firewall.so: plugins/firewall/Api.o plugins/firewall/Core.o \
+	common/File.o common/Process.o common/Frozen.o common/Logger.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
+
+# Limit Plugin
+plugins/limit/Api.o: plugins/limit/Api.c common/include/PluginInterface.h \
+	common/include/Type.h common/include/HttpRequest.h \
+	common/include/HttpHeader.h common/include/HttpResponse.h \
+	plugins/limit/include/Core.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_LIMIT_PLUGIN_INCLUDE) -o $@ $<
+
+plugins/limit/Core.o: plugins/limit/Core.c common/include/Process.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_LIMIT_PLUGIN_INCLUDE) -o $@ $<
+
+NETD_LIMIT_PLUGIN_OBJECTS=plugins/limit/Api.o plugins/limit/Core.o
+
+plugins/limit/limit.so: plugins/limit/Api.o plugins/limit/Core.o \
+	common/Process.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
+
+# Loadbalancer Plugin
+plugins/loadbalancer/Api.o: plugins/loadbalancer/Api.c common/include/PluginInterface.h \
+	common/include/Type.h common/include/HttpRequest.h \
+	common/include/HttpHeader.h common/include/HttpResponse.h \
+	plugins/loadbalancer/include/Core.h \
+	plugins/loadbalancer/include/Configuration.h \
+	plugins/loadbalancer/include/Listener.h \
+	plugins/loadbalancer/include/Rule.h common/include/Frozen.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_LOADBALANCER_PLUGIN_INCLUDE) -o $@ $<
+
+plugins/loadbalancer/Core.o: plugins/loadbalancer/Core.c \
+	plugins/loadbalancer/include/Configuration.h \
+	plugins/loadbalancer/include/Listener.h \
+	plugins/loadbalancer/include/Rule.h common/include/File.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_LOADBALANCER_PLUGIN_INCLUDE) -o $@ $<
+
+NETD_LOADBALANCER_PLUGIN_OBJECTS=plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o
+
+plugins/loadbalancer/loadbalancer.so: plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o \
+	common/File.o common/Frozen.o common/Logger.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
+
+# Nat Plugin
+plugins/nat/Api.o: plugins/nat/Api.c common/include/PluginInterface.h \
+	common/include/Type.h common/include/HttpRequest.h \
+	common/include/HttpHeader.h common/include/HttpResponse.h \
+	common/include/Type.h plugins/nat/include/Core.h \
+	plugins/nat/include/NatEntry.h plugins/nat/include/NatEntry.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_NAT_PLUGIN_INCLUDE) -o $@ $<
+
+plugins/nat/Core.o: plugins/nat/Core.c common/include/File.h common/include/Process.h \
+	plugins/nat/include/NatEntry.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_NAT_PLUGIN_INCLUDE) -o $@ $<
+
+NETD_NAT_PLUGIN_OBJECTS=plugins/nat/Api.o plugins/nat/Core.o
+
+plugins/nat/nat.so: plugins/nat/Api.o plugins/nat/Core.o \
+	common/File.o common/Process.o common/Logger.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
+
+# Route Plugin
+plugins/route/Api.o: plugins/route/Api.c common/include/PluginInterface.h \
+	common/include/Type.h common/include/HttpRequest.h \
+	common/include/HttpHeader.h common/include/HttpResponse.h
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_ROUTE_PLUGIN_INCLUDE) -o $@ $<
+
+plugins/route/Core.o: plugins/route/Core.c
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_ROUTE_PLUGIN_INCLUDE) -o $@ $<
+
+NETD_ROUTE_PLUGIN_OBJECTS=plugins/route/Api.o plugins/route/Core.o
+
+plugins/route/route.so: plugins/route/Api.o plugins/route/Core.o \
+	common/File.o common/Logger.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
+
+
