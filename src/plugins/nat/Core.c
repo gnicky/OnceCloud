@@ -97,6 +97,8 @@ void AddIPAddress(const char * interface, const char * address)
 	char fileContent[1000]={0};
 	sprintf(temp,"DEVICE=\"%s:%d\"\n",interface,i);
 	strcat(fileContent,temp);
+	sprintf(temp,"BOOTPROTO=\"static\"\n");
+	strcat(fileContent,temp);
 	sprintf(temp,"IPADDR=\"%s\"\n",address);
 	strcat(fileContent,temp);
 	sprintf(temp,"NETMASK=\"255.255.255.255\"\n");

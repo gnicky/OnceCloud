@@ -3,6 +3,5 @@
 
 void AddRoute(const char * interface, const char * address, const char * netmask);
 void RemoveRoute(const char * interface);
-void ConfigureNat(const char * interface);
 
 #endif
