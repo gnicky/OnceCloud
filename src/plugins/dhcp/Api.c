@@ -140,6 +140,63 @@ int ReadTextValue(struct json_token * object, const char * key, char * buffer)
 
 int DoAddHosts(const char * json)
 {
+	struct DhcpConfiguration configuration;
+	ReadDhcpConfiguration(&configuration);
+
+	struct json_token * object;
+	const struct json_token * token;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return FALSE;
+	}
+
+	int status=0;
+	int i=0;
+	int ret=FALSE;
+
+	while(1)
+	{
+		char hostIndex[100];
+		char temp[100];
+		char hardwareAddress[100];
+		char ipAddress[100];
+
+		sprintf(hostIndex,"hosts[%d]",i);
+		token=find_json_token(object,hostIndex);
+		if(token==NULL)
+		{
+			break;
+		}
+
+		sprintf(temp,"%s.hardwareAddress",hostIndex);
+		status=ReadTextValue(object,temp,hardwareAddress);
+		if(status!=0)
+		{
+			return FALSE;
+		}
+
+		sprintf(temp,"%s.ipAddress",hostIndex);
+		status=ReadTextValue(object,temp,ipAddress);
+		if(status!=0)
+		{
+			return FALSE;
+		}
+
+		ret=AddOrUpdateHost(&configuration,hardwareAddress,ipAddress);
+		if(ret!=TRUE)
+		{
+			return FALSE;
+		}
+
+		i++;
+	}
+
+	free(object);
+
+	SaveDhcpConfiguration(&configuration);
+
 	return TRUE;
 }
 
@@ -275,6 +332,63 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int DoRemoveHosts(const char * json)
 {
+	struct DhcpConfiguration configuration;
+	ReadDhcpConfiguration(&configuration);
+
+	struct json_token * object;
+	const struct json_token * token;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return FALSE;
+	}
+
+	int status=0;
+	int i=0;
+	int ret=FALSE;
+
+	while(1)
+	{
+		char hostIndex[100];
+		char temp[100];
+		char hardwareAddress[100];
+		char ipAddress[100];
+
+		sprintf(hostIndex,"hosts[%d]",i);
+		token=find_json_token(object,hostIndex);
+		if(token==NULL)
+		{
+			break;
+		}
+
+		sprintf(temp,"%s.hardwareAddress",hostIndex);
+		status=ReadTextValue(object,temp,hardwareAddress);
+		if(status!=0)
+		{
+			return FALSE;
+		}
+
+		sprintf(temp,"%s.ipAddress",hostIndex);
+		status=ReadTextValue(object,temp,ipAddress);
+		if(status!=0)
+		{
+			return FALSE;
+		}
+
+		ret=RemoveHost(&configuration,hardwareAddress,ipAddress);
+		if(ret!=TRUE)
+		{
+			return FALSE;
+		}
+
+		i++;
+	}
+
+	free(object);
+
+	SaveDhcpConfiguration(&configuration);
+
 	return TRUE;
 }
 

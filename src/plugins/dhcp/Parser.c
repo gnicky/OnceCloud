@@ -6,6 +6,7 @@
 
 #include "File.h"
 #include "String.h"
+#include "Process.h"
 
 #include "Option.h"
 #include "HostConfiguration.h"
@@ -304,11 +305,11 @@ void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
 	if(configuration->SubnetConfigurationCount==0)
 	{
 		// Configuration initialized
-		system("service dhcpd stop");
+		Execute("service dhcpd stop");
 	}
 	else
 	{
-		system("service dhcpd restart");
+		Execute("service dhcpd restart");
 	}
 	free(fileContent);
 }

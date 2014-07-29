@@ -172,7 +172,7 @@ plugins/firewall/Core.o: plugins/firewall/Core.c
 NETD_FIREWALL_PLUGIN_OBJECTS=plugins/firewall/Api.o plugins/firewall/Core.o
 
 plugins/firewall/firewall.so: plugins/firewall/Api.o plugins/firewall/Core.o \
-	common/File.o common/Process.o common/Frozen.o common/Logger.o
+	common/File.o common/Process.o common/Frozen.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Limit Plugin
@@ -185,7 +185,7 @@ plugins/limit/Core.o: plugins/limit/Core.c
 NETD_LIMIT_PLUGIN_OBJECTS=plugins/limit/Api.o plugins/limit/Core.o
 
 plugins/limit/limit.so: plugins/limit/Api.o plugins/limit/Core.o \
-	common/Process.o
+	common/Process.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Loadbalancer Plugin
@@ -198,7 +198,7 @@ plugins/loadbalancer/Core.o: plugins/loadbalancer/Core.c
 NETD_LOADBALANCER_PLUGIN_OBJECTS=plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o
 
 plugins/loadbalancer/loadbalancer.so: plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o \
-	common/File.o common/Frozen.o common/Logger.o
+	common/File.o common/Frozen.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Nat Plugin
@@ -211,7 +211,7 @@ plugins/nat/Core.o: plugins/nat/Core.c
 NETD_NAT_PLUGIN_OBJECTS=plugins/nat/Api.o plugins/nat/Core.o
 
 plugins/nat/nat.so: plugins/nat/Api.o plugins/nat/Core.o \
-	common/File.o common/Process.o common/Logger.o
+	common/File.o common/Process.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Route Plugin
@@ -224,6 +224,6 @@ plugins/route/Core.o: plugins/route/Core.c
 NETD_ROUTE_PLUGIN_OBJECTS=plugins/route/Api.o plugins/route/Core.o
 
 plugins/route/route.so: plugins/route/Api.o plugins/route/Core.o \
-	common/File.o common/Logger.o
+	common/File.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
