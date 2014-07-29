@@ -198,7 +198,7 @@ plugins/loadbalancer/Core.o: plugins/loadbalancer/Core.c
 NETD_LOADBALANCER_PLUGIN_OBJECTS=plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o
 
 plugins/loadbalancer/loadbalancer.so: plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o \
-	common/File.o common/Frozen.o common/Logger.o common/String.o
+	common/File.o common/Frozen.o common/Logger.o common/String.o common/Process.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Nat Plugin
@@ -224,6 +224,6 @@ plugins/route/Core.o: plugins/route/Core.c
 NETD_ROUTE_PLUGIN_OBJECTS=plugins/route/Api.o plugins/route/Core.o
 
 plugins/route/route.so: plugins/route/Api.o plugins/route/Core.o \
-	common/File.o common/Logger.o common/String.o
+	common/File.o common/Logger.o common/String.o common/Process.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 

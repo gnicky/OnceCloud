@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "File.h"
+#include "Process.h"
 
 void AddRoute(const char * interface, const char * address, const char * netmask)
 {
@@ -13,7 +14,7 @@ void AddRoute(const char * interface, const char * address, const char * netmask
 	if(IsFileExist(fileName))
 	{
 		sprintf(temp,"ifdown %s",interface);
-		system(temp);	
+		Execute(temp);	
 	}
 
 	sprintf(temp,"DEVICE=\"%s\"\n",interface);
@@ -30,7 +31,7 @@ void AddRoute(const char * interface, const char * address, const char * netmask
 	WriteFile(fileName,fileContent);
 
 	sprintf(temp,"ifup %s",interface);
-	system(temp);
+	Execute(temp);
 }
 
 void RemoveRoute(const char * interface)
@@ -41,7 +42,7 @@ void RemoveRoute(const char * interface)
 	if(IsFileExist(fileName))
 	{
 		sprintf(temp,"ifdown %s",interface);
-		system(temp);	
+		Execute(temp);	
 		RemoveFile(fileName);
 		return;
 	}

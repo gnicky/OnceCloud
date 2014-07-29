@@ -4,6 +4,7 @@
 
 #include "Configuration.h"
 #include "File.h"
+#include "Process.h"
 
 const char * NginxConfigurationFile="/usr/local/nginx/conf/nginx.conf";
 const char * NginxProgramFile="/usr/local/nginx/sbin/nginx";
@@ -102,5 +103,5 @@ void RestartService()
 {
 	char temp[1000];
 	sprintf(temp,"%s -s reload",NginxProgramFile);
-	system(temp);
+	Execute(temp);
 }

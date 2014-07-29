@@ -69,7 +69,7 @@ void RemoveIPAddress(const char * interface, const char * address)
 		{
 			char temp[100]={0};
 			sprintf(temp,"ifdown %s:%d",interface,i);
-			system(temp);
+			Execute(temp);
 			free(fileContent);
 			RemoveFile(fileName);
 			return;
@@ -109,7 +109,7 @@ void AddIPAddress(const char * interface, const char * address)
 	WriteFile(fileName,fileContent);
 
 	sprintf(temp,"ifup %s:%d",interface,i);
-	system(temp);
+	Execute(temp);
 }
 
 int AddNat(const char * internal, const char * external, const char * interface)

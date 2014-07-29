@@ -68,9 +68,9 @@ int Execute(const char * commandLine)
 	}
 	arguments[result->Count]=(char *)NULL;
 
+	WriteLog(LOG_NOTICE,"Executing \"%s\"",commandLine);
 	if(fork()==0)
 	{
-		WriteLog(LOG_NOTICE,"Executing \"%s\"",commandLine);
 		CloseAllSockets();
 		execvp(command,arguments);
 	}
