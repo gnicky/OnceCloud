@@ -5,107 +5,14 @@
 #include <regex.h>
 
 #include "File.h"
-#include "Common.h"
+#include "String.h"
 
-struct Parameter;
-struct SubnetConfiguration;
-struct DhcpConfiguration;
+#include "Parameter.h"
+#include "HostConfiguration.h"
+#include "SubnetConfiguration.h"
+#include "DhcpConfiguration.h"
 
-struct Parameter
-{
-	char Key[50];
-	char Value[50];
-};
-
-struct HostConfiguration
-{
-	char Name[50];
-	char IPAddress[50];
-	char HardwareAddress[50];
-};
-
-struct SubnetConfiguration
-{
-	char SubnetAddress[50];
-	char Netmask[50];
-	char Routers[50];
-	char SubnetMask[50];
-	char DomainNameServers[50];
-	char RangeStart[50];
-	char RangeEnd[50];
-	char DefaultLeaseTime[50];
-	char MaxLeaseTime[50];
-	struct HostConfiguration Hosts[255];
-	int HostsCount;
-};
-
-struct DhcpConfiguration
-{
-	struct Parameter GlobalConfiguration[10];
-	int GlobalConfigurationCount;
-	struct SubnetConfiguration SubnetConfiguration[10];
-	int SubnetConfigurationCount;
-};
-
-struct SplitResult
-{
-	char * Delimiter;
-	char ** Content;
-	int Count;
-};
-
-struct SplitResult * Split(const char * source, const char * delimiter)
-{
-	char * temp=malloc(strlen(source)+1);
-	strcpy(temp,source);
-
-	// Get Count
-	int i=0;
-	char * current=temp;
-	char * result=NULL;
-	char * lastPosition=NULL;
-	while((result=strtok_r(current,delimiter,&lastPosition))!=NULL)
-	{
-		i++;
-		current=NULL;
-	}
-
-	struct SplitResult * ret=malloc(sizeof(struct SplitResult));
-	ret->Count=i;
-	ret->Delimiter=malloc(strlen(delimiter)+1);
-	strcpy(ret->Delimiter,delimiter);
-
-	// Split
-	char ** content=malloc(sizeof(char *)*(ret->Count));
-	i=0;
-	current=temp;
-	result=NULL;
-	lastPosition=NULL;
-	strcpy(temp,source);
-	while((result=strtok_r(current,delimiter,&lastPosition))!=NULL)
-	{	
-		content[i]=malloc(strlen(result)+1);
-		strcpy(content[i],result);
-		i++;
-		current=NULL;	
-	}
-
-	ret->Content=content;
-
-	free(temp);
-	return ret;
-}
-
-void FreeSplitResult(struct SplitResult * result)
-{
-	free(result->Delimiter);
-	int i=0;
-	for(i=0;i<result->Count;i++)
-	{
-		free(result->Content[i]);
-	}
-	free(result);
-}
+const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
 
 void ParseAllGlobalConfiguration(struct SplitResult * result, struct DhcpConfiguration * configuration)
 {
@@ -290,14 +197,20 @@ void ParseAllSubnetConfiguration(struct SplitResult * result, struct DhcpConfigu
 	configuration->SubnetConfigurationCount=j;
 }
 
-void ReadDhcpConfiguration(char * fileContent, struct DhcpConfiguration * configuration)
+void ReadDhcpConfiguration(struct DhcpConfiguration * configuration)
 {
+	int fileSize=GetFileSize(DhcpdConfigurationFileName);
+	char * fileContent=malloc(fileSize+1);
+	ReadFile(DhcpdConfigurationFileName,fileContent);
+	fileContent[fileSize]='\0';
+
 	struct SplitResult * result=Split(fileContent,"\n");
 
 	ParseAllGlobalConfiguration(result,configuration);
 	ParseAllSubnetConfiguration(result,configuration);
 
 	FreeSplitResult(result);
+	free(fileContent);
 }
 
 void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
@@ -348,7 +261,8 @@ void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
 		strcat(fileContent,temp);
 	}
 
-	WriteFile(DHCPD_CONFIGURATION_FILE_NAME,fileContent);
+	WriteFile(DhcpdConfigurationFileName,fileContent);
+	system("service dhcpd restart > /dev/null");
 	free(fileContent);
 }
 

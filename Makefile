@@ -1,6 +1,6 @@
 # Top level makefile
 
-default: all
+default: install
 
 .DEFAULT:
 	cd src && $(MAKE) $@

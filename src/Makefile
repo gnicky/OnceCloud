@@ -5,7 +5,6 @@ LD=gcc
 
 NETD_CC=$(QUIET_CC)$(CC)
 NETD_LD=$(QUIET_LD)$(LD)
-NETD_INSTALL=$(QUIET_INSTALL)$(INSTALL)
 
 CFLAGS=-g -Wall -Werror -c
 CLIBFLAGS=-g -Wall -Werror -c -fpic
@@ -25,7 +24,6 @@ ENDCOLOR="\033[0m"
 ifndef V
 QUIET_CC = @printf '    %b %b\n' $(CCCOLOR)COMPILE$(ENDCOLOR) $(SRCCOLOR)$@$(ENDCOLOR) 1>&2;
 QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
-# QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
 endif
 
 NETD_MAIN=netd/netd
@@ -78,15 +76,15 @@ PREFIX=/usr/local
 INSTALL_BIN=$(PREFIX)/netd
 INSTALL=install
 
-install: all
-	@mkdir -p $(INSTALL_BIN)
-	@mkdir -p $(INSTALL_BIN)/sbin
-	@mkdir -p $(INSTALL_BIN)/plugins
-	@mkdir -p $(INSTALL_BIN)/log
-	@$(NETD_INSTALL) netd/netd $(INSTALL_BIN)/sbin
-	@$(NETD_INSTALL) $(NETD_PLUGINS) $(INSTALL_BIN)/plugins
-	@chmod +x $(INSTALL_BIN)/sbin/netd
-	@ln -sf $(INSTALL_BIN)/sbin/netd /bin/netd
+install: veryclean all
+	mkdir -p $(INSTALL_BIN)
+	mkdir -p $(INSTALL_BIN)/sbin
+	mkdir -p $(INSTALL_BIN)/plugins
+	mkdir -p $(INSTALL_BIN)/log
+	$(INSTALL) netd/netd $(INSTALL_BIN)/sbin
+	$(INSTALL) $(NETD_PLUGINS) $(INSTALL_BIN)/plugins
+	chmod +x $(INSTALL_BIN)/sbin/netd
+	ln -sf $(INSTALL_BIN)/sbin/netd /bin/netd
 
 depend:
 	@echo "# Dependencies"
@@ -141,7 +139,11 @@ common/Mongoose.o: common/Mongoose.c
 common/Process.o: common/Process.c
 	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
 
-NETD_COMMON_OBJECTS=common/File.o common/Frozen.o common/Logger.o common/Mongoose.o common/Process.o
+common/String.o: common/String.c
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) -o $@ $<	
+
+NETD_COMMON_OBJECTS=common/File.o common/Frozen.o common/Logger.o \
+	common/Mongoose.o common/Process.o common/String.o
 
 # Plugins
 # DHCP Plugin
@@ -157,7 +159,7 @@ plugins/dhcp/Parser.o: plugins/dhcp/Parser.c
 NETD_DHCP_PLUGIN_OBJECTS=plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o
 
 plugins/dhcp/dhcp.so: plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o \
-	common/File.o common/Frozen.o common/Logger.o
+	common/File.o common/Frozen.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Firewall Plugin
