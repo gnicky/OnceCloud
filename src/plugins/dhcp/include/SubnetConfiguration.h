@@ -14,8 +14,6 @@ struct SubnetConfiguration
 	char RangeEnd[50];
 	char DefaultLeaseTime[50];
 	char MaxLeaseTime[50];
-	struct HostConfiguration Hosts[255];
-	int HostsCount;
 };
 
 #endif

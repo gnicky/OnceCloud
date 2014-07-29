@@ -1,4 +1,8 @@
-int Test()
+#include "DhcpConfiguration.h"
+#include "Parser.h"
+
+void GetDhcpConfiguration(struct DhcpConfiguration * configuration)
 {
-	return 0;
+	ReadDhcpConfiguration(configuration);
+	SaveDhcpConfiguration(configuration);
 }
