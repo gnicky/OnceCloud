@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <memory.h>
+#include <unistd.h>
 
-#include <Type.h>
+#include "Type.h"
 
 int SetProcessInput(char * buffer, const char * commandLine)
 {

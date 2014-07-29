@@ -3,6 +3,14 @@
 
 #include "DhcpConfiguration.h"
 
-void GetDhcpConfiguration(struct DhcpConfiguration * configuration);
+void InitializeDhcpConfiguration(struct DhcpConfiguration * configuration);
+
+int AddOrUpdateSubnet(struct DhcpConfiguration * configuration, const char * subnetAddress, const char * netmask
+	, const char * routers, const char * subnetMask, const char * domainNameServers, const char * rangeStart
+	, const char * rangeEnd, const char * defaultLeaseTime, const char * maxLeaseTime);
+int RemoveSubnet(struct DhcpConfiguration * configuration, const char * subnetAddress, const char * netmask);
+
+int AddOrUpdateHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress);
+int RemoveHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress);
 
 #endif

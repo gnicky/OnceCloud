@@ -4,7 +4,9 @@
 
 #include "PluginInterface.h"
 #include "Core.h"
+#include "Parser.h"
 #include "Logger.h"
+#include "Frozen.h"
 
 const char * PluginName="DHCP";
 const char * PluginVersion="1.0.0.0";
@@ -104,7 +106,7 @@ int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * respons
 	WriteLog(LOG_NOTICE,"GET /DHCP");
 	char * buffer=malloc(1048576);
 	struct DhcpConfiguration configuration;
-	GetDhcpConfiguration(&configuration);
+	ReadDhcpConfiguration(&configuration);
 	GenerateDhcpConfigurationXml(buffer,&configuration);
 
 	response->StatusCode=200;
@@ -123,9 +125,137 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 	return TRUE;
 }
 
+int ReadTextValue(struct json_token * object, const char * key, char * buffer)
+{
+	const struct json_token * token;
+	token=find_json_token(object,key);
+	if(token==NULL)
+	{
+		return 1;
+	}
+	memcpy(buffer,token->ptr,token->len);
+	buffer[token->len]='\0';
+	return 0;
+}
+
+int DoAddHosts(const char * json)
+{
+	return TRUE;
+}
+
+int DoAddSubnet(const char * json)
+{
+	struct DhcpConfiguration configuration;
+	ReadDhcpConfiguration(&configuration);
+
+	char subnetAddress[50];
+	char netmask[50];
+	char routers[50];
+	char subnetMask[50];
+	char domainNameServers[50];
+	char rangeStart[50];
+	char rangeEnd[50];
+	char defaultLeaseTime[50];
+	char maxLeaseTime[50];
+
+	struct json_token * object;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return FALSE;
+	}
+
+	int status;
+
+	status=ReadTextValue(object,"subnet",subnetAddress);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+
+	status=ReadTextValue(object,"netmask",netmask);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+
+	status=ReadTextValue(object,"router",routers);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+
+	strcpy(subnetMask,netmask);
+
+	status=ReadTextValue(object,"dns",domainNameServers);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+
+	status=ReadTextValue(object,"rangeStart",rangeStart);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"rangeEnd",rangeEnd);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"defaultLease",defaultLeaseTime);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	status=ReadTextValue(object,"maxLease",maxLeaseTime);
+	if(status!=0)
+	{
+		return 1;
+	}
+
+	free(object);
+
+	int ret=AddOrUpdateSubnet(&configuration,subnetAddress,netmask,routers,subnetMask,domainNameServers
+		,rangeStart,rangeEnd,defaultLeaseTime,maxLeaseTime);
+
+	if(ret==FALSE)
+	{
+		return FALSE;
+	}
+	else
+	{
+		SaveDhcpConfiguration(&configuration);
+	}
+
+	return TRUE;
+}
+
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	response->StatusCode=405;
+	int ret=FALSE;
+
+	if(request->QueryString!=NULL && strcmp(request->QueryString,"host")==0)
+	{
+		ret=DoAddHosts(request->Content);
+	}
+	else
+	{
+		ret=DoAddSubnet(request->Content);
+	}
+
+	if(ret!=TRUE)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+		return TRUE;
+	}
+
+	response->StatusCode=200;
 	response->SetContent(response,"");
 
 	return TRUE;
@@ -133,14 +263,91 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	response->StatusCode=405;
+	struct DhcpConfiguration configuration;
+	InitializeDhcpConfiguration(&configuration);
+	SaveDhcpConfiguration(&configuration);
+
+	response->StatusCode=200;
 	response->SetContent(response,"");
+
+	return TRUE;
+}
+
+int DoRemoveHosts(const char * json)
+{
+	return TRUE;
+}
+
+int DoRemoveSubnet(const char * json)
+{
+	struct DhcpConfiguration configuration;
+	ReadDhcpConfiguration(&configuration);
+
+	char subnetAddress[50];
+	char netmask[50];
+
+	struct json_token * object;
+
+	object=parse_json2(json,strlen(json));
+	if(object==NULL)
+	{
+		return FALSE;
+	}
+
+	int status;
+
+	status=ReadTextValue(object,"subnet",subnetAddress);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+
+	status=ReadTextValue(object,"netmask",netmask);
+	if(status!=0)
+	{
+		return FALSE;
+	}
+
+	free(object);
+
+	int ret=RemoveSubnet(&configuration,subnetAddress,netmask);
+
+	if(ret==FALSE)
+	{
+		return FALSE;
+	}
+	else
+	{
+		SaveDhcpConfiguration(&configuration);
+	}
 
 	return TRUE;
 }
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
+	int ret=FALSE;
+
+	if(request->QueryString!=NULL && strcmp(request->QueryString,"host")==0)
+	{
+		ret=DoRemoveHosts(request->Content);
+	}
+	else
+	{
+		ret=DoRemoveSubnet(request->Content);
+	}
+
+	if(ret!=TRUE)
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+		return TRUE;
+	}
+
+	response->StatusCode=200;
+	response->SetContent(response,"");
+
+	return TRUE;
 	response->StatusCode=405;
 	response->SetContent(response,"");
 

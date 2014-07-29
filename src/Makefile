@@ -159,7 +159,7 @@ plugins/dhcp/Parser.o: plugins/dhcp/Parser.c
 NETD_DHCP_PLUGIN_OBJECTS=plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o
 
 plugins/dhcp/dhcp.so: plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o \
-	common/File.o common/Frozen.o common/Logger.o common/String.o
+	common/File.o common/Frozen.o common/Logger.o common/Process.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Firewall Plugin

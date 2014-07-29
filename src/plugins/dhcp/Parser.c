@@ -301,7 +301,15 @@ void SaveDhcpConfiguration(struct DhcpConfiguration * configuration)
 	}
 
 	WriteFile(DhcpdConfigurationFileName,fileContent);
-	system("service dhcpd restart > /dev/null");
+	if(configuration->SubnetConfigurationCount==0)
+	{
+		// Configuration initialized
+		system("service dhcpd stop");
+	}
+	else
+	{
+		system("service dhcpd restart");
+	}
 	free(fileContent);
 }
 

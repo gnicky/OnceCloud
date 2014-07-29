@@ -120,18 +120,10 @@ void OnHangup(int signal)
 	WriteLog(LOG_INFO,"Asked to hang up. Ignored.");
 }
 
-void OnSegmentationFault(int signal)
-{
-	WriteLog(LOG_ERR,"Segmentation fault detected. Aborting.");
-	abort();
-}
-
-
 int main(int argc, char * argv [])
 {
 	signal(SIGINT,OnInterrupt);
 	signal(SIGTERM,OnTerminate);
-	signal(SIGSEGV,OnSegmentationFault);
 	signal(SIGHUP,OnHangup);
 
 	WriteLog(LOG_INFO,"Net Daemon started.");
