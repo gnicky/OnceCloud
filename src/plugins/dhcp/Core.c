@@ -7,8 +7,7 @@
 #include "DhcpEntry.h"
 #include "Core.h"
 #include "Logger.h"
-
-const char * DhcpdConfigurationFileName="/etc/dhcp/dhcpd.conf";
+#include "Common.h"
 
 void GenerateHostConfiguration(char * buffer, const char * ipAddress, const char * hardwareAddress)
 {
@@ -31,15 +30,15 @@ void GenerateHostConfiguration(char * buffer, const char * ipAddress, const char
 
 void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 {
-	if(!IsFileExist(DhcpdConfigurationFileName))
+	if(!IsFileExist(DHCPD_CONFIGURATION_FILE_NAME))
 	{
-		WriteLog(LOG_ERR,"DHCP configuration file is not exist: %s. Exiting.",DhcpdConfigurationFileName);
+		WriteLog(LOG_ERR,"DHCP configuration file is not exist: %s. Exiting.",DHCPD_CONFIGURATION_FILE_NAME);
 		exit(1);
 	}
 
 	char * fileContent=malloc(1048576);
 	memset(fileContent,0,1048576);
-	ReadFile(DhcpdConfigurationFileName,fileContent);
+	ReadFile(DHCPD_CONFIGURATION_FILE_NAME,fileContent);
 
 	char temp[1000];
 	sprintf(temp,"fixed-address %s",ipAddress);
@@ -56,7 +55,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	char * position=strstr(fileContent,"\n}");
 	if(position==NULL)
 	{
-		WriteLog(LOG_ERR,"Malformed configuration file %s. Exiting.",DhcpdConfigurationFileName);
+		WriteLog(LOG_ERR,"Malformed configuration file %s. Exiting.",DHCPD_CONFIGURATION_FILE_NAME);
 		exit(1);
 	}
 	*position='\0';
@@ -72,7 +71,7 @@ void DoAddHostEntry(const char * ipAddress, const char * hardwareAddress)
 	strcat(newFileContent,buffer);
 	strcat(newFileContent,position+1);
 
-	WriteFile(DhcpdConfigurationFileName,newFileContent);	
+	WriteFile(DHCPD_CONFIGURATION_FILE_NAME,newFileContent);	
 
 	free(newFileContent);
 	free(fileContent);
@@ -98,15 +97,15 @@ int AddBindings(int hostsCount, struct Host * hosts)
 
 void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 {
-	if(!IsFileExist(DhcpdConfigurationFileName))
+	if(!IsFileExist(DHCPD_CONFIGURATION_FILE_NAME))
 	{
-		WriteLog(LOG_ERR,"DHCP configuration file is not exist: %s. Exiting.",DhcpdConfigurationFileName);
+		WriteLog(LOG_ERR,"DHCP configuration file is not exist: %s. Exiting.",DHCPD_CONFIGURATION_FILE_NAME);
 		exit(1);
 	}
 
 	char * fileContent=malloc(1048576);
 	memset(fileContent,0,1048576);
-	ReadFile(DhcpdConfigurationFileName,fileContent);
+	ReadFile(DHCPD_CONFIGURATION_FILE_NAME,fileContent);
 
 	char * hostEntryStart=fileContent;
 	char * hostEntryEnd=NULL;
@@ -140,7 +139,7 @@ void DoRemoveHostEntry(const char * ipAddress, const char * hardwareAddress)
 		strcat(newFileContent,fileContent);
 		strcat(newFileContent,hostEntryEnd+strlen("\t}\n"));
 
-		WriteFile(DhcpdConfigurationFileName,newFileContent);
+		WriteFile(DHCPD_CONFIGURATION_FILE_NAME,newFileContent);
 		system("service dhcpd restart > /dev/null");
 
 		free(newFileContent);
@@ -219,7 +218,7 @@ int InitializeConfiguration(const char * subnet, const char * netmask, const cha
 {
 	char * fileContent=malloc(BUFFER_SIZE);
 	GenerateInitialConfiguration(fileContent,subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLease,maxLease);
-	WriteFile(DhcpdConfigurationFileName,fileContent);
+	WriteFile(DHCPD_CONFIGURATION_FILE_NAME,fileContent);
 	system("service dhcpd restart > /dev/null");
 
 	free(fileContent);
@@ -232,7 +231,7 @@ int ListDhcpEntry(struct DhcpEntry * buffer, int * count)
 
 	char * fileContent=malloc(1048576);
 	memset(fileContent,0,1048576);
-	ReadFile(DhcpdConfigurationFileName,fileContent);
+	ReadFile(DHCPD_CONFIGURATION_FILE_NAME,fileContent);
 
 	char * hostEntryStart=fileContent;
 	while((hostEntryStart=strstr(hostEntryStart,"\thost "))!=NULL)
@@ -284,7 +283,7 @@ int GenerateConfiguration(struct DhcpConfiguration * configuration)
 
 	strcat(fileContent,"}\n");
 
-	WriteFile(DhcpdConfigurationFileName,fileContent);
+	WriteFile(DHCPD_CONFIGURATION_FILE_NAME,fileContent);
 
 	system("service dhcpd restart > /dev/null");
 
