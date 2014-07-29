@@ -11,6 +11,7 @@ int AddOrUpdateSubnet(struct DhcpConfiguration * configuration, const char * sub
 int RemoveSubnet(struct DhcpConfiguration * configuration, const char * subnetAddress, const char * netmask);
 
 int AddOrUpdateHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress);
-int RemoveHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress);
+int AssignIPAddressForHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * subnetAddress, char * assignedIPAddress);
+int RemoveHost(struct DhcpConfiguration * configuration, const char * hardwareAddress);
 
 #endif

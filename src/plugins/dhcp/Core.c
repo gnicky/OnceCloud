@@ -1,20 +1,33 @@
 #include <string.h>
+#include <stdio.h>
 
 #include "DhcpConfiguration.h"
 #include "Type.h"
 
-int FindHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress)
+int FindHost(struct DhcpConfiguration * configuration, const char * hardwareAddress)
 {
 	int position=0;
 	for(position=0;position<configuration->HostConfigurationCount;position++)
 	{
-		if(strcmp(configuration->HostConfiguration[position].HardwareAddress,hardwareAddress)==0
-			&& strcmp(configuration->HostConfiguration[position].IPAddress,ipAddress)==0)
+		if(strcmp(configuration->HostConfiguration[position].HardwareAddress,hardwareAddress)==0)
 		{
 			return position;
 		}
 	}
 	return -1;
+}
+
+int IsIPAddressExist(struct DhcpConfiguration * configuration, const char * ipAddress)
+{
+	int position=0;
+	for(position=0;position<configuration->HostConfigurationCount;position++)
+	{
+		if(strcmp(configuration->HostConfiguration[position].IPAddress,ipAddress)==0)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 int FindSubnet(struct DhcpConfiguration * configuration, const char * subnetAddress, const char * netmask)
@@ -94,7 +107,7 @@ int RemoveSubnet(struct DhcpConfiguration * configuration, const char * subnetAd
 
 int AddOrUpdateHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress)
 {
-	int position=FindHost(configuration,hardwareAddress,ipAddress);
+	int position=FindHost(configuration,hardwareAddress);
 	if(position==-1)
 	{
 		position=configuration->HostConfigurationCount;
@@ -108,9 +121,36 @@ int AddOrUpdateHost(struct DhcpConfiguration * configuration, const char * hardw
 	return TRUE;
 }
 
-int RemoveHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * ipAddress)
+int AssignIPAddressForHost(struct DhcpConfiguration * configuration, const char * hardwareAddress, const char * subnetAddress, char * assignedIPAddress)
 {
-	int position=FindHost(configuration,hardwareAddress,ipAddress);
+	int assignStart=2;
+	int assignEnd=254;
+
+	char subnet[100];
+	char temp[100];
+	strcpy(subnet,subnetAddress);
+	char * position=strstr(subnet,".");
+	position=strstr(position+1,".");
+	position=strstr(position+1,".");
+	*position='\0';
+
+	int i=0;
+	for(i=assignStart;i<=assignEnd;i++)
+	{
+		sprintf(temp,"%s.%d",subnet,i);
+		if(IsIPAddressExist(configuration,temp)==FALSE)
+		{
+			strcpy(assignedIPAddress,temp);
+			return AddOrUpdateHost(configuration,hardwareAddress,temp);
+		}
+	}
+	assignedIPAddress[0]='\0';
+	return FALSE;
+}
+
+int RemoveHost(struct DhcpConfiguration * configuration, const char * hardwareAddress)
+{
+	int position=FindHost(configuration,hardwareAddress);
 	int i=0;
 
 	if(position!=-1)

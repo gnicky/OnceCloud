@@ -300,6 +300,26 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 	{
 		ret=DoAddHosts(request->Content);
 	}
+	else if(request->QueryString!=NULL && strcmp(request->QueryString,"assign")==0)
+	{
+		const char * hardwareAddress=request->GetHeader(request,"x-bws-hardware-address");
+		const char * subnetAddress=request->GetHeader(request,"x-bws-subnet-address");
+		if(hardwareAddress==NULL || subnetAddress==NULL)
+		{
+			response->StatusCode=400;
+			response->SetContent(response,"");
+			return TRUE;
+		}
+		struct DhcpConfiguration configuration;
+		ReadDhcpConfiguration(&configuration);
+		char assignedIPAddress[100];
+		ret=AssignIPAddressForHost(&configuration,hardwareAddress,subnetAddress,assignedIPAddress);
+		if(ret==TRUE)
+		{
+			response->SetHeader(response,"x-bws-assigned-ip-address",assignedIPAddress);
+		}
+		SaveDhcpConfiguration(&configuration);
+	}
 	else
 	{
 		ret=DoAddSubnet(request->Content);
@@ -353,7 +373,6 @@ int DoRemoveHosts(const char * json)
 		char hostIndex[100];
 		char temp[100];
 		char hardwareAddress[100];
-		char ipAddress[100];
 
 		sprintf(hostIndex,"hosts[%d]",i);
 		token=find_json_token(object,hostIndex);
@@ -369,14 +388,7 @@ int DoRemoveHosts(const char * json)
 			return FALSE;
 		}
 
-		sprintf(temp,"%s.ipAddress",hostIndex);
-		status=ReadTextValue(object,temp,ipAddress);
-		if(status!=0)
-		{
-			return FALSE;
-		}
-
-		ret=RemoveHost(&configuration,hardwareAddress,ipAddress);
+		ret=RemoveHost(&configuration,hardwareAddress);
 		if(ret!=TRUE)
 		{
 			return FALSE;
