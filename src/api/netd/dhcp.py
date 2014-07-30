@@ -4,7 +4,7 @@ from netd import endpoint
 
 def get_configuration(location):
     connection=httplib.HTTPConnection(location)
-    connection.request("GET",endpoint.Dhcp.get_configuration)
+    connection.request("GET",endpoint.DHCP.get_configuration)
     response=connection.getresponse()
     content=response.read()
     connection.close()
@@ -23,7 +23,7 @@ def add_subnet(location,subnet,netmask,router,dns,rangeStart,rangeEnd,defaultLea
     }
 
     connection=httplib.HTTPConnection(location)
-    connection.request("POST",endpoint.Dhcp.add_subnet,json.dumps(request_content))
+    connection.request("POST",endpoint.DHCP.add_subnet,json.dumps(request_content))
     response=connection.getresponse()
     result=str(response.status)+" "+response.reason
     connection.close()
@@ -36,7 +36,7 @@ def assign_ip_address(location,mac,subnet):
     }
 
     connection=httplib.HTTPConnection(location)
-    connection.request("POST",endpoint.Dhcp.assign_ip_address,"",request_headers)
+    connection.request("POST",endpoint.DHCP.assign_ip_address,"",request_headers)
     response=connection.getresponse()
     result=str(response.status)+" "+response.reason
     if(response.status==200):
@@ -52,7 +52,40 @@ def add_hosts(location,hosts):
     }
 
     connection=httplib.HTTPConnection(location)
-    connection.request("POST",endpoint.Dhcp.add_hosts,json.dumps(request_content))
+    connection.request("POST",endpoint.DHCP.add_hosts,json.dumps(request_content))
+    response=connection.getresponse()
+    result=str(response.status)+" "+response.reason
+    connection.close()
+    return result
+
+def clean_up_configuration(location):
+    connection=httplib.HTTPConnection(location)
+    connection.request("PUT",endpoint.DHCP.clean_up_configuration)
+    response=connection.getresponse()
+    result=str(response.status)+" "+response.reason
+    connection.close()
+    return result
+
+def remove_subnet(location,subnet,netmask):
+    request_content={
+        "subnet":subnet,
+        "netmask":netmask
+    }
+
+    connection=httplib.HTTPConnection(location)
+    connection.request("DELETE",endpoint.DHCP.remove_subnet,json.dumps(request_content))
+    response=connection.getresponse()
+    result=str(response.status)+" "+response.reason
+    connection.close()
+    return result
+
+def remove_hosts(location,hosts):
+    request_content={
+        "hosts":hosts
+    }
+
+    connection=httplib.HTTPConnection(location)
+    connection.request("DELETE",endpoint.DHCP.remove_hosts,json.dumps(request_content))
     response=connection.getresponse()
     result=str(response.status)+" "+response.reason
     connection.close()
