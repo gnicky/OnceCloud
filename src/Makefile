@@ -53,8 +53,11 @@ NETD_OBJECTS=$(NETD_MAIN_OBJECTS) $(NETD_COMMON_OBJECTS) \
 	$(NETD_DHCP_PLUGIN_OBJECTS) $(NETD_FIREWALL_PLUGIN_OBJECTS) $(NETD_LIMIT_PLUGIN_OBJECTS) \
 	$(NETD_LOADBALANCER_PLUGIN_OBJECTS) $(NETD_NAT_PLUGIN_OBJECTS) $(NETD_ROUTE_PLUGIN_OBJECTS)
 
-all: $(NETD_MAIN) $(NETD_PLUGINS)
+
+all: everything api
 .PHONY: all
+
+everything: $(NETD_MAIN) $(NETD_PLUGINS)
 
 main: $(NETD_MAIN)
 .PHONY: main
@@ -65,7 +68,12 @@ plugins: $(NETD_PLUGINS)
 
 clean:
 	rm -rf $(NETD_OBJECTS)
+	cd api && python setup.py clean
 .PHONY: clean
+
+api:
+	cd api && python setup.py build
+.PHONY: api
 
 veryclean: clean
 	rm -rf $(NETD_MAIN)
@@ -85,6 +93,7 @@ install: veryclean all
 	$(INSTALL) $(NETD_PLUGINS) $(INSTALL_BIN)/plugins
 	chmod +x $(INSTALL_BIN)/sbin/netd
 	ln -sf $(INSTALL_BIN)/sbin/netd /bin/netd
+	cd api && python setup.py install
 
 depend:
 	@echo "# Dependencies"
