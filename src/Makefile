@@ -168,7 +168,7 @@ plugins/dhcp/Parser.o: plugins/dhcp/Parser.c
 NETD_DHCP_PLUGIN_OBJECTS=plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o
 
 plugins/dhcp/dhcp.so: plugins/dhcp/Api.o plugins/dhcp/Core.o plugins/dhcp/Parser.o \
-	common/File.o common/Frozen.o common/Logger.o common/Process.o common/String.o
+	common/File.o common/Logger.o common/Process.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Firewall Plugin
@@ -181,7 +181,7 @@ plugins/firewall/Core.o: plugins/firewall/Core.c
 NETD_FIREWALL_PLUGIN_OBJECTS=plugins/firewall/Api.o plugins/firewall/Core.o
 
 plugins/firewall/firewall.so: plugins/firewall/Api.o plugins/firewall/Core.o \
-	common/File.o common/Process.o common/Frozen.o common/Logger.o common/String.o
+	common/File.o common/Process.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Limit Plugin
@@ -207,7 +207,7 @@ plugins/loadbalancer/Core.o: plugins/loadbalancer/Core.c
 NETD_LOADBALANCER_PLUGIN_OBJECTS=plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o
 
 plugins/loadbalancer/loadbalancer.so: plugins/loadbalancer/Api.o plugins/loadbalancer/Core.o \
-	common/File.o common/Frozen.o common/Logger.o common/String.o common/Process.o
+	common/File.o common/Logger.o common/String.o common/Process.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Nat Plugin

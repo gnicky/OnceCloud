@@ -15,6 +15,7 @@ struct HttpRequest
 	char * Content;
 
 	const char * (* GetHeader) (struct HttpRequest * request, const char * name);
+	const char * (* GetValue) (struct HttpRequest * request, const char * name);
 };
 
 #endif
