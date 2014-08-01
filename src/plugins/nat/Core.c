@@ -143,7 +143,7 @@ int DoAddRule(const char * rule)
 	strcat(newConfiguration,originalConfiguration);
 	*natStart=savedChar;
 
-	char * ruleStart=strstr(natStart,":OUTPUT");
+	char * ruleStart=strstr(natStart,":POSTROUTING");
 	ruleStart=strstr(ruleStart,"\n");
 	ruleStart=ruleStart+strlen("\n");
 

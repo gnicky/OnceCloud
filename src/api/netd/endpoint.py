@@ -7,3 +7,6 @@ class DHCP:
     remove_subnet="/DHCP"
     remove_hosts="/DHCP?host"
 
+class NAT:
+    add_port_forwarding="/NAT?port"
+    remove_port_forwarding="/NAT?port"
