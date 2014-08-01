@@ -99,8 +99,6 @@ void AddIPAddress(const char * interface, const char * address)
 		}
 	}
 
-	printf("FileName: %s\n",fileName);
-
 	char temp[1000]={0};
 	char fileContent[1000]={0};
 	sprintf(temp,"DEVICE=\"%s:%d\"\n",interface,i);

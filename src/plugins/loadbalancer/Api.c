@@ -117,23 +117,6 @@ int ParseRequest(const char * json, struct Configuration * configuration)
 
 	configuration->ListenerCount=i;
 
-	printf("Parsing completed.\n");
- 	printf("WorkerProcesses=%s\n", configuration->WorkerProcesses);
-	printf("WorkerConnections=%s\n",configuration->WorkerConnections);
-	printf("ListenerCount=%d\n",configuration->ListenerCount);
-	for(i=0;i<configuration->ListenerCount;i++)
-	{
-		printf("Listener[%d].Port=%s\n",i,configuration->Listeners[i].Port);
-		printf("Listener[%d].Protocol=%s\n",i,configuration->Listeners[i].Protocol);
-		printf("Listener[%d].Policy=%s\n",i,configuration->Listeners[i].Policy);
-		printf("Listener[%d].RuleCount=%d\n",i,configuration->Listeners[i].RuleCount);
-		for(j=0;j<configuration->Listeners[i].RuleCount;j++)
-		{
-			printf("Listener[%d].Rule[%d].Port=%s\n",i,j,configuration->Listeners[i].Rules[j].Port);
-			printf("Listener[%d].Rule[%d].IPAddress=%s\n",i,j,configuration->Listeners[i].Rules[j].IPAddress);
-		}
-	}
-
  	free(object);
 
 	return 0;
