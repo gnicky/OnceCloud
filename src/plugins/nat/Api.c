@@ -72,6 +72,34 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
+	if(request->QueryString!=NULL)
+	{
+		if(strcmp(request->QueryString,"port")==0)
+		{
+			const char * protocol=request->GetHeader(request,"x-bws-protocol");
+			const char * internalAddress=request->GetHeader(request,"x-bws-internal-ip-address");
+			const char * internalPort=request->GetHeader(request,"x-bws-internal-port");
+			const char * externalAddress=request->GetHeader(request,"x-bws-external-ip-address");
+			const char * externalPort=request->GetHeader(request,"x-bws-external-port");
+
+			if(protocol==NULL || internalAddress==NULL || internalPort==NULL
+				|| externalAddress==NULL || externalPort==NULL)
+			{
+				response->StatusCode=400;
+				response->SetContent(response,"");
+
+				return TRUE;
+			}
+
+			AddPortForwarding(protocol,internalAddress,internalPort,externalAddress,externalPort);
+
+			response->StatusCode=200;
+			response->SetContent(response,"");
+
+			return TRUE;
+		}
+	}
+
 	const char * internalIPAddress=request->GetHeader(request,"x-bws-internal-ip-address");
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
 	const char * externalInterface=request->GetHeader(request,"x-bws-external-interface");
@@ -108,6 +136,34 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
+	if(request->QueryString!=NULL)
+	{
+		if(strcmp(request->QueryString,"port")==0)
+		{
+			const char * protocol=request->GetHeader(request,"x-bws-protocol");
+			const char * internalAddress=request->GetHeader(request,"x-bws-internal-ip-address");
+			const char * internalPort=request->GetHeader(request,"x-bws-internal-port");
+			const char * externalAddress=request->GetHeader(request,"x-bws-external-ip-address");
+			const char * externalPort=request->GetHeader(request,"x-bws-external-port");
+
+			if(protocol==NULL || internalAddress==NULL || internalPort==NULL
+				|| externalAddress==NULL || externalPort==NULL)
+			{
+				response->StatusCode=400;
+				response->SetContent(response,"");
+
+				return TRUE;
+			}
+
+			RemovePortForwarding(protocol,internalAddress,internalPort,externalAddress,externalPort);
+
+			response->StatusCode=200;
+			response->SetContent(response,"");
+
+			return TRUE;
+		}
+	}
+
 	const char * internalIPAddress=request->GetHeader(request,"x-bws-internal-ip-address");
 	const char * externalIPAddress=request->GetHeader(request,"x-bws-external-ip-address");
 	const char * externalInterface=request->GetHeader(request,"x-bws-external-interface");

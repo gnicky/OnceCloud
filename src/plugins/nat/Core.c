@@ -292,8 +292,8 @@ int RemoveNat(const char * internal, const char * external, const char * interfa
 	return 0;
 }
 
-int AddPortForwarding(char * buffer, const char * protocol, const char * internalAddress
-	, const char * internalPort, const char * externalAddress, const char * externalPort)
+int AddPortForwarding(const char * protocol, const char * internalAddress, const char * internalPort
+	, const char * externalAddress, const char * externalPort)
 {
 	char portForwardingRule[1000]={0};
 	GeneratePortForwardingRule(portForwardingRule,protocol,internalAddress,internalPort,externalAddress,externalPort);
@@ -301,8 +301,8 @@ int AddPortForwarding(char * buffer, const char * protocol, const char * interna
 	return 0;
 }
 
-int RemovePortForwarding(char * buffer, const char * protocol, const char * internalAddress
-	, const char * internalPort, const char * externalAddress, const char * externalPort)
+int RemovePortForwarding(const char * protocol, const char * internalAddress, const char * internalPort
+	, const char * externalAddress, const char * externalPort)
 {
 	char portForwardingRule[1000]={0};
 	GeneratePortForwardingRule(portForwardingRule,protocol,internalAddress,internalPort,externalAddress,externalPort);
