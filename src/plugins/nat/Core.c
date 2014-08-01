@@ -120,7 +120,7 @@ void AddIPAddress(const char * interface, const char * address)
 	Execute(temp);
 }
 
-int AddNat(const char * internal, const char * external, const char * interface)
+int DoAddRule(const char * rule)
 {
 	char savedChar;
 	char * originalConfiguration=malloc(1048576);
@@ -128,6 +128,7 @@ int AddNat(const char * internal, const char * external, const char * interface)
 	newConfiguration[0]='\0';
 
 	LoadConfiguration(originalConfiguration);
+
 	char * natStart=strstr(originalConfiguration,"*nat");
 
 	if(natStart==NULL)
@@ -160,27 +161,23 @@ int AddNat(const char * internal, const char * external, const char * interface)
 	*ruleEnd='\0';
 	strcat(newConfiguration,ruleStart);
 
+	// Check existance here
+
 	int exist=0;
-	char * internalExist=strstr(ruleStart,internal);
-	char * externalExist=strstr(ruleStart,external);
-	if(internalExist!=NULL || externalExist!=NULL)
+	char * rulePosition=strstr(ruleStart,rule);
+	if(rulePosition!=NULL)
 	{
 		exist=1;
 	}
 
 	*ruleEnd=savedChar;
 
+
 	// End of the rule
 
 	if(!exist)
 	{
-		char preRoutingRule[1000]={0};
-		char postRoutingRule[1000]={0};
-		GeneratePreRoutingRule(preRoutingRule,internal,external);
-		GeneratePostRoutingRule(postRoutingRule,internal,external);
-		strcat(newConfiguration,preRoutingRule);
-		strcat(newConfiguration,"\n");
-		strcat(newConfiguration,postRoutingRule);
+		strcat(newConfiguration,rule);
 		strcat(newConfiguration,"\n");
 	}
 
@@ -188,15 +185,29 @@ int AddNat(const char * internal, const char * external, const char * interface)
 
 	SaveConfiguration(newConfiguration);
 
-	RemoveIPAddress(interface,external);
-	AddIPAddress(interface,external);
-
 	free(newConfiguration);
 	free(originalConfiguration);
 	return 0;
 }
 
-int RemoveNat(const char * internal, const char * external, const char * interface)
+int AddNat(const char * internal, const char * external, const char * interface)
+{
+	char preRoutingRule[1000]={0};
+	char postRoutingRule[1000]={0};
+
+	GeneratePreRoutingRule(preRoutingRule,internal,external);
+	GeneratePostRoutingRule(postRoutingRule,internal,external);
+
+	DoAddRule(preRoutingRule);
+	DoAddRule(postRoutingRule);
+
+	RemoveIPAddress(interface,external);
+	AddIPAddress(interface,external);
+
+	return 0;
+}
+
+int DoRemoveRule(const char * rule)
 {
 	char savedChar;
 	char * originalConfiguration=malloc(1048576);
@@ -204,6 +215,7 @@ int RemoveNat(const char * internal, const char * external, const char * interfa
 	newConfiguration[0]='\0';
 
 	LoadConfiguration(originalConfiguration);
+
 	char * natStart=strstr(originalConfiguration,"*nat");
 
 	if(natStart==NULL)
@@ -227,18 +239,17 @@ int RemoveNat(const char * internal, const char * external, const char * interfa
 
 	// From the start of the rule
 
-	char preRoutingRule[1000]={0};
-	char postRoutingRule[1000]={0};
-	GeneratePreRoutingRule(preRoutingRule,internal,external);
-	GeneratePostRoutingRule(postRoutingRule,internal,external);
-
 	strcat(newConfiguration,"\n");
 	char * position=ruleStart+1;
 
 	while(strstr(position,"COMMIT")!=NULL && strstr(position,"COMMIT")!=position)
 	{
-		if(strstr(position,preRoutingRule)==position
-			|| strstr(position,postRoutingRule)==position)
+		char * end=strstr(position,"\n");
+		*end='\0';
+		char temp[1000];
+		strcpy(temp,position);
+		*end='\n';
+		if(strstr(temp,rule)!=NULL)
 		{
 			position=strstr(position,"\n");
 			position=position+strlen("\n");
@@ -258,11 +269,44 @@ int RemoveNat(const char * internal, const char * external, const char * interfa
 	char * ruleEnd=position;
 	strcat(newConfiguration,ruleEnd);
 
-	RemoveIPAddress(interface,external);
 	SaveConfiguration(newConfiguration);
 
 	free(newConfiguration);
 	free(originalConfiguration);
+	return 0;
+}
+
+int RemoveNat(const char * internal, const char * external, const char * interface)
+{
+	char preRoutingRule[1000]={0};
+	char postRoutingRule[1000]={0};
+
+	GeneratePreRoutingRule(preRoutingRule,internal,external);
+	GeneratePostRoutingRule(postRoutingRule,internal,external);
+
+	DoRemoveRule(preRoutingRule);
+	DoRemoveRule(postRoutingRule);
+
+	RemoveIPAddress(interface,external);
+
+	return 0;
+}
+
+int AddPortForwarding(char * buffer, const char * protocol, const char * internalAddress
+	, const char * internalPort, const char * externalAddress, const char * externalPort)
+{
+	char portForwardingRule[1000]={0};
+	GeneratePortForwardingRule(portForwardingRule,protocol,internalAddress,internalPort,externalAddress,externalPort);
+	DoAddRule(portForwardingRule);
+	return 0;
+}
+
+int RemovePortForwarding(char * buffer, const char * protocol, const char * internalAddress
+	, const char * internalPort, const char * externalAddress, const char * externalPort)
+{
+	char portForwardingRule[1000]={0};
+	GeneratePortForwardingRule(portForwardingRule,protocol,internalAddress,internalPort,externalAddress,externalPort);
+	DoRemoveRule(portForwardingRule);
 	return 0;
 }
 
