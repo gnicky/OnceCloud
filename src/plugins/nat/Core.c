@@ -19,6 +19,14 @@ void SaveConfiguration(char * buffer)
 	WriteFile("/etc/sysconfig/iptables",buffer);
 }
 
+void GeneratePortForwardingRule(char * buffer, const char * protocol, const char * internalAddress
+	, const char * internalPort, const char * externalAddress, const char * externalPort)
+{
+	// -A PREROUTING -d 192.168.118.20/32 -p tcp -m tcp --dport 80 -j DNAT --to-destination 192.168.121.2:8080
+	sprintf(buffer,"-A PREROUTING -d %s/32 -p %s -m %s --dport %s -j DNAT --to-destination %s:%s"
+		,externalAddress,protocol,protocol,externalPort,internalAddress,internalPort);
+}
+
 void GeneratePreRoutingRule(char * buffer, const char * internal, const char * external)
 {
 	buffer[0]='\0';
