@@ -4,5 +4,8 @@
 *.pyc
 *~
 *.egg-info
+*.aux
+*.log
+*.pdf
 dist
 build
