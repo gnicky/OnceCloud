@@ -101,7 +101,6 @@ void SaveConfiguration(struct Configuration * configuration)
 
 void RestartService()
 {
-	char temp[1000];
-	sprintf(temp,"%s -s reload",NginxProgramFile);
-	Execute(temp);
+	Execute("pkill nginx");
+	Execute(NginxProgramFile);
 }

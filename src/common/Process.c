@@ -55,20 +55,6 @@ int CloseAllSockets()
 
 int Execute(const char * commandLine)
 {
-	char command[100];
-	char ** arguments;
-	int i=0;
-
-	struct SplitResult * result=Split(commandLine," ");
-	arguments=malloc(sizeof(char *)*(result->Count+1));
-	strcpy(command,result->Content[0]);
-	for(i=0;i<result->Count;i++)
-	{
-		arguments[i]=malloc(sizeof(strlen(result->Content[i]))+1);
-		strcpy(arguments[i],result->Content[i]);
-	}
-	arguments[result->Count]=(char *)NULL;
-
 	WriteLog(LOG_NOTICE,"Executing \"%s\"",commandLine);
 
 	pid_t processId;
@@ -82,17 +68,12 @@ int Execute(const char * commandLine)
 	if(processId==0)
 	{
 		CloseAllSockets();
-		execvp(command,arguments);
+		system(commandLine);
+		exit(0);
 	}
 
-	waitpid(processId,NULL,0);
+	wait(NULL);
 
-	FreeSplitResult(result);
-	for(i=0;i<result->Count;i++)
-	{
-		free(arguments[i]);
-	}
-	free(arguments);
 	return TRUE;
 }
 
