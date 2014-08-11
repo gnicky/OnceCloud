@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #include "Type.h"
 #include "Logger.h"
@@ -69,11 +70,22 @@ int Execute(const char * commandLine)
 	arguments[result->Count]=(char *)NULL;
 
 	WriteLog(LOG_NOTICE,"Executing \"%s\"",commandLine);
-	if(fork()==0)
+
+	pid_t processId;
+	processId=fork();
+	if(processId<0)
+	{
+		WriteLog(LOG_ERR,"Error occurred while executing \"%s\"",commandLine);
+		exit(1);
+	}
+
+	if(processId==0)
 	{
 		CloseAllSockets();
 		execvp(command,arguments);
 	}
+
+	waitpid(processId,NULL,0);
 
 	FreeSplitResult(result);
 	for(i=0;i<result->Count;i++)
