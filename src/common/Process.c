@@ -68,11 +68,17 @@ int Execute(const char * commandLine)
 	if(processId==0)
 	{
 		CloseAllSockets();
-		system(commandLine);
-		exit(0);
+		int status=system(commandLine);
+		exit(status);
 	}
 
-	wait(NULL);
+	int ret;
+	waitpid(processId,&ret,0);
+	if(ret!=0)
+	{
+		WriteLog(LOG_ERR,"Child process %s exit with status %d",commandLine,ret);
+		return FALSE;
+	}
 
 	return TRUE;
 }
