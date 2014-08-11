@@ -24,3 +24,10 @@ class Firewall:
     add_ping_rule="/Firewall?ping"
     remove_ping_rule="/Firewall?ping"
 
+class Limit:
+    get_configuration="/Limit"
+    add_class="/Limit?class"
+    add_filter="/Limit?filter"
+    add_ip="/Limit?ip"
+    set_default_rules="/Limit"
+
