@@ -34,3 +34,6 @@ class Limit:
     remove_filter="/Limit?filter"
     remove_ip="/Limit?ip"
 
+class LoadBalancer:
+    configure="/LoadBalancer"
+
