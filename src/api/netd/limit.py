@@ -64,3 +64,40 @@ def set_default_rules(location,interface):
     connection.close()
     return (response.status==200)
 
+def remove_class(location,interface,class_id):
+    request_headers={
+        "x-bws-interface":interface,
+        "x-bws-class-id":class_id
+    }
+
+    connection=httplib.HTTPConnection(location)
+    connection.request("DELETE",endpoint.Limit.remove_class,"",request_headers)
+    response=connection.getresponse()
+    connection.close()
+    return (response.status==200)
+
+def remove_filter(location,interface,flow_id):
+    request_headers={
+        "x-bws-interface":interface,
+        "x-bws-flow-id":flow_id
+    }
+
+    connection=httplib.HTTPConnection(location)
+    connection.request("DELETE",endpoint.Limit.remove_filter,"",request_headers)
+    response=connection.getresponse()
+    connection.close()
+    return (response.status==200)
+
+def remove_ip(location,interface,gateway,ip):
+    request_headers={
+        "x-bws-interface":interface,
+        "x-bws-gateway":gateway,
+        "x-bws-ip-address":ip
+    }
+
+    connection=httplib.HTTPConnection(location)
+    connection.request("DELETE",endpoint.Limit.remove_ip,"",request_headers)
+    response=connection.getresponse()
+    connection.close()
+    return (response.status==200)
+

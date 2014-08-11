@@ -30,4 +30,7 @@ class Limit:
     add_filter="/Limit?filter"
     add_ip="/Limit?ip"
     set_default_rules="/Limit"
+    remove_class="/Limit?class"
+    remove_filter="/Limit?filter"
+    remove_ip="/Limit?ip"
 
