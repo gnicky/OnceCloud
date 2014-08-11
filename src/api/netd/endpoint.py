@@ -37,3 +37,7 @@ class Limit:
 class LoadBalancer:
     configure="/LoadBalancer"
 
+class Route:
+    connect="/Route"
+    disconnect="/Route"
+
