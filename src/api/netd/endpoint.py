@@ -15,3 +15,8 @@ class NAT:
     remove_binding="/NAT"
     remove_port_forwarding="/NAT?port"
 
+class Firewall:
+    add_rule="/Firewall"
+    remove_rule="/Firewall"
+    get_configuration="/Firewall"
+    set_rules="/Firewall"
