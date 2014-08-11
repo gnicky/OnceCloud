@@ -18,5 +18,9 @@ class NAT:
 class Firewall:
     add_rule="/Firewall"
     remove_rule="/Firewall"
-    get_configuration="/Firewall"
+    get_rules="/Firewall"
     set_rules="/Firewall"
+    get_ping_rules="/Firewall?ping"
+    add_ping_rule="/Firewall?ping"
+    remove_ping_rule="/Firewall?ping"
+
