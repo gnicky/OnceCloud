@@ -11,7 +11,98 @@
 \item DELETE请求：删除资源
 \end{itemize}
 
+具体到各个网络组件的API说明如下。需要说明以下几点：
+
+\begin{itemize}
+\item 所有传入参数均以HTTP Header的形式提供。参数名以x-bws开头。
+\item API返回响应时响应文本在HTTP Response的正文中提供，响应文本为XML格式。
+\item API的调用结果以HTTP Status Code的形式提供，目前会有三种可能的状态码：API成功调用时返回200 OK，参数错误时返回400 Bad Request，其余错误返回500 Internal Server Error。
+\item 调用失败时响应正文会包含错误信息，错误信息为XML格式。示例如例程\ref{error-example}所示。
+\begin{lstlisting}[caption=错误信息示例,label=error-example,language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+	Please specify Xxx, Xxx and Xxx.
+</Error>
+\end{lstlisting}
+\end{itemize}
+
 \section{DHCP}
+网络配置工具提供了针对DHCP静态绑定的配置功能。
+
+\subsection{GET /DHCP}
+说明：获得当前的DHCP配置。
+
+传入参数：无
+
+响应示例：
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<DhcpConfiguration>
+	<GlobalConfiguration>
+		<Option>
+			<Key>ddns-update-style</Key>
+			<Value>interim</Value>
+		</Option>
+		<Option>
+			<Key>ignore</Key>
+			<Value>client-updates</Value>
+		</Option>
+	</GlobalConfiguration>
+	<SubnetConfiguration>
+		<Subnet>
+			<SubnetAddress>192.168.118.0</SubnetAddress>
+			<Netmask>255.255.255.0</Netmask>
+			<Routers>192.168.118.1</Routers>
+			<SubnetMask>255.255.255.0</SubnetMask>
+			<DomainNameServers>114.114.114.114</DomainNameServers>
+			<Range>
+				<Start>192.168.118.100</Start>
+				<End>192.168.118.200</End>
+			</Range>
+			<DefaultLeaseTime>21600</DefaultLeaseTime>
+			<MaxLeaseTime>43200</MaxLeaseTime>
+		</Subnet>
+		<Subnet>
+			<SubnetAddress>192.168.121.0</SubnetAddress>
+			<Netmask>255.255.255.0</Netmask>
+			<Routers>192.168.121.1</Routers>
+			<SubnetMask>255.255.255.0</SubnetMask>
+			<DomainNameServers>114.114.114.114</DomainNameServers>
+			<Range>
+				<Start>192.168.121.100</Start>
+				<End>192.168.121.200</End>
+			</Range>
+			<DefaultLeaseTime>21600</DefaultLeaseTime>
+			<MaxLeaseTime>43200</MaxLeaseTime>
+		</Subnet>
+	</SubnetConfiguration>
+	<HostConfiguration>
+		<Host>
+			<Name>HostA</Name>
+			<HardwareAddress>12:34:56:78:AB:CD</HardwareAddress>
+			<IPAddress>192.168.118.21</IPAddress>
+		</Host>
+		<Host>
+			<Name>HostB</Name>
+			<HardwareAddress>87:65:43:21:CD:AB</HardwareAddress>
+			<IPAddress>192.168.118.22</IPAddress>
+		</Host>
+		<Host>
+			<Name>HostC</Name>
+			<HardwareAddress>34:12:56:78:AB:CD</HardwareAddress>
+			<IPAddress>192.168.121.21</IPAddress>
+		</Host>
+		<Host>
+			<Name>HostD</Name>
+			<HardwareAddress>65:87:43:21:CD:AB</HardwareAddress>
+			<IPAddress>192.168.121.22</IPAddress>
+		</Host>
+	</HostConfiguration>
+</DhcpConfiguration>
+\end{lstlisting}
+
+
+
 
 \section{NAT}
 

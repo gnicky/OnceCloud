@@ -30,7 +30,8 @@
 
 \usepackage{listings}
 \lstloadlanguages{}
-\lstset{
+\lstset
+{
 	showstringspaces=false,
 	numbers=left,
 	numberstyle=\tiny,
@@ -43,6 +44,17 @@
 	xleftmargin=2em,xrightmargin=2em, aboveskip=1em,
 	breaklines,
 	extendedchars=false
+}
+
+\lstdefinelanguage{XML}
+{
+	morestring=[b]",
+	morestring=[s]{>}{<},
+	morecomment=[s]{<?}{?>},
+	stringstyle=\color{black},
+	identifierstyle=\color{blue},
+	keywordstyle=\color{cyan},
+	morekeywords={xmlns,version,type}% list your attributes here
 }
 
 \usepackage[title,titletoc,header]{appendix}
@@ -62,9 +74,9 @@
 \setCJKmonofont[BoldFont={Microsoft YaHei Bold}]{Microsoft YaHei}
 \setCJKsansfont[BoldFont={Microsoft YaHei Bold}]{Microsoft YaHei}
 
-\setmainfont[BoldFont={Microsoft YaHei Bold}]{Microsoft YaHei}
+\setmainfont{Monaco}
 \setmonofont{Monaco}
-\setsansfont[BoldFont={Microsoft YaHei Bold}]{Microsoft YaHei}
+\setsansfont{Monaco}
 
 \geometry{left=2.75cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 
@@ -75,6 +87,7 @@
 \renewcommand{\listtablename}{表格目录}
 \renewcommand{\figurename}{图}
 \renewcommand{\tablename}{表}
+\renewcommand{\lstlistingname}{例程}
 \renewcommand{\appendixname}{附录}
 \renewcommand{\appendixpagename}{附录}
 \renewcommand{\appendixtocname}{附录}
