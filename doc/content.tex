@@ -2,16 +2,16 @@
 网络配置工具提供针对基本网络组件的配置和管理能力，同时适用于基础网络和虚拟网络。
 在后续开发过程中还会增加针对特定网络组件的性能数据监视，这些数据可能无法很方便地从Xen Hypervisor中得到，如经过防火墙各规则的具体流量等）。
 
-目前网络配置工具了基于轻量级HTTP服务的RESTful Web服务netd。RESTful Web服务遵循REST的基本规则，具体语义如下：
-\begin{enumerate}
+目前网络配置工具了基于轻量级HTTP服务的RESTful Web Service，并提供了配套的Python API。RESTful Web Service遵循REST的基本规则\cite{fielding2000architectural}，具体语义如下：
+
+\begin{itemize}
 \item GET请求：获取资源列表
 \item POST请求：创建或修改资源
 \item PUT请求：替换资源
 \item DELETE请求：删除资源
-\end{enumerate}
+\end{itemize}
 
 \section{DHCP}
 
 \section{NAT}
 
-参考文献引用测试\cite{programmer_xiuyang}
