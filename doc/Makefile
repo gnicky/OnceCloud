@@ -3,7 +3,7 @@ BIBTEX=bibtex
 
 document.pdf: document.tex *.tex
 	$(XELATEX) $<
-	-$(BIBTEX) document
+	$(BIBTEX) document
 	$(XELATEX) $<
 	$(XELATEX) $<
 
