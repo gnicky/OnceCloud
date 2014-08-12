@@ -68,17 +68,14 @@ plugins: $(NETD_PLUGINS)
 
 clean:
 	rm -rf $(NETD_OBJECTS)
+	rm -rf $(NETD_MAIN)
+	rm -rf $(NETD_PLUGINS)
 	cd api && python setup.py clean
 .PHONY: clean
 
 api:
 	cd api && python setup.py build
 .PHONY: api
-
-veryclean: clean
-	rm -rf $(NETD_MAIN)
-	rm -rf $(NETD_PLUGINS)
-.PHONY: veryclean
 
 PREFIX=/usr/local
 INSTALL_BIN=$(PREFIX)/netd

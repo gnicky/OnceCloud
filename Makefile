@@ -1,11 +1,15 @@
 # Top level makefile
 
-default: install
-
-.DEFAULT:
-	cd src && $(MAKE) $@
+all: install doc
 
 install:
 	cd src && $(MAKE) $@
 
-.PHONY: install
+doc:
+	cd doc && $(MAKE) $@
+
+clean:
+	cd src && $(MAKE) $@
+	cd doc && $(MAKE) $@
+
+.PHONY: install doc clean
