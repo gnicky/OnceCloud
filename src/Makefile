@@ -28,7 +28,8 @@ endif
 
 NETD_MAIN=netd/netd
 NETD_PLUGINS=$(NETD_DHCP_PLUGIN) $(NETD_FIREWALL_PLUGIN) $(NETD_LIMIT_PLUGIN) \
-	$(NETD_LOADBALANCER_PLUGIN) $(NETD_NAT_PLUGIN) $(NETD_ROUTE_PLUGIN)
+	$(NETD_LOADBALANCER_PLUGIN) $(NETD_NAT_PLUGIN) $(NETD_ROUTE_PLUGIN) \
+	$(NETD_PPTP_PLUGIN)
 
 # Plugins
 NETD_DHCP_PLUGIN=plugins/dhcp/dhcp.so
@@ -37,6 +38,7 @@ NETD_LIMIT_PLUGIN=plugins/limit/limit.so
 NETD_LOADBALANCER_PLUGIN=plugins/loadbalancer/loadbalancer.so
 NETD_NAT_PLUGIN=plugins/nat/nat.so
 NETD_ROUTE_PLUGIN=plugins/route/route.so
+NETD_PPTP_PLUGIN=plugins/pptp/pptp.so
 
 NETD_MAIN_INCLUDE=-Inetd/include/
 NETD_COMMON_INCLUDE=-Icommon/include/
@@ -48,10 +50,12 @@ NETD_LIMIT_PLUGIN_INCLUDE=-Iplugins/limit/include/
 NETD_LOADBALANCER_PLUGIN_INCLUDE=-Iplugins/loadbalancer/include/
 NETD_NAT_PLUGIN_INCLUDE=-Iplugins/nat/include/
 NETD_ROUTE_PLUGIN_INCLUDE=-Iplugins/route/include/
+NETD_PPTP_PLUGIN_INCLUDE=-Iplugins/pptp/include/
 
 NETD_OBJECTS=$(NETD_MAIN_OBJECTS) $(NETD_COMMON_OBJECTS) \
 	$(NETD_DHCP_PLUGIN_OBJECTS) $(NETD_FIREWALL_PLUGIN_OBJECTS) $(NETD_LIMIT_PLUGIN_OBJECTS) \
-	$(NETD_LOADBALANCER_PLUGIN_OBJECTS) $(NETD_NAT_PLUGIN_OBJECTS) $(NETD_ROUTE_PLUGIN_OBJECTS)
+	$(NETD_LOADBALANCER_PLUGIN_OBJECTS) $(NETD_NAT_PLUGIN_OBJECTS) $(NETD_ROUTE_PLUGIN_OBJECTS) \
+	$(NETD_PPTP_PLUGIN_OBJECTS)
 
 
 all: everything api
@@ -81,7 +85,7 @@ PREFIX=/usr/local
 INSTALL_BIN=$(PREFIX)/netd
 INSTALL=install
 
-install: veryclean all
+install: all
 	mkdir -p $(INSTALL_BIN)
 	mkdir -p $(INSTALL_BIN)/sbin
 	mkdir -p $(INSTALL_BIN)/plugins
@@ -233,3 +237,14 @@ plugins/route/route.so: plugins/route/Api.o plugins/route/Core.o \
 	common/File.o common/Logger.o common/String.o common/Process.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
+# PPTP Plugin
+plugins/pptp/Api.o: plugins/pptp/Api.c
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_PPTP_PLUGIN_INCLUDE) -o $@ $<
+
+plugins/pptp/Core.o: plugins/pptp/Core.c
+	$(NETD_CC) $(CLIBFLAGS) $(NETD_COMMON_INCLUDE) $(NETD_PPTP_PLUGIN_INCLUDE) -o $@ $<
+
+NETD_PPTP_PLUGIN_OBJECTS=plugins/pptp/Api.o plugins/pptp/Core.o
+
+plugins/pptp/pptp.so: plugins/pptp/Api.o plugins/pptp/Core.o
+	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
