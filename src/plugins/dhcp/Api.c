@@ -474,8 +474,4 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	response->SetContent(response,"");
 
 	return TRUE;
-	response->StatusCode=405;
-	response->SetContent(response,"");
-
-	return TRUE;
 }
