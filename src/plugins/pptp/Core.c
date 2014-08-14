@@ -5,6 +5,7 @@
 #include "File.h"
 #include "VpnUser.h"
 #include "Configuration.h"
+#include "Process.h"
 
 const char * PPTPConfigurationFileName="/etc/pptpd.conf";
 const char * SecretFileName="/etc/ppp/chap-secrets";
@@ -49,4 +50,6 @@ void Configure(struct Configuration * configuration)
 {
 	ConfigureAddress(configuration);
 	ConfigureUsers(configuration);
+	Execute("service pptpd stop");
+	Execute("service pptpd start");
 }

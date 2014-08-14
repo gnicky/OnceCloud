@@ -248,7 +248,7 @@ plugins/pptp/Core.o: plugins/pptp/Core.c
 NETD_PPTP_PLUGIN_OBJECTS=plugins/pptp/Api.o plugins/pptp/Core.o
 
 plugins/pptp/pptp.so: plugins/pptp/Api.o plugins/pptp/Core.o \
-	common/File.o common/String.o common/Logger.o
+	common/File.o common/String.o common/Logger.o common/Frozen.o common/Process.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # OpenVPN Plugin
