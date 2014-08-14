@@ -131,7 +131,7 @@ netd/PluginManager.o: netd/PluginManager.c
 NETD_MAIN_OBJECTS=netd/HttpHelper.o netd/Main.o netd/PluginManager.o
 
 netd/netd: netd/HttpHelper.o netd/Main.o netd/PluginManager.o \
-	common/File.o common/Logger.o common/Mongoose.o
+	common/File.o common/Logger.o common/Mongoose.o common/String.o
 	$(NETD_LD) $(LDFLAGS) $(DLFLAGS) $(PTHREADFLAGS) -o $@ $^
 
 # Common

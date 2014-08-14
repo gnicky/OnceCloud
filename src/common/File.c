@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <memory.h>
@@ -7,6 +8,7 @@
 
 #include "Type.h"
 #include "Logger.h"
+#include "String.h"
 
 int IsFileExist(const char * path)
 {
@@ -129,6 +131,22 @@ int ReadFile(const char * fileName, char * fileContent)
 	return TRUE;
 }
 
+int ReadFileAndSplit(const char * fileName, const char * delimiter, struct SplitResult ** result)
+{
+	int fileSize=GetFileSize(fileName);
+	char * temp=malloc(fileSize+1);
+	int ret=ReadFile(fileName,temp);
+	if(ret!=TRUE)
+	{
+		free(temp);
+		return FALSE;
+	}
+	temp[fileSize]='\0';
+	*result=Split(temp,delimiter);
+	free(temp);
+	return TRUE;
+}
+
 int WriteFile(const char * fileName, const char * fileContent)
 {
 	if(fileName==NULL)
@@ -166,6 +184,20 @@ int WriteFile(const char * fileName, const char * fileContent)
 	return TRUE;
 }
 
+int WriteSplitResultToFile(const char * fileName, struct SplitResult * result)
+{
+	char * temp=malloc(1048576);
+	temp[0]='\0';
+	int i=0;
+	for(i=0;i<result->Count;i++)
+	{
+		strcat(temp,result->Content[i]);
+		strcat(temp,result->Delimiter);
+	}
+	int ret=WriteFile(fileName,temp);
+	free(temp);
+	return ret;
+}
 
 int ListFiles(const char * path, const char * suffix, int * count, char ** buffer)
 {
