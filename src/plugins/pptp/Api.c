@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "PluginInterface.h"
+#include "Configuration.h"
 #include "Core.h"
 
 const char * PluginName="PPTP";
@@ -44,6 +45,20 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
+	struct Configuration configuration;
+	strcpy(configuration.NetworkAddress,"172.16.3.0");
+	configuration.MaxConnections=123;
+	configuration.UserCount=2;
+	strcpy(configuration.Users[0].UserName,"test1");
+	strcpy(configuration.Users[0].Password,"test1");
+	strcpy(configuration.Users[0].Server,"pptpd");
+	strcpy(configuration.Users[0].IPAddress,"*");
+	strcpy(configuration.Users[1].UserName,"test2");
+	strcpy(configuration.Users[1].Password,"test2");
+	strcpy(configuration.Users[1].Server,"pptpd");
+	strcpy(configuration.Users[1].IPAddress,"*");
+	Configure(&configuration);
+
 	response->StatusCode=405;
 	response->SetContent(response,"PUT /PPTP");
 
