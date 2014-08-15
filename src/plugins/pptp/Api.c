@@ -124,6 +124,7 @@ int ParseConfiguration(const char * json, struct Configuration * configuration)
 		i++;
 	}
 	configuration->UserCount=i;
+	free(object);
 	return TRUE;
 }
 
