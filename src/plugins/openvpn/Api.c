@@ -4,6 +4,7 @@
 
 #include "PluginInterface.h"
 #include "Core.h"
+#include "File.h"
 
 const char * PluginName="OpenVPN";
 const char * PluginVersion="1.0.0.0";
@@ -57,7 +58,20 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	response->StatusCode=405;
+	struct Configuration configuration;
+	strcpy(configuration.Protocol,"tcp");
+	configuration.Port=10086;
+	ReadFile("/root/keys/ca.crt",configuration.CACertificate);
+	ReadFile("/root/keys/server.crt",configuration.ServerCertificate);
+	ReadFile("/root/keys/server.key",configuration.ServerPrivateKey);
+	ReadFile("/root/keys/dh2048.pem",configuration.DiffieHellmanParameter);
+	ReadFile("/root/keys/ta.key",configuration.TLSAuthKey);
+	strcpy(configuration.NetworkAddress,"172.16.5.0");
+	strcpy(configuration.Netmask,"255.255.255.0");
+
+	Configure(&configuration);
+
+	response->StatusCode=200;
 	response->SetContent(response,"PUT /OpenVPN");
 
 	return TRUE;
