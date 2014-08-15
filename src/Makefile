@@ -260,6 +260,7 @@ plugins/openvpn/Core.o: plugins/openvpn/Core.c
 
 NETD_OPENVPN_PLUGIN_OBJECTS=plugins/openvpn/Api.o plugins/openvpn/Core.o
 
-plugins/openvpn/openvpn.so: plugins/openvpn/Api.o plugins/openvpn/Core.o
+plugins/openvpn/openvpn.so: plugins/openvpn/Api.o plugins/openvpn/Core.o \
+	common/File.o common/Process.o common/Logger.o common/String.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 

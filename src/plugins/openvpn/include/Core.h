@@ -3,6 +3,7 @@
 
 #include "Configuration.h"
 
+void GenerateTLSAuthKey(char * buffer);
 void Configure(struct Configuration * configuration);
 
 #endif

@@ -20,10 +20,23 @@ int Destroy()
 
 int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	response->StatusCode=405;
-	response->SetContent(response,"GET /OpenVPN");
-
-	return TRUE;
+	if(request->QueryString!=NULL && strcmp(request->QueryString,"takey")==0)
+	{
+		char * buffer=malloc(1048576);
+		memset(buffer,0,1048576);
+		GenerateTLSAuthKey(buffer);
+		response->SetHeader(response,"Content-Type","text/plain");
+		response->StatusCode=200;
+		response->SetContent(response,buffer);
+		free(buffer);
+		return TRUE;
+	}
+	else
+	{
+		response->StatusCode=400;
+		response->SetContent(response,"");
+		return TRUE;
+	}
 }
 
 int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * response)
