@@ -6,6 +6,7 @@
 #include "Core.h"
 #include "File.h"
 #include "Frozen.h"
+#include "String.h"
 
 const char * PluginName="OpenVPN";
 const char * PluginVersion="1.0.0.0";
@@ -70,6 +71,13 @@ int ReadTextValue(struct json_token * object, const char * key, char * buffer)
 	return 0;
 }
 
+void ReplaceEscapedChar(char * source)
+{
+	char * target=Replace(source,"\\n","\n");
+	strcpy(source,target);
+	free(target);
+}
+
 int ParseConfiguration(const char * json, struct Configuration * configuration)
 {
 	struct json_token * object;
@@ -102,30 +110,35 @@ int ParseConfiguration(const char * json, struct Configuration * configuration)
 	{
 		return FALSE;
 	}
+	ReplaceEscapedChar(configuration->CACertificate);
 
 	status=ReadTextValue(object,"serverCertificate",configuration->ServerCertificate);
 	if(status!=0)
 	{
 		return FALSE;
 	}
+	ReplaceEscapedChar(configuration->ServerCertificate);
 
 	status=ReadTextValue(object,"serverPrivateKey",configuration->ServerPrivateKey);
 	if(status!=0)
 	{
 		return FALSE;
 	}
+	ReplaceEscapedChar(configuration->ServerPrivateKey);
 
 	status=ReadTextValue(object,"diffieHellmanParameter",configuration->DiffieHellmanParameter);
 	if(status!=0)
 	{
 		return FALSE;
 	}
+	ReplaceEscapedChar(configuration->DiffieHellmanParameter);
 
 	status=ReadTextValue(object,"tlsAuthKey",configuration->TLSAuthKey);
 	if(status!=0)
 	{
 		return FALSE;
 	}
+	ReplaceEscapedChar(configuration->TLSAuthKey);
 
 	status=ReadTextValue(object,"networkAddress",configuration->NetworkAddress);
 	if(status!=0)
