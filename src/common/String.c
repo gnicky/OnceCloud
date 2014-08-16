@@ -56,3 +56,34 @@ void FreeSplitResult(struct SplitResult * result)
 	free(result);
 }
 
+char * Replace(const char * source, const char * subString, const char * replacement)
+{
+	char * token=NULL;
+	char * newString=NULL;
+	char * oldString=NULL;  
+
+	if(subString==NULL || replacement==NULL)
+	{
+		return strdup(source);
+	}
+
+	newString=strdup(source);
+	while((token=strstr(newString,subString))!=NULL)
+	{
+		oldString=newString;
+		newString=malloc(strlen(oldString)-strlen(subString)+strlen(replacement)+1);  
+		if(newString==NULL)
+		{
+			free(oldString);
+			return NULL;
+		}
+		memcpy(newString,oldString,token-oldString);
+		memcpy(newString+(token-oldString),replacement,strlen(replacement));
+		memcpy(newString+(token-oldString)+strlen(replacement),token+strlen(subString),strlen(oldString)-strlen(subString)-(token-oldString));
+		memset(newString+strlen(oldString)-strlen(subString)+strlen(replacement),0,1);
+		free(oldString);  
+    }
+
+    return newString;
+}
+
