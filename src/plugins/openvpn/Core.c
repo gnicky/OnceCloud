@@ -72,3 +72,7 @@ void Configure(struct Configuration * configuration)
 	Execute(temp);
 }
 
+void StopService()
+{
+	Execute("pkill openvpn");
+}

@@ -5,5 +5,6 @@
 
 void GenerateTLSAuthKey(char * buffer);
 void Configure(struct Configuration * configuration);
+void StopService();
 
 #endif

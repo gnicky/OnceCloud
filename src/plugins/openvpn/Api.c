@@ -170,15 +170,17 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 	Configure(&configuration);
 
 	response->StatusCode=200;
-	response->SetContent(response,"PUT /OpenVPN");
+	response->SetContent(response,"");
 
 	return TRUE;
 }
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	response->StatusCode=405;
-	response->SetContent(response,"DELETE /OpenVPN");
+	StopService();
+
+	response->StatusCode=200;
+	response->SetContent(response,""");
 
 	return TRUE;
 }
