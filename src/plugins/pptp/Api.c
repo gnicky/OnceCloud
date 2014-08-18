@@ -148,8 +148,10 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	response->StatusCode=405;
-	response->SetContent(response,"DELETE /PPTP");
+	StopService();
+
+	response->StatusCode=200;
+	response->SetContent(response,"");
 
 	return TRUE;
 }

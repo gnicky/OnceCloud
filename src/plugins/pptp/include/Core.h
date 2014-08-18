@@ -5,5 +5,6 @@
 #include "Configuration.h"
 
 void Configure(struct Configuration * configuration);
+void StopService();
 
 #endif

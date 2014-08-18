@@ -50,6 +50,13 @@ void Configure(struct Configuration * configuration)
 {
 	ConfigureAddress(configuration);
 	ConfigureUsers(configuration);
+	Execute("chkconfig pptpd on");
 	Execute("service pptpd stop");
 	Execute("service pptpd start");
+}
+
+void StopService()
+{
+	Execute("chkconfig pptpd off");
+	Execute("service pptpd stop");
 }
