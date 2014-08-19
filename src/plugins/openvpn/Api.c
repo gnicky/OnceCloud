@@ -180,7 +180,7 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 	StopService();
 
 	response->StatusCode=200;
-	response->SetContent(response,""");
+	response->SetContent(response,"");
 
 	return TRUE;
 }
