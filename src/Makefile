@@ -59,7 +59,7 @@ NETD_OBJECTS=$(NETD_MAIN_OBJECTS) $(NETD_COMMON_OBJECTS) \
 	$(NETD_LOADBALANCER_PLUGIN_OBJECTS) $(NETD_NAT_PLUGIN_OBJECTS) $(NETD_ROUTE_PLUGIN_OBJECTS) \
 	$(NETD_PPTP_PLUGIN_OBJECTS) $(NETD_OPENVPN_PLUGIN_OBJECTS)
 
-all: everything api
+all: everything
 .PHONY: all
 
 everything: $(NETD_MAIN) $(NETD_PLUGINS)
@@ -75,12 +75,7 @@ clean:
 	rm -rf $(NETD_OBJECTS)
 	rm -rf $(NETD_MAIN)
 	rm -rf $(NETD_PLUGINS)
-	cd api && python setup.py clean
 .PHONY: clean
-
-api:
-	cd api && python setup.py build
-.PHONY: api
 
 PREFIX=/usr/local
 INSTALL_BIN=$(PREFIX)/netd
@@ -95,7 +90,6 @@ install: all
 	$(INSTALL) $(NETD_PLUGINS) $(INSTALL_BIN)/plugins
 	chmod +x $(INSTALL_BIN)/sbin/netd
 	ln -sf $(INSTALL_BIN)/sbin/netd /bin/netd
-	cd api && python setup.py install
 
 depend:
 	@echo "# Dependencies"

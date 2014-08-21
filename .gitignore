@@ -1,11 +1,6 @@
 .*.swp
 *.o
 *.so
-*.pyc
-*~
-*.egg-info
 *.aux
 *.log
 *.pdf
-dist
-build
