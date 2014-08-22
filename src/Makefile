@@ -71,10 +71,12 @@ main: $(NETD_MAIN)
 plugins: $(NETD_PLUGINS)
 .PHONY: plugins
 
+PACKAGE_PATH=output
 clean:
 	rm -rf $(NETD_OBJECTS)
 	rm -rf $(NETD_MAIN)
 	rm -rf $(NETD_PLUGINS)
+	rm -rf $(PACKAGE_PATH)
 .PHONY: clean
 
 PREFIX=/usr/local
@@ -82,6 +84,7 @@ INSTALL_BIN=$(PREFIX)/netd
 INSTALL=install
 
 install: all
+	mkdir -p $(PACKAGE_PATH)
 	mkdir -p $(INSTALL_BIN)
 	mkdir -p $(INSTALL_BIN)/sbin
 	mkdir -p $(INSTALL_BIN)/plugins
@@ -90,6 +93,7 @@ install: all
 	$(INSTALL) $(NETD_PLUGINS) $(INSTALL_BIN)/plugins
 	chmod +x $(INSTALL_BIN)/sbin/netd
 	ln -sf $(INSTALL_BIN)/sbin/netd /bin/netd
+	tar -cvzf $(PACKAGE_PATH)/netd.tar.gz -C /usr/local netd
 
 depend:
 	@echo "# Dependencies"

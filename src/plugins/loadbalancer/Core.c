@@ -7,7 +7,7 @@
 #include "Process.h"
 
 const char * NginxConfigurationFile="/etc/nginx/nginx.conf";
-const char * NginxProgramFile="/usr/sbin/nginx";
+const char * NginxProgramFile="nohup /usr/sbin/nginx &";
 
 void InitializeConfiguration(char * buffer, const char * workerProcesses, const char * workerConnections)
 {
