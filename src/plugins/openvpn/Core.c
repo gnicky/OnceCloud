@@ -5,17 +5,17 @@
 #include "Process.h"
 #include "File.h"
 
-const char * OpenVPNProgramFileName="/usr/local/openvpn/sbin/openvpn";
-const char * ConfigurationDir="/usr/local/openvpn/conf";
-const char * OpenVPNConfigurationFileName="/usr/local/openvpn/conf/server.conf";
-const char * OpenVPNLogFileName="/usr/local/openvpn/conf/log";
-const char * IfconfigPoolPersistFileName="/usr/local/openvpn/conf/ipp.txt";
-const char * CACertificateFileName="/usr/local/openvpn/conf/ca.crt";
-const char * ServerCertificateFileName="/usr/local/openvpn/conf/server.crt";
-const char * ServerPrivateKeyFileName="/usr/local/openvpn/conf/server.key";
-const char * DiffieHellmanParameterFileName="/usr/local/openvpn/conf/dh.pem";
-const char * TLSAuthKeyFileName="/usr/local/openvpn/conf/ta.key";
-const char * TLSTempAuthKeyFileName="/usr/local/openvpn/conf/temp.key";
+const char * OpenVPNProgramFileName="/usr/sbin/openvpn";
+const char * ConfigurationDir="/etc/openvpn/";
+const char * OpenVPNConfigurationFileName="/etc/openvpn/server.conf";
+const char * OpenVPNLogFileName="/etc/openvpn/log";
+const char * IfconfigPoolPersistFileName="/etc/openvpn/ipp.txt";
+const char * CACertificateFileName="/etc/openvpn/ca.crt";
+const char * ServerCertificateFileName="/etc/openvpn/server.crt";
+const char * ServerPrivateKeyFileName="/etc/openvpn/server.key";
+const char * DiffieHellmanParameterFileName="/etc/openvpn/dh.pem";
+const char * TLSAuthKeyFileName="/etc/openvpn/ta.key";
+const char * TLSTempAuthKeyFileName="/etc/openvpn/temp.key";
 
 void GenerateTLSAuthKey(char * buffer)
 {
