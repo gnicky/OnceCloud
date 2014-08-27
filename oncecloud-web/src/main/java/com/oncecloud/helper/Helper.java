@@ -18,4 +18,8 @@ public final class Helper {
 		calendar.add(Calendar.MINUTE, minute);
 		return calendar.getTime();
 	}
+
+	public static String stickyToSuccess(String msg) {
+		return "<div class='alert alert-success'>" + msg + "</div>";
+	}
 }

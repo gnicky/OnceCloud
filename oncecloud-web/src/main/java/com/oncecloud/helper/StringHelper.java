@@ -1,5 +1,7 @@
 package com.oncecloud.helper;
 
+import java.net.URLEncoder;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,5 +36,15 @@ public final class StringHelper {
 			ret[i] = this.uniteBytes(tmp[i * 2], tmp[i * 2 + 1]);
 		}
 		return ret;
+	}
+
+	public String encodeText(String text) {
+		String result = "";
+		try {
+			result = URLEncoder.encode(text, "utf-8").replace("+", "%20");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
