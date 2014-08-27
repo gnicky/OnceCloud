@@ -51,6 +51,17 @@
 			<artifactId>json</artifactId>
 			<version>20140107</version>
 		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>3.0.M1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -60,6 +71,6 @@
 				<version>9.2.2.v20140723</version>
 			</plugin>
 		</plugins>
-		<finalName>usermgmt</finalName>
+		<finalName>oncecloud</finalName>
 	</build>
 </project>
