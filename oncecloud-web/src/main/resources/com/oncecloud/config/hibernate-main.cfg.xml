@@ -19,5 +19,6 @@
 		<property name="connection.is-connection-validation-required">true</property>
 
 		<mapping class="com.oncecloud.entity.Alarm" />
+		<mapping class="com.oncecloud.entity.AlarmRule" />
 	</session-factory>
 </hibernate-configuration>
