@@ -20,5 +20,6 @@
 
 		<mapping class="com.oncecloud.entity.Alarm" />
 		<mapping class="com.oncecloud.entity.AlarmRule" />
+		<mapping class="com.oncecloud.entity.EIP" />
 	</session-factory>
 </hibernate-configuration>
