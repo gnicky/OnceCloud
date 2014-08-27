@@ -23,6 +23,7 @@
 		<mapping class="com.oncecloud.entity.ChargeRecord" />
 		<mapping class="com.oncecloud.entity.EIP" />
 		<mapping class="com.oncecloud.entity.FeeVM" />
+		<mapping class="com.oncecloud.entity.FeeVolume" />
 		<mapping class="com.oncecloud.entity.Firewall" />
 		<mapping class="com.oncecloud.entity.OCPool" />
 		<mapping class="com.oncecloud.entity.OCVM" />
