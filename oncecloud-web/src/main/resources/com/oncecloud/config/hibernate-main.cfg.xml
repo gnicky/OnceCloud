@@ -22,5 +22,6 @@
 		<mapping class="com.oncecloud.entity.AlarmRule" />
 		<mapping class="com.oncecloud.entity.EIP" />
 		<mapping class="com.oncecloud.entity.Quota" />
+		<mapping class="com.oncecloud.entity.User" />
 	</session-factory>
 </hibernate-configuration>
