@@ -23,6 +23,7 @@
 		<mapping class="com.oncecloud.entity.ChargeRecord" />
 		<mapping class="com.oncecloud.entity.EIP" />
 		<mapping class="com.oncecloud.entity.FeeEip" />
+		<mapping class="com.oncecloud.entity.FeeImage" />
 		<mapping class="com.oncecloud.entity.FeeSnapshot" />
 		<mapping class="com.oncecloud.entity.FeeVM" />
 		<mapping class="com.oncecloud.entity.FeeVolume" />
