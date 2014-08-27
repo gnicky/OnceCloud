@@ -24,6 +24,7 @@ public class OCVM {
 	private Integer vmDisk;
 	private Integer vmPower;
 	private Integer vmStatus;
+	private Integer vmImportance;
 	private String hostUuid;
 	private Date createDate;
 	private Date backupDate;
@@ -230,6 +231,15 @@ public class OCVM {
 
 	public void setTplUuid(String tplUuid) {
 		this.tplUuid = tplUuid;
+	}
+
+	@Column(name = "vm_importance")
+	public Integer getVmImportance() {
+		return vmImportance;
+	}
+
+	public void setVmImportance(Integer vmImportance) {
+		this.vmImportance = vmImportance;
 	}
 
 	@Override
