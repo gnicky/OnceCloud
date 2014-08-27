@@ -34,6 +34,7 @@
 		<mapping class="com.oncecloud.entity.OverView" />
 		<mapping class="com.oncecloud.entity.Quota" />
 		<mapping class="com.oncecloud.entity.Rule" />
+		<mapping class="com.oncecloud.entity.Storage" />
 		<mapping class="com.oncecloud.entity.User" />
 	</session-factory>
 </hibernate-configuration>
