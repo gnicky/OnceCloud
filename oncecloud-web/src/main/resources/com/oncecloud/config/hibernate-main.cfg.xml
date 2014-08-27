@@ -24,6 +24,7 @@
 		<mapping class="com.oncecloud.entity.EIP" />
 		<mapping class="com.oncecloud.entity.Firewall" />
 		<mapping class="com.oncecloud.entity.OCPool" />
+		<mapping class="com.oncecloud.entity.OCVM" />
 		<mapping class="com.oncecloud.entity.OverView" />
 		<mapping class="com.oncecloud.entity.Quota" />
 		<mapping class="com.oncecloud.entity.Rule" />
