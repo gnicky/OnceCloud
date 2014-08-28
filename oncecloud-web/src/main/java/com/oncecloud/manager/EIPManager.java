@@ -48,6 +48,7 @@ public class EIPManager {
 	private DatabaseDAO databaseDAO;
 	private RouterDAO routerDAO;
 	private QuotaDAO quotaDAO;
+	private FirewallManager firewallManager;
 	private Constant constant;
 
 	private EIPDAO getEipDAO() {
@@ -120,6 +121,15 @@ public class EIPManager {
 	@Autowired
 	private void setQuotaDAO(QuotaDAO quotaDAO) {
 		this.quotaDAO = quotaDAO;
+	}
+
+	private FirewallManager getFirewallManager() {
+		return firewallManager;
+	}
+
+	@Autowired
+	private void setFirewallManager(FirewallManager firewallManager) {
+		this.firewallManager = firewallManager;
 	}
 
 	private Constant getConstant() {
@@ -405,8 +415,8 @@ public class EIPManager {
 			Connection c = this.getConstant().getConnection(userId);
 			logger.info("Bind EIP: UUID [" + uuid + "] IP [" + ip + "] + EIP ["
 					+ eipIp + "] Ethernet [" + eif + "]");
-			boolean activeResult = FirewallManager.activeFirewall(c, userId,
-					ip, firewallId);
+			boolean activeResult = this.getFirewallManager().activeFirewall(c,
+					userId, ip, firewallId);
 			logger.info("Active Firewall: " + activeResult);
 			if (activeResult) {
 				boolean bindResult = Host.bindOuterIp(c, ip, eipIp, eif);
@@ -448,8 +458,8 @@ public class EIPManager {
 				ip = rt.getRouterIP();
 			}
 			Connection c = this.getConstant().getConnection(userId);
-			boolean deActiveResult = FirewallManager.deActiveFirewall(c,
-					userId, ip);
+			boolean deActiveResult = this.getFirewallManager()
+					.deActiveFirewall(c, userId, ip);
 			if (deActiveResult) {
 				if (Host.unbindOuterIp(c, ip, eipIp, eif)) {
 					this.getEipDAO().unBindEip(eipIp);
