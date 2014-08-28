@@ -37,6 +37,7 @@
 		<mapping class="com.oncecloud.entity.Image" />
 		<mapping class="com.oncecloud.entity.LB" />
 		<mapping class="com.oncecloud.entity.OCHost" />
+		<mapping class="com.oncecloud.entity.OCLog" />
 		<mapping class="com.oncecloud.entity.OCPool" />
 		<mapping class="com.oncecloud.entity.OCVM" />
 		<mapping class="com.oncecloud.entity.OverView" />
