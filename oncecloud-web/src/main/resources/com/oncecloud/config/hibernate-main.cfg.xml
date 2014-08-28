@@ -55,5 +55,6 @@
 		<mapping class="com.oncecloud.entity.SwPort" />
 		<mapping class="com.oncecloud.entity.User" />
 		<mapping class="com.oncecloud.entity.Vlan" />
+		<mapping class="com.oncecloud.entity.Vnet" />
 	</session-factory>
 </hibernate-configuration>
