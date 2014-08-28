@@ -56,5 +56,6 @@
 		<mapping class="com.oncecloud.entity.User" />
 		<mapping class="com.oncecloud.entity.Vlan" />
 		<mapping class="com.oncecloud.entity.Vnet" />
+		<mapping class="com.oncecloud.entity.Volume" />
 	</session-factory>
 </hibernate-configuration>
