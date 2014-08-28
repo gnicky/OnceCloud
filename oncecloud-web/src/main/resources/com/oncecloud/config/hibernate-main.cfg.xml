@@ -52,6 +52,7 @@
 		<mapping class="com.oncecloud.entity.Snapshot" />
 		<mapping class="com.oncecloud.entity.Storage" />
 		<mapping class="com.oncecloud.entity.Switch" />
+		<mapping class="com.oncecloud.entity.SwPort" />
 		<mapping class="com.oncecloud.entity.User" />
 	</session-factory>
 </hibernate-configuration>
