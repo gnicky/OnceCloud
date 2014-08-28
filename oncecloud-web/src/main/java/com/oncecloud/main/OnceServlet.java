@@ -13,6 +13,7 @@ public class OnceServlet extends HttpServlet {
 	private static final long serialVersionUID = 8748334845182951985L;
 
 	public void init() throws ServletException {
+		// TODO: Inject FeeDAO
 		UpdateFeeThread uft = new UpdateFeeThread(null);
 		uft.start();
 		// RecvVMSyncThread rvst = new RecvVMSyncThread();
