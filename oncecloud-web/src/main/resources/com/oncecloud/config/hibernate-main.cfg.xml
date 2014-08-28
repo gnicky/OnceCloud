@@ -42,6 +42,7 @@
 		<mapping class="com.oncecloud.entity.OCVDI" />
 		<mapping class="com.oncecloud.entity.OCVM" />
 		<mapping class="com.oncecloud.entity.OverView" />
+		<mapping class="com.oncecloud.entity.Position" />
 		<mapping class="com.oncecloud.entity.Quota" />
 		<mapping class="com.oncecloud.entity.Rule" />
 		<mapping class="com.oncecloud.entity.Storage" />
