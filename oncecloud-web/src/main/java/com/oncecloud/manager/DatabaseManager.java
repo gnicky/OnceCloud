@@ -32,6 +32,7 @@ public class DatabaseManager {
 	private DHCPDAO dhcpDAO;
 	private DatabaseDAO databaseDAO;
 	private EIPDAO eipDAO;
+	private EIPManager eipManager;
 	private Constant constant;
 
 	private ImageDAO getImageDAO() {
@@ -68,6 +69,15 @@ public class DatabaseManager {
 	@Autowired
 	private void setEipDAO(EIPDAO eipDAO) {
 		this.eipDAO = eipDAO;
+	}
+
+	private EIPManager getEipManager() {
+		return eipManager;
+	}
+
+	@Autowired
+	private void setEipManager(EIPManager eipManager) {
+		this.eipManager = eipManager;
 	}
 
 	private Constant getConstant() {
@@ -188,7 +198,8 @@ public class DatabaseManager {
 				String mac = db.getDatabaseMac();
 				String publicip = this.getEipDAO().getEipIp(uuid);
 				if (publicip != null) {
-					EIPManager.unbindElasticIp(userId, uuid, publicip, "db");
+					this.getEipManager().unbindElasticIp(userId, uuid,
+							publicip, "db");
 				}
 				if (ip != null) {
 					this.getDhcpDAO().returnDHCP(mac);
