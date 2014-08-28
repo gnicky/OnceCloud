@@ -39,6 +39,7 @@
 		<mapping class="com.oncecloud.entity.OCHost" />
 		<mapping class="com.oncecloud.entity.OCLog" />
 		<mapping class="com.oncecloud.entity.OCPool" />
+		<mapping class="com.oncecloud.entity.OCVDI" />
 		<mapping class="com.oncecloud.entity.OCVM" />
 		<mapping class="com.oncecloud.entity.OverView" />
 		<mapping class="com.oncecloud.entity.Quota" />
