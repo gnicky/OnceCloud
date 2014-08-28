@@ -22,6 +22,7 @@
 		<mapping class="com.oncecloud.entity.AlarmRule" />
 		<mapping class="com.oncecloud.entity.Backend" />
 		<mapping class="com.oncecloud.entity.ChargeRecord" />
+		<mapping class="com.oncecloud.entity.Database" />
 		<mapping class="com.oncecloud.entity.EIP" />
 		<mapping class="com.oncecloud.entity.FeeEip" />
 		<mapping class="com.oncecloud.entity.FeeImage" />
