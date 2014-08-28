@@ -54,5 +54,6 @@
 		<mapping class="com.oncecloud.entity.Switch" />
 		<mapping class="com.oncecloud.entity.SwPort" />
 		<mapping class="com.oncecloud.entity.User" />
+		<mapping class="com.oncecloud.entity.Vlan" />
 	</session-factory>
 </hibernate-configuration>
