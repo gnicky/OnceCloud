@@ -35,6 +35,7 @@
 		<mapping class="com.oncecloud.entity.Frontend" />
 		<mapping class="com.oncecloud.entity.HostSR" />
 		<mapping class="com.oncecloud.entity.Image" />
+		<mapping class="com.oncecloud.entity.LB" />
 		<mapping class="com.oncecloud.entity.OCHost" />
 		<mapping class="com.oncecloud.entity.OCPool" />
 		<mapping class="com.oncecloud.entity.OCVM" />
