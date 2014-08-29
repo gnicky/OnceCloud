@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
 import com.once.xenapi.VM;
@@ -31,6 +32,7 @@ import com.oncecloud.main.Utilities;
  * @author hehai
  * @version 2014/08/23
  */
+@Component
 public class PoolManager {
 	private SessionHelper sessionHelper;
 
