@@ -39,12 +39,27 @@ public class DashboardController {
 				+ ":" + request.getServerPort() + path + "/";
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
-		Quota quota = this.getQuotaManager().getQuotaUsed(user.getUserId());
+		Quota quotaUsed = this.getQuotaManager().getQuotaUsed(user.getUserId());
 		model.put("basePath", basePath);
 		model.put("title", "控制台");
 		model.put("sideActive", 0);
 		model.put("user", user);
-		model.put("quota", quota);
+		model.put("quotaUsed", quotaUsed);
 		return new ModelAndView("user/dashboard", model);
+	}
+
+	@RequestMapping(value = "/user/modal/viewquota")
+	public ModelAndView viewQuota(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+		User user = (User) request.getSession().getAttribute("user");
+		Quota quotaUsed = this.getQuotaManager().getQuotaUsed(user.getUserId());
+		Quota quotaTotal = this.getQuotaManager().getQuotaTotal(
+				user.getUserId());
+		model.put("quotaUsed", quotaUsed);
+		model.put("quotaTotal", quotaTotal);
+		return new ModelAndView("user/modal/viewquota", model);
 	}
 }

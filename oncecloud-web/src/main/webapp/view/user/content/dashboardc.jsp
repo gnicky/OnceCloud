@@ -15,7 +15,7 @@
 			<div class="col-md-4" style="padding-top: 29px">
 				<button id="viewquota" class="btn btn-primary"
 					style="font-size: 12px; padding: 7px 15px"
-					url="${basePath}user/modal/viewquota.jsp">
+					url="${basePath}user/modal/viewquota">
 					<span class="glyphicon glyphicon-th-list"
 						style="padding-right: 5px"></span>查看资源限额
 				</button>
@@ -24,49 +24,49 @@
 	</div>
 	<div class="resource">
 		<div class="resource-item" data-type="instance">
-			<strong title="主机">${quota.quotaVM}</strong>
+			<strong title="主机">${quotaUsed.quotaVM}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-cloud"></span>主机
 			</h5>
 		</div>
 		<div class="resource-item" data-type="volume">
-			<strong title="硬盘">${quota.quotaDiskN}</strong>
+			<strong title="硬盘">${quotaUsed.quotaDiskN}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-inbox"></span>硬盘
 			</h5>
 		</div>
 		<div class="resource-item" data-type="snapshot">
-			<strong title="备份">${quota.quotaSnapshot}</strong>
+			<strong title="备份">${quotaUsed.quotaSnapshot}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-camera"></span>备份
 			</h5>
 		</div>
 		<div class="resource-item" data-type="router">
-			<strong title="路由器">${quota.quotaRoute}</strong>
+			<strong title="路由器">${quotaUsed.quotaRoute}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-fullscreen"></span>路由器
 			</h5>
 		</div>
 		<div class="resource-item" data-type="router">
-			<strong title="私有网络">${quota.quotaVlan}</strong>
+			<strong title="私有网络">${quotaUsed.quotaVlan}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-indent-left"></span>私有网络
 			</h5>
 		</div>
 		<div class="resource-item" data-type="elasticip">
-			<strong title="公网IP">${quota.quotaIP}</strong>
+			<strong title="公网IP">${quotaUsed.quotaIP}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-globe"></span>公网IP
 			</h5>
 		</div>
 		<div class="resource-item" data-type="loadbalance">
-			<strong title="负载均衡器">${quota.quotaLoadBalance}</strong>
+			<strong title="负载均衡器">${quotaUsed.quotaLoadBalance}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-random"></span>负载均衡器
 			</h5>
 		</div>
 		<div class="resource-item" data-type="firewall">
-			<strong title="防火墙">${quota.quotaFirewall}</strong>
+			<strong title="防火墙">${quotaUsed.quotaFirewall}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-flash"></span>防火墙
 			</h5>
@@ -78,7 +78,7 @@
 			</h5>
 		</div>
 		<div class="resource-item" data-type="image">
-			<strong title="映像">${quota.quotaImage}</strong>
+			<strong title="映像">${quotaUsed.quotaImage}</strong>
 			<h5>
 				<span class="glyphicon glyphicon-record"></span>映像
 			</h5>
