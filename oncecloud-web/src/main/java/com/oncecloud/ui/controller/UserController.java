@@ -21,7 +21,7 @@ public class UserController {
 	@ResponseBody
 	public ModelAndView login(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
+			return new ModelAndView(new RedirectView("/login"));
 		}
 		
 		String path = request.getContextPath();
@@ -36,7 +36,7 @@ public class UserController {
 		if (user.getUserLevel() == 0) {
 			return new ModelAndView("admin/user", model);
 		} else {
-			return new ModelAndView(new RedirectView("/backdoor"));
+			return new ModelAndView(new RedirectView("/login"));
 		}
 	}
 }

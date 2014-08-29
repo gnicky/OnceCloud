@@ -14,7 +14,7 @@ import com.oncecloud.manager.HostManager;
 
 @RequestMapping("/HostAction")
 @Controller
-public class HostController {
+public class HostAction {
 	private HostManager hostManager;
 
 	public HostManager getHostManager() {

@@ -1,8 +1,5 @@
 package com.oncecloud.ui.controller;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
@@ -14,31 +11,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.log.LogManager;
+import com.oncecloud.manager.QAManager;
 
+@RequestMapping("/QAAction")
 @Controller
-public class LogController {
-	private LogManager logManager;
+public class QAAction {
+	private QAManager qaManager;
 
-	private LogManager getLogManager() {
-		return logManager;
+	public QAManager getQaManager() {
+		return qaManager;
 	}
 
 	@Autowired
-	private void setLogManager(LogManager logManager) {
-		this.logManager = logManager;
+	public void setQaManager(QAManager qaManager) {
+		this.qaManager = qaManager;
 	}
 
-	@RequestMapping(value = "/LogAction", method = { RequestMethod.GET })
+	@RequestMapping(value = "/QuestionList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String logList(HttpServletRequest request, @RequestParam int status,
-			@RequestParam int start, @RequestParam int num)
-			throws ServletException, IOException {
+	public String questionList(HttpServletRequest request, @RequestParam int page,
+			@RequestParam int limit, @RequestParam String search) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getLogManager().getLogList(userId, status,
-					start, num);
+			JSONArray ja = this.getQaManager().getQuestionList(user.getUserId(),
+					user.getUserLevel(), page, limit, search);
 			return ja.toString();
 		} else {
 			return "";

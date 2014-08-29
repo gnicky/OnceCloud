@@ -14,7 +14,7 @@ import com.oncecloud.manager.DatacenterManager;
 
 @RequestMapping("/DatacenterAction")
 @Controller
-public class DatacenterController {
+public class DatacenterAction {
 	private DatacenterManager datacenterManager;
 
 	private DatacenterManager getDatacenterManager() {

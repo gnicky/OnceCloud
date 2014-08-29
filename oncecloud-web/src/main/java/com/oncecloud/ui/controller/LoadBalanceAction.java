@@ -15,7 +15,7 @@ import com.oncecloud.ui.model.AdminListRequestModel;
 
 @RequestMapping("/LBAction")
 @Controller
-public class LoadBalanceController {
+public class LoadBalanceAction {
 	private LBManager lbManager;
 
 	public LBManager getLbManager() {

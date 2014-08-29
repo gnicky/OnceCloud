@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.RouterManager;
+import com.oncecloud.manager.VMManager;
 import com.oncecloud.ui.model.AdminListRequestModel;
 
-@RequestMapping("/RouterAction")
+@RequestMapping("/VMAction")
 @Controller
-public class RouterController {
-	private RouterManager rtManager;
+public class VMAction {
+	private VMManager vmManager;
 
-	public RouterManager getRtManager() {
-		return rtManager;
+	public VMManager getVmManager() {
+		return vmManager;
 	}
 
 	@Autowired
-	public void setRtManger(RouterManager rtManager) {
-		this.rtManager = rtManager;
+	public void setVmManager(VMManager vmManager) {
+		this.vmManager = vmManager;
 	}
 
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
@@ -33,7 +33,7 @@ public class RouterController {
 			AdminListRequestModel alrModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			JSONArray ja = this.getRtManager().getAdminRouterList(
+			JSONArray ja = this.getVmManager().getAdminVMList(
 					alrModel.getPage(), alrModel.getLimit(),
 					alrModel.getHost(), alrModel.getImportance(),
 					alrModel.getType());
