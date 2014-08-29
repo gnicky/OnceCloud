@@ -48,6 +48,7 @@ public class HostManager {
 	public final static String DEFAULT_PORT = "9363";
 
 	private SessionHelper sessionHelper;
+	private SRManager srManager;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -56,6 +57,15 @@ public class HostManager {
 	@Autowired
 	private void setSessionHelper(SessionHelper sessionHelper) {
 		this.sessionHelper = sessionHelper;
+	}
+
+	private SRManager getSrManager() {
+		return srManager;
+	}
+
+	@Autowired
+	private void setSrManager(SRManager srManager) {
+		this.srManager = srManager;
 	}
 
 	private LogDAO logDAO;
@@ -253,7 +263,8 @@ public class HostManager {
 
 	public void bindHost(String srUuid, String hostUuid, int userid) {
 		Date startTime = new Date();
-		boolean result = SRManager.addStorage2Server(srUuid, hostUuid);
+		boolean result = this.getSrManager()
+				.addStorage2Server(srUuid, hostUuid);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
