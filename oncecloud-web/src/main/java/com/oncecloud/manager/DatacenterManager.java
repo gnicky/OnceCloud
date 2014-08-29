@@ -244,7 +244,7 @@ public class DatacenterManager {
 		return qaArray;
 	}
 
-	public JSONArray getOverView() {
+	public JSONArray getOverview() {
 		JSONArray qaArray = new JSONArray();
 		OverView ov = this.getOverViewDAO().getOverViewTotal();
 		JSONObject tObj = new JSONObject();

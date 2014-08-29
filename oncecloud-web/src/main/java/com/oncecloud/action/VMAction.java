@@ -94,16 +94,6 @@ public class VMAction extends HttpServlet {
 				String vmUuid = request.getParameter("instanceUuid");
 				JSONObject jo = this.getVmManager().getVMDetail(vmUuid);
 				out.print(jo.toString());
-			} else if (action.equals("getadminlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String host = request.getParameter("host");
-				int importance = Integer.parseInt(request
-						.getParameter("importance"));
-				String type = request.getParameter("type");
-				JSONArray ja = this.getVmManager().getAdminVMList(page, limit,
-						host, importance, type);
-				out.print(ja.toString());
 			}
 		}
 	}

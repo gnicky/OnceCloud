@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class AuthenticationController {
-
 	// 设置图形验证码中字符串的字体和大小
 	private Font myFont = new Font("Arial Black", Font.PLAIN, 16);
 
@@ -111,5 +110,4 @@ public class AuthenticationController {
 		stream.close();
 		return new ResponseEntity<byte[]>(data, headers, HttpStatus.OK);
 	}
-
 }

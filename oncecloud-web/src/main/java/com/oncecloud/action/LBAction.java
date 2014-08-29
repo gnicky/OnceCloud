@@ -169,16 +169,6 @@ public class LBAction extends HttpServlet {
 				String lbuuid = request.getParameter("lbUuid");
 				JSONObject jo = this.getLbManager().getonelb(lbuuid);
 				out.print(jo.toString());
-			} else if (action.equals("getadminlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String host = request.getParameter("host");
-				int importance = Integer.parseInt(request
-						.getParameter("importance"));
-				String type = request.getParameter("type");
-				JSONArray ja = this.getLbManager().getAdminLBList(page, limit,
-						host, importance, type);
-				out.print(ja.toString());
 			}
 		}
 	}

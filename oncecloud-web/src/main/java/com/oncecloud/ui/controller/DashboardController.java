@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -28,7 +29,7 @@ public class DashboardController {
 		this.quotaManager = quotaManager;
 	}
 
-	@RequestMapping(value = "/dashboard")
+	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public ModelAndView dashboard(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {
 			return new ModelAndView(new RedirectView("/login"));
@@ -52,7 +53,7 @@ public class DashboardController {
 		}
 	}
 
-	@RequestMapping(value = "/user/modal/viewquota")
+	@RequestMapping(value = "/user/modal/viewquota", method = { RequestMethod.GET })
 	public ModelAndView viewQuota(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {
 			return new ModelAndView(new RedirectView("/login"));

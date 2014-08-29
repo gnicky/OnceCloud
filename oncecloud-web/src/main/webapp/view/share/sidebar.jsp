@@ -45,12 +45,12 @@
 			<c:when test="${user.userLevel==0}">
 				<ul class="nav nav-list">
 					<li <c:if test="${sideActive==1}">class="active"</c:if>><a
-						href="${basePath}admin/instance.jsp"><span
+						href="${basePath}instance"><span
 							class="glyphicon glyphicon-cloud cool-orange"></span><span
 							class="name">虚拟机</span><span class="title">Instances</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==3}">class="active"</c:if>><a
-						href="${basePath}admin/user.jsp"><span
+						href="${basePath}user"><span
 							class="glyphicon glyphicon-user cool-green"></span><span
 							class="name">用户</span><span class="title">Users</span></a>
 						<div class="cool-border"></div></li>

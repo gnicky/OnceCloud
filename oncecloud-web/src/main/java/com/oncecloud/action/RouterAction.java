@@ -103,16 +103,6 @@ public class RouterAction extends HttpServlet {
 				String routeruuid = request.getParameter("routerUuid");
 				JSONArray jo = this.getRouterManager().getVxnets(routeruuid);
 				out.print(jo.toString());
-			} else if (action.equals("getadminlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String host = request.getParameter("host");
-				int importance = Integer.parseInt(request
-						.getParameter("importance"));
-				String type = request.getParameter("type");
-				JSONArray ja = this.getRouterManager().getAdminVMList(page,
-						limit, host, importance, type);
-				out.print(ja.toString());
 			}
 		}
 	}

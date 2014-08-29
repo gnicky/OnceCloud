@@ -891,14 +891,16 @@ public class HostManager {
 				rackUuid);
 	}
 
-	public JSONArray hostGetInintList() {
+	public JSONArray getAllList() {
 		JSONArray ja = new JSONArray();
 		List<OCHost> list = this.getHostDAO().getAllHost();
-		for (OCHost oh : list) {
-			JSONObject jo = new JSONObject();
-			jo.put("hostName", oh.getHostName());
-			jo.put("hostUuid", oh.getHostUuid());
-			ja.put(jo);
+		if (list != null) {
+			for (OCHost oh : list) {
+				JSONObject jo = new JSONObject();
+				jo.put("hostName", oh.getHostName());
+				jo.put("hostUuid", oh.getHostUuid());
+				ja.put(jo);
+			}
 		}
 		return ja;
 	}

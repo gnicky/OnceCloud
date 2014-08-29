@@ -36,7 +36,7 @@
 		</div>
 		<div class="resource-item" data-type="instance">
 			<strong title="主机" id="vmNum">0</strong>
-			<h5><span class="glyphicon glyphicon-cloud"></span>主机</h5>
+			<h5><span class="glyphicon glyphicon-cloud"></span>虚拟机</h5>
 		</div>
 		<div class="resource-item" data-type="address">
 			<strong title="公网IP" id="outipNum">0</strong>

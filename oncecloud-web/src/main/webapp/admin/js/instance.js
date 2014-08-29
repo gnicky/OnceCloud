@@ -10,7 +10,7 @@ function reloadList(page) {
     if (page == 1) {
         options = {
             currentPage: 1
-        }
+        };
         $('#pageDivider').bootstrapPaginator(options);
     }
     allDisable();
@@ -182,12 +182,12 @@ $('#shutdown').on('click', function (event) {
     showbox(1);
 });
 
-function loadlist(action, page, limit, str) {
+function loadList(action, page, limit, str) {
     $('#tablebody').html("");
     $.ajax({
         type: 'get',
         url: action,
-        data: {action: "getadminlist", page: page, limit: limit, host: host, importance: importance, type: type},
+        data: {page: page, limit: limit, host: host, importance: importance, type: type},
         dataType: 'json',
         success: function (array) {
             var totalnum = array[0];
@@ -197,7 +197,7 @@ function loadlist(action, page, limit, str) {
             }
             options = {
                 totalPages: totalp
-            }
+            };
             $('#pageDivider').bootstrapPaginator(options);
             pageDisplayUpdate(page, totalp);
             var tableStr = "";
@@ -207,7 +207,6 @@ function loadlist(action, page, limit, str) {
                 var vmName = decodeURI(obj.vmname);
                 var userName = decodeURI(obj.userName);
                 var state = obj.state;
-                var stateStr = "";
                 var showuuid = str + vmuuid.substring(0, 8);
                 var showstr = "<a class='id'>" + showuuid + '</a>';
                 var iconStr = new Array("stopped", "running", "process", "process", "process", "process", "process");
@@ -215,7 +214,7 @@ function loadlist(action, page, limit, str) {
                 var stateStr = '<td><span class="icon-status icon-' + iconStr[state] + '" name="stateicon">'
                     + '</span><span name="stateword">' + nameStr[state] + '</span></td>';
                 if (state == 1 && str == "i-") {
-                    var showstr = showstr + '<a class="console" data-uuid=' + vmuuid + '><img src="../../img/user/console.png"></a>';
+                    showstr = showstr + '<a class="console" data-uuid=' + vmuuid + '><img src="../../img/user/console.png"></a>';
                 }
                 var cpu = obj.cpu;
                 cpu = cpu + "&nbsp;核";
@@ -256,11 +255,11 @@ function loadlist(action, page, limit, str) {
 function getVMList(page, limit) {
     $('#tablebody').html("");
     if (type == "instance") {
-        loadlist('/VMAction', page, limit, "i-");
+        loadList('/VMAction/AdminList', page, limit, "i-");
     } else if (type == "router") {
-        loadlist('/RouterAction', page, limit, "rt-");
+        loadList('/RouterAction/AdminList', page, limit, "rt-");
     } else if (type == "loadbalance") {
-        loadlist('/LBAction', page, limit, "lb-");
+        loadList('/LBAction/AdminList', page, limit, "lb-");
     }
 }
 
@@ -318,8 +317,7 @@ function shutdownVM(uuid, force) {
 function initPage() {
     $.ajax({
         type: 'get',
-        url: '/HostAction',
-        data: {action: "getinintlist"},
+        url: '/HostAction/ALLList',
         dataType: 'json',
         success: function (array) {
             $.each(array, function (index, json) {

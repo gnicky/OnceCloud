@@ -123,9 +123,6 @@ public class HostAction extends HttpServlet {
 				String rackUuid = request.getParameter("rackUuid");
 				HostManager
 						.update(hostId, hostName, hostDesc, rackUuid, userId);
-			} else if (action.equals("getinintlist")) {
-				JSONArray ja = this.getHostManager().hostGetInintList();
-				out.print(ja.toString());
 			}
 		}
 	}

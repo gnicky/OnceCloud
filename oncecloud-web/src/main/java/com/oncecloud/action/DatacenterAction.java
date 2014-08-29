@@ -66,9 +66,6 @@ public class DatacenterAction extends HttpServlet {
 				JSONArray ja = this.getDatacenterManager().deleteDatacenter(
 						dcId, dcName, userid);
 				out.print(ja.toString());
-			} else if (action.equals("getOverView")) {
-				JSONArray ja = this.getDatacenterManager().getOverView();
-				out.print(ja.toString());
 			} else if (action.equals("detail")) {
 				String dcid = request.getParameter("dcid");
 				session.setAttribute("dcid", dcid);

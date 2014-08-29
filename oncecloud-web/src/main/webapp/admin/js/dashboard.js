@@ -1,10 +1,9 @@
 getLogList(4, 0);
-getServiceList(1, 10, "");
+getQuestionList(1, 10, "");
 
 $.ajax({
-    type: 'post',
-    url: '/DatacenterAction',
-    data: {action: "getOverView"},
+    type: 'get',
+    url: '/DatacenterAction/Overview',
     dataType: 'json',
     success: function (array) {
         if (array.length == 1) {
@@ -29,21 +28,20 @@ $('.resource-item').on('click', function (event) {
     if (type == "image") {
         window.location.href = "../common/image.jsp";
     } else {
-        window.location.href = "../admin/" + type + ".jsp";
+        window.location.href = "/" + type;
     }
 });
 
-function getServiceList(page, limit, search) {
+function getQuestionList(page, limit, search) {
+	$('#service-area').html("");
     $.ajax({
         type: 'get',
-        url: '/QAAction',
-        data: {action: "getquestion", page: page, limit: limit, search: search},
+        url: '/QAAction/QuestionList',
+        data: {page: page, limit: limit, search: search},
         dataType: 'json',
         success: function (array) {
-            if (array.length <= 1) {
-                $('#service-area').html('<div><span class="unit">目前没有表单<span></div>');
-            } else {
-                var tableStr = "";
+            if (array.length > 1) {
+                var allitem = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var qaTitle = obj.qaTitle;
@@ -61,36 +59,35 @@ function getServiceList(page, limit, search) {
                     } else {
                         statusSpan = '<span class="consumed"><span class="icon-status icon-close"></span>已关闭</span>';
                     }
-                    tableStr = tableStr + '<div class="act-item">' + serviceIcon
+                    var thisitem = '<div class="act-item">' + serviceIcon
                         + '<span>' + decodeURI(qaTitle) + '</span>'
                         + '<span class="created"><span class="glyphicon glyphicon-time icon-right"></span>' + qaTime + '</span>'
                         + statusSpan + '</div>';
+                    allitem += thisitem;
                 }
-                $('#service-area').html(tableStr);
+                $('#service-area').html(allitem);
+            } else {
+                $('#service-area').html('<div><span class="unit">目前没有表单<span></div>');
             }
         }
     });
 }
 
-function getLogList(logStatus, start) {
+function getLogList(status, start) {
+    $('#act-area').html("");
     $.ajax({
         type: 'get',
         url: '/LogAction',
-        data: {status: logStatus, start: start, num: "10"},
+        data: {status: status, start: start, num: "10"},
         dataType: 'json',
         success: function (jsonArray) {
-            $('#act-area').html("");
-            if (jsonArray.length == 0) {
-                $('#act-area').html('<div><span class="unit">目前没有操作<span></div>');
-            } else {
+            if (jsonArray.length > 0) {
                 var iconStr = new Array("cloud", "inbox", "camera", "globe", "globe",
                     "flash", "record", "sort", "fullscreen", "random", "camera", "flash",
                     "user", "tint", "hdd", "road", "tasks", "fullscreen", "globe", "indent-left", "thumbs-up");
-                var statusStr = new Array("danger", "success", "warning", "info");
                 var statusIconStr = new Array("remove", "ok");
                 for (var i = 0; i < jsonArray.length; i++) {
                     var jsonObj = jsonArray[i];
-                    var logId = jsonObj.logId;
                     var logObject = jsonObj.logObject;
                     var logObjectStr = decodeURI(jsonObj.logObjectStr);
                     var logActionStr = decodeURI(jsonObj.logActionStr);
@@ -113,6 +110,8 @@ function getLogList(logStatus, start) {
                         + logElapseSpan + '</div>';
                     $('#act-area').append(alertItem);
                 }
+            } else {
+                $('#act-area').html('<div><span class="unit">目前没有操作<span></div>');
             }
         }
     });

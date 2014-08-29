@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" vncServer="<%=vncServer%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent" data-novnc="${vncServer}">
 	<div class="intro">
 		<h1>主机&nbsp;Instances</h1>
 		<p class="lead">
@@ -14,8 +14,8 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="startup" disabled><span class="glyphicon glyphicon-play"></span>启动</a></li>
-					<li><a class="btn-forbidden" id="shutdown" disabled><span class="glyphicon glyphicon-stop"></span>关机</a></li>
+					<li><a class="btn-forbidden" id="startup"><span class="glyphicon glyphicon-play"></span>启动</a></li>
+					<li><a class="btn-forbidden" id="shutdown"><span class="glyphicon glyphicon-stop"></span>关机</a></li>
 				</ul>
 			</div>
 			<div class="btn-group">
@@ -23,7 +23,7 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu" id="select-server">
-					<li><a id="hostall"><sapn chalss="glyphicon glyphicon-tasks"></span>全部</a></li>
+					<li><a id="hostall"><span class="glyphicon glyphicon-tasks"></span>全部</a></li>
 				</ul>
 			</div>
 			<div class="btn-group">

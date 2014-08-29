@@ -933,13 +933,13 @@ public class VMManager {
 			int importance, String type) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getVmDAO().countAllAdminVMList(host, importance);
-		List<OCVM> VMList = this.getVmDAO().getOnePageAdminVmList(page, limit,
+		List<OCVM> vmList = this.getVmDAO().getOnePageAdminVmList(page, limit,
 				host, importance);
 		ja.put(totalNum);
-		if (VMList != null) {
-			for (int i = 0; i < VMList.size(); i++) {
+		if (vmList != null) {
+			for (int i = 0; i < vmList.size(); i++) {
 				JSONObject jo = new JSONObject();
-				OCVM ocvm = VMList.get(i);
+				OCVM ocvm = vmList.get(i);
 				jo.put("vmid", ocvm.getVmUuid());
 				jo.put("vmname", Utilities.encodeText(ocvm.getVmName()));
 				jo.put("state", ocvm.getVmPower());

@@ -28,5 +28,4 @@ public class LogOnRequestModel {
 	public void setVercode(String vercode) {
 		this.vercode = vercode;
 	}
-
 }

@@ -10,6 +10,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class HomeController {
+	
 	@RequestMapping(value = "/", method = { RequestMethod.GET })
 	public ModelAndView home(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {

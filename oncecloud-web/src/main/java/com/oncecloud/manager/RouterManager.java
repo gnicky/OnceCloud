@@ -794,7 +794,7 @@ public class RouterManager {
 		return jo;
 	}
 
-	public JSONArray getAdminVMList(int page, int limit, String host,
+	public JSONArray getAdminRouterList(int page, int limit, String host,
 			int importance, String type) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO()
