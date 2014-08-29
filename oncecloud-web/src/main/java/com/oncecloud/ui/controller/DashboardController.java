@@ -39,13 +39,17 @@ public class DashboardController {
 				+ ":" + request.getServerPort() + path + "/";
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
-		Quota quotaUsed = this.getQuotaManager().getQuotaUsed(user.getUserId());
 		model.put("basePath", basePath);
 		model.put("title", "控制台");
 		model.put("sideActive", 0);
 		model.put("user", user);
-		model.put("quotaUsed", quotaUsed);
-		return new ModelAndView("user/dashboard", model);
+		if (user.getUserLevel() > 0) {
+			Quota quotaUsed = this.getQuotaManager().getQuotaUsed(user.getUserId());
+			model.put("quotaUsed", quotaUsed);
+			return new ModelAndView("user/dashboard", model);
+		} else {
+			return new ModelAndView("admin/dashboard", model);
+		}
 	}
 
 	@RequestMapping(value = "/user/modal/viewquota")
