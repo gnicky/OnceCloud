@@ -45,10 +45,7 @@ public class UserAction extends HttpServlet {
 		String action = request.getParameter("action");
 		User user = (User) session.getAttribute("user");
 		// 登录登出
-		if (action.equals("login")) {
-			this.getUserManager().doLogin(request, response, basePath, session);
-			return;
-		} else if (action.equals("adminlogin")) {
+		if (action.equals("adminlogin")) {
 			this.getUserManager().doAdminLogin(request, response, basePath,
 					session);
 			return;

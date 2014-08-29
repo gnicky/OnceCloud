@@ -436,38 +436,4 @@ public class UserManager {
 			}
 		}
 	}
-
-	public void doLogin(HttpServletRequest request,
-			HttpServletResponse response, String basePath, HttpSession session)
-			throws IOException {
-		int result = -1;
-		String ver1 = request.getParameter("vercode");
-		String ver2 = (String) session.getAttribute("rand");
-		// 会话存在过期现象
-		if (ver1 == null || ver2 == null) {
-			response.sendRedirect(basePath + "account/login.jsp");
-		} else if (ver1.toLowerCase().equals(ver2.toLowerCase())) {
-			session.setAttribute("rand", null);
-			String username = request.getParameter("user");
-			String password = request.getParameter("pw");
-			if (username != null) {
-				result = this.checkLogin(username, password);
-			}
-			if (result == 0) {
-				User userlogin = this.getUserDAO().getUser(username);
-				int level = userlogin.getUserLevel();
-				if (level != 0) {
-					session.setAttribute("user", userlogin);
-					response.sendRedirect(basePath + "console/dashboard.jsp");
-				} else {
-					response.sendRedirect(basePath + "account/login.jsp");
-				}
-			} else {
-				response.sendRedirect(basePath + "account/login.jsp");
-			}
-		} else {
-			response.sendRedirect(basePath + "account/login.jsp");
-		}
-		return;
-	}
 }
