@@ -32,7 +32,7 @@
 		<mapping class="com.oncecloud.entity.FeeVM" />
 		<mapping class="com.oncecloud.entity.FeeVolume" />
 		<mapping class="com.oncecloud.entity.Firewall" />
-		<mapping class="com.oncecloud.entity.Frontend" />
+		<mapping class="com.oncecloud.entity.Foreend" />
 		<mapping class="com.oncecloud.entity.HostSR" />
 		<mapping class="com.oncecloud.entity.Image" />
 		<mapping class="com.oncecloud.entity.LB" />

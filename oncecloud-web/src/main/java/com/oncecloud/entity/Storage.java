@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -36,6 +37,7 @@ public class Storage {
 		this.rackuuid = rackuuid;
 	}
 
+	@Id
 	@Column(name = "sr_uuid")
 	public String getSrUuid() {
 		return srUuid;

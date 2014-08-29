@@ -34,7 +34,6 @@ public class VnetManager {
 	private QuotaDAO quotaDAO;
 	private RouterDAO routerDAO;
 	private VMManager vmManager;
-	private VnetManager vnetManager;
 	private RouterManager routerManager;
 
 	private VMDAO getVmDAO() {
@@ -98,15 +97,6 @@ public class VnetManager {
 	@Autowired
 	private void setVmManager(VMManager vmManager) {
 		this.vmManager = vmManager;
-	}
-
-	private VnetManager getVnetManager() {
-		return vnetManager;
-	}
-
-	@Autowired
-	private void setVnetManager(VnetManager vnetManager) {
-		this.vnetManager = vnetManager;
 	}
 
 	private RouterManager getRouterManager() {
@@ -395,7 +385,7 @@ public class VnetManager {
 
 	public JSONObject vnetChecknet(String routerid, Integer net, int userId) {
 		JSONObject jo = new JSONObject();
-		if (this.getVnetManager().checkNet(userId, routerid, net)) {
+		if (this.checkNet(userId, routerid, net)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);
@@ -432,8 +422,7 @@ public class VnetManager {
 	public JSONObject vnetAddvm(String vnId, String vmuuidStr, int userId,
 			String hostUuid) {
 		JSONObject jo = new JSONObject();
-		if (this.getVnetManager()
-				.addVmToVnet(userId, vmuuidStr, vnId, hostUuid)) {
+		if (this.addVmToVnet(userId, vmuuidStr, vnId, hostUuid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);
@@ -459,8 +448,7 @@ public class VnetManager {
 	public JSONObject vnetAddOnevm(String vnId, String vmuuid, int userId,
 			String hostUuid) {
 		JSONObject jo = new JSONObject();
-		if (this.getVnetManager()
-				.addOneVmToVnet(userId, vmuuid, vnId, hostUuid)) {
+		if (this.addOneVmToVnet(userId, vmuuid, vnId, hostUuid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);

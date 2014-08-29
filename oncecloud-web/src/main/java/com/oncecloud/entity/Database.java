@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
@@ -48,6 +49,7 @@ public class Database {
 		this.createDate = createDate;
 	}
 
+	@Id
 	@Column(name = "database_uuid")
 	public String getDatabaseUuid() {
 		return databaseUuid;
