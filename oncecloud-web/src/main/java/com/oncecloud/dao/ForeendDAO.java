@@ -19,6 +19,7 @@ import com.oncecloud.helper.SessionHelper;
 @Component
 public class ForeendDAO {
 	private SessionHelper sessionHelper;
+	private BackendDAO backendDAO;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -27,6 +28,15 @@ public class ForeendDAO {
 	@Autowired
 	private void setSessionHelper(SessionHelper sessionHelper) {
 		this.sessionHelper = sessionHelper;
+	}
+
+	private BackendDAO getBackendDAO() {
+		return backendDAO;
+	}
+
+	@Autowired
+	private void setBackendDAO(BackendDAO backendDAO) {
+		this.backendDAO = backendDAO;
 	}
 
 	/**
@@ -234,8 +244,8 @@ public class ForeendDAO {
 					feJo.put("forePort", foreend.getForePort());
 					feJo.put("forePolicy", foreend.getForePolicy());
 					feJo.put("foreStatus", foreend.getForeStatus());
-					List<Backend> backList = BackendDAO.getBEListByFE(session,
-							foreend.getForeUuid(), 0);
+					List<Backend> backList = this.getBackendDAO()
+							.getBEListByFE(session, foreend.getForeUuid(), 0);
 					JSONArray beArray = new JSONArray();
 					if (null != backList && backList.size() > 0) {
 						for (Backend backend : backList) {
@@ -294,8 +304,8 @@ public class ForeendDAO {
 							.toLowerCase());
 					feJo.put("port", foreend.getForePort());
 					feJo.put("policy", foreend.getForePolicy());
-					List<Backend> backList = BackendDAO.getBEListByFE(session,
-							foreend.getForeUuid(), 1);
+					List<Backend> backList = this.getBackendDAO()
+							.getBEListByFE(session, foreend.getForeUuid(), 1);
 					JSONArray beArray = new JSONArray();
 					if (null != backList && backList.size() > 0) {
 						for (Backend backend : backList) {
@@ -346,7 +356,7 @@ public class ForeendDAO {
 		try {
 			session = this.getSessionHelper().openMainSession();
 			tx = session.beginTransaction();
-			BackendDAO.deleteBackendByFE(session, foreUuid);
+			this.getBackendDAO().deleteBackendByFE(session, foreUuid);
 			String queryString = "delete from Foreend where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("foreUuid", foreUuid);

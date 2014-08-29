@@ -79,7 +79,7 @@ public class QuotaDAO {
 		return quota;
 	}
 
-	public static void insertQuota(Session session, int quotaUID, int quotaIP,
+	public void insertQuota(Session session, int quotaUID, int quotaIP,
 			int quotaVM, int quotaSnapshot, int quotaImage, int quotaDiskN,
 			int quotaDiskS, int quotaSsh, int quotaFirewall, int quotaRoute,
 			int quotaVlan, int quotaLoadBalance, int quotaBandwidth,

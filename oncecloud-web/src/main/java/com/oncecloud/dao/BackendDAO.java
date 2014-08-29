@@ -166,7 +166,7 @@ public class BackendDAO {
 	 * @author xpx 2014-7-18
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<Backend> getBEListByFE(Session session, String foreUuid,
+	public List<Backend> getBEListByFE(Session session, String foreUuid,
 			int forbid) {
 		List<Backend> backList = null;
 		try {
@@ -226,7 +226,7 @@ public class BackendDAO {
 		return result;
 	}
 
-	public static void deleteBackendByFE(Session session, String foreUuid) {
+	public void deleteBackendByFE(Session session, String foreUuid) {
 		try {
 			String queryString = "delete from Backend where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
