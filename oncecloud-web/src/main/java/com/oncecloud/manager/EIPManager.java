@@ -49,6 +49,7 @@ public class EIPManager {
 	private RouterDAO routerDAO;
 	private QuotaDAO quotaDAO;
 	private FirewallManager firewallManager;
+	private VMManager vmManager;
 	private Constant constant;
 
 	private EIPDAO getEipDAO() {
@@ -130,6 +131,15 @@ public class EIPManager {
 	@Autowired
 	private void setFirewallManager(FirewallManager firewallManager) {
 		this.firewallManager = firewallManager;
+	}
+
+	private VMManager getVmManager() {
+		return vmManager;
+	}
+
+	@Autowired
+	private void setVmManager(VMManager vmManager) {
+		this.vmManager = vmManager;
 	}
 
 	private Constant getConstant() {
@@ -423,7 +433,7 @@ public class EIPManager {
 				logger.info("Bind Result: " + bindResult);
 				if (bindResult) {
 					EIP eip = this.getEipDAO().getEip(eipIp);
-					VMManager.changeBandwidth(userId, uuid,
+					this.getVmManager().changeBandwidth(userId, uuid,
 							eip.getEipBandwidth());
 					this.getEipDAO().bindEip(eipIp, uuid, bindtype);
 					result.put("result", true);
@@ -546,8 +556,8 @@ public class EIPManager {
 			boolean limitResult = true;
 			eipVM = eipObj.getEipDependency();
 			if (eipObj.getEipDependency() != null) {
-				limitResult = VMManager.changeBandwidth(user.getUserId(),
-						eipVM, size);
+				limitResult = this.getVmManager().changeBandwidth(
+						user.getUserId(), eipVM, size);
 			}
 			if (limitResult == true) {
 				boolean cr = this.getEipDAO()

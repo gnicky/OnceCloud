@@ -33,6 +33,7 @@ public class DatabaseManager {
 	private DatabaseDAO databaseDAO;
 	private EIPDAO eipDAO;
 	private EIPManager eipManager;
+	private VMManager vmManager;
 	private Constant constant;
 
 	private ImageDAO getImageDAO() {
@@ -80,6 +81,15 @@ public class DatabaseManager {
 		this.eipManager = eipManager;
 	}
 
+	private VMManager getVmManager() {
+		return vmManager;
+	}
+
+	@Autowired
+	private void setVmManager(VMManager vmManager) {
+		this.vmManager = vmManager;
+	}
+
 	private Constant getConstant() {
 		return constant;
 	}
@@ -115,7 +125,7 @@ public class DatabaseManager {
 			ip = dhcp.getDhcpIp();
 			mac = dhcp.getDhcpMac();
 			c = this.getConstant().getConnection(userId);
-			allocateHost = VMManager.getAllocateHost(hostUuid, 1024);
+			allocateHost = this.getVmManager().getAllocateHost(hostUuid, 1024);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (mac != null) {
@@ -140,9 +150,9 @@ public class DatabaseManager {
 				if (preCreate == true) {
 					String os = "linux";
 					String backendName = "db-" + dbUuid.substring(0, 8);
-					Record lbrecord = VMManager.createVMOnHost(c, dbUuid,
-							tplUuid, "root", "onceas", 1, 1024, mac, ip, os,
-							allocateHost, imagePwd, backendName);
+					Record lbrecord = this.getVmManager().createVMOnHost(c,
+							dbUuid, tplUuid, "root", "onceas", 1, 1024, mac,
+							ip, os, allocateHost, imagePwd, backendName);
 					if (lbrecord != null) {
 						String hostuuid = lbrecord.residentOn.toWireString();
 						if (hostuuid.equals(allocateHost)) {

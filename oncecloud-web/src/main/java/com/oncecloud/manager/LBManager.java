@@ -62,6 +62,7 @@ public class LBManager {
 	private BackendDAO backendDAO;
 	private QuotaDAO quotaDAO;
 	private EIPManager eipManager;
+	private VMManager vmManager;
 	private Constant constant;
 
 	private ImageDAO getImageDAO() {
@@ -163,6 +164,15 @@ public class LBManager {
 		this.eipManager = eipManager;
 	}
 
+	private VMManager getVmManager() {
+		return vmManager;
+	}
+
+	@Autowired
+	private void setVmManager(VMManager vmManager) {
+		this.vmManager = vmManager;
+	}
+
 	private Constant getConstant() {
 		return constant;
 	}
@@ -194,7 +204,7 @@ public class LBManager {
 			ip = dhcp.getDhcpIp();
 			mac = dhcp.getDhcpMac();
 			c = this.getConstant().getConnectionFromPool(poolUuid);
-			allocateHost = VMManager.getAllocateHost(poolUuid, 1024);
+			allocateHost = this.getVmManager().getAllocateHost(poolUuid, 1024);
 			logger.info("LB [" + backendName + "] allocated to Host ["
 					+ allocateHost + "]");
 		} catch (Exception e) {
@@ -227,8 +237,8 @@ public class LBManager {
 					Record lbrecord = null;
 					// 如果不能获取该模板的空闲VDI，则直接创建该负载均衡，否则使用该VDI创建负载均衡
 					if (freeVDI == null) {
-						lbrecord = VMManager.createVMOnHost(c, uuid, tplUuid,
-								"root", pwd, 1, 1024, mac, ip, OS,
+						lbrecord = this.getVmManager().createVMOnHost(c, uuid,
+								tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
 								allocateHost, imagePwd, backendName);
 						Date createEndDate = new Date();
 						int elapse1 = Utilities.timeElapse(createDate,
@@ -238,9 +248,9 @@ public class LBManager {
 					} else {
 						String vdiUuid = freeVDI.getVdiUuid();
 						this.getVdiDAO().deleteVDI(freeVDI);
-						lbrecord = VMManager.createVMFromVDI(c, uuid, vdiUuid,
-								tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
-								allocateHost, imagePwd, backendName);
+						lbrecord = this.getVmManager().createVMFromVDI(c, uuid,
+								vdiUuid, tplUuid, "root", pwd, 1, 1024, mac,
+								ip, OS, allocateHost, imagePwd, backendName);
 						Date createEndDate = new Date();
 						int elapse1 = Utilities.timeElapse(createDate,
 								createEndDate);
@@ -344,7 +354,8 @@ public class LBManager {
 					VM thisVM = VM.getByUuid(c, uuid);
 					powerState = thisVM.getPowerState(c).toString();
 					if (!powerState.equals("Running")) {
-						hostUuid = VMManager.getAllocateHost(poolUuid, 1024);
+						hostUuid = this.getVmManager().getAllocateHost(
+								poolUuid, 1024);
 						Host allocateHost = Types.toHost(hostUuid);
 						thisVM.startOn(c, allocateHost, false, true);
 					} else {

@@ -65,6 +65,7 @@ public class RouterManager {
 	private FirewallDAO firewallDAO;
 
 	private EIPManager eipManager;
+	private VMManager vmManager;
 
 	private Constant constant;
 
@@ -167,6 +168,15 @@ public class RouterManager {
 		this.eipManager = eipManager;
 	}
 
+	private VMManager getVmManager() {
+		return vmManager;
+	}
+
+	@Autowired
+	private void setVmManager(VMManager vmManager) {
+		this.vmManager = vmManager;
+	}
+
 	private Constant getConstant() {
 		return constant;
 	}
@@ -198,7 +208,7 @@ public class RouterManager {
 			ip = dhcp.getDhcpIp();
 			mac = dhcp.getDhcpMac();
 			c = this.getConstant().getConnectionFromPool(poolUuid);
-			allocateHost = VMManager.getAllocateHost(poolUuid, 1024);
+			allocateHost = this.getVmManager().getAllocateHost(poolUuid, 1024);
 			logger.info("Router [" + backendName + "] allocated to Host ["
 					+ allocateHost + "]");
 		} catch (Exception e) {
@@ -231,8 +241,8 @@ public class RouterManager {
 					Record rtrecord = null;
 					// 如果不能获取该模板的空闲VDI，则直接创建该路由器，否则使用该VDI创建路由器
 					if (freeVDI == null) {
-						rtrecord = VMManager.createVMOnHost(c, uuid, tplUuid,
-								"root", pwd, 1, 1024, mac, ip, OS,
+						rtrecord = this.getVmManager().createVMOnHost(c, uuid,
+								tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
 								allocateHost, imagePwd, backendName);
 						Date createEndDate = new Date();
 						int elapse1 = Utilities.timeElapse(createDate,
@@ -242,9 +252,9 @@ public class RouterManager {
 					} else {
 						String vdiUuid = freeVDI.getVdiUuid();
 						this.getVdiDAO().deleteVDI(freeVDI);
-						rtrecord = VMManager.createVMFromVDI(c, uuid, vdiUuid,
-								tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
-								allocateHost, imagePwd, backendName);
+						rtrecord = this.getVmManager().createVMFromVDI(c, uuid,
+								vdiUuid, tplUuid, "root", pwd, 1, 1024, mac,
+								ip, OS, allocateHost, imagePwd, backendName);
 						Date createEndDate = new Date();
 						int elapse1 = Utilities.timeElapse(createDate,
 								createEndDate);
@@ -349,7 +359,8 @@ public class RouterManager {
 					VM thisVM = VM.getByUuid(c, uuid);
 					powerState = thisVM.getPowerState(c).toString();
 					if (!powerState.equals("Running")) {
-						hostUuid = VMManager.getAllocateHost(poolUuid, 1024);
+						hostUuid = this.getVmManager().getAllocateHost(
+								poolUuid, 1024);
 						Host allocateHost = Types.toHost(hostUuid);
 						thisVM.startOn(c, allocateHost, false, true);
 					} else {

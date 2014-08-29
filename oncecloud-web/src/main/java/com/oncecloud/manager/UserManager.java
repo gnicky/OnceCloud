@@ -389,7 +389,7 @@ public class UserManager {
 		return ja;
 	}
 
-	public static void doLogout(HttpServletResponse response, String basePath,
+	public void doLogout(HttpServletResponse response, String basePath,
 			HttpSession session, User user) throws IOException {
 		if (user != null) {
 			session.removeAttribute("user");
