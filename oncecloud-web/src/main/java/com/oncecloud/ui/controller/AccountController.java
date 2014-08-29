@@ -67,12 +67,12 @@ public class AccountController {
 		model.put("basePath", basePath);
 
 		int result = -1;
-		String ver2 = (String) request.getSession().getAttribute("rand");
+		String captcha = (String) request.getSession().getAttribute("rand");
 		// 会话存在过期现象
-		if (logOnRequestModel.getVercode() == null || ver2 == null) {
+		if (logOnRequestModel.getVercode() == null || captcha == null) {
 			return new ModelAndView("account/login", model);
 		} else if (logOnRequestModel.getVercode().toLowerCase()
-				.equals(ver2.toLowerCase())) {
+				.equals(captcha.toLowerCase())) {
 			request.getSession().setAttribute("rand", null);
 			if (logOnRequestModel.getUser() != null) {
 				result = this.getUserManager().checkLogin(
@@ -87,13 +87,68 @@ public class AccountController {
 					request.getSession().setAttribute("user", userlogin);
 					return new ModelAndView(new RedirectView("/dashboard"));
 				} else {
-					return new ModelAndView("account/login");
+					return new ModelAndView("account/login", model);
 				}
 			} else {
-				return new ModelAndView("account/login");
+				return new ModelAndView("account/login", model);
 			}
 		} else {
-			return new ModelAndView("account/login");
+			return new ModelAndView("account/login", model);
+		}
+	}
+	
+	@RequestMapping(value = "/backdoor", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView backdoor(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") != null) {
+			return new ModelAndView(new RedirectView("/dashboard"));
+		}
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("basePath", basePath);
+		return new ModelAndView("account/backdoor", model);
+	}
+	
+	@RequestMapping(value = "/backdoor", method = { RequestMethod.POST })
+	@ResponseBody
+	public ModelAndView backdoor(HttpServletRequest request,
+			LogOnRequestModel logOnRequestModel) {
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("basePath", basePath);
+
+		int result = -1;
+		String captcha = (String) request.getSession().getAttribute("rand");
+		// 会话存在过期现象
+		if (logOnRequestModel.getVercode() == null || captcha == null) {
+			return new ModelAndView("account/backdoor", model);
+		} else if (logOnRequestModel.getVercode().toLowerCase()
+				.equals(captcha.toLowerCase())) {
+			request.getSession().setAttribute("rand", null);
+			if (logOnRequestModel.getUser() != null) {
+				result = this.getUserManager().checkLogin(
+						logOnRequestModel.getUser(),
+						logOnRequestModel.getPassword());
+			}
+			if (result == 0) {
+				User userlogin = this.getUserDAO().getUser(
+						logOnRequestModel.getUser());
+				int level = userlogin.getUserLevel();
+				if (level == 0) {
+					request.getSession().setAttribute("user", userlogin);
+					return new ModelAndView(new RedirectView("/dashboard"));
+				} else {
+					return new ModelAndView("account/backdoor", model);
+				}
+			} else {
+				return new ModelAndView("account/backdoor", model);
+			}
+		} else {
+			return new ModelAndView("account/backdoor", model);
 		}
 	}
 }

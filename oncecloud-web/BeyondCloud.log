@@ -578,3 +578,283 @@ WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServle
 WARN: No mapping found for HTTP request with URI [/UserAction] in DispatcherServlet with name 'dispatcherServlet'
 2014-08-29 05:16:28 [org.springframework.web.context.support.XmlWebApplicationContext:873] [Thread-1]
 INFO: Closing WebApplicationContext for namespace 'dispatcherServlet-servlet': startup date [Fri Aug 29 17:15:43 CST 2014]; root of context hierarchy
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:13:54 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 07:13:55 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 07:13:55 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 07:13:55 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 07:13:55 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 07:13:55 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 07:13:55 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4120 ms
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:16:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 07:16:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 07:16:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 07:16:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 07:16:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 07:16:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 07:16:26 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4360 ms
+2014-08-29 07:17:17 [com.oncecloud.manager.UserManager:89] [qtp64317759-17]
+INFO: Check Login: User [hehai] Password [onceas] Result [0]
+2014-08-29 07:17:17 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-12]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:17:17 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-49]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:17:17 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-19]
+WARN: No mapping found for HTTP request with URI [/UserAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:17:17 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-51]
+WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:17:58 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-17]
+WARN: No mapping found for HTTP request with URI [/UserAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:18:03 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-19]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:18:03 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-51]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:18:03 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-16]
+WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:18:03 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-17]
+WARN: No mapping found for HTTP request with URI [/UserAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:18:16 [org.springframework.web.context.support.XmlWebApplicationContext:873] [Thread-1]
+INFO: Closing WebApplicationContext for namespace 'dispatcherServlet-servlet': startup date [Fri Aug 29 19:16:21 CST 2014]; root of context hierarchy
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:44:22 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 07:44:23 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 07:44:23 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 07:44:23 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 07:44:23 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 07:44:23 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/admin/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 07:44:23 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-08-29 07:44:23 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4736 ms
+2014-08-29 07:46:49 [org.springframework.web.servlet.PageNotFound:198] [qtp183308202-19]
+WARN: Request method 'POST' not supported
+2014-08-29 07:53:29 [org.springframework.web.context.support.XmlWebApplicationContext:873] [Thread-1]
+INFO: Closing WebApplicationContext for namespace 'dispatcherServlet-servlet': startup date [Fri Aug 29 19:44:18 CST 2014]; root of context hierarchy
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:53:52 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 07:53:52 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 07:53:52 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 07:53:52 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 07:53:52 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 07:53:52 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/admin/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 07:53:52 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-08-29 07:53:52 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4122 ms
+2014-08-29 07:54:05 [com.oncecloud.manager.UserManager:89] [qtp943992413-17]
+INFO: Check Login: User [admin] Password [onceas] Result [0]
+2014-08-29 07:54:05 [org.springframework.web.servlet.PageNotFound:1114] [qtp943992413-14]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:54:06 [org.springframework.web.servlet.PageNotFound:1114] [qtp943992413-14]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:54:06 [org.springframework.web.servlet.PageNotFound:1114] [qtp943992413-13]
+WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:54:06 [org.springframework.web.servlet.PageNotFound:1114] [qtp943992413-18]
+WARN: No mapping found for HTTP request with URI [/DatacenterAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:54:24 [org.springframework.web.context.support.XmlWebApplicationContext:873] [Thread-1]
+INFO: Closing WebApplicationContext for namespace 'dispatcherServlet-servlet': startup date [Fri Aug 29 19:53:48 CST 2014]; root of context hierarchy
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:56:25 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 07:56:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 07:56:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 07:56:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 07:56:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 07:56:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/admin/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 07:56:25 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-08-29 07:56:25 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4578 ms
+2014-08-29 07:57:31 [com.oncecloud.manager.UserManager:89] [qtp607175072-16]
+INFO: Check Login: User [admin] Password [onceas] Result [0]
+2014-08-29 07:57:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-19]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:57:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-17]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:57:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-22]
+WARN: No mapping found for HTTP request with URI [/DatacenterAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:57:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-16]
+WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 07:58:11 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 07:58:12 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 07:58:12 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 07:58:12 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 07:58:12 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 07:58:12 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/admin/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 07:58:12 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-08-29 07:58:12 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4602 ms
+2014-08-29 07:58:53 [com.oncecloud.manager.UserManager:89] [qtp575892672-20]
+INFO: Check Login: User [admin] Password [onceas] Result [0]
+2014-08-29 07:59:39 [org.springframework.web.servlet.PageNotFound:1114] [qtp575892672-19]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:59:39 [org.springframework.web.servlet.PageNotFound:1114] [qtp575892672-17]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:59:39 [org.springframework.web.servlet.PageNotFound:1114] [qtp575892672-22]
+WARN: No mapping found for HTTP request with URI [/DatacenterAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 07:59:39 [org.springframework.web.servlet.PageNotFound:1114] [qtp575892672-15]
+WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnRequestModel)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.controller.AuthenticationController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.DashboardController.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.controller.HomeController.home(javax.servlet.http.HttpServletRequest)
+2014-08-29 08:01:18 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.controller.LogController.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-08-29 08:01:18 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-08-29 08:01:18 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-08-29 08:01:18 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-08-29 08:01:18 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/user/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-08-29 08:01:18 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/admin/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-08-29 08:01:18 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-08-29 08:01:18 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 4483 ms
+2014-08-29 08:01:26 [com.oncecloud.manager.UserManager:89] [qtp607175072-22]
+INFO: Check Login: User [admin] Password [onceas] Result [0]
+2014-08-29 08:02:21 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-19]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 08:02:21 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-21]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 08:02:21 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-20]
+WARN: No mapping found for HTTP request with URI [/DatacenterAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 08:02:21 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-22]
+WARN: No mapping found for HTTP request with URI [/QAAction] in DispatcherServlet with name 'dispatcherServlet'
+2014-08-29 08:02:53 [org.springframework.web.servlet.PageNotFound:1114] [qtp607175072-19]
+WARN: No mapping found for HTTP request with URI [/UserAction] in DispatcherServlet with name 'dispatcherServlet'
