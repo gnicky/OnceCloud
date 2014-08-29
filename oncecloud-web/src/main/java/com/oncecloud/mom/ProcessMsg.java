@@ -19,6 +19,7 @@ import com.oncecloud.manager.VMManager;
 public class ProcessMsg {
 	private VMDAO vmDAO;
 	private HostDAO hostDAO;
+	private VMManager vmManager;
 
 	private VMDAO getVmDAO() {
 		return vmDAO;
@@ -36,6 +37,15 @@ public class ProcessMsg {
 	@Autowired
 	private void setHostDAO(HostDAO hostDAO) {
 		this.hostDAO = hostDAO;
+	}
+
+	private VMManager getVmManager() {
+		return vmManager;
+	}
+
+	@Autowired
+	private void setVmManager(VMManager vmManager) {
+		this.vmManager = vmManager;
 	}
 
 	public void ProcessSync(String message) {
@@ -69,8 +79,8 @@ public class ProcessMsg {
 												.getAsInt();
 									}
 								}
-								VMManager.syncAddVMOperate(hostUuid, vmUuid,
-										powerAttrvalue);
+								this.getVmManager().syncAddVMOperate(hostUuid,
+										vmUuid, powerAttrvalue);
 							} else if (optype.equals("DEL")) {
 								this.getVmDAO().syncDelVMOperate(hostUuid,
 										vmUuid);
@@ -96,11 +106,11 @@ public class ProcessMsg {
 											&& ocvm.getVmPower() == 0) {
 										this.getVmDAO().setVMPowerStatus(
 												vmUuid, powerAttrvalue);
-										String hostAddress = VMManager
-												.getHostAddress(ocvm
-														.getHostUuid());
-										int port = VMManager.getVNCPort(vmUuid,
-												poolUuid);
+										String hostAddress = this
+												.getVmManager().getHostAddress(
+														ocvm.getHostUuid());
+										int port = this.getVmManager()
+												.getVNCPort(vmUuid, poolUuid);
 										NoVNC.createToken(
 												vmUuid.substring(0, 8),
 												hostAddress, port);
