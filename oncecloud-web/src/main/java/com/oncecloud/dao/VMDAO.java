@@ -879,8 +879,8 @@ public class VMDAO {
 		return vmList;
 	}
 
-	public static void updatePowerAndHost(Session session, String uuid,
-			int power, String hostUuid) {
+	public void updatePowerAndHost(Session session, String uuid, int power,
+			String hostUuid) {
 		String queryString = "update OCVM set vmPower = :power, hostUuid = :hostUuid where vmUuid = :uuid";
 		Query query = session.createQuery(queryString);
 		query.setInteger("power", power);
