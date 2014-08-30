@@ -42,14 +42,7 @@ public class VolumeAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getVolumeManager().getVolumeList(userId,
-						page, limit, search);
-				out.print(ja.toString());
-			} else if (action.equals("create")) {
+			if (action.equals("create")) {
 				String volUuid = request.getParameter("volumeuuid");
 				String volName = request.getParameter("volumeName");
 				int volSize = Integer.parseInt(request

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.VMManager;
 import com.oncecloud.ui.model.AdminListModel;
+import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/VMAction")
 @Controller
@@ -29,14 +30,27 @@ public class VMAction {
 
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String adminList(HttpServletRequest request,
-			AdminListModel alrModel) {
+	public String adminList(HttpServletRequest request, AdminListModel alrModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			JSONArray ja = this.getVmManager().getAdminVMList(
 					alrModel.getPage(), alrModel.getLimit(),
 					alrModel.getHost(), alrModel.getImportance(),
 					alrModel.getType());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/VMList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String vmList(HttpServletRequest request, ListModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			JSONArray ja = this.getVmManager().getVMList(userId,
+					list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

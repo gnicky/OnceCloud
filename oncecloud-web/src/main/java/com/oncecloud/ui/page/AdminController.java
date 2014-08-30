@@ -19,7 +19,7 @@ public class AdminController {
 	
 	@RequestMapping(value = "/user", method = { RequestMethod.GET })
 	@ResponseBody
-	public ModelAndView login(HttpServletRequest request) {
+	public ModelAndView user(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {
 			return new ModelAndView(new RedirectView("/backdoor"));
 		}

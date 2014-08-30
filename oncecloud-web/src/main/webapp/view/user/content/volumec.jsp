@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>硬盘&nbsp;Volumes</h1>
 		<p class="lead">
@@ -9,16 +9,16 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="<%=basePath %>user/create/createvolume.jsp">+&nbsp;新建</button>
+			<button id="create" class="btn btn-primary" url="${basePath}user/create/createvolume.jsp">+&nbsp;新建</button>
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="bind" url="<%=basePath %>user/modal/bindvolume.jsp" disabled><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
-					<li><a class="btn-forbidden" id="unbind" disabled><span class="glyphicon glyphicon-cloud-download"></span>卸载硬盘</a></li>
-					<li><a class="btn-forbidden backup" id="backup" url="<%=basePath %>user/create/createsnapshot.jsp" disabled><span class="glyphicon glyphicon-camera"></span>备份</a></li>
-					<li><a class="btn-forbidden" id="delete" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="bind" url="${basePath}user/modal/bindvolume.jsp"><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
+					<li><a class="btn-forbidden" id="unbind"><span class="glyphicon glyphicon-cloud-download"></span>卸载硬盘</a></li>
+					<li><a class="btn-forbidden backup" id="backup" url="${basePath}user/create/createsnapshot.jsp"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
+					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

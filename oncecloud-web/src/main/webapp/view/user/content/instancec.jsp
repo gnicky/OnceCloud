@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" vncServer="<%=vncServer%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent" data-novnc="${vncServer}">
 	<div class="intro">
 		<h1>主机&nbsp;Instances</h1>
 		<p class="lead">
@@ -9,7 +9,7 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="<%=basePath %>user/create/createinstance.jsp">+&nbsp;新建</button>
+			<button id="create" class="btn btn-primary" url="${basePath}user/create/createinstance.jsp">+&nbsp;新建</button>
 			<button class="btn btn-default btn-disable" id="startup" disabled><span class="glyphicon glyphicon-play"></span>启动</button>
 			<button class="btn btn-default btn-disable" id="shutdown" disabled><span class="glyphicon glyphicon-stop"></span>关机</button>
 			<div class="btn-group">
@@ -17,11 +17,11 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="restart" disabled><span class="glyphicon glyphicon-repeat"></span>重启</a></li>
-					<li><a class="btn-forbidden" id="addtovlan" url="<%=basePath %>user/modal/bindnetwork.jsp" disabled><span class="glyphicon glyphicon-barcode"></span>加入网络</a></li>
-					<li><a class="btn-forbidden backup" id="backup" url="<%=basePath %>user/create/createsnapshot.jsp" disabled><span class="glyphicon glyphicon-camera"></span>备份</a></li>
-					<li><a class="btn-forbidden" id="image" url="<%=basePath %>user/create/createimage.jsp" disabled><span class="glyphicon glyphicon-record"></span>制作映像</a></li>
-					<li><a class="btn-forbidden" id="destroy" disabled><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
+					<li><a class="btn-forbidden" id="restart"><span class="glyphicon glyphicon-repeat"></span>重启</a></li>
+					<li><a class="btn-forbidden" id="addtovlan" url="${basePath}user/modal/bindnetwork.jsp"><span class="glyphicon glyphicon-barcode"></span>加入网络</a></li>
+					<li><a class="btn-forbidden backup" id="backup" url="${basePath}user/create/createsnapshot.jsp"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
+					<li><a class="btn-forbidden" id="image" url="${basePath}user/create/createimage.jsp"><span class="glyphicon glyphicon-record"></span>制作映像</a></li>
+					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">
@@ -56,7 +56,6 @@
 			<tbody id="tablebody">
 			</tbody>
 		</table>
-		<div id="applet"></div>
 	</div>
 	<div id="InstanceModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>

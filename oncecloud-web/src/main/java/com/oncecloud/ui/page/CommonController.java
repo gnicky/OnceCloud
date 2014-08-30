@@ -61,7 +61,7 @@ public class CommonController {
 	
 	@RequestMapping(value = "/instance", method = { RequestMethod.GET })
 	@ResponseBody
-	public ModelAndView login(HttpServletRequest request) {
+	public ModelAndView instance(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {
 			return new ModelAndView(new RedirectView("/login"));
 		}

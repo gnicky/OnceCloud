@@ -17,7 +17,7 @@ import com.oncecloud.entity.User;
 import com.oncecloud.manager.QuotaManager;
 
 @Controller
-public class UserModalController {
+public class ModalControllerUser {
 	private QuotaManager quotaManager;
 
 	private QuotaManager getQuotaManager() {

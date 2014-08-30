@@ -62,13 +62,6 @@ public class VMAction extends HttpServlet {
 				String uuid = request.getParameter("uuid");
 				String force = request.getParameter("force");
 				this.getVmManager().doShutdownVM(userId, uuid, force, poolUuid);
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getVmManager().getVMList(userId, page,
-						limit, search);
-				out.print(ja.toString());
 			} else if (action.equals("simplelist")) {
 				JSONArray ja = this.getVmManager().getSimpleVMList(userId);
 				out.print(ja.toString());

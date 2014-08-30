@@ -81,7 +81,6 @@
 			<tbody id="tablebody">
 			</tbody>
 		</table>
-		<div id="applet"></div>
 	</div>
 	<div id="InstanceModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>
