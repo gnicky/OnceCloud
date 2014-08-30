@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver </property>
+		<property name="hibernate.connection.url"> jdbc:mysql://localhost:3306/beyondcloud</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">onceas</property>
+		<property name="hibernate.connection.pool.size">1000</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="format_sql">true</property>
+		<property name="Connection.useUnicode">true </property>
+		<property name="connection.characterEncoding">utf-8 </property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect </property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="connection.autoReconnect">true</property>
+		<property name="connection.autoReconnectForPools">true</property>
+		<property name="connection.is-connection-validation-required">true</property>
+
+		<mapping class="com.oncecloud.entity.Alarm" />
+		<mapping class="com.oncecloud.entity.AlarmRule" />
+		<mapping class="com.oncecloud.entity.Backend" />
+		<mapping class="com.oncecloud.entity.ChargeRecord" />
+		<mapping class="com.oncecloud.entity.Database" />
+		<mapping class="com.oncecloud.entity.Datacenter" />
+		<mapping class="com.oncecloud.entity.DHCP" />
+		<mapping class="com.oncecloud.entity.EIP" />
+		<mapping class="com.oncecloud.entity.FeeEip" />
+		<mapping class="com.oncecloud.entity.FeeImage" />
+		<mapping class="com.oncecloud.entity.FeeSnapshot" />
+		<mapping class="com.oncecloud.entity.FeeVM" />
+		<mapping class="com.oncecloud.entity.FeeVolume" />
+		<mapping class="com.oncecloud.entity.Firewall" />
+		<mapping class="com.oncecloud.entity.Foreend" />
+		<mapping class="com.oncecloud.entity.HostSR" />
+		<mapping class="com.oncecloud.entity.Image" />
+		<mapping class="com.oncecloud.entity.LB" />
+		<mapping class="com.oncecloud.entity.OCHost" />
+		<mapping class="com.oncecloud.entity.OCLog" />
+		<mapping class="com.oncecloud.entity.OCPool" />
+		<mapping class="com.oncecloud.entity.OCVDI" />
+		<mapping class="com.oncecloud.entity.OCVM" />
+		<mapping class="com.oncecloud.entity.OverView" />
+		<mapping class="com.oncecloud.entity.Position" />
+		<mapping class="com.oncecloud.entity.QA" />
+		<mapping class="com.oncecloud.entity.Quota" />
+		<mapping class="com.oncecloud.entity.Rack" />
+		<mapping class="com.oncecloud.entity.Router" />
+		<mapping class="com.oncecloud.entity.Rule" />
+		<mapping class="com.oncecloud.entity.ServerPort" />
+		<mapping class="com.oncecloud.entity.Snapshot" />
+		<mapping class="com.oncecloud.entity.Storage" />
+		<mapping class="com.oncecloud.entity.Switch" />
+		<mapping class="com.oncecloud.entity.SwPort" />
+		<mapping class="com.oncecloud.entity.User" />
+		<mapping class="com.oncecloud.entity.Vlan" />
+		<mapping class="com.oncecloud.entity.Vnet" />
+		<mapping class="com.oncecloud.entity.Volume" />
+	</session-factory>
+</hibernate-configuration>

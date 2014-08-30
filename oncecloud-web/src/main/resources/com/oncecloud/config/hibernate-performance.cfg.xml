@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver </property>
+		<property name="hibernate.connection.url"> jdbc:mysql://localhost:3306/bcperformance</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">onceas</property>
+		<property name="hibernate.connection.pool.size">1000</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="format_sql">true</property>
+		<property name="Connection.useUnicode">true </property>
+		<property name="connection.characterEncoding">utf-8 </property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect </property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="connection.autoReconnect">true</property>
+		<property name="connection.autoReconnectForPools">true</property>
+		<property name="connection.is-connection-validation-required">true</property>
+
+		<mapping class="com.oncecloud.entity.performance.Cpu" />
+		<mapping class="com.oncecloud.entity.performance.Cpu1d" />
+		<mapping class="com.oncecloud.entity.performance.Cpu1m" />
+		<mapping class="com.oncecloud.entity.performance.Cpu2w" />
+		<mapping class="com.oncecloud.entity.performance.Cpu30min" />
+		<mapping class="com.oncecloud.entity.performance.Cpu6h" />
+		<mapping class="com.oncecloud.entity.performance.Memory" />
+		<mapping class="com.oncecloud.entity.performance.Memory1d" />
+		<mapping class="com.oncecloud.entity.performance.Memory1m" />
+		<mapping class="com.oncecloud.entity.performance.Memory2w" />
+		<mapping class="com.oncecloud.entity.performance.Memory30min" />
+		<mapping class="com.oncecloud.entity.performance.Memory6h" />
+		<mapping class="com.oncecloud.entity.performance.Pif" />
+		<mapping class="com.oncecloud.entity.performance.Pif1d" />
+		<mapping class="com.oncecloud.entity.performance.Pif1m" />
+		<mapping class="com.oncecloud.entity.performance.Pif2w" />
+		<mapping class="com.oncecloud.entity.performance.Pif30min" />
+		<mapping class="com.oncecloud.entity.performance.Pif6h" />
+		<mapping class="com.oncecloud.entity.performance.Vbd" />
+		<mapping class="com.oncecloud.entity.performance.Vbd1d" />
+		<mapping class="com.oncecloud.entity.performance.Vbd1m" />
+		<mapping class="com.oncecloud.entity.performance.Vbd2w" />
+		<mapping class="com.oncecloud.entity.performance.Vbd30min" />
+		<mapping class="com.oncecloud.entity.performance.Vbd6h" />
+		<mapping class="com.oncecloud.entity.performance.Vif" />
+		<mapping class="com.oncecloud.entity.performance.Vif1d" />
+		<mapping class="com.oncecloud.entity.performance.Vif1m" />
+		<mapping class="com.oncecloud.entity.performance.Vif2w" />
+		<mapping class="com.oncecloud.entity.performance.Vif30min" />
+		<mapping class="com.oncecloud.entity.performance.Vif6h" />
+	</session-factory>
+</hibernate-configuration>
