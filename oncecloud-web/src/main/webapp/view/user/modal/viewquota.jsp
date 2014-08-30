@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-
 <div class="modal-dialog" style="width: 700px; margin-top: 100px">
 	<div class="modal-content">
 		<div class="modal-header">

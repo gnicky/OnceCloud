@@ -95,13 +95,6 @@ public class UserAction extends HttpServlet {
 				String userName = request.getParameter("username");
 				JSONArray ja = this.getUserManager().doQueryUser(userName);
 				out.print(ja.toString());
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limitnum"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getUserManager().getUserList(page, limit,
-						search);
-				out.print(ja.toString());
 			} else if (action.equals("delete")) {
 				int changeId = Integer.parseInt(request.getParameter("userid"));
 				String userName = request.getParameter("username");

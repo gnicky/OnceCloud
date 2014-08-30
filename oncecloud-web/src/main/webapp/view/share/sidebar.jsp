@@ -13,13 +13,13 @@
 				</p>
 				<div class="user-link">
 					<a title="首页"><span class="glyphicon glyphicon-home"></span></a> <a
-						href="${basePath}admin/dashboard.jsp" title="控制台"><span
+						href="${basePath}dashboard" title="控制台"><span
 						class="glyphicon glyphicon-dashboard"></span></a> <a
 						href="javascript:void(0)"><span
 						class="glyphicon glyphicon-briefcase"></span></a> <a target="_blank"
 						href="${basePath}/map/CompanyMap.jsp" title="用户地图展示"><span
 						class="glyphicon glyphicon-book"></span></a> <a
-						href="${basePath}UserAction?action=logout" title="退出登录"><span
+						href="${basePath}logout" title="退出登录"><span
 						class="glyphicon glyphicon-off"></span></a>
 				</div>
 			</c:when>
@@ -29,12 +29,12 @@
 				</p>
 				<div class="user-link">
 					<a title="首页"><span class="glyphicon glyphicon-home"></span></a> <a
-						href="${basePath}user/dashboard.jsp" title="控制台"><span
+						href="${basePath}dashboard" title="控制台"><span
 						class="glyphicon glyphicon-dashboard"></span></a> <a title="帐户充值"
 						href="${basePath}account/recharge.jsp"><span
 						class="glyphicon glyphicon-briefcase"></span></a> <a title="用户指南"><span
 						class="glyphicon glyphicon-book"></span></a> <a
-						href="${basePath}UserAction?action=logout" title="退出登录"><span
+						href="${basePath}logout" title="退出登录"><span
 						class="glyphicon glyphicon-off"></span></a>
 				</div>
 			</c:otherwise>

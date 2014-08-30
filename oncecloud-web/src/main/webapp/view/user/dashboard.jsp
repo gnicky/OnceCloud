@@ -9,6 +9,6 @@
 	<%@ include file="../share/sidebar.jsp"%>
 	<%@ include file="content/dashboardc.jsp"%>
 	<%@ include file="../share/js.jsp"%>
-	<script src="${basePath}user/js/dashboard.js"></script>
+	<script src="${basePath}js/user/dashboard.js"></script>
 </body>
 </html>

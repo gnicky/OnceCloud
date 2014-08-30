@@ -47,6 +47,7 @@
 	</div>
 	<script>
 		refresh();
+		
 		function refresh() {
 			$("#authImg").attr("src", "${basePath}captcha?" + Math.random());
 		}

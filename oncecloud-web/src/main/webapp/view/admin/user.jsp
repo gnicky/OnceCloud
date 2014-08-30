@@ -3,12 +3,11 @@
 <html lang="en">
 <head>
 	<%@ include file="../share/head.jsp" %>
-	<link rel="stylesheet" href="${basePath}css/instance.css" />
 </head>
 <body class="cloud-body">
 	<%@ include file="../share/sidebar.jsp" %>
-	<%@ include file="content/instancec.jsp" %>
+	<%@ include file="content/userc.jsp" %>
 	<%@ include file="../share/js.jsp" %>
-	<script src="${basePath}js/admin/instance.js"></script>
+	<script src="${basePath}js/admin/user.js"></script>
 </body>
 </html>

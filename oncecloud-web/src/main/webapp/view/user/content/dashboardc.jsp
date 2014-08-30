@@ -96,6 +96,5 @@
 		</h4>
 		<div class="inner" id="service-area"></div>
 	</div>
-	<div id="DashboardModalContainer" class="modal fade" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<div id="DashboardModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>

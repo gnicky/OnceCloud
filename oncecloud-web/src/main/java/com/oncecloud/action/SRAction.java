@@ -52,14 +52,7 @@ public class SRAction extends HttpServlet {
 				JSONArray ja = this.getSrManager().addStorage(userId, srname,
 						srAddress, srDesc, srType, srDir, rackId, rackName);
 				out.print(ja.toString());
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limitnum"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getSrManager().getStorageList(page, limit,
-						search);
-				out.print(ja.toString());
-			} else if (action.equals("delete")) {
+			}else if (action.equals("delete")) {
 				String srId = request.getParameter("srid");
 				String srName = request.getParameter("srname");
 				JSONArray ja = this.getSrManager().deleteStorage(userId, srId,

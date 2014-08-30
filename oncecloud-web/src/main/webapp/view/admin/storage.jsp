@@ -8,6 +8,6 @@
 	<%@ include file="../share/sidebar.jsp" %>
 	<%@ include file="content/storagec.jsp" %>
 	<%@ include file="../share/js.jsp" %>
-	<script src="js/storage.js"></script>
+	<script src="${basePath}js/admin/storage.js"></script>
 </body>
 </html>

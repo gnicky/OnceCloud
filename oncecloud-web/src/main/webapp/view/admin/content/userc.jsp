@@ -1,28 +1,26 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <div class="content" id="platformcontent">
 	<div class="intro">
-		<h1>存储&nbsp;Storages</h1>
+		<h1>用户&nbsp;Users</h1>
 		<p class="lead" style="margin-top:10px">
-			<em>存储&nbsp;(Storage)</em>是云平台的共享存储单元，用于存储主机和映像文件，它是一个BFS的存储集群，也可以是其他支持的存储如GlusterFS或OCFS2。
+			<em>用户&nbsp;(User)</em>是云平台的具体使用者，可以通过管理后台对用户进行增删改查，并对用户的资源限额进行调整。
 		</p>
 	</div>
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createstorage.jsp">
-				+&nbsp;添加存储
+			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createuser.jsp">
+				<span class="glyphicon glyphicon-user"></span>新建用户
 			</button>
             <div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="load" url="${basePath}admin/modal/addtohost.jsp"><span class="glyphicon glyphicon-tasks"></span>添加到服务器</a></li>
-		            <li><a class="btn-forbidden" id="update" url="${basePath}admin/create/createstorage.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
-		            <li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>
-			<input class="search" id="search" value="">
+            <input class="search" id="search" value="">
 			<div class="toolbar-right">
 				<table>
 					<tr>
@@ -43,18 +41,19 @@
 			<thead>
 				<tr>
                 	<th width="4%"></th>
-					<th width="16%">ID</th>
-					<th width="16%">名称</th>
-                    <th width="16%">地址</th>
-                  	<th width="10%">挂载目录</th>
-                    <th width="10%">文件系统</th>
-                    <th width="12%">机架</th>
-					<th width="16%">创建时间</th>
+					<th width="10%">用户名</th>
+					<th width="15%">邮箱</th>
+					<th width="10%">联系电话</th>
+					<th width="10%">公司</th>
+                    <th width="10%">级别</th>
+					<th width="15%">注册时间</th>
+					<th width="10%">申请代金券</th>
 				</tr>
 			</thead>
 			<tbody id="tablebody">
 			</tbody>
 		</table>
 	</div>
-	<div id="SRModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
-</div> 
+	<div id="UserModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    </div> 
+</div>
