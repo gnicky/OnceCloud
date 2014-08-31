@@ -3,9 +3,13 @@ package com.oncecloud.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,189 +32,170 @@ public class AlarmDAO {
 	public Alarm getAlarm(String alarmUuid) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "from Alarm where alarmUuid =:alarmUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("alarmUuid", alarmUuid);
-			return (Alarm) query.uniqueResult();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Alarm.class).add(
+					Restrictions.eq("alarmUuid", alarmUuid));
+			Alarm alarm = (Alarm) criteria.uniqueResult();
+			session.getTransaction().commit();
+			return alarm;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
 	}
 
 	public boolean updateAlarm(Alarm alarm) {
 		Session session = null;
-		Transaction transaction = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			transaction = session.beginTransaction();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			session.update(alarm);
-			transaction.commit();
+			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (transaction != null) {
-				transaction.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 			return false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
 	}
 
 	public boolean removeAlarm(Alarm alarm) {
 		Session session = null;
-		Transaction transaction = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			transaction = session.beginTransaction();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			session.delete(alarm);
-			transaction.commit();
+			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (transaction != null) {
-				transaction.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 			return false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Alarm> getOnePageList(int userId, int page, int limit, String search) {
-		List<Alarm> alrmList = null;
+	public List<Alarm> getOnePageList(int userId, int pageIndex,
+			int itemPerPage, String keyword) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			int startPos = (page - 1) * limit;
-			String queryString = "from Alarm where alarmUid = :userId and alarmName like '%:search%' order by alarmDate desc";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", search);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			alrmList = query.list();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPosition = (pageIndex - 1) * itemPerPage;
+			Criteria criteria = session
+					.createCriteria(Alarm.class)
+					.add(Restrictions.eq("alarmUid", userId))
+					.add(Restrictions.like("alarmName", keyword,
+							MatchMode.ANYWHERE))
+					.addOrder(Order.desc("alarmDate"));
+			criteria.setFirstResult(startPosition);
+			criteria.setMaxResults(itemPerPage);
+			List<Alarm> list = criteria.list();
+			session.getTransaction().commit();
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return alrmList;
 	}
 
-	public int countAlarmList(int userId, String search) {
-		int count = 0;
+	public int countAlarmList(int userId, String keyword) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Alarm where alarmUid= :userId and alarmName like '%:search%'";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", search);
-			count = ((Number) query.iterate().next()).intValue();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Alarm.class)
+					.add(Restrictions.eq("alarmUid", userId))
+					.add(Restrictions.like("alarmName", keyword,
+							MatchMode.ANYWHERE));
+			criteria.setProjection(Projections.rowCount());
+			int count = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return 0;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return 0;
 		}
-		return count;
 	}
 
 	public boolean addAlarm(String alarmUuid, String alarmName,
 			Integer alarmType, Integer alarmIsalarm, Integer alarmTouch,
 			Integer alarmPeriod, int userId) {
-		Transaction transaction = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			transaction = session.beginTransaction();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Date alarmDate = new Date();
-			Alarm alram = new Alarm(alarmUuid, alarmName, alarmType, alarmDate,
+			Alarm alarm = new Alarm(alarmUuid, alarmName, alarmType, alarmDate,
 					alarmIsalarm, alarmTouch, alarmPeriod, userId);
-			session.save(alram);
-			transaction.commit();
+			session.save(alarm);
+			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (transaction != null) {
-				transaction.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 			return false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
 	}
 
 	public boolean updateName(String alarmUuid, String newName,
 			String description) {
 		Session session = null;
-		Transaction transaction = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			transaction = session.beginTransaction();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "update Alarm set alarmName=:name, alarmDesc=:desc where alarmUuid=:uuid";
 			Query query = session.createQuery(queryString);
 			query.setString("name", newName);
 			query.setString("uuid", alarmUuid);
 			query.setString("desc", description);
 			query.executeUpdate();
-			transaction.commit();
+			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (transaction != null) {
-				transaction.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 			return false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
 	}
 
 	public boolean updatePeriod(String alarmUuid, int alarmPeriod) {
 		Session session = null;
-		Transaction transaction = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			transaction = session.beginTransaction();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "update Alarm set alarmPeriod=:alarmPeriod where alarmUuid=:uuid";
 			Query query = session.createQuery(queryString);
 			query.setString("uuid", alarmUuid);
 			query.setInteger("alarmPeriod", alarmPeriod);
 			query.executeUpdate();
-			transaction.commit();
+			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (transaction != null) {
-				transaction.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 			return false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
 	}
 }
