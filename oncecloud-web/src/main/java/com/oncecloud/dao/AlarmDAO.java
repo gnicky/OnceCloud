@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -160,12 +159,14 @@ public class AlarmDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update Alarm set alarmName=:name, alarmDesc=:desc where alarmUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", alarmUuid);
-			query.setString("desc", description);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(Alarm.class).add(
+					Restrictions.eq("alarmUuid", alarmUuid));
+			Alarm alarm = (Alarm) criteria.uniqueResult();
+			if (alarm != null) {
+				alarm.setAlarmName(newName);
+				alarm.setAlarmDesc(description);
+				session.update(alarm);
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -182,11 +183,13 @@ public class AlarmDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update Alarm set alarmPeriod=:alarmPeriod where alarmUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("uuid", alarmUuid);
-			query.setInteger("alarmPeriod", alarmPeriod);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(Alarm.class).add(
+					Restrictions.eq("alarmUuid", alarmUuid));
+			Alarm alarm = (Alarm) criteria.uniqueResult();
+			if (alarm != null) {
+				alarm.setAlarmPeriod(alarmPeriod);
+				session.update(alarm);
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
