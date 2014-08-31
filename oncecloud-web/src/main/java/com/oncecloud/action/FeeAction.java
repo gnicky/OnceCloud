@@ -40,15 +40,7 @@ public class FeeAction extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		String action = request.getParameter("action");
-		if (action.equals("getlist")) {
-			int page = Integer.parseInt(request.getParameter("page"));
-			int limit = Integer.parseInt(request.getParameter("limitnum"));
-			String searchStr = request.getParameter("search");
-			String type = request.getParameter("type");
-			JSONArray ja = this.getFeeManager().feeGetList(page, limit,
-					searchStr, type, user);
-			out.print(ja.toString());
-		} else if (action.equals("getdetaillist")) {
+		if (action.equals("getdetaillist")) {
 			int page = Integer.parseInt(request.getParameter("page"));
 			int limit = Integer.parseInt(request.getParameter("limitnum"));
 			String searchStr = request.getParameter("search");
@@ -56,20 +48,6 @@ public class FeeAction extends HttpServlet {
 			String uuid = request.getParameter("uuid");
 			JSONArray ja = this.getFeeManager().feeGetDetailList(page, limit,
 					searchStr, type, uuid, user);
-			out.print(ja.toString());
-		} else if (action.equals("initfee")) {
-			int userid = user.getUserId();
-			JSONObject jo = this.getFeeManager().feeInitfee(userid);
-			out.print(jo.toString());
-		} else if (action.equals("querylist")) {
-			int userid = user.getUserId();
-			int page = Integer.parseInt(request.getParameter("page"));
-			int limit = Integer.parseInt(request.getParameter("limitnum"));
-			String searchStr = request.getParameter("search");
-			String type = request.getParameter("type");
-			String monthStr = request.getParameter("month");
-			JSONArray ja = this.getFeeManager().feeQuerylist(userid, page,
-					limit, searchStr, type, monthStr);
 			out.print(ja.toString());
 		}
 	}

@@ -160,4 +160,40 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
+	
+	@RequestMapping(value = "/expense/summary", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView expenseSummary(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		User user = (User) request.getSession().getAttribute("user");
+		model.put("sideActive", 10);
+		model.put("title", "计费清单");
+		if (user.getUserLevel() > 0) {
+			return new ModelAndView("user/expensesummary", model);
+		} else {
+			return new ModelAndView(new RedirectView("/dashboard"));
+		}
+	}
+	
+	@RequestMapping(value = "/expense/query", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView expenseQuery(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		User user = (User) request.getSession().getAttribute("user");
+		model.put("sideActive", 10);
+		model.put("title", "计费查询");
+		if (user.getUserLevel() > 0) {
+			return new ModelAndView("user/expensequery", model);
+		} else {
+			return new ModelAndView(new RedirectView("/dashboard"));
+		}
+	}
 }

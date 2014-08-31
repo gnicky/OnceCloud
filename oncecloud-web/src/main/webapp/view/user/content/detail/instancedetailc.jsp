@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String instanceid = "i-" + instanceUuid.substring(0, 8);
-%>
-<div class="content detail" id="platformcontent" platformUserId="<%=user.getUserId()%>" vncServer="<%=vncServer%>" instanceUuid="<%=instanceUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent"  novnc="${vncServer}" uuid="${uuid}" basePath="${basePath}">
 	<div class="intro">
 		<h1>主机&nbsp;Instance</h1>
 		<p class="lead">
@@ -12,8 +9,8 @@
 	<div class="row" style="margin:0; border-bottom: 1px solid #f3f3f3">
 		<div class="col-md-4">	
 			<ol class="breadcrumb oc-crumb" style="border-bottom:none">
-				<li><a href="<%=basePath %>user/instance.jsp"><span class="glyphicon glyphicon-cloud cool-orange"></span><span class="ctext">INSTANCE</span></a></li>
-				<li class="active"><a href="<%=basePath %>user/detail/instancedetail.jsp"><%=instanceid %></a></li>
+				<li><a href="${basePath}user/instance.jsp"><span class="glyphicon glyphicon-cloud cool-orange"></span><span class="ctext">INSTANCE</span></a></li>
+				<li class="active"><a href="${basePath}user/detail/instancedetail.jsp">${uuid}</a></li>
 			</ol>
 		</div>
 		<div class="col-md-8">
@@ -102,13 +99,13 @@
 		</div>
 	</div>
 	</div>
-	<div id="imageview" style="display:none">
+	<div id="imageview" style="display:none"></div>
 	<input type="hidden" id="instancestate" value=0>
 	<input type="hidden" id="vnUuid" value=''>
 	<input type="hidden" id="vnrouterUuid" value=''>
-	<input type="hidden" id="instanceid" value="<%=instanceid %>">
+	<input type="hidden" id="instanceid" value="${uuid}">
 	 <div class="col-md-8">
-	   <div class="graph-wrapper"><h2 class="graph-title">Instance: <%=instanceid %> 结构示意图</h2>
+	   <div class="graph-wrapper"><h2 class="graph-title">Instance: ${uuid} 结构示意图</h2>
 	   <div class="col-md-2 actions">
 	      <div class="graph-actions"><a id="uistart" class="btn btn-forbidden" href="#" >
 	       <span class="glyphicon glyphicon-play"></span>
@@ -122,9 +119,9 @@
 	        <a class="btn btn-forbidden" href="#">
 	        <span class="glyphicon glyphicon-cog"></span>
 	        <span class="text">更改配置</span></a> -->
-	        <a id="createimage" class="btn" href="#" url="<%=basePath %>user/create/createimage.jsp">
+	        <a id="createimage" class="btn" href="#" url="${basePath}user/create/createimage.jsp">
 	        <span class="glyphicon glyphicon-record"></span><span class="text">制作映像</span></a>
-	        <a id="backup" class="btn" href="#" url="<%=basePath %>user/create/createsnapshot.jsp"><span class="glyphicon glyphicon-camera"></span>
+	        <a id="backup" class="btn" href="#" url="${basePath}user/create/createsnapshot.jsp"><span class="glyphicon glyphicon-camera"></span>
 	        <span class="text">备份</span></a>
 	     <!--    <a class="btn" href="#">
 	        <span class="glyphicon glyphicon-repeat"></span><span class="text">重置</span></a> -->
@@ -172,9 +169,8 @@
                </div>
 	        
 	        
-	        <!-- 路由网络 结束 -->
-	        
-	         <!--    公网ip开始 -->
+	         <!-- 路由网络 结束 -->
+	         <!-- 公网IP开始 -->
 	          <div class="graph-component component-instance-network" id="instancenetworkDiv" style="display:none">
 	          <div class="graph-component component-instance-cloud"></div>
               <a id="bingpublic" class="btn" href="#" >
@@ -191,17 +187,16 @@
                      <span class="vxnet-name">基础网络</span>
              </div>
 	         </div>
-	       <!--    公网ip结束 -->
-	       
-	       <!--    防火墙开始 -->
+	       <!-- 公网IP结束 -->
+	       <!-- 防火墙开始 -->
 	         <div class="graph-component component-instance-sg" id="instancesgDiv" style="display:none">
 	              <a class="sg-name"  data-permalink="" id="firewallId">缺省防火墙</a>
 	              <a class="btn" href="#" id="bingfirewall"><span class="glyphicon glyphicon-pencil"></span>
 	                 <span class="text">加载防火墙规则</span>
 	              </a>
 	         </div>
-	       <!--    防火墙结束 --> 
-	       <!--    主机开始 -->
+	       <!-- 防火墙结束 --> 
+	       <!-- 主机开始 -->
 	         <div class="graph-component component-instance connected" id="instanceID">
 			      <a class="btn-delete" href="#" data-id="vxnet-0" id="instanceNetID">
 			          <span class="glyphicon glyphicon-pencil"></span>
@@ -209,38 +204,13 @@
 	              <span class="private-ip"></span>
 	              <span class="instance-name"></span>
 	         </div>
-	       <!--    主机结束 -->
-	       <!--    硬盘开始 -->
+	       <!-- 主机结束 -->
+	       <!-- 硬盘开始 -->
 	         <div class="graph-component component-instance-volumes">
-	       
 	           <div class="col-md-12 tree" id="instance-volumeDiv">
-	                <!--  <div class="col-md-4 instance-volume component-instance-volume">
-	                  <a class="btn-delete" href="#" data-id="vol-dtskb0rv">
-	                  <span class="glyphicon glyphicon-remove"></span></a>
-	                  <span class="size">10 G</span>
-	                  <a class="volume-name" href="/user/volumes/vol-dtskb0rv/" data-permalink="">2</a>
-	                </div>
-	                  <div class="col-md-4 instance-volume component-instance-volume">
-	                  <a class="btn-delete" href="#" data-id="vol-dtskb0rv">
-	                  <span class="glyphicon glyphicon-remove"></span></a>
-	                  <span class="size">10 G</span>
-	                  <a class="volume-name" href="/user/volumes/vol-dtskb0rv/" data-permalink="">2</a>
-	                </div> 
-	                  <div class="col-md-4 component-instance-volume none">
-	                       <a class="btn" href="#" id="bindvolumes"><span class="glyphicon glyphicon-hdd"></span>
-	                       <span class="text">加载硬盘</span></a>
-	                 </div> -->
-	           </div>
-	         </div>
-	       <!--    硬盘结束 -->
-	       
-	       <!-- 
-	       <div class="instance-keypairs"><a class="btn" href="#"><span class="icon icon-keypairs"></span>
-	       <span class="text">加载SSH密钥</span></a></div> -->
-	       
 	       <div class="graph-resource-snapshots" style="width: 0px;"></div></div></div>
+	   	   <!-- 硬盘结束 -->
 	   </div>
-
 	  <div class="col-md-4">
 	    	<div class="detail-item">
 			<div class="title">

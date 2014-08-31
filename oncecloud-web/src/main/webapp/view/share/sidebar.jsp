@@ -164,7 +164,7 @@
 							class="name">操作日志</span><span class="title">Activities</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==10}">class="active"</c:if>><a
-						href="${basePath}expensesummary"><span
+						href="${basePath}expense/summary"><span
 							class="glyphicon glyphicon-shopping-cart cool-red"></span><span
 							class="name">消费记录</span><span class="title">Consumptions</span></a>
 						<div class="cool-border"></div></li>

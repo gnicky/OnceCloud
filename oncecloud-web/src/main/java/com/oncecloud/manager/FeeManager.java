@@ -26,40 +26,43 @@ public class FeeManager {
 		this.feeDAO = feeDAO;
 	}
 
-	public JSONArray feeGetList(int page, int limit, String searchStr,
-			String type, User user) {
+	/**
+	 * 获取用户计费列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param type
+	 * @return
+	 */
+	public JSONArray getFeeList(int userId, int page, int limit, String search,
+			String type) {
 		JSONArray ja = new JSONArray();
 		int totalNum = 0;
 		List<Object> feeObjList = new ArrayList<Object>();
 		if (type.equals("instance")) {
-			totalNum = this.getFeeDAO().countAllFeeVMList(searchStr,
-					user.getUserId());
+			totalNum = this.getFeeDAO().countAllFeeVMList(search, userId);
 			feeObjList = this.getFeeDAO().getOnePageFeeVMList(page, limit,
-					searchStr, user.getUserId());
+					search, userId);
 		} else if (type.equals("volume")) {
-			totalNum = this.getFeeDAO().countAllFeeVolumeList(searchStr,
-					user.getUserId());
+			totalNum = this.getFeeDAO().countAllFeeVolumeList(search, userId);
 			feeObjList = this.getFeeDAO().getOnePageFeeVolumeList(page, limit,
-					searchStr, user.getUserId());
+					search, userId);
 		} else if (type.equals("snapshot")) {
-			totalNum = this.getFeeDAO().countAllFeeSnapshotList(searchStr,
-					user.getUserId());
+			totalNum = this.getFeeDAO().countAllFeeSnapshotList(search, userId);
 			feeObjList = this.getFeeDAO().getOnePageFeeSnapshotList(page,
-					limit, searchStr, user.getUserId());
+					limit, search, userId);
 		} else if (type.equals("image")) {
-			totalNum = this.getFeeDAO().countAllFeeImageList(searchStr,
-					user.getUserId());
+			totalNum = this.getFeeDAO().countAllFeeImageList(search, userId);
 			feeObjList = this.getFeeDAO().getOnePageFeeImageList(page, limit,
-					searchStr, user.getUserId());
+					search, userId);
 		} else if (type.equals("eip")) {
-			totalNum = this.getFeeDAO().countAllFeeEipList(searchStr,
-					user.getUserId());
+			totalNum = this.getFeeDAO().countAllFeeEipList(search, userId);
 			feeObjList = this.getFeeDAO().getOnePageFeeEipList(page, limit,
-					searchStr, user.getUserId());
+					search, userId);
 		}
-		JSONObject tn = new JSONObject();
-		tn.put("totalpage", totalNum);
-		ja.put(tn);
+		ja.put(totalNum);
 		for (int i = 0; i < feeObjList.size(); i++) {
 			JSONObject jo = new JSONObject();
 			Object[] obj = (Object[]) feeObjList.get(i);
@@ -74,7 +77,7 @@ public class FeeManager {
 		return ja;
 	}
 
-	public JSONArray feeGetDetailList(int page, int limit, String searchStr,
+	public JSONArray feeGetDetailList(int page, int limit, String search,
 			String type, String uuid, User user) {
 		JSONArray ja = new JSONArray();
 		int totalNum = 0;
@@ -83,27 +86,27 @@ public class FeeManager {
 			totalNum = this.getFeeDAO().countFeeVMDetailList(user.getUserId(),
 					uuid);
 			feeObjList = this.getFeeDAO().getFeeVMDetailList(page, limit,
-					searchStr, user.getUserId(), uuid);
+					search, user.getUserId(), uuid);
 		} else if (type.equals("volume")) {
 			totalNum = this.getFeeDAO().countFeeVolumeDetailList(
 					user.getUserId(), uuid);
 			feeObjList = this.getFeeDAO().getFeeVolumeDetailList(page, limit,
-					searchStr, user.getUserId(), uuid);
+					search, user.getUserId(), uuid);
 		} else if (type.equals("snapshot")) {
 			totalNum = this.getFeeDAO().countFeeSnapshotDetailList(
 					user.getUserId(), uuid);
 			feeObjList = this.getFeeDAO().getFeeSnapshotDetailList(page, limit,
-					searchStr, user.getUserId(), uuid);
+					search, user.getUserId(), uuid);
 		} else if (type.equals("image")) {
 			totalNum = this.getFeeDAO().countFeeImageDetailList(
 					user.getUserId(), uuid);
 			feeObjList = this.getFeeDAO().getFeeImageDetailList(page, limit,
-					searchStr, user.getUserId(), uuid);
+					search, user.getUserId(), uuid);
 		} else if (type.equals("eip")) {
 			totalNum = this.getFeeDAO().countFeeEipDetailList(user.getUserId(),
 					uuid);
 			feeObjList = this.getFeeDAO().getFeeEipDetailList(page, limit,
-					searchStr, user.getUserId(), uuid);
+					search, user.getUserId(), uuid);
 		}
 		JSONObject tn = new JSONObject();
 		tn.put("totalpage", totalNum);
@@ -120,12 +123,18 @@ public class FeeManager {
 		return ja;
 	}
 
-	public JSONObject feeInitfee(int userid) {
-		double instanceFee = this.getFeeDAO().getVmTotalFee(userid);
-		double volumeFee = this.getFeeDAO().getVolumeTotalFee(userid);
-		double snapshotFee = this.getFeeDAO().getSnapshotTotalFee(userid);
-		double imageFee = this.getFeeDAO().getImageTotalFee(userid);
-		double eipFee = this.getFeeDAO().getEipTotalFee(userid);
+	/**
+	 * 用户计费清单
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public JSONObject getFeeSummary(int userId) {
+		double instanceFee = this.getFeeDAO().getVmTotalFee(userId);
+		double volumeFee = this.getFeeDAO().getVolumeTotalFee(userId);
+		double snapshotFee = this.getFeeDAO().getSnapshotTotalFee(userId);
+		double imageFee = this.getFeeDAO().getImageTotalFee(userId);
+		double eipFee = this.getFeeDAO().getEipTotalFee(userId);
 		double totalFee = instanceFee + volumeFee + snapshotFee + imageFee
 				+ eipFee;
 		JSONObject jo = new JSONObject();
@@ -138,42 +147,51 @@ public class FeeManager {
 		return jo;
 	}
 
-	public JSONArray feeQuerylist(int userid, int page, int limit,
-			String searchStr, String type, String monthStr) {
-		Date month = Utilities.String2Month(monthStr);
-		Date nextMonth = Utilities.AddMonthForDate(month, 1);
+	/**
+	 * 用户计费查询
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param type
+	 * @param month
+	 * @return
+	 */
+	public JSONArray getQueryList(int userId, int page, int limit,
+			String search, String type, String month) {
 		JSONArray ja = new JSONArray();
+		Date thisMonth = Utilities.String2Month(month);
+		Date nextMonth = Utilities.AddMonthForDate(thisMonth, 1);
 		int totalNum = 0;
 		List<Object> feeObjList = new ArrayList<Object>();
 		if (type.equals("instance")) {
-			totalNum = this.getFeeDAO().countFeeVMDetailList(userid, month,
+			totalNum = this.getFeeDAO().countFeeVMDetailList(userId, thisMonth,
 					nextMonth);
 			feeObjList = this.getFeeDAO().getFeeVMDetailList(page, limit,
-					searchStr, userid, month, nextMonth);
+					search, userId, thisMonth, nextMonth);
 		} else if (type.equals("volume")) {
-			totalNum = this.getFeeDAO().countFeeVolumeDetailList(userid, month,
-					nextMonth);
+			totalNum = this.getFeeDAO().countFeeVolumeDetailList(userId,
+					thisMonth, nextMonth);
 			feeObjList = this.getFeeDAO().getFeeVolumeDetailList(page, limit,
-					searchStr, userid, month, nextMonth);
+					search, userId, thisMonth, nextMonth);
 		} else if (type.equals("snapshot")) {
-			totalNum = this.getFeeDAO().countFeeSnapshotDetailList(userid,
-					month, nextMonth);
+			totalNum = this.getFeeDAO().countFeeSnapshotDetailList(userId,
+					thisMonth, nextMonth);
 			feeObjList = this.getFeeDAO().getFeeSnapshotDetailList(page, limit,
-					searchStr, userid, month, nextMonth);
+					search, userId, thisMonth, nextMonth);
 		} else if (type.equals("image")) {
-			totalNum = this.getFeeDAO().countFeeImageDetailList(userid, month,
-					nextMonth);
+			totalNum = this.getFeeDAO().countFeeImageDetailList(userId,
+					thisMonth, nextMonth);
 			feeObjList = this.getFeeDAO().getFeeImageDetailList(page, limit,
-					searchStr, userid, month, nextMonth);
+					search, userId, thisMonth, nextMonth);
 		} else if (type.equals("eip")) {
-			totalNum = this.getFeeDAO().countFeeEipDetailList(userid, month,
-					nextMonth);
+			totalNum = this.getFeeDAO().countFeeEipDetailList(userId,
+					thisMonth, nextMonth);
 			feeObjList = this.getFeeDAO().getFeeEipDetailList(page, limit,
-					searchStr, userid, month, nextMonth);
+					search, userId, thisMonth, nextMonth);
 		}
-		JSONObject tn = new JSONObject();
-		tn.put("totalpage", totalNum);
-		ja.put(tn);
+		ja.put(totalNum);
 		for (int i = 0; i < feeObjList.size(); i++) {
 			JSONObject jo = new JSONObject();
 			Object[] obj = (Object[]) feeObjList.get(i);

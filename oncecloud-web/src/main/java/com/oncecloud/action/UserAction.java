@@ -144,11 +144,6 @@ public class UserAction extends HttpServlet {
 				this.getUserManager().doQuotaUpdate(quotaid, changerId, eip,
 						vm, bk, img, vol, ssh, fw, rt, vlan, lb, disk, bw, mem,
 						cpu, userId);
-			} else if (action.equals("getbalance")) {
-				double userBalance = user.getUserBalance();
-				JSONObject jo = new JSONObject();
-				jo.put("balance", userBalance);
-				out.print(jo.toString());
 			} else if (action.equals("getcompanylist")) {
 				JSONArray ja = this.getUserManager().doGetCompanyList();
 				out.print(ja.toString());
