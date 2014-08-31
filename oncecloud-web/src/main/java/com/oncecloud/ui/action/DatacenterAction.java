@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.DatacenterManager;
+import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/DatacenterAction")
 @Controller
@@ -32,6 +33,18 @@ public class DatacenterAction {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			JSONArray ja = this.getDatacenterManager().getOverview();
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/DCList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String dcList(HttpServletRequest request, ListModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getDatacenterManager().getDatacenterList(list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

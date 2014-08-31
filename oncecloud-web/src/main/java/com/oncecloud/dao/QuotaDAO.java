@@ -40,7 +40,7 @@ public class QuotaDAO {
 		Quota quota = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session.createQuery("from Quota where quotaUID = "
 					+ quotaUID + " and quotaType = 1");
 			List<Quota> quotaList = query.list();
@@ -62,7 +62,7 @@ public class QuotaDAO {
 		Quota quota = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session.createQuery("from Quota where quotaUID = "
 					+ quotaUID + " and quotaType = 0");
 			List<Quota> quotaList = query.list();
@@ -126,7 +126,7 @@ public class QuotaDAO {
 	public synchronized void changeQuotaBandwidth(int quotaUID, int size) {
 		Quota quotaUsed = getQuotaUsed(quotaUID);
 		quotaUsed.setQuotaBandwidth(quotaUsed.getQuotaBandwidth() + size);
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		session.update(quotaUsed);
 		tx.commit();
@@ -156,7 +156,7 @@ public class QuotaDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(newQuota);
 			tx.commit();

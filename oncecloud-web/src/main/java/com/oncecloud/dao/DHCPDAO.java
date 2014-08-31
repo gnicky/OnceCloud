@@ -65,7 +65,7 @@ public class DHCPDAO {
 		Transaction tx = null;
 		Connection c = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			c = this.getConstant().getConnection(1);
 			List<DHCP> dhcpList = new ArrayList<DHCP>();
@@ -120,7 +120,7 @@ public class DHCPDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from DHCP where tenantUuid = null order by rand()");
 			query.setFirstResult(0);
@@ -152,7 +152,7 @@ public class DHCPDAO {
 		DHCP dhcp = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from DHCP where dhcpMac = :dhcpMac";
 			Query query = session.createQuery(queryString);
 			query.setString("dhcpMac", dhcpMac);
@@ -175,7 +175,7 @@ public class DHCPDAO {
 		boolean result = false;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from DHCP where dhcpIp = :dhcpIp";
 			Query query = session.createQuery(queryString);
 			query.setString("dhcpIp", dhcpIp);
@@ -202,7 +202,7 @@ public class DHCPDAO {
 			if (dhcp != null) {
 				dhcp.setTenantUuid(null);
 				dhcp.setDepenType(null);
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(dhcp);
 				tx.commit();
@@ -226,7 +226,7 @@ public class DHCPDAO {
 		List<DHCP> dcList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from DHCP where dhcpIp like '%" + search
 					+ "%' order by tenantUuid desc, dhcpIp";
@@ -248,7 +248,7 @@ public class DHCPDAO {
 		int total = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from DHCP where dhcpIp like '%"
 					+ search + "%'";
 			Query query = session.createQuery(queryString);
@@ -269,7 +269,7 @@ public class DHCPDAO {
 		Transaction tx = null;
 		try {
 			DHCP dhcp = this.getDHCP(mac);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.delete(dhcp);
 			this.getOverViewDAO().updateOverViewfield(session, "viewDhcp",

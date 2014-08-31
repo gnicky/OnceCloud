@@ -45,7 +45,7 @@ public class DatacenterDAO {
 		Datacenter dc = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Datacenter where dcUuid = :dcUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("dcUuid", dcUuid);
@@ -76,7 +76,7 @@ public class DatacenterDAO {
 			dc.setDcDesc(dcDesc);
 			dc.setDcStatus(1);
 			dc.setCreateDate(new Date());
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(dc);
 			this.getOverViewDAO().updateOverViewfield(session, "viewDc", true);
@@ -100,7 +100,7 @@ public class DatacenterDAO {
 		List<Datacenter> dcList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Datacenter where dcName like '%"
 					+ search + "%' and dcStatus = 1 order by createDate desc";
@@ -122,7 +122,7 @@ public class DatacenterDAO {
 		int total = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Datacenter where dcName like '%"
 					+ search + "%' and dcStatus = 1";
 			Query query = session.createQuery(queryString);
@@ -145,7 +145,7 @@ public class DatacenterDAO {
 		try {
 			if (delDC != null) {
 				delDC.setDcStatus(0);
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(delDC);
 				String queryString = "update Rack set dcUuid = null where dcUuid = :dcUuid";
@@ -179,7 +179,7 @@ public class DatacenterDAO {
 		List<Datacenter> dcList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Datacenter where dcStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			dcList = query.list();
@@ -199,7 +199,7 @@ public class DatacenterDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Datacenter set dcName=:name,dcLocation=:location,dcDesc=:desc  where dcUuid = :dcUuid";
 			Query query = session.createQuery(queryString);

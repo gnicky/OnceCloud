@@ -33,7 +33,7 @@ public class VDIDAO {
 		int count = -1;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from OCVDI where tplUuid=:tplUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("tplUuid", tplUuid);
@@ -53,7 +53,7 @@ public class VDIDAO {
 		OCVDI vdi = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCVDI where tplUuid=:tplUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("tplUuid", tplUuid);
@@ -74,7 +74,7 @@ public class VDIDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.delete(vdi);
 			tx.commit();
@@ -101,7 +101,7 @@ public class VDIDAO {
 			vdi.setTplUuid(tplUuid);
 			vdi.setVdiUuid(vmUuid);
 			vdi.setCreateDate(new Date());
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(vdi);
 			tx.commit();

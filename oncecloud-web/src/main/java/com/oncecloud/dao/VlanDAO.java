@@ -29,7 +29,7 @@ public class VlanDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Vlan> getVlanOfSwitch(String switchId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Vlan where swUuid ='" + switchId + "'";
 		Query query = session.createQuery(queryString);
 		List<Vlan> vlanList = query.list();

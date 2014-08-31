@@ -37,7 +37,7 @@ public class HostSRDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(hsr);
 			tx.commit();
@@ -57,7 +57,7 @@ public class HostSRDAO {
 
 	@SuppressWarnings("unchecked")
 	public Set<String> getSRList(String hostUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Set<String> srList = new HashSet<String>();
 		Query query = session.createQuery("from HostSR where hostUuid = '"
 				+ hostUuid + "'");

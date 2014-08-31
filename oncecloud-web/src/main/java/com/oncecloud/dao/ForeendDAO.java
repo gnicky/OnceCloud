@@ -51,7 +51,7 @@ public class ForeendDAO {
 		Foreend fore = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Foreend where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("foreUuid", foreUuid);
@@ -101,7 +101,7 @@ public class ForeendDAO {
 			fore.setLbUuid(lbUuid);
 			fore.setForeStatus(1);// 设置正常运行0/禁用,1/正常
 			fore.setCreateDate(new Date());
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(fore);
 			tx.commit();
@@ -134,7 +134,7 @@ public class ForeendDAO {
 		Session session = null;
 		int total = 1;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Foreend where lbUuid=:lbuuid and forePort=:port";
 			Query query = session.createQuery(queryString);
 			query.setString("lbuuid", lbUuid);
@@ -168,7 +168,7 @@ public class ForeendDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Foreend set foreName = :name, forePolicy = :policy where foreUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -196,7 +196,7 @@ public class ForeendDAO {
 		List<Foreend> foreList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Foreend where foreName like '%" + search
 					+ "%' order by foreStatus desc";
@@ -227,7 +227,7 @@ public class ForeendDAO {
 		JSONArray feArray = new JSONArray();
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Foreend where lbUuid ='" + lbUuid
 					+ "' order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -291,7 +291,7 @@ public class ForeendDAO {
 		JSONArray feArray = new JSONArray();
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Foreend where lbUuid ='" + lbUuid
 					+ "' and foreStatus >=1 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -334,7 +334,7 @@ public class ForeendDAO {
 		int total = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Foreend where foreName like '%"
 					+ search + "%'";
 			Query query = session.createQuery(queryString);
@@ -354,7 +354,7 @@ public class ForeendDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			this.getBackendDAO().deleteBackendByFE(session, foreUuid);
 			String queryString = "delete from Foreend where foreUuid = :foreUuid";
@@ -388,7 +388,7 @@ public class ForeendDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Foreend set foreStatus = :state where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
@@ -415,7 +415,7 @@ public class ForeendDAO {
 		List<Foreend> foreList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Foreend order by createDate desc";
 			Query query = session.createQuery(queryString);
 			foreList = query.list();

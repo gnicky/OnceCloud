@@ -42,7 +42,7 @@ public class StorageDAO {
 
 	@SuppressWarnings("unchecked")
 	public Storage getStorage(String srUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Storage sr = null;
 		Query query = session.createQuery("from Storage where srUuid = '"
 				+ srUuid + "'");
@@ -72,7 +72,7 @@ public class StorageDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(storage);
 			this.getOverViewDAO().updateOverViewfield(session, "viewSr", true);
@@ -95,7 +95,7 @@ public class StorageDAO {
 		long size = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("select count(*) from Storage where srUuid = "
 							+ storageId + " and srstatus = 1");
@@ -113,7 +113,7 @@ public class StorageDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean isExist(String srName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Query query = session.createQuery("from Storage where srName = '"
 				+ srName + "' and srstatus = 1");
 		List<Storage> srList = query.list();
@@ -139,7 +139,7 @@ public class StorageDAO {
 		List<Storage> srList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Storage where srName like :search and srstatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -167,7 +167,7 @@ public class StorageDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Storage where srName like :search and srstatus = 1 ";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
@@ -186,7 +186,7 @@ public class StorageDAO {
 		int total = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from HostSR where hostUuid = :hostUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("hostUuid", hostUuid);
@@ -205,7 +205,7 @@ public class StorageDAO {
 		int total = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from HostSR where srUuid = :srUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("srUuid", srUuid);
@@ -225,7 +225,7 @@ public class StorageDAO {
 		Transaction tx = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Storage set srstatus = 0 where srUuid='"
 					+ storageId + "'";
@@ -253,7 +253,7 @@ public class StorageDAO {
 		Session session = null;
 		Storage sr = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from Storage where srAddress = '"
 							+ address.trim() + "' and srstatus = 1");
@@ -276,7 +276,7 @@ public class StorageDAO {
 	public List<Storage> getStorageListByHostId(String poolMaster) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from Storage where srUuid in (select s.srUuid from HostSR s where s.hostUuid= '"
 							+ poolMaster.trim() + "') and srstatus = 1");
@@ -296,7 +296,7 @@ public class StorageDAO {
 	public List<Storage> getStorageListOfRack(String rackUuid) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session.createQuery("from Storage where rackuuid = '"
 					+ rackUuid + "' and srstatus = 1");
 			List<Storage> srList = query.list();
@@ -317,7 +317,7 @@ public class StorageDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			Query query = session
 					.createQuery("update Storage set srName=:name,"

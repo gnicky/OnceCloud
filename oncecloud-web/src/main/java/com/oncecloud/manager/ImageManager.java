@@ -225,7 +225,7 @@ public class ImageManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			OCVM fromVM = this.getVmDAO().getVM(uuid);
 			Connection c = this.getConstant().getConnection(uid);

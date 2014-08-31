@@ -30,41 +30,38 @@ public class DatabaseDAO {
 	}
 
 	public Database getDatabase(String dbUuid) {
-		Database db = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Database where databaseUuid = :dbUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("dbUuid", dbUuid);
 			db = (Database) query.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return db;
 	}
 
 	public Database getAliveDatabase(String dbUuid) {
 		Database db = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Database where databaseUuid = :dbUuid and databaseStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("dbUuid", dbUuid);
 			db = (Database) query.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return db;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -72,7 +69,7 @@ public class DatabaseDAO {
 		Session session = null;
 		String result = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select databaseName from Database where databaseUuid='"
 					+ dbUuid + "'";
 			Query query = session.createQuery(queryString);
@@ -80,12 +77,11 @@ public class DatabaseDAO {
 			result = list.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 
 	public boolean preCreateDatabase(String databaseUuid, String databaseName,
@@ -97,7 +93,7 @@ public class DatabaseDAO {
 		Session session = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Database db = new Database(databaseUuid, databaseName, databaseUID,
 					databaseUser, databasePwd, databaseType,
 					databaseThroughout, databaseMac, databaseIp, databasePort,
@@ -108,14 +104,11 @@ public class DatabaseDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
-		return result;
 	}
 
 	public void updateDatabase(String databaseUuid, int power, String hostUuid) {
@@ -125,19 +118,16 @@ public class DatabaseDAO {
 			Database db = this.getDatabase(databaseUuid);
 			db.setDatabasePower(power);
 			db.setHostUuid(hostUuid);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(db);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
 	}
 
@@ -147,19 +137,16 @@ public class DatabaseDAO {
 		try {
 			Database db = this.getDatabase(databaseUuid);
 			db.setDatabaseStatus(0);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(db);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
 	}
 
@@ -169,7 +156,7 @@ public class DatabaseDAO {
 		List<Database> dbList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Database where databaseUID = " + uid
 					+ " and databaseName like '%" + search
@@ -180,19 +167,18 @@ public class DatabaseDAO {
 			dbList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return dbList;
 	}
 
 	public int countAllDatabaseList(String search, int uid) {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Database where databaseUID = "
 					+ uid
 					+ " and databaseName like '%"
@@ -202,12 +188,11 @@ public class DatabaseDAO {
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return count;
 	}
 
 	public boolean setDBPowerStatus(String uuid, int powerStatus) {
@@ -217,18 +202,18 @@ public class DatabaseDAO {
 		Transaction tx = null;
 		try {
 			db.setDatabasePower(powerStatus);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(db);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
 		}
-		return result;
 	}
 
 	public boolean setDBStatus(String uuid, int state) {
@@ -236,7 +221,7 @@ public class DatabaseDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Database set databaseStatus=" + state
 					+ " where databaseUuid ='" + uuid + "'";
@@ -246,15 +231,11 @@ public class DatabaseDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -263,7 +244,7 @@ public class DatabaseDAO {
 		List<Database> databaseList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Database where databaseUID = "
 					+ uid
@@ -278,19 +259,18 @@ public class DatabaseDAO {
 			databaseList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return databaseList;
 	}
 
 	public int countDatabasesWithoutEIP(String search, int uid) {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Database where databaseUID= "
 					+ uid
 					+ " and databaseName like '%"
@@ -302,11 +282,10 @@ public class DatabaseDAO {
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return count;
 	}
 }

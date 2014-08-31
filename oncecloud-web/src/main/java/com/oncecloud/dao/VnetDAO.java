@@ -47,7 +47,7 @@ public class VnetDAO {
 		Vnet vnet = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Vnet where vnetUuid = :vnetUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("vnetUuid", vnetUuid);
@@ -80,7 +80,7 @@ public class VnetDAO {
 		List<Vnet> vnetList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Vnet where vnetUID = :userId and vnetName like :search order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -110,7 +110,7 @@ public class VnetDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Vnet where vnetUID = :usrId and vnetName like :search";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
@@ -131,7 +131,7 @@ public class VnetDAO {
 		Session session = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Vnet vnet = new Vnet(uuid, userId, name, desc, null, null, null,
 					null, 1, null, new Date());
 			vnet.setVnetID(getFreeVnetID());
@@ -159,7 +159,7 @@ public class VnetDAO {
 		List<Integer> usedVnetList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select vnetID from Vnet";
 			Query query = session.createQuery(queryString);
 			usedVnetList = query.list();
@@ -184,7 +184,7 @@ public class VnetDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "delete from Vnet where vnetUuid=:uuid";
 			Query query = session.createQuery(queryString);
 			tx = session.beginTransaction();
@@ -212,7 +212,7 @@ public class VnetDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCVM set vmVlan=:vnetUuid,vmIp=:ip where vmUuid =:vmUuid";
 			Query query = session.createQuery(queryString);
@@ -240,7 +240,7 @@ public class VnetDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Vnet set dhcpStatus=" + state
 					+ " where vnetUuid ='" + vnetUuid + "'";
@@ -267,7 +267,7 @@ public class VnetDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Vnet set vnetName=:name, vnetDesc=:desc where vnetUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -296,7 +296,7 @@ public class VnetDAO {
 		Session session = null;
 		String result = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select vnetName from Vnet where vnetUuid='"
 					+ vnetuuid + "'";
 			Query query = session.createQuery(queryString);
@@ -321,7 +321,7 @@ public class VnetDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Vnet set vnetNet=:net, vnetGate=:gate, vnetStart=:start, vnetEnd=:end, dhcpStatus=:status, vnetRouter=:routerid, routerMac=:routermac where vnetUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -355,7 +355,7 @@ public class VnetDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Vnet set vnetNet=null, vnetGate=null, vnetStart=null, vnetEnd=null, dhcpStatus=0, vnetRouter=null where vnetUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -382,7 +382,7 @@ public class VnetDAO {
 		Transaction tx = null;
 		Integer count = 0;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "select count(*) from Vnet where vnetUID=:userid "
 					+ " and vnetNet=:net and vnetRouter=:routerid";
@@ -411,7 +411,7 @@ public class VnetDAO {
 		List<Vnet> vxnetsList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Vnet where vnetRouter=:routerid ";
 			Query query = session.createQuery(queryString);
 			query.setString("routerid", routerUuid);
@@ -431,7 +431,7 @@ public class VnetDAO {
 		List<Vnet> vxnetsList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Vnet where vnetUID=:userid ";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userid", userId);

@@ -35,7 +35,7 @@ public class LogDAO {
 		Session session = null;
 		List<OCLog> logList = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = null;
 			if (logStatus == LogConstant.logStatus.全部.ordinal()) {
 				query = session
@@ -74,7 +74,7 @@ public class LogDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(log);
 			tx.commit();

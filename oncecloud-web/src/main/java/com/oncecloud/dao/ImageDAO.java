@@ -54,7 +54,7 @@ public class ImageDAO {
 		Image image = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session.createQuery("from Image where imageUuid = '"
 					+ imageUuid + "'");
 			List<Image> imageList = query.list();
@@ -77,7 +77,7 @@ public class ImageDAO {
 		List<Image> imageList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String poolUuid = this.getUserDAO().getUser(userId)
 					.getUserAllocate();
@@ -124,7 +124,7 @@ public class ImageDAO {
 		int total = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "";
 			if (userLevel == 0) {
 				if (type.equals("system")) {
@@ -169,7 +169,7 @@ public class ImageDAO {
 			image = new Image(imageUId, imageName, imagePwd, imageUID, 20,
 					imagePlatform, 1, imageServer, imageDesc, new Date());
 			image.setPreAllocate(0);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(image);
 			this.getOverViewDAO().updateOverViewfield(session, "viewImage",
@@ -194,7 +194,7 @@ public class ImageDAO {
 		Transaction tx = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Image set imageStatus = 0 where imageUuid='"
 					+ imageId + "'";
@@ -218,7 +218,7 @@ public class ImageDAO {
 	}
 
 	public int countByHost(String hostUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) from Image where imageStatus!=0 and hostUuid='"
 				+ hostUuid + "'";
@@ -238,7 +238,7 @@ public class ImageDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Image set imageName=:name, imageDesc=:desc where imageUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -266,7 +266,7 @@ public class ImageDAO {
 		try {
 			String poolUuid = this.getUserDAO().getUser(userId)
 					.getUserAllocate();
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from Image where imagePlatform = 2 and poolUuid = :poolUuid");
 			query.setString("poolUuid", poolUuid);
@@ -293,7 +293,7 @@ public class ImageDAO {
 		try {
 			String poolUuid = this.getUserDAO().getUser(userId)
 					.getUserAllocate();
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			// 目前使用LB镜像,创建完成后改为=3
 			Query query = session
 					.createQuery("from Image where imagePlatform = 3 and poolUuid = :poolUuid");
@@ -315,7 +315,7 @@ public class ImageDAO {
 		List<Image> imageList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from Image where imageUID = 1 and preAllocate > 0");
 			imageList = query.list();

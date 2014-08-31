@@ -29,7 +29,7 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public OCHost getHost(String hostUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		OCHost host = null;
 		Query query = session.createQuery("from OCHost where hostUuid = '"
 				+ hostUuid + "'");
@@ -43,7 +43,7 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public OCHost getHostFromIp(String hostIp) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		OCHost host = null;
 		Query query = session.createQuery("from OCHost where hostIP = '"
 				+ hostIp + "' and hostStatus = 1");
@@ -60,7 +60,7 @@ public class HostDAO {
 		OCHost host = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from OCHost where poolUuid = :poolUuid and hostStatus = 1 order by rand()");
 			query.setString("poolUuid", poolUuid);
@@ -82,7 +82,7 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageHostList(int page, int limit, String search) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "from OCHost where hostName like '%" + search
 				+ "%' and hostStatus = 1 order by createDate desc";
@@ -97,7 +97,7 @@ public class HostDAO {
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageLoadHostList(int page, int limit,
 			String search, String sruuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "from OCHost where hostName like '%"
 				+ search
@@ -112,7 +112,7 @@ public class HostDAO {
 	}
 
 	public int countAllHostList(String search) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select count(*) from OCHost where hostName like '%"
 				+ search + "%' and hostStatus = 1";
 		Query query = session.createQuery(queryString);
@@ -124,7 +124,7 @@ public class HostDAO {
 		Session session = null;
 		List<OCHost> list = new ArrayList<OCHost>();
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCHost where hostStatus = 1";
 			Query query = session.createQuery(queryString);
 			list = query.list();
@@ -142,7 +142,7 @@ public class HostDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCHost set poolUuid = :poolUuid where hostUuid = :hostUuid";
 			Query query = session.createQuery(queryString);
@@ -164,7 +164,7 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Storage> getSROfHost(String hostUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select sr from Storage sr where sr.srUuid in (select hs.srUuid from HostSR hs where hs.hostUuid='"
 				+ hostUuid + "')";
 		Query query = session.createQuery(queryString);
@@ -178,7 +178,7 @@ public class HostDAO {
 		Transaction tx = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "delete from HostSR where hostUuid=:hid and srUuid=:sid";
 			Query query = session.createQuery(queryString);
@@ -218,7 +218,7 @@ public class HostDAO {
 		List<OCHost> hostList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCHost where poolUuid = :poolUuid and hostStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("poolUuid", poolUuid);
@@ -236,7 +236,7 @@ public class HostDAO {
 		List<OCHost> hostList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCHost where hostStatus = 1";
 			Query query = session.createQuery(queryString);
 			hostList = query.list();
@@ -253,7 +253,7 @@ public class HostDAO {
 		List<OCHost> hostList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCHost where rackUuid = :rackUuid and hostStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("rackUuid", rackUuid);
@@ -272,7 +272,7 @@ public class HostDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String querysString = "update OCHost set hostName=:name,"
 					+ "hostDesc=:desc,rackUuid=:rackid where hostUuid =:hostid";

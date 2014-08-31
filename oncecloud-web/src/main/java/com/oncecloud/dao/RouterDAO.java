@@ -49,7 +49,7 @@ public class RouterDAO {
 		Router router = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Router where routerUuid = :routerUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("routerUuid", routerUuid);
@@ -68,7 +68,7 @@ public class RouterDAO {
 		Router router = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Router where routerUuid = :routerUuid and routerStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("routerUuid", routerUuid);
@@ -98,7 +98,7 @@ public class RouterDAO {
 		List<Router> routerList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Router where routerUID = :userId and routerName like :search and routerStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -131,7 +131,7 @@ public class RouterDAO {
 		List<Router> routerList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Router where routerUID =:routerUID and routerName like '%"
 					+ search
@@ -156,7 +156,7 @@ public class RouterDAO {
 		List<Router> list = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Router where routerUID =:routerUID and routerStatus > 0 and alarmUuid =:alarmUuid order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("routerUID", routerUID);
@@ -183,7 +183,7 @@ public class RouterDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Router where routerUID = :userId and routerName like :search and routerStatus > 0";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
@@ -209,7 +209,7 @@ public class RouterDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Router where routerUID=:routerUID and routerName like '%"
 					+ search + "%' and routerStatus > 0 and alarmUuid is null";
 			Query query = session.createQuery(queryString);
@@ -229,7 +229,7 @@ public class RouterDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Criteria criteria = session.createCriteria(Router.class);
 			criteria.add(Restrictions.ne("routerStatus", 0));
 			if (!host.equals("all")) {
@@ -256,7 +256,7 @@ public class RouterDAO {
 		List<Router> rtList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			Criteria criteria = session.createCriteria(Router.class);
 			criteria.add(Restrictions.ne("routerStatus", 0));
@@ -286,7 +286,7 @@ public class RouterDAO {
 		Session session = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Router router = new Router(uuid, pwd, userId, name, mac, capacity,
 					power, status, fwuuid, createDate);
 			tx = session.beginTransaction();
@@ -318,7 +318,7 @@ public class RouterDAO {
 			router.setHostUuid(hostUuid);
 			router.setRouterIP(ip);
 			router.setFirewallUuid(firewallId);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(router);
 			tx.commit();
@@ -340,7 +340,7 @@ public class RouterDAO {
 		try {
 			Router toDelete = this.getRouter(uuid);
 			toDelete.setRouterStatus(0);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
 			this.getQuotaDAO().updateQuotaField(session, userId, "quotaRoute",
@@ -365,7 +365,7 @@ public class RouterDAO {
 		Transaction tx = null;
 		try {
 			router.setRouterPower(powerStatus);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(router);
 			tx.commit();
@@ -384,7 +384,7 @@ public class RouterDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Router set routerStatus=" + state
 					+ " where routerUuid ='" + routerUuid + "'";
@@ -409,7 +409,7 @@ public class RouterDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Router set firewallUuid=:fid where routerUuid ='"
 					+ routerUuid + "'";
@@ -431,7 +431,7 @@ public class RouterDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Router set routerName=:name, routerDesc=:desc where routerUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -461,7 +461,7 @@ public class RouterDAO {
 		List<Router> routerList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Router where routerUID = "
 					+ uid
@@ -488,7 +488,7 @@ public class RouterDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Router where routerUID= "
 					+ uid
 					+ " and routerName like '%"
@@ -513,7 +513,7 @@ public class RouterDAO {
 		Session session = null;
 		String result = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select routerName from Router where routerUuid='"
 					+ routeruuid + "'";
 			Query query = session.createQuery(queryString);
@@ -544,7 +544,7 @@ public class RouterDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Router set routerName=:name, routerDesc=:desc,routerCapacity=:capacity,firewallUuid=:fwuuid where routerUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -575,7 +575,7 @@ public class RouterDAO {
 		JSONArray routerList = new JSONArray();
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select routerUuid,routerName from Router where routerUID = "
 					+ uid + " and routerStatus <>0 ";
 			Query query = session.createQuery(queryString);
@@ -610,7 +610,7 @@ public class RouterDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Router set alarmUuid=:alarmUuid where routerUuid =:routerUuid";
 			Query query = session.createQuery(queryString);
@@ -636,7 +636,7 @@ public class RouterDAO {
 		boolean result = true;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Router where alarmUuid = :alarmUuid and routerStatus >0";
 			Query query = session.createQuery(queryString);
 			query.setString("alarmUuid", alarmUuid);
@@ -661,7 +661,7 @@ public class RouterDAO {
 		Transaction tx = null;
 		try {
 			rt.setHostUuid(hostUuid);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(rt);
 			tx.commit();

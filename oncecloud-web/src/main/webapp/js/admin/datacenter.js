@@ -21,8 +21,8 @@ function removeAllCheck() {
 }
 
 function allDisable() {
-    $("#delete").addClass('btn-forbidden').attr('disabled', true);
-    $("#update").addClass('btn-forbidden').attr('disabled', true);
+    $("#delete").addClass('btn-forbidden');
+    $("#update").addClass('btn-forbidden');
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
@@ -33,9 +33,9 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         count++;
     });
     if (count > 0) {
-        $("#delete").removeClass('btn-forbidden').attr('disabled', false);
+        $("#delete").removeClass('btn-forbidden');
         if (count == 1) {
-            $("#udpate").removeClass('btn-forbidden').attr('disabled', false);
+            $("#udpate").removeClass('btn-forbidden');
         }
     }
 });
@@ -66,8 +66,8 @@ function getDCList(page, limit, search) {
     $('#tablebody').html("");
     $.ajax({
         type: 'get',
-        url: '/DatacenterAction',
-        data: {action: "getlist", page: page, limitnum: limit, search: search},
+        url: '/DatacenterAction/DCList',
+        data: {page: page, limit: limit, search: search},
         dataType: 'json',
         success: function (array) {
             if (array.length >= 1) {
@@ -131,9 +131,6 @@ $('#tablebody').on('click', '.id', function (event) {
 
 $('#delete').on('click', function (event) {
     event.preventDefault();
-    if ($(this).attr('disabled') == "disabled") {
-        return;
-    }
     var boxes = document.getElementsByName("dcrow");
     var infoList = "";
     for (var i = 0; i < boxes.length; i++) {
@@ -182,9 +179,6 @@ function deleteDC(dcid, dcname) {
                     $(thistr).remove();
                 }
             }
-        },
-        error: function () {
-
         }
     });
 }

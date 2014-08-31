@@ -32,7 +32,7 @@ public class FeeDAO {
 
 	public void insertFeeVM(Integer vmUID, Date startDate, Date endDate,
 			Double vmPrice, Integer vmState, String vmUuid, String vmName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		FeeVM feeVM = new FeeVM(vmUID, startDate, endDate, vmPrice, vmState,
 				vmUuid, vmName);
 		feeVM.setVmExpense();
@@ -44,7 +44,7 @@ public class FeeDAO {
 
 	@SuppressWarnings("unchecked")
 	public void destoryVM(Date endDate, String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryStr = "from FeeVM fv where fv.vmUuid=:uuid and fv.vmState<>0";
 		Query query = session.createQuery(queryStr);
@@ -64,7 +64,7 @@ public class FeeDAO {
 	public void insertFeeVolume(Integer volumeUID, Date startDate,
 			Date endDate, Double volumePrice, Integer volumeState,
 			String volumeUuid, String volumeName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		FeeVolume feeVolume = new FeeVolume(volumeUID, startDate, endDate,
 				volumePrice, volumeState, volumeUuid, volumeName);
 		feeVolume.setVolumeExpense();
@@ -76,7 +76,7 @@ public class FeeDAO {
 
 	@SuppressWarnings("unchecked")
 	public void deleteVolume(Date endDate, String volumeUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryStr = "from FeeVolume fv where fv.volumeUuid=:uuid and fv.volumeState<>0";
 		Query query = session.createQuery(queryStr);
@@ -96,7 +96,7 @@ public class FeeDAO {
 	public void insertFeeSnapshot(Integer snapshotUID, Date startDate,
 			Date endDate, Double snapshotPrice, Integer snapshotState,
 			String vmUuid, String vmName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		FeeSnapshot feeSnapshot = new FeeSnapshot(snapshotUID, startDate,
 				endDate, snapshotPrice, snapshotState, vmUuid, vmName);
 		feeSnapshot.setSnapshotExpense();
@@ -108,7 +108,7 @@ public class FeeDAO {
 
 	@SuppressWarnings({ "unchecked" })
 	public void deleteSnapshot(Date endDate, String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryStr = "from FeeSnapshot fs where fs.vmUuid=:uuid and fs.snapshotState<>0";
 		Query query = session.createQuery(queryStr);
@@ -127,7 +127,7 @@ public class FeeDAO {
 
 	public void insertFeeEip(Integer eipUID, Date startDate, Date endDate,
 			Double eipPrice, Integer eipState, String eipUuid, String eipName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		FeeEip feeEip = new FeeEip(eipUID, startDate, endDate, eipPrice,
 				eipState, eipUuid, eipName);
 		feeEip.setEipExpense();
@@ -139,7 +139,7 @@ public class FeeDAO {
 
 	@SuppressWarnings({ "unchecked" })
 	public void abandonEip(Date endDate, String eipUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryStr = "from FeeEip fe where fe.eipUuid=:uuid and fe.eipState<>0";
 		Query query = session.createQuery(queryStr);
@@ -159,7 +159,7 @@ public class FeeDAO {
 	public void insertFeeImage(Integer imageUID, Date startDate, Date endDate,
 			Double imagePrice, Integer imageState, String imageUuid,
 			String imageName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		FeeImage feeImage = new FeeImage(imageUID, startDate, endDate,
 				imagePrice, imageState, imageUuid, imageName);
 		feeImage.setImageExpense();
@@ -171,7 +171,7 @@ public class FeeDAO {
 
 	@SuppressWarnings("unchecked")
 	public void deleteImage(Date endDate, String imageUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryStr = "from FeeImage fi where fi.imageUuid=:uuid and fi.imageState<>0";
 		Query query = session.createQuery(queryStr);
@@ -191,7 +191,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getOnePageFeeVMList(int page, int limit, String search,
 			int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "select sum(fv.vmExpense), fv1.vmName, fv.vmUuid, fv1.vmState, fv1.vmPrice, min(fv.startDate) "
@@ -210,7 +210,7 @@ public class FeeDAO {
 	}
 
 	public int countAllFeeVMList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(distinct fv.vmUuid) " + "from FeeVM fv "
 				+ "where fv.vmUID=:uid ";
@@ -224,7 +224,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getOnePageFeeVolumeList(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "select sum(fv.volumeExpense), fv.volumeName, fv.volumeUuid, fv1.volumeState, fv1.volumePrice, min(fv.startDate) "
@@ -243,7 +243,7 @@ public class FeeDAO {
 	}
 
 	public int countAllFeeVolumeList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(distinct fv.volumeUuid) "
 				+ "from FeeVolume fv " + "where fv.volumeUID=:uid";
@@ -257,7 +257,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getOnePageFeeImageList(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "select sum(fi.imageExpense), fi.imageName, fi.imageUuid, fi1.imageState, fi1.imagePrice, min(fi.startDate) "
@@ -276,7 +276,7 @@ public class FeeDAO {
 	}
 
 	public int countAllFeeImageList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(distinct fi.imageUuid) "
 				+ "from FeeImage fi " + "where fi.imageUID=:uid";
@@ -290,7 +290,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getOnePageFeeEipList(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "select sum(fe.eipExpense), fe.eipName, fe.eipUuid, fe1.eipState, fe1.eipPrice, min(fe.startDate) "
@@ -309,7 +309,7 @@ public class FeeDAO {
 	}
 
 	public int countAllFeeEipList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(distinct fe.eipUuid) " + "from FeeEip fe "
 				+ "where fe.eipUID=:uid";
@@ -323,7 +323,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getOnePageFeeSnapshotList(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "select sum(fs.snapshotExpense), fs.vmName, fs.vmUuid, fs1.snapshotState, fs1.snapshotPrice, min(fs.startDate) "
@@ -342,7 +342,7 @@ public class FeeDAO {
 	}
 
 	public int countAllFeeSnapshotList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(distinct fs.vmUuid) "
 				+ "from FeeSnapshot fs " + "where fs.snapshotUID=:uid";
@@ -356,7 +356,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeVMDetailList(int page, int limit, String search,
 			int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fv.startDate, fv.endDate, fv.vmExpense, fv.vmPrice from FeeVM fv where fv.vmUuid=:uuid and fv.vmUID=:uid order by fv.startDate desc";
 		Query query = session.createQuery(queryString);
@@ -372,7 +372,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeVMDetailList(int page, int limit, String search,
 			int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fv.vmUuid, fv.startDate, fv.endDate, fv.vmExpense, fv.vmPrice "
 				+ "from FeeVM fv where fv.vmUID=:uid "
@@ -391,7 +391,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeVolumeDetailList(int page, int limit,
 			String search, int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fv.startDate, fv.endDate, fv.volumeExpense, fv.volumePrice from FeeVolume fv where fv.volumeUuid=:uuid and fv.volumeUID=:uid order by fv.startDate desc";
 		Query query = session.createQuery(queryString);
@@ -407,7 +407,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeVolumeDetailList(int page, int limit,
 			String search, int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fv.volumeUuid, fv.startDate, fv.endDate, fv.volumeExpense, fv.volumePrice "
 				+ "from FeeVolume fv where fv.volumeUID=:uid and "
@@ -426,7 +426,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeImageDetailList(int page, int limit,
 			String search, int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fi.startDate, fi.endDate, fi.imageExpense, fi.imagePrice from FeeImage fi where fi.imageUuid=:uuid and fi.imageUID=:uid order by fi.startDate desc";
 		Query query = session.createQuery(queryString);
@@ -442,7 +442,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeImageDetailList(int page, int limit,
 			String search, int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fi.imageUuid, fi.startDate, fi.endDate, fi.imageExpense, fi.imagePrice "
 				+ "from FeeImage fi where fi.imageUID=:uid "
@@ -461,7 +461,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeEipDetailList(int page, int limit, String search,
 			int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fe.startDate, fe.endDate, fe.eipExpense, fe.eipPrice from FeeEip fe where fe.eipUuid=:uuid and fe.eipUID=:uid order by fe.startDate desc";
 		Query query = session.createQuery(queryString);
@@ -477,7 +477,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeEipDetailList(int page, int limit, String search,
 			int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fe.eipUuid, fe.startDate, fe.endDate, fe.eipExpense, fe.eipPrice "
 				+ "from FeeEip fe "
@@ -497,7 +497,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeSnapshotDetailList(int page, int limit,
 			String search, int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fs.startDate, fs.endDate, fs.snapshotExpense, fs.snapshotPrice from FeeSnapshot fs where fs.vmUuid=:uuid and fs.snapshotUID=:uid order by fs.startDate desc";
 		Query query = session.createQuery(queryString);
@@ -513,7 +513,7 @@ public class FeeDAO {
 	@SuppressWarnings("unchecked")
 	public List<Object> getFeeSnapshotDetailList(int page, int limit,
 			String search, int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "select fs.vmUuid, fs.startDate, fs.endDate, fs.snapshotExpense, fs.snapshotPrice "
 				+ "from FeeSnapshot fs where fs.snapshotUID=:uid "
@@ -530,7 +530,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeVMDetailList(int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) " + "from FeeVM fv "
 				+ "where fv.vmUID=:uid and fv.vmUuid=:uuid";
@@ -543,7 +543,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeVolumeDetailList(int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) " + "from FeeVolume fv "
 				+ "where fv.volumeUID=:uid and fv.volumeUuid=:uuid";
@@ -556,7 +556,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeEipDetailList(int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) " + "from FeeEip fe "
 				+ "where fe.eipUID=:uid and fe.eipUuid=:uuid";
@@ -569,7 +569,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeSnapshotDetailList(int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) " + "from FeeSnapshot fs "
 				+ "where fs.snapshotUID=:uid and fs.vmUuid=:uuid";
@@ -582,7 +582,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeImageDetailList(int uid, String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) " + "from FeeImage fi "
 				+ "where fi.imageUID=:uid and fi.imageUuid=:uuid";
@@ -595,7 +595,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeVMDetailList(int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) "
 				+ "from FeeVM fv "
@@ -610,7 +610,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeVolumeDetailList(int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) "
 				+ "from FeeVolume fv "
@@ -625,7 +625,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeEipDetailList(int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) "
 				+ "from FeeEip fe "
@@ -641,7 +641,7 @@ public class FeeDAO {
 
 	public int countFeeSnapshotDetailList(int uid, Date startMonth,
 			Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) "
 				+ "from FeeSnapshot fs "
@@ -656,7 +656,7 @@ public class FeeDAO {
 	}
 
 	public int countFeeImageDetailList(int uid, Date startMonth, Date endMonth) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) "
 				+ "from FeeImage fi "
@@ -671,7 +671,7 @@ public class FeeDAO {
 	}
 
 	public double getVmTotalFee(int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select sum(fv.vmExpense) from FeeVM fv where fv.vmUID=:uid";
 		Query query = session.createQuery(queryString);
@@ -686,7 +686,7 @@ public class FeeDAO {
 	}
 
 	public double getVolumeTotalFee(int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select sum(fv.volumeExpense) from FeeVolume fv where fv.volumeUID=:uid";
 		Query query = session.createQuery(queryString);
@@ -701,7 +701,7 @@ public class FeeDAO {
 	}
 
 	public double getEipTotalFee(int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select sum(fe.eipExpense) from FeeEip fe where fe.eipUID=:uid";
 		Query query = session.createQuery(queryString);
@@ -716,7 +716,7 @@ public class FeeDAO {
 	}
 
 	public double getImageTotalFee(int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select sum(fi.imageExpense) from FeeImage fi where fi.imageUID=:uid";
 		Query query = session.createQuery(queryString);
@@ -731,7 +731,7 @@ public class FeeDAO {
 	}
 
 	public double getSnapshotTotalFee(int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select sum(fs.snapshotExpense) from FeeSnapshot fs where fs.snapshotUID=:uid";
 		Query query = session.createQuery(queryString);
@@ -751,7 +751,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "from FeeVM fv where fv.vmState<>0 and fv.endDate<:date";
 			Query query = session.createQuery(queryString);
@@ -787,7 +787,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "from FeeVolume fv where fv.volumeState<>0 and fv.endDate<:date";
 			Query query = session.createQuery(queryString);
@@ -823,7 +823,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "from FeeEip fe where fe.eipState<>0 and fe.endDate<:date";
 			Query query = session.createQuery(queryString);
@@ -859,7 +859,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "from FeeImage fi where fi.imageState<>0 and fi.endDate<:date";
 			Query query = session.createQuery(queryString);
@@ -895,7 +895,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "from FeeSnapshot fs where fs.snapshotState<>0 and fs.endDate<:date";
 			Query query = session.createQuery(queryString);
@@ -934,7 +934,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "";
 			queryString = "update FeeVM fv set fv.vmName=:name where fv.vmState<>0 and fv.vmUuid=:uuid";
@@ -964,7 +964,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update FeeVolume set volumeName=:name where volumeState<>0 and volumeUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -993,7 +993,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update FeeEip set eipName=:name where eipState<>0 and eipUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -1022,7 +1022,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update FeeSnapshot set vmName=:name where snapshotState<>0 and vmUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -1051,7 +1051,7 @@ public class FeeDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update FeeImage set imageName=:name where imageState<>0 and imageUuid=:uuid";
 			Query query = session.createQuery(queryString);

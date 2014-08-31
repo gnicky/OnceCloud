@@ -68,7 +68,7 @@ public class OCPool {
 		this.poolMaster = poolMaster;
 	}
 
-	@Column(name = "")
+	@Column(name = "create_date")
 	public Date getCreateDate() {
 		return createDate;
 	}

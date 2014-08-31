@@ -737,7 +737,7 @@ public class HostManager {
 							HostManager.DEFAULT_USER, master.getHostPwd());
 					Host ejectHost = Types.toHost(hostUuid);
 					Pool.eject(conn, ejectHost);
-					session = this.getSessionHelper().openMainSession();
+					session = this.getSessionHelper().getMainSession();
 					tx = session.beginTransaction();
 					host.setPoolUuid(null);
 					session.update(host);
@@ -778,7 +778,7 @@ public class HostManager {
 				Pool.create(conn, poolUuid);
 				targetHost.setPoolUuid(poolUuid);
 				pool.setPoolMaster(hostUuid);
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(targetHost);
 				session.update(pool);
@@ -831,7 +831,7 @@ public class HostManager {
 				break;
 			}
 			// Insert into database
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(host);
 			this.getOverViewDAO().updateOverViewfield(session, "viewServer",
@@ -857,7 +857,7 @@ public class HostManager {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			host.setHostStatus(0);
 			Query query = session
