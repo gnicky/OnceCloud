@@ -2,6 +2,7 @@ package com.oncecloud.test;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,7 @@ public class AlarmDAOTest {
 
 	@Test
 	public void testList() {
-		List<Alarm> alarms = this.getAlarmDAO().getOnePageList(1, 100, 14, "");
-		for (Alarm alarm : alarms) {
-			System.out.println(alarm.getAlarmUuid());
-		}
+		int count = this.getAlarmDAO().countAlarmList("", 14);
+		System.out.println(count);
 	}
 }
