@@ -61,9 +61,8 @@ public class ChargeDAO {
 			Criteria criteria = session.createCriteria(ChargeRecord.class)
 					.add(Restrictions.eq("recordUID", userid))
 					.add(Restrictions.gt("recordState", 0))
-					.addOrder(Order.desc("recordDate"));
-			criteria.setFirstResult(startPos);
-			criteria.setMaxResults(limit);
+					.addOrder(Order.desc("recordDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
 			List<ChargeRecord> list = criteria.list();
 			session.getTransaction().commit();
 			return list;
