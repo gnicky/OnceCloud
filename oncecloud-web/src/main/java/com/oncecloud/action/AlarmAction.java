@@ -91,13 +91,6 @@ public class AlarmAction extends HttpServlet {
 			} else if (action.equals("detail")) {
 				String alarmUuid = request.getParameter("alarmUuid");
 				session.setAttribute("alarmUuid", alarmUuid);
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getAlarmManager().alarmGetList(page, limit,
-						search, userId);
-				out.print(ja.toString());
 			} else if (action.equals("getResource")) {
 				int page = Integer.parseInt(request.getParameter("page"));
 				int limit = Integer.parseInt(request.getParameter("limit"));

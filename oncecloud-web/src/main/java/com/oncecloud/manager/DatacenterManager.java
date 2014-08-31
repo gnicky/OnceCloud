@@ -244,22 +244,28 @@ public class DatacenterManager {
 		return qaArray;
 	}
 
+	/**
+	 * 获取管理员全局视图
+	 * @return
+	 */
 	public JSONArray getOverview() {
 		JSONArray qaArray = new JSONArray();
 		OverView ov = this.getOverViewDAO().getOverViewTotal();
-		JSONObject tObj = new JSONObject();
-		tObj.put("viewId", ov.getViewId());
-		tObj.put("viewDc", ov.getViewDc());
-		tObj.put("viewDhcp", ov.getViewDhcp());
-		tObj.put("viewFirewall", ov.getViewFirewall());
-		tObj.put("viewImage", ov.getViewImage());
-		tObj.put("viewOutip", ov.getViewOutip());
-		tObj.put("viewPool", ov.getViewPool());
-		tObj.put("viewRack", ov.getViewRack());
-		tObj.put("viewServer", ov.getViewServer());
-		tObj.put("viewSr", ov.getViewSr());
-		tObj.put("viewVm", ov.getViewVm());
-		qaArray.put(tObj);
+		if (ov != null) {
+			JSONObject tObj = new JSONObject();
+			tObj.put("viewId", ov.getViewId());
+			tObj.put("viewDc", ov.getViewDc());
+			tObj.put("viewDhcp", ov.getViewDhcp());
+			tObj.put("viewFirewall", ov.getViewFirewall());
+			tObj.put("viewImage", ov.getViewImage());
+			tObj.put("viewOutip", ov.getViewOutip());
+			tObj.put("viewPool", ov.getViewPool());
+			tObj.put("viewRack", ov.getViewRack());
+			tObj.put("viewServer", ov.getViewServer());
+			tObj.put("viewSr", ov.getViewSr());
+			tObj.put("viewVm", ov.getViewVm());
+			qaArray.put(tObj);
+		}
 		return qaArray;
 	}
 

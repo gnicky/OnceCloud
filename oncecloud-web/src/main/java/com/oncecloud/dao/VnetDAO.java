@@ -65,6 +65,15 @@ public class VnetDAO {
 		return vnet;
 	}
 
+	/**
+	 * 获取用户私有网络列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Vnet> getOnePageVnetList(int userId, int page, int limit,
 			String search) {
@@ -73,10 +82,10 @@ public class VnetDAO {
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Vnet where vnetUID = " + userId
-					+ " and vnetName like '%" + search
-					+ "%' order by createDate desc";
+			String queryString = "from Vnet where vnetUID = :userId and vnetName like :search order by createDate desc";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			vnetList = query.list();
@@ -90,14 +99,22 @@ public class VnetDAO {
 		return vnetList;
 	}
 
-	public int countAllVnetList(String search, int uid) {
+	/**
+	 * 获取用户私有网络总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public int countAllVnetList(int userId, String search) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Vnet where vnetUID= "
-					+ uid + " and vnetName like '%" + search + "%' ";
+			String queryString = "select count(*) from Vnet where vnetUID = :usrId and vnetName like :search";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();

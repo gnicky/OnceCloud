@@ -16,16 +16,16 @@ import javax.persistence.Table;
 public class LB {
 	private String lbUuid;
 	private String lbPWD;
-	private int lbUID;
+	private Integer lbUID;
 	private String lbName;
 	private String lbDesc;
 	private String lbIP;
 	private String lbMac;
-	private int lbCapacity;
-	private int lbPower;
+	private Integer lbCapacity;
+	private Integer lbPower;
 	// lbStatus 0=伪删除 1=正常使用 2=修改后尚未提交
-	private int lbStatus;
-	private int lbImportance;
+	private Integer lbStatus;
+	private Integer lbImportance;
 	private String hostUuid;
 	private String firewallUuid;
 	private Date createDate;
@@ -34,8 +34,8 @@ public class LB {
 	public LB() {
 	}
 
-	public LB(String uuid, String pwd, int userId, String name, String mac,
-			int capacity, int power, int status, Date createDate) {
+	public LB(String uuid, String pwd, Integer userId, String name, String mac,
+			Integer capacity, Integer power, Integer status, Date createDate) {
 		this.lbUuid = uuid;
 		this.lbPWD = pwd;
 		this.lbUID = userId;
@@ -67,11 +67,11 @@ public class LB {
 	}
 
 	@Column(name = "lb_uid")
-	public int getLbUID() {
+	public Integer getLbUID() {
 		return lbUID;
 	}
 
-	public void setLbUID(int lbUID) {
+	public void setLbUID(Integer lbUID) {
 		this.lbUID = lbUID;
 	}
 
@@ -112,29 +112,29 @@ public class LB {
 	}
 
 	@Column(name = "lb_capacity")
-	public int getLbCapacity() {
+	public Integer getLbCapacity() {
 		return lbCapacity;
 	}
 
-	public void setLbCapacity(int lbCapacity) {
+	public void setLbCapacity(Integer lbCapacity) {
 		this.lbCapacity = lbCapacity;
 	}
 
 	@Column(name = "lb_power")
-	public int getLbPower() {
+	public Integer getLbPower() {
 		return lbPower;
 	}
 
-	public void setLbPower(int lbPower) {
+	public void setLbPower(Integer lbPower) {
 		this.lbPower = lbPower;
 	}
 
 	@Column(name = "lb_status")
-	public int getLbStatus() {
+	public Integer getLbStatus() {
 		return lbStatus;
 	}
 
-	public void setLbStatus(int lbStatus) {
+	public void setLbStatus(Integer lbStatus) {
 		this.lbStatus = lbStatus;
 	}
 
@@ -175,11 +175,11 @@ public class LB {
 	}
 
 	@Column(name = "lb_importance")
-	public int getLbImportance() {
+	public Integer getLbImportance() {
 		return lbImportance;
 	}
 
-	public void setLbImportance(int lbImportance) {
+	public void setLbImportance(Integer lbImportance) {
 		this.lbImportance = lbImportance;
 	}
 

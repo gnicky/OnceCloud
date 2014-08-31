@@ -83,6 +83,15 @@ public class RouterDAO {
 		return router;
 	}
 
+	/**
+	 * 获取用户路由器列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRouterList(int userId, int page, int limit,
 			String search) {
@@ -91,10 +100,10 @@ public class RouterDAO {
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Router where routerUID = " + userId
-					+ " and routerName like '%" + search
-					+ "%' and routerStatus > 0 order by createDate desc";
+			String queryString = "from Router where routerUID = :userId and routerName like :search and routerStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			routerList = query.list();
@@ -142,12 +151,6 @@ public class RouterDAO {
 		return routerList;
 	}
 
-	/**
-	 * @author hty
-	 * @param alarmUuid
-	 * @param uid
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getAllListAlarm(int routerUID, String alarmUuid) {
 		List<Router> list = null;
@@ -169,17 +172,22 @@ public class RouterDAO {
 		return list;
 	}
 
-	public int countAllRouterList(String search, int uid) {
+	/**
+	 * 获取用户路由器总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public int countAllRouterList(int userId, String search) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Router where routerUID= "
-					+ uid
-					+ " and routerName like '%"
-					+ search
-					+ "%' and routerStatus > 0";
+			String queryString = "select count(*) from Router where routerUID = :userId and routerName like :search and routerStatus > 0";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();

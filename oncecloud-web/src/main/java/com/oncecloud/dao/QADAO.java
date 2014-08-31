@@ -167,8 +167,7 @@ public class QADAO {
 			String queryStr = "select count(*) from QA where qaTitle like '%"
 					+ search + "%' and qaUID = " + qaUID + " and qaStatus < 2";
 			if (user.getUserLevel() == 0) {
-				queryStr = "select count(*) from QA where qaTitle like '%"
-						+ search + "%' and qaStatus < 2";
+				queryStr = "select count(*) from QA where qaTitle like :search and qaStatus < 2";
 			}
 			query = session.createQuery(queryStr);
 			result = ((Number) query.iterate().next()).intValue();

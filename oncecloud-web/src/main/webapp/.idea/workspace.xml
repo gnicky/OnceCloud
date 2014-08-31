@@ -23,27 +23,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="loadbalance.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/user/loadbalance.js">
+      <file leaf-file-name="alarm.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/user/alarm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.63770795" vertical-offset="615" max-vertical-offset="3765">
-              <caret line="64" column="3" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.25210086" vertical-offset="1605" max-vertical-offset="3135">
+              <caret line="117" column="57" selection-start-line="0" selection-start-column="0" selection-end-line="203" selection-end-column="3" />
               <folding>
-                <marker date="1409458876000" expanded="true" signature="4722:4740" placeholder="..." />
-                <marker date="1409458876000" expanded="true" signature="4867:4875" placeholder="..." />
-                <marker date="1409458876000" expanded="true" signature="4906:4923" placeholder="..." />
-                <marker date="1409458876000" expanded="true" signature="5169:5180" placeholder="..." />
+                <marker date="1409464159000" expanded="true" signature="1603:1614" placeholder="..." />
+                <marker date="1409464159000" expanded="true" signature="6121:6132" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="router.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/user/router.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4080">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="1" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -69,6 +57,7 @@
         <option value="$PROJECT_DIR$/js/user/firewall.js" />
         <option value="$PROJECT_DIR$/js/user/elasticip.js" />
         <option value="$PROJECT_DIR$/js/user/loadbalance.js" />
+        <option value="$PROJECT_DIR$/js/user/alarm.js" />
       </list>
     </option>
   </component>
@@ -311,14 +300,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10084034" vertical-offset="0" max-vertical-offset="1875">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="17" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/user/volume.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6302521" vertical-offset="330" max-vertical-offset="4170">
@@ -365,17 +346,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/elasticip.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40336135" vertical-offset="1530" max-vertical-offset="5655">
-          <caret line="118" column="34" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
-          <folding>
-            <marker date="1409457732000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1409457732000" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/user/router.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4080">
@@ -386,13 +356,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/user/loadbalance.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.63770795" vertical-offset="615" max-vertical-offset="3765">
+        <state vertical-scroll-proportion="-6.388889" vertical-offset="615" max-vertical-offset="3765">
           <caret line="64" column="3" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
           <folding>
-            <marker date="1409458876000" expanded="true" signature="4722:4740" placeholder="..." />
-            <marker date="1409458876000" expanded="true" signature="4867:4875" placeholder="..." />
-            <marker date="1409458876000" expanded="true" signature="4906:4923" placeholder="..." />
-            <marker date="1409458876000" expanded="true" signature="5169:5180" placeholder="..." />
+            <marker date="1409459799000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1409459799000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1409459799000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1409459799000" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="1875">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="17" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/elasticip.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5655">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="1" />
+          <folding>
+            <marker date="1409457732000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1409457732000" expanded="false" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/alarm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25210086" vertical-offset="1605" max-vertical-offset="3135">
+          <caret line="117" column="57" selection-start-line="0" selection-start-column="0" selection-end-line="203" selection-end-column="3" />
+          <folding>
+            <marker date="1409464159000" expanded="true" signature="1603:1614" placeholder="..." />
+            <marker date="1409464159000" expanded="true" signature="6121:6132" placeholder="..." />
           </folding>
         </state>
       </provider>

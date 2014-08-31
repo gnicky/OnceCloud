@@ -88,19 +88,19 @@ public class AlarmDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Alarm> getOnePageList(int page, int limit, int alarmUid,
-			String search) {
+	public List<Alarm> getOnePageList(int userId, int page, int limit, String search) {
+		List<Alarm> alrmList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Alarm alarm where alarm.alarmUid =:alarmUid and alarm.alarmName like '%"
-					+ search + "%' order by alarm.alarmDate desc";
+			String queryString = "from Alarm where alarmUid = :userId and alarmName like '%:search%' order by alarmDate desc";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", search);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
-			query.setInteger("alarmUid", alarmUid);
-			return (List<Alarm>) query.list();
+			alrmList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -109,17 +109,19 @@ public class AlarmDAO {
 				session.close();
 			}
 		}
+		return alrmList;
 	}
 
-	public int countAlarmList(String search, int alarmUid) {
+	public int countAlarmList(int userId, String search) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Alarm where alarmUid=:alarmUid and alarmName like '%"
-					+ search + "%'";
+			String queryString = "select count(*) from Alarm where alarmUid= :userId and alarmName like '%:search%'";
 			Query query = session.createQuery(queryString);
-			query.setInteger("alarmUid", alarmUid);
-			return ((Number) query.iterate().next()).intValue();
+			query.setInteger("userId", userId);
+			query.setString("search", search);
+			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -128,6 +130,7 @@ public class AlarmDAO {
 				session.close();
 			}
 		}
+		return count;
 	}
 
 	public boolean addAlarm(String alarmUuid, String alarmName,

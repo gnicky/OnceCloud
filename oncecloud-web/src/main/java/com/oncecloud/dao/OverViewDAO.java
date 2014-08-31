@@ -1,7 +1,5 @@
 package com.oncecloud.dao;
 
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +21,14 @@ public class OverViewDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	@SuppressWarnings("unchecked")
 	public OverView getOverViewTotal() {
-		Session session = null;
 		OverView overView = null;
+		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
-			Query query = session.createQuery("from OverView ");
-			query.setCacheable(false);
-			List<OverView> quotaList = query.list();
-			if (quotaList.size() >= 1) {
-				overView = quotaList.get(0);
-			}
+			Query query = session.createQuery("from OverView");
+			overView = (OverView)query.list().get(0);
 		} catch (Exception e) {
-			System.out.println("出错了：");
 			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {

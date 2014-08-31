@@ -17,7 +17,7 @@ public class Snapshot {
 
 	private String snapshotId;
 	private String snapshotName;
-	private int snapshotSize;
+	private Integer snapshotSize;
 	private Date backupDate;
 	private String snapshotVm;
 	private String snapshotVolume;
@@ -25,7 +25,7 @@ public class Snapshot {
 	public Snapshot() {
 	}
 
-	public Snapshot(String snapshotId, String snapshotName, int snapshotSize,
+	public Snapshot(String snapshotId, String snapshotName, Integer snapshotSize,
 			Date backupDate, String snapshotVm, String snapshotVolume) {
 		this.snapshotId = snapshotId;
 		this.snapshotName = snapshotName;
@@ -55,11 +55,11 @@ public class Snapshot {
 	}
 
 	@Column(name = "snapshot_size")
-	public int getSnapshotSize() {
+	public Integer getSnapshotSize() {
 		return snapshotSize;
 	}
 
-	public void setSnapshotSize(int snapshotSize) {
+	public void setSnapshotSize(Integer snapshotSize) {
 		this.snapshotSize = snapshotSize;
 	}
 

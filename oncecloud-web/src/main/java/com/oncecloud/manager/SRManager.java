@@ -174,6 +174,14 @@ public class SRManager {
 		return ja;
 	}
 
+	/**
+	 * 获取存储列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getStorageList(int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getStorageDAO().countAllStorageList(search);

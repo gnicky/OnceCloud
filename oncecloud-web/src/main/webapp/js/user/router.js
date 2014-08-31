@@ -79,7 +79,7 @@ function getRouterList(page, limit, search) {
             }
             options = {
                 totalPages: totalp
-            }
+            };
             $('#pageDivider').bootstrapPaginator(options);
             pageDisplayUpdate(page, totalp);
             var tableStr = "";
@@ -98,7 +98,7 @@ function getRouterList(page, limit, search) {
                 }
                 var publicip = obj.eip;
                 if (publicip != "") {
-                    publicip = '<a><span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;' + publicip + '</a>'
+                    publicip = '<a><span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;' + publicip + '</a>';
                 }
                 var capacity = obj.capacity;
                 var capStr = "小型";
@@ -229,7 +229,6 @@ function startRouter(uuid) {
 }
 
 function destroyRouter(uuid) {
-    var xmlhttp5;
     var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
     var thisicon = thistr.find('[name="stateicon"]');
     thisicon.removeClass("icon-stopped");

@@ -202,10 +202,18 @@ public class EIPManager {
 		return jo;
 	}
 
+	/**
+	 * 获取公网IP列表
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getEIPList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		try {
-			int totalNum = this.getEipDAO().countAllEipList(search, userId);
+			int totalNum = this.getEipDAO().countAllEipList(userId, search);
 			List<EIP> eipList = this.getEipDAO().getOnePageEipList(userId,
 					page, limit, search);
 			ja.put(totalNum);

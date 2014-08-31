@@ -16,16 +16,16 @@ import javax.persistence.Table;
 public class Router {
 	private String routerUuid;
 	private String routerPWD;
-	private int routerUID;
+	private Integer routerUID;
 	private String routerName;
 	private String routerDesc;
 	private String routerIP;
 	private String routerMac;
-	private int routerCapacity;
-	private int routerImportance;
-	private int routerPower;
+	private Integer routerCapacity;
+	private Integer routerImportance;
+	private Integer routerPower;
 	// routerStatus 0=伪删除 1=正常使用 2=修改后尚未提交
-	private int routerStatus;
+	private Integer routerStatus;
 	private String hostUuid;
 	private String firewallUuid;
 	private Date createDate;
@@ -34,8 +34,8 @@ public class Router {
 	public Router() {
 	}
 
-	public Router(String uuid, String pwd, int userId, String name, String mac,
-			int capacity, int power, int status, String firewallUuid,
+	public Router(String uuid, String pwd, Integer userId, String name, String mac,
+			Integer capacity, Integer power, Integer status, String firewallUuid,
 			Date createDate) {
 		this.routerUuid = uuid;
 		this.routerPWD = pwd;
@@ -69,11 +69,11 @@ public class Router {
 	}
 
 	@Column(name = "rt_uid")
-	public int getRouterUID() {
+	public Integer getRouterUID() {
 		return routerUID;
 	}
 
-	public void setRouterUID(int routerUID) {
+	public void setRouterUID(Integer routerUID) {
 		this.routerUID = routerUID;
 	}
 
@@ -114,29 +114,29 @@ public class Router {
 	}
 
 	@Column(name = "rt_capacity")
-	public int getRouterCapacity() {
+	public Integer getRouterCapacity() {
 		return routerCapacity;
 	}
 
-	public void setRouterCapacity(int routerCapacity) {
+	public void setRouterCapacity(Integer routerCapacity) {
 		this.routerCapacity = routerCapacity;
 	}
 
 	@Column(name = "rt_power")
-	public int getRouterPower() {
+	public Integer getRouterPower() {
 		return routerPower;
 	}
 
-	public void setRouterPower(int routerPower) {
+	public void setRouterPower(Integer routerPower) {
 		this.routerPower = routerPower;
 	}
 
 	@Column(name = "rt_status")
-	public int getRouterStatus() {
+	public Integer getRouterStatus() {
 		return routerStatus;
 	}
 
-	public void setRouterStatus(int routerStatus) {
+	public void setRouterStatus(Integer routerStatus) {
 		this.routerStatus = routerStatus;
 	}
 
@@ -177,11 +177,11 @@ public class Router {
 	}
 
 	@Column(name = "rt_importance")
-	public int getRouterImportance() {
+	public Integer getRouterImportance() {
 		return routerImportance;
 	}
 
-	public void setRouterImportance(int routerImportance) {
+	public void setRouterImportance(Integer routerImportance) {
 		this.routerImportance = routerImportance;
 	}
 

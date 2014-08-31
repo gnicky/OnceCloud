@@ -41,6 +41,16 @@ public class QAManager {
 		this.userDAO = userDAO;
 	}
 
+	/**
+	 * 获取用户问题列表
+	 * 
+	 * @param userId
+	 * @param userLevel
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getQuestionList(int userId, int userLevel, int page,
 			int limit, String search) {
 		JSONArray ja = new JSONArray();

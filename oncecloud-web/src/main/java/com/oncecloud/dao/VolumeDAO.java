@@ -40,19 +40,27 @@ public class VolumeDAO {
 		this.quotaDAO = quotaDAO;
 	}
 
+	/**
+	 * 获取用户硬盘列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Volume> getOnePageVolumeList(int page, int limit,
-			String search, int userId) {
+	public List<Volume> getOnePageVolumeList(int userId, int page, int limit,
+			String search) {
 		List<Volume> volumeList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Volume where volumeUID = :userId and volumeName like '%"
-					+ search
-					+ "%' and volumeStatus != 0  order by createDate desc";
+			String queryString = "from Volume where volumeUID = :userId and volumeName like :search and volumeStatus != 0  order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			volumeList = query.list();
@@ -66,16 +74,23 @@ public class VolumeDAO {
 		return volumeList;
 	}
 
-	public int countAllVolumeList(String search, int userId) {
-		int total = 0;
+	/**
+	 * 获取用户硬盘总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public int countAllVolumeList(int userId, String search) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Volume where volumeUID = :userId and volumeName like '%"
-					+ search + "%' and volumeStatus != 0 ";
+			String queryString = "select count(*) from Volume where volumeUID = :userId and volumeName like :search and volumeStatus != 0 ";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
-			total = ((Number) query.iterate().next()).intValue();
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -83,7 +98,7 @@ public class VolumeDAO {
 				session.close();
 			}
 		}
-		return total;
+		return count;
 	}
 
 	/**

@@ -555,10 +555,19 @@ public class RouterManager {
 		return ja;
 	}
 
+	/**
+	 * 获取用户路由器列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getRouterList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
-		int total = this.getRouterDAO().countAllRouterList(search, userId);
+		int total = this.getRouterDAO().countAllRouterList(userId, search);
 		List<Router> routerList = this.getRouterDAO().getOnePageRouterList(
 				userId, page, limit, search);
 		ja.put(total);
@@ -596,10 +605,10 @@ public class RouterManager {
 
 	public JSONArray getAbleRTs(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getRouterDAO().countAllRouterList(search, userId);
+		int totalNum = this.getRouterDAO().countAllRouterList(userId, search);
 		ja.put(totalNum);
-		List<Router> rtList = this.getRouterDAO().getOnePageRouterList(userId, page,
-				limit, search);
+		List<Router> rtList = this.getRouterDAO().getOnePageRouterList(userId,
+				page, limit, search);
 		if (rtList != null) {
 			for (int i = 0; i < rtList.size(); i++) {
 				JSONObject jo = new JSONObject();

@@ -106,30 +106,38 @@ public class SnapshotManager {
 		this.constant = constant;
 	}
 
+	/**
+	 * 获取备份链列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getSnapshotList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getSnapshotDAO().countAllSnapshotList(search,
-				userId);
-		int vmNum = this.getSnapshotDAO().countVmSnapshotList(search, userId);
+		int totalNum = this.getSnapshotDAO().countAllSnapshotList(userId,
+				search);
+		int vmNum = this.getSnapshotDAO().countVMSnapshotList(userId, search);
 		int offside = limit - vmNum % limit;
 		ja.put(totalNum);
-		;
 		List<Object> vmSnapshotList = new ArrayList<Object>();
 		List<Object> volumeSnapshotList = new ArrayList<Object>();
 		if (page <= vmNum / limit) {
-			vmSnapshotList = this.getSnapshotDAO().getOnePageVmSnapshotList(
-					page, limit, search, userId);
+			vmSnapshotList = this.getSnapshotDAO().getOnePageVMSnapshotList(
+					userId, page, limit, search);
 		} else if (page == vmNum / limit + 1) {
-			vmSnapshotList = this.getSnapshotDAO().getOnePageVmSnapshotList(
-					page, limit, search, userId);
+			vmSnapshotList = this.getSnapshotDAO().getOnePageVMSnapshotList(
+					userId, page, limit, search);
 			volumeSnapshotList = this
 					.getSnapshotDAO()
-					.getOnePageVolumeSnapshotList(1, offside, search, userId, 0);
+					.getOnePageVolumeSnapshotList(userId, 1, offside, search, 0);
 		} else {
 			volumeSnapshotList = this.getSnapshotDAO()
-					.getOnePageVolumeSnapshotList(page - vmNum / limit - 2,
-							limit, search, userId, offside);
+					.getOnePageVolumeSnapshotList(userId,
+							page - vmNum / limit - 2, limit, search, offside);
 		}
 		if (vmSnapshotList != null) {
 			for (int i = 0; i < vmSnapshotList.size(); i++) {
