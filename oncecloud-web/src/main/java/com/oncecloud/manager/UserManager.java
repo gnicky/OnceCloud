@@ -99,6 +99,19 @@ public class UserManager {
 		this.userRegister("admin", "onceas", "admin@beyondcent.com",
 				"12345678901", "BeyondCent", "0");
 	}
+	
+	/**
+	 * 获取用户余额
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public JSONObject getBalance(int userId) {
+		JSONObject jo = new JSONObject();
+		User user = userDAO.getUser(userId);
+		jo.put("balance", user.getUserBalance());
+		return jo;
+	}
 
 	public User userRegister(String userName, String userPassword,
 			String userEmail, String userTelephone, String userCompany,

@@ -1,12 +1,12 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
-		<h1 style="font-size:22px; margin-top:30px">消费记录&nbsp;Consumptions</h1>
+		<h1 style="font-size:22px; margin-top:30px">计费清单&nbsp;Consumptions</h1>
 		<p class="lead" style="margin-top:10px"></p>
 	</div>
 	<ul class="nav nav-tabs once-tab">
-    	<li class="tab-filter active"><a href="javascript:void(0)" id="summary"><span class="glyphicon glyphicon-list"></span>摘要</a></li>
-  		<li class="tab-filter"><a href="javascript:void(0)" id="query"><span class="glyphicon glyphicon-search"></span>查询</a></li>
+    	<li class="tab-filter active"><a href="${basePath}expense/summary"><span class="glyphicon glyphicon-list"></span>清单</a></li>
+  		<li class="tab-filter"><a href="${basePath}expense/query"><span class="glyphicon glyphicon-search"></span>查询</a></li>
 	</ul>
 	<div class="once-pane">
 		<div class="charge-summary">
@@ -44,8 +44,8 @@
 					<tr>
 						<td>每页&nbsp;</td>
 						<td><input id="limit" name="limit" class="page" value="10"></td>
-						<td>&nbsp;个&nbsp;页数&nbsp;<a id="currentPsummary"></a>&nbsp;/&nbsp;<a id="totalPsummary"></a></td>
-						<td style="padding-left:10px"><div><ul id="summaryP" style="display:inline"></ul></div></td>
+						<td>&nbsp;个&nbsp;页数&nbsp;<a id="currentP"></a>&nbsp;/&nbsp;<a id="totalP"></a></td>
+						<td style="padding-left:10px"><div><ul id="pageDivider" style="display:inline"></ul></div></td>
 					</tr>
 				</table>
 			</div>

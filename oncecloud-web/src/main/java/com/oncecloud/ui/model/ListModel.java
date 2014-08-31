@@ -5,6 +5,7 @@ public class ListModel {
 	int limit;
 	String search;
 	String type;
+	String month;
 	
 	public int getPage() {
 		return page;
@@ -37,5 +38,12 @@ public class ListModel {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
 }

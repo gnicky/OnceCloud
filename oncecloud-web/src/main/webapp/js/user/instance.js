@@ -155,11 +155,11 @@ $('#tablebody').on('click', '.id', function (event) {
     var uuid = $(this).parent().parent().attr('rowid');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=detail&instanceuuid=' + uuid,
+        url: '/VMAction/Detail',
+        data: {uuid: uuid},
         dataType: 'text',
         success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
+            window.location.href = $('#platformcontent').attr('basePath') + "instance/detail";
         }
     });
 });
@@ -341,7 +341,7 @@ function shutdownVM(uuid, force) {
 $('#tablebody').on('click', '.console', function (event) {
     event.preventDefault();
     var uuid = $(this).data("uuid");
-    var vnc = $('#platformcontent').data("novnc");
+    var vnc = $('#platformcontent').attr("novnc");
     var token = uuid.substring(0, 8);
     var url = vnc + "console.html?id=" + token;
     window.open(url, "novnc", 'height=600, width=810, top=0, left=0');
