@@ -10,37 +10,34 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.ImageManager;
+import com.oncecloud.manager.PoolManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/ImageAction")
+@RequestMapping("/PoolAction")
 @Controller
-public class ImageAction {
+public class PoolAction {
 
-	private ImageManager imageManager;
+	private PoolManager poolManager;
 
-	public ImageManager getImageManager() {
-		return imageManager;
+	public PoolManager getPoolManager() {
+		return poolManager;
 	}
 
 	@Autowired
-	public void setImageManager(ImageManager imageManager) {
-		this.imageManager = imageManager;
+	public void setPoolManager(PoolManager poolManager) {
+		this.poolManager = poolManager;
 	}
-
-	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET })
+	
+	@RequestMapping(value = "/PoolList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String imageList(HttpServletRequest request, ListModel list) {
+	public String poolList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			int userId = user.getUserId();
-			int userLevel = user.getUserLevel();
-			JSONArray ja = imageManager.getImageList(userId, userLevel, list.getPage(),
-					list.getLimit(), list.getSearch(), list.getType());
+			JSONArray ja = this.poolManager.getPoolList(list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";
 		}
 	}
-
+	
 }

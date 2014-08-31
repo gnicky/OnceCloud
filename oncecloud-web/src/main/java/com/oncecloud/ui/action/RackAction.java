@@ -10,37 +10,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.ImageManager;
+import com.oncecloud.manager.RackManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/ImageAction")
+@RequestMapping("/RackAction")
 @Controller
-public class ImageAction {
+public class RackAction {
+	private RackManager rackManager;
 
-	private ImageManager imageManager;
-
-	public ImageManager getImageManager() {
-		return imageManager;
+	public RackManager getRackManager() {
+		return rackManager;
 	}
 
 	@Autowired
-	public void setImageManager(ImageManager imageManager) {
-		this.imageManager = imageManager;
+	public void setRackManager(RackManager rackManager) {
+		this.rackManager = rackManager;
 	}
 
-	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/RackList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String imageList(HttpServletRequest request, ListModel list) {
+	public String rackList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			int userId = user.getUserId();
-			int userLevel = user.getUserLevel();
-			JSONArray ja = imageManager.getImageList(userId, userLevel, list.getPage(),
-					list.getLimit(), list.getSearch(), list.getType());
+			JSONArray ja = this.getRackManager().getRackList(list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";
 		}
 	}
-
 }

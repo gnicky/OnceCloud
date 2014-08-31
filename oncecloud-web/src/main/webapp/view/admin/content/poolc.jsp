@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>资源池&nbsp;Pools</h1>
 		<p class="lead" style="margin-top:10px">
@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="<%=basePath %>admin/create/createpool.jsp">
+			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createpool.jsp">
 				+&nbsp;新建资源池
 			</button>
             <div class="btn-group">
@@ -17,11 +17,11 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li style="display:none"><a class="btn-forbidden" id="load" url="<%=basePath %>admin/modal/addtorack.jsp" disabled><span class="glyphicon glyphicon-road"></span>添加到机架</a></li>
-					<li style="display:none"><a class="btn-forbidden" id="unload" disabled><span class="glyphicon glyphicon-save"></span>从机架中移除</a></li>
-					<li><a class="btn-forbidden" id="update" url="<%=basePath %>admin/create/createpool.jsp" disabled><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
-					<li><a class="btn-forbidden" id="consistency" disabled><span class="glyphicon glyphicon-check""></span>校验一致性</a></li> 
-					<li><a class="btn-forbidden" id="delete" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li> 
+					<li style="display:none"><a class="btn-forbidden" id="load" url="${basePath}admin/modal/addtorack.jsp"><span class="glyphicon glyphicon-road"></span>添加到机架</a></li>
+					<li style="display:none"><a class="btn-forbidden" id="unload"><span class="glyphicon glyphicon-save"></span>从机架中移除</a></li>
+					<li><a class="btn-forbidden" id="update" url="${basePath}admin/create/createpool.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+					<li><a class="btn-forbidden" id="consistency"><span class="glyphicon glyphicon-check""></span>校验一致性</a></li> 
+					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li> 
 				</ul>
 			</div>
 			<input class="search" id="search" value="">
@@ -30,10 +30,10 @@
 					<tr>
 						<td>每页&nbsp;</td>
 						<td><input id="limit" name="limit" class="page" value="10"></td>
-						<td>&nbsp;个&nbsp;页数&nbsp;<a id="currentPS"></a>&nbsp;/&nbsp;<a id="totalPS"></a></td>
+						<td>&nbsp;个&nbsp;页数&nbsp;<a id="currentP"></a>&nbsp;/&nbsp;<a id="totalP"></a></td>
 						<td style="padding-left:10px">
 							<div>
-								<ul id="poolP" style="display:inline">
+								<ul id="pageDivider" style="display:inline">
 								</ul>
 							</div>
 						</td>

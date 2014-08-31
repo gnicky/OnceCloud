@@ -37,5 +37,5 @@ public class ListModel {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 }

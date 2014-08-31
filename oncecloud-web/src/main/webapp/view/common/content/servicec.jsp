@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformBasePath="<%=basePath %>" userLevel="<%=level %>">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>表单&nbsp;Services</h1>
 		<p class="lead" style="margin-top:10px">
@@ -9,22 +10,18 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<%
-				if (level != 0) {
-			%>
-			<button id="apply" class="btn btn-primary" url="<%=basePath %>user/create/createservice.jsp">
-				<span class="glyphicon glyphicon-tags"></span>提交表单
-			</button>
-			<%
-				}
-			%>
+			<c:if test="${user.userLevel!=0}">
+				<button id="apply" class="btn btn-primary" url="${basePath}user/create/createservice.jsp">
+					<span class="glyphicon glyphicon-tags"></span>提交表单
+				</button>
+			</c:if>
 			<input class="search" id="search" value="">
 			<div class="toolbar-right">
 				<table>
 					<tr>
 						<td>每页&nbsp;</td>
 						<td><input id="limit" name="limit" class="page" value="10"></td>
-						<td>&nbsp;个&nbsp;页数&nbsp;<a id="currentPS"></a>&nbsp;/&nbsp;<a id="totalPS"></a></td>
+						<td>&nbsp;个&nbsp;页数&nbsp;<a id="currentP"></a>&nbsp;/&nbsp;<a id="totalP"></a></td>
 						<td style="padding-left:10px">
 							<div>
 								<ul id="pageDivider" style="display:inline">
@@ -39,13 +36,9 @@
 			<thead>
 				<tr>
 					<th width="20%">标题</th>
-					<%
-						if (level == 0) {
-					%>
-					<th width="10%">用户名</th>
-					<%
-						}
-					%>
+					<c:if test="${user.userLevel==0}">
+						<th width="10%">用户名</th>
+					</c:if>
 					<th>内容摘要</th>
 					<th width="10%">回复数</th>
 					<th width="10%">状态</th>

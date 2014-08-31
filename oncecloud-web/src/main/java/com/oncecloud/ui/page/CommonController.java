@@ -91,4 +91,30 @@ public class CommonController {
 		model.put("title", "映像");
 		return new ModelAndView("common/image", model);
 	}
+
+	@RequestMapping(value = "/log", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView log(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("sideActive", 9);
+		model.put("title", "操作日志");
+		return new ModelAndView("common/log", model);
+	}
+
+	@RequestMapping(value = "/service", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView service(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("sideActive", 11);
+		model.put("title", "表单");
+		return new ModelAndView("common/service", model);
+	}
 }

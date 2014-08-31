@@ -65,8 +65,8 @@ function getAddressList(page, limit, search, type) {
             + '<th width="16%">创建时间</th></tr>');
         $.ajax({
             type: 'get',
-            url: '/AddressAction',
-            data: {action: "getdhcplist", page: page, limitnum: limit, search: search},
+            url: '/AddressAction/DHCPList',
+            data: {page: page, limit: limit, search: search},
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {
@@ -117,8 +117,8 @@ function getAddressList(page, limit, search, type) {
             + 'IP分组</th><th width="12%">网关接口</th><th width="12%">所属用户</th><th width="12%">创建时间</th> </tr>');
         $.ajax({
             type: 'get',
-            url: '/AddressAction',
-            data: {action: "getpubliciplist", page: page, limitnum: limit, search: search},
+            url: '/AddressAction/EIPList',
+            data: {page: page, limit: limit, search: search},
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {

@@ -48,13 +48,6 @@ public class AddressAction extends HttpServlet {
 				JSONArray ja = this.getAddressManager().addDHCPPool(userId,
 						prefix, start, end);
 				out.print(ja.toString());
-			} else if (action.equals("getdhcplist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limitnum"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getAddressManager().getDHCPList(page,
-						limit, search);
-				out.print(ja.toString());
 			} else if (action.equals("addpublicip")) {
 				String prefix = request.getParameter("prefix");
 				int start = Integer.parseInt(request.getParameter("start"));
@@ -63,13 +56,6 @@ public class AddressAction extends HttpServlet {
 				String eipInterface = request.getParameter("eipif");
 				JSONArray ja = this.getAddressManager().addPublicIP(userId,
 						prefix, start, end, eiptype, eipInterface);
-				out.print(ja.toString());
-			} else if (action.equals("getpubliciplist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limitnum"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getAddressManager().getPublicIPList(page,
-						limit, search);
 				out.print(ja.toString());
 			} else if (action.equals("deleteDHCP")) {
 				String ip = request.getParameter("ip");

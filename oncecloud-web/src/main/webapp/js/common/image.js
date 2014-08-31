@@ -56,7 +56,7 @@ $('#create').on('click', function (event) {
 function getImageList(page, limit, search, type) {
     $('#tablebody').html("");
     $.ajax({
-        type: 'post',
+        type: 'get',
         url: '/ImageAction/ImageList',
         data: { page: page, limit: limit, search: search, type: type},
         dataType: 'json',

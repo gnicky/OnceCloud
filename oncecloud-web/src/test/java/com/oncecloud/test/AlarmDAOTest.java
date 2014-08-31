@@ -28,7 +28,7 @@ public class AlarmDAOTest {
 
 	@Test
 	public void testList() {
-		int count = this.getAlarmDAO().countAlarmList("", 14);
+		int count = this.getAlarmDAO().countAlarmList(14, "");
 		System.out.println(count);
 	}
 }

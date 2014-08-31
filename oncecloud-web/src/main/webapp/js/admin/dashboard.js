@@ -73,7 +73,7 @@ function getLogList(status, start) {
     $('#act-area').html("");
     $.ajax({
         type: 'get',
-        url: '/LogAction',
+         url: '/LogAction',
         data: {status: status, start: start, num: "10"},
         dataType: 'json',
         success: function (jsonArray) {

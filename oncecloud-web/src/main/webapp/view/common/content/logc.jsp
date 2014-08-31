@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1 style="font-size:22px; margin-top:30px">操作日志&nbsp;Activities</h1>
 		<p class="lead" style="margin-top:10px"></p>
