@@ -1,6 +1,5 @@
 reloadList(1);
 
-console.log(basePath);
 function reloadList(page) {
     var limit = $("#limit").val();
     var search = $('#search').val();
