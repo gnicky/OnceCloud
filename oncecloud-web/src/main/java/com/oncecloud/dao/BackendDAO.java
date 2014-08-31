@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -84,13 +83,15 @@ public class BackendDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update Backend set backName=:name, vmPort=:port,backWeight=:weight where backUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", backName);
-			query.setInteger("port", vmPort);
-			query.setInteger("weight", backWeight);
-			query.setString("uuid", backUuid);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(Backend.class).add(
+					Restrictions.eq("backUuid", backUuid));
+			Backend backend = (Backend) criteria.uniqueResult();
+			if (backend != null) {
+				backend.setBackName(backName);
+				backend.setVmPort(vmPort);
+				backend.setBackWeight(backWeight);
+				session.update(backend);
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -207,10 +208,12 @@ public class BackendDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "delete from Backend where backUuid = :backUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("backUuid", backUuid);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(Backend.class).add(
+					Restrictions.eq("backUuid", backUuid));
+			Backend backend = (Backend) criteria.uniqueResult();
+			if (backend != null) {
+				session.delete(backend);
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -225,10 +228,12 @@ public class BackendDAO {
 	public void deleteBackendByFE(Session session, String foreUuid) {
 		try {
 			session.beginTransaction();
-			String queryString = "delete from Backend where foreUuid = :foreUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("foreUuid", foreUuid);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(Backend.class).add(
+					Restrictions.eq("foreUuid", foreUuid));
+			Backend backend = (Backend) criteria.uniqueResult();
+			if (backend != null) {
+				session.delete(backend);
+			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -250,11 +255,13 @@ public class BackendDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update Backend set backStatus = :state where backUuid = :backUuid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("state", state);
-			query.setString("backUuid", backUuid);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(Backend.class).add(
+					Restrictions.eq("backUuid", backUuid));
+			Backend backend = (Backend) criteria.uniqueResult();
+			if (backend != null) {
+				backend.setBackStatus(state);
+				session.update(backend);
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
@@ -300,11 +307,11 @@ public class BackendDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Backend where vmUuid=:vmUuid and vmPort=:port";
-			Query query = session.createQuery(queryString);
-			query.setString("vmUuid", beuuid);
-			query.setInteger("port", port);
-			int total = ((Number) query.iterate().next()).intValue();
+			Criteria criteria = session.createCriteria(Backend.class)
+					.add(Restrictions.eq("vmUuid", beuuid))
+					.add(Restrictions.eq("vmPort", port))
+					.setProjection(Projections.rowCount());
+			int total = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			if (0 == total) {
 				return true;
