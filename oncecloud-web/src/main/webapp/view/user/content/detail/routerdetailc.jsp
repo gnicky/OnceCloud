@@ -1,10 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String rtid = "rt-" + rtUuid.substring(0, 8);
-%>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<div class="content detail" id="platformcontent" rtUuid="<%=rtUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" routerUuid="${routerUuid}">
 	<div class="intro">
 		<h1>网络&nbsp;Networks</h1>
 		<p class="lead">
@@ -12,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/router.jsp"><span class="glyphicon glyphicon-fullscreen cool-green"></span><span class="ctext">ROUTER</span></a></li>
-		<li class="active"><a href="<%=basePath %>user/detail/routerdetail.jsp"><%=rtid %></a></li>
+		<li><a href="${basePath}router"><span class="glyphicon glyphicon-fullscreen cool-green"></span><span class="ctext">ROUTER</span></a></li>
+		<li class="active"><a href="${basePath}router/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">

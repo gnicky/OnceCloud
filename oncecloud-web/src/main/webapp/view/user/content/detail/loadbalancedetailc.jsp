@@ -1,10 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String lbid = "lb-" + lbUuid.substring(0, 8);
-%>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<div class="content detail" id="platformcontent" lbUuid="<%=lbUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" lbUuid="${lbUuid}">
 	<div class="intro">
 		<h1>负载均衡&nbsp;Load&nbsp;Balances</h1>
 		<p class="lead">
@@ -12,19 +7,25 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/loadbalance.jsp"><span class="glyphicon glyphicon-random cool-cyan"></span><span class="ctext">LOADBALANCE</span></a></li>
-		<li class="active"><a href="<%=basePath %>user/detail/loadbalancedetail.jsp"><%=lbid %></a></li>
+		<li><a href="${basePath}loadbalance"><span
+				class="glyphicon glyphicon-random cool-cyan"></span><span
+				class="ctext">LOADBALANCE</span></a></li>
+		<li class="active"><a href="${basePath}loadbalance/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
 			<div class="title">
-				<h3>基本属性&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
+				<h3>
+					基本属性&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span
+						class="glyphicon glyphicon-refresh"></span></a>
 					<div class="btn-group">
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<button class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
-							<li><a id="modify"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+							<li><a id="modify"><span
+									class="glyphicon glyphicon-pencil"></span>修改</a></li>
 						</ul>
 					</div>
 				</h3>
@@ -33,9 +34,12 @@
 		</div>
 		<div class="detail-item">
 			<div class="title">
-				<h3>关联资源&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
+				<h3>
+					关联资源&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span
+						class="glyphicon glyphicon-refresh"></span></a>
 					<div class="btn-group">
-						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<button class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
@@ -48,17 +52,21 @@
 	</div>
 	<div class="col-md-8">
 		<div class="detail-item detail-right">
-			<div class="once-pane" style="padding:0">
-				<div class="title"><h3 class="uppercase">功能</h3><span class="oc-update" id="suggestion" style="display:none">修改尚未更新，请点击"应用修改"</span></div>
+			<div class="once-pane" style="padding: 0">
+				<div class="title">
+					<h3 class="uppercase">功能</h3>
+					<span class="oc-update" id="suggestion" style="display: none">修改尚未更新，请点击"应用修改"</span>
+				</div>
 				<div class="once-toolbar">
 					<button id="fe_create" class="btn btn-default">+&nbsp;添加监听器</button>
 					<button id="fe_apply" class="btn btn-default">&nbsp;应用修改</button>
 					<button id="monitor" class="btn btn-default btn-disable" disabled>流量监控</button>
 				</div>
-				<div id="fore_list">			
-				<div>					
+				<div id="fore_list">
+				</div>
 			</div>
+			<div id="LbModalContainer" class="modal fade" tabindex="-1"
+				role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 		</div>
 	</div>
-	<div id="LbModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>

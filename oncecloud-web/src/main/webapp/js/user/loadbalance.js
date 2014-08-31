@@ -109,16 +109,16 @@ function getLBList(page, limit, search) {
 
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
+    event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: 'action=detail&lbUuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/loadbalancedetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/loadbalance/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="lbUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getInfoList() {

@@ -380,6 +380,12 @@ public class VolumeManager {
 		return quota;
 	}
 
+	/**
+	 * 获取硬盘详细信息
+	 * 
+	 * @param volUuid
+	 * @return
+	 */
 	public JSONObject getVolumeDetail(String volUuid) {
 		JSONObject jo = new JSONObject();
 		Volume volume = this.getVolumeDAO().getVolume(volUuid);

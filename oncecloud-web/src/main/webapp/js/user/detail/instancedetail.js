@@ -1,9 +1,211 @@
-$(document).ready(function () {
+getInstanceBasicList();
+var cpuChart;
+var memoryChart;
+var vbdChart;
+var vifChart;
+drawCpuLine('sixhours');
+drawMemoryLine('sixhours');
+drawVbdLine('sixhours');
+drawVifLine('sixhours');
+cpuTimer = setInterval(function () {
+    drawCpuLine('sixhours');
+}, 5 * 60 * 1000);
+memoryTimer = setInterval(function () {
+    drawMemoryLine('sixhours');
+}, 5 * 60 * 1000);
+vbdTimer = setInterval(function () {
+    drawVbdLine('sixhours');
+}, 5 * 60 * 1000);
+vifTimer = setInterval(function () {
+    drawVifLine('sixhours');
+}, 5 * 60 * 1000);
+
+$('#modify').on('click', function (event) {
+    event.preventDefault();
+    var url = $("#platformcontent").attr('platformBasePath') + 'common/modify.jsp';
+    var instanceUuid = $("#platformcontent").attr("instanceUuid");
+    var instanceName = $("#instancename").text();
+    var instanceDesc = $("#instancedesc").text();
+    $('#InstanceModalContainer').load(url, {"modifytype": "instance", "modifyuuid": instanceUuid, "modifyname": instanceName, "modifydesc": instanceDesc}, function () {
+        $('#InstanceModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+$('#InstanceModalContainer').on('hide', function (event) {
     getInstanceBasicList();
-    var cpuChart;
-    var memoryChart;
-    var vbdChart;
-    var vifChart;
+});
+
+$('#basic-list, #basic-list2').on('click', '.console', function (event) {
+    event.preventDefault();
+    var uuid = $(this).data("uuid");
+    var vnc = document.getElementById("platformcontent").getAttribute("vncServer");
+    var token = uuid.substring(0, 8);
+    var url = vnc + "console.html?id=" + token;
+    window.open(url, "newwindow", 'height=600,width=810,top=0,left=0');
+});
+
+$('#depend-list').on('click', '#firewallid', function (event) {
+    event.preventDefault();
+    var firewallId = $(this).attr("firewallid");
+    var basePath = $("#platformcontent").attr("platformBasePath");
+    $.ajax({
+        type: 'get',
+        url: '/FirewallAction',
+        data: 'action=detail&firewallId=' + firewallId,
+        dataType: 'text',
+        success: function (response) {
+            window.location.href = basePath + "user/detail/firewalldetail.jsp";
+        },
+        error: function () {
+
+        }
+    });
+});
+
+$('#depend-list').on('click', '#eip', function (event) {
+    event.preventDefault();
+    var eip = $(this).attr("eipip");
+    var basePath = $("#platformcontent").attr("platformBasePath");
+    $.ajax({
+        type: 'get',
+        url: '/EipAction',
+        data: 'action=detail&eip=' + eip,
+        dataType: 'text',
+        success: function (response) {
+            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/elasticipdetail.jsp";
+        },
+        error: function () {
+
+        }
+    });
+});
+
+/**
+ * 2014/08/15 hty
+ */
+$('#depend-list').on('click', '#vnetip', function (event) {
+    event.preventDefault();
+    var uuid = $(this).attr("vnetip");
+    var routerid = $(this).attr("routerUuid");
+    $.ajax({
+        type: 'get',
+        url: '/VnetAction',
+        data: 'action=detail&vnetUuid=' + uuid + '&routerid=' + routerid,
+        dataType: 'text',
+        success: function (response) {
+            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/vnetdetail.jsp";
+        },
+        error: function () {
+        }
+    });
+});
+
+
+$('.detail-right').on('mouseenter', '.bootstrap-switch', function (event) {
+    event.preventDefault();
+    $('.oc-tip').css('display', 'inline-block');
+});
+
+$('.detail-right').on('mouseleave', '.bootstrap-switch', function (event) {
+    event.preventDefault();
+    $('.oc-tip').css('display', 'none');
+});
+
+
+$('#depend-list').on('click', '#snapshotid', function (event) {
+    event.preventDefault();
+    var resourceUuid = $(this).attr('rsuuid');
+    var resourceName = $(this).attr('rsname');
+    var userid = document.getElementById("platformcontent").getAttribute("platformUserId");
+    var basePath = $("#platformcontent").attr("platformBasePath");
+    $.ajax({
+        type: 'get',
+        url: '/SnapshotAction',
+        data: 'action=detail&resourceUuid=' + resourceUuid + '&resourceType=instance&resourceName=' + resourceName,
+        dataType: 'text',
+        success: function (response) {
+            window.location.href = basePath + "user/detail/snapshotdetail.jsp";
+        },
+        error: function () {
+
+        }
+    });
+});
+
+$('#depend-list').on('click', '.volid', function (event) {
+    event.preventDefault();
+    var volid = $(this).attr('voluuid');
+    $.ajax({
+        type: 'get',
+        url: '/VolumeAction',
+        data: 'action=detail&volumeuuid=' + volid,
+        dataType: 'text',
+        success: function (response) {
+            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/volumedetail.jsp";
+        },
+        error: function () {
+        }
+    });
+});
+
+function thirtymin() {
+    resetChart();
+    $('.btn-monitor').removeClass('selected');
+    $('.chart-span').text("30 秒");
+    $('.chart-span').addClass("chart-right");
+    $('#chart-group').addClass("chart-right");
+    window.clearInterval(cpuTimer);
+    window.clearInterval(memoryTimer);
+    window.clearInterval(vbdTimer);
+    window.clearInterval(vifTimer);
+    drawCpuLine('thirtymin');
+    drawMemoryLine('thirtymin');
+    drawVbdLine('thirtymin');
+    drawVifLine('thirtymin');
+    cpuTimer = setInterval(function () {
+        drawCpuLine('thirtymin');
+    }, 30 * 1000);
+    memoryTimer = setInterval(function () {
+        drawMemoryLine('thirtymin');
+    }, 30 * 1000);
+    vbdTimer = setInterval(function () {
+        drawVbdLine('thirtymin');
+    }, 30 * 1000);
+    vifTimer = setInterval(function () {
+        drawVifLine('thirtymin');
+    }, 30 * 1000);
+}
+
+$("#sixhours").on('click', function (event) {
+    event.preventDefault();
+    resetSwitch();
+    $('.btn-monitor').removeClass('selected');
+    $(this).addClass('selected');
+    sixhours();
+});
+
+function resetChart() {
+    $('#chart-area-1').html('<div id="cpupic"></div>');
+    $('#chart-area-2').html('<div id="memorypic"></div>');
+    $('#chart-area-3').html('<div id="vbdpic"></div>');
+    $('#chart-area-4').html('<div id="vifpic"></div>');
+}
+
+function resetSwitch() {
+    $('.oc-switch').bootstrapSwitch('state', false, false);
+}
+
+function sixhours() {
+    resetChart();
+    $('.chart-span').text("5 分钟");
+    $('.chart-span').addClass("chart-right");
+    $('#chart-group').addClass("chart-right");
+    window.clearInterval(cpuTimer);
+    window.clearInterval(memoryTimer);
+    window.clearInterval(vbdTimer);
+    window.clearInterval(vifTimer);
     drawCpuLine('sixhours');
     drawMemoryLine('sixhours');
     drawVbdLine('sixhours');
@@ -20,793 +222,562 @@ $(document).ready(function () {
     vifTimer = setInterval(function () {
         drawVifLine('sixhours');
     }, 5 * 60 * 1000);
+}
 
-    $('#modify').on('click', function (event) {
-        event.preventDefault();
-        var url = $("#platformcontent").attr('platformBasePath') + 'common/modify.jsp';
-        var instanceUuid = $("#platformcontent").attr("instanceUuid");
-        var instanceName = $("#instancename").text();
-        var instanceDesc = $("#instancedesc").text();
-        $('#InstanceModalContainer').load(url, {"modifytype": "instance", "modifyuuid": instanceUuid, "modifyname": instanceName, "modifydesc": instanceDesc}, function () {
-            $('#InstanceModalContainer').modal({
-                backdrop: false,
-                show: true
-            });
-        });
-    });
-    $('#InstanceModalContainer').on('hide', function (event) {
-        getInstanceBasicList();
-    });
-
-    $('#basic-list, #basic-list2').on('click', '.console', function (event) {
-        event.preventDefault();
-        var uuid = $(this).data("uuid");
-        var vnc = document.getElementById("platformcontent").getAttribute("vncServer");
-        var token = uuid.substring(0, 8);
-        var url = vnc + "console.html?id=" + token;
-        window.open(url, "newwindow", 'height=600,width=810,top=0,left=0');
-    });
-
-    $('#depend-list').on('click', '#firewallid', function (event) {
-        event.preventDefault();
-        var firewallId = $(this).attr("firewallid");
-        var basePath = $("#platformcontent").attr("platformBasePath");
-        $.ajax({
-            type: 'get',
-            url: '/FirewallAction',
-            data: 'action=detail&firewallId=' + firewallId,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = basePath + "user/detail/firewalldetail.jsp";
-            },
-            error: function () {
-
-            }
-        });
-    });
-
-    $('#depend-list').on('click', '#eip', function (event) {
-        event.preventDefault();
-        var eip = $(this).attr("eipip");
-        var basePath = $("#platformcontent").attr("platformBasePath");
-        $.ajax({
-            type: 'get',
-            url: '/EipAction',
-            data: 'action=detail&eip=' + eip,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/elasticipdetail.jsp";
-            },
-            error: function () {
-
-            }
-        });
-    });
-
-    /**
-     * 2014/08/15 hty
-     */
-    $('#depend-list').on('click', '#vnetip', function (event) {
-        event.preventDefault();
-        var uuid = $(this).attr("vnetip");
-        var routerid = $(this).attr("routerUuid");
-        $.ajax({
-            type: 'get',
-            url: '/VnetAction',
-            data: 'action=detail&vnetUuid=' + uuid + '&routerid=' + routerid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/vnetdetail.jsp";
-            },
-            error: function () {
-            }
-        });
-    });
-
-
-    $('.detail-right').on('mouseenter', '.bootstrap-switch', function (event) {
-        event.preventDefault();
-        $('.oc-tip').css('display', 'inline-block');
-    });
-
-    $('.detail-right').on('mouseleave', '.bootstrap-switch', function (event) {
-        event.preventDefault();
-        $('.oc-tip').css('display', 'none');
-    });
-
-
-    $('#depend-list').on('click', '#snapshotid', function (event) {
-        event.preventDefault();
-        var resourceUuid = $(this).attr('rsuuid');
-        var resourceName = $(this).attr('rsname');
-        var userid = document.getElementById("platformcontent").getAttribute("platformUserId");
-        var basePath = $("#platformcontent").attr("platformBasePath");
-        $.ajax({
-            type: 'get',
-            url: '/SnapshotAction',
-            data: 'action=detail&resourceUuid=' + resourceUuid + '&resourceType=instance&resourceName=' + resourceName,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = basePath + "user/detail/snapshotdetail.jsp";
-            },
-            error: function () {
-
-            }
-        });
-    });
-
-    $('#depend-list').on('click', '.volid', function (event) {
-        event.preventDefault();
-        var volid = $(this).attr('voluuid');
-        $.ajax({
-            type: 'get',
-            url: '/VolumeAction',
-            data: 'action=detail&volumeuuid=' + volid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/volumedetail.jsp";
-            },
-            error: function () {
-            }
-        });
-    });
-
-    function thirtymin() {
-        resetChart();
-        $('.btn-monitor').removeClass('selected');
-        $('.chart-span').text("30 秒");
-        $('.chart-span').addClass("chart-right");
-        $('#chart-group').addClass("chart-right");
-        window.clearInterval(cpuTimer);
-        window.clearInterval(memoryTimer);
-        window.clearInterval(vbdTimer);
-        window.clearInterval(vifTimer);
-        drawCpuLine('thirtymin');
-        drawMemoryLine('thirtymin');
-        drawVbdLine('thirtymin');
-        drawVifLine('thirtymin');
-        cpuTimer = setInterval(function () {
-            drawCpuLine('thirtymin');
-        }, 30 * 1000);
-        memoryTimer = setInterval(function () {
-            drawMemoryLine('thirtymin');
-        }, 30 * 1000);
-        vbdTimer = setInterval(function () {
-            drawVbdLine('thirtymin');
-        }, 30 * 1000);
-        vifTimer = setInterval(function () {
-            drawVifLine('thirtymin');
-        }, 30 * 1000);
-    }
-
-    $("#sixhours").on('click', function (event) {
-        event.preventDefault();
-        resetSwitch();
-        $('.btn-monitor').removeClass('selected');
-        $(this).addClass('selected');
-        sixhours();
-    });
-
-    function resetChart() {
-        $('#chart-area-1').html('<div id="cpupic"></div>');
-        $('#chart-area-2').html('<div id="memorypic"></div>');
-        $('#chart-area-3').html('<div id="vbdpic"></div>');
-        $('#chart-area-4').html('<div id="vifpic"></div>');
-    }
-
-    function resetSwitch() {
-        $('.oc-switch').bootstrapSwitch('state', false, false);
-    }
-
-    function sixhours() {
-        resetChart();
-        $('.chart-span').text("5 分钟");
-        $('.chart-span').addClass("chart-right");
-        $('#chart-group').addClass("chart-right");
-        window.clearInterval(cpuTimer);
-        window.clearInterval(memoryTimer);
-        window.clearInterval(vbdTimer);
-        window.clearInterval(vifTimer);
-        drawCpuLine('sixhours');
-        drawMemoryLine('sixhours');
-        drawVbdLine('sixhours');
-        drawVifLine('sixhours');
-        cpuTimer = setInterval(function () {
-            drawCpuLine('sixhours');
-        }, 5 * 60 * 1000);
-        memoryTimer = setInterval(function () {
-            drawMemoryLine('sixhours');
-        }, 5 * 60 * 1000);
-        vbdTimer = setInterval(function () {
-            drawVbdLine('sixhours');
-        }, 5 * 60 * 1000);
-        vifTimer = setInterval(function () {
-            drawVifLine('sixhours');
-        }, 5 * 60 * 1000);
-    }
-
-    $("#oneday").on('click', function (event) {
-        event.preventDefault();
-        resetSwitch();
-        resetChart();
-        $('.btn-monitor').removeClass('selected');
-        $(this).addClass('selected');
-        $('.chart-span').text("15 分钟");
-        $('.chart-span').addClass("chart-right");
-        $('#chart-group').addClass("chart-right");
-        window.clearInterval(cpuTimer);
-        window.clearInterval(memoryTimer);
-        window.clearInterval(vbdTimer);
-        window.clearInterval(vifTimer);
+$("#oneday").on('click', function (event) {
+    event.preventDefault();
+    resetSwitch();
+    resetChart();
+    $('.btn-monitor').removeClass('selected');
+    $(this).addClass('selected');
+    $('.chart-span').text("15 分钟");
+    $('.chart-span').addClass("chart-right");
+    $('#chart-group').addClass("chart-right");
+    window.clearInterval(cpuTimer);
+    window.clearInterval(memoryTimer);
+    window.clearInterval(vbdTimer);
+    window.clearInterval(vifTimer);
+    drawCpuLine('oneday');
+    drawMemoryLine('oneday');
+    drawVbdLine('oneday');
+    drawVifLine('oneday');
+    cpuTimer = setInterval(function () {
         drawCpuLine('oneday');
+    }, 15 * 60 * 1000);
+    memoryTimer = setInterval(function () {
         drawMemoryLine('oneday');
+    }, 15 * 60 * 1000);
+    vbdTimer = setInterval(function () {
         drawVbdLine('oneday');
+    }, 15 * 60 * 1000);
+    vifTimer = setInterval(function () {
         drawVifLine('oneday');
-        cpuTimer = setInterval(function () {
-            drawCpuLine('oneday');
-        }, 15 * 60 * 1000);
-        memoryTimer = setInterval(function () {
-            drawMemoryLine('oneday');
-        }, 15 * 60 * 1000);
-        vbdTimer = setInterval(function () {
-            drawVbdLine('oneday');
-        }, 15 * 60 * 1000);
-        vifTimer = setInterval(function () {
-            drawVifLine('oneday');
-        }, 15 * 60 * 1000);
-    });
-
-    $("#twoweeks").on('click', function (event) {
-        event.preventDefault();
-        resetSwitch();
-        resetChart();
-        $('.btn-monitor').removeClass('selected');
-        $(this).addClass('selected');
-        $('.chart-span').text("4 小时");
-        $('.chart-span').addClass("chart-right");
-        $('#chart-group').addClass("chart-right");
-        window.clearInterval(cpuTimer);
-        window.clearInterval(memoryTimer);
-        window.clearInterval(vbdTimer);
-        window.clearInterval(vifTimer);
-        drawCpuLine('twoweeks');
-        drawMemoryLine('twoweeks');
-        drawVbdLine('twoweeks');
-        drawVifLine('twoweeks');
-        cpuTimer = setInterval(function () {
-            drawCpuLine('twoweeks');
-        }, 4 * 3600 * 1000);
-        memoryTimer = setInterval(function () {
-            drawMemoryLine('twoweeks');
-        }, 4 * 3600 * 1000);
-        vbdTimer = setInterval(function () {
-            drawVbdLine('twoweeks');
-        }, 4 * 3600 * 1000);
-        vifTimer = setInterval(function () {
-            drawVifLine('twoweeks');
-        }, 4 * 3600 * 1000);
-    });
-
-    $("#onemonth").on('click', function (event) {
-        event.preventDefault();
-        resetSwitch();
-        resetChart();
-        $('.btn-monitor').removeClass('selected');
-        $(this).addClass('selected');
-        $('.chart-span').text("1 天");
-        $('.chart-span').addClass("chart-right");
-        $('#chart-group').addClass("chart-right");
-        window.clearInterval(cpuTimer);
-        window.clearInterval(memoryTimer);
-        window.clearInterval(vbdTimer);
-        window.clearInterval(vifTimer);
-        drawCpuLine('onemonth');
-        drawMemoryLine('onemonth');
-        drawVbdLine('onemonth');
-        drawVifLine('onemonth');
-        cpuTimer = setInterval(function () {
-            drawCpuLine('onemonth');
-        }, 24 * 3600 * 1000);
-        memoryTimer = setInterval(function () {
-            drawMemoryLine('onemonth');
-        }, 24 * 3600 * 1000);
-        vbdTimer = setInterval(function () {
-            drawVbdLine('onemonth');
-        }, 24 * 3600 * 1000);
-        vifTimer = setInterval(function () {
-            drawVifLine('onemonth');
-        }, 24 * 3600 * 1000);
-    });
-
-    $('.btn-refresh').on('click', function (event) {
-        event.preventDefault();
-        getInstanceBasicList();
-    });
-
-    function drawCpuLine(types) {
-        var instanceUuid = $("#platformcontent").attr("instanceUuid");
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-        cpuChart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'cpupic',
-                type: 'spline',
-                animation: Highcharts.svg, // don't animate in old IE
-                height: 300,
-                events: {
-                    load: function () {
-                        // setInterval(function() {
-                        //     updateCpuData(instanceUuid, 'sixhours');
-                        // }, 5000);
-                    }
-                }
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                type: 'datetime'
-                //tickPixelInterval: 100
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                min: 0,
-                labels: {
-                    formatter: function () {
-                        return this.value + ' %';
-                    }
-                }
-            },
-            plotOptions: {
-                spline: {
-                    lineWidth: 2.0,
-                    fillOpacity: 0.1,
-                    marker: {
-                        enabled: false,
-                        states: {
-                            hover: {
-                                enabled: true,
-                                radius: 2
-                            }
-                        }
-                    },
-                    shadow: false
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    return '<b>CPU ' + this.series.name + '</b><br>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
-                        Highcharts.numberFormat(this.y, 2) + ' %';
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            exporting: {
-                enabled: false
-            },
-            series: []
-        });
-
-        updateCpuData(instanceUuid, types);
-    }
-
-    function drawMemoryLine(types) {
-        var instanceUuid = $("#platformcontent").attr("instanceUuid");
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-        memoryChart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'memorypic',
-                type: 'spline',
-                animation: Highcharts.svg, // don't animate in old IE
-                height: 300,
-                events: {
-                    load: function () {
-                        // setInterval(function() {
-                        // updateMemoryData(instanceUuid, 'sixhours');
-                        // }, 5000);
-                    }
-                }
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                type: 'datetime',
-                //tickPixelInterval: 100
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                min: 0,
-                labels: {
-                    formatter: function () {
-                        return this.value + ' GB';
-                    }
-                }
-            },
-            plotOptions: {
-                spline: {
-                    lineWidth: 2.0,
-                    fillOpacity: 0.1,
-                    marker: {
-                        enabled: false,
-                        states: {
-                            hover: {
-                                enabled: true,
-                                radius: 2
-                            }
-                        }
-                    },
-                    shadow: false
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
-                        Highcharts.numberFormat(this.y, 2) + ' GB';
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            exporting: {
-                enabled: false
-            },
-            series: []
-        });
-
-        updateMemoryData(instanceUuid, types);
-    }
-
-    function drawVbdLine(types) {
-        var instanceUuid = $("#platformcontent").attr("instanceUuid");
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-        vbdChart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'vbdpic',
-                type: 'spline',
-                animation: Highcharts.svg, // don't animate in old IE
-                height: 300,
-                events: {
-                    load: function () {
-                        // setInterval(function() {
-                        //     updateVbdData(instanceUuid, 'sixhours');
-                        // }, 5000);
-                    }
-                }
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                type: 'datetime',
-                // tickPixelInterval: 100
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                min: 0,
-                labels: {
-                    formatter: function () {
-                        return this.value + ' kbps';
-                    }
-                }
-            },
-            plotOptions: {
-                spline: {
-                    lineWidth: 2.0,
-                    fillOpacity: 0.1,
-                    marker: {
-                        enabled: false,
-                        states: {
-                            hover: {
-                                enabled: true,
-                                radius: 2
-                            }
-                        }
-                    },
-                    shadow: false
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
-                        Highcharts.numberFormat(this.y, 2) + ' kbps';
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            exporting: {
-                enabled: false
-            },
-            series: []
-        });
-
-        updateVbdData(instanceUuid, types);
-
-    }
-
-    function drawVifLine(types) {
-        var instanceUuid = $("#platformcontent").attr("instanceUuid");
-        Highcharts.setOptions({
-            global: {
-                useUTC: false
-            }
-        });
-        vifChart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'vifpic',
-                type: 'spline',
-                animation: Highcharts.svg, // don't animate in old IE
-                height: 300,
-                events: {
-                    load: function () {
-                        // setInterval(function() {
-                        //     updateVbdData(instanceUuid, 'sixhours');
-                        // }, 5000);
-                    }
-                }
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                type: 'datetime',
-                // tickPixelInterval: 100
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                min: 0,
-                labels: {
-                    formatter: function () {
-                        return this.value + ' kb/s';
-                    }
-                }
-            },
-            plotOptions: {
-                spline: {
-                    lineWidth: 2.0,
-                    fillOpacity: 0.1,
-                    marker: {
-                        enabled: false,
-                        states: {
-                            hover: {
-                                enabled: true,
-                                radius: 2
-                            }
-                        }
-                    },
-                    shadow: false
-                }
-            },
-            tooltip: {
-                formatter: function () {
-                    return '<b>' + this.series.name + '</b><br>' +
-                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
-                        Highcharts.numberFormat(this.y, 2) + ' kb/s';
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            exporting: {
-                enabled: false
-            },
-            series: []
-        });
-
-        updateVifData(instanceUuid, types);
-
-    }
-
-    function updateCpuData(uuid, type) {
-        $.ajax({
-            type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getcpu&uuid=" + uuid + "&type=" + type,
-            dataType: 'text',
-            success: function (response) {
-                var obj = jQuery.parseJSON(response);
-                var hasPic = false;
-                for (key in obj) {
-                    hasPic = true;
-                    var cpuId = key;
-                    var array = obj[key];
-                    var cpuData = [];
-                    for (var c = 0; c < array.length; c++) {
-                        var times = array[c].times;
-                        var usage = array[c].usage;
-                        cpuData.push({x: times, y: usage});
-                    }
-                    cpuChart.addSeries({
-                        name: cpuId,
-                        data: cpuData
-                    }, false);
-                }
-                if (hasPic) {
-                    cpuChart.redraw();
-                } else {
-                    $('#chart-area-1').html('<div class="no-data">没有数据</div>');
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-
-    function updateMemoryData(uuid, type) {
-        $.ajax({
-            type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getmemory&uuid=" + uuid + "&type=" + type,
-            dataType: 'text',
-            success: function (response) {
-                var array = jQuery.parseJSON(response);
-                var memoryTotalData = [];
-                var memoryUsedData = [];
-                var hasPic = false;
-                for (var c = 0; c < array.length; c++) {
-                    hasPic = true;
-                    var times = array[c].times;
-                    var total = array[c].total;
-                    var used = array[c].used;
-                    memoryTotalData.push({x: times, y: total});
-                    memoryUsedData.push({x: times, y: used});
-                }
-                if (memoryTotalData.length != 0) {
-                    memoryChart.addSeries({
-                        name: "总量",
-                        data: memoryTotalData
-                    }, false);
-                    memoryChart.addSeries({
-                        name: "使用",
-                        data: memoryUsedData
-                    }, false);
-                }
-                if (hasPic) {
-                    memoryChart.redraw();
-                } else {
-                    $('#chart-area-2').html('<div class="no-data">没有数据</div>');
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-
-    function updateVbdData(uuid, type) {
-        $.ajax({
-            type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getvbd&uuid=" + uuid + "&type=" + type,
-            dataType: 'text',
-            success: function (response) {
-                var obj = jQuery.parseJSON(response);
-                var hasPic = false;
-                for (key in obj) {
-                    hasPic = true;
-                    var vbdId = key;
-                    var array = obj[key];
-                    var vbdReadData = [];
-                    var vbdWriteData = [];
-                    for (var c = 0; c < array.length; c++) {
-                        var times = array[c].times;
-                        var read = array[c].read;
-                        var write = array[c].write;
-                        vbdReadData.push({x: times, y: read});
-                        vbdWriteData.push({x: times, y: write});
-                    }
-                    vbdChart.addSeries({
-                        name: vbdId + " 读",
-                        data: vbdReadData
-                    }, false);
-                    vbdChart.addSeries({
-                        name: vbdId + " 写",
-                        data: vbdWriteData
-                    }, false);
-                }
-                if (hasPic) {
-                    vbdChart.redraw();
-                } else {
-                    $('#chart-area-3').html('<div class="no-data">没有数据</div>');
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-
-    function updateVifData(uuid, type) {
-        $.ajax({
-            type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getvif&uuid=" + uuid + "&type=" + type,
-            dataType: 'text',
-            success: function (response) {
-                var obj = jQuery.parseJSON(response);
-                var hasPic = false;
-                for (key in obj) {
-                    hasPic = true;
-                    var vifId = key;
-                    var array = obj[key];
-                    var vifRxData = [];
-                    var vifTxData = [];
-                    for (var c = 0; c < array.length; c++) {
-                        var times = array[c].times;
-                        var rx = array[c].rx;
-                        var tx = array[c].tx;
-                        vifRxData.push({x: times, y: rx});
-                        vifTxData.push({x: times, y: tx});
-                    }
-                    vifChart.addSeries({
-                        name: "VIF" + vifId + " 下行",
-                        data: vifRxData
-                    }, false);
-                    vifChart.addSeries({
-                        name: "VIF" + vifId + " 上行",
-                        data: vifTxData
-                    }, false);
-                }
-                if (hasPic) {
-                    vifChart.redraw();
-                } else {
-                    $('#chart-area-4').html('<div class="no-data">没有数据</div>');
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-
-    $('.oc-switch').bootstrapSwitch();
-
-    $('.oc-switch').on('switchChange.bootstrapSwitch', function (event, state) {
-        if (state == true) {
-            thirtymin();
-        } else {
-            sixhours();
-        }
-    });
-
-    ///add by cyh
-    init();
-    doShowPic();
-
+    }, 15 * 60 * 1000);
 });
 
-function getInstanceBasicList() {
+$("#twoweeks").on('click', function (event) {
+    event.preventDefault();
+    resetSwitch();
+    resetChart();
+    $('.btn-monitor').removeClass('selected');
+    $(this).addClass('selected');
+    $('.chart-span').text("4 小时");
+    $('.chart-span').addClass("chart-right");
+    $('#chart-group').addClass("chart-right");
+    window.clearInterval(cpuTimer);
+    window.clearInterval(memoryTimer);
+    window.clearInterval(vbdTimer);
+    window.clearInterval(vifTimer);
+    drawCpuLine('twoweeks');
+    drawMemoryLine('twoweeks');
+    drawVbdLine('twoweeks');
+    drawVifLine('twoweeks');
+    cpuTimer = setInterval(function () {
+        drawCpuLine('twoweeks');
+    }, 4 * 3600 * 1000);
+    memoryTimer = setInterval(function () {
+        drawMemoryLine('twoweeks');
+    }, 4 * 3600 * 1000);
+    vbdTimer = setInterval(function () {
+        drawVbdLine('twoweeks');
+    }, 4 * 3600 * 1000);
+    vifTimer = setInterval(function () {
+        drawVifLine('twoweeks');
+    }, 4 * 3600 * 1000);
+});
+
+$("#onemonth").on('click', function (event) {
+    event.preventDefault();
+    resetSwitch();
+    resetChart();
+    $('.btn-monitor').removeClass('selected');
+    $(this).addClass('selected');
+    $('.chart-span').text("1 天");
+    $('.chart-span').addClass("chart-right");
+    $('#chart-group').addClass("chart-right");
+    window.clearInterval(cpuTimer);
+    window.clearInterval(memoryTimer);
+    window.clearInterval(vbdTimer);
+    window.clearInterval(vifTimer);
+    drawCpuLine('onemonth');
+    drawMemoryLine('onemonth');
+    drawVbdLine('onemonth');
+    drawVifLine('onemonth');
+    cpuTimer = setInterval(function () {
+        drawCpuLine('onemonth');
+    }, 24 * 3600 * 1000);
+    memoryTimer = setInterval(function () {
+        drawMemoryLine('onemonth');
+    }, 24 * 3600 * 1000);
+    vbdTimer = setInterval(function () {
+        drawVbdLine('onemonth');
+    }, 24 * 3600 * 1000);
+    vifTimer = setInterval(function () {
+        drawVifLine('onemonth');
+    }, 24 * 3600 * 1000);
+});
+
+$('.btn-refresh').on('click', function (event) {
+    event.preventDefault();
+    getInstanceBasicList();
+});
+
+function drawCpuLine(types) {
     var instanceUuid = $("#platformcontent").attr("instanceUuid");
-    var basiclist = document.getElementById("basic-list");
-    basiclist.innerHTML = "";
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    cpuChart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'cpupic',
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            height: 300,
+            events: {
+                load: function () {
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            min: 0,
+            labels: {
+                formatter: function () {
+                    return this.value + ' %';
+                }
+            }
+        },
+        plotOptions: {
+            spline: {
+                lineWidth: 2.0,
+                fillOpacity: 0.1,
+                marker: {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            radius: 2
+                        }
+                    }
+                },
+                shadow: false
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>CPU ' + this.series.name + '</b><br>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
+                    Highcharts.numberFormat(this.y, 2) + ' %';
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: []
+    });
+
+    updateCpuData(instanceUuid, types);
+}
+
+function drawMemoryLine(types) {
+    var instanceUuid = $("#platformcontent").attr("instanceUuid");
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    memoryChart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'memorypic',
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            height: 300,
+            events: {
+                load: function () {
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            min: 0,
+            labels: {
+                formatter: function () {
+                    return this.value + ' GB';
+                }
+            }
+        },
+        plotOptions: {
+            spline: {
+                lineWidth: 2.0,
+                fillOpacity: 0.1,
+                marker: {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            radius: 2
+                        }
+                    }
+                },
+                shadow: false
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
+                    Highcharts.numberFormat(this.y, 2) + ' GB';
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: []
+    });
+
+    updateMemoryData(instanceUuid, types);
+}
+
+function drawVbdLine(types) {
+    var instanceUuid = $("#platformcontent").attr("instanceUuid");
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    vbdChart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'vbdpic',
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            height: 300,
+            events: {
+                load: function () {
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            min: 0,
+            labels: {
+                formatter: function () {
+                    return this.value + ' kbps';
+                }
+            }
+        },
+        plotOptions: {
+            spline: {
+                lineWidth: 2.0,
+                fillOpacity: 0.1,
+                marker: {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            radius: 2
+                        }
+                    }
+                },
+                shadow: false
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
+                    Highcharts.numberFormat(this.y, 2) + ' kbps';
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: []
+    });
+
+    updateVbdData(instanceUuid, types);
+
+}
+
+function drawVifLine(types) {
+    var instanceUuid = $("#platformcontent").attr("instanceUuid");
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    vifChart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'vifpic',
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in old IE
+            height: 300,
+            events: {
+                load: function () {
+                }
+            }
+        },
+        title: {
+            text: ''
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            min: 0,
+            labels: {
+                formatter: function () {
+                    return this.value + ' kb/s';
+                }
+            }
+        },
+        plotOptions: {
+            spline: {
+                lineWidth: 2.0,
+                fillOpacity: 0.1,
+                marker: {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            radius: 2
+                        }
+                    }
+                },
+                shadow: false
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.series.name + '</b><br>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
+                    Highcharts.numberFormat(this.y, 2) + ' kb/s';
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: []
+    });
+    updateVifData(instanceUuid, types);
+}
+
+function updateCpuData(uuid, type) {
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: "action=getoneinstance&instanceUuid=" + instanceUuid,
+        url: '/PerformanceAction',
+        data: "action=getcpu&uuid=" + uuid + "&type=" + type,
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
+            var hasPic = false;
+            for (key in obj) {
+                hasPic = true;
+                var cpuId = key;
+                var array = obj[key];
+                var cpuData = [];
+                for (var c = 0; c < array.length; c++) {
+                    var times = array[c].times;
+                    var usage = array[c].usage;
+                    cpuData.push({x: times, y: usage});
+                }
+                cpuChart.addSeries({
+                    name: cpuId,
+                    data: cpuData
+                }, false);
+            }
+            if (hasPic) {
+                cpuChart.redraw();
+            } else {
+                $('#chart-area-1').html('<div class="no-data">没有数据</div>');
+            }
+        }
+    });
+}
+
+function updateMemoryData(uuid, type) {
+    $.ajax({
+        type: 'get',
+        url: '/PerformanceAction',
+        data: "action=getmemory&uuid=" + uuid + "&type=" + type,
+        dataType: 'text',
+        success: function (response) {
+            var array = jQuery.parseJSON(response);
+            var memoryTotalData = [];
+            var memoryUsedData = [];
+            var hasPic = false;
+            for (var c = 0; c < array.length; c++) {
+                hasPic = true;
+                var times = array[c].times;
+                var total = array[c].total;
+                var used = array[c].used;
+                memoryTotalData.push({x: times, y: total});
+                memoryUsedData.push({x: times, y: used});
+            }
+            if (memoryTotalData.length != 0) {
+                memoryChart.addSeries({
+                    name: "总量",
+                    data: memoryTotalData
+                }, false);
+                memoryChart.addSeries({
+                    name: "使用",
+                    data: memoryUsedData
+                }, false);
+            }
+            if (hasPic) {
+                memoryChart.redraw();
+            } else {
+                $('#chart-area-2').html('<div class="no-data">没有数据</div>');
+            }
+        }
+    });
+}
+
+function updateVbdData(uuid, type) {
+    $.ajax({
+        type: 'get',
+        url: '/PerformanceAction',
+        data: "action=getvbd&uuid=" + uuid + "&type=" + type,
+        dataType: 'text',
+        success: function (response) {
+            var obj = jQuery.parseJSON(response);
+            var hasPic = false;
+            for (key in obj) {
+                hasPic = true;
+                var vbdId = key;
+                var array = obj[key];
+                var vbdReadData = [];
+                var vbdWriteData = [];
+                for (var c = 0; c < array.length; c++) {
+                    var times = array[c].times;
+                    var read = array[c].read;
+                    var write = array[c].write;
+                    vbdReadData.push({x: times, y: read});
+                    vbdWriteData.push({x: times, y: write});
+                }
+                vbdChart.addSeries({
+                    name: vbdId + " 读",
+                    data: vbdReadData
+                }, false);
+                vbdChart.addSeries({
+                    name: vbdId + " 写",
+                    data: vbdWriteData
+                }, false);
+            }
+            if (hasPic) {
+                vbdChart.redraw();
+            } else {
+                $('#chart-area-3').html('<div class="no-data">没有数据</div>');
+            }
+        }
+    });
+}
+
+function updateVifData(uuid, type) {
+    $.ajax({
+        type: 'get',
+        url: '/PerformanceAction',
+        data: "action=getvif&uuid=" + uuid + "&type=" + type,
+        dataType: 'text',
+        success: function (response) {
+            var obj = jQuery.parseJSON(response);
+            var hasPic = false;
+            for (key in obj) {
+                hasPic = true;
+                var vifId = key;
+                var array = obj[key];
+                var vifRxData = [];
+                var vifTxData = [];
+                for (var c = 0; c < array.length; c++) {
+                    var times = array[c].times;
+                    var rx = array[c].rx;
+                    var tx = array[c].tx;
+                    vifRxData.push({x: times, y: rx});
+                    vifTxData.push({x: times, y: tx});
+                }
+                vifChart.addSeries({
+                    name: "VIF" + vifId + " 下行",
+                    data: vifRxData
+                }, false);
+                vifChart.addSeries({
+                    name: "VIF" + vifId + " 上行",
+                    data: vifTxData
+                }, false);
+            }
+            if (hasPic) {
+                vifChart.redraw();
+            } else {
+                $('#chart-area-4').html('<div class="no-data">没有数据</div>');
+            }
+        },
+        error: function () {
+        }
+    });
+}
+
+$('.oc-switch').bootstrapSwitch();
+
+$('.oc-switch').on('switchChange.bootstrapSwitch', function (event, state) {
+    if (state == true) {
+        thirtymin();
+    } else {
+        sixhours();
+    }
+});
+
+///add by cyh
+init();
+doShowPic();
+
+function getInstanceBasicList() {
+    var instanceUuid = $("#platformcontent").attr("instanceUuid");
+    $('#basic-list').html("");
+    $.ajax({
+        type: 'get',
+        url: '/VMAction/VMDetail',
+        data: {uuid: instanceUuid},
+        dataType: 'json',
+        success: function (obj) {
             var instanceName = decodeURI(obj.instanceName);
             var instanceDesc = decodeURI(obj.instanceDesc);
             var instanceState = obj.instanceState;
@@ -972,8 +943,6 @@ function getInstanceBasicList() {
             $("#instanceID").find(".instance-name").text(instanceName);
 
             $("#basic-list2").html($(basiclist).html());
-        },
-        error: function () {
         }
     });
 }
@@ -1187,8 +1156,6 @@ function changeNet() {
                                 dataType: 'text',
                                 success: function (response) {
                                     getInstanceBasicList();
-                                },
-                                error: function () {
                                 }
                             });
 
@@ -1208,9 +1175,6 @@ function changeNet() {
                 $('div', $('.epubliciplist')).removeClass('selected');
                 $(this).addClass('selected');
             });
-        },
-        error: function () {
-
         }
     });
 
@@ -1708,6 +1672,5 @@ function doShowPic() {
     if (!imageIsShow) {
 
     }
-
     imageIsShow = true;
 }

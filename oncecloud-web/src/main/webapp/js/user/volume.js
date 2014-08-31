@@ -125,6 +125,7 @@ $('#delete').on('click', function (event) {
     event.preventDefault();
     showbox(0);
 });
+
 $('#unbind').on('click', function (event) {
     event.preventDefault();
     showbox(1);
@@ -227,17 +228,16 @@ function getVolumeList(page, limit, search) {
 }
 
 $('#tablebody').on('click', '.id', function (event) {
-    event.preventDefault();
+	event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/VolumeAction',
-        data: 'action=detail&volumeuuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/volumedetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/volume/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="volumeUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function deleteVolume(uuid) {
