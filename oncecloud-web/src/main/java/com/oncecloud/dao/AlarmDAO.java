@@ -37,7 +37,7 @@ public class AlarmDAO {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -59,7 +59,7 @@ public class AlarmDAO {
 			}
 			return false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -81,7 +81,7 @@ public class AlarmDAO {
 			}
 			return false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -105,7 +105,7 @@ public class AlarmDAO {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -124,7 +124,7 @@ public class AlarmDAO {
 			e.printStackTrace();
 			return 0;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -151,7 +151,7 @@ public class AlarmDAO {
 			}
 			return false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -179,7 +179,7 @@ public class AlarmDAO {
 			}
 			return false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -205,7 +205,7 @@ public class AlarmDAO {
 			}
 			return false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

@@ -39,7 +39,7 @@ public class OverViewDAO {
 			System.out.println("出错了：");
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

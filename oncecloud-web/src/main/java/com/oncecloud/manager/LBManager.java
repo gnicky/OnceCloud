@@ -483,11 +483,10 @@ public class LBManager {
 		return result;
 	}
 
-	public JSONArray lbGetList(int page, int limit, String search, int userId) {
+	public JSONArray getLBList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getLbDAO().countAllLBList(search, userId);
-		List<LB> lbList = this.getLbDAO().getOnePageLBList(page, limit, search,
-				userId);
+		List<LB> lbList = this.getLbDAO().getOnePageLBList(userId, page, limit, search);
 		ja.put(total);
 		if (lbList != null) {
 			for (LB lb : lbList) {
@@ -517,8 +516,7 @@ public class LBManager {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getLbDAO().countAllLBList(search, userId);
 		ja.put(totalNum);
-		List<LB> lbList = this.getLbDAO().getOnePageLBList(page, limit, search,
-				userId);
+		List<LB> lbList = this.getLbDAO().getOnePageLBList(userId, page, limit, search);
 		if (lbList != null) {
 			for (int i = 0; i < lbList.size(); i++) {
 				JSONObject jo = new JSONObject();

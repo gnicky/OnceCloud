@@ -53,14 +53,7 @@ public class LBAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getLbManager().lbGetList(page, limit,
-						search, userId);
-				out.print(ja.toString());
-			} else if (action.equals("getforelist")) {
+			if (action.equals("getforelist")) {
 				String lbuuid = request.getParameter("lbuuid");
 				JSONArray feArray = this.getForeendDAO().getFEListByLB(lbuuid);
 				out.print(feArray.toString());

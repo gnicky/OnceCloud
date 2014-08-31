@@ -59,7 +59,7 @@ public class VolumeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -79,7 +79,7 @@ public class VolumeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -104,7 +104,7 @@ public class VolumeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -135,7 +135,7 @@ public class VolumeDAO {
 				tx.commit();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -158,7 +158,7 @@ public class VolumeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -195,7 +195,7 @@ public class VolumeDAO {
 				tx.commit();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -218,7 +218,7 @@ public class VolumeDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -241,7 +241,7 @@ public class VolumeDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -263,7 +263,7 @@ public class VolumeDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -286,7 +286,7 @@ public class VolumeDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -305,7 +305,7 @@ public class VolumeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -325,7 +325,7 @@ public class VolumeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -350,7 +350,7 @@ public class VolumeDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

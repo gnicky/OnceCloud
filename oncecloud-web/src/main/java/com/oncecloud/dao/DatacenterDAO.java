@@ -56,7 +56,7 @@ public class DatacenterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -88,7 +88,7 @@ public class DatacenterDAO {
 			}
 			return null;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -111,7 +111,7 @@ public class DatacenterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -130,7 +130,7 @@ public class DatacenterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -167,7 +167,7 @@ public class DatacenterDAO {
 			}
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -186,7 +186,7 @@ public class DatacenterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -217,7 +217,7 @@ public class DatacenterDAO {
 			e.printStackTrace();
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

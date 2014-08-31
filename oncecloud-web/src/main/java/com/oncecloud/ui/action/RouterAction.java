@@ -12,31 +12,45 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.RouterManager;
 import com.oncecloud.ui.model.AdminListModel;
+import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/RouterAction")
 @Controller
 public class RouterAction {
-	private RouterManager rtManager;
+	private RouterManager routerManager;
 
-	public RouterManager getRtManager() {
-		return rtManager;
+	public RouterManager getRouterManager() {
+		return routerManager;
 	}
 
 	@Autowired
-	public void setRtManger(RouterManager rtManager) {
-		this.rtManager = rtManager;
+	public void setRouterManger(RouterManager rtManager) {
+		this.routerManager = rtManager;
 	}
 
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String adminList(HttpServletRequest request,
-			AdminListModel alrModel) {
+	public String adminList(HttpServletRequest request, AdminListModel alrModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			JSONArray ja = this.getRtManager().getAdminRouterList(
+			JSONArray ja = this.getRouterManager().getAdminRouterList(
 					alrModel.getPage(), alrModel.getLimit(),
 					alrModel.getHost(), alrModel.getImportance(),
 					alrModel.getType());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/RouterList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String routerList(HttpServletRequest request, ListModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			JSONArray ja = this.getRouterManager().getRouterList(userId,
+					list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

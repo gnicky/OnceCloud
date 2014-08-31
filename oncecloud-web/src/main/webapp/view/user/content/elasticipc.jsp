@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>公网IP&nbsp;Elastic&nbsp;IPs</h1>
 		<p class="lead"> <em>公网&nbsp;IP&nbsp;(Elastic IP)</em>是在互联网上合法的静态 IP 地址。在本系统中，公网 IP 地址与您的账户而非特定的资源（主机）关联，您可以将申请到的公网 IP 地址分配到任意主机，并随时可以解绑、再分配到其他主机，如此可以快速替换您的对外主机。 </p>
@@ -7,17 +7,17 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="apply" class="btn btn-primary" url="<%=basePath %>user/create/createelasticip.jsp">+&nbsp;申请</button>
+			<button id="apply" class="btn btn-primary" url="${basePath}user/create/createelasticip.jsp">+&nbsp;申请</button>
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作... <span class="caret" style="margin-left:15px"></span> </button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="bind" url="<%=basePath %>user/modal/bindelasticip.jsp" disabled><span class="glyphicon glyphicon-cloud"></span>分配到主机</a></li>
-					<li><a class="btn-forbidden" id="bindlb" url="<%=basePath %>user/modal/bindelasticip.jsp" disabled><span class="glyphicon glyphicon-random"></span>分配到负载均衡</a></li>
-					<li><a class="btn-forbidden" id="bindrt" url="<%=basePath %>user/modal/bindelasticip.jsp" disabled><span class="glyphicon glyphicon-fullscreen"></span>分配到路由器</a></li>
-					<li><a class="btn-forbidden" id="binddb" url="<%=basePath %>user/modal/bindelasticip.jsp" disabled><span class="glyphicon glyphicon-inbox"></span>分配到数据库</a></li>
-					<li><a class="btn-forbidden" id="unbind" disabled><span class="glyphicon glyphicon-cloud-download"></span>解绑</a></li>
-					<li><a class="btn-forbidden" id="bandwidth" disabled><span class="glyphicon glyphicon-stats"></span>修改带宽</a></li>
-					<li><a class="btn-forbidden" id="delete" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="bind" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-cloud"></span>分配到主机</a></li>
+					<li><a class="btn-forbidden" id="bindlb" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-random"></span>分配到负载均衡</a></li>
+					<li><a class="btn-forbidden" id="bindrt" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-fullscreen"></span>分配到路由器</a></li>
+					<li><a class="btn-forbidden" id="binddb" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-inbox"></span>分配到数据库</a></li>
+					<li><a class="btn-forbidden" id="unbind"><span class="glyphicon glyphicon-cloud-download"></span>解绑</a></li>
+					<li><a class="btn-forbidden" id="bandwidth"><span class="glyphicon glyphicon-stats"></span>修改带宽</a></li>
+					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

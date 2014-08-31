@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.VolumeManager;
+import com.oncecloud.manager.FirewallManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/VolumeAction")
+@RequestMapping("/FirewallAction")
 @Controller
-public class VolumeAction {
-	private VolumeManager volumeManager;
+public class FirewallAction {
+	private FirewallManager firewallManager;
 
-	public VolumeManager getVolumeManager() {
-		return volumeManager;
+	public FirewallManager getFirewallManager() {
+		return firewallManager;
 	}
 
 	@Autowired
-	public void setVolumeManager(VolumeManager volManager) {
-		this.volumeManager = volManager;
+	public void setFirewallManager(FirewallManager firewallManager) {
+		this.firewallManager = firewallManager;
 	}
 	
-	@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/FirewallList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String volumeList(HttpServletRequest request, ListModel list) {
+	public String firewallList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			int userId = user.getUserId();
-			JSONArray ja = this.getVolumeManager().getVolumeList(userId, list.getPage(),
-					list.getLimit(), list.getSearch());
+			JSONArray ja = this.getFirewallManager().getFirewallList(userId,
+					list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

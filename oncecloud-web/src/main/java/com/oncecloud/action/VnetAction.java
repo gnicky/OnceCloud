@@ -66,14 +66,7 @@ public class VnetAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getVnetManager().vnetGetList(page, limit,
-						search, userId);
-				out.print(ja.toString());
-			} else if (action.equals("create")) {
+			if (action.equals("create")) {
 				String name = request.getParameter("name");
 				String uuid = request.getParameter("uuid");
 				String desc = request.getParameter("desc");

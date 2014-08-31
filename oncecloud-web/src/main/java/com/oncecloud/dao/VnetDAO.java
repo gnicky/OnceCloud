@@ -58,7 +58,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -66,14 +66,14 @@ public class VnetDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Vnet> getOnePageVnetList(int page, int limit, String search,
-			int uid) {
+	public List<Vnet> getOnePageVnetList(int userId, int page, int limit,
+			String search) {
 		List<Vnet> vnetList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Vnet where vnetUID = " + uid
+			String queryString = "from Vnet where vnetUID = " + userId
 					+ " and vnetName like '%" + search
 					+ "%' order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -83,7 +83,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -102,7 +102,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -129,7 +129,7 @@ public class VnetDAO {
 			if (tx != null) {
 				tx.rollback();
 			}
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -149,7 +149,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -183,7 +183,7 @@ public class VnetDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -211,7 +211,7 @@ public class VnetDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -237,7 +237,7 @@ public class VnetDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -267,7 +267,7 @@ public class VnetDAO {
 			}
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -290,7 +290,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -326,7 +326,7 @@ public class VnetDAO {
 			}
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -353,7 +353,7 @@ public class VnetDAO {
 			}
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -402,7 +402,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -422,7 +422,7 @@ public class VnetDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

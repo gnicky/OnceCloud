@@ -41,7 +41,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -60,7 +60,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -81,7 +81,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -111,7 +111,7 @@ public class DatabaseDAO {
 			if (tx != null) {
 				tx.rollback();
 			}
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -135,7 +135,7 @@ public class DatabaseDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -157,7 +157,7 @@ public class DatabaseDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -181,7 +181,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -203,7 +203,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -250,7 +250,7 @@ public class DatabaseDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -279,7 +279,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -303,7 +303,7 @@ public class DatabaseDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

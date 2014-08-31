@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>防火墙&nbsp;Security&nbsp;Groups</h1>
 		<p class="lead" style="margin-top:10px">
@@ -9,17 +9,17 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="createfw" class="btn btn-primary" url="<%=basePath %>user/create/createfirewall.jsp">+&nbsp;新建</button>
+			<button id="createfw" class="btn btn-primary" url="${basePath}user/create/createfirewall.jsp">+&nbsp;新建</button>
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="bind" url="<%=basePath %>user/modal/bindfirewall.jsp" disabled><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
-					<li><a class="btn-forbidden" id="bindlb" url="<%=basePath %>user/modal/bindfirewall.jsp" disabled><span class="glyphicon glyphicon-random"></span>加载到负载均衡</a></li>
-					<li><a class="btn-forbidden" id="bindrt" url="<%=basePath %>user/modal/bindfirewall.jsp" disabled><span class="glyphicon glyphicon-fullscreen"></span>加载到路由器</a></li>
-					<li><a class="btn-forbidden" style="display:none;" id="binddb" url="<%=basePath %>user/modal/bindfirewall.jsp.jsp" disabled><span class="glyphicon glyphicon-inbox"></span>加载到数据库</a></li>
-					<li><a class="btn-forbidden" id="delete" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="bind" url="${basePath}user/modal/bindfirewall.jsp"><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
+					<li><a class="btn-forbidden" id="bindlb" url="${basePath}user/modal/bindfirewall.jsp"><span class="glyphicon glyphicon-random"></span>加载到负载均衡</a></li>
+					<li><a class="btn-forbidden" id="bindrt" url="${basePath}user/modal/bindfirewall.jsp"><span class="glyphicon glyphicon-fullscreen"></span>加载到路由器</a></li>
+					<li><a class="btn-forbidden" style="display:none;" id="binddb" url="${basePath}user/modal/bindfirewall.jsp.jsp"><span class="glyphicon glyphicon-inbox"></span>加载到数据库</a></li>
+					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">
@@ -50,5 +50,5 @@
 			</tbody>
 		</table>
 	</div>
-	<div id="FirewallModalContainer" bindtype="" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<div id="FirewallModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>

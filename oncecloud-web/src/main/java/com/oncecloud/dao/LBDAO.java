@@ -64,7 +64,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -83,7 +83,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -91,23 +91,23 @@ public class LBDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<LB> getOnePageLBList(int page, int limit, String search, int uid) {
+	public List<LB> getOnePageLBList(int userId, int page, int limit, String search) {
 		List<LB> lbList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from LB where lbUID = " + uid
-					+ " and lbName like '%" + search
-					+ "%' and lbStatus > 0 order by createDate desc";
+			String queryString = "from LB where lbUID = :userId and lbName like '%:search%' and lbStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", search);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			lbList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -141,7 +141,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -168,7 +168,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -188,7 +188,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -214,7 +214,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -239,7 +239,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -268,7 +268,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -296,7 +296,7 @@ public class LBDAO {
 			if (tx != null) {
 				tx.rollback();
 			}
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -326,7 +326,7 @@ public class LBDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -350,7 +350,7 @@ public class LBDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -396,7 +396,7 @@ public class LBDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -442,7 +442,7 @@ public class LBDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -470,7 +470,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -494,7 +494,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -515,7 +515,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -568,7 +568,7 @@ public class LBDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

@@ -196,7 +196,7 @@ public class SnapshotDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -218,7 +218,7 @@ public class SnapshotDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -251,7 +251,7 @@ public class SnapshotDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -276,7 +276,7 @@ public class SnapshotDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -301,7 +301,7 @@ public class SnapshotDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

@@ -61,13 +61,6 @@ public class EipAction extends HttpServlet {
 				JSONObject jo = this.getEipManager().eipApply(eipName, userId,
 						eipBandwidth, eipUuid);
 				out.print(jo.toString());
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getEipManager().eipGetList(page, limit,
-						search, userId);
-				out.print(ja.toString());
 			} else if (action.equals("delete")) {
 				String eipIp = request.getParameter("eip");
 				this.getEipManager().eipDelete(eipIp, userId);

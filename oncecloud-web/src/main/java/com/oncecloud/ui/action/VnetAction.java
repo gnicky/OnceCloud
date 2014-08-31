@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.VolumeManager;
+import com.oncecloud.manager.VnetManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/VolumeAction")
+@RequestMapping("/VnetAction")
 @Controller
-public class VolumeAction {
-	private VolumeManager volumeManager;
+public class VnetAction {
+	private VnetManager vnetManager;
 
-	public VolumeManager getVolumeManager() {
-		return volumeManager;
+	public VnetManager getVnetManager() {
+		return vnetManager;
 	}
 
 	@Autowired
-	public void setVolumeManager(VolumeManager volManager) {
-		this.volumeManager = volManager;
+	public void setVnetManager(VnetManager vnetManager) {
+		this.vnetManager = vnetManager;
 	}
-	
-	@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
+
+	@RequestMapping(value = "/VnetList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String volumeList(HttpServletRequest request, ListModel list) {
+	public String vnetList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			int userId = user.getUserId();
-			JSONArray ja = this.getVolumeManager().getVolumeList(userId, list.getPage(),
-					list.getLimit(), list.getSearch());
+			JSONArray ja = this.getVnetManager().getVnetList(userId,
+					list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

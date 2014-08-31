@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.VolumeManager;
+import com.oncecloud.manager.EIPManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/VolumeAction")
+@RequestMapping("/EIPAction")
 @Controller
-public class VolumeAction {
-	private VolumeManager volumeManager;
+public class EIPAction {
+	private EIPManager eipManager;
 
-	public VolumeManager getVolumeManager() {
-		return volumeManager;
+	public EIPManager getEipManager() {
+		return eipManager;
 	}
 
 	@Autowired
-	public void setVolumeManager(VolumeManager volManager) {
-		this.volumeManager = volManager;
+	public void setEipManager(EIPManager eipManager) {
+		this.eipManager = eipManager;
 	}
-	
-	@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
+
+	@RequestMapping(value = "/EIPList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String volumeList(HttpServletRequest request, ListModel list) {
+	public String eipList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			int userId = user.getUserId();
-			JSONArray ja = this.getVolumeManager().getVolumeList(userId, list.getPage(),
-					list.getLimit(), list.getSearch());
+			JSONArray ja = this.getEipManager().getEIPList(userId,
+					list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

@@ -78,7 +78,7 @@ public class RackDAO {
 			e.printStackTrace();
 			return null;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -136,7 +136,7 @@ public class RackDAO {
 				}
 				e.printStackTrace();
 			} finally {
-				if (session != null) {
+				if (session != null && session.isOpen()) {
 					session.close();
 				}
 			}
@@ -174,7 +174,7 @@ public class RackDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -201,7 +201,7 @@ public class RackDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -250,7 +250,7 @@ public class RackDAO {
 			}
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

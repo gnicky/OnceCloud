@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>"  platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>负载均衡&nbsp;Load&nbsp;Balances</h1>
 		<p class="lead">
@@ -7,10 +7,10 @@
 		</p>
 	</div>
 	<ul class="nav nav-tabs once-tab">
-		<li class="tab-filter active" type="lb">
+		<li class="tab-filter active">
 			<a href="javascript:void(0)"><span class="glyphicon glyphicon-random"></span>负载均衡</a>
 		</li>
-		<li class="tab-filter" type="rule">
+		<li class="tab-filter">
 			<a href="javascript:void(0)"><span class="glyphicon glyphicon-barcode"></span>转发策略</a>
 		</li>
 	</ul>
@@ -20,7 +20,7 @@
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
 			<button id="create" class="btn btn-primary"
-				url="<%=basePath%>user/create/createloadbalance.jsp">
+				url="${basePath}user/create/createloadbalance.jsp">
 				+&nbsp;新建</button>	
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle"
@@ -28,9 +28,9 @@
 					更多操作... <span class="caret" style="margin-left: 15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="startup" disabled><span class="glyphicon glyphicon-play"></span>启动</a></li>
-					<li><a class="btn-forbidden" id="shutdown" disabled><span class="glyphicon glyphicon-stop"></span>关机</a></li>
-		           <li><a class="btn-forbidden" id="destroy" disabled><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
+					<li><a class="btn-forbidden" id="startup"><span class="glyphicon glyphicon-play"></span>启动</a></li>
+					<li><a class="btn-forbidden" id="shutdown"><span class="glyphicon glyphicon-stop"></span>关机</a></li>
+		           <li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

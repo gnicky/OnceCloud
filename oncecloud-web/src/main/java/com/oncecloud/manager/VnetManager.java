@@ -283,11 +283,11 @@ public class VnetManager {
 		return result;
 	}
 
-	public JSONArray vnetGetList(int page, int limit, String search, int userId) {
+	public JSONArray getVnetList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getVnetDAO().countAllVnetList(search, userId);
-		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnetList(page, limit,
-				search, userId);
+		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnetList(userId, page, limit,
+				search);
 		ja.put(total);
 		if (vnetList != null) {
 			for (Vnet vnet : vnetList) {
