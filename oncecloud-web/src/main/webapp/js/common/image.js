@@ -1,5 +1,6 @@
 reloadList(1);
 
+console.log(basePath);
 function reloadList(page) {
     var limit = $("#limit").val();
     var search = $('#search').val();
@@ -57,8 +58,8 @@ function getImageList(page, limit, search, type) {
     $('#tablebody').html("");
     $.ajax({
         type: 'post',
-        url: '/ImageAction',
-        data: {action: "getPageList", page: page, limit: limit, search: search, type: type},
+        url: '/ImageAction/ImageList',
+        data: { page: page, limit: limit, search: search, type: type},
         dataType: 'json',
         success: function (array) {
             if (array.length >= 1) {

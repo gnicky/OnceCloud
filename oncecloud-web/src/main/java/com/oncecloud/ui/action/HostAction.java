@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.HostManager;
+import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/HostAction")
 @Controller
@@ -32,6 +33,18 @@ public class HostAction {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			JSONArray ja = this.getHostManager().getAllList();
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+	
+	@RequestMapping(value = "/HostList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String hostList(HttpServletRequest request, ListModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getHostManager().getHostList(list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

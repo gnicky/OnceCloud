@@ -55,12 +55,12 @@
 							class="name">用户</span><span class="title">Users</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==2}">class="active"</c:if>><a
-						href="${basePath}common/image.jsp"><span
+						href="${basePath}image"><span
 							class="glyphicon glyphicon-record cool-blue"></span><span
 							class="name">映像</span><span class="title">Images</span></a>
 						<div class="cool-border" style="margin-left: 0"></div></li>
 					<li <c:if test="${sideActive==4}">class="active"</c:if>><a
-						href="${basePath}admin/address.jsp"><span
+						href="${basePath}address"><span
 							class="glyphicon glyphicon-indent-left cool-purple"></span><span
 							class="name">地址池</span><span class="title">Address Pool</span></a>
 						<div class="cool-border" style="margin-left: 0"></div></li>
@@ -68,22 +68,22 @@
 				<ul class="nav nav-list" style="margin-top: 25px">
 					<li <c:if test="${sideActive==12}">class="active"</c:if>><div
 							class="cool-border" style="margin-left: 0"></div> <a
-						href="${basePath}admin/datacenter.jsp"><span
+						href="${basePath}datacenter"><span
 							class="glyphicon glyphicon-globe cool-green"></span><span
 							class="name">数据中心</span><span class="title">Data Centers</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==13}">class="active"</c:if>><a
-						href="${basePath}admin/rack.jsp"><span
+						href="${basePath}rack"><span
 							class="glyphicon glyphicon-road cool-purple"></span><span
 							class="name">机架</span><span class="title">Racks</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==14}">class="active"</c:if>><a
-						href="${basePath}admin/pool.jsp"><span
+						href="${basePath}pool"><span
 							class="glyphicon glyphicon-tint cool-blue"></span><span
 							class="name">资源池</span><span class="title">Pools</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==15}">class="active"</c:if>><a
-						href="${basePath}admin/host.jsp"><span
+						href="${basePath}host"><span
 							class="glyphicon glyphicon-tasks cool-red"></span><span
 							class="name">服务器</span><span class="title">Servers</span></a>
 						<div class="cool-border"></div></li>
@@ -96,12 +96,12 @@
 				<ul class="nav nav-list" style="margin-top: 50px">
 					<li <c:if test="${sideActive==9}">class="active"</c:if>><div
 							class="cool-border" style="margin-left: 0"></div> <a
-						href="${basePath}common/log.jsp"><span
+						href="${basePath}log"><span
 							class="glyphicon glyphicon-list-alt cool-purple"></span><span
 							class="name">操作日志</span><span class="title">Activities</span></a>
 						<div class="cool-border"></div></li>
 					<li <c:if test="${sideActive==11}">class="active"</c:if>><a
-						href="${basePath}common/service.jsp"><span
+						href="${basePath}service"><span
 							class="glyphicon glyphicon-question-sign cool-cyan"></span><span
 							class="name">表单</span><span class="title">Services</span></a>
 						<div class="cool-border"></div></li>

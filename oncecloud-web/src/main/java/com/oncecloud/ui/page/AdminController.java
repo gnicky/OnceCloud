@@ -52,4 +52,22 @@ public class AdminController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
+
+	@RequestMapping(value = "/host", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView host(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/backdoor"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		User user = (User) request.getSession().getAttribute("user");
+		model.put("sideActive", 15);
+		model.put("title", "服务器管理");
+		if (user.getUserLevel() == 0) {
+			return new ModelAndView("admin/host", model);
+		} else {
+			return new ModelAndView(new RedirectView("/dashboard"));
+		}
+	}
 }

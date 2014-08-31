@@ -3,7 +3,7 @@ reloadList(1);
 function reloadList(page) {
     var limit = $('#limit').val();
     var search = $('#search').val();
-    getServerList(page, limit, search);
+    getHostList(page, limit, search);
     if (page == 1) {
         options = {
             currentPage: 1
@@ -14,10 +14,10 @@ function reloadList(page) {
 }
 
 function allDisable() {
-	$("#update").attr("disabled", true).addClass('btn-forbidden');
-	$("#delete").attr("disabled", true).addClass('btn-forbidden');
-	$("#add2pool").attr("disabled", true).addClass('btn-forbidden');
-	$("#remove4pool").attr("disabled", true).addClass('btn-forbidden');
+	$("#update").addClass('btn-forbidden');
+	$("#delete").addClass('btn-forbidden');
+	$("#add2pool").addClass('btn-forbidden');
+	$("#remove4pool").addClass('btn-forbidden');
 }
 
 function removeAllCheck() {
@@ -45,13 +45,12 @@ $('#tablebody').on('change', 'input:checkbox', function(event) {
 				count++;
 			});
 	if (count == 1) {
-		$('#update').removeClass('btn-forbidden').attr('disabled', false);
+		$('#update').removeClass('btn-forbidden');
 		if (count == bindcount) {
-			$("#remove4pool").attr('disabled', false)
-					.removeClass('btn-forbidden');
+			$("#remove4pool").removeClass('btn-forbidden');
 		} else if (count == unbindcount) {
-			$("#add2pool").attr('disabled', false).removeClass('btn-forbidden');
-			$("#delete").attr('disabled', false).removeClass('btn-forbidden');
+			$("#add2pool").removeClass('btn-forbidden');
+			$("#delete").removeClass('btn-forbidden');
 		}
 	}
 });
@@ -110,9 +109,6 @@ $('#tablebody').on('click', '.id', function(event) {
 					window.location.href = $('#platformcontent')
 							.attr('platformBasePath')
 							+ "admin/detail/hostdetail.jsp";
-				},
-				error : function() {
-
 				}
 			});
 });
@@ -183,9 +179,6 @@ $('#add2pool').on('click', function(event) {
 
 $('#remove4pool').on('click', function(event) {
 	event.preventDefault();
-	if ($(this).attr('disabled') == "disabled") {
-		return;
-	}
 	var boxes = document.getElementsByName("hostrow");
 	var infoList = "";
 	for (var i = 0; i < boxes.length; i++) {
@@ -242,11 +235,11 @@ function ejectPool(hostid) {
 			});
 }
 
-function getServerList(page, limit, searchstr) {
+function getHostList(page, limit, search) {
 	$.ajax({
 		type : 'get',
-		url : '/HostAction',
-		data : {action:"getlist", page:page, limitnum:limit, search:searchstr},
+		url : '/HostAction/HostList',
+		data : {page:page, limit:limit, search:search},
 		dataType : 'json',
 		success : function(array) {
 			if (array.length >= 1) {
@@ -323,9 +316,6 @@ function getServerList(page, limit, searchstr) {
 
 $('#delete').on('click', function(event) {
 	event.preventDefault();
-	if ($(this).attr('disabled') == "disabled") {
-		return;
-	}
 	var boxes = document.getElementsByName("hostrow");
 	var infoList = "";
 	for (var i = 0; i < boxes.length; i++) {

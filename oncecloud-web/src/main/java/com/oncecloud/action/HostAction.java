@@ -51,13 +51,6 @@ public class HostAction extends HttpServlet {
 				JSONArray ja = this.getHostManager().createHost(hostName,
 						hostPwd, hostDesc, hostIp, rackUuid, rackName, userId);
 				out.print(ja.toString());
-			} else if (action.equals("getlist")) {
-				String pageStr = request.getParameter("page");
-				String limitStr = request.getParameter("limitnum");
-				String searchStr = request.getParameter("search");
-				JSONArray ja = this.getHostManager().getHostList(pageStr,
-						limitStr, searchStr);
-				out.print(ja.toString());
 			} else if (action.equals("getloadlist")) {
 				String pageStr = request.getParameter("page");
 				String limitStr = request.getParameter("limitnum");

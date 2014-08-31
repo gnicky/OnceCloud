@@ -4,6 +4,7 @@ public class ListModel {
 	int page;
 	int limit;
 	String search;
+	String type;
 	
 	public int getPage() {
 		return page;
@@ -28,4 +29,13 @@ public class ListModel {
 	public void setSearch(String search) {
 		this.search = search;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 }

@@ -8,3 +8,7 @@
 <script src='${basePath}js/engine.js'></script>
 <script src='${basePath}dwr/util.js'></script>
 <script src="${basePath}js/oncecloud.js"></script>
+<script>
+	var basePath = "${basePath}";
+</script>
+

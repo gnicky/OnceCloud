@@ -10,33 +10,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.SRManager;
+import com.oncecloud.manager.ImageManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/StorageAction")
+@RequestMapping("/ImageAction")
 @Controller
-public class StorageAction {
-	private SRManager srManager;
+public class ImageAction {
 
-	public SRManager getSrManager() {
-		return srManager;
+	private ImageManager imageManager;
+
+	public ImageManager getImageManager() {
+		return imageManager;
 	}
 
 	@Autowired
-	public void setSrManager(SRManager srManager) {
-		this.srManager = srManager;
+	public void setImageManager(ImageManager imageManager) {
+		this.imageManager = imageManager;
 	}
 
-	@RequestMapping(value = "/StorageList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ImageList", method = { RequestMethod.POST })
 	@ResponseBody
-	public String storageList(HttpServletRequest request, ListModel list) {
+	public String imageList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			JSONArray ja = this.getSrManager().getStorageList(list.getPage(),
-					list.getLimit(), list.getSearch());
+			int userId = user.getUserId();
+			int userLevel = user.getUserLevel();
+			JSONArray ja = imageManager.getImageList(userId, userLevel, list.getPage(),
+					list.getLimit(), list.getSearch(), list.getType());
 			return ja.toString();
 		} else {
 			return "";
 		}
 	}
+
 }

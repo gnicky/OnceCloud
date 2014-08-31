@@ -190,14 +190,11 @@ public class HostManager {
 		return qaArray;
 	}
 
-	public JSONArray getHostList(String pageStr, String limitStr,
-			String searchStr) {
+	public JSONArray getHostList(int page, int limit, String search) {
 		JSONArray qaArray = new JSONArray();
-		int page = Integer.parseInt(pageStr);
-		int limit = Integer.parseInt(limitStr);
-		int totalNum = this.getHostDAO().countAllHostList(searchStr);
+		int totalNum = this.getHostDAO().countAllHostList(search);
 		List<OCHost> hostList = this.getHostDAO().getOnePageHostList(page,
-				limit, searchStr);
+				limit, search);
 		qaArray.put(totalNum);
 		for (OCHost result : hostList) {
 			JSONObject tObj = new JSONObject();

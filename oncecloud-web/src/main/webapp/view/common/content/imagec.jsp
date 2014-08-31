@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">	<div class="intro">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<div class="content" id="platformcontent">	<div class="intro">
 		<h1>映像&nbsp;Images</h1>
 		<p class="lead" style="margin-top: 10px">
 			<em>映像&nbsp;(Image)</em>是带有操作系统的主机模板。云平台官方会提供主流的 Linux、Windows
@@ -10,46 +11,41 @@
 		<li class="tab-filter active" type="system">
 			<a href="javascript:void(0)"><span class="glyphicon glyphicon-star"></span>系统</a>
 		</li>
-		<%
-			if (user.getUserLevel() != 0) {
-		%>
-		<li class="tab-filter" type="user">
-			<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>自有</a>
-		</li>
-		<%
-			} else {
-		%>
-		<li class="tab-filter" type="user">
-			<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>用户</a>
-		</li>
-		<%
-			}
-		%>
+		<c:choose>
+			<c:when test="${user.userLevel!=0}">
+				<li class="tab-filter" type="user">
+					<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>自有</a>
+				</li>
+			</c:when>
+			<c:otherwise>
+				<li class="tab-filter" type="user">
+					<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>用户</a>
+				</li>
+			</c:otherwise>
+		</c:choose>
 	</ul>
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh">
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
-			<%
-				if (user.getUserLevel() == 0) {
-			%>
-			<button id="create" class="btn btn-primary"
-				url="<%=basePath%>admin/create/createimage.jsp">
-				+&nbsp;添加映像</button>
-			
-			<div class="btn-group">
-				<button class="btn btn-default dropdown-toggle"
-					data-toggle="dropdown">
-					更多操作... <span class="caret" style="margin-left: 15px"></span>
-				</button>
-				<ul class="dropdown-menu">
-		            <li><a class="btn-forbidden" id="delete" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li>
-				</ul>
-			</div>
-			<%
-				}
-			%>
+
+			<c:if test="${user.userLevel==0}">
+				<button id="create" class="btn btn-primary"
+					url="${basePath}admin/create/createimage.jsp">
+					+&nbsp;添加映像</button>
+
+				<div class="btn-group">
+					<button class="btn btn-default dropdown-toggle"
+						data-toggle="dropdown">
+						更多操作... <span class="caret" style="margin-left: 15px"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a class="btn-forbidden" id="delete" disabled><span
+								class="glyphicon glyphicon-trash"></span>删除</a></li>
+					</ul>
+				</div>
+			</c:if>
 			<input class="search" id="search" value="">
 			<div class="toolbar-right">
 				<table>

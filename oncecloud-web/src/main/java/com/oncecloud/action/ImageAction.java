@@ -42,16 +42,7 @@ public class ImageAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("getPageList")) {
-				int userLevel = user.getUserLevel();
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				String type = request.getParameter("type");
-				JSONArray ja = this.getImageManager().getImageList(userId,
-						userLevel, page, limit, search, type);
-				out.print(ja.toString());
-			} else if (action.equals("create")) {
+			if (action.equals("create")) {
 				int userLevel = user.getUserLevel();
 				String imageUuid = request.getParameter("imageUUId");
 				String imageName = request.getParameter("imageName");

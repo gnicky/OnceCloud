@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>服务器&nbsp;Servers</h1>
 		<p class="lead" style="margin-top:10px">
@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="<%=basePath %>admin/create/createhost.jsp">
+			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createhost.jsp">
 				+&nbsp;添加服务器
 			</button>
             <div class="btn-group">
@@ -17,10 +17,10 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="add2pool" disabled><span class="glyphicon glyphicon-tint"></span>添加到资源池</a></li>
-					<li><a class="btn-forbidden" id="remove4pool" disabled><span class="glyphicon glyphicon-save"></span>从资源池移除</a></li>
-					<li><a class="btn-forbidden" id="update" url="<%=basePath %>admin/create/createhost.jsp" disabled><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
-					<li><a class="btn-forbidden" id="delete" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="add2pool"><span class="glyphicon glyphicon-tint"></span>添加到资源池</a></li>
+					<li><a class="btn-forbidden" id="remove4pool"><span class="glyphicon glyphicon-save"></span>从资源池移除</a></li>
+					<li><a class="btn-forbidden" id="update" url="${basePath}admin/create/createhost.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

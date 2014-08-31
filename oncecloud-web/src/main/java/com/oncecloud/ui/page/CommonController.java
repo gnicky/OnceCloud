@@ -78,4 +78,17 @@ public class CommonController {
 			return new ModelAndView("admin/instance", model);
 		}
 	}
+
+	@RequestMapping(value = "/image", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView image(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("sideActive", 2);
+		model.put("title", "映像");
+		return new ModelAndView("common/image", model);
+	}
 }
