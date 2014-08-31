@@ -16,6 +16,7 @@
 		<property name="connection.autoReconnect">true</property>
 		<property name="connection.autoReconnectForPools">true</property>
 		<property name="connection.is-connection-validation-required">true</property>
+		<property name="hibernate.current_session_context_class">thread</property>
 
 		<mapping class="com.oncecloud.entity.Alarm" />
 		<mapping class="com.oncecloud.entity.AlarmRule" />
