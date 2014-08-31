@@ -114,9 +114,8 @@ public class BackendDAO {
 					.createCriteria(Backend.class)
 					.add(Restrictions.like("backName", search,
 							MatchMode.ANYWHERE))
-					.addOrder(Order.desc("createDate"));
-			criteria.setFirstResult(startPos);
-			criteria.setMaxResults(limit);
+					.addOrder(Order.desc("createDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
 			backList = criteria.list();
 			session.getTransaction().commit();
 			return backList;
@@ -186,9 +185,11 @@ public class BackendDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Backend.class).add(
-					Restrictions.like("backName", search, MatchMode.ANYWHERE));
-			criteria.setProjection(Projections.rowCount());
+			Criteria criteria = session
+					.createCriteria(Backend.class)
+					.add(Restrictions.like("backName", search,
+							MatchMode.ANYWHERE))
+					.setProjection(Projections.rowCount());
 			int count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			return count;
@@ -235,7 +236,6 @@ public class BackendDAO {
 				session.getTransaction().rollback();
 			}
 		}
-
 	}
 
 	/**
