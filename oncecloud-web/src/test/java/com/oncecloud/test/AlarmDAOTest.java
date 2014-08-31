@@ -26,10 +26,22 @@ public class AlarmDAOTest {
 	}
 
 	@Test
-	public void testList() {
-		List<Alarm> alarms = this.getAlarmDAO().getOnePageList(1, 100, 14, "");
+	public void testGetAlarm() {
+		System.out.println(this.getAlarmDAO()
+				.getAlarm("32530a9a-0b13-4e17-8b81-2240aa8e214e")
+				.getAlarmName());
+	}
+
+	@Test
+	public void testGetOnePageList() {
+		List<Alarm> alarms = this.getAlarmDAO().getOnePageList(14, 1, 100, "");
 		for (Alarm alarm : alarms) {
 			System.out.println(alarm.getAlarmUuid());
 		}
+	}
+
+	@Test
+	public void testCountAlarmList() {
+		System.out.println(this.getAlarmDAO().countAlarmList(14, ""));
 	}
 }
