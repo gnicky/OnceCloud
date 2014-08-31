@@ -125,30 +125,60 @@ public class StorageDAO {
 		}
 	}
 
+	/**
+	 * 获取存储列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Storage> getOnePageStorageList(int page, int limit,
 			String search) {
-		Session session = this.getSessionHelper().openMainSession();
-		int startPos = (page - 1) * limit;
-		String queryString = "";
-		queryString = "from Storage where srName like '%" + search
-				+ "%' and srstatus = 1 order by createDate desc";
-		Query query = session.createQuery(queryString);
-		query.setFirstResult(startPos);
-		query.setMaxResults(limit);
-		List<Storage> srList = query.list();
-		session.close();
+		List<Storage> srList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			int startPos = (page - 1) * limit;
+			String queryString = "from Storage where srName like :search and srstatus = 1 order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			srList = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
 		return srList;
 	}
 
+	/**
+	 * 获取存储总数
+	 * 
+	 * @param search
+	 * @return
+	 */
 	public int countAllStorageList(String search) {
-		Session session = this.getSessionHelper().openMainSession();
-		String queryString = "";
-		queryString = "select count(*) from Storage where srName like '%"
-				+ search + "%' and srstatus = 1 ";
-		Query query = session.createQuery(queryString);
-		int count = ((Number) query.iterate().next()).intValue();
-		session.close();
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			String queryString = "select count(*) from Storage where srName like :search and srstatus = 1 ";
+			Query query = session.createQuery(queryString);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.iterate().next()).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
 		return count;
 	}
 

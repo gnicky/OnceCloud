@@ -93,12 +93,21 @@ public class VolumeManager {
 		this.constant = constant;
 	}
 
+	/**
+	 * 获取用户硬盘列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getVolumeList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVolumeDAO().countAllVolumeList(search, userId);
+		int totalNum = this.getVolumeDAO().countAllVolumeList(userId, search);
 		List<Volume> volumeList = this.getVolumeDAO().getOnePageVolumeList(
-				page, limit, search, userId);
+				userId, page, limit, search);
 		ja.put(totalNum);
 		if (volumeList != null) {
 			for (int i = 0; i < volumeList.size(); i++) {

@@ -219,18 +219,27 @@ public class VMDAO {
 		return result;
 	}
 
+	/**
+	 * 获取用户主机列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<OCVM> getOnePageVmList(int page, int limit, String search,
-			int uid) {
+	public List<OCVM> getOnePageVmList(int userId, int page, int limit,
+			String search) {
 		List<OCVM> vmList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from OCVM where vmUID = " + uid
-					+ " and vmName like '%" + search
-					+ "%' and vmStatus = 1 order by createDate desc";
+			String queryString = "from OCVM where vmUID = :userId and vmName like :search and vmStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			vmList = query.list();
@@ -307,15 +316,22 @@ public class VMDAO {
 		return vmList;
 	}
 
-	public int countAllVMList(String search, int vmUID) {
+	/**
+	 * 获取用户主机总数
+	 * 
+	 * @param search
+	 * @param vmUID
+	 * @return
+	 */
+	public int countAllVMList(int userId, String search) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from OCVM where vmUID =:vmUID and vmName like '%"
-					+ search + "%' and vmStatus = 1";
+			String queryString = "select count(*) from OCVM where vmUID = :userId and vmName like :search and vmStatus = 1";
 			Query query = session.createQuery(queryString);
-			query.setInteger("vmUID", vmUID);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();

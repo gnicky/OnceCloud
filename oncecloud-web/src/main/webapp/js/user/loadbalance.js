@@ -79,7 +79,7 @@ function getLBList(page, limit, search) {
             }
             options = {
                 totalPages: totalp
-            }
+            };
             $('#pageDivider').bootstrapPaginator(options);
             pageDisplayUpdate(page, totalp);
             var tableStr = "";
@@ -95,7 +95,7 @@ function getLBList(page, limit, search) {
                     + '</span><span name="stateword">' + nameStr[power] + '</span></td>';
                 var publicip = obj.eip;
                 if (publicip != "") {
-                    publicip = '<a><span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;' + publicip + '</a>'
+                    publicip = '<a><span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;' + publicip + '</a>';
                 }
                 var thistr = '<tr rowid="' + uuid + '" lbname="' + name + '"><td class="rcheck"><input type="checkbox" name="lbrow"></td><td><a class="id">' + showid + '</a></td>'
                     + '<td>' + name + '</td>' + stateStr + '<td name="eip">' + publicip + '</td><td name="capacity">' + obj.capacity + '</td>'

@@ -283,9 +283,17 @@ public class VnetManager {
 		return result;
 	}
 
+	/**
+	 * 获取用户私有网络列表
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getVnetList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int total = this.getVnetDAO().countAllVnetList(search, userId);
+		int total = this.getVnetDAO().countAllVnetList(userId, search);
 		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnetList(userId, page, limit,
 				search);
 		ja.put(total);

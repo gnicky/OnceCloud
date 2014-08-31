@@ -85,20 +85,21 @@ public class EIPDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<EIP> getOnePageEipList(int userId, int page, int limit, String search) {
+	public List<EIP> getOnePageEipList(int userId, int page, int limit,
+			String search) {
 		List<EIP> eipList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from EIP where eipUID= :userId and eipName like '%:search%' order by createDate desc";
+			String queryString = "from EIP where eipUID = :userId and eipName like '%:search%' order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", search);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			eipList = query.list();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -133,14 +134,25 @@ public class EIPDAO {
 		return eipList;
 	}
 
-	public int countAllEipList(String search, int eipUID) {
-		Session session = this.getSessionHelper().openMainSession();
-		String queryString = "";
-		queryString = "select count(*) from EIP where eipUID=:eipUID and eipName like '%"
-				+ search + "%'";
-		Query query = session.createQuery(queryString);
-		query.setInteger("eipUID", eipUID);
-		return ((Number) query.iterate().next()).intValue();
+	public int countAllEipList(int userId, String search) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			String queryString = "";
+			queryString = "select count(*) from EIP where eipUID = :userId and eipName like '%:search%'";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", search);
+			count = ((Number) query.iterate().next()).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return count;
 	}
 
 	/**

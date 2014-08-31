@@ -879,11 +879,20 @@ public class VMManager {
 		return jo;
 	}
 
+	/**
+	 * 获取用户主机列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getVMList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVmDAO().countAllVMList(search, userId);
-		List<OCVM> VMList = this.getVmDAO().getOnePageVmList(page, limit,
-				search, userId);
+		int totalNum = this.getVmDAO().countAllVMList(userId, search);
+		List<OCVM> VMList = this.getVmDAO().getOnePageVmList(userId, page,
+				limit, search);
 		ja.put(totalNum);
 		if (VMList != null) {
 			for (int i = 0; i < VMList.size(); i++) {
@@ -970,10 +979,10 @@ public class VMManager {
 
 	public JSONArray getAbleVMs(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVmDAO().countAllVMList(search, userId);
+		int totalNum = this.getVmDAO().countAllVMList(userId, search);
 		ja.put(totalNum);
-		List<OCVM> vmList = this.getVmDAO().getOnePageVmList(page, limit,
-				search, userId);
+		List<OCVM> vmList = this.getVmDAO().getOnePageVmList(userId, page,
+				limit, search);
 		if (vmList != null) {
 			for (int i = 0; i < vmList.size(); i++) {
 				JSONObject jo = new JSONObject();

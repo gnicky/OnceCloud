@@ -313,11 +313,18 @@ public class AlarmManager {
 		return ja;
 	}
 
-	public JSONArray alarmGetList(int page, int limit, String searchStr,
-			int userId) {
-		int totalNum = this.getAlarmDAO().countAlarmList(searchStr, userId);
-		List<Alarm> alarmList = this.getAlarmDAO().getOnePageList(page, limit,
-				userId, searchStr);
+	/**
+	 * 获取监控警告列表
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public JSONArray getAlarmList(int userId, int page, int limit, String search) {
+		int totalNum = this.getAlarmDAO().countAlarmList(userId, search);
+		List<Alarm> alarmList = this.getAlarmDAO().getOnePageList(userId, page,
+				limit, search);
 		JSONArray ja = new JSONArray();
 		ja.put(totalNum);
 		if (alarmList != null) {
@@ -332,7 +339,6 @@ public class AlarmManager {
 				jo.put("alarmModify", alarm.getAlarmModify());
 				String timeUsed = Utilities.encodeText(alarm.getAlarmDate()
 						.toString());
-				timeUsed = timeUsed.replace("+", "%20");
 				jo.put("alarmDate", timeUsed);
 				ja.put(jo);
 			}

@@ -39,54 +39,81 @@ public class SnapshotDAO {
 		this.quotaDAO = quotaDAO;
 	}
 
+	/**
+	 * 获取主机快照列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param uid
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageVmSnapshotList(int page, int limit,
-			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
-		int startPos = (page - 1) * limit;
-		String queryString = "";
-		queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
-				+ "from Snapshot ss, OCVM ov "
-				+ "where ss.snapshotVm=ov.vmUuid "
-				+ "group by ss.snapshotVm, ov.vmName "
-				+ "having ss.snapshotVm in "
-				+ "(select vm.vmUuid from OCVM vm where vm.vmUID="
-				+ uid
-				+ " and vm.vmName like '%"
-				+ search
-				+ "%') "
-				+ "order by ov.createDate desc";
-		Query query = session.createQuery(queryString);
-		query.setFirstResult(startPos);
-		query.setMaxResults(limit);
-		List<Object> VMSnapshotList = query.list();
-		session.close();
-		return VMSnapshotList;
+	public List<Object> getOnePageVMSnapshotList(int userId, int page, int limit,
+			String search) {
+		List<Object> vmSnapshotList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			int startPos = (page - 1) * limit;
+			String queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
+					+ "from Snapshot ss, OCVM ov where ss.snapshotVm = ov.vmUuid "
+					+ "group by ss.snapshotVm, ov.vmName having ss.snapshotVm in "
+					+ "(select vm.vmUuid from OCVM vm where vm.vmUID = :userId "
+					+ "and vm.vmName like :search) order by ov.createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			vmSnapshotList = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return vmSnapshotList;
 	}
 
+	/**
+	 * 获取硬盘快照列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param uid
+	 * @param offside
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageVolumeSnapshotList(int page, int limit,
-			String search, int uid, int offside) {
-		Session session = this.getSessionHelper().openMainSession();
-		int startPos = (page - 1) * limit + offside;
-		String queryString = "";
-		queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
-				+ "from Snapshot ss, Volume ol "
-				+ "where ss.snapshotVolume=ol.volumeUuid "
-				+ "group by ss.snapshotVolume, ol.volumeName "
-				+ "having ss.snapshotVolume in "
-				+ "(select v.volumeUuid from Volume v where v.volumeUID="
-				+ uid
-				+ " and v.volumeName like '%"
-				+ search
-				+ "%') "
-				+ "order by ol.createDate desc";
-		Query query = session.createQuery(queryString);
-		query.setFirstResult(startPos);
-		query.setMaxResults(limit);
-		List<Object> VolumeSnapshotList = query.list();
-		session.close();
-		return VolumeSnapshotList;
+	public List<Object> getOnePageVolumeSnapshotList(int userId, int page, int limit,
+			String search, int offside) {
+		List<Object> volumeSnapshotList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			int startPos = (page - 1) * limit;
+			String queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
+					+ "from Snapshot ss, Volume ol where ss.snapshotVolume=ol.volumeUuid "
+					+ "group by ss.snapshotVolume, ol.volumeName having ss.snapshotVolume in "
+					+ "(select v.volumeUuid from Volume v where v.volumeUID = :userId "
+					+ "and v.volumeName like :search) order by ol.createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			volumeSnapshotList = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return volumeSnapshotList;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -137,41 +164,73 @@ public class SnapshotDAO {
 		}
 	}
 
-	public int countAllSnapshotList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
-		String queryString = "";
-
-		queryString = "select count(distinct ss.snapshotVm) "
-				+ "from Snapshot ss " + "where ss.snapshotVm in "
-				+ "(select vm.vmUuid from OCVM vm where vm.vmUID=" + uid
-				+ " and vm.vmName like '%" + search + "%')";
-		Query query = session.createQuery(queryString);
-		int vmCount = ((Number) query.iterate().next()).intValue();
-
-		queryString = "select count(distinct ss.snapshotVolume) "
-				+ "from Snapshot ss " + "where ss.snapshotVolume in "
-				+ "(select v.volumeUuid from Volume v where v.volumeUID=" + uid
-				+ " and v.volumeName like '%" + search + "%')";
-		Query query1 = session.createQuery(queryString);
-		int volumeCount = ((Number) query1.iterate().next()).intValue();
-
-		session.close();
-		return vmCount + volumeCount;
+	/**
+	 * 获取备份链总数
+	 * 
+	 * @param search
+	 * @param uid
+	 * @return
+	 */
+	public int countAllSnapshotList(int userId, String search) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			String queryString1 = "select count(distinct ss.snapshotVm) "
+					+ "from Snapshot ss where ss.snapshotVm in "
+					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
+					+ "and vm.vmName like :search')";
+			Query query1 = session.createQuery(queryString1);
+			query1.setInteger("userId", userId);
+			query1.setString("search", "%" + search + "%");
+			int vmCount = ((Number) query1.iterate().next()).intValue();
+			String queryString2 = "select count(distinct ss.snapshotVolume) "
+					+ "from Snapshot ss where ss.snapshotVolume in "
+					+ "(select v.volumeUuid from Volume v where v.volumeUID = :userId"
+					+ " and v.volumeName like :search')";
+			Query query2 = session.createQuery(queryString2);
+			query2.setInteger("userId", userId);
+			query2.setString("search", "%" + search + "%");
+			int volumeCount = ((Number) query2.iterate().next()).intValue();
+			count = vmCount + volumeCount;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return count;
 	}
 
-	public int countVmSnapshotList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
-		String queryString = "";
-
-		queryString = "select count(distinct ss.snapshotVm) "
-				+ "from Snapshot ss " + "where ss.snapshotVm in "
-				+ "(select vm.vmUuid from OCVM vm where vm.vmUID=" + uid
-				+ " and vm.vmName like '%" + search + "%')";
-		Query query = session.createQuery(queryString);
-		int vmCount = ((Number) query.iterate().next()).intValue();
-
-		session.close();
-		return vmCount;
+	/**
+	 * 获取主机备份链总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public int countVMSnapshotList(int userId, String search) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			String queryString1 = "select count(distinct ss.snapshotVm) "
+					+ "from Snapshot ss where ss.snapshotVm in "
+					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
+					+ "and vm.vmName like :search')";
+			Query query = session.createQuery(queryString1);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.iterate().next()).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		return count;
 	}
 
 	public void insertSnapshot(String snapshotId, String snapshotName,

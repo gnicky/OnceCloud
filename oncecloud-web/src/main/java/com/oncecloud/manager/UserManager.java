@@ -361,6 +361,14 @@ public class UserManager {
 		return jo;
 	}
 
+	/**
+	 * 获取用户列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
 	public JSONArray getUserList(int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getUserDAO().countAllUserList(search);

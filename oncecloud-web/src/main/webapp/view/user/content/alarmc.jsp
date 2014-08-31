@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>监控告警&nbsp;Alarms</h1>
 		<p class="lead">
@@ -9,14 +9,14 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="<%=basePath %>user/create/createalarm.jsp">+&nbsp;新建</button>
+			<button id="create" class="btn btn-primary" url="${basePath}user/create/createalarm.jsp">+&nbsp;新建</button>
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="destroy" disabled><span class="glyphicon glyphicon-trash"></span>删除</a></li>
-					<li><a class="btn-forbidden" id="addresource" url="<%=basePath%>user/modal/bindalarm.jsp" disabled><span class="glyphicon glyphicon-cloud"></span>绑定资源</a></li>
+					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="bindalarm" url="${basePath}user/modal/bindalarm.jsp"><span class="glyphicon glyphicon-cloud"></span>绑定资源</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">
@@ -51,6 +51,5 @@
 		</table>
 		<div id="applet"></div>
 	</div>
-	<div id="InstanceModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
-	<div id="ResourceModalContainer" type="new" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<div id="AlarmModalContainer" type="new" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>
