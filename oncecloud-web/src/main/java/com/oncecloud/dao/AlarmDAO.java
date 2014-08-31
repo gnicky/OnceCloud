@@ -95,9 +95,8 @@ public class AlarmDAO {
 					.add(Restrictions.eq("alarmUid", userId))
 					.add(Restrictions.like("alarmName", keyword,
 							MatchMode.ANYWHERE))
-					.addOrder(Order.desc("alarmDate"));
-			criteria.setFirstResult(startPosition);
-			criteria.setMaxResults(itemPerPage);
+					.addOrder(Order.desc("alarmDate"))
+					.setFirstResult(startPosition).setMaxResults(itemPerPage);
 			List<Alarm> list = criteria.list();
 			session.getTransaction().commit();
 			return list;
@@ -119,8 +118,8 @@ public class AlarmDAO {
 					.createCriteria(Alarm.class)
 					.add(Restrictions.eq("alarmUid", userId))
 					.add(Restrictions.like("alarmName", keyword,
-							MatchMode.ANYWHERE));
-			criteria.setProjection(Projections.rowCount());
+							MatchMode.ANYWHERE))
+					.setProjection(Projections.rowCount());
 			int count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			return count;

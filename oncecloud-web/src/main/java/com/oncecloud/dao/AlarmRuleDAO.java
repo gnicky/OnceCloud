@@ -140,10 +140,9 @@ public class AlarmRuleDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			Criteria criteria = session.createCriteria(AlarmRule.class).add(
-					Restrictions.eq("ruleAAlarmUuid", ruleAAlarmUuid));
-			criteria.setFirstResult(startPos);
-			criteria.setMaxResults(limit);
+			Criteria criteria = session.createCriteria(AlarmRule.class)
+					.add(Restrictions.eq("ruleAAlarmUuid", ruleAAlarmUuid))
+					.setFirstResult(startPos).setMaxResults(limit);
 			List<AlarmRule> list = criteria.list();
 			session.getTransaction().commit();
 			return list;
@@ -161,9 +160,9 @@ public class AlarmRuleDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(AlarmRule.class).add(
-					Restrictions.eq("ruleAAlarmUuid", ruleAAlarmUuid));
-			criteria.setProjection(Projections.rowCount());
+			Criteria criteria = session.createCriteria(AlarmRule.class)
+					.add(Restrictions.eq("ruleAAlarmUuid", ruleAAlarmUuid))
+					.setProjection(Projections.rowCount());
 			int count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			return count;
