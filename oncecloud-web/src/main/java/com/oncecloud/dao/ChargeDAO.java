@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -101,10 +100,13 @@ public class ChargeDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update ChargeRecord set recordState="
-					+ recordstate + " where recordId ='" + recordId + "'";
-			Query query = session.createQuery(queryString);
-			query.executeUpdate();
+			Criteria criteria = session.createCriteria(ChargeRecord.class).add(
+					Restrictions.eq("recordId", recordId));
+			ChargeRecord chargeRecord = (ChargeRecord) criteria.uniqueResult();
+			if (chargeRecord != null) {
+				chargeRecord.setRecordState(recordstate);
+				session.update(chargeRecord);
+			}
 			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
