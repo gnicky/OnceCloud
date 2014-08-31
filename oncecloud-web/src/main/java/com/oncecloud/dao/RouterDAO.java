@@ -57,7 +57,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -76,7 +76,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -84,14 +84,14 @@ public class RouterDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageRouterList(int page, int limit,
-			String search, int uid) {
+	public List<Router> getOnePageRouterList(int userId, int page, int limit,
+			String search) {
 		List<Router> routerList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().openMainSession();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Router where routerUID = " + uid
+			String queryString = "from Router where routerUID = " + userId
 					+ " and routerName like '%" + search
 					+ "%' and routerStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -101,7 +101,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -135,7 +135,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -162,7 +162,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -184,7 +184,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -210,7 +210,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -235,7 +235,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -264,7 +264,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -292,7 +292,7 @@ public class RouterDAO {
 			if (tx != null) {
 				tx.rollback();
 			}
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -320,7 +320,7 @@ public class RouterDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -344,7 +344,7 @@ public class RouterDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -390,7 +390,7 @@ public class RouterDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -440,7 +440,7 @@ public class RouterDAO {
 			}
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -469,7 +469,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -493,7 +493,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -514,7 +514,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -555,7 +555,7 @@ public class RouterDAO {
 			}
 			result = false;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -586,7 +586,7 @@ public class RouterDAO {
 			e.printStackTrace();
 			routerList = null;
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -639,7 +639,7 @@ public class RouterDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

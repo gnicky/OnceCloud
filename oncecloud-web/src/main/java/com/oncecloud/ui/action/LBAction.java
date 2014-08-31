@@ -10,31 +10,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
-import com.oncecloud.manager.VolumeManager;
+import com.oncecloud.manager.LBManager;
 import com.oncecloud.ui.model.ListModel;
 
-@RequestMapping("/VolumeAction")
+@RequestMapping("/LBAction")
 @Controller
-public class VolumeAction {
-	private VolumeManager volumeManager;
+public class LBAction {
+	private LBManager lbManager;
 
-	public VolumeManager getVolumeManager() {
-		return volumeManager;
+	public LBManager getLbManager() {
+		return lbManager;
 	}
 
 	@Autowired
-	public void setVolumeManager(VolumeManager volManager) {
-		this.volumeManager = volManager;
+	public void setLbManager(LBManager lbManager) {
+		this.lbManager = lbManager;
 	}
-	
-	@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
+
+	@RequestMapping(value = "/LBList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String volumeList(HttpServletRequest request, ListModel list) {
+	public String lbList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			int userId = user.getUserId();
-			JSONArray ja = this.getVolumeManager().getVolumeList(userId, list.getPage(),
-					list.getLimit(), list.getSearch());
+			JSONArray ja = this.getLbManager().getLBList(userId,
+					list.getPage(), list.getLimit(), list.getSearch());
 			return ja.toString();
 		} else {
 			return "";

@@ -246,7 +246,7 @@ public class ImageManager {
 			}
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

@@ -77,7 +77,7 @@ public class EIPDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -85,18 +85,26 @@ public class EIPDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<EIP> getOnePageEipList(int page, int limit, String search,
-			int uid) {
-		Session session = this.getSessionHelper().openMainSession();
-		int startPos = (page - 1) * limit;
-		String queryString = "";
-		queryString = "from EIP where eipUID=" + uid + " and eipName like '%"
-				+ search + "%' order by createDate desc";
-		Query query = session.createQuery(queryString);
-		query.setFirstResult(startPos);
-		query.setMaxResults(limit);
-		List<EIP> eipList = query.list();
-		session.close();
+	public List<EIP> getOnePageEipList(int userId, int page, int limit, String search) {
+		List<EIP> eipList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().openMainSession();
+			int startPos = (page - 1) * limit;
+			String queryString = "from EIP where eipUID= :userId and eipName like '%:search%' order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", search);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			eipList = query.list();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
 		return eipList;
 	}
 
@@ -182,7 +190,7 @@ public class EIPDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -213,7 +221,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -269,7 +277,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -301,7 +309,7 @@ public class EIPDAO {
 				tx.rollback();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -339,7 +347,7 @@ public class EIPDAO {
 				tx.commit();
 			}
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -362,7 +370,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -390,7 +398,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -443,7 +451,7 @@ public class EIPDAO {
 			}
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -471,7 +479,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -491,7 +499,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -517,7 +525,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -543,7 +551,7 @@ public class EIPDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}

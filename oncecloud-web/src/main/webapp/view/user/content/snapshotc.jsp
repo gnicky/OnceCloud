@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content"  id="platformcontent" platformBasePath="<%=basePath %>">
+<div class="content"  id="platformcontent">
 	<div class="intro">
 		<h1>备份&nbsp;Snapshots</h1>
 		<p class="lead" style="margin-top:10px">
@@ -45,8 +45,6 @@
 				</tr>
 			</thead>
 			<tbody id="tablebody">
-				<tr rsuuid="dsaf33des" rstype="instance">
-				</tr>
 			</tbody>
 		</table>
 	</div>

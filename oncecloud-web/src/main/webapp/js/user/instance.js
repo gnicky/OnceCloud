@@ -48,7 +48,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         }
         total++;
     });
-    if (total != 0 && process == 0) {
+    if (total > 0 && process == 0) {
         $("#destroy").removeClass('btn-forbidden');
         $("#backup").removeClass('btn-forbidden');
         $("#image").removeClass('btn-forbidden');

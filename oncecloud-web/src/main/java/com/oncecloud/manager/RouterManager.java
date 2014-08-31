@@ -555,12 +555,12 @@ public class RouterManager {
 		return ja;
 	}
 
-	public JSONArray routerGetList(int page, int limit, String search,
-			int userId) {
+	public JSONArray getRouterList(int userId, int page, int limit,
+			String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getRouterDAO().countAllRouterList(search, userId);
 		List<Router> routerList = this.getRouterDAO().getOnePageRouterList(
-				page, limit, search, userId);
+				userId, page, limit, search);
 		ja.put(total);
 		if (routerList != null) {
 			for (Router router : routerList) {
@@ -598,8 +598,8 @@ public class RouterManager {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO().countAllRouterList(search, userId);
 		ja.put(totalNum);
-		List<Router> rtList = this.getRouterDAO().getOnePageRouterList(page,
-				limit, search, userId);
+		List<Router> rtList = this.getRouterDAO().getOnePageRouterList(userId, page,
+				limit, search);
 		if (rtList != null) {
 			for (int i = 0; i < rtList.size(); i++) {
 				JSONObject jo = new JSONObject();

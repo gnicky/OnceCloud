@@ -202,12 +202,12 @@ public class EIPManager {
 		return jo;
 	}
 
-	public JSONArray eipGetList(int page, int limit, String search, int userId) {
+	public JSONArray getEIPList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		try {
 			int totalNum = this.getEipDAO().countAllEipList(search, userId);
-			List<EIP> eipList = this.getEipDAO().getOnePageEipList(page, limit,
-					search, userId);
+			List<EIP> eipList = this.getEipDAO().getOnePageEipList(userId,
+					page, limit, search);
 			ja.put(totalNum);
 			if (eipList != null) {
 				for (int i = 0; i < eipList.size(); i++) {

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>"  platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>网络&nbsp;Networks</h1>
 		<p class="lead">
@@ -8,10 +8,10 @@
 	</div>
 	<ul class="nav nav-tabs once-tab">
 		<li class="tab-filter active" type="rt">
-			<a href="<%=basePath%>user/router.jsp"><span class="glyphicon glyphicon-fullscreen"></span>路由器</a>
+			<a href="${basePath}router"><span class="glyphicon glyphicon-fullscreen"></span>路由器</a>
 		</li>
 		<li class="tab-filter" type="vlan">
-			<a href="<%=basePath%>user/vnet.jsp"><span class="glyphicon glyphicon-barcode"></span>私有网络</a>
+			<a href="${basePath}vnet"><span class="glyphicon glyphicon-barcode"></span>私有网络</a>
 		</li>
 	</ul>
 	<div class="once-pane">
@@ -23,7 +23,7 @@
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
 			<button id="create" class="btn btn-primary"
-				url="<%=basePath%>user/create/createrouter.jsp">
+				url="${basePath}user/create/createrouter.jsp">
 				+&nbsp;新建</button>	
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle"
@@ -31,9 +31,9 @@
 					更多操作... <span class="caret" style="margin-left: 15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="startup" disabled><span class="glyphicon glyphicon-play"></span>启动</a></li>
-					<li><a class="btn-forbidden" id="shutdown" disabled><span class="glyphicon glyphicon-stop"></span>关机</a></li>
-		           <li><a class="btn-forbidden" id="destroy" disabled><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
+					<li><a class="btn-forbidden" id="startup"><span class="glyphicon glyphicon-play"></span>启动</a></li>
+					<li><a class="btn-forbidden" id="shutdown"><span class="glyphicon glyphicon-stop"></span>关机</a></li>
+		           <li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">
@@ -70,5 +70,5 @@
 			</tbody>
 		</table>
 	</div>
-    <div id="RouterModalContainer" type="new" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    <div id="RouterModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>
