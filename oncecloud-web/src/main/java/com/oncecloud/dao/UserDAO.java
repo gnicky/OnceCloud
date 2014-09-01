@@ -91,6 +91,7 @@ public class UserDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from User where userName like :search and userId != 1 and userStatus = 1 order by userDate desc";
 			Query query = session.createQuery(queryString);
@@ -98,11 +99,11 @@ public class UserDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			userList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return userList;
@@ -119,15 +120,16 @@ public class UserDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from User where userName like :search and userId != 1 and userStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -135,30 +137,51 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public User getUser(String userName) {
-		Session session = this.getSessionHelper().getMainSession();
-		User user = null;
-		Query query = session.createQuery("from User where userName = '"
-				+ userName + "'");
-		List<User> userList = query.list();
-		if (userList.size() == 1) {
-			user = userList.get(0);
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			User user = null;
+			Query query = session.createQuery("from User where userName = '"
+					+ userName + "'");
+			List<User> userList = query.list();
+			if (userList.size() == 1) {
+				user = userList.get(0);
+			}
+			session.getTransaction().commit();
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
 		}
-		session.close();
-		return user;
 	}
 
 	@SuppressWarnings("unchecked")
 	public User getUser(int userId) {
-		Session session = this.getSessionHelper().getMainSession();
-		User user = null;
-		Query query = session.createQuery("from User where userId = :userId");
-		query.setInteger("userId", userId);
-		List<User> userList = query.list();
-		if (userList.size() == 1) {
-			user = userList.get(0);
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			User user = null;
+			Query query = session
+					.createQuery("from User where userId = :userId");
+			query.setInteger("userId", userId);
+			List<User> userList = query.list();
+			if (userList.size() == 1) {
+				user = userList.get(0);
+			}
+			session.getTransaction().commit();
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
 		}
-		session.close();
-		return user;
 	}
 
 	public boolean disableUser(int userId) {
@@ -388,13 +411,23 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<User> getCompanyUserList(String searchStr) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from User where userName like '%"
-				+ searchStr
-				+ "%' and userLevel != 0 and userStatus = 1 order by userDate desc";
-		Query query = session.createQuery(queryString);
-		List<User> userList = query.list();
-		session.close();
-		return userList;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from User where userName like '%"
+					+ searchStr
+					+ "%' and userLevel != 0 and userStatus = 1 order by userDate desc";
+			Query query = session.createQuery(queryString);
+			List<User> userList = query.list();
+			session.getTransaction().commit();
+			return userList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
 	}
 }

@@ -46,6 +46,7 @@ public class DatacenterDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Datacenter where dcUuid = :dcUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("dcUuid", dcUuid);
@@ -53,14 +54,15 @@ public class DatacenterDAO {
 			if (dcList.size() == 1) {
 				dc = dcList.get(0);
 			}
+			session.getTransaction().commit();
+			return dc;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return dc;
 	}
 
 	public Datacenter createDatacenter(String dcName, String dcLocation,
@@ -81,18 +83,14 @@ public class DatacenterDAO {
 			session.save(dc);
 			this.getOverViewDAO().updateOverViewfield(session, "viewDc", true);
 			tx.commit();
+			return dc;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 			return null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
-		return dc;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,6 +99,7 @@ public class DatacenterDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Datacenter where dcName like '%"
 					+ search + "%' and dcStatus = 1 order by createDate desc";
@@ -108,14 +107,15 @@ public class DatacenterDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			dcList = query.list();
+			session.getTransaction().commit();
+			return dcList;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return dcList;
 	}
 
 	public int countAllDatacenter(String search) {
@@ -123,23 +123,24 @@ public class DatacenterDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from Datacenter where dcName like '%"
 					+ search + "%' and dcStatus = 1";
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return 0;
 		}
-		return total;
 	}
 
 	public boolean deleteDatacenter(String dcUuid) {
 		Datacenter delDC = this.getDatacenter(dcUuid);
-		boolean result = false;
 		Session session = null;
 		Transaction tx = null;
 		try {
@@ -159,19 +160,16 @@ public class DatacenterDAO {
 				this.getOverViewDAO().updateOverViewfield(session, "viewDc",
 						false);
 				tx.commit();
-				result = true;
+				return true;
 			}
+			return false;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -183,19 +181,18 @@ public class DatacenterDAO {
 			String queryString = "from Datacenter where dcStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			dcList = query.list();
+			return dcList;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return dcList;
 	}
 
 	public boolean updateDatacenter(String dcUuid, String dcName,
 			String dcLocation, String dcDesc) {
-		boolean result = false;
 		Session session = null;
 		Transaction tx = null;
 		try {
@@ -209,18 +206,13 @@ public class DatacenterDAO {
 			query.setString("desc", dcDesc);
 			query.executeUpdate();
 			tx.commit();
-			result = true;
+			return true;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 }

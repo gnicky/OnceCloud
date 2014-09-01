@@ -41,20 +41,22 @@ public class QuotaDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session.createQuery("from Quota where quotaUID = "
 					+ quotaUID + " and quotaType = 1");
 			List<Quota> quotaList = query.list();
 			if (quotaList.size() == 1) {
 				quota = quotaList.get(0);
 			}
+			session.getTransaction().commit();
+			return quota;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return quota;
 	}
 
 	@SuppressWarnings("unchecked")
