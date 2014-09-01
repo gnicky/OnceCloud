@@ -21,6 +21,12 @@ public class QuotaDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
+	/**
+	 * 获取已用的配额
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Quota getQuotaUsed(int userId) {
 		Quota quota = null;
 		Session session = null;
@@ -41,6 +47,12 @@ public class QuotaDAO {
 		return quota;
 	}
 
+	/**
+	 * 获取全部的配额
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Quota getQuotaTotal(int userId) {
 		Quota quota = null;
 		Session session = null;
@@ -60,6 +72,12 @@ public class QuotaDAO {
 		return quota;
 	}
 
+	/**
+	 * 获取全部的配额（不包含事务）
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Quota getQuotaTotalNoTransaction(int userId) {
 		Session session = this.getSessionHelper().getMainSession();
 		Query query = session
@@ -68,19 +86,14 @@ public class QuotaDAO {
 		return (Quota) query.uniqueResult();
 	}
 
-	public void insertQuotaNoTransaction(int quotaUID, int quotaIP,
-			int quotaVM, int quotaSnapshot, int quotaImage, int quotaDiskN,
-			int quotaDiskS, int quotaSsh, int quotaFirewall, int quotaRoute,
-			int quotaVlan, int quotaLoadBalance, int quotaBandwidth,
-			int quotaMemory, int quotaCpu, int quotaType) throws Exception {
-		Session session = sessionHelper.getMainSession();
-		Quota quota = new Quota(quotaUID, quotaIP, quotaVM, quotaSnapshot,
-				quotaImage, quotaDiskN, quotaDiskS, quotaSsh, quotaFirewall,
-				quotaRoute, quotaVlan, quotaLoadBalance, quotaBandwidth,
-				quotaMemory, quotaCpu, quotaType);
-		session.save(quota);
-	}
-
+	/**
+	 * 更新配额（不包含事务）
+	 * 
+	 * @param userId
+	 * @param filedName
+	 * @param size
+	 * @param isadd
+	 */
 	public synchronized void updateQuotaFieldNoTransaction(int userId,
 			String filedName, int size, boolean isadd) {
 		Session session = sessionHelper.getMainSession();
@@ -96,11 +109,18 @@ public class QuotaDAO {
 		query.executeUpdate();
 	}
 
+	/**
+	 * 初始化配额（不包含事务）
+	 * 
+	 * @param userId
+	 * @throws Exception
+	 */
 	public void initQuotaNoTransaction(Integer userId) throws Exception {
 		Session session = sessionHelper.getMainSession();
 		if (userId == 1) {
-			insertQuotaNoTransaction(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
+			Quota quota = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
 					10, 20, 10, 0);
+			session.save(quota);
 		} else {
 			Quota def = getQuotaTotalNoTransaction(userId);
 			def.setQuotaUID(userId);
@@ -112,6 +132,12 @@ public class QuotaDAO {
 		}
 	}
 
+	/**
+	 * 更新配额
+	 * 
+	 * @param newQuota
+	 * @return
+	 */
 	public boolean updateQuota(Quota newQuota) {
 		boolean result = false;
 		Session session = null;
@@ -128,5 +154,4 @@ public class QuotaDAO {
 		}
 		return result;
 	}
-
 }

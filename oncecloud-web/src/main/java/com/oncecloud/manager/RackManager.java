@@ -259,7 +259,7 @@ public class RackManager {
 	}
 
 	public JSONArray getRackAllList() {
-		List<Rack> rackList = this.getRackDAO().getAllPageRackList();
+		List<Rack> rackList = this.getRackDAO().getRackList();
 		JSONArray ja = new JSONArray();
 		for (Rack result : rackList) {
 			JSONObject jo = new JSONObject();

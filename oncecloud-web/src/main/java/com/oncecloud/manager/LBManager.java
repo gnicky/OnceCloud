@@ -443,7 +443,7 @@ public class LBManager {
 							}
 						}
 					}
-					this.getRouterDAO().setRouterHostUuid(uuid, hostUuid);
+					this.getRouterDAO().updateHostUuid(uuid, hostUuid);
 					this.getLbDAO().setLBPowerStatus(uuid,
 							LBManager.POWER_HALTED);
 					result = true;
