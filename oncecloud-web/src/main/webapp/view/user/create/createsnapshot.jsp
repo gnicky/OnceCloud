@@ -1,31 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	String rsid = null;
-	String rstype = null;
-	String rsname = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-		rsid = request.getParameter("rsid");
-		rstype = request.getParameter("rstype");
-		rsname = request.getParameter("rsname");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<script src="<%=basePath %>user/js/create/createsnapshot.js"></script>
-<div class="modal-dialog" id="modal-dialog" style="margin-top:100px" rsid="<%=rsid%>" rstype="<%=rstype%>" rsname="<%=rsname%>">
+<script src="${basePath}js/user/create/createsnapshot.js"></script>
+<div class="modal-dialog" id="modal-dialog" style="margin-top:100px" rsid="${resourceId}" rstype="${resourceType}" rsname="${resourceName}">
 	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-title">新建备份<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>
@@ -37,12 +12,12 @@
 			</div>
 			<div class="alert alert-warning modal-alert" style="height: 0px; overflow: hidden; padding: 0px 10px;">
 			</div>
-			<form class="form" id="backupinfo-form">
+			<form class="form" id="backup-form">
 				<fieldset>
 					<div class="item">
 						<div class="control-label">名称</div>
 						<div class="controls">
-							<input type="text" id="snapshot_name" name="snapshot_name" autofocus="">
+							<input type="text" id="snapshot_name" name="snapshot_name">
 						</div>
 					</div>
 					<div class="item">

@@ -245,7 +245,7 @@ public class SnapshotDAO {
 			tx = session.beginTransaction();
 			session.save(snapshot);
 			if (newChain) {
-				this.getQuotaDAO().updateQuotaField(session, userId,
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaSnapshot", 1, true);
 			}
 			tx.commit();
@@ -299,7 +299,7 @@ public class SnapshotDAO {
 				tx = session.beginTransaction();
 				session.delete(ss);
 				if (nsize == 1) {
-					this.getQuotaDAO().updateQuotaField(session, userId,
+					this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 							"quotaSnapshot", 1, false);
 				}
 				tx.commit();
@@ -326,7 +326,7 @@ public class SnapshotDAO {
 					+ vmUuid + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaField(session, userId,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaSnapshot", 1, false);
 			tx.commit();
 		} catch (Exception e) {
@@ -351,7 +351,7 @@ public class SnapshotDAO {
 					+ volumeUuid + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaField(session, userId,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaSnapshot", 1, false);
 			tx.commit();
 		} catch (Exception e) {

@@ -72,15 +72,16 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session
 					.createQuery("from OCVM where vmUuid = :vmUuid");
 			query.setString("vmUuid", vmUuid);
-			vm = (OCVM) query.list().get(0);
+			vm = (OCVM) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vm;
@@ -91,15 +92,16 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session
 					.createQuery("from OCVM where vmUuid = :vmUuid and vmStatus = 1");
 			query.setString("vmUuid", vmUuid);
-			vm = (OCVM) query.list().get(0);
+			vm = (OCVM) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vm;
@@ -110,16 +112,16 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session
 					.createQuery("select count(*) from OCVM where vmUID = "
 							+ userId + " and vmStatus = 1");
 			size = (Long) query.list().get(0);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			size = 0;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return (int) size;
@@ -127,14 +129,24 @@ public class VMDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean isExist(String vmUuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		Query query = session.createQuery("from OCVM where vmUuid = '" + vmUuid
-				+ "' and vmStatus=1");
-		List<OCVM> vmList = query.list();
-		session.close();
-		if (vmList.size() > 0) {
-			return true;
-		} else {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session.createQuery("from OCVM where vmUuid = '"
+					+ vmUuid + "' and vmStatus=1");
+			List<OCVM> vmList = query.list();
+			session.getTransaction().commit();
+			if (vmList.size() > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 			return false;
 		}
 	}
@@ -146,16 +158,26 @@ public class VMDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		Query query = session
-				.createQuery("from OCVM where alarmUuid =:alarmUuid and vmStatus=1");
-		List<OCVM> vmList = query.list();
-		query.setString("alarmUuid", alarmUuid);
-		session.close();
-		if (vmList.size() > 0) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from OCVM where alarmUuid =:alarmUuid and vmStatus=1");
+			List<OCVM> vmList = query.list();
+			query.setString("alarmUuid", alarmUuid);
+			session.getTransaction().commit();
+			if (vmList.size() > 0) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 			return false;
-		} else {
-			return true;
 		}
 	}
 
@@ -171,17 +193,14 @@ public class VMDAO {
 					vmMem, vmCpu, vmPower, vmStatus, createDate);
 			tx = session.beginTransaction();
 			session.save(vm);
-			this.getQuotaDAO().updateQuotaField(session, vmUID, "quotaVM", 1,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(vmUID, "quotaVM", 1,
 					true);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -208,12 +227,8 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -235,6 +250,7 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from OCVM where vmUID = :userId and vmName like :search and vmStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -243,11 +259,11 @@ public class VMDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			vmList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -260,6 +276,7 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			Criteria criteria = session.createCriteria(OCVM.class);
 			criteria.add(Restrictions.ne("vmStatus", 0));
@@ -272,11 +289,11 @@ public class VMDAO {
 				criteria.add(Restrictions.eq("vmImportance", importance));
 			}
 			vmList = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -297,6 +314,7 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from OCVM where vmUID =:vmUID and vmName like '%"
 					+ search
@@ -306,11 +324,11 @@ public class VMDAO {
 			query.setMaxResults(limit);
 			query.setInteger("vmUID", vmUID);
 			vmList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -328,16 +346,17 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from OCVM where vmUID = :userId and vmName like :search and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -348,6 +367,7 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(OCVM.class);
 			criteria.add(Restrictions.ne("vmStatus", 0));
 			if (!host.equals("all")) {
@@ -358,11 +378,11 @@ public class VMDAO {
 			}
 			criteria.setProjection(Projections.rowCount());
 			count = Integer.parseInt(criteria.uniqueResult().toString());
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -373,15 +393,16 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from OCVM where vmVlan = :vnetUuid and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("vnetUuid", vnetUuid);
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -398,31 +419,39 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from OCVM where vmUID =:vmUID and vmName like '%"
 					+ search + "%' and vmStatus = 1 and alarmUuid is null";
 			Query query = session.createQuery(queryString);
 			query.setInteger("vmUID", vmUID);
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
 	}
 
 	public void updateBackupDate(String vmuuid, Date date) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		String queryString = "update OCVM set backupDate=:date where vmUuid='"
-				+ vmuuid + "'";
-		Query query = session.createQuery(queryString);
-		query.setTimestamp("date", date);
-		query.executeUpdate();
-		tx.commit();
-		session.close();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			String queryString = "update OCVM set backupDate=:date where vmUuid='"
+					+ vmuuid + "'";
+			Query query = session.createQuery(queryString);
+			query.setTimestamp("date", date);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 	}
 
 	public void removeVM(int userId, String vmUuid) {
@@ -434,118 +463,190 @@ public class VMDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVM", 1,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVM", 1,
 					false);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public int getVmPowerState(String vmuuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "select vmPower from OCVM where vmUuid='" + vmuuid
-				+ "'";
-		Query query = session.createQuery(queryString);
-		List<Integer> list = query.list();
-		session.close();
-		return list.get(0);
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select vmPower from OCVM where vmUuid='"
+					+ vmuuid + "'";
+			Query query = session.createQuery(queryString);
+			List<Integer> list = query.list();
+			session.getTransaction().commit();
+			return list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public String getVmName(String vmuuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "select vmName from OCVM where vmUuid='" + vmuuid
-				+ "'";
-		Query query = session.createQuery(queryString);
-		List<String> list = query.list();
-		session.close();
-		return list.get(0);
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select vmName from OCVM where vmUuid='"
+					+ vmuuid + "'";
+			Query query = session.createQuery(queryString);
+			List<String> list = query.list();
+			session.getTransaction().commit();
+			return list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().getMainSession();
-		int startPos = (page - 1) * limit;
-		String queryString = "";
-		queryString = "select vm from OCVM vm where vm.vmUID=" + uid
-				+ " and vm.vmName like '%" + search
-				+ "%' and vm.vmStatus=1 and vm.vmUuid not in "
-				+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-				+ uid + " and eip.eipDependency is not null)";
-		Query query = session.createQuery(queryString);
-		query.setFirstResult(startPos);
-		query.setMaxResults(limit);
-		List<OCVM> vms = query.list();
-		session.close();
-		return vms;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "select vm from OCVM vm where vm.vmUID="
+					+ uid
+					+ " and vm.vmName like '%"
+					+ search
+					+ "%' and vm.vmStatus=1 and vm.vmUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
+					+ uid + " and eip.eipDependency is not null)";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			List<OCVM> vms = query.list();
+			session.getTransaction().commit();
+			return vms;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
 	}
 
 	public int countVMsWithoutEIP(String search, int uid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "";
-		queryString = "select count(*) from OCVM vm where vm.vmUID=" + uid
-				+ " and vm.vmName like '%" + search
-				+ "%' and vm.vmStatus=1 and vm.vmUuid not in "
-				+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-				+ uid + " and eip.eipDependency is not null)";
-		Query query = session.createQuery(queryString);
-		int count = ((Number) query.iterate().next()).intValue();
-		session.close();
-		return count;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) from OCVM vm where vm.vmUID="
+					+ uid
+					+ " and vm.vmName like '%"
+					+ search
+					+ "%' and vm.vmStatus=1 and vm.vmUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
+					+ uid + " and eip.eipDependency is not null)";
+			Query query = session.createQuery(queryString);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public String getVmIp(String vmUuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "select vmIP from OCVM where vmUuid='" + vmUuid
-				+ "'";
-		Query query = session.createQuery(queryString);
-		List<String> list = query.list();
-		return list.get(0);
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select vmIP from OCVM where vmUuid='"
+					+ vmUuid + "'";
+			Query query = session.createQuery(queryString);
+			List<String> list = query.list();
+			session.getTransaction().commit();
+			return list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
 	}
 
 	public void updateVMIP(String vmuuid, String ip) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		String queryString = "update OCVM set vmIP='" + ip
-				+ "' where vmUuid ='" + vmuuid + "'";
-		Query query = session.createQuery(queryString);
-		query.executeUpdate();
-		tx.commit();
-		session.close();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			String queryString = "update OCVM set vmIP='" + ip
+					+ "' where vmUuid ='" + vmuuid + "'";
+			Query query = session.createQuery(queryString);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 	}
 
 	public void emptyVMEipIp(String vmuuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		String queryString = "update EIP set eipDependency=null where eipDependency ='"
-				+ vmuuid + "'";
-		Query query = session.createQuery(queryString);
-		query.executeUpdate();
-		tx.commit();
-		session.close();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			String queryString = "update EIP set eipDependency=null where eipDependency ='"
+					+ vmuuid + "'";
+			Query query = session.createQuery(queryString);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 	}
 
 	public void updateFirewall(String vmuuid, String firewallId) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		String queryString = "update OCVM set vmFirewall=:fid where vmUuid ='"
-				+ vmuuid + "'";
-		Query query = session.createQuery(queryString);
-		query.setString("fid", firewallId);
-		query.executeUpdate();
-		tx.commit();
-		session.close();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			String queryString = "update OCVM set vmFirewall=:fid where vmUuid ='"
+					+ vmuuid + "'";
+			Query query = session.createQuery(queryString);
+			query.setString("fid", firewallId);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 	}
 
 	public void updateName(String uuid, String newName, String description) {
@@ -562,9 +663,8 @@ public class VMDAO {
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
@@ -583,6 +683,9 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return result;
 	}
@@ -601,6 +704,9 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return result;
 	}
@@ -627,27 +733,33 @@ public class VMDAO {
 				result = true;
 			}
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
 	}
 
 	public int countByHost(String hostUuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "";
-		queryString = "select count(*) from OCVM where vmStatus!=0 and hostUuid='"
-				+ hostUuid + "'";
-		Query query = session.createQuery(queryString);
-		int count = ((Number) query.iterate().next()).intValue();
-		session.close();
-		return count;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) from OCVM where vmStatus!=0 and hostUuid='"
+					+ hostUuid + "'";
+			Query query = session.createQuery(queryString);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -656,15 +768,16 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select vmUuid,vmName,vmIP from OCVM where vmUID = "
 					+ userId + " and vmStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			vmList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -677,6 +790,7 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int count = countVMWithoutVnet(session, userId);
 			vmList.put(count);
 			int startPos = (page - 1) * limit;
@@ -695,12 +809,11 @@ public class VMDAO {
 				itemjo.put("vmname", Utilities.encodeText((String) item[1]));
 				vmList.put(itemjo);
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			vmList = null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -730,14 +843,10 @@ public class VMDAO {
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
 			tx.commit();
-
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
@@ -758,13 +867,9 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-
 		}
 		return result;
 	}
@@ -785,13 +890,9 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-
 		}
 		return result;
 	}
@@ -802,15 +903,16 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from OCVM where vmVlan= :vmVlan and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("vmVlan", vmVlan);
 			list = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return list;
@@ -838,13 +940,9 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-
 		}
 		return result;
 	}
@@ -861,16 +959,17 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from OCVM where vmUID =:vmUID and vmStatus = 1 and alarmUuid =:alarmUuid order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("vmUID", vmUID);
 			query.setString("alarmUuid", alarmUuid);
 			vmList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -882,14 +981,15 @@ public class VMDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from OCVM where vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			vmList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vmList;
@@ -921,12 +1021,8 @@ public class VMDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;

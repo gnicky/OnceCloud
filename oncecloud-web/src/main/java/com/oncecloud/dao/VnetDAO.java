@@ -48,6 +48,7 @@ public class VnetDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Vnet where vnetUuid = :vnetUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("vnetUuid", vnetUuid);
@@ -55,11 +56,11 @@ public class VnetDAO {
 			if (vnetList.size() == 1) {
 				vnet = vnetList.get(0);
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vnet;
@@ -81,6 +82,7 @@ public class VnetDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Vnet where vnetUID = :userId and vnetName like :search order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -89,11 +91,11 @@ public class VnetDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			vnetList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vnetList;
@@ -111,16 +113,17 @@ public class VnetDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from Vnet where vnetUID = :usrId and vnetName like :search";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -132,22 +135,20 @@ public class VnetDAO {
 		boolean result = false;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Vnet vnet = new Vnet(uuid, userId, name, desc, null, null, null,
 					null, 1, null, new Date());
 			vnet.setVnetID(getFreeVnetID());
 			tx = session.beginTransaction();
 			session.save(vnet);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVlan",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVlan",
 					1, true);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -160,14 +161,15 @@ public class VnetDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select vnetID from Vnet";
 			Query query = session.createQuery(queryString);
 			usedVnetList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		for (Integer i = VNETMIN; i <= VNETMAX; i++) {
@@ -190,18 +192,14 @@ public class VnetDAO {
 			tx = session.beginTransaction();
 			query.setString("uuid", uuid);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVlan",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVlan",
 					1, false);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -224,12 +222,8 @@ public class VnetDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -250,12 +244,8 @@ public class VnetDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -279,13 +269,8 @@ public class VnetDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -297,6 +282,7 @@ public class VnetDAO {
 		String result = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select vnetName from Vnet where vnetUuid='"
 					+ vnetuuid + "'";
 			Query query = session.createQuery(queryString);
@@ -304,11 +290,11 @@ public class VnetDAO {
 			if (1 == list.size()) {
 				result = list.get(0);
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -338,13 +324,8 @@ public class VnetDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -365,13 +346,8 @@ public class VnetDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -379,11 +355,10 @@ public class VnetDAO {
 
 	public int countAbleNet(int userId, String routerid, Integer net) {
 		Session session = null;
-		Transaction tx = null;
 		Integer count = 0;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "select count(*) from Vnet where vnetUID=:userid "
 					+ " and vnetNet=:net and vnetRouter=:routerid";
 			Query query = session.createQuery(queryString);
@@ -391,10 +366,11 @@ public class VnetDAO {
 			query.setInteger("userid", userId);
 			query.setInteger("net", net);
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -412,15 +388,16 @@ public class VnetDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Vnet where vnetRouter=:routerid ";
 			Query query = session.createQuery(queryString);
 			query.setString("routerid", routerUuid);
 			vxnetsList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vxnetsList;
@@ -432,15 +409,16 @@ public class VnetDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Vnet where vnetUID=:userid ";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userid", userId);
 			vxnetsList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vxnetsList;

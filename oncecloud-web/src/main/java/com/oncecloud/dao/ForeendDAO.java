@@ -52,6 +52,7 @@ public class ForeendDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Foreend where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("foreUuid", foreUuid);
@@ -59,11 +60,11 @@ public class ForeendDAO {
 			if (foreList.size() == 1) {
 				fore = foreList.get(0);
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return fore;
@@ -105,18 +106,14 @@ public class ForeendDAO {
 			tx = session.beginTransaction();
 			session.save(fore);
 			tx.commit();
+			return fore;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-			fore = null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return null;
 		}
-		return fore;
 	}
 
 	/**
@@ -135,22 +132,24 @@ public class ForeendDAO {
 		int total = 1;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from Foreend where lbUuid=:lbuuid and forePort=:port";
 			Query query = session.createQuery(queryString);
 			query.setString("lbuuid", lbUuid);
 			query.setInteger("port", forePort);
 			total = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 			if (0 == total) {
 				result = true;
 			}
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 
 	/**
@@ -164,7 +163,6 @@ public class ForeendDAO {
 	 */
 	public boolean updateForeend(String foreUuid, String foreName,
 			Integer forePolicy) {
-		boolean result = false;
 		Session session = null;
 		Transaction tx = null;
 		try {
@@ -177,18 +175,14 @@ public class ForeendDAO {
 			query.setInteger("policy", forePolicy);
 			query.executeUpdate();
 			tx.commit();
-			result = true;
+			return true;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -197,6 +191,7 @@ public class ForeendDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Foreend where foreName like '%" + search
 					+ "%' order by foreStatus desc";
@@ -204,11 +199,11 @@ public class ForeendDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			foreList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return foreList;
@@ -228,6 +223,7 @@ public class ForeendDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Foreend where lbUuid ='" + lbUuid
 					+ "' order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -267,12 +263,11 @@ public class ForeendDAO {
 					feArray.put(feJo);
 				}
 			}
-
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return feArray;
@@ -292,6 +287,7 @@ public class ForeendDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Foreend where lbUuid ='" + lbUuid
 					+ "' and foreStatus >=1 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -319,12 +315,11 @@ public class ForeendDAO {
 					feArray.put(feJo);
 				}
 			}
-
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return feArray;
@@ -335,15 +330,16 @@ public class ForeendDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from Foreend where foreName like '%"
 					+ search + "%'";
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return total;
@@ -364,13 +360,9 @@ public class ForeendDAO {
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -398,13 +390,9 @@ public class ForeendDAO {
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -416,14 +404,15 @@ public class ForeendDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Foreend order by createDate desc";
 			Query query = session.createQuery(queryString);
 			foreList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return foreList;

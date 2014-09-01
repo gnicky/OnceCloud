@@ -280,11 +280,9 @@ function startVM(uuid) {
     thistr.find('[name="stateword"]').text('启动中');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=startup&uuid=' + uuid,
+        url: '/VMAction/StartVM',
+        data: {uuid:uuid},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }
 
@@ -296,11 +294,9 @@ function restartVM(uuid) {
     thistr.find('.console').remove();
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=restart&uuid=' + uuid,
+        url: '/VMAction/restartVM',
+        data:{uuid:uuid},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }
 
@@ -313,11 +309,9 @@ function destroyVM(uuid) {
     thistr.find('[name="stateword"]').text('销毁中');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=destroy&uuid=' + uuid,
+        url: '/VMAction/deleteVM',
+        data:{uuid:uuid},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }
 
@@ -329,11 +323,9 @@ function shutdownVM(uuid, force) {
     thistr.find('.console').remove();
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=shutdown&uuid=' + uuid + '&force=' + force,
+        url: '/VMAction/shutdownVM',
+        data: {uuid:uuid,force:force},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }
 

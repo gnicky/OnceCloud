@@ -1,25 +1,7 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<link rel="stylesheet" href="<%=basePath %>css/bwizard.css" />
-<script src="<%=basePath %>js/bwizard.js"></script>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<script src="<%=basePath %>user/js/create/createinstance.js"></script>
+<link rel="stylesheet" href="${basePath}css/bwizard.css" />
+<script src="${basePath}js/bwizard.js"></script>
+<script src="${basePath}js/user/create/createinstance.js"></script>
 <div class="modal-dialog" style="width:1000px; margin-top:100px">
 	<div class="modal-content">
 		<div class="modal-header">

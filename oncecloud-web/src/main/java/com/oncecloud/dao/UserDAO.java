@@ -198,13 +198,9 @@ public class UserDAO {
 				tx.commit();
 				result = true;
 			} catch (Exception e) {
-				if (tx != null) {
-					tx.rollback();
-				}
 				e.printStackTrace();
-			} finally {
-				if (session != null && session.isOpen()) {
-					session.close();
+				if (session != null) {
+					session.getTransaction().rollback();
 				}
 			}
 		}
@@ -232,37 +228,38 @@ public class UserDAO {
 			tx = session.beginTransaction();
 			session.save(user);
 			int userId = user.getUserId();
-			this.getQuotaDAO().initQuota(session, userId);
+			this.getQuotaDAO().initQuotaNoTransaction(userId);
 			this.getFirewallDAO().createDefaultFirewall(session, userId);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void updatePwd(String userName, String newPwd) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		Query query = session.createQuery("from User where userName = '"
-				+ userName + "'");
-		List<User> userList = query.list();
-		if (userList.size() == 1) {
-			User user = userList.get(0);
-			user.setUserPass(this.getHashHelper().md5Hash(newPwd));
-			session.update(user);
-			tx.commit();
-			session.close();
-			return;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery("from User where userName = '"
+					+ userName + "'");
+			List<User> userList = query.list();
+			if (userList.size() == 1) {
+				User user = userList.get(0);
+				user.setUserPass(this.getHashHelper().md5Hash(newPwd));
+				session.update(user);
+				tx.commit();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
-		session.close();
 	}
 
 	public boolean applyVoucher(int userId, int voucher) {
@@ -282,12 +279,8 @@ public class UserDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -316,12 +309,8 @@ public class UserDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -329,27 +318,32 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean denyVoucher(int userid) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		Query query = session.createQuery("from User where userId = '" + userid
-				+ "'");
-		List<User> userList = query.list();
-		if (userList.size() == 1) {
-			User user = userList.get(0);
-			if (user.getUserLevel() == 1) {
-				user.setUserVoucher(null);
-				user.setUserLevel(2);
-				session.update(user);
-				tx.commit();
-				session.close();
-				return true;
-			} else {
-				session.close();
-				return false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery("from User where userId = '"
+					+ userid + "'");
+			List<User> userList = query.list();
+			if (userList.size() == 1) {
+				User user = userList.get(0);
+				if (user.getUserLevel() == 1) {
+					user.setUserVoucher(null);
+					user.setUserLevel(2);
+					session.update(user);
+					tx.commit();
+					return true;
+				}
 			}
+			tx.commit();
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
 		}
-		session.close();
-		return false;
 	}
 
 	public boolean updateUser(Integer userid, String userName, String userMail,
@@ -373,13 +367,8 @@ public class UserDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
