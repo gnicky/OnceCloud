@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import com.oncecloud.dao.DatacenterDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.RackDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Datacenter;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.Rack;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai yly
@@ -27,6 +27,7 @@ public class RackManager {
 	private RackDAO rackDAO;
 	private DatacenterDAO datacenterDAO;
 	private LogDAO logDAO;
+	private MessagePush messagePush;
 
 	private RackDAO getRackDAO() {
 		return rackDAO;
@@ -53,6 +54,15 @@ public class RackManager {
 	@Autowired
 	private void setLogDAO(LogDAO logDAO) {
 		this.logDAO = logDAO;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	public JSONArray createRack(String rackName, String dcid, String rackDesc,
@@ -89,7 +99,7 @@ public class RackManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -97,7 +107,7 @@ public class RackManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -147,16 +157,16 @@ public class RackManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
-			MessagePush.deleteRow(userid, rackId);
+			this.getMessagePush().deleteRow(userid, rackId);
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
 					LogConstant.logObject.机架.ordinal(),
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -186,7 +196,7 @@ public class RackManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -194,7 +204,7 @@ public class RackManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -220,7 +230,7 @@ public class RackManager {
 					LogConstant.logAction.移除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -228,7 +238,7 @@ public class RackManager {
 					LogConstant.logAction.移除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -240,10 +250,11 @@ public class RackManager {
 				rackDesc, dcid);
 		// push message
 		if (result) {
-			MessagePush
-					.pushMessage(userid, Utilities.stickyToSuccess("机架更新成功"));
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToSuccess("机架更新成功"));
 		} else {
-			MessagePush.pushMessage(userid, Utilities.stickyToError("机架更新失败"));
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError("机架更新失败"));
 		}
 	}
 

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,17 +35,23 @@ public class PoolDAO {
 		this.overViewDAO = overViewDAO;
 	}
 
-	@SuppressWarnings("unchecked")
 	public OCPool getPool(String poolUuid) {
-		Session session = this.getSessionHelper().getMainSession();
 		OCPool pool = null;
-		Query query = session.createQuery("from OCPool where poolUuid = '"
-				+ poolUuid + "'");
-		List<OCPool> poolList = query.list();
-		if (poolList.size() == 1) {
-			pool = poolList.get(0);
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String builder = "from OCPool where poolUuid = :poolUuid";
+			Query query = session.createQuery(builder);
+			query.setString("poolUuid", poolUuid);
+			pool = (OCPool) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
-		session.close();
 		return pool;
 	}
 
@@ -59,58 +64,86 @@ public class PoolDAO {
 		pool.setPoolStatus(1);
 		pool.setCreateDate(new Date());
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.save(pool);
-			this.getOverViewDAO()
-					.updateOverViewfield(session, "viewPool", true);
-			tx.commit();
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewPool",
+					true);
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-			return null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			pool = null;
 		}
 		return pool;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getOnePagePoolList(int page, int limit, String search) {
-		Session session = this.getSessionHelper().getMainSession();
-		int startPos = (page - 1) * limit;
-		String queryString = "from OCPool where poolName like '%" + search
-				+ "%' and poolStatus = 1 order by createDate desc";
-		Query query = session.createQuery(queryString);
-		query.setFirstResult(startPos);
-		query.setMaxResults(limit);
-		List<OCPool> poolList = query.list();
-		session.close();
-		return poolList;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<OCPool> getPoolList() {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from OCPool where poolStatus = 1 order by createDate desc";
-		Query query = session.createQuery(queryString);
-		List<OCPool> poolList = query.list();
-		session.close();
+		List<OCPool> poolList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "from OCPool where poolName like :search and poolStatus = 1 order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			poolList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 		return poolList;
 	}
 
 	public int countAllPoolList(String search) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "select count(*) from OCPool where poolName like '%"
-				+ search + "%' and poolStatus = 1";
-		Query query = session.createQuery(queryString);
-		return ((Number) query.iterate().next()).intValue();
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			StringBuilder builder = new StringBuilder(
+					"select count(*) from OCPool where ");
+			builder.append("poolName like :search and poolStatus = 1");
+			Query query = session.createQuery(builder.toString());
+			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<OCPool> getPoolList() {
+		List<OCPool> poolList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from OCPool where poolStatus = 1 order by createDate desc";
+			Query query = session.createQuery(queryString);
+			poolList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return poolList;
 	}
 
 	public boolean deletePool(String poolId) {
@@ -119,80 +152,63 @@ public class PoolDAO {
 		if (delPool != null) {
 			delPool.setPoolStatus(0);
 			Session session = null;
-			Transaction tx = null;
 			try {
 				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
+				session.beginTransaction();
 				session.update(delPool);
-				this.getOverViewDAO().updateOverViewfield(session, "viewPool",
-						false);
-				tx.commit();
+				this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewPool", false);
+				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
-				if (tx != null) {
-					tx.rollback();
-				}
 				e.printStackTrace();
-			} finally {
-				if (session != null && session.isOpen()) {
-					session.close();
+				if (session != null) {
+					session.getTransaction().rollback();
 				}
 			}
 		}
 		return result;
 	}
 
-	// /绑定
-	public boolean bindPool(String poolId, String dcUuid) {
+	public boolean bindPool(String poolUuid, String dcUuid) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update OCPool set dcUuid =:dcUuid where poolUuid=:poolid";
+			session.beginTransaction();
+			String queryString = "update OCPool set dcUuid = :dcUuid where poolUuid= :poolUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("dcUuid", dcUuid);
-			query.setString("poolid", poolId);
+			query.setString("poolUuid", poolUuid);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
 	}
 
-	// /卸载
 	public boolean unbindPool(String poolId) {
+		OCPool pool = this.getPool(poolId);
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
-			OCPool pool = this.getPool(poolId);
 			if (pool != null) {
 				pool.setDcUuid(null);
 				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
+				session.beginTransaction();
 				session.update(pool);
-				tx.commit();
+				session.getTransaction().commit();
 				result = true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -204,54 +220,59 @@ public class PoolDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from OCPool where podUuid = :podUuid and poolStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("podUuid", rackUuid);
 			pooList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return pooList;
 	}
 
-	@SuppressWarnings("unchecked")
 	public String getRandomPool() {
 		String pool = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from OCPool where poolStatus = 1 order by rand()";
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(0);
 			query.setMaxResults(1);
-			List<OCPool> iplist = query.list();
-			if (iplist.size() == 1) {
-				pool = iplist.get(0).getPoolUuid();
-			}
+			pool = ((OCPool) query.list().get(0)).getPoolUuid();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return pool;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<OCPool> getPoolListOfDC(String dcid) {
+	public List<OCPool> getPoolListOfDC(String dcUuid) {
 		List<OCPool> pooList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from OCPool where dcUuid = :dcUuid and poolStatus = 1";
 			Query query = session.createQuery(queryString);
-			query.setString("dcUuid", dcid);
+			query.setString("dcUuid", dcUuid);
 			pooList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return pooList;
 	}
@@ -260,10 +281,9 @@ public class PoolDAO {
 			String dcuuid) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "update OCPool set poolName =:poolName, poolDesc=:poolDesc,dcUuid=:dcuuid where poolUuid=:poolId";
 			Query query = session.createQuery(queryString);
 			query.setString("poolName", poolName);
@@ -271,17 +291,12 @@ public class PoolDAO {
 			query.setString("dcuuid", dcuuid);
 			query.setString("poolId", poolId);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;

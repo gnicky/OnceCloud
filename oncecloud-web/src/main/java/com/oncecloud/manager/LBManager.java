@@ -26,7 +26,6 @@ import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VDIDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Backend;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Foreend;
@@ -37,6 +36,7 @@ import com.oncecloud.entity.OCVDI;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -69,6 +69,8 @@ public class LBManager {
 	private HostDAO hostDAO;
 	private UserDAO userDAO;
 	
+	private MessagePush messagePush;
+
 	private ImageDAO getImageDAO() {
 		return imageDAO;
 	}
@@ -186,12 +188,12 @@ public class LBManager {
 		this.constant = constant;
 	}
 
-	public HostDAO getHostDAO() {
+	private HostDAO getHostDAO() {
 		return hostDAO;
 	}
 
 	@Autowired
-	public void setHostDAO(HostDAO hostDAO) {
+	private void setHostDAO(HostDAO hostDAO) {
 		this.hostDAO = hostDAO;
 	}
 
@@ -202,6 +204,15 @@ public class LBManager {
 	@Autowired
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+	
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	public JSONObject createLB(String uuid, int userId, String name,
@@ -488,7 +499,7 @@ public class LBManager {
 						LogConstant.logAction.更新.ordinal(),
 						LogConstant.logStatus.成功.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userId,
+				this.getMessagePush().pushMessage(userId,
 						Utilities.stickyToSuccess(log.toString()));
 			} else {
 				OCLog log = this.getLogDAO().insertLog(userId,
@@ -496,7 +507,7 @@ public class LBManager {
 						LogConstant.logAction.更新.ordinal(),
 						LogConstant.logStatus.失败.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userId,
+				this.getMessagePush().pushMessage(userId,
 						Utilities.stickyToError(log.toString()));
 			}
 		} catch (Exception e) {
@@ -572,8 +583,8 @@ public class LBManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, uuid, "running", "活跃");
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			infoArray.put(Utilities.createLogInfo("原因",
@@ -583,8 +594,8 @@ public class LBManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, uuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -597,12 +608,15 @@ public class LBManager {
 		// push message
 		if (null != fe) {
 			String info = "监听器创建成功";
-			MessagePush.editRowStatus(userId, foreuuid, "running", "活跃");
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().editRowStatus(userId, foreuuid, "running",
+					"活跃");
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
 			String info = "监听器创建失败";
-			MessagePush.deleteRow(userId, foreuuid);
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().deleteRow(userId, foreuuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 	}
 
@@ -615,10 +629,12 @@ public class LBManager {
 		// push message
 		if (null != be) {
 			String info = "后端创建成功";
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
 			String info = "后端创建失败";
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 	}
 
@@ -637,10 +653,12 @@ public class LBManager {
 		if (result) {
 			this.getLbDAO().setLBStatus(lbuuid, 2);
 			String info = "监听器删除成功";
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
 			String info = "监听器删除失败";
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 		return jo;
 	}
@@ -651,10 +669,12 @@ public class LBManager {
 		// push message
 		if (result) {
 			String info = "后端删除成功";
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
 			String info = "后端删除失败";
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 		JSONObject jo = new JSONObject();
 		jo.put("result", result);
@@ -684,9 +704,11 @@ public class LBManager {
 			}
 		}
 		if (result == true) {
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 		return jo;
 	}
@@ -714,9 +736,11 @@ public class LBManager {
 			}
 		}
 		if (result == true) {
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 		return jo;
 	}
@@ -729,10 +753,12 @@ public class LBManager {
 		// push message
 		if (result) {
 			String info = "监听器修改成功";
-			MessagePush.pushMessage(userId, Utilities.stickyToSuccess(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(info));
 		} else {
 			String info = "监听器修改失败";
-			MessagePush.pushMessage(userId, Utilities.stickyToError(info));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(info));
 		}
 	}
 
@@ -745,10 +771,11 @@ public class LBManager {
 
 	public void lbAdminShutUp(String uuid, int userId) {
 		LB lb = this.getLbDAO().getLB(uuid);
-		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid()).getPoolUuid();
+		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid())
+				.getPoolUuid();
 		this.lbShutup(uuid, userId, poolUuid);
 	}
-	
+
 	public void lbShutup(String uuid, int userId, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.startLB(uuid, poolUuid);
@@ -760,32 +787,33 @@ public class LBManager {
 				LogConstant.logObject.负载均衡.toString(),
 				"lb-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.负载均衡.ordinal(),
 					LogConstant.logAction.启动.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.负载均衡.ordinal(),
 					LogConstant.logAction.启动.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
 
 	public void lbAdminShutDown(String uuid, String force, int userId) {
 		LB lb = this.getLbDAO().getLB(uuid);
-		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid()).getPoolUuid();
+		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid())
+				.getPoolUuid();
 		this.lbShutdown(uuid, force, userId, poolUuid);
 	}
-	
+
 	public void lbShutdown(String uuid, String force, int userId,
 			String poolUuid) {
 		Date startTime = new Date();
@@ -798,22 +826,22 @@ public class LBManager {
 				LogConstant.logObject.负载均衡.toString(),
 				"lb-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.负载均衡.ordinal(),
 					LogConstant.logAction.关闭.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.负载均衡.ordinal(),
 					LogConstant.logAction.关闭.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -834,8 +862,8 @@ public class LBManager {
 					LogConstant.logAction.销毁.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, uuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -843,7 +871,7 @@ public class LBManager {
 					LogConstant.logAction.销毁.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}

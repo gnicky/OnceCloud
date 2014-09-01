@@ -17,7 +17,6 @@ import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VolumeDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.Volume;
@@ -25,6 +24,7 @@ import com.oncecloud.entity.VolumeStatus;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -38,6 +38,16 @@ public class VolumeManager {
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
 	private Constant constant;
+	private MessagePush messagePush;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 
 	private VolumeDAO getVolumeDAO() {
 		return volumeDAO;
@@ -191,8 +201,9 @@ public class VolumeManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, volUuid, "running", "可用");
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, volUuid, "running",
+					"可用");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -200,8 +211,8 @@ public class VolumeManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, volUuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, volUuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -244,8 +255,8 @@ public class VolumeManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, volUuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, volUuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -253,8 +264,9 @@ public class VolumeManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, volUuid, "running", "可用");
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, volUuid, "running",
+					"可用");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -297,10 +309,11 @@ public class VolumeManager {
 					LogConstant.logAction.加载.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, volUuid, "using", "使用中");
-			MessagePush.editRowStatusForBindVolume(userId, volUuid, vmUuid,
-					vmName);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush()
+					.editRowStatus(userId, volUuid, "using", "使用中");
+			this.getMessagePush().editRowStatusForBindVolume(userId, volUuid,
+					vmUuid, vmName);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -308,8 +321,9 @@ public class VolumeManager {
 					LogConstant.logAction.加载.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, volUuid, "running", "可用");
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, volUuid, "running",
+					"可用");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -352,9 +366,10 @@ public class VolumeManager {
 					LogConstant.logAction.卸载.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, volUuid, "running", "可用");
-			MessagePush.editRowStatusForUnbindVolume(userId, volUuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, volUuid, "running",
+					"可用");
+			this.getMessagePush().editRowStatusForUnbindVolume(userId, volUuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -362,8 +377,9 @@ public class VolumeManager {
 					LogConstant.logAction.卸载.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, volUuid, "using", "使用中");
-			MessagePush.pushMessage(userId,
+			this.getMessagePush()
+					.editRowStatus(userId, volUuid, "using", "使用中");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}

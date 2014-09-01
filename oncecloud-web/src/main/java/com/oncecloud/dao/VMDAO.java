@@ -14,11 +14,11 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.main.NoVNC;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai hty
@@ -30,6 +30,7 @@ public class VMDAO {
 	private QuotaDAO quotaDAO;
 	private FirewallDAO firewallDAO;
 	private FeeDAO feeDAO;
+	private MessagePush messagePush;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -65,6 +66,15 @@ public class VMDAO {
 	@Autowired
 	private void setFeeDAO(FeeDAO feeDAO) {
 		this.feeDAO = feeDAO;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	public OCVM getVM(String vmUuid) {
@@ -193,8 +203,8 @@ public class VMDAO {
 					vmMem, vmCpu, vmPower, vmStatus, createDate);
 			tx = session.beginTransaction();
 			session.save(vm);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(vmUID, "quotaVM", 1,
-					true);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(vmUID, "quotaVM",
+					1, true);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
@@ -463,8 +473,8 @@ public class VMDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVM", 1,
-					false);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVM",
+					1, false);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -726,7 +736,7 @@ public class VMDAO {
 					tx.commit();
 					this.getFeeDAO().destoryVM(new Date(), vmUuid);
 					NoVNC.deleteToken(vmUuid.substring(0, 8));
-					MessagePush.deleteRow(vm.getVmUID(), vmUuid);
+					this.getMessagePush().deleteRow(vm.getVmUID(), vmUuid);
 				}
 				result = true;
 			} else {

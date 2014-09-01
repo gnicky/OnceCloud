@@ -19,7 +19,6 @@ import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Database;
 import com.oncecloud.entity.EIP;
 import com.oncecloud.entity.LB;
@@ -31,6 +30,7 @@ import com.oncecloud.entity.User;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hty
@@ -51,6 +51,7 @@ public class EIPManager {
 	private FirewallManager firewallManager;
 	private VMManager vmManager;
 	private Constant constant;
+	private MessagePush messagePush;
 
 	private EIPDAO getEipDAO() {
 		return eipDAO;
@@ -151,6 +152,15 @@ public class EIPManager {
 		this.constant = constant;
 	}
 
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
+
 	public JSONObject eipApply(String eipName, int uid, int eipBandwidth,
 			String eipUuid) {
 		boolean result = false;
@@ -188,7 +198,7 @@ public class EIPManager {
 					LogConstant.logAction.申请.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(uid,
@@ -196,7 +206,7 @@ public class EIPManager {
 					LogConstant.logAction.申请.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
@@ -204,6 +214,7 @@ public class EIPManager {
 
 	/**
 	 * 获取公网IP列表
+	 * 
 	 * @param userId
 	 * @param page
 	 * @param limit
@@ -294,7 +305,7 @@ public class EIPManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(uid,
@@ -302,7 +313,7 @@ public class EIPManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -340,7 +351,7 @@ public class EIPManager {
 					LogConstant.logAction.绑定.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(uid,
@@ -348,7 +359,7 @@ public class EIPManager {
 					LogConstant.logAction.绑定.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
@@ -387,7 +398,7 @@ public class EIPManager {
 					LogConstant.logAction.解绑.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(uid,
@@ -395,7 +406,7 @@ public class EIPManager {
 					LogConstant.logAction.解绑.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
@@ -601,7 +612,7 @@ public class EIPManager {
 					LogConstant.logAction.调整.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(uid,
@@ -609,7 +620,7 @@ public class EIPManager {
 					LogConstant.logAction.调整.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(uid,
+			this.getMessagePush().pushMessage(uid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;

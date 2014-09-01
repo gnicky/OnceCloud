@@ -19,7 +19,6 @@ import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.VMDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Datacenter;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
@@ -27,6 +26,7 @@ import com.oncecloud.entity.OCPool;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -35,6 +35,7 @@ import com.oncecloud.main.Utilities;
 @Component
 public class PoolManager {
 	private SessionHelper sessionHelper;
+	private MessagePush messagePush;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -43,6 +44,15 @@ public class PoolManager {
 	@Autowired
 	private void setSessionHelper(SessionHelper sessionHelper) {
 		this.sessionHelper = sessionHelper;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	private PoolDAO poolDAO;
@@ -138,7 +148,7 @@ public class PoolManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -146,7 +156,7 @@ public class PoolManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -215,7 +225,7 @@ public class PoolManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -223,7 +233,7 @@ public class PoolManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -253,7 +263,7 @@ public class PoolManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -261,7 +271,7 @@ public class PoolManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -285,7 +295,7 @@ public class PoolManager {
 					LogConstant.logAction.移除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -293,7 +303,7 @@ public class PoolManager {
 					LogConstant.logAction.移除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -304,10 +314,11 @@ public class PoolManager {
 		boolean result = this.getPoolDAO().updatePool(poolUuid, poolName,
 				poolDesc, dcUuid);
 		if (result) {
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess("资源池更新成功"));
 		} else {
-			MessagePush.pushMessage(userId, Utilities.stickyToError("资源池更新失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("资源池更新失败"));
 		}
 	}
 
@@ -376,9 +387,9 @@ public class PoolManager {
 		}
 		// push message
 		if (result) {
-			MessagePush.pushMessage(userId, "资源池状态已保持一致");
+			this.getMessagePush().pushMessage(userId, "资源池状态已保持一致");
 		} else {
-			MessagePush.pushMessage(userId, "资源池状态未保持一致");
+			this.getMessagePush().pushMessage(userId, "资源池状态未保持一致");
 		}
 	}
 }

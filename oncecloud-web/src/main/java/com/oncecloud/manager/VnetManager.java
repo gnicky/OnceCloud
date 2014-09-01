@@ -14,12 +14,12 @@ import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author xpx hty
@@ -35,6 +35,16 @@ public class VnetManager {
 	private RouterDAO routerDAO;
 	private VMManager vmManager;
 	private RouterManager routerManager;
+	private MessagePush messagePush;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 
 	private VMDAO getVmDAO() {
 		return vmDAO;
@@ -153,7 +163,7 @@ public class VnetManager {
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.成功.ordinal(),
 								infoArray.toString(), startTime, elapse);
-						MessagePush.pushMessage(userId,
+						this.getMessagePush().pushMessage(userId,
 								Utilities.stickyToSuccess(log.toAString()));
 					} else {
 						OCLog log = this.getLogDAO().insertLog(userId,
@@ -161,7 +171,7 @@ public class VnetManager {
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.失败.ordinal(),
 								infoArray.toString(), startTime, elapse);
-						MessagePush.pushMessage(userId,
+						this.getMessagePush().pushMessage(userId,
 								Utilities.stickyToError(log.toAString()));
 					}
 				}
@@ -220,7 +230,7 @@ public class VnetManager {
 							LogConstant.logAction.加入.ordinal(),
 							LogConstant.logStatus.成功.ordinal(),
 							infoArray.toString(), startTime, elapse);
-					MessagePush.pushMessage(userId,
+					this.getMessagePush().pushMessage(userId,
 							Utilities.stickyToSuccess(log.toAString()));
 				} else {
 					OCLog log = this.getLogDAO().insertLog(userId,
@@ -228,7 +238,7 @@ public class VnetManager {
 							LogConstant.logAction.加入.ordinal(),
 							LogConstant.logStatus.失败.ordinal(),
 							infoArray.toString(), startTime, elapse);
-					MessagePush.pushMessage(userId,
+					this.getMessagePush().pushMessage(userId,
 							Utilities.stickyToError(log.toAString()));
 				}
 			}
@@ -267,8 +277,8 @@ public class VnetManager {
 						LogConstant.logAction.删除.ordinal(),
 						LogConstant.logStatus.成功.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.deleteRow(userId, vnetUuid);
-				MessagePush.pushMessage(userId,
+				this.getMessagePush().deleteRow(userId, vnetUuid);
+				this.getMessagePush().pushMessage(userId,
 						Utilities.stickyToSuccess(log.toString()));
 			} else {
 				OCLog log = this.getLogDAO().insertLog(userId,
@@ -276,7 +286,7 @@ public class VnetManager {
 						LogConstant.logAction.删除.ordinal(),
 						LogConstant.logStatus.失败.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userId,
+				this.getMessagePush().pushMessage(userId,
 						Utilities.stickyToError(log.toString()));
 			}
 		}
@@ -332,7 +342,7 @@ public class VnetManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -340,8 +350,8 @@ public class VnetManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, uuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -413,10 +423,11 @@ public class VnetManager {
 				vnetuuid, routerid, net, gate, start, end, dhcpState);
 		// push message
 		if (jo.getBoolean("result")) {
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess("连接路由器成功"));
 		} else {
-			MessagePush.pushMessage(userId, Utilities.stickyToError("连接路由器失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("连接路由器失败"));
 		}
 		return jo;
 	}
@@ -425,10 +436,11 @@ public class VnetManager {
 		boolean result = this.getVnetDAO().unlink(vnetuuid);
 		// push message
 		if (result) {
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess("离开路由器成功"));
 		} else {
-			MessagePush.pushMessage(userId, Utilities.stickyToError("离开路由器失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("离开路由器失败"));
 		}
 	}
 

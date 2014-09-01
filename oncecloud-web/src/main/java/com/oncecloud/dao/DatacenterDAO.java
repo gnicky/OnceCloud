@@ -81,7 +81,8 @@ public class DatacenterDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(dc);
-			this.getOverViewDAO().updateOverViewfield(session, "viewDc", true);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDc",
+					true);
 			tx.commit();
 			return dc;
 		} catch (Exception e) {
@@ -157,7 +158,7 @@ public class DatacenterDAO {
 				Query query2 = session.createQuery(queryString);
 				query2.setString("dcUuid", dcUuid);
 				query2.executeUpdate();
-				this.getOverViewDAO().updateOverViewfield(session, "viewDc",
+				this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDc",
 						false);
 				tx.commit();
 				return true;

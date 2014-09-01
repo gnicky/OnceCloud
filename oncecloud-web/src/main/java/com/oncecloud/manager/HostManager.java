@@ -28,7 +28,6 @@ import com.oncecloud.dao.OverViewDAO;
 import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCPool;
@@ -36,6 +35,7 @@ import com.oncecloud.entity.Storage;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -49,6 +49,7 @@ public class HostManager {
 
 	private SessionHelper sessionHelper;
 	private SRManager srManager;
+	private MessagePush messagePush;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -66,6 +67,15 @@ public class HostManager {
 	@Autowired
 	private void setSrManager(SRManager srManager) {
 		this.srManager = srManager;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	private LogDAO logDAO;
@@ -176,7 +186,7 @@ public class HostManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -184,7 +194,7 @@ public class HostManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return qaArray;
@@ -278,7 +288,7 @@ public class HostManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -286,7 +296,7 @@ public class HostManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -309,9 +319,11 @@ public class HostManager {
 
 	public void unbindSr(String hostUuid, String srUuid, int userid) {
 		if (this.getHostDAO().unbindSr(hostUuid, srUuid)) {
-			MessagePush.pushMessage(userid, Utilities.stickyToSuccess("解绑成功"));
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToSuccess("解绑成功"));
 		} else {
-			MessagePush.pushMessage(userid, Utilities.stickyToError("解绑失败"));
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError("解绑失败"));
 		}
 	}
 
@@ -417,7 +429,7 @@ public class HostManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -425,7 +437,7 @@ public class HostManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return qaArray;
@@ -476,7 +488,7 @@ public class HostManager {
 							LogConstant.logAction.加入.ordinal(),
 							LogConstant.logStatus.成功.ordinal(),
 							infoArray.toString(), startTime, elapse);
-					MessagePush.pushMessage(userid,
+					this.getMessagePush().pushMessage(userid,
 							Utilities.stickyToSuccess(log.toString()));
 				} else {
 					OCLog log = this.getLogDAO().insertLog(userid,
@@ -484,7 +496,7 @@ public class HostManager {
 							LogConstant.logAction.加入.ordinal(),
 							LogConstant.logStatus.失败.ordinal(),
 							infoArray.toString(), startTime, elapse);
-					MessagePush.pushMessage(userid,
+					this.getMessagePush().pushMessage(userid,
 							Utilities.stickyToError(log.toString()));
 				}
 			}
@@ -506,7 +518,7 @@ public class HostManager {
 						LogConstant.logAction.创建.ordinal(),
 						LogConstant.logStatus.成功.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userid,
+				this.getMessagePush().pushMessage(userid,
 						Utilities.stickyToSuccess(log.toString()));
 
 				JSONObject tObj1 = new JSONObject();
@@ -537,7 +549,7 @@ public class HostManager {
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.成功.ordinal(),
 								infoArray.toString(), startTime, elap);
-						MessagePush.pushMessage(userid,
+						this.getMessagePush().pushMessage(userid,
 								Utilities.stickyToSuccess(log1.toString()));
 					} else {
 						OCLog log1 = this.getLogDAO().insertLog(userid,
@@ -545,7 +557,7 @@ public class HostManager {
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.失败.ordinal(),
 								infoArray.toString(), startTime, elap);
-						MessagePush.pushMessage(userid,
+						this.getMessagePush().pushMessage(userid,
 								Utilities.stickyToError(log1.toString()));
 					}
 				}
@@ -555,7 +567,7 @@ public class HostManager {
 						LogConstant.logAction.创建.ordinal(),
 						LogConstant.logStatus.失败.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userid,
+				this.getMessagePush().pushMessage(userid,
 						Utilities.stickyToError(log.toString()));
 			}
 		}
@@ -587,7 +599,7 @@ public class HostManager {
 						LogConstant.logAction.离开.ordinal(),
 						LogConstant.logStatus.成功.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userid,
+				this.getMessagePush().pushMessage(userid,
 						Utilities.stickyToSuccess(log.toString()));
 			} else {
 				JSONObject tObj = new JSONObject();
@@ -598,7 +610,7 @@ public class HostManager {
 						LogConstant.logAction.离开.ordinal(),
 						LogConstant.logStatus.失败.ordinal(),
 						infoArray.toString(), startTime, elapse);
-				MessagePush.pushMessage(userid,
+				this.getMessagePush().pushMessage(userid,
 						Utilities.stickyToError(log.toString()));
 			}
 		} else {
@@ -661,16 +673,17 @@ public class HostManager {
 		return qaArray;
 	}
 
-	public static void update(String hostId, String hostName, String hostDesc,
+	public void update(String hostId, String hostName, String hostDesc,
 			String rackUuid, int userid) {
 		HostManager hm = new HostManager();
 		boolean result = hm.updateHost(hostId, hostName, hostDesc, rackUuid);
 		// push message
 		if (result) {
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess("服务器更新成功"));
 		} else {
-			MessagePush.pushMessage(userid, Utilities.stickyToError("服务器更新成功"));
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError("服务器更新成功"));
 		}
 	}
 
@@ -834,8 +847,8 @@ public class HostManager {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(host);
-			this.getOverViewDAO().updateOverViewfield(session, "viewServer",
-					true);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction(
+					"viewServer", true);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -865,8 +878,8 @@ public class HostManager {
 							+ hostId + "'");
 			session.update(host);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfield(session, "viewServer",
-					false);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction(
+					"viewServer", false);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {

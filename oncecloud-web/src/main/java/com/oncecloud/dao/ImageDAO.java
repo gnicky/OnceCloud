@@ -165,7 +165,7 @@ public class ImageDAO {
 					imagePlatform, 1, imageServer, imageDesc, new Date());
 			image.setPreAllocate(0);
 			session.saveOrUpdate(image);
-			this.getOverViewDAO().updateOverViewfield(session, "viewImage",
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
 					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -186,7 +186,7 @@ public class ImageDAO {
 					+ imageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfield(session, "viewImage",
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
 					false);
 			result = true;
 			session.getTransaction().commit();

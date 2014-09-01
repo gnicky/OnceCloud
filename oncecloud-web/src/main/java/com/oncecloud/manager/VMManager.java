@@ -26,22 +26,20 @@ import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
-import com.oncecloud.dao.VDIDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.dao.VolumeDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
-import com.oncecloud.entity.OCVDI;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.NoVNC;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -68,14 +66,24 @@ public class VMManager {
 	private FeeDAO feeDAO;
 	private VolumeDAO volumeDAO;
 	private ImageDAO imageDAO;
-	private VDIDAO vdiDAO;
 	private FirewallDAO firewallDAO;
 	private QuotaDAO quotaDAO;
 	private UserDAO userDAO;
 	
+	private MessagePush messagePush;
+
 	private EIPManager eipManager;
 
 	private Constant constant;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 
 	private HostDAO getHostDAO() {
 		return hostDAO;
@@ -156,15 +164,6 @@ public class VMManager {
 	@Autowired
 	private void setImageDAO(ImageDAO imageDAO) {
 		this.imageDAO = imageDAO;
-	}
-
-	private VDIDAO getVdiDAO() {
-		return vdiDAO;
-	}
-
-	@Autowired
-	private void setVdiDAO(VDIDAO vdiDAO) {
-		this.vdiDAO = vdiDAO;
 	}
 
 	private FirewallDAO getFirewallDAO() {
@@ -363,8 +362,8 @@ public class VMManager {
 					LogConstant.logAction.销毁.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, uuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -372,7 +371,7 @@ public class VMManager {
 					LogConstant.logAction.销毁.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -447,24 +446,26 @@ public class VMManager {
 				LogConstant.logObject.主机.toString(),
 				"i-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "running", "正常运行");
-			MessagePush.editRowConsole(userId, uuid, "add");
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.重启.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "running", "正常运行");
-			MessagePush.editRowConsole(userId, uuid, "add");
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.重启.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -529,14 +530,14 @@ public class VMManager {
 		}
 		return result;
 	}
-	
+
 	public void doAdminStartVm(int userId, String uuid) {
 		OCVM ocvm = this.getVmDAO().getVM(uuid);
 		String hostUuid = ocvm.getHostUuid();
 		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
 		this.doStartVM(userId, hostUuid, poolUuid);
 	}
-	
+
 	public void doStartVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.startVM(uuid, poolUuid);
@@ -548,23 +549,24 @@ public class VMManager {
 				LogConstant.logObject.主机.toString(),
 				"i-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "running", "正常运行");
-			MessagePush.editRowConsole(userId, uuid, "add");
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.启动.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.启动.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -626,14 +628,14 @@ public class VMManager {
 		}
 		return result;
 	}
-	
+
 	public void doAdminShutDown(int userId, String uuid, String force) {
 		OCVM ocvm = this.getVmDAO().getVM(uuid);
 		String hostUuid = ocvm.getHostUuid();
 		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
 		this.doAdminShutDown(userId, poolUuid, force);
 	}
-	
+
 	public void doShutdownVM(int userId, String uuid, String force,
 			String poolUuid) {
 		Date startTime = new Date();
@@ -646,23 +648,24 @@ public class VMManager {
 				LogConstant.logObject.主机.toString(),
 				"i-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.关闭.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "running", "正常运行");
-			MessagePush.editRowConsole(userId, uuid, "add");
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.关闭.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -744,10 +747,12 @@ public class VMManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, vmUuid, "running", "正常运行");
-			MessagePush.editRowIP(userId, vmUuid, "基础网络", jo.getString("ip"));
-			MessagePush.editRowConsole(userId, vmUuid, "add");
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, vmUuid, "running",
+					"正常运行");
+			this.getMessagePush().editRowIP(userId, vmUuid, "基础网络",
+					jo.getString("ip"));
+			this.getMessagePush().editRowConsole(userId, vmUuid, "add");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			infoArray.put(Utilities.createLogInfo("原因", jo.getString("error")));
@@ -756,8 +761,8 @@ public class VMManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, vmUuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, vmUuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -815,33 +820,19 @@ public class VMManager {
 				logger.info("VM [" + vmBackendName + "] Pre Create Time ["
 						+ elapse + "]");
 				if (preCreate == true) {
-					OCVDI freeVDI = this.getVdiDAO().getFreeVDI(tplUuid);
 					Record vmrecord = null;
 					// 如果不能获取该模板的空闲VDI，则直接创建该虚拟机，否则使用该VDI创建虚拟机
 					logger.info("VM Config: Template [" + tplUuid + "] CPU ["
 							+ cpu + "] Memory [" + memory + "] Mac [" + mac
 							+ "] IP [" + ip + "] OS [" + OS + "]");
-					if (freeVDI == null) {
-						vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root",
-								pwd, cpu, memory, mac, ip, OS, allocateHost,
-								imagePwd, vmBackendName);
-						Date createEndDate = new Date();
-						int elapse1 = Utilities.timeElapse(createDate,
-								createEndDate);
-						logger.info("VM [" + vmBackendName + "] Create Time ["
-								+ elapse1 + "]");
-					} else {
-						String vdiUuid = freeVDI.getVdiUuid();
-						this.getVdiDAO().deleteVDI(freeVDI);
-						vmrecord = createVMFromVDI(c, vmUuid, vdiUuid, tplUuid,
-								"root", pwd, cpu, memory, mac, ip, OS,
-								allocateHost, imagePwd, vmBackendName);
-						Date createEndDate = new Date();
-						int elapse1 = Utilities.timeElapse(createDate,
-								createEndDate);
-						logger.info("VM [" + vmBackendName
-								+ "] Create From VDI Time [" + elapse1 + "]");
-					}
+					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
+							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
+							vmBackendName);
+					Date createEndDate = new Date();
+					int elapse1 = Utilities.timeElapse(createDate,
+							createEndDate);
+					logger.info("VM [" + vmBackendName + "] Create Time ["
+							+ elapse1 + "]");
 					if (vmrecord != null) {
 						String hostuuid = vmrecord.residentOn.toWireString();
 						if (hostuuid.equals(allocateHost)) {
@@ -1130,17 +1121,19 @@ public class VMManager {
 						.getPoolUuid();
 				int port = this.getVNCPort(vmUuid, poolUuid);
 				NoVNC.createToken(vmUuid.substring(0, 8), hostAddress, port);
-				MessagePush.editRowStatus(userId, vmUuid, "running", "正常运行");
-				MessagePush.editRowConsole(userId, vmUuid, "add");
-				MessagePush.pushMessage(
+				this.getMessagePush().editRowStatus(userId, vmUuid, "running",
+						"正常运行");
+				this.getMessagePush().editRowConsole(userId, vmUuid, "add");
+				this.getMessagePush().pushMessage(
 						userId,
 						Utilities.stickyToSuccess("主机 [i-"
 								+ vmUuid.substring(0, 8) + "] 已启动"));
 			} else {
 				NoVNC.deleteToken(vmUuid.substring(0, 8));
-				MessagePush.editRowStatus(userId, vmUuid, "stopped", "已关机");
-				MessagePush.editRowConsole(userId, vmUuid, "del");
-				MessagePush.pushMessage(
+				this.getMessagePush().editRowStatus(userId, vmUuid, "stopped",
+						"已关机");
+				this.getMessagePush().editRowConsole(userId, vmUuid, "del");
+				this.getMessagePush().pushMessage(
 						userId,
 						Utilities.stickyToSuccess("主机 [i-"
 								+ vmUuid.substring(0, 8) + "] 已关闭"));

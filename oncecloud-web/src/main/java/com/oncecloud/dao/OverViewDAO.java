@@ -27,7 +27,7 @@ public class OverViewDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			Query query = session.createQuery("from OverView");
-			overView = (OverView)query.list().get(0);
+			overView = (OverView) query.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -38,23 +38,13 @@ public class OverViewDAO {
 		return overView;
 	}
 
-	public boolean updateOverViewfield(Session session, String filedName,
-			boolean isadd) {
-		boolean result = false;
-		if (session == null || !session.isOpen()) {
-			return result;
-		}
-		try {
-			String queryString = String.format(
-					"update OverView set %s where viewId = 1",
-					isadd ? (filedName + "=" + filedName + "+1") : (filedName
-							+ "=" + filedName + "-1"));
-			Query query = session.createQuery(queryString);
-			query.executeUpdate();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
+	public void updateOverViewfieldNoTransaction(String filedName, boolean isadd) {
+		Session session = getSessionHelper().getMainSession();
+		String queryString = String.format(
+				"update OverView set %s where viewId = 1", isadd ? (filedName
+						+ "=" + filedName + "+1") : (filedName + "="
+						+ filedName + "-1"));
+		Query query = session.createQuery(queryString);
+		query.executeUpdate();
 	}
 }
