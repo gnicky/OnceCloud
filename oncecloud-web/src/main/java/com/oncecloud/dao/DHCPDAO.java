@@ -3,10 +3,14 @@ package com.oncecloud.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,11 +66,9 @@ public class DHCPDAO {
 	public boolean addDHCPPool(String prefix, int start, int end, Date date) {
 		boolean result = true;
 		Session session = null;
-		Connection c = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			c = this.getConstant().getConnection(1);
 			List<DHCP> dhcpList = new ArrayList<DHCP>();
 			JSONObject total = new JSONObject();
 			JSONArray ipMacArray = new JSONArray();
@@ -87,7 +89,8 @@ public class DHCPDAO {
 				}
 			}
 			total.put("hosts", ipMacArray);
-			boolean bindResult = Host.bindIpMac(c, total.toString());
+			Connection connection = this.getConstant().getConnection(1);
+			boolean bindResult = Host.bindIpMac(connection, total.toString());
 			if (bindResult) {
 				for (DHCP dhcp : dhcpList) {
 					session.save(dhcp);
@@ -99,28 +102,28 @@ public class DHCPDAO {
 			} else {
 				result = false;
 			}
-			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public synchronized DHCP getFreeDHCP(String tenantUuid, int depenType) {
 		DHCP dhcp = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session
-					.createQuery("from DHCP where tenantUuid = null order by rand()");
-			query.setFirstResult(0);
-			query.setMaxResults(1);
-			dhcp = (DHCP) query.list().get(0);
-			if (dhcp != null) {
+			Criteria criteria = session.createCriteria(DHCP.class).add(
+					Restrictions.isNull("tenantUuid"));
+			List<DHCP> dhcpList = criteria.list();
+			if (dhcpList.size() > 0) {
+				int selectedIndex = new Random().nextInt(dhcpList.size());
+				dhcp = dhcpList.get(selectedIndex);
 				dhcp.setTenantUuid(tenantUuid);
 				dhcp.setDepenType(depenType);
 				session.update(dhcp);
@@ -141,10 +144,7 @@ public class DHCPDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from DHCP where dhcpMac = :dhcpMac";
-			Query query = session.createQuery(queryString);
-			query.setString("dhcpMac", dhcpMac);
-			dhcp = (DHCP) query.uniqueResult();
+			dhcp = this.doGetDHCP(session, dhcpMac);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -155,18 +155,25 @@ public class DHCPDAO {
 		return dhcp;
 	}
 
+	private DHCP doGetDHCP(Session session, String dhcpMac) {
+		DHCP dhcp;
+		Criteria criteria = session.createCriteria(DHCP.class).add(
+				Restrictions.eq("dhcpMac", dhcpMac));
+		dhcp = (DHCP) criteria.uniqueResult();
+		return dhcp;
+	}
+
 	public boolean ipExist(String dhcpIp) {
 		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from DHCP where dhcpIp = :dhcpIp";
-			Query query = session.createQuery(queryString);
-			query.setString("dhcpIp", dhcpIp);
-			query.uniqueResult();
+			Criteria criteria = session.createCriteria(DHCP.class).add(
+					Restrictions.eq("dhcpIp", dhcpIp));
+			DHCP dhcp = (DHCP) criteria.uniqueResult();
 			session.getTransaction().commit();
-			result = true;
+			result = (dhcp != null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -177,19 +184,19 @@ public class DHCPDAO {
 	}
 
 	public synchronized boolean returnDHCP(String dhcpMac) {
-		DHCP dhcp = this.getDHCP(dhcpMac);
-		Session session = null;
 		boolean result = false;
+		Session session = null;
 		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			DHCP dhcp = this.doGetDHCP(session, dhcpMac);
 			if (dhcp != null) {
 				dhcp.setTenantUuid(null);
 				dhcp.setDepenType(null);
-				session = this.getSessionHelper().getMainSession();
-				session.beginTransaction();
 				session.update(dhcp);
-				session.getTransaction().commit();
 				result = true;
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -201,71 +208,73 @@ public class DHCPDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<DHCP> getOnePageDHCPList(int page, int limit, String search) {
-		List<DHCP> dcList = null;
+		List<DHCP> dhcpList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from DHCP where dhcpIp like '%" + search
-					+ "%' order by tenantUuid desc, dhcpIp";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			dcList = query.list();
+			Criteria criteria = session
+					.createCriteria(DHCP.class)
+					.add(Restrictions
+							.like("dhcpIp", search, MatchMode.ANYWHERE))
+					.addOrder(Order.desc("tenantUuid"))
+					.addOrder(Order.asc("dhcpIp")).setFirstResult(startPos)
+					.setMaxResults(limit);
+			dhcpList = criteria.list();
 			session.getTransaction().commit();
-			return dcList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return dhcpList;
 	}
 
 	public int countAllDHCP(String search) {
-		int total = 0;
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from DHCP where dhcpIp like '%"
-					+ search + "%'";
-			Query query = session.createQuery(queryString);
-			total = ((Number) query.iterate().next()).intValue();
+			Criteria criteria = session
+					.createCriteria(DHCP.class)
+					.add(Restrictions
+							.like("dhcpIp", search, MatchMode.ANYWHERE))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
-		return total;
+		return count;
 	}
 
 	public boolean deleteDHCP(String ip, String mac) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
-			DHCP dhcp = this.getDHCP(mac);
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.delete(dhcp);
+			session.beginTransaction();
+			DHCP dhcp = this.doGetDHCP(session, mac);
+			if (dhcp != null) {
+				session.delete(dhcp);
+				result = true;
+			}
 			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDhcp",
 					false);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
-			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 }

@@ -4,13 +4,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.Datacenter;
+import com.oncecloud.entity.OCPool;
+import com.oncecloud.entity.Rack;
 import com.oncecloud.helper.SessionHelper;
 
 /**
@@ -40,180 +45,189 @@ public class DatacenterDAO {
 		this.overViewDAO = overViewDAO;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Datacenter getDatacenter(String dcUuid) {
-		Datacenter dc = null;
+		Datacenter datacenter = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from Datacenter where dcUuid = :dcUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("dcUuid", dcUuid);
-			List<Datacenter> dcList = query.list();
-			if (dcList.size() == 1) {
-				dc = dcList.get(0);
-			}
+			datacenter = this.doGetDatacenter(session, dcUuid);
 			session.getTransaction().commit();
-			return dc;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return datacenter;
+	}
+
+	private Datacenter doGetDatacenter(Session session, String dcUuid) {
+		Datacenter datacenter;
+		Criteria criteria = session.createCriteria(Datacenter.class).add(
+				Restrictions.eq("dcUuid", dcUuid));
+		datacenter = (Datacenter) criteria.uniqueResult();
+		return datacenter;
 	}
 
 	public Datacenter createDatacenter(String dcName, String dcLocation,
 			String dcDesc) {
-		Datacenter dc = null;
+		Datacenter datacenter = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
-			dc = new Datacenter();
-			dc.setDcUuid(UUID.randomUUID().toString());
-			dc.setDcName(dcName);
-			dc.setDcLocation(dcLocation);
-			dc.setDcDesc(dcDesc);
-			dc.setDcStatus(1);
-			dc.setCreateDate(new Date());
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.save(dc);
+			session.beginTransaction();
+			datacenter = new Datacenter();
+			datacenter.setDcUuid(UUID.randomUUID().toString());
+			datacenter.setDcName(dcName);
+			datacenter.setDcLocation(dcLocation);
+			datacenter.setDcDesc(dcDesc);
+			datacenter.setDcStatus(1);
+			datacenter.setCreateDate(new Date());
+			session.save(datacenter);
 			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDc",
 					true);
-			tx.commit();
-			return dc;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return datacenter;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Datacenter> getOnePageDCList(int page, int limit, String search) {
-		List<Datacenter> dcList = null;
+		List<Datacenter> datacenterList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Datacenter where dcName like '%"
-					+ search + "%' and dcStatus = 1 order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			dcList = query.list();
+			Criteria criteria = session
+					.createCriteria(Datacenter.class)
+					.add(Restrictions
+							.like("dcName", search, MatchMode.ANYWHERE))
+					.add(Restrictions.eq("dcStatus", 1))
+					.addOrder(Order.desc("createDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
+			datacenterList = criteria.list();
 			session.getTransaction().commit();
-			return dcList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return datacenterList;
 	}
 
 	public int countAllDatacenter(String search) {
-		int total = 0;
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Datacenter where dcName like '%"
-					+ search + "%' and dcStatus = 1";
-			Query query = session.createQuery(queryString);
-			total = ((Number) query.iterate().next()).intValue();
+			Criteria criteria = session
+					.createCriteria(Datacenter.class)
+					.add(Restrictions
+							.like("dcName", search, MatchMode.ANYWHERE))
+					.add(Restrictions.eq("dcStatus", 1))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean deleteDatacenter(String dcUuid) {
-		Datacenter delDC = this.getDatacenter(dcUuid);
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
-			if (delDC != null) {
-				delDC.setDcStatus(0);
-				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
-				session.update(delDC);
-				String queryString = "update Rack set dcUuid = null where dcUuid = :dcUuid";
-				Query query = session.createQuery(queryString);
-				query.setString("dcUuid", dcUuid);
-				query.executeUpdate();
-				queryString = "update OCPool set dcUuid = null where dcUuid=:dcUuid";
-				Query query2 = session.createQuery(queryString);
-				query2.setString("dcUuid", dcUuid);
-				query2.executeUpdate();
-				this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDc",
-						false);
-				tx.commit();
-				return true;
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Datacenter datacenter = this.doGetDatacenter(session, dcUuid);
+			if (datacenter != null) {
+				datacenter.setDcStatus(0);
+				session.update(datacenter);
+				List<Rack> racks = session.createCriteria(Rack.class)
+						.add(Restrictions.eq("dcUuid", dcUuid)).list();
+				for (Rack rack : racks) {
+					rack.setDcUuid(null);
+					session.update(rack);
+				}
+				List<OCPool> pools = session.createCriteria(OCPool.class)
+						.add(Restrictions.eq("dcUuid", dcUuid)).list();
+				for (OCPool pool : pools) {
+					pool.setDcUuid(null);
+					session.update(pool);
+				}
+				this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewDc", false);
+				session.getTransaction().commit();
+				result = true;
 			}
-			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Datacenter> getAllPageDCList() {
-		List<Datacenter> dcList = null;
+		List<Datacenter> datacenterList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "from Datacenter where dcStatus = 1 order by createDate desc";
-			Query query = session.createQuery(queryString);
-			dcList = query.list();
-			return dcList;
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Datacenter.class)
+					.add(Restrictions.eq("dcStatus", 1))
+					.addOrder(Order.desc("createDate"));
+			datacenterList = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return datacenterList;
 	}
 
 	public boolean updateDatacenter(String dcUuid, String dcName,
 			String dcLocation, String dcDesc) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Datacenter set dcName=:name,dcLocation=:location,dcDesc=:desc  where dcUuid = :dcUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("dcUuid", dcUuid);
-			query.setString("name", dcName);
-			query.setString("location", dcLocation);
-			query.setString("desc", dcDesc);
-			query.executeUpdate();
-			tx.commit();
-			return true;
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Datacenter.class).add(
+					Restrictions.eq("dcUuid", dcUuid));
+			Datacenter datacenter = (Datacenter) criteria.uniqueResult();
+			if (datacenter != null) {
+				datacenter.setDcName(dcName);
+				datacenter.setDcLocation(dcLocation);
+				datacenter.setDcDesc(dcDesc);
+				session.update(datacenter);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 }
