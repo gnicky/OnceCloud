@@ -25,7 +25,7 @@ public class AlarmRuleDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	private AlarmRule doGetAlarmRule(String ruleAUuid, Session session) {
+	private AlarmRule doGetAlarmRule(Session session, String ruleAUuid) {
 		AlarmRule alarmRule;
 		Criteria criteria = session.createCriteria(AlarmRule.class).add(
 				Restrictions.eq("ruleAUuid", ruleAUuid));
@@ -39,7 +39,7 @@ public class AlarmRuleDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			alarmRule = this.doGetAlarmRule(ruleAUuid, session);
+			alarmRule = this.doGetAlarmRule(session, ruleAUuid);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,7 +121,7 @@ public class AlarmRuleDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			AlarmRule alarmRule = this.doGetAlarmRule(ruleAUuid, session);
+			AlarmRule alarmRule = this.doGetAlarmRule(session, ruleAUuid);
 			if (alarmRule != null) {
 				if (ruleAPeriod > 0) {
 					alarmRule.setRuleAPeriod(ruleAPeriod);
