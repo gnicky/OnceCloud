@@ -1024,6 +1024,12 @@ public class VMManager {
 		return ja;
 	}
 
+	/**
+	 * 获取主机详细信息
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
 	public JSONObject getVMDetail(String vmUuid) {
 		JSONObject jo = new JSONObject();
 		OCVM ocvm = this.getVmDAO().getVM(vmUuid);

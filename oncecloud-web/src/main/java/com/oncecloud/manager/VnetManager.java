@@ -285,6 +285,7 @@ public class VnetManager {
 
 	/**
 	 * 获取用户私有网络列表
+	 * 
 	 * @param userId
 	 * @param page
 	 * @param limit
@@ -294,8 +295,8 @@ public class VnetManager {
 	public JSONArray getVnetList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getVnetDAO().countAllVnetList(userId, search);
-		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnetList(userId, page, limit,
-				search);
+		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnetList(userId,
+				page, limit, search);
 		ja.put(total);
 		if (vnetList != null) {
 			for (Vnet vnet : vnetList) {
@@ -360,34 +361,38 @@ public class VnetManager {
 		return ja;
 	}
 
-	public JSONObject vnetGetOneVnet(String vnetuuid) {
-		Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
+	public JSONObject getVnetDetail(String vnetUuid) {
 		JSONObject jo = new JSONObject();
-		jo.put("vnetName", Utilities.encodeText(vnet.getVnetName()));
-		jo.put("vnetDesc", (null == vnet.getVnetDesc()) ? "&nbsp;" : Utilities
-				.encodeText(vnet.getVnetDesc()).replace("+", "%20"));
-		jo.put("vnetUID", vnet.getVnetUID());
-		jo.put("vnetNet", (null == vnet.getVnetNet()) ? "" : vnet.getVnetNet());
-		jo.put("vnetGate",
-				(null == vnet.getVnetGate()) ? "" : vnet.getVnetGate());
-		jo.put("vnetStart",
-				(null == vnet.getVnetStart()) ? "" : vnet.getVnetStart());
-		jo.put("vnetEnd", (null == vnet.getVnetEnd()) ? "" : vnet.getVnetEnd());
-		jo.put("dhcpStatus", vnet.getDhcpStatus());
-		JSONArray ja = getVMs(vnetuuid);
-		jo.put("vmList", ja);
-		if (vnet.getVnetRouter() == null) {
-			jo.put("vnetRouter", "&nbsp;");
-		} else {
-			jo.put("vnetRouter", vnet.getVnetRouter());
-			jo.put("vnetRouterName",
-					this.getRouterDAO().getRouter(vnet.getVnetRouter())
-							.getRouterName());
+		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
+		if (vnet != null) {
+			jo.put("vnetName", Utilities.encodeText(vnet.getVnetName()));
+			jo.put("vnetDesc", (null == vnet.getVnetDesc()) ? "&nbsp;"
+					: Utilities.encodeText(vnet.getVnetDesc()));
+			jo.put("vnetUID", vnet.getVnetUID());
+			jo.put("vnetNet",
+					(null == vnet.getVnetNet()) ? "" : vnet.getVnetNet());
+			jo.put("vnetGate",
+					(null == vnet.getVnetGate()) ? "" : vnet.getVnetGate());
+			jo.put("vnetStart",
+					(null == vnet.getVnetStart()) ? "" : vnet.getVnetStart());
+			jo.put("vnetEnd",
+					(null == vnet.getVnetEnd()) ? "" : vnet.getVnetEnd());
+			jo.put("dhcpStatus", vnet.getDhcpStatus());
+			JSONArray ja = getVMs(vnetUuid);
+			jo.put("vmList", ja);
+			if (vnet.getVnetRouter() == null) {
+				jo.put("vnetRouter", "&nbsp;");
+			} else {
+				jo.put("vnetRouter", vnet.getVnetRouter());
+				jo.put("vnetRouterName",
+						this.getRouterDAO().getRouter(vnet.getVnetRouter())
+								.getRouterName());
+			}
+			jo.put("createDate", Utilities.formatTime(vnet.getCreateDate()));
+			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(vnet
+					.getCreateDate()));
+			jo.put("useDate", timeUsed);
 		}
-		jo.put("createDate", Utilities.formatTime(vnet.getCreateDate()));
-		String timeUsed = Utilities.encodeText(Utilities.dateToUsed(vnet
-				.getCreateDate()));
-		jo.put("useDate", timeUsed);
 		return jo;
 	}
 

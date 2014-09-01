@@ -789,15 +789,21 @@ public class RouterManager {
 		return ja;
 	}
 
-	public JSONObject routerGetOneRouter(String routeruuid) {
+	/**
+	 * 获取路由器详细信息
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public JSONObject getRouterDetail(String routerUuid) {
 		JSONObject jo = new JSONObject();
-		Router router = this.getRouterDAO().getRouter(routeruuid);
+		Router router = this.getRouterDAO().getRouter(routerUuid);
 		if (router != null) {
 			jo.put("routerName", Utilities.encodeText(router.getRouterName()));
 			jo.put("routerDesc", (null == router.getRouterDesc()) ? "&nbsp;"
 					: Utilities.encodeText(router.getRouterDesc()));
 			jo.put("routerIp", router.getRouterIP());
-			String eip = this.getEipDAO().getEipIp(routeruuid);
+			String eip = this.getEipDAO().getEipIp(routerUuid);
 			if (eip == null) {
 				jo.put("eip", "");
 			} else {

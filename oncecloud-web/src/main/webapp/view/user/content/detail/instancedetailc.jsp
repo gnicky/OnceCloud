@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content detail" id="platformcontent"  novnc="${vncServer}" uuid="${uuid}" basePath="${basePath}">
+<div class="content detail" id="platformcontent"  novnc="${vncServer}" instanceUuid="${instanceUuid}">
 	<div class="intro">
 		<h1>主机&nbsp;Instance</h1>
 		<p class="lead">
@@ -9,8 +9,8 @@
 	<div class="row" style="margin:0; border-bottom: 1px solid #f3f3f3">
 		<div class="col-md-4">	
 			<ol class="breadcrumb oc-crumb" style="border-bottom:none">
-				<li><a href="${basePath}user/instance.jsp"><span class="glyphicon glyphicon-cloud cool-orange"></span><span class="ctext">INSTANCE</span></a></li>
-				<li class="active"><a href="${basePath}user/detail/instancedetail.jsp">${uuid}</a></li>
+				<li><a href="${basePath}instance"><span class="glyphicon glyphicon-cloud cool-orange"></span><span class="ctext">INSTANCE</span></a></li>
+				<li class="active"><a href="${basePath}instance/detail">${showId}</a></li>
 			</ol>
 		</div>
 		<div class="col-md-8">

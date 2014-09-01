@@ -157,10 +157,6 @@ public class LBAction extends HttpServlet {
 			} else if (action.equals("detail")) {
 				String lbuuid = request.getParameter("lbUuid");
 				session.setAttribute("lbUuid", lbuuid);
-			} else if (action.equals("getonelb")) {
-				String lbuuid = request.getParameter("lbUuid");
-				JSONObject jo = this.getLbManager().getonelb(lbuuid);
-				out.print(jo.toString());
 			}
 		}
 	}

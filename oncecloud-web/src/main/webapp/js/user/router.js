@@ -122,17 +122,16 @@ function getRouterList(page, limit, search) {
 }
 
 $('#tablebody').on('click', '.id', function (event) {
-    event.preventDefault();
+	event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/RouterAction',
-        data: 'action=detail&routerUuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/routerdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/router/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="routerUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getInfoList() {

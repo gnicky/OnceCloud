@@ -7,31 +7,157 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.oncecloud.entity.User;
+import com.oncecloud.main.Constant;
 
 @Controller
 public class DetailControllerUser {
 	
-	@RequestMapping(value = "/instance/detail", method = { RequestMethod.GET })
+	@RequestMapping(value = "/instance/detail")
 	@ResponseBody
-	public ModelAndView volume(HttpServletRequest request) {
+	public ModelAndView instanceDetail(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") == null) {
 			return new ModelAndView(new RedirectView("/login"));
 		}
 		
 		Map<String, Object> model = new HashMap<String, Object>();
-		User user = (User) request.getSession().getAttribute("user");
 		model.put("title", "主机");
-		model.put("uuid", request.getParameter("uuid"));
-		if (user.getUserLevel() > 0) {
+		model.put("sideActive", 1);
+		model.put("vncServer", Constant.noVNCServerPublic);
+		String uuid = request.getParameter("instanceUuid");
+		if (uuid != null) {
+			request.getSession().setAttribute("instanceUuid", uuid);
+			request.getSession().setAttribute("showId", "i-" + uuid.substring(0, 8));
 			return new ModelAndView("user/detail/instancedetail", model);
 		} else {
-			return new ModelAndView(new RedirectView("/dashboard"));
+			if (request.getSession().getAttribute("instanceUuid") != null) {
+				return new ModelAndView("user/detail/instancedetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/volume/detail")
+	@ResponseBody
+	public ModelAndView volumeDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "硬盘");
+		model.put("sideActive", 3);
+		String uuid = request.getParameter("volumeUuid");
+		if (uuid != null) {
+			request.getSession().setAttribute("volumeUuid", uuid);
+			request.getSession().setAttribute("showId", "vol-" + uuid.substring(0, 8));
+			return new ModelAndView("user/detail/volumedetail", model);
+		} else {
+			if (request.getSession().getAttribute("volumeUuid") != null) {
+				return new ModelAndView("user/detail/volumedetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/router/detail")
+	@ResponseBody
+	public ModelAndView routerDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "路由器");
+		model.put("sideActive", 5);
+		String uuid = request.getParameter("routerUuid");
+		if (uuid != null) {
+			request.getSession().setAttribute("routerUuid", uuid);
+			request.getSession().setAttribute("showId", "rt-" + uuid.substring(0, 8));
+			return new ModelAndView("user/detail/routerdetail", model);
+		} else {
+			if (request.getSession().getAttribute("routerUuid") != null) {
+				return new ModelAndView("user/detail/routerdetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/vnet/detail")
+	@ResponseBody
+	public ModelAndView vnetDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "私有网络");
+		model.put("sideActive", 5);
+		String uuid = request.getParameter("vnetUuid");
+		if (uuid != null) {
+			request.getSession().setAttribute("vnetUuid", uuid);
+			request.getSession().setAttribute("showId", "vn-" + uuid.substring(0, 8));
+			return new ModelAndView("user/detail/vnetdetail", model);
+		} else {
+			if (request.getSession().getAttribute("vnetUuid") != null) {
+				return new ModelAndView("user/detail/vnetdetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/elasticip/detail")
+	@ResponseBody
+	public ModelAndView elasticIPDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "公网IP");
+		model.put("sideActive", 6);
+		String uuid = request.getParameter("eipUuid");
+		if (uuid != null) {
+			request.getSession().setAttribute("eipUuid", uuid);
+			request.getSession().setAttribute("showId", "eip-" + uuid.substring(0, 8));
+			return new ModelAndView("user/detail/elasticipdetail", model);
+		} else {
+			if (request.getSession().getAttribute("eipUuid") != null) {
+				return new ModelAndView("user/detail/elasticipdetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/loadbalance/detail")
+	@ResponseBody
+	public ModelAndView loadBalanceDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "负载均衡");
+		model.put("sideActive", 7);
+		String uuid = request.getParameter("lbUuid");
+		if (uuid != null) {
+			request.getSession().setAttribute("lbUuid", uuid);
+			request.getSession().setAttribute("showId", "lb-" + uuid.substring(0, 8));
+			return new ModelAndView("user/detail/loadbalancedetail", model);
+		} else {
+			if (request.getSession().getAttribute("lbUuid") != null) {
+				return new ModelAndView("user/detail/loadbalancedetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
 		}
 	}
 }

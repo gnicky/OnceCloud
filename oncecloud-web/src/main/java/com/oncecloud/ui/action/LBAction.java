@@ -3,6 +3,7 @@ package com.oncecloud.ui.action;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +60,18 @@ public class LBAction {
 		if (user != null) {
 			int userId = user.getUserId();
 			this.getLbManager().lbAdminShutDown(uuid, force, userId);
+		}
+	}
+
+	@RequestMapping(value = "/LBDetail", method = { RequestMethod.GET })
+	@ResponseBody
+	public String volumeDetail(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONObject jo = this.getLbManager().getLBDetail(uuid);
+			return jo.toString();
+		} else {
+			return "";
 		}
 	}
 }

@@ -497,7 +497,8 @@ public class LBManager {
 	public JSONArray getLBList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getLbDAO().countAllLBList(search, userId);
-		List<LB> lbList = this.getLbDAO().getOnePageLBList(userId, page, limit, search);
+		List<LB> lbList = this.getLbDAO().getOnePageLBList(userId, page, limit,
+				search);
 		ja.put(total);
 		if (lbList != null) {
 			for (LB lb : lbList) {
@@ -527,7 +528,8 @@ public class LBManager {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getLbDAO().countAllLBList(search, userId);
 		ja.put(totalNum);
-		List<LB> lbList = this.getLbDAO().getOnePageLBList(userId, page, limit, search);
+		List<LB> lbList = this.getLbDAO().getOnePageLBList(userId, page, limit,
+				search);
 		if (lbList != null) {
 			for (int i = 0; i < lbList.size(); i++) {
 				JSONObject jo = new JSONObject();
@@ -851,32 +853,34 @@ public class LBManager {
 		return ja;
 	}
 
-	public JSONObject getonelb(String lbuuid) {
-		LB lb = this.getLbDAO().getLB(lbuuid);
+	public JSONObject getLBDetail(String lbUuid) {
 		JSONObject jo = new JSONObject();
-		jo.put("lbName", Utilities.encodeText(lb.getLbName()));
-		jo.put("lbDesc",
-				(lb.getLbDesc() == null) ? "&nbsp;" : Utilities.encodeText(lb
-						.getLbDesc()));
-		jo.put("lbIp", lb.getLbIP());
-		String eip = this.getEipDAO().getEipIp(lbuuid);
-		if (eip == null) {
-			jo.put("eip", "&nbsp;");
-		} else {
-			jo.put("eip", eip);
+		LB lb = this.getLbDAO().getLB(lbUuid);
+		if (lb != null) {
+			jo.put("lbName", Utilities.encodeText(lb.getLbName()));
+			jo.put("lbDesc",
+					(lb.getLbDesc() == null) ? "&nbsp;" : Utilities
+							.encodeText(lb.getLbDesc()));
+			jo.put("lbIp", lb.getLbIP());
+			String eip = this.getEipDAO().getEipIp(lbUuid);
+			if (eip == null) {
+				jo.put("eip", "&nbsp;");
+			} else {
+				jo.put("eip", eip);
+			}
+			jo.put("lbUID", lb.getLbUID());
+			jo.put("lbMac", lb.getLbMac());
+			jo.put("lbStatus", lb.getLbStatus());
+			jo.put("lbCapacity", lb.getLbCapacity());
+			jo.put("lbPower", lb.getLbPower());
+			jo.put("lbFirewall",
+					(lb.getFirewallUuid() == null) ? "&nbsp;" : lb
+							.getFirewallUuid());
+			jo.put("createDate", Utilities.formatTime(lb.getCreateDate()));
+			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(lb
+					.getCreateDate()));
+			jo.put("useDate", timeUsed);
 		}
-		jo.put("lbUID", lb.getLbUID());
-		jo.put("lbMac", lb.getLbMac());
-		jo.put("lbStatus", lb.getLbStatus());
-		jo.put("lbCapacity", lb.getLbCapacity());
-		jo.put("lbPower", lb.getLbPower());
-		jo.put("lbFirewall",
-				(lb.getFirewallUuid() == null) ? "&nbsp;" : lb
-						.getFirewallUuid());
-		jo.put("createDate", Utilities.formatTime(lb.getCreateDate()));
-		String timeUsed = Utilities.encodeText(Utilities.dateToUsed(lb
-				.getCreateDate()));
-		jo.put("useDate", timeUsed);
 		return jo;
 	}
 

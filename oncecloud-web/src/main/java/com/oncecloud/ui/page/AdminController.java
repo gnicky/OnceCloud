@@ -117,7 +117,7 @@ public class AdminController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 12);
-		model.put("title", "数据仓库管理");
+		model.put("title", "数据中心管理");
 		if (user.getUserLevel() == 0) {
 			return new ModelAndView("admin/datacenter", model);
 		} else {
