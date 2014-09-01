@@ -834,8 +834,8 @@ public class HostManager {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(host);
-			this.getOverViewDAO().updateOverViewfield(session, "viewServer",
-					true);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction(
+					"viewServer", true);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -865,8 +865,8 @@ public class HostManager {
 							+ hostId + "'");
 			session.update(host);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfield(session, "viewServer",
-					false);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction(
+					"viewServer", false);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {

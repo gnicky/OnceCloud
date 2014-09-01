@@ -39,6 +39,25 @@ public class VolumeDAO {
 		this.quotaDAO = quotaDAO;
 	}
 
+	public Volume getVolume(String volumeUuid) {
+		Volume volume = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from Volume where volumeUuid = :volumeUuid");
+			query.setString("volumeUuid", volumeUuid);
+			volume = (Volume) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return volume;
+	}
+
 	/**
 	 * 获取用户硬盘列表
 	 * 
@@ -57,8 +76,11 @@ public class VolumeDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Volume where volumeUID = :userId and volumeName like :search and volumeStatus != 0  order by createDate desc";
-			Query query = session.createQuery(queryString);
+			StringBuilder builder = new StringBuilder(
+					"from Volume where volumeUID = :userId and ");
+			builder.append("volumeName like :search and volumeStatus != 0 ");
+			builder.append("order by createDate desc");
+			Query query = session.createQuery(builder.toString());
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
@@ -86,8 +108,10 @@ public class VolumeDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Volume where volumeUID = :userId and volumeName like :search and volumeStatus != 0 ";
-			Query query = session.createQuery(queryString);
+			StringBuilder builder = new StringBuilder(
+					"select count(*) from Volume where volumeUID = :userId and ");
+			builder.append("volumeName like :search and volumeStatus != 0");
+			Query query = session.createQuery(builder.toString());
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
@@ -101,9 +125,10 @@ public class VolumeDAO {
 	}
 
 	/**
+	 * 获取主机硬盘列表
+	 * 
 	 * @param vmUuid
-	 * @return volumeList(id)
-	 * @author xpx 2014-7-8
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getVolumeListByVM(String vmUuid) {
@@ -112,7 +137,7 @@ public class VolumeDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select volumeUuid from Volume where volumeDependency = :vmUuid and volumeStatus = 4 order by  createDate desc";
+			String queryString = "select volumeUuid from Volume where volumeDependency = :vmUuid and volumeStatus = 4 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setString("vmUuid", vmUuid);
 			volumeList = query.list();
@@ -125,6 +150,17 @@ public class VolumeDAO {
 		return volumeList;
 	}
 
+	/**
+	 * 预创建硬盘
+	 * 
+	 * @param volumeUuid
+	 * @param volumeName
+	 * @param volumeUID
+	 * @param volumeSize
+	 * @param createDate
+	 * @param status
+	 * @return
+	 */
 	public boolean preCreateVolume(String volumeUuid, String volumeName,
 			Integer volumeUID, Integer volumeSize, Date createDate,
 			Integer status) {
@@ -140,8 +176,8 @@ public class VolumeDAO {
 					"quotaDiskN", 1, true);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(volumeUID,
 					"quotaDiskS", volumeSize, true);
-			result = true;
 			session.getTransaction().commit();
+			result = true;
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
@@ -150,122 +186,109 @@ public class VolumeDAO {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Volume getVolume(String volumeUuid) {
-		Volume volume = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Query query = session
-					.createQuery("from Volume where volumeUuid= :volumeUuid");
-			query.setString("volumeUuid", volumeUuid);
-			List<Volume> volList = query.list();
-			if (volList.size() == 1) {
-				volume = volList.get(0);
-			}
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return volume;
-	}
-
 	public boolean isExist(String volumeUuid) {
 		boolean result = false;
 		Volume volume = this.getVolume(volumeUuid);
-		if (volume.getVolumeStatus() > 0) {
+		if (volume != null && volume.getVolumeStatus() > 0) {
 			result = true;
 		}
 		return result;
 	}
 
 	public void deleteVolume(int userId, String volumeUuid) {
-		Session session = null;
-		try {
-			Volume volume = this.getVolume(volumeUuid);
-			volume.setVolumeStatus(0);
-			int size = volume.getVolumeSize();
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(volume);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaDiskN",
-					1, false);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaDiskS",
-					size, false);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		Volume volume = this.getVolume(volumeUuid);
+		if (volume != null) {
+			Session session = null;
+			try {
+				volume.setVolumeStatus(0);
+				int size = volume.getVolumeSize();
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(volume);
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+						"quotaDiskN", 1, false);
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+						"quotaDiskS", size, false);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 	}
 
 	public void addDependency(String volumeUuid, String vmUuid) {
-		Session session = null;
-		try {
-			Volume volume = this.getVolume(volumeUuid);
-			volume.setVolumeDependency(vmUuid);
-			volume.setVolumeStatus(VolumeStatus.STATUS_MOUNTED);
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(volume);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		Volume volume = this.getVolume(volumeUuid);
+		if (volume != null) {
+			Session session = null;
+			try {
+				volume.setVolumeDependency(vmUuid);
+				volume.setVolumeStatus(VolumeStatus.STATUS_MOUNTED);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(volume);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 	}
 
 	public void emptyDependency(String volumeUuid) {
-		Session session = null;
-		try {
-			Volume volume = this.getVolume(volumeUuid);
-			volume.setVolumeDependency(null);
-			volume.setVolumeStatus(VolumeStatus.STATUS_FREE);
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(volume);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		Volume volume = this.getVolume(volumeUuid);
+		if (volume != null) {
+			Session session = null;
+			try {
+				volume.setVolumeDependency(null);
+				volume.setVolumeStatus(VolumeStatus.STATUS_FREE);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(volume);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 	}
 
 	public void updateBackupDate(String volumeUuid, Date backupDate) {
-		Session session = null;
-		try {
-			Volume volume = this.getVolume(volumeUuid);
-			volume.setBackupDate(backupDate);
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(volume);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		Volume volume = this.getVolume(volumeUuid);
+		if (volume != null) {
+			Session session = null;
+			try {
+				volume.setBackupDate(backupDate);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(volume);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 	}
 
 	public void updateName(String volumeUuid, String newName, String description) {
-		Session session = null;
-		try {
-			Volume volume = this.getVolume(volumeUuid);
-			volume.setVolumeName(newName);
-			volume.setVolumeDescription(description);
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(volume);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		Volume volume = this.getVolume(volumeUuid);
+		if (volume != null) {
+			Session session = null;
+			try {
+				volume.setVolumeName(newName);
+				volume.setVolumeDescription(description);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(volume);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 	}
@@ -312,18 +335,20 @@ public class VolumeDAO {
 
 	public boolean setVolumeStatus(String volUuid, int status) {
 		boolean result = false;
-		Session session = null;
-		try {
-			Volume volume = this.getVolume(volUuid);
-			volume.setVolumeStatus(status);
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(volume);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		Volume volume = this.getVolume(volUuid);
+		if (volume != null) {
+			Session session = null;
+			try {
+				volume.setVolumeStatus(status);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(volume);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return result;
