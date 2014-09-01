@@ -1,13 +1,11 @@
 package com.oncecloud.dao;
 
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.Router;
 import com.oncecloud.helper.SessionHelper;
+import com.oncecloud.main.Utilities;
 
 /**
  * @author xpx hehai hty
@@ -45,46 +44,75 @@ public class RouterDAO {
 		this.quotaDAO = quotaDAO;
 	}
 
+	/**
+	 * 获取路由器
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
 	public Router getRouter(String routerUuid) {
 		Router router = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Router where routerUuid = :routerUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("routerUuid", routerUuid);
-			router = (Router) query.list().get(0);
+			router = (Router) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return router;
-	}
-
-	public Router getAliveRouter(String routerUuid) {
-		Router router = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "from Router where routerUuid = :routerUuid and routerStatus = 1";
-			Query query = session.createQuery(queryString);
-			query.setString("routerUuid", routerUuid);
-			router = (Router) query.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return router;
 	}
 
 	/**
-	 * 获取用户路由器列表
+	 * 获取路由器名称
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public String getRouterName(String routerUuid) {
+		String name = "";
+		Router router = this.getRouter(routerUuid);
+		if (router != null) {
+			name = router.getRouterName();
+		}
+		return name;
+	}
+
+	/**
+	 * 获取使用中的路由器
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public Router getAliveRouter(String routerUuid) {
+		Router router = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Router where routerUuid = :routerUuid and routerStatus = 1";
+			Query query = session.createQuery(queryString);
+			query.setString("routerUuid", routerUuid);
+			router = (Router) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return router;
+	}
+
+	/**
+	 * 获取一页用户路由器列表
 	 * 
 	 * @param userId
 	 * @param page
@@ -99,6 +127,7 @@ public class RouterDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Router where routerUID = :userId and routerName like :search and routerStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -107,69 +136,191 @@ public class RouterDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			routerList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return routerList;
 	}
 
 	/**
-	 * @author hty
+	 * 获取一页管理员路由器列表
+	 * 
 	 * @param page
 	 * @param limit
-	 * @param search
-	 * @param uid
+	 * @param host
+	 * @param importance
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageRouterListAlarm(int page, int limit,
-			String search, int routerUID) {
+	public List<Router> getOnePageAdminList(int page, int limit, String host,
+			int importance) {
+		List<Router> rtList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			Criteria criteria = session.createCriteria(Router.class);
+			criteria.add(Restrictions.ne("routerStatus", 0));
+			criteria.setFirstResult(startPos);
+			criteria.setMaxResults(limit);
+			if (!host.equals("all")) {
+				criteria.add(Restrictions.eq("hostUuid", host));
+			}
+			if (importance != 6) {
+				criteria.add(Restrictions.eq("routerImportance", importance));
+			}
+			rtList = criteria.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return rtList;
+	}
+
+	/**
+	 * 获取一页未设置监控警告的路由器列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Router> getOnePageRoutersWithoutAlarm(int page, int limit,
+			String search, int userId) {
 		List<Router> routerList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Router where routerUID =:routerUID and routerName like '%"
-					+ search
-					+ "%' and routerStatus > 0 and alarmUuid is null order by createDate desc";
+			String queryString = "from Router where routerUID = :userId and routerName like :search "
+					+ "and routerStatus > 0 and alarmUuid is null order by createDate desc";
 			Query query = session.createQuery(queryString);
+			query.setString("search", "%" + search + "%");
+			query.setInteger("userId", userId);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
-			query.setInteger("routerUID", routerUID);
 			routerList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return routerList;
 	}
 
+	/**
+	 * 获取一页没有绑定公网IP的路由器列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Router> getAllListAlarm(int routerUID, String alarmUuid) {
+	public List<Router> getOnePageRoutersWithoutEip(int page, int limit,
+			String search, int userId) {
+		List<Router> routerList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "from Router where routerUID = :userId and routerName like :search "
+					+ "and routerStatus <>0 and routerUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "and eip.eipDependency is not null)";
+			Query query = session.createQuery(queryString);
+			query.setString("search", "%" + search + "%");
+			query.setInteger("userId", userId);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			routerList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return routerList;
+	}
+
+	/**
+	 * 获取对应监控警告的路由器列表
+	 * 
+	 * @param routerUID
+	 * @param alarmUuid
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Router> getRouterListOfAlarm(int routerUID, String alarmUuid) {
 		List<Router> list = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "from Router where routerUID =:routerUID and routerStatus > 0 and alarmUuid =:alarmUuid order by createDate desc";
+			session.beginTransaction();
+			String queryString = "from Router where routerUID = :routerUID "
+					+ "and routerStatus > 0 and alarmUuid = :alarmUuid order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("routerUID", routerUID);
 			query.setString("alarmUuid", alarmUuid);
 			list = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * 获取用户路由器列表
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public JSONArray getRouterListOfUser(int userId) {
+		Session session = null;
+		JSONArray routerList = new JSONArray();
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select routerUuid, routerName from Router where routerUID = :userId "
+					+ "and routerStatus <> 0";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			List<Object[]> resultList = query.list();
+			session.getTransaction().commit();
+			for (Object[] item : resultList) {
+				JSONObject itemjo = new JSONObject();
+				itemjo.put("uuid", (String) item[0]);
+				itemjo.put("rtname", Utilities.encodeText((String) item[1]));
+				routerList.put(itemjo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return routerList;
 	}
 
 	/**
@@ -184,52 +335,35 @@ public class RouterDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from Router where routerUID = :userId and routerName like :search and routerStatus > 0";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
 	}
 
 	/**
-	 * @author hty
-	 * @param search
-	 * @param uid
+	 * 获取管理员路由器总数
+	 * 
+	 * @param host
+	 * @param importance
 	 * @return
 	 */
-	public int countAllRouterListAlarm(String search, int routerUID) {
+	public int countAllAdminList(String host, int importance) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "select count(*) from Router where routerUID=:routerUID and routerName like '%"
-					+ search + "%' and routerStatus > 0 and alarmUuid is null";
-			Query query = session.createQuery(queryString);
-			query.setInteger("routerUID", routerUID);
-			count = ((Number) query.iterate().next()).intValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return count;
-	}
-
-	public int countAllAdminVMList(String host, int importance) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Router.class);
 			criteria.add(Restrictions.ne("routerStatus", 0));
 			if (!host.equals("all")) {
@@ -240,394 +374,348 @@ public class RouterDAO {
 			}
 			criteria.setProjection(Projections.rowCount());
 			count = Integer.parseInt(criteria.uniqueResult().toString());
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageAdminVmList(int page, int limit, String host,
-			int importance) {
-		List<Router> rtList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			int startPos = (page - 1) * limit;
-			Criteria criteria = session.createCriteria(Router.class);
-			criteria.add(Restrictions.ne("routerStatus", 0));
-			criteria.setFirstResult(startPos);
-			criteria.setMaxResults(limit);
-			if (!host.equals("all")) {
-				criteria.add(Restrictions.eq("hostUuid", host));
-			}
-			if (importance != 6) {
-				criteria.add(Restrictions.eq("routerImportance", importance));
-			}
-			rtList = criteria.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return rtList;
-	}
-
-	public boolean preCreateRouter(String uuid, String pwd, int userId,
-			String name, String mac, int capacity, String fwuuid, int power,
-			int status, Date createDate) {
-		Transaction tx = null;
-		Session session = null;
-		boolean result = false;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Router router = new Router(uuid, pwd, userId, name, mac, capacity,
-					power, status, fwuuid, createDate);
-			tx = session.beginTransaction();
-			session.save(router);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaRoute",
-					1, true);
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return result;
-	}
-
-	public void updateRouter(int userId, String uuid, String pwd, int power,
-			String firewallId, String hostUuid, String ip) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			Router router = this.getRouter(uuid);
-			router.setRouterPWD(pwd);
-			router.setRouterPower(power);
-			router.setHostUuid(hostUuid);
-			router.setRouterIP(ip);
-			router.setFirewallUuid(firewallId);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.update(router);
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-	}
-
-	public void removeRouter(int userId, String uuid) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			Router toDelete = this.getRouter(uuid);
-			toDelete.setRouterStatus(0);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaRoute",
-					1, false);
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-	}
-
-	public boolean setRouterPowerStatus(String uuid, int powerStatus) {
-		boolean result = false;
-		Router router = this.getRouter(uuid);
-		Session session = null;
-		Transaction tx = null;
-		try {
-			router.setRouterPower(powerStatus);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.update(router);
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
-		}
-		return result;
-	}
-
-	public boolean setRouterStatus(String routerUuid, int state) {
-		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Router set routerStatus=" + state
-					+ " where routerUuid ='" + routerUuid + "'";
-			Query query = session.createQuery(queryString);
-			query.executeUpdate();
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return result;
-	}
-
-	public void updateFirewall(String routerUuid, String firewallId) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Router set firewallUuid=:fid where routerUuid ='"
-					+ routerUuid + "'";
-			Query query = session.createQuery(queryString);
-			query.setString("fid", firewallId);
-			query.executeUpdate();
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
-		}
-	}
-
-	public boolean updateName(String routeruuid, String newName,
-			String description) {
-		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Router set routerName=:name, routerDesc=:desc where routerUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", routeruuid);
-			query.setString("desc", description);
-			query.executeUpdate();
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageRoutersWithoutEip(int page, int limit,
-			String search, int uid) {
-		List<Router> routerList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			int startPos = (page - 1) * limit;
-			String queryString = "from Router where routerUID = "
-					+ uid
-					+ " and routerName like '%"
-					+ search
-					+ "%' and routerStatus <>0 and routerUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			routerList = query.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return routerList;
-	}
-
-	public int countRoutersWithoutEIP(String search, int uid) {
+	/**
+	 * 获取未设置监控警告的路由器总数
+	 * 
+	 * @param search
+	 * @param routerUID
+	 * @return
+	 */
+	public int countAllRoutersWithoutAlarm(String search, int routerUID) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "select count(*) from Router where routerUID= "
-					+ uid
-					+ " and routerName like '%"
-					+ search
-					+ "%' and routerStatus <> 0 and routerUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
+			session.beginTransaction();
+			String queryString = "select count(*) from Router where routerUID :routerUID and routerName like :search "
+					+ "and routerStatus > 0 and alarmUuid is null";
 			Query query = session.createQuery(queryString);
+			query.setInteger("routerUID", routerUID);
+			query.setString("search", "%" + search + "%");
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
 	}
 
-	@SuppressWarnings("unchecked")
-	public String getRouterName(String routeruuid) {
+	/**
+	 * 获取未绑定公网IP的路由器总数
+	 * 
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public int countRoutersWithoutEIP(String search, int userId) {
+		int count = 0;
 		Session session = null;
-		String result = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "select routerName from Router where routerUuid='"
-					+ routeruuid + "'";
+			session.beginTransaction();
+			String queryString = "select count(*) from Router where routerUID = :userId "
+					+ "and routerName like :search and routerStatus <> 0 and routerUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
-			List<String> list = query.list();
-			result = list.get(0);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
-		return result;
+		return count;
 	}
 
 	/**
+	 * 预创建路由器
+	 * 
 	 * @param uuid
+	 * @param pwd
+	 * @param userId
 	 * @param name
-	 * @param desc
+	 * @param mac
 	 * @param capacity
 	 * @param fwuuid
+	 * @param power
+	 * @param status
+	 * @param createDate
 	 * @return
-	 * @author xpx 2014-7-26
 	 */
-	public boolean updateRouter(String uuid, String name, String desc,
-			int capacity, String fwuuid) {
+	public boolean preCreateRouter(String uuid, String pwd, int userId,
+			String name, String mac, int capacity, String fwuuid, int power,
+			int status, Date createDate) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
+			Router router = new Router(uuid, pwd, userId, name, mac, capacity,
+					power, status, fwuuid, createDate);
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Router set routerName=:name, routerDesc=:desc,routerCapacity=:capacity,firewallUuid=:fwuuid where routerUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", name);
-			query.setString("uuid", uuid);
-			query.setString("desc", desc);
-			query.setInteger("capacity", capacity);
-			query.setString("fwuuid", desc);
-			query.executeUpdate();
-			tx.commit();
+			session.beginTransaction();
+			session.save(router);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+					"quotaRoute", 1, true);
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			result = false;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public JSONArray getRoutersForVnet(int uid) {
-		JSONArray routerList = new JSONArray();
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "select routerUuid,routerName from Router where routerUID = "
-					+ uid + " and routerStatus <>0 ";
-			Query query = session.createQuery(queryString);
-			List<Object[]> resultList = query.list();
-			for (Object[] item : resultList) {
-				JSONObject itemjo = new JSONObject();
-				itemjo.put("uuid", (String) item[0]);
-				itemjo.put(
-						"rtname",
-						URLEncoder.encode((String) item[1], "utf-8").replace(
-								"+", "%20"));
-				routerList.put(itemjo);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			routerList = null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+	/**
+	 * 删除路由器
+	 * 
+	 * @param userId
+	 * @param uuid
+	 */
+	public void removeRouter(int userId, String uuid) {
+		Router toDelete = this.getRouter(uuid);
+		if (toDelete != null) {
+			Session session = null;
+			try {
+				toDelete.setRouterStatus(0);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(toDelete);
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+						"quotaRoute", 1, false);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
-		return routerList;
 	}
 
 	/**
-	 * @author hty
+	 * 更新路由器
+	 * 
+	 * @param userId
+	 * @param uuid
+	 * @param pwd
+	 * @param power
+	 * @param firewallId
+	 * @param hostUuid
+	 * @param ip
+	 */
+	public void updateRouter(int userId, String uuid, String pwd, int power,
+			String firewallId, String hostUuid, String ip) {
+		Router router = this.getRouter(uuid);
+		if (router != null) {
+			Session session = null;
+			try {
+				router.setRouterPWD(pwd);
+				router.setRouterPower(power);
+				router.setHostUuid(hostUuid);
+				router.setRouterIP(ip);
+				router.setFirewallUuid(firewallId);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(router);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+	}
+
+	/**
+	 * 更新路由器状态
+	 * 
+	 * @param routerUuid
+	 * @param status
+	 * @return
+	 */
+	public boolean updateStatus(String routerUuid, int status) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "update Router set routerStatus = :status "
+					+ "where routerUuid = :routerUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("routerUuid", routerUuid);
+			query.setInteger("status", status);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 更新路由器电源状态
+	 * 
+	 * @param uuid
+	 * @param powerStatus
+	 * @return
+	 */
+	public boolean updatePowerStatus(String uuid, int powerStatus) {
+		boolean result = false;
+		Router router = this.getRouter(uuid);
+		if (router != null) {
+			Session session = null;
+			try {
+				router.setRouterPower(powerStatus);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(router);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 更新路由器防火墙
+	 * 
+	 * @param routerUuid
+	 * @param firewallId
+	 */
+	public void updateFirewall(String routerUuid, String firewallId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "update Router set firewallUuid= :firewallId "
+					+ "where routerUuid = :routerUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("firewallId", firewallId);
+			query.setString("routerUuid", routerUuid);
+			query.executeUpdate();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	/**
+	 * 更新路由器名称和描述
+	 * 
+	 * @param routeruuid
+	 * @param routerName
+	 * @param routerDesc
+	 * @return
+	 */
+	public boolean updateName(String routeruuid, String routerName,
+			String routerDesc) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "update Router set routerName= :routerName, routerDesc = :routerDesc where routerUuid ＝ :routerUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("routerName", routerName);
+			query.setString("routerUuid", routeruuid);
+			query.setString("routerDesc", routerDesc);
+			query.executeUpdate();
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 更新路由器所在服务器
+	 * 
+	 * @param uuid
+	 * @param hostUuid
+	 * @return
+	 */
+	public boolean updateHostUuid(String uuid, String hostUuid) {
+		boolean result = false;
+		Router rt = getRouter(uuid);
+		if (rt != null) {
+			Session session = null;
+			try {
+				rt.setHostUuid(hostUuid);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(rt);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 更新路由器监控警告
+	 * 
 	 * @param routerUuid
 	 * @param alarmUuid
 	 */
 	public void updateAlarm(String routerUuid, String alarmUuid) {
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Router set alarmUuid=:alarmUuid where routerUuid =:routerUuid";
+			session.beginTransaction();
+			String queryString = "update Router set alarmUuid = :alarmUuid where routerUuid = :routerUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("alarmUuid", alarmUuid);
 			query.setString("routerUuid", routerUuid);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 	}
 
 	/**
-	 * @author hty
+	 * 是否有路由器具有该监控警告
+	 * 
 	 * @param alarmUuid
 	 * @return
 	 */
@@ -637,37 +725,20 @@ public class RouterDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "from Router where alarmUuid = :alarmUuid and routerStatus >0";
+			session.beginTransaction();
+			String queryString = "from Router where alarmUuid = :alarmUuid and routerStatus > 0";
 			Query query = session.createQuery(queryString);
 			query.setString("alarmUuid", alarmUuid);
 			List<Router> routerList = query.list();
 			if (routerList.size() > 0) {
 				result = false;
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		}
-		return result;
-	}
-
-	public boolean setRouterHostUuid(String uuid, String hostUuid) {
-		boolean result = false;
-		Router rt = getRouter(uuid);
-		Session session = null;
-		Transaction tx = null;
-		try {
-			rt.setHostUuid(hostUuid);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.update(rt);
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return result;
 	}

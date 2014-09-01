@@ -145,7 +145,7 @@ public class PoolDAO {
 	}
 
 	/**
-	 * 获取机架的资源池列表
+	 * 获取数据中心的资源池列表
 	 * 
 	 * @param dcUuid
 	 * @return

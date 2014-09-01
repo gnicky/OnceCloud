@@ -966,4 +966,13 @@ public class VMDAO {
 		}
 		return result;
 	}
+
+	public String getVmName(String vmUuid) {
+		String name = "";
+		OCVM vm = getVM(vmUuid);
+		if (vm != null) {
+			name = getVM(vmUuid).getVmName();
+		}
+		return name;
+	}
 }

@@ -79,7 +79,7 @@ public class VnetAction extends HttpServlet {
 						limit, search, userId);
 				out.print(jo.toString());
 			} else if (action.equals("getablerts")) {
-				JSONArray jo = this.getRouterDAO().getRoutersForVnet(userId);
+				JSONArray jo = this.getRouterDAO().getRouterListOfUser(userId);
 				out.print(jo.toString());
 			} else if (action.equals("delete")) {
 				String uuid = request.getParameter("uuid");

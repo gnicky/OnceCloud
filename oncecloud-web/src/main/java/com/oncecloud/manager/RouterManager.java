@@ -346,7 +346,7 @@ public class RouterManager {
 		Connection c = null;
 		try {
 			c = this.getConstant().getConnectionFromPool(poolUuid);
-			boolean preDeleteRouter = this.getRouterDAO().setRouterPowerStatus(
+			boolean preDeleteRouter = this.getRouterDAO().updatePowerStatus(
 					uuid, RouterManager.POWER_DESTROY);
 			if (preDeleteRouter == true) {
 				VM thisRouter = VM.getByUuid(c, uuid);
@@ -385,7 +385,7 @@ public class RouterManager {
 			Router currentRT = this.getRouterDAO().getRouter(uuid);
 			if (currentRT != null) {
 				boolean preStartRouter = this.getRouterDAO()
-						.setRouterPowerStatus(uuid, RouterManager.POWER_BOOT);
+						.updatePowerStatus(uuid, RouterManager.POWER_BOOT);
 				if (preStartRouter == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
 							poolUuid);
@@ -399,8 +399,8 @@ public class RouterManager {
 					} else {
 						hostUuid = thisVM.getResidentOn(c).toWireString();
 					}
-					this.getRouterDAO().setRouterHostUuid(uuid, hostUuid);
-					this.getRouterDAO().setRouterPowerStatus(uuid,
+					this.getRouterDAO().updateHostUuid(uuid, hostUuid);
+					this.getRouterDAO().updatePowerStatus(uuid,
 							RouterManager.POWER_RUNNING);
 					result = true;
 				}
@@ -409,14 +409,14 @@ public class RouterManager {
 			e.printStackTrace();
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
-					this.getRouterDAO().setRouterPowerStatus(uuid,
+					this.getRouterDAO().updatePowerStatus(uuid,
 							RouterManager.POWER_RUNNING);
 				} else {
-					this.getRouterDAO().setRouterPowerStatus(uuid,
+					this.getRouterDAO().updatePowerStatus(uuid,
 							RouterManager.POWER_HALTED);
 				}
 			} else {
-				this.getRouterDAO().setRouterPowerStatus(uuid,
+				this.getRouterDAO().updatePowerStatus(uuid,
 						RouterManager.POWER_HALTED);
 			}
 		}
@@ -431,7 +431,7 @@ public class RouterManager {
 			Router currentRT = this.getRouterDAO().getRouter(uuid);
 			if (currentRT != null) {
 				boolean preShutdownRouter = this.getRouterDAO()
-						.setRouterPowerStatus(uuid,
+						.updatePowerStatus(uuid,
 								RouterManager.POWER_SHUTDOWN);
 				if (preShutdownRouter == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
@@ -449,8 +449,8 @@ public class RouterManager {
 							}
 						}
 					}
-					this.getRouterDAO().setRouterHostUuid(uuid, hostUuid);
-					this.getRouterDAO().setRouterPowerStatus(uuid,
+					this.getRouterDAO().updateHostUuid(uuid, hostUuid);
+					this.getRouterDAO().updatePowerStatus(uuid,
 							RouterManager.POWER_HALTED);
 					result = true;
 				}
@@ -459,14 +459,14 @@ public class RouterManager {
 			e.printStackTrace();
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
-					this.getRouterDAO().setRouterPowerStatus(uuid,
+					this.getRouterDAO().updatePowerStatus(uuid,
 							RouterManager.POWER_RUNNING);
 				} else {
-					this.getRouterDAO().setRouterPowerStatus(uuid,
+					this.getRouterDAO().updatePowerStatus(uuid,
 							RouterManager.POWER_HALTED);
 				}
 			} else {
-				this.getRouterDAO().setRouterPowerStatus(uuid,
+				this.getRouterDAO().updatePowerStatus(uuid,
 						RouterManager.POWER_RUNNING);
 			}
 		}
@@ -861,8 +861,8 @@ public class RouterManager {
 			int importance, String type) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO()
-				.countAllAdminVMList(host, importance);
-		List<Router> rtList = this.getRouterDAO().getOnePageAdminVmList(page,
+				.countAllAdminList(host, importance);
+		List<Router> rtList = this.getRouterDAO().getOnePageAdminList(page,
 				limit, host, importance);
 		ja.put(totalNum);
 		if (rtList != null) {

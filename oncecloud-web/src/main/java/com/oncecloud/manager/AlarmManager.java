@@ -180,9 +180,10 @@ public class AlarmManager {
 				}
 			}
 		} else if (type == 2) {
-			list = this.getRouterDAO().getOnePageRouterListAlarm(page, limit,
-					search, uid);
-			totalNum = this.getRouterDAO().countAllRouterListAlarm(search, uid);
+			list = this.getRouterDAO().getOnePageRoutersWithoutAlarm(page,
+					limit, search, uid);
+			totalNum = this.getRouterDAO().countAllRoutersWithoutAlarm(search,
+					uid);
 			ja.put(totalNum);
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
@@ -275,7 +276,7 @@ public class AlarmManager {
 				ja.put(js);
 			}
 		} else if (type == 2) {
-			for (Router router : this.getRouterDAO().getAllListAlarm(uid,
+			for (Router router : this.getRouterDAO().getRouterListOfAlarm(uid,
 					alarmUuid)) {
 				JSONObject js = new JSONObject();
 				js.put("rsName", Utilities.encodeText(router.getRouterName()));
@@ -315,6 +316,7 @@ public class AlarmManager {
 
 	/**
 	 * 获取监控警告列表
+	 * 
 	 * @param userId
 	 * @param page
 	 * @param limit
