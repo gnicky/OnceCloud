@@ -333,9 +333,8 @@ public class DatacenterManager {
 			for (OCPool pool : poolList) {
 				JSONObject tpool = new JSONObject();
 				tpool.put("poolobj", pool.toJsonString());
-
 				List<Storage> srlist = this.getStorageDAO()
-						.getStorageListByHostId(pool.getPoolMaster());
+						.getStorageListOfHost(pool.getPoolMaster());
 				JSONArray jsonArrayStorage = new JSONArray();
 				if (srlist != null) {
 					for (Storage sr : srlist)

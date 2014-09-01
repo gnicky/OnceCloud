@@ -372,7 +372,7 @@ public class SnapshotDAO {
 			Query query = session.createQuery(queryString1);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = (Integer) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
@@ -402,7 +402,7 @@ public class SnapshotDAO {
 			Query query1 = session.createQuery(queryString1);
 			query1.setInteger("userId", userId);
 			query1.setString("search", "%" + search + "%");
-			int vmCount = ((Number) query1.iterate().next()).intValue();
+			int vmCount = (Integer) query1.uniqueResult();
 			String queryString2 = "select count(distinct ss.snapshotVolume) "
 					+ "from Snapshot ss where ss.snapshotVolume in "
 					+ "(select v.volumeUuid from Volume v where v.volumeUID = :userId "
@@ -410,7 +410,7 @@ public class SnapshotDAO {
 			Query query2 = session.createQuery(queryString2);
 			query2.setInteger("userId", userId);
 			query2.setString("search", "%" + search + "%");
-			int volumeCount = ((Number) query2.iterate().next()).intValue();
+			int volumeCount = (Integer) query2.uniqueResult();
 			count = vmCount + volumeCount;
 			session.getTransaction().commit();
 		} catch (Exception e) {
