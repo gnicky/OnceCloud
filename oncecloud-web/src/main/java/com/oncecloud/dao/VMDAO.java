@@ -479,114 +479,67 @@ public class VMDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String getVmName(String vmuuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select vmName from OCVM where vmUuid='"
-					+ vmuuid + "'";
-			Query query = session.createQuery(queryString);
-			List<String> list = query.list();
-			session.getTransaction().commit();
-			return list.get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
-			String search, int uid) {
+			String search, int userId) {
+		List<OCVM> vmList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "select vm from OCVM vm where vm.vmUID="
-					+ uid
-					+ " and vm.vmName like '%"
-					+ search
-					+ "%' and vm.vmStatus=1 and vm.vmUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
+			String queryString = "select vm from OCVM vm where vm.vmUID = :userId "
+					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId"
+					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", search);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
-			List<OCVM> vms = query.list();
+			vmList = query.list();
 			session.getTransaction().commit();
-			return vms;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return vmList;
 	}
 
 	public int countVMsWithoutEIP(String search, int uid) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) from OCVM vm where vm.vmUID="
-					+ uid
-					+ " and vm.vmName like '%"
-					+ search
-					+ "%' and vm.vmStatus=1 and vm.vmUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
+			String queryString = "select count(*) from OCVM vm where vm.vmUID = :userId "
+					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
-			int count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.iterate().next()).intValue();
 			session.getTransaction().commit();
-			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
-	@SuppressWarnings("unchecked")
-	public String getVmIp(String vmUuid) {
+	public void updateVMIP(String vmUuid, String vmIp) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select vmIP from OCVM where vmUuid='"
-					+ vmUuid + "'";
+			String queryString = "update OCVM set vmIP = :vmIp where vmUuid = :vmUuid";
 			Query query = session.createQuery(queryString);
-			List<String> list = query.list();
+			query.setString("vmUuid", vmUuid);
+			query.setString("vmIp", vmIp);
+			query.executeUpdate();
 			session.getTransaction().commit();
-			return list.get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public void updateVMIP(String vmuuid, String ip) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "update OCVM set vmIP='" + ip
-					+ "' where vmUuid ='" + vmuuid + "'";
-			Query query = session.createQuery(queryString);
-			query.executeUpdate();
-			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -595,16 +548,17 @@ public class VMDAO {
 		}
 	}
 
-	public void emptyVMEipIp(String vmuuid) {
+	public void emptyVMEipIp(String vmUuid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "update EIP set eipDependency=null where eipDependency ='"
-					+ vmuuid + "'";
+			session.beginTransaction();
+			String queryString = "update EIP set eipDependency = null where "
+					+ "eipDependency = :vmUuid";
 			Query query = session.createQuery(queryString);
+			query.setString("vmUuid", vmUuid);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -613,17 +567,17 @@ public class VMDAO {
 		}
 	}
 
-	public void updateFirewall(String vmuuid, String firewallId) {
+	public void updateFirewall(String vmUuid, String firewallId) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "update OCVM set vmFirewall=:fid where vmUuid ='"
-					+ vmuuid + "'";
+			session.beginTransaction();
+			String queryString = "update OCVM set vmFirewall = :firewallId where vmUuid = :vmUuid";
 			Query query = session.createQuery(queryString);
-			query.setString("fid", firewallId);
+			query.setString("vmUuid", vmUuid);
+			query.setString("firewallId", firewallId);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -632,18 +586,18 @@ public class VMDAO {
 		}
 	}
 
-	public void updateName(String uuid, String newName, String description) {
+	public void updateName(String vmUuid, String vmName, String vmDesc) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "update OCVM set vmName=:name,vmDesc=:desc where vmUuid=:uuid";
+			session.beginTransaction();
+			String queryString = "update OCVM set vmName = :vmName, vmDesc = :vmDesc where vmUuid = :vmUuid";
 			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", uuid);
-			query.setString("desc", description);
+			query.setString("vmName", vmName);
+			query.setString("vmUuid", vmUuid);
+			query.setString("vmDesc", vmDesc);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -655,19 +609,21 @@ public class VMDAO {
 	public boolean setVMPowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		OCVM vm = this.getVM(uuid);
-		Session session = null;
-		Transaction tx = null;
-		try {
-			vm.setVmPower(powerStatus);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.update(vm);
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
+		if (vm != null) {
+			Session session = null;
+			Transaction tx = null;
+			try {
+				vm.setVmPower(powerStatus);
+				session = this.getSessionHelper().getMainSession();
+				tx = session.beginTransaction();
+				session.update(vm);
+				tx.commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return result;
