@@ -228,7 +228,7 @@ public class UserDAO {
 			tx = session.beginTransaction();
 			session.save(user);
 			int userId = user.getUserId();
-			this.getQuotaDAO().initQuota(session, userId);
+			this.getQuotaDAO().initQuotaNoTransaction(userId);
 			this.getFirewallDAO().createDefaultFirewall(session, userId);
 			tx.commit();
 		} catch (Exception e) {

@@ -120,9 +120,9 @@
             var vmCount = parseInt($('#count').val(), 10);
             var loginPwd = $('#login_passwd').val();
             $.ajax({
-                type: 'get',
-                url: '/VMAction',
-                data: 'action=quota&count=' + vmCount,
+                type: 'post',
+                url: '/VMAction/quota',
+                data: {count:vmCount},
                 dataType: 'text',
                 success: function (msg) {
                     if (msg != "ok") {
@@ -237,11 +237,9 @@
     function createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd) {
         $.ajax({
             type: 'post',
-            url: '/VMAction',
-            data: "action=create&tpluuid=" + imageuuid + "&cpuCore=" + cpuCore + "&memoryCapacity=" + memoryCapacity + "&vmName=" + vmName + "&loginPwd=" + loginPwd + "&vmuuid=" + vmuuid,
-            dataType: 'json',
-            success: function (obj) {
-            }
+            url: '/VMAction/CreateVM',
+            data:{imageUuid:imageuuid,cpu:cpuCore,memory:memoryCapacity,vmName:vmName,password:loginPwd,vmUuid:vmUuid},
+            dataType: 'json'
         });
     }
 

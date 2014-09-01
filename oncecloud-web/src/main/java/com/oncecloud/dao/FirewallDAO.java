@@ -50,7 +50,7 @@ public class FirewallDAO {
 			Firewall firewall = new Firewall(firewallId, firewallName,
 					firewallUID, createDate, 1, 0);
 			session.save(firewall);
-			this.getQuotaDAO().updateQuotaField(session, firewallUID,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(firewallUID,
 					"quotaFirewall", 1, true);
 			tx.commit();
 		} catch (Exception e) {
@@ -340,7 +340,7 @@ public class FirewallDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("id", firewallId);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaField(session, userId,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaFirewall", 1, false);
 			tx.commit();
 		} catch (Exception e) {

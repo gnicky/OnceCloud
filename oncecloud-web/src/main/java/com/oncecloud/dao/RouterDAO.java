@@ -291,7 +291,7 @@ public class RouterDAO {
 					power, status, fwuuid, createDate);
 			tx = session.beginTransaction();
 			session.save(router);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaRoute",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaRoute",
 					1, true);
 			tx.commit();
 			result = true;
@@ -343,7 +343,7 @@ public class RouterDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaRoute",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaRoute",
 					1, false);
 			tx.commit();
 		} catch (Exception e) {

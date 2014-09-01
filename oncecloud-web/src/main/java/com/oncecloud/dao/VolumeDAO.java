@@ -136,9 +136,9 @@ public class VolumeDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(volume);
-			this.getQuotaDAO().updateQuotaField(session, volumeUID,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(volumeUID,
 					"quotaDiskN", 1, true);
-			this.getQuotaDAO().updateQuotaField(session, volumeUID,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(volumeUID,
 					"quotaDiskS", volumeSize, true);
 			result = true;
 			session.getTransaction().commit();
@@ -191,9 +191,9 @@ public class VolumeDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.update(volume);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaDiskN",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaDiskN",
 					1, false);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaDiskS",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaDiskS",
 					size, false);
 			session.getTransaction().commit();
 		} catch (Exception e) {

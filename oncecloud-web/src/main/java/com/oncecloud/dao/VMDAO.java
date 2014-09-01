@@ -193,7 +193,7 @@ public class VMDAO {
 					vmMem, vmCpu, vmPower, vmStatus, createDate);
 			tx = session.beginTransaction();
 			session.save(vm);
-			this.getQuotaDAO().updateQuotaField(session, vmUID, "quotaVM", 1,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(vmUID, "quotaVM", 1,
 					true);
 			tx.commit();
 			result = true;
@@ -463,7 +463,7 @@ public class VMDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVM", 1,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVM", 1,
 					false);
 			tx.commit();
 		} catch (Exception e) {
