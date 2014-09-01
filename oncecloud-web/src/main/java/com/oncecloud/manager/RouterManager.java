@@ -19,6 +19,7 @@ import com.once.xenapi.VM.Record;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FirewallDAO;
+import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
@@ -63,6 +64,7 @@ public class RouterManager {
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
 	private FirewallDAO firewallDAO;
+	private HostDAO hostDAO;
 
 	private EIPManager eipManager;
 	private VMManager vmManager;
@@ -157,6 +159,15 @@ public class RouterManager {
 	@Autowired
 	private void setFirewallDAO(FirewallDAO firewallDAO) {
 		this.firewallDAO = firewallDAO;
+	}
+
+	public HostDAO getHostDAO() {
+		return hostDAO;
+	}
+
+	@Autowired
+	public void setHostDAO(HostDAO hostDAO) {
+		this.hostDAO = hostDAO;
 	}
 
 	private EIPManager getEipManager() {
@@ -658,6 +669,12 @@ public class RouterManager {
 		}
 	}
 
+	public void routerAdminStartUp(String uuid, int userId) {
+		Router router = this.getRouterDAO().getRouter(uuid);
+		String poolUuid = this.getHostDAO().getHost(router.getHostUuid()).getPoolUuid();
+		this.routerStartUp(uuid, userId, poolUuid);
+	}
+	
 	public void routerStartUp(String uuid, int userId, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.startRouter(uuid, poolUuid);
@@ -689,6 +706,12 @@ public class RouterManager {
 		}
 	}
 
+	public void routerAdminShutDown(String uuid, String force, int userId) {
+		Router router = this.getRouterDAO().getRouter(uuid);
+		String poolUuid = this.getHostDAO().getHost(router.getHostUuid()).getPoolUuid();
+		this.routerShutDown(poolUuid, force, userId, poolUuid);
+	}
+	
 	public void routerShutDown(String uuid, String force, int userId,
 			String poolUuid) {
 		Date startTime = new Date();

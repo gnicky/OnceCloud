@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -46,6 +47,30 @@ public class AddressAction {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			JSONArray ja = this.getAddressManager().getPublicIPList(list.getPage(), list.getLimit(), list.getSearch());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/DeleteEIP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteEIP(HttpServletRequest request, @RequestParam String ip, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getAddressManager().deletePublicIP(user.getUserId(), ip, uuid);
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/DeleteDHCP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteDHCP(HttpServletRequest request, @RequestParam String ip, @RequestParam String mac) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getAddressManager().deleteDHCP(user.getUserId(), ip, mac);
 			return ja.toString();
 		} else {
 			return "";
