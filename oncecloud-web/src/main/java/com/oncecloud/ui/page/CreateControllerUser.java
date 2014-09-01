@@ -34,6 +34,6 @@ public class CreateControllerUser {
 		model.put("resourceId", rsid);
 		model.put("resourceType", rstype);
 		model.put("resourceName", rsname);
-		return new ModelAndView("user/create/createinstance",model);
+		return new ModelAndView("user/create/createsnapshot",model);
 	}
 }

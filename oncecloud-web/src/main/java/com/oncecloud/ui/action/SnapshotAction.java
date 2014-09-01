@@ -2,7 +2,6 @@ package com.oncecloud.ui.action;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.directwebremoting.json.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +63,28 @@ public class SnapshotAction {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 		   JSONObject jsonobect = this.getSnapshotManager().createSnapshot(user.getUserId(), createsnapshotModel.getSnapshotId(), createsnapshotModel.getSnapshotName(), createsnapshotModel.getResourceUuid(), createsnapshotModel.getResourceType());
+		   return  jsonobect.toString();
+		}
+		return "";
+	}
+	
+	@RequestMapping(value = "/detaillist", method = { RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public String detaillist(HttpServletRequest request,CreateSnapshotModel createsnapshotModel) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getSnapshotManager().getDetailList(createsnapshotModel.getResourceUuid(), createsnapshotModel.getResourceType());
+		   return  ja.toString();
+		}
+		return "";
+	}
+	
+	@RequestMapping(value = "/getresource", method = { RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public String getresource(HttpServletRequest request,CreateSnapshotModel createsnapshotModel) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONObject jsonobect = this.getSnapshotManager().getOneResource(user.getUserId(),createsnapshotModel.getResourceUuid(), createsnapshotModel.getResourceType());
 		   return  jsonobect.toString();
 		}
 		return "";
