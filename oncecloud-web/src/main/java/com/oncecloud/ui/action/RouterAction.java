@@ -58,6 +58,26 @@ public class RouterAction {
 			return "";
 		}
 	}
+	
+	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
+	@ResponseBody
+	public void routerAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getRouterManager().routerAdminStartUp(uuid, userId);
+		}
+	}
+
+	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
+	@ResponseBody
+	public void routerAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getRouterManager().routerAdminShutDown(uuid, force, userId);
+		}
+	}
 
 	@RequestMapping(value = "/RouterDetail", method = { RequestMethod.GET })
 	@ResponseBody

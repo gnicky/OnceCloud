@@ -36,6 +36,7 @@ public class LogDAO {
 		List<OCLog> logList = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = null;
 			if (logStatus == LogConstant.logStatus.全部.ordinal()) {
 				query = session
@@ -51,14 +52,15 @@ public class LogDAO {
 			query.setFirstResult(start);
 			query.setMaxResults(num);
 			logList = query.list();
+			session.getTransaction().commit();
+			return logList;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return logList;
 	}
 
 	public OCLog insertLog(int logUID, int logObject, int logAction,

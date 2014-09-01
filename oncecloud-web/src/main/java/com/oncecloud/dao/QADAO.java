@@ -49,6 +49,7 @@ public class QADAO {
 		List<QA> qaList = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = null;
 			String queryStr = "from QA where qaTitle like '%" + search
 					+ "%' and qaUID = " + qaUID
@@ -62,11 +63,11 @@ public class QADAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			qaList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return qaList;
@@ -163,6 +164,7 @@ public class QADAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = null;
 			String queryStr = "select count(*) from QA where qaTitle like '%"
 					+ search + "%' and qaUID = " + qaUID + " and qaStatus < 2";
@@ -171,11 +173,11 @@ public class QADAO {
 			}
 			query = session.createQuery(queryStr);
 			result = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;

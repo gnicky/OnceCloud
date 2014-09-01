@@ -59,6 +59,26 @@ public class VMAction {
 		}
 	}
 	
+	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
+	@ResponseBody
+	public void vmAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getVmManager().doAdminStartVm(userId, uuid);
+		}
+	}
+
+	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
+	@ResponseBody
+	public void vmAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getVmManager().doAdminShutDown(userId, uuid, force);
+		}
+	}
+
 	@RequestMapping(value = "/VMDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vmDetail(HttpServletRequest request, @RequestParam String uuid) {
