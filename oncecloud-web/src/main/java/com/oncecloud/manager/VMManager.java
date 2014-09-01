@@ -420,7 +420,7 @@ public class VMManager {
 
 	private void emptyAttachedVolume(Connection c, String uuid) {
 		try {
-			List<String> volumeList = this.getVolumeDAO().getVolumeListByVM(
+			List<String> volumeList = this.getVolumeDAO().getVolumesOfVM(
 					uuid);
 			for (String volume : volumeList) {
 				try {
@@ -1045,7 +1045,7 @@ public class VMManager {
 			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(ocvm
 					.getCreateDate()));
 			List<String> volList = this.getVolumeDAO()
-					.getVolumeListByVM(vmUuid);
+					.getVolumesOfVM(vmUuid);
 			if (volList == null || volList.size() == 0) {
 				jo.put("volList", "&nbsp;");
 			} else {

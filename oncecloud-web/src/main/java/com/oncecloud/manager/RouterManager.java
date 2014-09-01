@@ -555,7 +555,7 @@ public class RouterManager {
 	 */
 	public JSONArray getVxnets(String rtuuid) {
 		JSONArray ja = new JSONArray();
-		List<Vnet> vxnetsList = this.getVnetDAO().getVxnets(rtuuid);
+		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(rtuuid);
 		if (vxnetsList != null) {
 			for (Vnet vnet : vxnetsList) {
 				JSONObject jo = new JSONObject();
