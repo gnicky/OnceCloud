@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String hostid = "host-" + hostUuid.substring(0, 8);
-%>
-<div class="content detail" id="platformcontent" platformUserId="<%=user.getUserId()%>"  hostUuid="<%=hostUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" hostUuid="${hostid}">
 	<div class="intro">
 		<h1>服务器&nbsp;Servers</h1>
 		<p class="lead" style="margin-top:10px">
@@ -10,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>admin/host.jsp"><span class="glyphicon glyphicon-tasks cool-red"></span><span class="ctext">Servers</span></a></li>
-		<li class="active"><a href="<%=basePath %>admin/detail/hostdetail.jsp"><%=hostid %></a></li>
+		<li><a href="/host"><span class="glyphicon glyphicon-tasks cool-red"></span><span class="ctext">Servers</span></a></li>
+		<li class="active"><a href="/host/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">

@@ -48,20 +48,9 @@ public class RackAction extends HttpServlet {
 				JSONArray ja = this.getRackManager().createRack(rackName, dcId,
 						rackDesc, userId);
 				out.print(ja.toString());
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limitnum"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getRackManager().getRackList(page, limit,
-						search);
-				out.print(ja.toString());
 			} else if (action.equals("getalllist")) {
 				JSONArray qaArray = this.getRackManager().getRackAllList();
 				out.print(qaArray.toString());
-			} else if (action.equals("delete")) {
-				String rackId = request.getParameter("rackid");
-				String rackName = request.getParameter("rackname");
-				this.getRackManager().deleteRack(rackId, rackName, userId);
 			} else if (action.equals("bind")) {
 				String rackId = request.getParameter("rackid");
 				String dcId = request.getParameter("dcid");

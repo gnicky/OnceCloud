@@ -45,6 +45,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         $('#update').addClass('btn-forbidden');
     }
 });
+
 $('#create').on('click', function (event) {
     event.preventDefault();
     $('#PoolModalContainer').attr('type', 'new')
@@ -179,9 +180,8 @@ $('#delete').on('click', function (event) {
 function deletePool(poolid, poolname) {
     $.ajax({
         type: 'post',
-        url: '/PoolAction',
-        data: 'action=delete&poolid=' + poolid + '&poolname='
-            + poolname,
+        url: '/PoolAction/Delete',
+        data: {poolid:poolid, poolname:poolname},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {
@@ -201,8 +201,8 @@ function unbind2rack(poolid) {
     var thistd = thistr.find('[state]');
     $.ajax({
         type: 'get',
-        url: '/PoolAction',
-        data: 'action=unbind&poolid=' + poolid,
+        url: '/PoolAction/UnBind',
+        data: {poolid:poolid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {
@@ -306,8 +306,8 @@ $('#consistency').on('click', function (event) {
 function consistencyPool(poolUuid) {
     $.ajax({
         type: 'post',
-        url: '/PoolAction',
-        data: 'action=consistency&poolUuid=' + poolUuid,
+        url: '/PoolAction/Consistency',
+        data: {poolUuid:poolUuid},
         dataType: 'json',
         success: function (array) {
 

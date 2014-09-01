@@ -144,8 +144,8 @@ $('#tablebody').on('click', '.permit', function (event) {
                 callback: function () {
                     $.ajax({
                         type: 'post',
-                        url: '/VoucherAction',
-                        data: {action: "confirm", userid: userid},
+                        url: '/VoucherAction/Confirm',
+                        data: {userid: userid},
                         dataType: 'json',
                         success: function (obj) {
                             if (obj.result) {
@@ -181,8 +181,8 @@ $('#tablebody').on('click', '.deny', function (event) {
                 callback: function () {
                     $.ajax({
                         type: 'post',
-                        url: '/VoucherAction',
-                        data: 'action=deny&userid=' + userid,
+                        url: '/VoucherAction/Deny',
+                        data: {userid:userid},
                         dataType: 'json',
                         success: function (obj) {
                             if (obj.result) {
@@ -207,8 +207,8 @@ $('#tablebody').on('click', '.deny', function (event) {
 function deleteUser(userid, username) {
     $.ajax({
         type: 'get',
-        url: '/UserAction',
-        data: {action: "delete", userid: userid, username: username},
+        url: '/UserAction/Delete',
+        data: {userid: userid, username: username},
         dataType: 'json',
         success: function (obj) {
             if (obj.result) {
@@ -223,13 +223,14 @@ $('#tablebody').on('click', '.username', function (event) {
     event.preventDefault();
     var userid = $(this).parent().parent().attr('userid');
     var username = $(this).parent().parent().attr('username');
-    $.ajax({
-        type: 'get',
-        url: '/UserAction',
-        data: {action: "detail", userid: userid, username: username},
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/detail/userdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/user/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="userid" value="' + userid + '" />');
+    var input1 = $('<input type="text" name="username" value="' + username + '" />');
+    form.append(input);
+    form.append(input1);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });

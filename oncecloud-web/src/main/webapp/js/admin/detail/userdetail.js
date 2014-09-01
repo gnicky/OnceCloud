@@ -20,8 +20,8 @@ $(document).ready(function () {
         $('#basic-list').html("");
         $.ajax({
             type: 'get',
-            url: '/UserAction',
-            data: 'action=getoneuser&userid=' + userid,
+            url: '/UserAction/OneUser',
+            data: {userid:userid},
             dataType: 'json',
             success: function (obj) {
                 var username = decodeURI(obj.username);
@@ -44,8 +44,6 @@ $(document).ready(function () {
                     + levelstr + '</dd><dt>余额</dt><dd>￥'
                     + balance + '</dd><dt>注册时间</dt><dd class="time">'
                     + userdate + '</dd>');
-            },
-            error: function () {
             }
         });
     }
@@ -54,8 +52,8 @@ $(document).ready(function () {
         var userid = $('#platformcontent').attr('userid');
         $.ajax({
             type: 'get',
-            url: '/UserAction',
-            data: 'action=getuserquota&userid=' + userid,
+            url: '/UserAction/UserQuota',
+            data: {userid:userid},
             dataType: 'json',
             success: function (obj) {
                 var qU = obj.quotaU;
@@ -178,10 +176,25 @@ $(document).ready(function () {
 
             $.ajax({
                 type: 'post',
-                url: '/UserAction',
-                data: 'action=quotaupdate&userid=' + userid + '&quotaid=' + quotaid + '&eip=' + eip + '&vm=' + vm + '&bk=' + bk
-                    + '&img=' + img + '&vol=' + vol + '&ssh=' + ssh + '&fw=' + fw + '&rt=' + rt + '&vlan=' + vlan + '&lb=' + lb
-                    + '&disk=' + disk + '&bw=' + bw + '&mem=' + mem + '&cpu=' + cpu,
+                url: '/UserAction/QuotaUpdate',
+                data : {
+							changerId : userid,
+							quotaid : quotaid,
+							eip : eip,
+							vm : vm,
+							bk : bk,
+							img : img,
+							vol : vol,
+							ssh : ssh,
+							fw : fw,
+							rt : rt,
+							vlan : vlan,
+							lb : lb,
+							disk : disk,
+							bw : bw,
+							me : mem,
+							cpu : cpu
+						},
                 dataType: 'text',
                 success: function () {
                     $('#quota_update').attr('state', 'edit');

@@ -88,8 +88,8 @@ function getQuestionList(page, limit, search) {
 function closeQuestion(id) {
 	$.ajax({
 		type : 'get',
-		url : '/QAAction',
-		data : "action=closequestion&qaid=" + id,
+		url : '/QAAction/CloseQuestion',
+		data : {qaid:id},
 		dataType : 'json',
 		success : function(array) {
 			if (array.length == 1) {
@@ -137,15 +137,13 @@ $('#tablebody').on('click', '.qa-close', function(event) {
 
 $('#tablebody').on('click', '.view-detail', function(event) {
 	event.preventDefault();
-	var qaId = $(this).parent().parent().attr("qaId");
-	var basePath = $("#platformcontent").attr("platformBasePath");
-	$.ajax({
-		type : 'get',
-		url : '/QAAction',
-		data : "action=detail&qaid=" + qaId,
-		dataType : 'text',
-		success : function(response) {
-			window.location.href = basePath + "common/detail/servicedetail.jsp";
-		}
-	});
+	var qaid = $(this).parent().parent().attr("qaId");
+	var form = $("<form></form>");
+    form.attr("action","/question/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="qaid" value="' + qaid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });

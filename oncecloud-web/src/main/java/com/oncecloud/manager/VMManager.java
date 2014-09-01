@@ -25,6 +25,7 @@ import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
+import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.dao.VolumeDAO;
@@ -67,6 +68,8 @@ public class VMManager {
 	private ImageDAO imageDAO;
 	private FirewallDAO firewallDAO;
 	private QuotaDAO quotaDAO;
+	private UserDAO userDAO;
+	
 	private MessagePush messagePush;
 
 	private EIPManager eipManager;
@@ -179,6 +182,15 @@ public class VMManager {
 	@Autowired
 	private void setQuotaDAO(QuotaDAO quotaDAO) {
 		this.quotaDAO = quotaDAO;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	@Autowired
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 	private EIPManager getEipManager() {
@@ -975,6 +987,7 @@ public class VMManager {
 						.dateToUsed(ocvm.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", ocvm.getVmImportance());
+				jo.put("userName", Utilities.encodeText(this.getUserDAO().getUser(ocvm.getVmUID()).getUserName()));
 				ja.put(jo);
 			}
 		}

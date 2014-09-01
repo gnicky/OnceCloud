@@ -95,12 +95,6 @@ public class UserAction extends HttpServlet {
 				String userName = request.getParameter("username");
 				JSONArray ja = this.getUserManager().doQueryUser(userName);
 				out.print(ja.toString());
-			} else if (action.equals("delete")) {
-				int changeId = Integer.parseInt(request.getParameter("userid"));
-				String userName = request.getParameter("username");
-				JSONObject jo = this.getUserManager().doDeleteUser(userId,
-						changeId, userName);
-				out.print(jo.toString());
 			} else if (action.equals("update")) {
 				int changeId = Integer.parseInt(request.getParameter("userid"));
 				String userName = request.getParameter("username");
@@ -110,40 +104,6 @@ public class UserAction extends HttpServlet {
 				String userLevel = request.getParameter("userlevel");
 				this.getUserManager().doUpdateUser(userId, changeId, userName,
 						userEmail, userTel, userCom, userLevel);
-			} else if (action.equals("detail")) {
-				int uid = Integer.parseInt(request.getParameter("userid"));
-				String userName = request.getParameter("username");
-				session.setAttribute("userid", uid);
-				session.setAttribute("username", userName);
-			} else if (action.equals("getoneuser")) {
-				int uid = Integer.parseInt(request.getParameter("userid"));
-				JSONObject jo = this.getUserManager().doGetOneUser(uid);
-				out.print(jo.toString());
-			} else if (action.equals("getuserquota")) {
-				int uid = Integer.parseInt(request.getParameter("userid"));
-				JSONObject jo = this.getUserManager().doGetUserQuota(uid);
-				out.print(jo.toString());
-			} else if (action.equals("quotaupdate")) {
-				int quotaid = Integer.parseInt(request.getParameter("quotaid"));
-				int changerId = Integer
-						.parseInt(request.getParameter("userid"));
-				int eip = Integer.parseInt(request.getParameter("eip"));
-				int vm = Integer.parseInt(request.getParameter("vm"));
-				int bk = Integer.parseInt(request.getParameter("bk"));
-				int img = Integer.parseInt(request.getParameter("img"));
-				int vol = Integer.parseInt(request.getParameter("vol"));
-				int ssh = Integer.parseInt(request.getParameter("ssh"));
-				int fw = Integer.parseInt(request.getParameter("fw"));
-				int rt = Integer.parseInt(request.getParameter("rt"));
-				int vlan = Integer.parseInt(request.getParameter("vlan"));
-				int lb = Integer.parseInt(request.getParameter("lb"));
-				int disk = Integer.parseInt(request.getParameter("disk"));
-				int bw = Integer.parseInt(request.getParameter("bw"));
-				int mem = Integer.parseInt(request.getParameter("mem"));
-				int cpu = Integer.parseInt(request.getParameter("cpu"));
-				this.getUserManager().doQuotaUpdate(quotaid, changerId, eip,
-						vm, bk, img, vol, ssh, fw, rt, vlan, lb, disk, bw, mem,
-						cpu, userId);
 			} else if (action.equals("getcompanylist")) {
 				JSONArray ja = this.getUserManager().doGetCompanyList();
 				out.print(ja.toString());

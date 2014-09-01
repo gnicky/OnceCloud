@@ -1,4 +1,4 @@
-
+$(document).ready(function () {
 
     $("#InstanceModalContainer").on("hidden", function () {
         $(this).removeData("modal");
@@ -7,7 +7,7 @@
 
     $("#wizard").bwizard({
         backBtnText: "",
-        nextBtnText: "",
+        nextBtnText: ""
     });
 
     var options = {
@@ -39,8 +39,9 @@
         $('#imagelist').html("");
         $.ajax({
             type: 'post',
-            url: '/ImageAction/ImageList',
-            data: {page:page, limit:limit,search:search,type:type},
+            url: '/ImageAction',
+            data: "action=getPageList&page=" + page + "&limit=" + limit
+                + "&search=" + search + "&type=" + type,
             dataType: 'json',
             success: function (array) {
                 var tableStr = "";
@@ -54,7 +55,7 @@
                         totalPages: totalp
                     }
                     $('#tplpage').bootstrapPaginator(options);
-                    modalPageUpdate(page, totalp);
+                    pageDisplayUpdate(page, totalp);
                     for (var i = 1; i < array.length; i++) {
                         var obj = array[i];
                         var imageid = obj.imageid;
@@ -73,6 +74,8 @@
                     }
                     $('#imagelist').html(tableStr);
                 }
+            },
+            error: function () {
             }
         });
     }
@@ -120,9 +123,9 @@
             var vmCount = parseInt($('#count').val(), 10);
             var loginPwd = $('#login_passwd').val();
             $.ajax({
-                type: 'post',
-                url: '/VMAction/quota',
-                data: {count:vmCount},
+                type: 'get',
+                url: '/VMAction',
+                data: 'action=quota&count=' + vmCount,
                 dataType: 'text',
                 success: function (msg) {
                     if (msg != "ok") {
@@ -209,13 +212,13 @@
         }
     });
 
-    function modalPageUpdate(current, total) {
+    function pageDisplayUpdate(current, total) {
         $('#currentPtpl').html(current);
         $('#totalPtpl').html(total);
     }
 
-    function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd) {
-        cpuCore = cpuCore1 + "&nbsp;核";
+    function preCreateVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd) {
+        cpuCore = cpuCore + "&nbsp;核";
         var memoryInt = parseInt(memoryCapacity);
         var memoryStr;
         if (memoryInt < 1) {
@@ -231,15 +234,19 @@
             + vmName + '</td><td><span class="icon-status icon-process" name="stateicon"></span><span name="stateword">创建中</span></td><td name="cpuCore">'
             + cpuCore + '</td><td name="memoryCapacity">'
             + memoryStr + '</td><td name="sip"><a>(基础网络)</a></td><td name="pip"></td><td name="backuptime">' + backupStr + '</td><td name="createtime" class="time"><1分钟</td></tr>');
-        createVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd);
+        createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd);
     }
 
     function createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd) {
         $.ajax({
             type: 'post',
-            url: '/VMAction/CreateVM',
-            data:{imageUuid:imageuuid,cpu:cpuCore,memory:memoryCapacity,vmName:vmName,password:loginPwd,vmUuid:vmuuid},
-            dataType: 'json'
+            url: '/VMAction',
+            data: "action=create&tpluuid=" + imageuuid + "&cpuCore=" + cpuCore + "&memoryCapacity=" + memoryCapacity + "&vmName=" + vmName + "&loginPwd=" + loginPwd + "&vmuuid=" + vmuuid,
+            dataType: 'json',
+            success: function (obj) {
+            },
+            error: function () {
+            }
         });
     }
 
@@ -290,3 +297,4 @@
             $('#pw-alert').addClass("alert-danger");
         }
     });
+});	

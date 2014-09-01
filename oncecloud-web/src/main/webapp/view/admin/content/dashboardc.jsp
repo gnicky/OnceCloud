@@ -56,12 +56,12 @@
 		</div>
 	</div>
 	<div class="area">
-		<h4><a href="${basePath}common/log.jsp">最近操作</a></h4>
+		<h4><a href="/log">最近操作</a></h4>
 		<div class="inner" id="act-area">
 		</div>
 	</div>
 	<div class="area">
-		<h4><a href="${basePath}common/service.jsp">待处理问题</a></h4>
+		<h4><a href="/service">待处理问题</a></h4>
 		<div class="inner" id="service-area">
 		</div>
 	</div>

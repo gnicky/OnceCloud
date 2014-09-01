@@ -69,19 +69,9 @@ public class HostAction extends HttpServlet {
 				String hostUuid = request.getParameter("hostuuid");
 				String srUuid = request.getParameter("sruuid");
 				this.getHostManager().unbindSr(hostUuid, srUuid, userId);
-			} else if (action.equals("issamesr")) {
-				String uuidJsonStr = request.getParameter("uuidjsonstr");
-				JSONArray ja = this.getHostManager().isSameSr(uuidJsonStr);
-				out.print(ja.toString());
 			} else if (action.equals("getablepool")) {
 				String uuidJsonStr = request.getParameter("uuidjsonstr");
 				JSONArray ja = this.getHostManager().getTablePool(uuidJsonStr);
-				out.print(ja.toString());
-			} else if (action.equals("delete")) {
-				String hostId = request.getParameter("hostid");
-				String hostName = request.getParameter("hostname");
-				JSONArray ja = this.getHostManager().deleteAction(hostId,
-						hostName, userId);
 				out.print(ja.toString());
 			} else if (action.equals("queryaddress")) {
 				String address = request.getParameter("address");
@@ -93,10 +83,6 @@ public class HostAction extends HttpServlet {
 				String poolUuid = request.getParameter("pooluuid");
 				JSONArray ja = this.getHostManager().add2Pool(uuidJsonStr,
 						hasMaster, poolUuid, userId);
-				out.print(ja.toString());
-			} else if (action.equals("r4pool")) {
-				String hostUuid = request.getParameter("hostuuid");
-				JSONArray ja = this.getHostManager().r4Pool(hostUuid, userId);
 				out.print(ja.toString());
 			} else if (action.equals("getHostForImage")) {
 				out.print(this.getHostManager().getHostForImage().toString());

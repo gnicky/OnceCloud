@@ -24,6 +24,7 @@ import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
+import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VDIDAO;
 import com.oncecloud.entity.Backend;
 import com.oncecloud.entity.DHCP;
@@ -66,6 +67,8 @@ public class LBManager {
 	private VMManager vmManager;
 	private Constant constant;
 	private HostDAO hostDAO;
+	private UserDAO userDAO;
+	
 	private MessagePush messagePush;
 
 	private ImageDAO getImageDAO() {
@@ -194,6 +197,15 @@ public class LBManager {
 		this.hostDAO = hostDAO;
 	}
 
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	@Autowired
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+	
 	private MessagePush getMessagePush() {
 		return messagePush;
 	}
@@ -937,6 +949,7 @@ public class LBManager {
 						.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", lb.getLbImportance());
+				jo.put("userName", Utilities.encodeText(this.getUserDAO().getUser(lb.getLbUID()).getUserName()));
 				ja.put(jo);
 			}
 		}
