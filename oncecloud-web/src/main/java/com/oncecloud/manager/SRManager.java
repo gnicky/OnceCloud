@@ -209,7 +209,7 @@ public class SRManager {
 				tObj.put("srType", sr.getSrtype());
 				tObj.put("srDir", sr.getSrdir());
 				tObj.put("srsize",
-						this.getStorageDAO().getHostSizeOfStorage(srUuid));
+						this.getStorageDAO().countHostsOfStorage(srUuid));
 				tObj.put("srDesc", Utilities.encodeText(sr.getSrDesc()));
 				String rackid = sr.getRackuuid();
 				if (rackid == null) {
@@ -299,7 +299,7 @@ public class SRManager {
 
 	public JSONArray getStorageByAddress(String address) {
 		JSONArray ja = new JSONArray();
-		Storage sr = this.getStorageDAO().getStorageByAddress(address);
+		Storage sr = this.getStorageDAO().getStorageOfAddress(address);
 		JSONObject jo = new JSONObject();
 		if (sr != null) {
 			jo.put("exist", true);
