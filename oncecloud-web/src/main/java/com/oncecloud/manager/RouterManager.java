@@ -24,6 +24,7 @@ import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
+import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VDIDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
@@ -65,7 +66,8 @@ public class RouterManager {
 	private QuotaDAO quotaDAO;
 	private FirewallDAO firewallDAO;
 	private HostDAO hostDAO;
-
+	private UserDAO userDAO;
+	
 	private EIPManager eipManager;
 	private VMManager vmManager;
 
@@ -168,6 +170,15 @@ public class RouterManager {
 	@Autowired
 	public void setHostDAO(HostDAO hostDAO) {
 		this.hostDAO = hostDAO;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	@Autowired
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 	private EIPManager getEipManager() {
@@ -859,6 +870,7 @@ public class RouterManager {
 						.dateToUsed(router.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", router.getRouterImportance());
+				jo.put("userName", Utilities.encodeText(this.getUserDAO().getUser(router.getRouterUID()).getUserName()));
 				ja.put(jo);
 			}
 		}

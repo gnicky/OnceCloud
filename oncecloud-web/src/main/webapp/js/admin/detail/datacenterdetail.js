@@ -15,23 +15,17 @@ getPoolList();
 $('#tagdiv').on('click', '.id', function(event) {
 	event.preventDefault();
 	var hostid = $(this).attr('hostid');
-	$.ajax({
-				type : 'get',
-				url : '/HostAction',
-				data : 'action=detail&hostid=' + hostid,
-				dataType : 'text',
-				success : function(response) {
-					window.location.href = $('#platformcontent')
-							.attr('platformBasePath')
-							+ "admin/detail/hostdetail.jsp";
-				},
-				error : function() {
-
-				}
-			});
+	var form = $("<form></form>");
+    form.attr("action","/host/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="hostid" value="' + hostid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
-$('#tagdiv').on('click', '.switchid', function(event) {
+/*$('#tagdiv').on('click', '.switchid', function(event) {
 	event.preventDefault();
 	var switchid = $(this).attr('switchid');
 	$.ajax({
@@ -49,6 +43,7 @@ $('#tagdiv').on('click', '.switchid', function(event) {
 				}
 			});
 });
+*/
 
 $('#tagdiv').on('mouseenter', 'li', function(event) {
 			event.preventDefault();
@@ -62,9 +57,8 @@ $('#tagdiv').on('mouseleave', 'li', function(event) {
 
 function getrackList() {
     $.ajax({
-        type: 'post',
-        url: '/DatacenterAction',
-        data: 'action=getRackList',
+        type: 'get',
+        url: '/DatacenterAction/RackList',
         dataType: 'json',
         success: function (array) {
             $("#tagdiv").html("");
@@ -125,9 +119,6 @@ function getrackList() {
             });
 
             $(".t_tips").hide();
-        },
-        error: function () {
-
         }
     });
 
@@ -136,9 +127,8 @@ function getrackList() {
 
 function getPoolList() {
     $.ajax({
-        type: 'post',
-        url: '/DatacenterAction',
-        data: 'action=getPoolList',
+        type: 'get',
+        url: '/DatacenterAction/PoolList',
         dataType: 'json',
         success: function (array) {
             var srhtml = "";
@@ -224,8 +214,5 @@ function getPoolList() {
                     + '</div></div></div></div>');
             });
             $("#tagdiv").append(srhtml);
-        },
-        error: function () {
-
         }
     });

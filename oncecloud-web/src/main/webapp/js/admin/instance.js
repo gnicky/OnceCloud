@@ -218,9 +218,6 @@ function loadList(action, page, limit, str) {
                 var nameStr = new Array("已关机", "正常运行", "创建中", "销毁中", "启动中", "关机中", "重启中");
                 var stateStr = '<td><span class="icon-status icon-' + iconStr[state] + '" name="stateicon">'
                     + '</span><span name="stateword">' + nameStr[state] + '</span></td>';
-                if (state == 1 && str == "i-") {
-                    showstr = showstr + '<a class="console" data-uuid=' + vmuuid + '><img src="../../img/user/console.png"></a>';
-                }
                 var cpu = obj.cpu;
                 cpu = cpu + "&nbsp;核";
                 var memory = obj.memory;

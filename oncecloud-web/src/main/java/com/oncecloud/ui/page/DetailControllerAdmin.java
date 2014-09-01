@@ -27,7 +27,6 @@ public class DetailControllerAdmin {
 		String dcid = request.getParameter("dcid");
 		if (dcid != null) {
 			request.getSession().setAttribute("dcid", dcid);
-			request.getSession().setAttribute("showId", "dc-" + dcid.substring(0, 8));
 			return new ModelAndView("admin/detail/datacenterdetail", model);
 		} else {
 			if (request.getSession().getAttribute("dcid") != null) {
@@ -75,7 +74,6 @@ public class DetailControllerAdmin {
 		String rackid = request.getParameter("rackid");
 		if (rackid != null) {
 			request.getSession().setAttribute("rackid", rackid);
-			request.getSession().setAttribute("showId", "rack-" + rackid.substring(0, 8));
 			return new ModelAndView("admin/detail/rackdetail", model);
 		} else {
 			if (request.getSession().getAttribute("rackid") != null) {
@@ -101,7 +99,6 @@ public class DetailControllerAdmin {
 		if (userid != null) {
 			request.getSession().setAttribute("userid", userid);
 			request.getSession().setAttribute("username", username);
-			request.getSession().setAttribute("showId", "user-" + userid.substring(0, 8));
 			return new ModelAndView("admin/detail/userdetail", model);
 		} else {
 			if (request.getSession().getAttribute("userid") != null) {

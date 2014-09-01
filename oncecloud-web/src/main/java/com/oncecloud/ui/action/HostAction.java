@@ -87,4 +87,16 @@ public class HostAction {
 			return "";
 		}
 	}
+
+	@RequestMapping(value = "/OneHost", method = { RequestMethod.GET })
+	@ResponseBody
+	public String oneHost(HttpServletRequest request,@RequestParam("hostUuid") String hostUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getHostManager().getOneHost(hostUuid);
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
 }

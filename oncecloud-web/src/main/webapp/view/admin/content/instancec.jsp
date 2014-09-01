@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" data-novnc="${vncServer}">
+<div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>主机&nbsp;Instances</h1>
 		<p class="lead">

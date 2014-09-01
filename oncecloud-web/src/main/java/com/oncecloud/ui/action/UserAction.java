@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.UserManager;
 import com.oncecloud.ui.model.ListModel;
+import com.oncecloud.ui.model.QuotaModel;
 
 @RequestMapping("/UserAction")
 @Controller
@@ -65,6 +66,44 @@ public class UserAction {
 			return jo.toString();
 		} else {
 			return "";
+		}
+	}
+
+	@RequestMapping(value = "/OneUser", method = { RequestMethod.GET })
+	@ResponseBody
+	public String oneUser(HttpServletRequest request, @RequestParam("userid") int userid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONObject jo = this.getUserManager().doGetOneUser(userid);
+			return jo.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/UserQuota", method = { RequestMethod.GET })
+	@ResponseBody
+	public String userQuota(HttpServletRequest request, @RequestParam("userid") int userid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONObject jo = this.getUserManager().doGetUserQuota(userid);
+			return jo.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/QuotaUpdate", method = { RequestMethod.POST })
+	@ResponseBody
+	public void quotaUpdate(HttpServletRequest request, QuotaModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			this.getUserManager().doQuotaUpdate(list.getQuotaid(),
+					list.getChangerId(), list.getEip(), list.getVm(),
+					list.getBk(), list.getImg(), list.getVol(), list.getSsh(),
+					list.getFw(), list.getRt(), list.getVlan(), list.getLb(),
+					list.getDisk(), list.getBw(), list.getMem(), list.getCpu(),
+					user.getUserId());
 		}
 	}
 }
