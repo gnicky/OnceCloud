@@ -28,7 +28,7 @@ public class ImageAction {
 		this.imageManager = imageManager;
 	}
 
-	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET,RequestMethod.POST })
 	@ResponseBody
 	public String imageList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");

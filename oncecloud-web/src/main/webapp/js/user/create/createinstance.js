@@ -1,4 +1,4 @@
-$(document).ready(function () {
+
 
     $("#InstanceModalContainer").on("hidden", function () {
         $(this).removeData("modal");
@@ -39,9 +39,8 @@ $(document).ready(function () {
         $('#imagelist').html("");
         $.ajax({
             type: 'post',
-            url: '/ImageAction',
-            data: "action=getPageList&page=" + page + "&limit=" + limit
-                + "&search=" + search + "&type=" + type,
+            url: '/ImageAction/ImageList',
+            data: {page:page, limit:limit,search:search,type:type},
             dataType: 'json',
             success: function (array) {
                 var tableStr = "";
@@ -55,7 +54,7 @@ $(document).ready(function () {
                         totalPages: totalp
                     }
                     $('#tplpage').bootstrapPaginator(options);
-                    pageDisplayUpdate(page, totalp);
+                    modalPageUpdate(page, totalp);
                     for (var i = 1; i < array.length; i++) {
                         var obj = array[i];
                         var imageid = obj.imageid;
@@ -74,8 +73,6 @@ $(document).ready(function () {
                     }
                     $('#imagelist').html(tableStr);
                 }
-            },
-            error: function () {
             }
         });
     }
@@ -212,7 +209,7 @@ $(document).ready(function () {
         }
     });
 
-    function pageDisplayUpdate(current, total) {
+    function modalPageUpdate(current, total) {
         $('#currentPtpl').html(current);
         $('#totalPtpl').html(total);
     }
@@ -244,8 +241,6 @@ $(document).ready(function () {
             data: "action=create&tpluuid=" + imageuuid + "&cpuCore=" + cpuCore + "&memoryCapacity=" + memoryCapacity + "&vmName=" + vmName + "&loginPwd=" + loginPwd + "&vmuuid=" + vmuuid,
             dataType: 'json',
             success: function (obj) {
-            },
-            error: function () {
             }
         });
     }
@@ -297,4 +292,3 @@ $(document).ready(function () {
             $('#pw-alert').addClass("alert-danger");
         }
     });
-});	

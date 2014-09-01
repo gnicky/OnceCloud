@@ -9,7 +9,7 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}user/create/createinstance.jsp">+&nbsp;新建</button>
+			<button id="create" class="btn btn-primary" url="${basePath}instance/create">+&nbsp;新建</button>
 			<button class="btn btn-default btn-disable" id="startup" disabled><span class="glyphicon glyphicon-play"></span>启动</button>
 			<button class="btn btn-default btn-disable" id="shutdown" disabled><span class="glyphicon glyphicon-stop"></span>关机</button>
 			<div class="btn-group">
