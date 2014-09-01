@@ -66,9 +66,9 @@ public class EIPDAO {
 			eip.setEipBandwidth(eipBandwidth);
 			eip.setCreateDate(createDate);
 			session.update(eip);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaIP", 1,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaIP", 1,
 					true);
-			this.getQuotaDAO().updateQuotaField(session, userId,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaBandwidth", eipBandwidth, true);
 			tx.commit();
 			return eip;
@@ -212,9 +212,9 @@ public class EIPDAO {
 				eip.setEipName(null);
 				eip.setEipUID(null);
 				session.update(eip);
-				this.getQuotaDAO().updateQuotaField(session, userId, "quotaIP",
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaIP",
 						1, false);
-				this.getQuotaDAO().updateQuotaField(session, userId,
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaBandwidth", bandwith, false);
 				tx.commit();
 			}
@@ -364,10 +364,10 @@ public class EIPDAO {
 			tx = session.beginTransaction();
 			session.update(eipObj);
 			if (size > origin) {
-				this.getQuotaDAO().updateQuotaField(session, userId,
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaBandwidth", size - origin, true);
 			} else {
-				this.getQuotaDAO().updateQuotaField(session, userId,
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaBandwidth", origin - size, false);
 			}
 			tx.commit();

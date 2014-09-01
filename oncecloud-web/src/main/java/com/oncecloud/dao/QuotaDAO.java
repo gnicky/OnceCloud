@@ -1,21 +1,16 @@
 package com.oncecloud.dao;
 
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.Quota;
-import com.oncecloud.entity.User;
 import com.oncecloud.helper.SessionHelper;
 
 @Component
 public class QuotaDAO {
 	private SessionHelper sessionHelper;
-	private UserDAO userDAO;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -26,124 +21,88 @@ public class QuotaDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	private UserDAO getUserDAO() {
-		return userDAO;
-	}
-
-	@Autowired
-	private void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-
-	@SuppressWarnings("unchecked")
-	public Quota getQuotaUsed(int quotaUID) {
+	public Quota getQuotaUsed(int userId) {
 		Quota quota = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from Quota where quotaUID = "
-					+ quotaUID + " and quotaType = 1");
-			List<Quota> quotaList = query.list();
-			if (quotaList.size() == 1) {
-				quota = quotaList.get(0);
-			}
+			Query query = session
+					.createQuery("from Quota where quotaUID = :userId and quotaType = 1");
+			query.setInteger("userId", userId);
+			quota = (Quota) query.uniqueResult();
 			session.getTransaction().commit();
 			return quota;
 		} catch (Exception e) {
-			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public Quota getQuotaTotal(int quotaUID) {
-		Quota quota = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Query query = session.createQuery("from Quota where quotaUID = "
-					+ quotaUID + " and quotaType = 0");
-			List<Quota> quotaList = query.list();
-			if (quotaList.size() == 1) {
-				quota = quotaList.get(0);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
 			}
 		}
 		return quota;
 	}
 
-	public void insertQuota(Session session, int quotaUID, int quotaIP,
+	public Quota getQuotaTotal(int userId) {
+		Quota quota = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from Quota where quotaUID = :userId and quotaType = 0");
+			query.setInteger("userId", userId);
+			quota = (Quota) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return quota;
+	}
+
+	public Quota getQuotaTotalNoTransaction(int userId) {
+		Session session = this.getSessionHelper().getMainSession();
+		Query query = session
+				.createQuery("from Quota where quotaUID = :userId and quotaType = 0");
+		query.setInteger("userId", userId);
+		return (Quota) query.uniqueResult();
+	}
+
+	public void insertQuotaNoTransaction(int quotaUID, int quotaIP,
 			int quotaVM, int quotaSnapshot, int quotaImage, int quotaDiskN,
 			int quotaDiskS, int quotaSsh, int quotaFirewall, int quotaRoute,
 			int quotaVlan, int quotaLoadBalance, int quotaBandwidth,
 			int quotaMemory, int quotaCpu, int quotaType) throws Exception {
-		if (session == null || !session.isOpen()) {
-			throw new Exception("Session not open");
-		}
+		Session session = sessionHelper.getMainSession();
 		Quota quota = new Quota(quotaUID, quotaIP, quotaVM, quotaSnapshot,
 				quotaImage, quotaDiskN, quotaDiskS, quotaSsh, quotaFirewall,
 				quotaRoute, quotaVlan, quotaLoadBalance, quotaBandwidth,
 				quotaMemory, quotaCpu, quotaType);
 		session.save(quota);
-		session.close();
 	}
 
-	public synchronized boolean updateQuotaField(Session session, int userId,
+	public synchronized void updateQuotaFieldNoTransaction(int userId,
 			String filedName, int size, boolean isadd) {
-		boolean result = false;
-		if (session == null || !session.isOpen()) {
-			return result;
+		Session session = sessionHelper.getMainSession();
+		String setString = filedName + "=" + filedName + "+" + size;
+		if (isadd == false) {
+			setString = filedName + "=" + filedName + "-" + size;
 		}
-		try {
-			User user = this.getUserDAO().getUser(userId);
-			if (user.getUserLevel() == 0) {
-				return true;
-			}
-			String setString = filedName + "=" + filedName + "+" + size;
-			if (isadd == false) {
-				setString = filedName + "=" + filedName + "-" + size;
-			}
-			String queryString = String
-					.format("update Quota set %s where quotaUID = :userId and quotaType = 1",
-							setString);
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.executeUpdate();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
+		String queryString = String
+				.format("update Quota set %s where quotaUID = :userId and quotaType = 1",
+						setString);
+		Query query = session.createQuery(queryString);
+		query.setInteger("userId", userId);
+		query.executeUpdate();
 	}
 
-	public synchronized void changeQuotaBandwidth(int quotaUID, int size) {
-		Quota quotaUsed = getQuotaUsed(quotaUID);
-		quotaUsed.setQuotaBandwidth(quotaUsed.getQuotaBandwidth() + size);
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		session.update(quotaUsed);
-		tx.commit();
-		session.close();
-	}
-
-	public void initQuota(Session session, Integer userId) throws Exception {
-		if (session == null || !session.isOpen()) {
-			throw new Exception("Session not open");
-		}
+	public void initQuotaNoTransaction(Integer userId) throws Exception {
+		Session session = sessionHelper.getMainSession();
 		if (userId == 1) {
-			insertQuota(session, 1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3, 10,
-					20, 10, 0);
+			insertQuotaNoTransaction(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
+					10, 20, 10, 0);
 		} else {
-			Quota def = getQuotaTotal(1);
+			Quota def = getQuotaTotalNoTransaction(userId);
 			def.setQuotaUID(userId);
 			def.setQuotaID(null);
 			Quota current = new Quota(userId, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
@@ -156,21 +115,15 @@ public class QuotaDAO {
 	public boolean updateQuota(Quota newQuota) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.update(newQuota);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;

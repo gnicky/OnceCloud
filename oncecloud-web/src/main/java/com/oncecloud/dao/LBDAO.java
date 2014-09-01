@@ -287,7 +287,7 @@ public class LBDAO {
 					status, createDate);
 			tx = session.beginTransaction();
 			session.save(lb);
-			this.getQuotaDAO().updateQuotaField(session, userId,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaLoadBalance", 1, true);
 			tx.commit();
 			result = true;
@@ -341,7 +341,7 @@ public class LBDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaField(session, userId,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaLoadBalance", 1, false);
 			tx.commit();
 		} catch (Exception e) {

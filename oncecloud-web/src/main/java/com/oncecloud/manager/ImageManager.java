@@ -236,7 +236,7 @@ public class ImageManager {
 					.getPoolUuid();
 			this.getImageDAO().createImage(imageUuid, newName, uid,
 					fromVM.getVmPlatform(), poolUuid, desc, fromVM.getVmPWD());
-			this.getQuotaDAO().updateQuotaField(session, uid, "quotaImage", 1,
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(uid, "quotaImage", 1,
 					true);
 			tx.commit();
 			result.put("result", true);

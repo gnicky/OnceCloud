@@ -141,7 +141,7 @@ public class VnetDAO {
 			vnet.setVnetID(getFreeVnetID());
 			tx = session.beginTransaction();
 			session.save(vnet);
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVlan",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVlan",
 					1, true);
 			tx.commit();
 			result = true;
@@ -192,7 +192,7 @@ public class VnetDAO {
 			tx = session.beginTransaction();
 			query.setString("uuid", uuid);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVlan",
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaVlan",
 					1, false);
 			tx.commit();
 			result = true;
