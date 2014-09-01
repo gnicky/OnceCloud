@@ -58,15 +58,6 @@ public class DatacenterAction extends HttpServlet {
 				JSONArray qaArray = this.getDatacenterManager()
 						.getDatacenterAllList();
 				out.print(qaArray.toString());
-			} else if (action.equals("delete")) {
-				String dcId = request.getParameter("dcid");
-				String dcName = request.getParameter("dcname");
-				JSONArray ja = this.getDatacenterManager().deleteDatacenter(
-						dcId, dcName, userid);
-				out.print(ja.toString());
-			} else if (action.equals("detail")) {
-				String dcid = request.getParameter("dcid");
-				session.setAttribute("dcid", dcid);
 			} else if (action.equals("getPoolList")) {
 				String dcid = (String) session.getAttribute("dcid");
 				JSONArray qaArray = this.getDatacenterManager().getPoolList(
