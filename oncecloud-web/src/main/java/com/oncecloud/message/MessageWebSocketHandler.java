@@ -89,7 +89,6 @@ public class MessageWebSocketHandler implements WebSocketHandler {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					break;
 				}
 			}
 		}

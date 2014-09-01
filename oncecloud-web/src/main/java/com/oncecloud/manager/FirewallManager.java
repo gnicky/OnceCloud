@@ -18,7 +18,6 @@ import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Firewall;
 import com.oncecloud.entity.LB;
 import com.oncecloud.entity.OCLog;
@@ -28,6 +27,7 @@ import com.oncecloud.entity.Rule;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -43,6 +43,7 @@ public class FirewallManager {
 	private RouterDAO routerDAO;
 	private QuotaDAO quotaDAO;
 	private Constant constant;
+	private MessagePush messagePush;
 
 	private FirewallDAO getFirewallDAO() {
 		return firewallDAO;
@@ -114,6 +115,15 @@ public class FirewallManager {
 	@Autowired
 	private void setConstant(Constant constant) {
 		this.constant = constant;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	public JSONObject updateFirewall(int userId, String firewallId) {
@@ -195,7 +205,7 @@ public class FirewallManager {
 					LogConstant.logAction.更新.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -203,7 +213,7 @@ public class FirewallManager {
 					LogConstant.logAction.更新.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
@@ -362,7 +372,7 @@ public class FirewallManager {
 					LogConstant.logAction.绑定.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -370,7 +380,7 @@ public class FirewallManager {
 					LogConstant.logAction.绑定.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
@@ -396,7 +406,7 @@ public class FirewallManager {
 				LogConstant.logAction.创建.ordinal(),
 				LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 				startTime, elapse);
-		MessagePush.pushMessage(userId,
+		this.getMessagePush().pushMessage(userId,
 				Utilities.stickyToSuccess(log.toString()));
 		return jo;
 	}

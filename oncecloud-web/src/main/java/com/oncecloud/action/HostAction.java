@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.HostManager;
@@ -113,8 +112,8 @@ public class HostAction extends HttpServlet {
 				String hostName = request.getParameter("hostname");
 				String hostDesc = request.getParameter("hostdesc");
 				String rackUuid = request.getParameter("rackUuid");
-				HostManager
-						.update(hostId, hostName, hostDesc, rackUuid, userId);
+				this.getHostManager().update(hostId, hostName, hostDesc,
+						rackUuid, userId);
 			}
 		}
 	}
