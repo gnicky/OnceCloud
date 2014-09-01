@@ -390,7 +390,7 @@ public class SnapshotManager {
 				try {
 					Connection c = this.getConstant().getConnection(userId);
 					VM vm = Types.toVM(resourceUuid);
-					if (this.getVmDAO().getVmPowerState(resourceUuid) == 1) {
+					if (this.getVmDAO().getVM(resourceUuid).getVmPower() == 1) {
 						vm.hardShutdown(c);
 						this.getVmDAO().setVMPowerStatus(resourceUuid,
 								VMManager.POWER_HALTED);
@@ -434,7 +434,7 @@ public class SnapshotManager {
 					String dependenVm = volume.getVolumeDependency();
 					try {
 						Connection c = this.getConstant().getConnection(userId);
-						if (this.getVmDAO().getVmPowerState(dependenVm) == 1) {
+						if (this.getVmDAO().getVM(resourceUuid).getVmPower() == 1) {
 							VM vm = Types.toVM(dependenVm);
 							vm.hardShutdown(c);
 							this.getVmDAO().setVMPowerStatus(dependenVm,
