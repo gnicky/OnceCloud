@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,23 +48,20 @@ public class ImageDAO {
 		this.overViewDAO = overViewDAO;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Image getImage(String imageUuid) {
 		Image image = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Query query = session.createQuery("from Image where imageUuid = '"
-					+ imageUuid + "'");
-			List<Image> imageList = query.list();
-			if (imageList.size() == 1) {
-				image = imageList.get(0);
-			}
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from Image where imageUuid = :imageUuid");
+			query.setString("imageUuid", imageUuid);
+			image = (Image) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return image;
@@ -78,6 +74,7 @@ public class ImageDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String poolUuid = this.getUserDAO().getUser(userId)
 					.getUserAllocate();
@@ -109,11 +106,10 @@ public class ImageDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			imageList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return imageList;
@@ -125,6 +121,7 @@ public class ImageDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "";
 			if (userLevel == 0) {
 				if (type.equals("system")) {
@@ -149,12 +146,9 @@ public class ImageDAO {
 			}
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			session.getTransaction().rollback();
 		}
 		return total;
 	}
@@ -164,26 +158,19 @@ public class ImageDAO {
 			String imagePwd) {
 		Image image = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			image = new Image(imageUId, imageName, imagePwd, imageUID, 20,
 					imagePlatform, 1, imageServer, imageDesc, new Date());
 			image.setPreAllocate(0);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
 			session.saveOrUpdate(image);
 			this.getOverViewDAO().updateOverViewfield(session, "viewImage",
 					true);
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			image = null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return image;
@@ -191,40 +178,44 @@ public class ImageDAO {
 
 	public boolean deleteImage(String imageId) {
 		Session session = null;
-		Transaction tx = null;
 		boolean result = false;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "update Image set imageStatus = 0 where imageUuid='"
 					+ imageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
 			this.getOverViewDAO().updateOverViewfield(session, "viewImage",
 					false);
-			tx.commit();
 			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
 	}
 
 	public int countByHost(String hostUuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "";
-		queryString = "select count(*) from Image where imageStatus!=0 and hostUuid='"
-				+ hostUuid + "'";
-		Query query = session.createQuery(queryString);
-		int count = ((Number) query.iterate().next()).intValue();
-		session.close();
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			StringBuilder builder = new StringBuilder(
+					"select count(*) from Image where ");
+			builder.append("imageStatus != 0 and hostUuid = :hostUuid");
+			Query query = session.createQuery(builder.toString());
+			query.setString("hostUuid", hostUuid);
+			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 		return count;
 	}
 
@@ -236,25 +227,19 @@ public class ImageDAO {
 	 */
 	public void updateName(String imageuuid, String newName, String description) {
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "update Image set imageName=:name, imageDesc=:desc where imageUuid=:uuid";
 			Query query = session.createQuery(queryString);
 			query.setString("name", newName);
 			query.setString("uuid", imageuuid);
 			query.setString("desc", description);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
@@ -267,16 +252,16 @@ public class ImageDAO {
 			String poolUuid = this.getUserDAO().getUser(userId)
 					.getUserAllocate();
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session
 					.createQuery("from Image where imagePlatform = 2 and poolUuid = :poolUuid");
 			query.setString("poolUuid", poolUuid);
 			List<Image> imageList = query.list();
 			image = imageList.get(0);
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return image;
@@ -286,25 +271,22 @@ public class ImageDAO {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Image getRTImage(int userId) {
 		Image image = null;
 		Session session = null;
 		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String poolUuid = this.getUserDAO().getUser(userId)
 					.getUserAllocate();
-			session = this.getSessionHelper().getMainSession();
-			// 目前使用LB镜像,创建完成后改为=3
 			Query query = session
 					.createQuery("from Image where imagePlatform = 3 and poolUuid = :poolUuid");
 			query.setString("poolUuid", poolUuid);
-			List<Image> imageList = query.list();
-			image = imageList.get(0);
+			image = (Image) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return image;
@@ -316,14 +298,14 @@ public class ImageDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session
 					.createQuery("from Image where imageUID = 1 and preAllocate > 0");
 			imageList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return imageList;

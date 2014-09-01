@@ -76,7 +76,7 @@ public class VMDAO {
 			Query query = session
 					.createQuery("from OCVM where vmUuid = :vmUuid");
 			query.setString("vmUuid", vmUuid);
-			vm = (OCVM) query.list().get(0);
+			vm = (OCVM) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,7 +96,7 @@ public class VMDAO {
 			Query query = session
 					.createQuery("from OCVM where vmUuid = :vmUuid and vmStatus = 1");
 			query.setString("vmUuid", vmUuid);
-			vm = (OCVM) query.list().get(0);
+			vm = (OCVM) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
