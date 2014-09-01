@@ -73,11 +73,11 @@ public class ImageDAO {
 		List<Image> imageList = null;
 		Session session = null;
 		try {
+			String poolUuid = this.getUserDAO().getUser(userId)
+					.getUserAllocate();
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String poolUuid = this.getUserDAO().getUser(userId)
-					.getUserAllocate();
 			String queryString = "";
 			if (userLevel == 0) {
 				if (type.equals("system")) {
