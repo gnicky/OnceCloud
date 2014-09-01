@@ -351,7 +351,7 @@ public class DatacenterManager {
 					thost.put("imagecount",
 							this.getImageDAO().countByHost(host.getHostUuid()));
 					thost.put("vmcount",
-							this.getVmDAO().countByHost(host.getHostUuid()));
+							this.getVmDAO().countVMsOfHost(host.getHostUuid()));
 					jsonArrayServer.put(thost);
 				}
 
@@ -398,7 +398,7 @@ public class DatacenterManager {
 					thost.put("imagecount",
 							this.getImageDAO().countByHost(host.getHostUuid()));
 					thost.put("vmcount",
-							this.getVmDAO().countByHost(host.getHostUuid()));
+							this.getVmDAO().countVMsOfHost(host.getHostUuid()));
 					jsonArrayServer.put(thost);
 				}
 

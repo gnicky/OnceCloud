@@ -27,13 +27,30 @@ public class VlanDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
+	/**
+	 * 获取交换机的VLAN列表
+	 * 
+	 * @param switchId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Vlan> getVlanOfSwitch(String switchId) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from Vlan where swUuid ='" + switchId + "'";
-		Query query = session.createQuery(queryString);
-		List<Vlan> vlanList = query.list();
-		session.close();
+		List<Vlan> vlanList  = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Vlan where swUuid = :switchId";
+			Query query = session.createQuery(queryString);
+			query.setString("switchId", switchId);
+			vlanList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 		return vlanList;
 	}
 }

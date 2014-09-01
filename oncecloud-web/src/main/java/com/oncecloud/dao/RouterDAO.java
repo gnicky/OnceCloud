@@ -121,7 +121,7 @@ public class RouterDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageRouterList(int userId, int page, int limit,
+	public List<Router> getOnePageRouters(int userId, int page, int limit,
 			String search) {
 		List<Router> routerList = null;
 		Session session = null;
@@ -156,7 +156,7 @@ public class RouterDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageAdminList(int page, int limit, String host,
+	public List<Router> getOnePageRoutersOfAdmin(int page, int limit, String host,
 			int importance) {
 		List<Router> rtList = null;
 		Session session = null;
@@ -267,7 +267,7 @@ public class RouterDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Router> getRouterListOfAlarm(int routerUID, String alarmUuid) {
+	public List<Router> getRoutersOfAlarm(int routerUID, String alarmUuid) {
 		List<Router> list = null;
 		Session session = null;
 		try {
@@ -296,7 +296,7 @@ public class RouterDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONArray getRouterListOfUser(int userId) {
+	public JSONArray getRoutersOfUser(int userId) {
 		Session session = null;
 		JSONArray routerList = new JSONArray();
 		try {
@@ -330,7 +330,7 @@ public class RouterDAO {
 	 * @param search
 	 * @return
 	 */
-	public int countAllRouterList(int userId, String search) {
+	public int countRouters(int userId, String search) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -358,7 +358,7 @@ public class RouterDAO {
 	 * @param importance
 	 * @return
 	 */
-	public int countAllAdminList(String host, int importance) {
+	public int countRoutersOfAdmin(String host, int importance) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -391,7 +391,7 @@ public class RouterDAO {
 	 * @param routerUID
 	 * @return
 	 */
-	public int countAllRoutersWithoutAlarm(String search, int routerUID) {
+	public int countRoutersWithoutAlarm(String search, int routerUID) {
 		int count = 0;
 		Session session = null;
 		try {

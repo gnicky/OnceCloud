@@ -189,7 +189,7 @@ public class VnetManager {
 
 	public JSONArray getVMs(String vnUuid) {
 		JSONArray ja = new JSONArray();
-		List<OCVM> ocvmList = this.getVmDAO().getVxnetsList(vnUuid);
+		List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(vnUuid);
 		if (ocvmList != null) {
 			for (OCVM ocvm : ocvmList) {
 				JSONObject jovm = new JSONObject();
@@ -256,7 +256,7 @@ public class VnetManager {
 	public DeleteVnetResult deleteVnet(int userId, String vnetUuid) {
 		Date startTime = new Date();
 		DeleteVnetResult result = DeleteVnetResult.Failed;
-		int using = this.getVmDAO().countVMOfVnet(vnetUuid);
+		int using = this.getVmDAO().countVMsOfVnet(vnetUuid);
 		if (using == 0) {
 			boolean ret = this.getVnetDAO().removeVnet(userId, vnetUuid);
 			result = ret ? DeleteVnetResult.Success : result;

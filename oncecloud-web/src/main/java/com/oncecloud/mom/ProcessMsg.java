@@ -114,7 +114,7 @@ public class ProcessMsg {
 											.getPoolUuid();
 									if (powerAttrvalue == 1
 											&& ocvm.getVmPower() == 0) {
-										this.getVmDAO().setVMPowerStatus(
+										this.getVmDAO().updatePowerStatus(
 												vmUuid, powerAttrvalue);
 										String hostAddress = this
 												.getVmManager().getHostAddress(
@@ -131,7 +131,7 @@ public class ProcessMsg {
 												userId, vmUuid, "add");
 									} else if (powerAttrvalue == 0
 											&& ocvm.getVmPower() == 1) {
-										this.getVmDAO().setVMPowerStatus(
+										this.getVmDAO().updatePowerStatus(
 												vmUuid, powerAttrvalue);
 										NoVNC.deleteToken(vmUuid
 												.substring(0, 8));
