@@ -47,42 +47,6 @@ public class AlarmDAO {
 		return alarm;
 	}
 
-	public boolean updateAlarm(Alarm alarm) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(alarm);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean removeAlarm(Alarm alarm) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.delete(alarm);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<Alarm> getOnePageList(int userId, int pageIndex,
 			int itemPerPage, String keyword) {
@@ -156,6 +120,24 @@ public class AlarmDAO {
 		return result;
 	}
 
+	public boolean updateAlarm(Alarm alarm) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.update(alarm);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
 	public boolean updateName(String alarmUuid, String newName,
 			String description) {
 		boolean result = false;
@@ -197,6 +179,24 @@ public class AlarmDAO {
 				result = true;
 			}
 			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean removeAlarm(Alarm alarm) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.delete(alarm);
+			session.getTransaction().commit();
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
