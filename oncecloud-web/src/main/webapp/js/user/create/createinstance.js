@@ -214,8 +214,8 @@
         $('#totalPtpl').html(total);
     }
 
-    function preCreateVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd) {
-        cpuCore = cpuCore + "&nbsp;核";
+    function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd) {
+        cpuCore = cpuCore1 + "&nbsp;核";
         var memoryInt = parseInt(memoryCapacity);
         var memoryStr;
         if (memoryInt < 1) {
@@ -231,14 +231,14 @@
             + vmName + '</td><td><span class="icon-status icon-process" name="stateicon"></span><span name="stateword">创建中</span></td><td name="cpuCore">'
             + cpuCore + '</td><td name="memoryCapacity">'
             + memoryStr + '</td><td name="sip"><a>(基础网络)</a></td><td name="pip"></td><td name="backuptime">' + backupStr + '</td><td name="createtime" class="time"><1分钟</td></tr>');
-        createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd);
+        createVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd);
     }
 
     function createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd) {
         $.ajax({
             type: 'post',
             url: '/VMAction/CreateVM',
-            data:{imageUuid:imageuuid,cpu:cpuCore,memory:memoryCapacity,vmName:vmName,password:loginPwd,vmUuid:vmUuid},
+            data:{imageUuid:imageuuid,cpu:cpuCore,memory:memoryCapacity,vmName:vmName,password:loginPwd,vmUuid:vmuuid},
             dataType: 'json'
         });
     }

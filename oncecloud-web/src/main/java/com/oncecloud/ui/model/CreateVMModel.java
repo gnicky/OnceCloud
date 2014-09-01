@@ -5,7 +5,7 @@ public class CreateVMModel {
      
      private int cpu;
      
-     private int memory;
+     private double memory;
      
      private String vmName;
      
@@ -25,10 +25,10 @@ public class CreateVMModel {
 	public void setCpu(int cpu) {
 		this.cpu = cpu;
 	}
-	public int getMemory() {
+	public double getMemory() {
 		return memory;
 	}
-	public void setMemory(int memory) {
+	public void setMemory(double memory) {
 		this.memory = memory;
 	}
 	public String getVmName() {

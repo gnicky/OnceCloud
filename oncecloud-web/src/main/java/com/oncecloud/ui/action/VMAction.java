@@ -152,7 +152,7 @@ public class VMAction {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			this.getVmManager().doCreateVM(createvmModel.getVmUuid(),createvmModel.getImageUuid(), user.getUserId(), createvmModel.getVmName(),
-					createvmModel.getCpu(), createvmModel.getMemory(), createvmModel.getPassword(), user.getUserAllocate());
+				createvmModel.getCpu(), createvmModel.getMemory(), createvmModel.getPassword(), user.getUserAllocate());
 		}
 	}
 	

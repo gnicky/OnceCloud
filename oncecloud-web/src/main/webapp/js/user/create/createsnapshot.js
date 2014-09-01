@@ -13,8 +13,8 @@ $('#createsnapshotAction').on('click', function (event) {
             var chain = getNewChain();
             $.ajax({
                 type: 'get',
-                url: '/SnapshotAction',
-                data: 'action=quota&count=' + chain,
+                url: '/SnapshotAction/quota',
+                data: {count:chain},
                 dataType: 'text',
                 success: function (msg) {
                     if (msg != "ok") {
@@ -147,12 +147,11 @@ function initResourceList() {
 function snapshot(snapshotId, snapshotName, resourceUuid, resourceType) {
     $.ajax({
         type: 'post',
-        url: '/SnapshotAction',
-        data: 'action=create&snapshotId=' + snapshotId + '&snapshotName='
-            + snapshotName + '&resourceUuid=' + resourceUuid + '&resourceType=' + resourceType,
+        url: '/SnapshotAction/create',
+        data: {snapshotId:snapshotId,snapshotName:snapshotName,resourceUuid:resourceUuid,resourceType:resourceType},
         dataType: 'json',
         success: function (obj) {
-            if (obj.isSuccess) {
+            if (obj!=null && obj.isSuccess) {
                 var thistd = $("#tablebody").find('[rowid="' + resourceUuid + '"]').find('[name="backuptime"]');
                 thistd.text(decodeURI(obj.backupDate));
             }
