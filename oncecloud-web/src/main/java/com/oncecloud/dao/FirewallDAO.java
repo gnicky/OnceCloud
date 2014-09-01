@@ -45,7 +45,7 @@ public class FirewallDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			Firewall firewall = new Firewall(firewallId, firewallName,
 					firewallUID, createDate, 1, 0);
@@ -69,7 +69,7 @@ public class FirewallDAO {
 			Integer rulePriority, String ruleProtocol, Integer ruleStartPort,
 			Integer ruleEndPort, Integer ruleState, String ruleIp,
 			String ruleFirewall) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		Rule rule = new Rule(ruleId, ruleName, rulePriority, ruleProtocol,
 				ruleStartPort, ruleEndPort, ruleState, ruleIp, ruleFirewall);
@@ -81,7 +81,7 @@ public class FirewallDAO {
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getOnePageFirewallList(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "from Firewall where firewallUID=" + uid
@@ -96,7 +96,7 @@ public class FirewallDAO {
 	}
 
 	public int countAllFirewallList(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) from Firewall where firewallUID=" + uid
 				+ " and firewallName like '%" + search + "%'";
@@ -107,7 +107,7 @@ public class FirewallDAO {
 	}
 
 	public void updateConfirm(String firewallId, int isConfirm) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "update Firewall set isConfirm=:confirm where firewallId=:id";
 		Query query = session.createQuery(queryString);
@@ -121,7 +121,7 @@ public class FirewallDAO {
 	@SuppressWarnings("unchecked")
 	public List<Rule> getOnePageRuleList(int page, int limit, String search,
 			String firewallId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "from Rule where ruleFirewall='" + firewallId
@@ -135,7 +135,7 @@ public class FirewallDAO {
 	}
 
 	public int countAllRuleList(String search, String firewallId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) from Rule where ruleFirewall='"
 				+ firewallId + "' and ruleName like '%" + search
@@ -148,7 +148,7 @@ public class FirewallDAO {
 
 	@SuppressWarnings("unchecked")
 	public Firewall getFirewall(String firewallId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "from Firewall where firewallId='" + firewallId + "'";
 		Query query = session.createQuery(queryString);
@@ -161,7 +161,7 @@ public class FirewallDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "delete Rule where ruleId= :ruleId";
 			Query query = session.createQuery(queryString);
@@ -181,7 +181,7 @@ public class FirewallDAO {
 	}
 
 	public void deleteAllRuleOfFirewall(String firewallId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "delete Rule where ruleFirewall=:id";
 		Query query = session.createQuery(queryString);
@@ -192,7 +192,7 @@ public class FirewallDAO {
 	}
 
 	public void updateRuleState(String ruleId, int state) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "update Rule set ruleState=:state where ruleId=:id";
 		Query query = session.createQuery(queryString);
@@ -208,7 +208,7 @@ public class FirewallDAO {
 		List<Object> rsList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("firewallId", firewallId);
@@ -240,7 +240,7 @@ public class FirewallDAO {
 		List<Rule> ruleList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Rule where ruleFirewall= :firewallId and ruleState = 1 order by rulePriority";
 			Query query = session.createQuery(queryString);
 			query.setString("firewallId", firewallId);
@@ -259,7 +259,7 @@ public class FirewallDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "delete Firewall where firewallId=:id";
 			Query query = session.createQuery(queryString);
@@ -282,7 +282,7 @@ public class FirewallDAO {
 
 	@SuppressWarnings("unchecked")
 	public Rule getRule(String ruleId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "from Rule where ruleId='" + ruleId + "'";
 		Query query = session.createQuery(queryString);
@@ -292,7 +292,7 @@ public class FirewallDAO {
 	}
 
 	public int getRuleSize(String firewallId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) from Rule where ruleFirewall='"
 				+ firewallId + "'";
@@ -330,7 +330,7 @@ public class FirewallDAO {
 		Firewall firewall = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Firewall where firewallUID = :userId and isDefault = 1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
@@ -351,7 +351,7 @@ public class FirewallDAO {
 		JSONObject jo = new JSONObject();
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select firewallId, firewallName from Firewall where firewallUID=:userid order by isDefault desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userid", userId);
@@ -390,7 +390,7 @@ public class FirewallDAO {
 		List<Firewall> list = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Firewall where firewallUID=" + uid
 					+ " order by isDefault desc";
 			Query query = session.createQuery(queryString);

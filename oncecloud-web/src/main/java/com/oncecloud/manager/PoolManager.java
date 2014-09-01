@@ -350,7 +350,7 @@ public class PoolManager {
 			Session session = null;
 			Transaction tx = null;
 			try {
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				for (SimpleRecord sr : srList) {
 					String uuid = sr.getUuid();

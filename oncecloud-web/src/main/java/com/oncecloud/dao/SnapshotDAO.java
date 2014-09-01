@@ -54,7 +54,7 @@ public class SnapshotDAO {
 		List<Object> vmSnapshotList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
 					+ "from Snapshot ss, OCVM ov where ss.snapshotVm = ov.vmUuid "
@@ -93,7 +93,7 @@ public class SnapshotDAO {
 		List<Object> volumeSnapshotList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
 					+ "from Snapshot ss, Volume ol where ss.snapshotVolume=ol.volumeUuid "
@@ -118,7 +118,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public Object getOneVmSnapshot(String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
 				+ "from Snapshot ss, OCVM ov "
@@ -134,7 +134,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public Object getOneVolumeSnapshot(String volumeUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
 				+ "from Snapshot ss, Volume ol "
@@ -150,7 +150,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean ifNewChain(String uuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "from Snapshot where snapshotVm=:uuid or snapshotVolume=:uuid";
 		Query query = session.createQuery(queryString);
@@ -175,7 +175,7 @@ public class SnapshotDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString1 = "select count(distinct ss.snapshotVm) "
 					+ "from Snapshot ss where ss.snapshotVm in "
 					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
@@ -214,7 +214,7 @@ public class SnapshotDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString1 = "select count(distinct ss.snapshotVm) "
 					+ "from Snapshot ss where ss.snapshotVm in "
 					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
@@ -241,7 +241,7 @@ public class SnapshotDAO {
 		try {
 			Snapshot snapshot = new Snapshot(snapshotId, snapshotName,
 					snapshotSize, backupDate, snapshotVm, snapshotVolume);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(snapshot);
 			if (newChain) {
@@ -266,7 +266,7 @@ public class SnapshotDAO {
 		Snapshot ss = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Snapshot where snapshotId = :snapshotId";
 			Query query = session.createQuery(queryString);
 			query.setString("snapshotId", snapshotId);
@@ -295,7 +295,7 @@ public class SnapshotDAO {
 		Transaction tx = null;
 		try {
 			if (ss != null) {
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.delete(ss);
 				if (nsize == 1) {
@@ -320,7 +320,7 @@ public class SnapshotDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "delete from Snapshot where snapshotVm= '"
 					+ vmUuid + "'";
@@ -345,7 +345,7 @@ public class SnapshotDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "delete from Snapshot where snapshotVolume= '"
 					+ volumeUuid + "'";
@@ -367,7 +367,7 @@ public class SnapshotDAO {
 	}
 
 	public Date getRecentVmSnapshotDate(String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select max(ss.backupDate) " + "from Snapshot ss "
 				+ "group by ss.snapshotVm " + "having ss.snapshotVm='" + vmUuid
@@ -383,7 +383,7 @@ public class SnapshotDAO {
 	}
 
 	public Date getRecentVolumeSnapshotDate(String volumeUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select max(ss.backupDate) " + "from Snapshot ss "
 				+ "group by ss.snapshotVolume " + "having ss.snapshotVolume='"
@@ -400,7 +400,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Snapshot> getVmSnapshotList(String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Snapshot where snapshotVm = '" + vmUuid
 				+ "' order by backupDate desc";
 		Query query = session.createQuery(queryString);
@@ -411,7 +411,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Snapshot> getVolumeSnapshotList(String volumeUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Snapshot where snapshotVolume = '"
 				+ volumeUuid + "' order by backupDate desc";
 		Query query = session.createQuery(queryString);
@@ -422,7 +422,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public int getVmSnapshotSize(String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVm=:uuid";
 		Query query = session.createQuery(queryString);
 		query.setString("uuid", vmUuid);
@@ -437,7 +437,7 @@ public class SnapshotDAO {
 
 	@SuppressWarnings("unchecked")
 	public int getVolumeSnapshotSize(String volumeUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVolume=:uuid";
 		Query query = session.createQuery(queryString);
 		query.setString("uuid", volumeUuid);

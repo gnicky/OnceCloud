@@ -29,7 +29,7 @@ public class SwitchDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Switch> getSwitchOfRack(String rackid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Switch where swState = 1 and rackUuid ='"
 				+ rackid + "' order by createDate desc";
 		Query query = session.createQuery(queryString);
@@ -40,7 +40,7 @@ public class SwitchDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Switch> getSwitch(String switchid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Switch where swState = 1 and swUuid ='"
 				+ switchid + "' order by createDate desc";
 		Query query = session.createQuery(queryString);

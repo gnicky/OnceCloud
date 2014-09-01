@@ -42,7 +42,7 @@ public class RackDAO {
 
 	@SuppressWarnings("unchecked")
 	public Rack getRack(String rackUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Rack rack = null;
 		Query query = session.createQuery("from Rack where rackUuid = '"
 				+ rackUuid + "'");
@@ -65,7 +65,7 @@ public class RackDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(rack);
 			this.getOverViewDAO()
@@ -87,7 +87,7 @@ public class RackDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Rack> getOnePageRackList(int page, int limit, String search) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "from Rack where rackName like '%" + search
 				+ "%' and rackStatus = 1 order by createDate desc";
@@ -100,7 +100,7 @@ public class RackDAO {
 	}
 
 	public int countAllRackList(String search) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select count(*) from Rack where rackName like '%"
 				+ search + "%' and rackStatus = 1";
 		Query query = session.createQuery(queryString);
@@ -115,7 +115,7 @@ public class RackDAO {
 			Session session = null;
 			Transaction tx = null;
 			try {
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(delRack);
 				String queryString = "update OCHost set rackUuid= null where rackUuid = :rackId";
@@ -146,7 +146,7 @@ public class RackDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<Rack> getAllPageRackList() {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Rack where rackStatus = 1 order by createDate desc";
 		Query query = session.createQuery(queryString);
 		List<Rack> rackList = query.list();
@@ -159,7 +159,7 @@ public class RackDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Rack set dcUuid =:dcId where rackUuid=:rackId";
 			Query query = session.createQuery(queryString);
@@ -189,7 +189,7 @@ public class RackDAO {
 			Rack rack = this.getRack(rackId);
 			if (rack != null) {
 				rack.setDcUuid(null);
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(rack);
 				tx.commit();
@@ -213,7 +213,7 @@ public class RackDAO {
 		List<Rack> rackList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Rack where dcUuid = :dcUuid and rackStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("dcUuid", dcUuid);
@@ -232,7 +232,7 @@ public class RackDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update Rack set rackName=:name,rackDesc=:desc,dcUuid =:dcId where rackUuid=:rackId";
 			Query query = session.createQuery(queryString);

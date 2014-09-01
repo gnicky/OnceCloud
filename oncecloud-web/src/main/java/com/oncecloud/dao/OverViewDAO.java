@@ -25,7 +25,7 @@ public class OverViewDAO {
 		OverView overView = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session.createQuery("from OverView");
 			overView = (OverView)query.list().get(0);
 		} catch (Exception e) {

@@ -48,7 +48,7 @@ public class QADAO {
 		Session session = null;
 		List<QA> qaList = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = null;
 			String queryStr = "from QA where qaTitle like '%" + search
 					+ "%' and qaUID = " + qaUID
@@ -77,7 +77,7 @@ public class QADAO {
 		Session session = null;
 		List<Object> qaList = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = null;
 			query = session
 					.createQuery("select user.userName, qa.qaContent, qa.qaStatus, qa.qaTime from QA qa, User user where qa.qaUID = user.userId and qa.qaTid = :qaTid");
@@ -106,7 +106,7 @@ public class QADAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(question);
 			tx.commit();
@@ -138,7 +138,7 @@ public class QADAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(question);
 			session.update(target);
@@ -162,7 +162,7 @@ public class QADAO {
 		int result = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = null;
 			String queryStr = "select count(*) from QA where qaTitle like '%"
 					+ search + "%' and qaUID = " + qaUID + " and qaStatus < 2";
@@ -187,7 +187,7 @@ public class QADAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			Query query = null;
 			query = session.createQuery("from QA where qaId = :qaId");
@@ -213,7 +213,7 @@ public class QADAO {
 		Transaction tx = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			Query query = session
 					.createQuery("update QA qa set qa.qaStatus = 0 where qa.qaId = :qaId");

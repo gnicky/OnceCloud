@@ -29,7 +29,7 @@ public class ServerPortDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<ServerPort> getServerPortOfSwPort(String serverPortid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from ServerPort where serverportUuid ='"
 				+ serverPortid + "'";
 		Query query = session.createQuery(queryString);

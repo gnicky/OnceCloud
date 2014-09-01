@@ -30,7 +30,7 @@ public class PositionDAO {
 
 	@SuppressWarnings("unchecked")
 	public Position getPosition(String keyid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from Position where objectUuid ='" + keyid + "'";
 		Query query = session.createQuery(queryString);
 		List<Position> positionList = query.list();
@@ -45,7 +45,7 @@ public class PositionDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(position);
 			tx.commit();

@@ -29,7 +29,7 @@ public class SwPortDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<SwPort> getSwPortOfVlan(String vlanid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from SwPort where vlanUuid ='" + vlanid + "'";
 		Query query = session.createQuery(queryString);
 		List<SwPort> vlanList = query.list();

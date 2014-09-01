@@ -90,7 +90,7 @@ public class UserDAO {
 		List<User> userList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from User where userName like :search and userId != 1 and userStatus = 1 order by userDate desc";
 			Query query = session.createQuery(queryString);
@@ -118,7 +118,7 @@ public class UserDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from User where userName like :search and userId != 1 and userStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
@@ -135,7 +135,7 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public User getUser(String userName) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		User user = null;
 		Query query = session.createQuery("from User where userName = '"
 				+ userName + "'");
@@ -149,7 +149,7 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public User getUser(int userId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		User user = null;
 		Query query = session.createQuery("from User where userId = :userId");
 		query.setInteger("userId", userId);
@@ -169,7 +169,7 @@ public class UserDAO {
 			Session session = null;
 			Transaction tx = null;
 			try {
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(delUser);
 				tx.commit();
@@ -205,7 +205,7 @@ public class UserDAO {
 			user.setUserBalance(0.0);
 			String allocatePool = this.getPoolDAO().getRandomPool();
 			user.setUserAllocate(allocatePool);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(user);
 			int userId = user.getUserId();
@@ -226,7 +226,7 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public void updatePwd(String userName, String newPwd) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery("from User where userName = '"
 				+ userName + "'");
@@ -247,7 +247,7 @@ public class UserDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			User user = this.getUser(userId);
 			if (user.getUserLevel() == 2) {
@@ -275,7 +275,7 @@ public class UserDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			User user = this.getUser(userId);
 			if (user.getUserLevel() == 1) {
@@ -306,7 +306,7 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean denyVoucher(int userid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery("from User where userId = '" + userid
 				+ "'");
@@ -335,7 +335,7 @@ public class UserDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			Query query = session
 					.createQuery("update User set userName=:name, userMail=:mail,userPhone=:phone,userCompany=:com,userLevel=:level where userId =:id");
@@ -364,7 +364,7 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean updateBalance(int userid, int bill) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery("from User where userId = '" + userid
 				+ "'");
@@ -388,7 +388,7 @@ public class UserDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<User> getCompanyUserList(String searchStr) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from User where userName like '%"
 				+ searchStr
 				+ "%' and userLevel != 0 and userStatus = 1 order by userDate desc";

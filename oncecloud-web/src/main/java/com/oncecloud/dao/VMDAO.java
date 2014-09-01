@@ -71,7 +71,7 @@ public class VMDAO {
 		OCVM vm = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from OCVM where vmUuid = :vmUuid");
 			query.setString("vmUuid", vmUuid);
@@ -90,7 +90,7 @@ public class VMDAO {
 		OCVM vm = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from OCVM where vmUuid = :vmUuid and vmStatus = 1");
 			query.setString("vmUuid", vmUuid);
@@ -109,7 +109,7 @@ public class VMDAO {
 		long size = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("select count(*) from OCVM where vmUID = "
 							+ userId + " and vmStatus = 1");
@@ -127,7 +127,7 @@ public class VMDAO {
 
 	@SuppressWarnings("unchecked")
 	public boolean isExist(String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Query query = session.createQuery("from OCVM where vmUuid = '" + vmUuid
 				+ "' and vmStatus=1");
 		List<OCVM> vmList = query.list();
@@ -146,7 +146,7 @@ public class VMDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Query query = session
 				.createQuery("from OCVM where alarmUuid =:alarmUuid and vmStatus=1");
 		List<OCVM> vmList = query.list();
@@ -166,7 +166,7 @@ public class VMDAO {
 		Session session = null;
 		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			OCVM vm = new OCVM(vmUuid, vmPWD, vmUID, vmName, vmPlatform, vmMac,
 					vmMem, vmCpu, vmPower, vmStatus, createDate);
 			tx = session.beginTransaction();
@@ -201,7 +201,7 @@ public class VMDAO {
 			vm.setHostUuid(hostUuid);
 			vm.setVmIP(ip);
 			vm.setVmFirewall(firewallId);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(vm);
 			tx.commit();
@@ -234,7 +234,7 @@ public class VMDAO {
 		List<OCVM> vmList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from OCVM where vmUID = :userId and vmName like :search and vmStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -259,7 +259,7 @@ public class VMDAO {
 		List<OCVM> vmList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			Criteria criteria = session.createCriteria(OCVM.class);
 			criteria.add(Restrictions.ne("vmStatus", 0));
@@ -296,7 +296,7 @@ public class VMDAO {
 		List<OCVM> vmList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from OCVM where vmUID =:vmUID and vmName like '%"
 					+ search
@@ -327,7 +327,7 @@ public class VMDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from OCVM where vmUID = :userId and vmName like :search and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
@@ -347,7 +347,7 @@ public class VMDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Criteria criteria = session.createCriteria(OCVM.class);
 			criteria.add(Restrictions.ne("vmStatus", 0));
 			if (!host.equals("all")) {
@@ -372,7 +372,7 @@ public class VMDAO {
 		int count = -1;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from OCVM where vmVlan = :vnetUuid and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("vnetUuid", vnetUuid);
@@ -397,7 +397,7 @@ public class VMDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from OCVM where vmUID =:vmUID and vmName like '%"
 					+ search + "%' and vmStatus = 1 and alarmUuid is null";
 			Query query = session.createQuery(queryString);
@@ -414,7 +414,7 @@ public class VMDAO {
 	}
 
 	public void updateBackupDate(String vmuuid, Date date) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "update OCVM set backupDate=:date where vmUuid='"
 				+ vmuuid + "'";
@@ -431,7 +431,7 @@ public class VMDAO {
 		try {
 			OCVM toDelete = this.getVM(vmUuid);
 			toDelete.setVmStatus(0);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
 			this.getQuotaDAO().updateQuotaField(session, userId, "quotaVM", 1,
@@ -451,7 +451,7 @@ public class VMDAO {
 
 	@SuppressWarnings("unchecked")
 	public int getVmPowerState(String vmuuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select vmPower from OCVM where vmUuid='" + vmuuid
 				+ "'";
 		Query query = session.createQuery(queryString);
@@ -462,7 +462,7 @@ public class VMDAO {
 
 	@SuppressWarnings("unchecked")
 	public String getVmName(String vmuuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select vmName from OCVM where vmUuid='" + vmuuid
 				+ "'";
 		Query query = session.createQuery(queryString);
@@ -474,7 +474,7 @@ public class VMDAO {
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
 			String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "";
 		queryString = "select vm from OCVM vm where vm.vmUID=" + uid
@@ -491,7 +491,7 @@ public class VMDAO {
 	}
 
 	public int countVMsWithoutEIP(String search, int uid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) from OCVM vm where vm.vmUID=" + uid
 				+ " and vm.vmName like '%" + search
@@ -506,7 +506,7 @@ public class VMDAO {
 
 	@SuppressWarnings("unchecked")
 	public String getVmIp(String vmUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select vmIP from OCVM where vmUuid='" + vmUuid
 				+ "'";
 		Query query = session.createQuery(queryString);
@@ -515,7 +515,7 @@ public class VMDAO {
 	}
 
 	public void updateVMIP(String vmuuid, String ip) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "update OCVM set vmIP='" + ip
 				+ "' where vmUuid ='" + vmuuid + "'";
@@ -526,7 +526,7 @@ public class VMDAO {
 	}
 
 	public void emptyVMEipIp(String vmuuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "update EIP set eipDependency=null where eipDependency ='"
 				+ vmuuid + "'";
@@ -537,7 +537,7 @@ public class VMDAO {
 	}
 
 	public void updateFirewall(String vmuuid, String firewallId) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		Transaction tx = session.beginTransaction();
 		String queryString = "update OCVM set vmFirewall=:fid where vmUuid ='"
 				+ vmuuid + "'";
@@ -551,7 +551,7 @@ public class VMDAO {
 	public void updateName(String uuid, String newName, String description) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Transaction tx = session.beginTransaction();
 			String queryString = "update OCVM set vmName=:name,vmDesc=:desc where vmUuid=:uuid";
 			Query query = session.createQuery(queryString);
@@ -576,7 +576,7 @@ public class VMDAO {
 		Transaction tx = null;
 		try {
 			vm.setVmPower(powerStatus);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(vm);
 			tx.commit();
@@ -594,7 +594,7 @@ public class VMDAO {
 		Transaction tx = null;
 		try {
 			vm.setHostUuid(hostUuid);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(vm);
 			tx.commit();
@@ -614,7 +614,7 @@ public class VMDAO {
 			if (vm != null) {
 				if (hostUuid.equals(vm.getHostUuid())) {
 					vm.setVmStatus(0);
-					session = this.getSessionHelper().openMainSession();
+					session = this.getSessionHelper().getMainSession();
 					tx = session.beginTransaction();
 					session.update(vm);
 					tx.commit();
@@ -640,7 +640,7 @@ public class VMDAO {
 	}
 
 	public int countByHost(String hostUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "";
 		queryString = "select count(*) from OCVM where vmStatus!=0 and hostUuid='"
 				+ hostUuid + "'";
@@ -655,7 +655,7 @@ public class VMDAO {
 		List<Object[]> vmList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select vmUuid,vmName,vmIP from OCVM where vmUID = "
 					+ userId + " and vmStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -676,7 +676,7 @@ public class VMDAO {
 		JSONArray vmList = new JSONArray();
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int count = countVMWithoutVnet(session, userId);
 			vmList.put(count);
 			int startPos = (page - 1) * limit;
@@ -723,7 +723,7 @@ public class VMDAO {
 		Transaction tx = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCVM set vmIP=null, vmVlan=null where vmUuid ='"
 					+ vmuuid + "'";
@@ -747,7 +747,7 @@ public class VMDAO {
 		Transaction tx = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCVM set vmIP=null, vmVlan=:vnetid where vmUuid =:vmid";
 			Query query = session.createQuery(queryString);
@@ -774,7 +774,7 @@ public class VMDAO {
 		Transaction tx = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCVM set vmIP=:ip, vmVlan=null where vmUuid =:vmid";
 			Query query = session.createQuery(queryString);
@@ -801,7 +801,7 @@ public class VMDAO {
 		List<OCVM> list = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCVM where vmVlan= :vmVlan and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("vmVlan", vmVlan);
@@ -827,7 +827,7 @@ public class VMDAO {
 		Transaction tx = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCVM set alarmUuid=:alarmUuid where vmUuid =:vmid";
 			Query query = session.createQuery(queryString);
@@ -860,7 +860,7 @@ public class VMDAO {
 		List<OCVM> vmList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCVM where vmUID =:vmUID and vmStatus = 1 and alarmUuid =:alarmUuid order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("vmUID", vmUID);
@@ -881,7 +881,7 @@ public class VMDAO {
 		List<OCVM> vmList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCVM where vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			vmList = query.list();
@@ -911,7 +911,7 @@ public class VMDAO {
 		Transaction tx = null;
 		try {
 			OCVM vm = this.getVM(vmUuid);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			vm.setHostUuid(hostUuid);
 			vm.setVmStatus(1);

@@ -57,11 +57,11 @@ public final class SessionHelper {
 				.buildSessionFactory(mainServiceRegistry));
 	}
 
-	public Session openMainSession() {
-		return this.getMainSessionFactory().openSession();
+	public Session getMainSession() {
+		return this.getMainSessionFactory().getCurrentSession();
 	}
 
-	public Session openPerformaceSession() {
-		return this.getPerformanceSessionFactory().openSession();
+	public Session getPerformaceSession() {
+		return this.getPerformanceSessionFactory().getCurrentSession();
 	}
 }

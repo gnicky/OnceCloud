@@ -38,7 +38,7 @@ public class PoolDAO {
 
 	@SuppressWarnings("unchecked")
 	public OCPool getPool(String poolUuid) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		OCPool pool = null;
 		Query query = session.createQuery("from OCPool where poolUuid = '"
 				+ poolUuid + "'");
@@ -61,7 +61,7 @@ public class PoolDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(pool);
 			this.getOverViewDAO()
@@ -83,7 +83,7 @@ public class PoolDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getOnePagePoolList(int page, int limit, String search) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		int startPos = (page - 1) * limit;
 		String queryString = "from OCPool where poolName like '%" + search
 				+ "%' and poolStatus = 1 order by createDate desc";
@@ -97,7 +97,7 @@ public class PoolDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getPoolList() {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "from OCPool where poolStatus = 1 order by createDate desc";
 		Query query = session.createQuery(queryString);
 		List<OCPool> poolList = query.list();
@@ -106,7 +106,7 @@ public class PoolDAO {
 	}
 
 	public int countAllPoolList(String search) {
-		Session session = this.getSessionHelper().openMainSession();
+		Session session = this.getSessionHelper().getMainSession();
 		String queryString = "select count(*) from OCPool where poolName like '%"
 				+ search + "%' and poolStatus = 1";
 		Query query = session.createQuery(queryString);
@@ -121,7 +121,7 @@ public class PoolDAO {
 			Session session = null;
 			Transaction tx = null;
 			try {
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(delPool);
 				this.getOverViewDAO().updateOverViewfield(session, "viewPool",
@@ -148,7 +148,7 @@ public class PoolDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCPool set dcUuid =:dcUuid where poolUuid=:poolid";
 			Query query = session.createQuery(queryString);
@@ -179,7 +179,7 @@ public class PoolDAO {
 			OCPool pool = this.getPool(poolId);
 			if (pool != null) {
 				pool.setDcUuid(null);
-				session = this.getSessionHelper().openMainSession();
+				session = this.getSessionHelper().getMainSession();
 				tx = session.beginTransaction();
 				session.update(pool);
 				tx.commit();
@@ -203,7 +203,7 @@ public class PoolDAO {
 		List<OCPool> pooList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCPool where podUuid = :podUuid and poolStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("podUuid", rackUuid);
@@ -221,7 +221,7 @@ public class PoolDAO {
 		String pool = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCPool where poolStatus = 1 order by rand()";
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(0);
@@ -243,7 +243,7 @@ public class PoolDAO {
 		List<OCPool> pooList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from OCPool where dcUuid = :dcUuid and poolStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("dcUuid", dcid);
@@ -262,7 +262,7 @@ public class PoolDAO {
 		Session session = null;
 		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			String queryString = "update OCPool set poolName =:poolName, poolDesc=:poolDesc,dcUuid=:dcuuid where poolUuid=:poolId";
 			Query query = session.createQuery(queryString);

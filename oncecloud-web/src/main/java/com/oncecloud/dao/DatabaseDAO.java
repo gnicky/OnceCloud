@@ -3,13 +3,17 @@ package com.oncecloud.dao;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.Database;
+import com.oncecloud.entity.EIP;
 import com.oncecloud.helper.SessionHelper;
 
 /**
@@ -30,62 +34,61 @@ public class DatabaseDAO {
 	}
 
 	public Database getDatabase(String dbUuid) {
-		Database db = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "from Database where databaseUuid = :dbUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("dbUuid", dbUuid);
-			db = (Database) query.list().get(0);
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Database.class).add(
+					Restrictions.eq("databaseUuid", dbUuid));
+			Database database = (Database) criteria.uniqueResult();
+			session.getTransaction().commit();
+			return database;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return db;
 	}
 
 	public Database getAliveDatabase(String dbUuid) {
-		Database db = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "from Database where databaseUuid = :dbUuid and databaseStatus = 1";
-			Query query = session.createQuery(queryString);
-			query.setString("dbUuid", dbUuid);
-			db = (Database) query.list().get(0);
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUuid", dbUuid))
+					.add(Restrictions.eq("databaseStatus", 1));
+			Database database = (Database) criteria.uniqueResult();
+			session.getTransaction().commit();
+			return database;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return db;
 	}
 
-	@SuppressWarnings("unchecked")
 	public String getDBName(String dbUuid) {
 		Session session = null;
-		String result = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "select databaseName from Database where databaseUuid='"
-					+ dbUuid + "'";
-			Query query = session.createQuery(queryString);
-			List<String> list = query.list();
-			result = list.get(0);
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Database.class).add(
+					Restrictions.eq("databaseUuid", dbUuid));
+			Database database = (Database) criteria.uniqueResult();
+			session.getTransaction().commit();
+			return (database == null) ? null : database.getDatabaseName();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return result;
 	}
 
 	public boolean preCreateDatabase(String databaseUuid, String databaseName,
@@ -93,72 +96,57 @@ public class DatabaseDAO {
 			String databaseType, Integer databaseThroughout,
 			String databaseMac, String databaseIp, Integer databasePort,
 			Integer databasePower, Integer databaseStatus, Date createDate) {
-		Transaction tx = null;
 		Session session = null;
-		boolean result = false;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			Database db = new Database(databaseUuid, databaseName, databaseUID,
-					databaseUser, databasePwd, databaseType,
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = new Database(databaseUuid, databaseName,
+					databaseUID, databaseUser, databasePwd, databaseType,
 					databaseThroughout, databaseMac, databaseIp, databasePort,
 					databasePower, databaseStatus, createDate);
-			tx = session.beginTransaction();
-			session.save(db);
-			tx.commit();
-			result = true;
+			session.save(database);
+			session.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
-		return result;
 	}
 
 	public void updateDatabase(String databaseUuid, int power, String hostUuid) {
 		Session session = null;
-		Transaction tx = null;
 		try {
-			Database db = this.getDatabase(databaseUuid);
-			db.setDatabasePower(power);
-			db.setHostUuid(hostUuid);
-			session = this.getSessionHelper().openMainSession();
-			tx = session.beginTransaction();
-			session.update(db);
-			tx.commit();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = this.getDatabase(databaseUuid);
+			database.setDatabasePower(power);
+			database.setHostUuid(hostUuid);
+			session.update(database);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
 
 	public void removeDatabase(String databaseUuid) {
 		Session session = null;
-		Transaction tx = null;
 		try {
-			Database db = this.getDatabase(databaseUuid);
-			db.setDatabaseStatus(0);
-			session = this.getSessionHelper().openMainSession();
-			tx = session.beginTransaction();
-			session.update(db);
-			tx.commit();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = this.getDatabase(databaseUuid);
+			database.setDatabaseStatus(0);
+			session.update(database);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
@@ -166,147 +154,162 @@ public class DatabaseDAO {
 	@SuppressWarnings("unchecked")
 	public List<Database> getOnePageDatabaseList(int page, int limit,
 			String search, int uid) {
-		List<Database> dbList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Database where databaseUID = " + uid
-					+ " and databaseName like '%" + search
-					+ "%' and databaseStatus = 1 order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			dbList = query.list();
+			Criteria criteria = session
+					.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUID", uid))
+					.add(Restrictions.like("databaseName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.eq("databaseStatus", 1))
+					.addOrder(Order.desc("createDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
+			List<Database> list = criteria.list();
+			session.getTransaction().commit();
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return dbList;
 	}
 
 	public int countAllDatabaseList(String search, int uid) {
-		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Database where databaseUID = "
-					+ uid
-					+ " and databaseName like '%"
-					+ search
-					+ "%' and databaseStatus = 1";
-			Query query = session.createQuery(queryString);
-			count = ((Number) query.iterate().next()).intValue();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUID", uid))
+					.add(Restrictions.like("databaseName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.eq("databaseStatus", 1));
+			int total = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return 0;
 		}
-		return count;
 	}
 
 	public boolean setDBPowerStatus(String uuid, int powerStatus) {
-		boolean result = false;
-		Database db = this.getDatabase(uuid);
 		Session session = null;
-		Transaction tx = null;
 		try {
-			db.setDatabasePower(powerStatus);
-			session = this.getSessionHelper().openMainSession();
-			tx = session.beginTransaction();
-			session.update(db);
-			tx.commit();
-			result = true;
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = this.getDatabase(uuid);
+			database.setDatabasePower(powerStatus);
+			session.update(database);
+			session.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
 		}
-		return result;
 	}
 
 	public boolean setDBStatus(String uuid, int state) {
-		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Database set databaseStatus=" + state
-					+ " where databaseUuid ='" + uuid + "'";
-			Query query = session.createQuery(queryString);
-			query.executeUpdate();
-			tx.commit();
-			result = true;
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Database.class).add(
+					Restrictions.eq("databaseUuid", uuid));
+			Database database = (Database) criteria.uniqueResult();
+			database.setDatabaseStatus(state);
+			session.update(database);
+			session.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Database> getOnePageDatabasesWithoutEip(int page, int limit,
 			String searchStr, int uid) {
-		List<Database> databaseList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from Database where databaseUID = "
-					+ uid
-					+ " and databaseName like '%"
-					+ searchStr
-					+ "%' and databaseStatus <>0 and databaseUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			databaseList = query.list();
+			Criteria criteria = session
+					.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUID", uid))
+					.add(Restrictions.like("databaseName", searchStr,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.ne("databaseStatus", 0))
+					.add(Restrictions.not(Restrictions.in(
+							"databaseUuid",
+							session.createCriteria(EIP.class)
+									.add(Restrictions.eq("eipUID", uid))
+									.add(Restrictions
+											.isNotNull("eipDependency"))
+									.setProjection(
+											Projections
+													.property("eipDependency"))
+									.list()))).setFirstResult(startPos)
+					.setMaxResults(limit);
+			List<Database> list = criteria.list();
+			session.getTransaction().commit();
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return databaseList;
 	}
 
 	public int countDatabasesWithoutEIP(String search, int uid) {
-		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
-			String queryString = "select count(*) from Database where databaseUID= "
-					+ uid
-					+ " and databaseName like '%"
-					+ search
-					+ "%' and databaseStatus <> 0 and databaseUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
-			Query query = session.createQuery(queryString);
-			count = ((Number) query.iterate().next()).intValue();
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUID", uid))
+					.add(Restrictions.like("databaseName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.ne("databaseStatus", 0))
+					.add(Restrictions.not(Restrictions.in(
+							"databaseUuid",
+							session.createCriteria(EIP.class)
+									.add(Restrictions.eq("eipUID", uid))
+									.add(Restrictions
+											.isNotNull("eipDependency"))
+									.setProjection(
+											Projections
+													.property("eipDependency"))
+									.list())))
+					.setProjection(Projections.rowCount());
+			int total = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return 0;
 		}
-		return count;
 	}
 }

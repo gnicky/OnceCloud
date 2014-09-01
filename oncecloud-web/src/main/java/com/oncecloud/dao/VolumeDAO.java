@@ -55,7 +55,7 @@ public class VolumeDAO {
 		List<Volume> volumeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Volume where volumeUID = :userId and volumeName like :search and volumeStatus != 0  order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -85,7 +85,7 @@ public class VolumeDAO {
 		int count = 0;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select count(*) from Volume where volumeUID = :userId and volumeName like :search and volumeStatus != 0 ";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
@@ -111,7 +111,7 @@ public class VolumeDAO {
 		List<String> volumeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "select volumeUuid from Volume where volumeDependency = :vmUuid and volumeStatus = 4 order by  createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setString("vmUuid", vmUuid);
@@ -135,7 +135,7 @@ public class VolumeDAO {
 		try {
 			Volume volume = new Volume(volumeUuid, volumeName, volumeUID,
 					volumeSize, createDate, status);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(volume);
 			this.getQuotaDAO().updateQuotaField(session, volumeUID,
@@ -162,7 +162,7 @@ public class VolumeDAO {
 		Volume volume = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			Query query = session
 					.createQuery("from Volume where volumeUuid= :volumeUuid");
 			query.setString("volumeUuid", volumeUuid);
@@ -196,7 +196,7 @@ public class VolumeDAO {
 			Volume volume = this.getVolume(volumeUuid);
 			volume.setVolumeStatus(0);
 			int size = volume.getVolumeSize();
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(volume);
 			this.getQuotaDAO().updateQuotaField(session, userId, "quotaDiskN",
@@ -223,7 +223,7 @@ public class VolumeDAO {
 			Volume volume = this.getVolume(volumeUuid);
 			volume.setVolumeDependency(vmUuid);
 			volume.setVolumeStatus(VolumeStatus.STATUS_MOUNTED);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(volume);
 			tx.commit();
@@ -246,7 +246,7 @@ public class VolumeDAO {
 			Volume volume = this.getVolume(volumeUuid);
 			volume.setVolumeDependency(null);
 			volume.setVolumeStatus(VolumeStatus.STATUS_FREE);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(volume);
 			tx.commit();
@@ -268,7 +268,7 @@ public class VolumeDAO {
 		try {
 			Volume volume = this.getVolume(volumeUuid);
 			volume.setBackupDate(backupDate);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(volume);
 			tx.commit();
@@ -291,7 +291,7 @@ public class VolumeDAO {
 			Volume volume = this.getVolume(volumeUuid);
 			volume.setVolumeName(newName);
 			volume.setVolumeDescription(description);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(volume);
 			tx.commit();
@@ -312,7 +312,7 @@ public class VolumeDAO {
 		List<Volume> volumeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Volume where volumeUID=:userId and volumeDependency=null and volumeStatus=1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
@@ -332,7 +332,7 @@ public class VolumeDAO {
 		List<Volume> volumeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			String queryString = "from Volume where volumeDependency=:vmUuid and volumeStatus=4";
 			Query query = session.createQuery(queryString);
 			query.setString("vmUuid", vmUuid);
@@ -354,7 +354,7 @@ public class VolumeDAO {
 		try {
 			Volume volume = this.getVolume(volUuid);
 			volume.setVolumeStatus(status);
-			session = this.getSessionHelper().openMainSession();
+			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(volume);
 			tx.commit();

@@ -32,7 +32,7 @@ public class PerformanceDAO {
 		List<Cpu> cpuList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Cpu30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -52,7 +52,7 @@ public class PerformanceDAO {
 		List<Memory> memoryList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Memory30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -72,7 +72,7 @@ public class PerformanceDAO {
 		List<Pif> pifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Pif30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -92,7 +92,7 @@ public class PerformanceDAO {
 		List<Vif> vifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vif30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -112,7 +112,7 @@ public class PerformanceDAO {
 		List<Vbd> vbdList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vbd30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -132,7 +132,7 @@ public class PerformanceDAO {
 		List<Cpu> cpuList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Cpu6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -152,7 +152,7 @@ public class PerformanceDAO {
 		List<Memory> memoryList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Memory6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -172,7 +172,7 @@ public class PerformanceDAO {
 		List<Pif> pifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Pif6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -192,7 +192,7 @@ public class PerformanceDAO {
 		List<Vif> vifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vif6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -213,7 +213,7 @@ public class PerformanceDAO {
 		List<Vbd> vbdList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vbd6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -233,7 +233,7 @@ public class PerformanceDAO {
 		List<Cpu> cpuList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Cpu1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -253,7 +253,7 @@ public class PerformanceDAO {
 		List<Memory> memoryList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Memory1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -273,7 +273,7 @@ public class PerformanceDAO {
 		List<Pif> pifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Pif1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -293,7 +293,7 @@ public class PerformanceDAO {
 		List<Vif> vifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vif1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -313,7 +313,7 @@ public class PerformanceDAO {
 		List<Vbd> vbdList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vbd1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -333,7 +333,7 @@ public class PerformanceDAO {
 		List<Cpu> cpuList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Cpu2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -353,7 +353,7 @@ public class PerformanceDAO {
 		List<Memory> memoryList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Memory2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -373,7 +373,7 @@ public class PerformanceDAO {
 		List<Pif> pifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Pif2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -393,7 +393,7 @@ public class PerformanceDAO {
 		List<Vif> vifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vif2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -413,7 +413,7 @@ public class PerformanceDAO {
 		List<Vbd> vbdList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vbd2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -433,7 +433,7 @@ public class PerformanceDAO {
 		List<Cpu> cpuList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Cpu1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -453,7 +453,7 @@ public class PerformanceDAO {
 		List<Memory> memoryList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Memory1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -473,7 +473,7 @@ public class PerformanceDAO {
 		List<Pif> pifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Pif1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -493,7 +493,7 @@ public class PerformanceDAO {
 		List<Vif> vifList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vif1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -513,7 +513,7 @@ public class PerformanceDAO {
 		List<Vbd> vbdList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "from Vbd1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
@@ -533,7 +533,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Cpu";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -552,7 +552,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Cpu6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -571,7 +571,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Cpu1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -590,7 +590,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Cpu2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -609,7 +609,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Cpu1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -628,7 +628,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Memory";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -647,7 +647,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Memory6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -666,7 +666,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Memory1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -685,7 +685,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Memory2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -704,7 +704,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Memory1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -723,7 +723,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vbd";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -742,7 +742,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vbd6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -761,7 +761,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vbd1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -780,7 +780,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vbd2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -799,7 +799,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vbd1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -818,7 +818,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vif";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -837,7 +837,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vif6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -856,7 +856,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vif1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -875,7 +875,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vif2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -894,7 +894,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Vif1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -913,7 +913,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Pif";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -932,7 +932,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Pif6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -951,7 +951,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Pif1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -970,7 +970,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Pif2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
@@ -989,7 +989,7 @@ public class PerformanceDAO {
 		List<Long> timeList = null;
 		Session session = null;
 		try {
-			session = this.getSessionHelper().openPerformaceSession();
+			session = this.getSessionHelper().getPerformaceSession();
 			String queryString = "select distinct time from Pif1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
