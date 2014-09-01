@@ -68,8 +68,8 @@ public class RackDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(rack);
-			this.getOverViewDAO()
-					.updateOverViewfield(session, "viewRack", true);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewRack",
+					true);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null) {
@@ -126,8 +126,8 @@ public class RackDAO {
 				Query query2 = session.createQuery(queryString);
 				query2.setString("rackId", rackId);
 				query2.executeUpdate();
-				this.getOverViewDAO().updateOverViewfield(session, "viewRack",
-						false);
+				this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewRack", false);
 				tx.commit();
 				result = true;
 			} catch (Exception e) {
