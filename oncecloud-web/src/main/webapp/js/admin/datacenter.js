@@ -116,8 +116,8 @@ $('#tablebody').on('click', '.id', function (event) {
     var dcid = $(this).parent().parent().attr('dcid');
     $.ajax({
         type: 'get',
-        url: '/DatacenterAction',
-        data: {action: "detail", dcid: dcid},
+        url: '/DatacenterAction/Detail',
+        data: {dcid: dcid},
         dataType: 'text',
         success: function (response) {
             window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/detail/datacenterdetail.jsp";

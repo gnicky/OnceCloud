@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -38,6 +39,26 @@ public class LBAction {
 			return ja.toString();
 		} else {
 			return "";
+		}
+	}
+	
+	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
+	@ResponseBody
+	public void lbAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getLbManager().lbAdminShutUp(uuid, userId);
+		}
+	}
+
+	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
+	@ResponseBody
+	public void lbAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getLbManager().lbAdminShutDown(uuid, force, userId);
 		}
 	}
 }

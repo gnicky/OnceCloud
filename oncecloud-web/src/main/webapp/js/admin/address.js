@@ -215,8 +215,8 @@ $('#delete').on('click', function (event) {
 function deleteDHCP(ip, mac) {
     $.ajax({
         type: 'post',
-        url: '/AddressAction',
-        data: {action: "deleteDHCP", ip: ip, mac: mac},
+        url: '/AddressAction/DeleteDHCP',
+        data: {ip: ip, mac: mac},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {
@@ -233,8 +233,8 @@ function deleteDHCP(ip, mac) {
 function deleteEIP(ip, uuid) {
     $.ajax({
         type: 'post',
-        url: '/AddressAction',
-        data: {action: "deleleEIP", ip: ip, uuid: uuid},
+        url: '/AddressAction/DeleteEIP',
+        data: {ip: ip, uuid: uuid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {

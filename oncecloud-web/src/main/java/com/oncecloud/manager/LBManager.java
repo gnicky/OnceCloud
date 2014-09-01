@@ -18,6 +18,7 @@ import com.oncecloud.dao.BackendDAO;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.ForeendDAO;
+import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.LogDAO;
@@ -64,7 +65,8 @@ public class LBManager {
 	private EIPManager eipManager;
 	private VMManager vmManager;
 	private Constant constant;
-
+	private HostDAO hostDAO;
+	
 	private ImageDAO getImageDAO() {
 		return imageDAO;
 	}
@@ -180,6 +182,15 @@ public class LBManager {
 	@Autowired
 	private void setConstant(Constant constant) {
 		this.constant = constant;
+	}
+
+	public HostDAO getHostDAO() {
+		return hostDAO;
+	}
+
+	@Autowired
+	public void setHostDAO(HostDAO hostDAO) {
+		this.hostDAO = hostDAO;
 	}
 
 	public JSONObject createLB(String uuid, int userId, String name,
@@ -719,6 +730,12 @@ public class LBManager {
 		return jo;
 	}
 
+	public void lbAdminShutUp(String uuid, int userId) {
+		LB lb = this.getLbDAO().getLB(uuid);
+		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid()).getPoolUuid();
+		this.lbShutup(uuid, userId, poolUuid);
+	}
+	
 	public void lbShutup(String uuid, int userId, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.startLB(uuid, poolUuid);
@@ -750,6 +767,12 @@ public class LBManager {
 		}
 	}
 
+	public void lbAdminShutDown(String uuid, String force, int userId) {
+		LB lb = this.getLbDAO().getLB(uuid);
+		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid()).getPoolUuid();
+		this.lbShutdown(uuid, force, userId, poolUuid);
+	}
+	
 	public void lbShutdown(String uuid, String force, int userId,
 			String poolUuid) {
 		Date startTime = new Date();
