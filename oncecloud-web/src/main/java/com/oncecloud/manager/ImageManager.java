@@ -21,7 +21,6 @@ import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
@@ -31,6 +30,7 @@ import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -41,6 +41,7 @@ public class ImageManager {
 	private final static Logger logger = Logger.getLogger(ImageManager.class);
 
 	private SessionHelper sessionHelper;
+	private MessagePush messagePush;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -49,6 +50,15 @@ public class ImageManager {
 	@Autowired
 	private void setSessionHelper(SessionHelper sessionHelper) {
 		this.sessionHelper = sessionHelper;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	private HostManager hostManager;
@@ -204,7 +214,7 @@ public class ImageManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -212,7 +222,7 @@ public class ImageManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return result;
@@ -236,8 +246,8 @@ public class ImageManager {
 					.getPoolUuid();
 			this.getImageDAO().createImage(imageUuid, newName, uid,
 					fromVM.getVmPlatform(), poolUuid, desc, fromVM.getVmPWD());
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(uid, "quotaImage", 1,
-					true);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(uid, "quotaImage",
+					1, true);
 			tx.commit();
 			result.put("result", true);
 		} catch (Exception e) {
@@ -304,7 +314,7 @@ public class ImageManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -312,7 +322,7 @@ public class ImageManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -335,7 +345,7 @@ public class ImageManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -343,7 +353,7 @@ public class ImageManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;

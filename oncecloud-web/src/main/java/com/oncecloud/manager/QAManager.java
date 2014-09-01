@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.QADAO;
 import com.oncecloud.dao.UserDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.QA;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -22,6 +22,7 @@ import com.oncecloud.main.Utilities;
 public class QAManager {
 	private QADAO qaDAO;
 	private UserDAO userDAO;
+	private MessagePush messagePush;
 
 	private QADAO getQaDAO() {
 		return qaDAO;
@@ -39,6 +40,15 @@ public class QAManager {
 	@Autowired
 	private void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	/**
@@ -87,11 +97,11 @@ public class QAManager {
 		ja.put(jo);
 		// push message
 		if (result == true) {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("表单关闭成功"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("表单关闭成功"));
 		} else {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("表单关闭失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("表单关闭失败"));
 		}
 		return ja;
 	}
@@ -108,11 +118,11 @@ public class QAManager {
 			jo.put("qaSummary",
 					Utilities.encodeText(Utilities.getSummary(qaContent)));
 			jo.put("qaTime", Utilities.formatTime(qaTime));
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("表单提交成功"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("表单提交成功"));
 		} else {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("表单提交失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("表单提交失败"));
 		}
 		return jo;
 	}
@@ -128,11 +138,11 @@ public class QAManager {
 		if (qaId > 0) {
 			jo.put("qaContent", Utilities.encodeText(qaContent));
 			jo.put("qaTime", Utilities.formatTime(qaTime));
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("回复提交成功"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("回复提交成功"));
 		} else {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("回复提交失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("回复提交失败"));
 		}
 		ja.put(jo);
 		return ja;

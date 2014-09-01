@@ -19,7 +19,6 @@ import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
 import com.oncecloud.dao.SwitchDAO;
 import com.oncecloud.dao.VMDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.Datacenter;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
@@ -30,6 +29,7 @@ import com.oncecloud.entity.Storage;
 import com.oncecloud.entity.Switch;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 @Component
 public class DatacenterManager {
@@ -43,6 +43,7 @@ public class DatacenterManager {
 	private VMDAO vmDAO;
 	private RackDAO rackDAO;
 	private SwitchDAO switchDAO;
+	private MessagePush messagePush;
 
 	private DatacenterDAO getDatacenterDAO() {
 		return datacenterDAO;
@@ -134,6 +135,15 @@ public class DatacenterManager {
 		this.switchDAO = switchDAO;
 	}
 
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
+
 	public JSONArray createDatacenter(String dcName, String dcLocation,
 			String dcDesc, int userid) {
 		Date startTime = new Date();
@@ -160,7 +170,7 @@ public class DatacenterManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -168,7 +178,7 @@ public class DatacenterManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return qaArray;
@@ -230,7 +240,7 @@ public class DatacenterManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -238,7 +248,7 @@ public class DatacenterManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return qaArray;
@@ -246,6 +256,7 @@ public class DatacenterManager {
 
 	/**
 	 * 获取管理员全局视图
+	 * 
 	 * @return
 	 */
 	public JSONArray getOverview() {
@@ -274,11 +285,11 @@ public class DatacenterManager {
 		boolean result = this.getDatacenterDAO().updateDatacenter(dcUuid,
 				dcName, dcLocation, dcDesc);
 		if (result) {
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess("数据中心更新成功"));
 		} else {
-			MessagePush
-					.pushMessage(userid, Utilities.stickyToError("数据中心更新失败"));
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError("数据中心更新失败"));
 		}
 	}
 

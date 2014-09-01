@@ -27,7 +27,6 @@ import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VDIDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCLog;
@@ -38,6 +37,7 @@ import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author xpx hehai hty
@@ -65,11 +65,21 @@ public class RouterManager {
 	private QuotaDAO quotaDAO;
 	private FirewallDAO firewallDAO;
 	private HostDAO hostDAO;
+	private MessagePush messagePush;
 
 	private EIPManager eipManager;
 	private VMManager vmManager;
 
 	private Constant constant;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 
 	private ImageDAO getImageDAO() {
 		return imageDAO;
@@ -651,9 +661,10 @@ public class RouterManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.editRowStatus(userId, uuid, "running", "活跃");
-			MessagePush.editRowIP(userId, uuid, "基础网络", result.getString("ip"));
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().editRowIP(userId, uuid, "基础网络",
+					result.getString("ip"));
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			infoArray.put(Utilities.createLogInfo("原因",
@@ -663,18 +674,19 @@ public class RouterManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, uuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
 
 	public void routerAdminStartUp(String uuid, int userId) {
 		Router router = this.getRouterDAO().getRouter(uuid);
-		String poolUuid = this.getHostDAO().getHost(router.getHostUuid()).getPoolUuid();
+		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
+				.getPoolUuid();
 		this.routerStartUp(uuid, userId, poolUuid);
 	}
-	
+
 	public void routerStartUp(String uuid, int userId, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.startRouter(uuid, poolUuid);
@@ -686,32 +698,33 @@ public class RouterManager {
 				LogConstant.logObject.路由器.toString(),
 				"rt-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.路由器.ordinal(),
 					LogConstant.logAction.启动.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.路由器.ordinal(),
 					LogConstant.logAction.启动.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
 
 	public void routerAdminShutDown(String uuid, String force, int userId) {
 		Router router = this.getRouterDAO().getRouter(uuid);
-		String poolUuid = this.getHostDAO().getHost(router.getHostUuid()).getPoolUuid();
+		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
+				.getPoolUuid();
 		this.routerShutDown(poolUuid, force, userId, poolUuid);
 	}
-	
+
 	public void routerShutDown(String uuid, String force, int userId,
 			String poolUuid) {
 		Date startTime = new Date();
@@ -724,22 +737,22 @@ public class RouterManager {
 				LogConstant.logObject.路由器.toString(),
 				"rt-" + uuid.substring(0, 8)));
 		if (result == true) {
-			MessagePush.editRowStatus(userId, uuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.路由器.ordinal(),
 					LogConstant.logAction.关闭.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			MessagePush.editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.路由器.ordinal(),
 					LogConstant.logAction.关闭.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
@@ -760,8 +773,8 @@ public class RouterManager {
 					LogConstant.logAction.销毁.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.deleteRow(userId, uuid);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -769,7 +782,7 @@ public class RouterManager {
 					LogConstant.logAction.销毁.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 	}
