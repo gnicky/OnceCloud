@@ -30,28 +30,29 @@ public class ChargeDAO {
 	public ChargeRecord createChargeRecord(String recordId, Double recordBill,
 			Integer recordType, Date recordDate, Integer recordUID,
 			Integer state) {
+		ChargeRecord chargeRecord = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			ChargeRecord cr = new ChargeRecord(recordId, recordBill,
-					recordType, recordDate, recordUID);
-			cr.setRecordState(state);
-			session.save(cr);
+			chargeRecord = new ChargeRecord(recordId, recordBill, recordType,
+					recordDate, recordUID);
+			chargeRecord.setRecordState(state);
+			session.save(chargeRecord);
 			session.getTransaction().commit();
-			return cr;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return chargeRecord;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeRecord> getOnePageChargeRecord(int page, int limit,
 			int userid) {
+		List<ChargeRecord> chargeRecordList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -62,19 +63,19 @@ public class ChargeDAO {
 					.add(Restrictions.gt("recordState", 0))
 					.addOrder(Order.desc("recordDate"))
 					.setFirstResult(startPos).setMaxResults(limit);
-			List<ChargeRecord> list = criteria.list();
+			chargeRecordList = criteria.list();
 			session.getTransaction().commit();
-			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return chargeRecordList;
 	}
 
 	public int countChargeRecord(int userid) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -83,19 +84,19 @@ public class ChargeDAO {
 					.add(Restrictions.eq("recordUID", userid))
 					.add(Restrictions.gt("recordState", 0))
 					.setProjection(Projections.rowCount());
-			int total = ((Number) criteria.uniqueResult()).intValue();
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
 	public boolean updateChargeRecord(String recordId, Integer recordstate) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -106,34 +107,34 @@ public class ChargeDAO {
 			if (chargeRecord != null) {
 				chargeRecord.setRecordState(recordstate);
 				session.update(chargeRecord);
+				result = true;
 			}
 			session.getTransaction().commit();
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	public ChargeRecord getChargeRecord(String recordId) {
+		ChargeRecord chargeRecord = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(ChargeRecord.class).add(
 					Restrictions.eq("recordId", recordId));
-			ChargeRecord chargeRecord = (ChargeRecord) criteria.uniqueResult();
+			chargeRecord = (ChargeRecord) criteria.uniqueResult();
 			session.getTransaction().commit();
-			return chargeRecord;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return chargeRecord;
 	}
 }
