@@ -27,14 +27,27 @@ public class ServerPortDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
+	/**
+	 * 获取端口号
+	 * 
+	 * @param portId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<ServerPort> getServerPortOfSwPort(String serverPortid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from ServerPort where serverportUuid ='"
-				+ serverPortid + "'";
-		Query query = session.createQuery(queryString);
-		List<ServerPort> vlanList = query.list();
-		session.close();
+	public List<ServerPort> getServerPortOfSwPort(String portId) {
+		List<ServerPort> vlanList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from ServerPort where serverportUuid = :portId";
+			Query query = session.createQuery(queryString);
+			query.setString("portId", portId);
+			session.getTransaction().commit();
+			vlanList = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return vlanList;
 	}
 }
