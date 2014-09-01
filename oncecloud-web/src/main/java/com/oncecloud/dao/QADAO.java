@@ -156,7 +156,7 @@ public class QADAO {
 				}
 				query = session.createQuery(queryStr);
 				query.setString("search", "%" + search + "%");
-				count = ((Number) query.iterate().next()).intValue();
+				count = (Integer) query.uniqueResult();
 				session.getTransaction().commit();
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -39,7 +39,88 @@ public class SnapshotDAO {
 	}
 
 	/**
-	 * 获取主机快照列表
+	 * 获取快照
+	 * 
+	 * @param snapshotId
+	 * @return
+	 */
+	public Snapshot getSnapshot(String snapshotId) {
+		Snapshot ss = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			String queryString = "from Snapshot where snapshotId = :snapshotId";
+			Query query = session.createQuery(queryString);
+			query.setString("snapshotId", snapshotId);
+			ss = (Snapshot) query.uniqueResult();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return ss;
+	}
+
+	/**
+	 * 获取主机的备份链
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public Object getOneVmSnapshot(String vmUuid) {
+		Object object = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
+					+ "from Snapshot ss, OCVM ov "
+					+ "where ss.snapshotVm = ov.vmUuid "
+					+ "group by ss.snapshotVm, ov.vmName "
+					+ "having ss.snapshotVm = :vmuuid ";
+			Query query = session.createQuery(queryString);
+			query.setString("vmuuid", vmUuid);
+			object = query.list().get(0);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return object;
+	}
+
+	/**
+	 * 获取硬盘的备份链
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public Object getOneVolumeSnapshot(String volumeUuid) {
+		Object object = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
+					+ "from Snapshot ss, Volume ol "
+					+ "where ss.snapshotVolume=ol.volumeUuid "
+					+ "group by ss.snapshotVolume, ol.volumeName "
+					+ "having ss.snapshotVolume=:volumeuuid";
+			Query query = session.createQuery(queryString);
+			query.setString("volumeuuid", volumeUuid);
+			object = query.list().get(0);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return object;
+	}
+
+	/**
+	 * 获取一页主机备份链列表
 	 * 
 	 * @param page
 	 * @param limit
@@ -77,7 +158,7 @@ public class SnapshotDAO {
 	}
 
 	/**
-	 * 获取硬盘快照列表
+	 * 获取一页硬盘备份链列表
 	 * 
 	 * @param page
 	 * @param limit
@@ -115,109 +196,160 @@ public class SnapshotDAO {
 		return volumeSnapshotList;
 	}
 
-	public Object getOneVmSnapshot(String vmUuid) {
-		Object object = null;
+	/**
+	 * 获取虚拟机快照列表
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Snapshot> getVmSnapshotList(String vmUuid) {
+		List<Snapshot> snapshotList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
-					+ "from Snapshot ss, OCVM ov "
-					+ "where ss.snapshotVm = ov.vmUuid "
-					+ "group by ss.snapshotVm, ov.vmName "
-					+ "having ss.snapshotVm = :vmuuid ";
+			String queryString = "from Snapshot where snapshotVm = :vmUuid order by backupDate desc";
 			Query query = session.createQuery(queryString);
-			query.setString("vmuuid", vmUuid);
-			object = query.list().get(0);
+			query.setString("vmUuid", vmUuid);
+			snapshotList = query.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
-		return object;
-	}
-
-	public Object getOneVolumeSnapshot(String volumeUuid) {
-		Object object = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
-					+ "from Snapshot ss, Volume ol "
-					+ "where ss.snapshotVolume=ol.volumeUuid "
-					+ "group by ss.snapshotVolume, ol.volumeName "
-					+ "having ss.snapshotVolume=:volumeuuid";
-			Query query = session.createQuery(queryString);
-			query.setString("volumeuuid", volumeUuid);
-			object = query.list().get(0);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return object;
-	}
-
-	public boolean ifNewChain(String uuid) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "from Snapshot where snapshotVm = :uuid or snapshotVolume = :uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("uuid", uuid);
-			int size = query.list().size();
-			if (size == 0) {
-				result = true;
-			}
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
+		return snapshotList;
 	}
 
 	/**
-	 * 获取备份链总数
+	 * 获取硬盘快照列表
 	 * 
-	 * @param search
-	 * @param uid
+	 * @param volumeUuid
 	 * @return
 	 */
-	public int countAllSnapshotList(int userId, String search) {
-		int count = 0;
+	@SuppressWarnings("unchecked")
+	public List<Snapshot> getVolumeSnapshotList(String volumeUuid) {
+		List<Snapshot> snapshotList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString1 = "select count(distinct ss.snapshotVm) "
-					+ "from Snapshot ss where ss.snapshotVm in "
-					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
-					+ "and vm.vmName like :search')";
-			Query query1 = session.createQuery(queryString1);
-			query1.setInteger("userId", userId);
-			query1.setString("search", "%" + search + "%");
-			int vmCount = ((Number) query1.iterate().next()).intValue();
-			String queryString2 = "select count(distinct ss.snapshotVolume) "
-					+ "from Snapshot ss where ss.snapshotVolume in "
-					+ "(select v.volumeUuid from Volume v where v.volumeUID = :userId "
-					+ "and v.volumeName like :search')";
-			Query query2 = session.createQuery(queryString2);
-			query2.setInteger("userId", userId);
-			query2.setString("search", "%" + search + "%");
-			int volumeCount = ((Number) query2.iterate().next()).intValue();
-			count = vmCount + volumeCount;
+			String queryString = "from Snapshot where snapshotVolume = :volumeUuid order by backupDate desc";
+			Query query = session.createQuery(queryString);
+			query.setString("volumeUuid", volumeUuid);
+			snapshotList = query.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
-		return count;
+		return snapshotList;
+	}
+
+	/**
+	 * 获取最近的主机快照时间
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public Date getRecentVmSnapshotDate(String vmUuid) {
+		Date date = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select max(ss.backupDate) "
+					+ "from Snapshot ss group by ss.snapshotVm "
+					+ "having ss.snapshotVm = :vmUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("vmUuid", vmUuid);
+			date = (Date) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return date;
+	}
+
+	/**
+	 * 获取最近的硬盘快照时间
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public Date getRecentVolumeSnapshotDate(String volumeUuid) {
+		Date date = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select max(ss.backupDate) "
+					+ "from Snapshot ss group by ss.snapshotVolume "
+					+ "having ss.snapshotVolume = :volumeUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("volumeUuid", volumeUuid);
+			date = (Date) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return date;
+	}
+
+	/**
+	 * 获取主机快照数目
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public int getVmSnapshotSize(String vmUuid) {
+		int size = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVm = :vmUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("vmUuid", vmUuid);
+			size = (Integer) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return size;
+	}
+
+	/**
+	 * 获取硬盘快照数目
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public int getVolumeSnapshotSize(String volumeUuid) {
+		int size = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVolume = :volumeUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("volumeUuid", volumeUuid);
+			size = (Integer) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return size;
 	}
 
 	/**
@@ -240,7 +372,7 @@ public class SnapshotDAO {
 			Query query = session.createQuery(queryString1);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = (Integer) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
@@ -250,6 +382,83 @@ public class SnapshotDAO {
 		return count;
 	}
 
+	/**
+	 * 获取备份链总数
+	 * 
+	 * @param search
+	 * @param uid
+	 * @return
+	 */
+	public int countAllSnapshotList(int userId, String search) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString1 = "select count(distinct ss.snapshotVm) "
+					+ "from Snapshot ss where ss.snapshotVm in "
+					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
+					+ "and vm.vmName like :search')";
+			Query query1 = session.createQuery(queryString1);
+			query1.setInteger("userId", userId);
+			query1.setString("search", "%" + search + "%");
+			int vmCount = (Integer) query1.uniqueResult();
+			String queryString2 = "select count(distinct ss.snapshotVolume) "
+					+ "from Snapshot ss where ss.snapshotVolume in "
+					+ "(select v.volumeUuid from Volume v where v.volumeUID = :userId "
+					+ "and v.volumeName like :search')";
+			Query query2 = session.createQuery(queryString2);
+			query2.setInteger("userId", userId);
+			query2.setString("search", "%" + search + "%");
+			int volumeCount = (Integer) query2.uniqueResult();
+			count = vmCount + volumeCount;
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * 判断是否是新的备份链
+	 * 
+	 * @param uuid
+	 * @return
+	 */
+	public boolean ifNewChain(String uuid) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			String queryString = "from Snapshot where snapshotVm = :uuid or snapshotVolume = :uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("uuid", uuid);
+			int size = query.list().size();
+			if (size == 0) {
+				result = true;
+			}
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 创建新的快照
+	 * 
+	 * @param snapshotId
+	 * @param snapshotName
+	 * @param snapshotSize
+	 * @param backupDate
+	 * @param snapshotVm
+	 * @param snapshotVolume
+	 * @param newChain
+	 * @param userId
+	 */
 	public void insertSnapshot(String snapshotId, String snapshotName,
 			int snapshotSize, Date backupDate, String snapshotVm,
 			String snapshotVolume, boolean newChain, int userId) {
@@ -272,23 +481,12 @@ public class SnapshotDAO {
 		}
 	}
 
-	public Snapshot getSnapshot(String snapshotId) {
-		Snapshot ss = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "from Snapshot where snapshotId = :snapshotId";
-			Query query = session.createQuery(queryString);
-			query.setString("snapshotId", snapshotId);
-			ss = (Snapshot) query.uniqueResult();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return ss;
-	}
-
+	/**
+	 * 删除快照
+	 * 
+	 * @param userId
+	 * @param snapshotId
+	 */
 	public void deleteOneSnapshot(int userId, String snapshotId) {
 		Snapshot ss = this.getSnapshot(snapshotId);
 		if (ss != null) {
@@ -315,6 +513,12 @@ public class SnapshotDAO {
 		}
 	}
 
+	/**
+	 * 删除主机的全部快照
+	 * 
+	 * @param vmUuid
+	 * @param userId
+	 */
 	public void deleteVmSnapshot(String vmUuid, int userId) {
 		Session session = null;
 		try {
@@ -334,6 +538,12 @@ public class SnapshotDAO {
 		}
 	}
 
+	/**
+	 * 删除硬盘的全部快照
+	 * 
+	 * @param volumeUuid
+	 * @param userId
+	 */
 	public void deleteVolumeSnapshot(String volumeUuid, int userId) {
 		Session session = null;
 		try {
@@ -351,125 +561,5 @@ public class SnapshotDAO {
 				session.getTransaction().rollback();
 			}
 		}
-	}
-
-	public Date getRecentVmSnapshotDate(String vmUuid) {
-		Date date = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select max(ss.backupDate) "
-					+ "from Snapshot ss group by ss.snapshotVm "
-					+ "having ss.snapshotVm = :vmUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("vmUuid", vmUuid);
-			date = (Date) query.uniqueResult();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return date;
-	}
-
-	public Date getRecentVolumeSnapshotDate(String volumeUuid) {
-		Date date = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select max(ss.backupDate) "
-					+ "from Snapshot ss group by ss.snapshotVolume "
-					+ "having ss.snapshotVolume = :volumeUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("volumeUuid", volumeUuid);
-			date = (Date) query.uniqueResult();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return date;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Snapshot> getVmSnapshotList(String vmUuid) {
-		List<Snapshot> snapshotList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Snapshot where snapshotVm = :vmUuid order by backupDate desc";
-			Query query = session.createQuery(queryString);
-			query.setString("vmUuid", vmUuid);
-			snapshotList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return snapshotList;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Snapshot> getVolumeSnapshotList(String volumeUuid) {
-		List<Snapshot> snapshotList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Snapshot where snapshotVolume = :volumeUuid order by backupDate desc";
-			Query query = session.createQuery(queryString);
-			query.setString("volumeUuid", volumeUuid);
-			snapshotList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return snapshotList;
-	}
-
-	public int getVmSnapshotSize(String vmUuid) {
-		int size = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVm = :vmUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("vmUuid", vmUuid);
-			size = (Integer) query.uniqueResult();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return size;
-	}
-
-	public int getVolumeSnapshotSize(String volumeUuid) {
-		int size = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVolume = :volumeUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("volumeUuid", volumeUuid);
-			size = (Integer) query.uniqueResult();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return size;
 	}
 }

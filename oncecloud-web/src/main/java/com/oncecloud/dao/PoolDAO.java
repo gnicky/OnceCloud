@@ -187,7 +187,7 @@ public class PoolDAO {
 					"select count(*) from OCPool where ");
 			builder.append("poolName like :search and poolStatus = 1");
 			Query query = session.createQuery(builder.toString());
-			count = ((Number) query.iterate().next()).intValue();
+			count = (Integer) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
