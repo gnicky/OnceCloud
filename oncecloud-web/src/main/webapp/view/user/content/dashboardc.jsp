@@ -10,7 +10,7 @@
 			<div class="col-md-5 charge">
 				账户余额：<a class="charge-total" id="charge-total"></a>&nbsp;<span
 					class="unit" style="color: #daf07d">元</span> <a class="link"
-					href="${basePath}user/expensesummary.jsp">查看消费记录</a>
+					href="${basePath}expense/summary">查看消费记录</a>
 			</div>
 			<div class="col-md-4" style="padding-top: 29px">
 				<button id="viewquota" class="btn btn-primary"

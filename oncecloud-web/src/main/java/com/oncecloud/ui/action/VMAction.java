@@ -70,4 +70,14 @@ public class VMAction {
 			return "";
 		}
 	}
+	
+	@RequestMapping(value = "/StartVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public void startVM(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			String poolUuid = user.getUserAllocate();
+			this.getVmManager().startVM(uuid, poolUuid);
+		}
+	}
 }
