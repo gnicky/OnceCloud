@@ -518,7 +518,14 @@ public class VMManager {
 		}
 		return result;
 	}
-
+	
+	public void doAdminStartVm(int userId, String uuid) {
+		OCVM ocvm = this.getVmDAO().getVM(uuid);
+		String hostUuid = ocvm.getHostUuid();
+		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		this.doStartVM(userId, hostUuid, poolUuid);
+	}
+	
 	public void doStartVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.startVM(uuid, poolUuid);
@@ -608,7 +615,14 @@ public class VMManager {
 		}
 		return result;
 	}
-
+	
+	public void doAdminShutDown(int userId, String uuid, String force) {
+		OCVM ocvm = this.getVmDAO().getVM(uuid);
+		String hostUuid = ocvm.getHostUuid();
+		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		this.doAdminShutDown(userId, poolUuid, force);
+	}
+	
 	public void doShutdownVM(int userId, String uuid, String force,
 			String poolUuid) {
 		Date startTime = new Date();

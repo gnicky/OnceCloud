@@ -57,18 +57,6 @@ public class AddressAction extends HttpServlet {
 				JSONArray ja = this.getAddressManager().addPublicIP(userId,
 						prefix, start, end, eiptype, eipInterface);
 				out.print(ja.toString());
-			} else if (action.equals("deleteDHCP")) {
-				String ip = request.getParameter("ip");
-				String mac = request.getParameter("mac");
-				JSONArray ja = this.getAddressManager().deleteDHCP(userId, ip,
-						mac);
-				out.print(ja.toString());
-			} else if (action.equals("deleteEIP")) {
-				String ip = request.getParameter("ip");
-				String uuid = request.getParameter("uuid");
-				JSONArray ja = this.getAddressManager().deletePublicIP(userId,
-						ip, uuid);
-				out.print(ja.toString());
 			}
 		}
 	}

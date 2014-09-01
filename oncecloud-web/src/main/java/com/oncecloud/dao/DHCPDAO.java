@@ -100,18 +100,14 @@ public class DHCPDAO {
 			} else {
 				result = false;
 			}
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = false;
-			if (tx != null) {
-				tx.commit();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return false;
 		}
-		return result;
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -134,17 +130,14 @@ public class DHCPDAO {
 				session.update(dhcp);
 				tx.commit();
 			}
+			return dhcp;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+			return null;
 		}
-		return dhcp;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -153,6 +146,7 @@ public class DHCPDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from DHCP where dhcpMac = :dhcpMac";
 			Query query = session.createQuery(queryString);
 			query.setString("dhcpMac", dhcpMac);
@@ -160,14 +154,15 @@ public class DHCPDAO {
 			if (dhcpList.size() == 1) {
 				dhcp = dhcpList.get(0);
 			}
+			session.getTransaction().commit();
+			return dhcp;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return dhcp;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -176,6 +171,7 @@ public class DHCPDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from DHCP where dhcpIp = :dhcpIp";
 			Query query = session.createQuery(queryString);
 			query.setString("dhcpIp", dhcpIp);
@@ -183,14 +179,15 @@ public class DHCPDAO {
 			if (dhcpList.size() == 1) {
 				result = true;
 			}
+			session.getTransaction().commit();
+			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 
 	public synchronized boolean returnDHCP(String dhcpMac) {
@@ -208,17 +205,14 @@ public class DHCPDAO {
 				tx.commit();
 				result = true;
 			}
+			return result;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -227,6 +221,7 @@ public class DHCPDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from DHCP where dhcpIp like '%" + search
 					+ "%' order by tenantUuid desc, dhcpIp";
@@ -234,14 +229,15 @@ public class DHCPDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			dcList = query.list();
+			session.getTransaction().commit();
+			return dcList;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return null;
 		}
-		return dcList;
 	}
 
 	public int countAllDHCP(String search) {
@@ -249,10 +245,13 @@ public class DHCPDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from DHCP where dhcpIp like '%"
 					+ search + "%'";
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -276,16 +275,13 @@ public class DHCPDAO {
 					false);
 			tx.commit();
 			result = true;
+			return result;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
+			return false;
 		}
-		return result;
 	}
 }

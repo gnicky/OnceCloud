@@ -109,6 +109,11 @@ $("#select-loadbalance").on("click", function () {
     type = "loadbalance";
 });
 
+$("#hostall").on("click", function () {
+    $("#selecthost").text("全部");
+    host = "all";
+});
+
 function getInfoList() {
     var infoList = "";
     var typeStr = "i";
@@ -267,7 +272,7 @@ function adminstart(action, uuid) {
     $.ajax({
         type: 'get',
         url: action,
-        data: {action: "adminstartup", uuid: uuid},
+        data: {uuid: uuid},
         dataType: 'json',
         success: function (array) {
         }
@@ -280,11 +285,11 @@ function startVM(uuid) {
     thistr.find('[name="stateicon"]').addClass('icon-process');
     thistr.find('[name="stateword"]').text('启动中');
     if (type == "instance") {
-        adminstart('/VMAction', uuid);
+        adminstart('/VMAction/AdminStartUp', uuid);
     } else if (type == "router") {
-        adminstart('/RouterAction', uuid);
+        adminstart('/RouterAction/AdminStartUp', uuid);
     } else if (type == "loadbalance") {
-        adminstart('/LBAction', uuid);
+        adminstart('/LBAction/AdminStartUp', uuid);
     }
 }
 
@@ -292,7 +297,7 @@ function adminshut(action, uuid, force) {
     $.ajax({
         type: 'get',
         url: action,
-        data: {action: "adminshutdown", uuid: uuid, force: force},
+        data: {uuid: uuid, force: force},
         dataType: 'json',
         success: function (array) {
         }
@@ -306,11 +311,11 @@ function shutdownVM(uuid, force) {
     thistr.find('[name="stateword"]').text('关机中');
     thistr.find('.console').remove();
     if (type == "instance") {
-        adminshut('/VMAction', uuid, force);
+        adminshut('/VMAction/AdminShutDown', uuid, force);
     } else if (type == "router") {
-        adminshut('/RouterAction', uuid, force);
+        adminshut('/RouterAction/AdminShutDown', uuid, force);
     } else if (type == "loadbalance") {
-        adminshut('/LBAction', uuid, force);
+        adminshut('/LBAction/AdminShutDown', uuid, force);
     }
 }
 
@@ -330,17 +335,3 @@ function initPage() {
         }
     });
 }
-
-$("#hostall").on("click", function () {
-    $("#selecthost").text("全部");
-    host = "all";
-});
-
-$('#tablebody').on('click', '.console', function (event) {
-    event.preventDefault();
-    var uuid = $(this).data("uuid");
-    var vnc = $('#platformcontent').data("novnc");
-    var token = uuid.substring(0, 8);
-    var url = vnc + "console.html?id=" + token;
-    window.open(url, "novnc", 'height=600, width=810, top=0, left=0');
-});

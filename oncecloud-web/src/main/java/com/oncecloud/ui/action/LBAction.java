@@ -43,6 +43,26 @@ public class LBAction {
 		}
 	}
 	
+	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
+	@ResponseBody
+	public void lbAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getLbManager().lbAdminShutUp(uuid, userId);
+		}
+	}
+
+	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
+	@ResponseBody
+	public void lbAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			this.getLbManager().lbAdminShutDown(uuid, force, userId);
+		}
+	}
+
 	@RequestMapping(value = "/LBDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String volumeDetail(HttpServletRequest request, @RequestParam String uuid) {
