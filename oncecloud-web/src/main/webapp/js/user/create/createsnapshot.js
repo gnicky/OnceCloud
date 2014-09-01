@@ -76,22 +76,16 @@ $("#backup-form").validate({
 
 function getNewChain() {
     var newchain = 0;
-    var vmboxes = document.getElementsByName("vmrow");
-    for (var i = 0; i < vmboxes.length; i++) {
-        if (vmboxes[i].checked == true) {
-            if ($(vmboxes[i]).parent().parent().find(".glyphicon-camera").size() > 0) {
-                newchain++;
-            }
+    $('input[name="vmrow"]:checked').each(function () {
+        if ($(this).parent().parent().find(".glyphicon-camera").size() > 0) {
+            newchain++;
         }
-    }
-    var volumeboxes = document.getElementsByName("volumerow");
-    for (var i = 0; i < volumeboxes.length; i++) {
-        if (volumeboxes[i].checked == true) {
-            if ($(volumeboxes[i]).parent().parent().find(".glyphicon-camera").size() > 0) {
-                newchain++;
-            }
+    });
+    $('input[name="volumerow"]:checked').each(function () {
+        if ($(this).parent().parent().find(".glyphicon-camera").size() > 0) {
+            newchain++;
         }
-    }
+    });
     return newchain;
 }
 
@@ -121,25 +115,19 @@ function initResourceList() {
                 + rsid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-inbox"></span>&nbsp;' + rsname + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
         }
     } else {
-        var vmboxes = document.getElementsByName("vmrow");
-        for (var i = 0; i < vmboxes.length; i++) {
-            if (vmboxes[i].checked == true) {
-                var vmuuid = $(vmboxes[i]).parent().parent().attr("rowid");
-                var showuuid = "i-" + vmuuid.substring(0, 8);
-                var vmName = $(vmboxes[i]).parent().parent().find('[name="vmname"]').text();
-                $('#resource-list').append('<div name="vm-select-item" uuid="' + vmuuid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-cloud"></span>&nbsp;' + vmName + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
-            }
-        }
+        $('input[name="volumerow"]:checked').each(function () {
+            var vmuuid = $(vmboxes[i]).parent().parent().attr("rowid");
+            var showuuid = "i-" + vmuuid.substring(0, 8);
+            var vmName = $(vmboxes[i]).parent().parent().find('[name="vmname"]').text();
+            $('#resource-list').append('<div name="vm-select-item" uuid="' + vmuuid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-cloud"></span>&nbsp;' + vmName + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
+        });
         removeAllCheck("vmrow");
-        var volumeboxes = document.getElementsByName("volumerow");
-        for (var i = 0; i < volumeboxes.length; i++) {
-            if (volumeboxes[i].checked == true) {
-                var volumeuuid = $(volumeboxes[i]).parent().parent().attr("rowid");
-                var volumeName = $(volumeboxes[i]).parent().parent().find('[name="volumename"]').text();
-                var showuuid = "vol-" + volumeuuid.substring(0, 8);
-                $('#resource-list').append('<div name="volume-select-item" uuid="' + volumeuuid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-inbox"></span>&nbsp;' + volumeName + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
-            }
-        }
+        $('input[name="volumerow"]:checked').each(function () {
+            var volumeuuid = $(this).parent().parent().attr("rowid");
+            var volumeName = $(this).parent().parent().find('[name="volumename"]').text();
+            var showuuid = "vol-" + volumeuuid.substring(0, 8);
+            $('#resource-list').append('<div name="volume-select-item" uuid="' + volumeuuid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-inbox"></span>&nbsp;' + volumeName + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
+        });
         removeAllCheck("volumerow");
     }
 }

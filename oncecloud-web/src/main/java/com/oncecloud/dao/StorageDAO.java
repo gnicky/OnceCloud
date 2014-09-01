@@ -75,7 +75,7 @@ public class StorageDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.save(storage);
-			this.getOverViewDAO().updateOverViewfield(session, "viewSr", true);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewSr", true);
 			tx.commit();
 		} catch (Exception e) {
 			if (tx != null) {
@@ -231,7 +231,7 @@ public class StorageDAO {
 					+ storageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfield(session, "viewSr", false);
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewSr", false);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
