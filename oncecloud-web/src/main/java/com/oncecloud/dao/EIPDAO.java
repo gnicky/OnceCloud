@@ -66,8 +66,8 @@ public class EIPDAO {
 			eip.setEipBandwidth(eipBandwidth);
 			eip.setCreateDate(createDate);
 			session.update(eip);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaIP", 1,
-					true);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaIP",
+					1, true);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaBandwidth", eipBandwidth, true);
 			tx.commit();
@@ -212,8 +212,8 @@ public class EIPDAO {
 				eip.setEipName(null);
 				eip.setEipUID(null);
 				session.update(eip);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaIP",
-						1, false);
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+						"quotaIP", 1, false);
 				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaBandwidth", bandwith, false);
 				tx.commit();
@@ -399,7 +399,7 @@ public class EIPDAO {
 					eip.setEipInterface(eipInterface);
 					eip.setCreateDate(date);
 					session.save(eip);
-					this.getOverViewDAO().updateOverViewfield(session,
+					this.getOverViewDAO().updateOverViewfieldNoTransaction(
 							"viewOutip", true);
 				}
 			}
@@ -526,7 +526,7 @@ public class EIPDAO {
 					+ "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfield(session, "viewOutip",
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewOutip",
 					false);
 			tx.commit();
 			return true;

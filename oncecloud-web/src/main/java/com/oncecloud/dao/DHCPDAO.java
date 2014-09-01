@@ -91,7 +91,7 @@ public class DHCPDAO {
 			if (bindResult) {
 				for (DHCP dhcp : dhcpList) {
 					session.save(dhcp);
-					this.getOverViewDAO().updateOverViewfield(session,
+					this.getOverViewDAO().updateOverViewfieldNoTransaction(
 							"viewDhcp", true);
 				}
 				session.getTransaction().commit();
@@ -255,7 +255,7 @@ public class DHCPDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.delete(dhcp);
-			this.getOverViewDAO().updateOverViewfield(session, "viewDhcp",
+			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDhcp",
 					false);
 			tx.commit();
 			result = true;
