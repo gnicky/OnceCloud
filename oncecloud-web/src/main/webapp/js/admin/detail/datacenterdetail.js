@@ -1,61 +1,63 @@
-$(document).ready(function () {
-    $('.once-tab').on('click', '.tab-filter', function (event) {
-        event.preventDefault();
-        $('li', $('.once-tab')).removeClass('active');
-        $(this).addClass('active');
-        var type = $('.once-tab').find('.active').attr("type");
-        if (type == "pooltab") {
-            getPoolList();
-        } else if (type == "racktab") {
-            getrackList();
-        }
-    });
+$('.once-tab').on('click', '.tab-filter', function(event) {
+			event.preventDefault();
+			$('li', $('.once-tab')).removeClass('active');
+			$(this).addClass('active');
+			var type = $('.once-tab').find('.active').attr("type");
+			if (type == "pooltab") {
+				getPoolList();
+			} else if (type == "racktab") {
+				getrackList();
+			}
+		});
 
-    getPoolList();
+getPoolList();
 
-    $('#tagdiv').on('click', '.id', function (event) {
-        event.preventDefault();
-        var hostid = $(this).attr('hostid');
-        $.ajax({
-            type: 'get',
-            url: '/HostAction',
-            data: 'action=detail&hostid=' + hostid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/detail/hostdetail.jsp";
-            },
-            error: function () {
+$('#tagdiv').on('click', '.id', function(event) {
+	event.preventDefault();
+	var hostid = $(this).attr('hostid');
+	$.ajax({
+				type : 'get',
+				url : '/HostAction',
+				data : 'action=detail&hostid=' + hostid,
+				dataType : 'text',
+				success : function(response) {
+					window.location.href = $('#platformcontent')
+							.attr('platformBasePath')
+							+ "admin/detail/hostdetail.jsp";
+				},
+				error : function() {
 
-            }
-        });
-    });
-
-    $('#tagdiv').on('click', '.switchid', function (event) {
-        event.preventDefault();
-        var switchid = $(this).attr('switchid');
-        $.ajax({
-            type: 'get',
-            url: '/DashboardAction',
-            data: 'action=switchdetail&switchid=' + switchid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/detail/switchdetail.jsp";
-            },
-            error: function () {
-
-            }
-        });
-    });
-
-    $('#tagdiv').on('mouseenter', 'li', function (event) {
-        event.preventDefault();
-        $(this).find(".t_tips").show();
-    });
-    $('#tagdiv').on('mouseleave', 'li', function (event) {
-        event.preventDefault();
-        $(this).find(".t_tips").hide();
-    });
+				}
+			});
 });
+
+$('#tagdiv').on('click', '.switchid', function(event) {
+	event.preventDefault();
+	var switchid = $(this).attr('switchid');
+	$.ajax({
+				type : 'get',
+				url : '/DashboardAction',
+				data : 'action=switchdetail&switchid=' + switchid,
+				dataType : 'text',
+				success : function(response) {
+					window.location.href = $('#platformcontent')
+							.attr('platformBasePath')
+							+ "admin/detail/switchdetail.jsp";
+				},
+				error : function() {
+
+				}
+			});
+});
+
+$('#tagdiv').on('mouseenter', 'li', function(event) {
+			event.preventDefault();
+			$(this).find(".t_tips").show();
+		});
+$('#tagdiv').on('mouseleave', 'li', function(event) {
+			event.preventDefault();
+			$(this).find(".t_tips").hide();
+		});});
 
 
 function getrackList() {
@@ -100,22 +102,16 @@ function getrackList() {
 				    </li>'
                 });
 
-                /*$.each(item.storagelist,function(key,sr){
-                 var storage =  eval('('+ sr +')');
-                 srhtml+='<li class="two" srid='+ storage.srUuid +'>\
-                 <div class="name">' + decodeURI(storage.srName) +'</div>\
-                 <div class="clear_both"></div>\
-                 <div class="t_tips">\
-                 <span class="n_content">\
-                 <p>存储集群:'+decodeURI(storage.srName)+'</p>\
-                 <p>管理节点:'+storage.srAddress+'</p>\
-                 <p>挂载目录：'+storage.srdir+'</p>\
-                 <p>文件系统：'+storage.srtype.toUpperCase()+'</p>\
-                 </span>\
-                 <b class="arrow"></b>\
-                 </div>\
-                 </li>'
-                 });*/
+                /*
+				 * $.each(item.storagelist,function(key,sr){ var storage =
+				 * eval('('+ sr +')'); srhtml+='<li class="two" srid='+ storage.srUuid +'>\
+				 * <div class="name">' + decodeURI(storage.srName) +'</div>\
+				 * <div class="clear_both"></div>\ <div class="t_tips">\ <span
+				 * class="n_content">\ <p>存储集群:'+decodeURI(storage.srName)+'</p>\
+				 * <p>管理节点:'+storage.srAddress+'</p>\ <p>挂载目录：'+storage.srdir+'</p>\
+				 * <p>文件系统：'+storage.srtype.toUpperCase()+'</p>\ </span>\ <b
+				 * class="arrow"></b>\ </div>\ </li>' });
+				 */
 
 
                 $("#tagdiv").append('<div class="serviceto">\
@@ -233,4 +229,3 @@ function getPoolList() {
 
         }
     });
-}

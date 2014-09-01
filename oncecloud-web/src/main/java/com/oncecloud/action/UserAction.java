@@ -95,12 +95,6 @@ public class UserAction extends HttpServlet {
 				String userName = request.getParameter("username");
 				JSONArray ja = this.getUserManager().doQueryUser(userName);
 				out.print(ja.toString());
-			} else if (action.equals("delete")) {
-				int changeId = Integer.parseInt(request.getParameter("userid"));
-				String userName = request.getParameter("username");
-				JSONObject jo = this.getUserManager().doDeleteUser(userId,
-						changeId, userName);
-				out.print(jo.toString());
 			} else if (action.equals("update")) {
 				int changeId = Integer.parseInt(request.getParameter("userid"));
 				String userName = request.getParameter("username");
@@ -110,11 +104,6 @@ public class UserAction extends HttpServlet {
 				String userLevel = request.getParameter("userlevel");
 				this.getUserManager().doUpdateUser(userId, changeId, userName,
 						userEmail, userTel, userCom, userLevel);
-			} else if (action.equals("detail")) {
-				int uid = Integer.parseInt(request.getParameter("userid"));
-				String userName = request.getParameter("username");
-				session.setAttribute("userid", uid);
-				session.setAttribute("username", userName);
 			} else if (action.equals("getoneuser")) {
 				int uid = Integer.parseInt(request.getParameter("userid"));
 				JSONObject jo = this.getUserManager().doGetOneUser(uid);

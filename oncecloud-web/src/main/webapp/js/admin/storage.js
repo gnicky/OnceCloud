@@ -157,7 +157,7 @@ $('#delete').on('click', function (event) {
 function deletesr(srid, srname) {
     $.ajax({
         type: 'post',
-        url: '/StorageAction/DeleteStorage',
+        url: '/StorageAction/Delete',
         data: {srid: srid, srname: srname},
         dataType: 'json',
         success: function (array) {

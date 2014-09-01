@@ -56,19 +56,10 @@ public class PoolAction extends HttpServlet {
 				JSONArray ja = this.getPoolManager().getPoolList(page, limit,
 						search);
 				out.print(ja.toString());
-			} else if (action.equals("delete")) {
-				String poolId = request.getParameter("poolid");
-				String poolName = request.getParameter("poolname");
-				JSONArray ja = this.getPoolManager().deletePool(poolId,
-						poolName, userId);
-				out.print(ja.toString());
 			} else if (action.equals("bind")) {
 				String poolId = request.getParameter("poolid");
 				String dcid = request.getParameter("dcid");
 				this.getPoolManager().bind(poolId, dcid, userId);
-			} else if (action.equals("unbind")) {
-				String poolId = request.getParameter("poolid");
-				this.getPoolManager().unbind(poolId, userId);
 			} else if (action.equals("update")) {
 				String poolUuid = request.getParameter("pooluuid");
 				String poolName = request.getParameter("poolname");

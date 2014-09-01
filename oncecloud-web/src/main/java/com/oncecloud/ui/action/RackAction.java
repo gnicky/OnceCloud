@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -36,6 +37,15 @@ public class RackAction {
 			return ja.toString();
 		} else {
 			return "";
+		}
+	}
+
+	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
+	@ResponseBody
+	public void delete(HttpServletRequest request, @RequestParam String rackid, @RequestParam String rackname) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			this.getRackManager().deleteRack(rackid, rackname, user.getUserId());
 		}
 	}
 }

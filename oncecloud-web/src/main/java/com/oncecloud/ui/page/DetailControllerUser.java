@@ -161,27 +161,4 @@ public class DetailControllerUser {
 		}
 	}
 	
-	@RequestMapping(value = "/datacenter/detail")
-	@ResponseBody
-	public ModelAndView datacenterDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("title", "数据中心管理");
-		model.put("sideActive", 12);
-		String dcid = request.getParameter("dcid");
-		if (dcid != null) {
-			request.getSession().setAttribute("dcid", dcid);
-			request.getSession().setAttribute("showId", "dc-" + dcid.substring(0, 8));
-			return new ModelAndView("admin/detail/datacenterdetail", model);
-		} else {
-			if (request.getSession().getAttribute("dcid") != null) {
-				return new ModelAndView("admin/detail/datacenterdetail", model);
-			} else {
-				return new ModelAndView(new RedirectView("/dashboard"));
-			}
-		}
-	}
 }

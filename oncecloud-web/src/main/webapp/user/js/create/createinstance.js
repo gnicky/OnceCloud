@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     $("#wizard").bwizard({
         backBtnText: "",
-        nextBtnText: "",
+        nextBtnText: ""
     });
 
     var options = {

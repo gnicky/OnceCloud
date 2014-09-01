@@ -1,25 +1,7 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	String hostUuidJsonStr = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-		hostUuidJsonStr = request.getParameter("uuidjsonstr");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<script src="<%=basePath %>admin/js/modal/addtopool.js"></script>
+<script src="${basePath}js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="${basePath}js/uuid.js"></script>
+<script src="${basePath}js/admin/modal/addtopool.js"></script>
 <style type="text/css">
 	.image-item {
 		margin-top: 7px;
@@ -35,7 +17,7 @@
 		<div class="modal-header">
 			<h4 class="modal-title">添加到资源池<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>
 		</div>
-		<div class="modal-body" jsonstr='<%=hostUuidJsonStr%>' id="hostjson">
+		<div class="modal-body" jsonstr='${uuidjsonstr}' id="hostjson">
 			<div class="table-inner">
 				<div class="once-pane sr-pane" style="padding:10px 30px 0">
 					<div class="item">

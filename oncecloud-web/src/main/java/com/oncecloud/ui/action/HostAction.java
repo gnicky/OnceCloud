@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -45,6 +46,42 @@ public class HostAction {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			JSONArray ja = this.getHostManager().getHostList(list.getPage(), list.getLimit(), list.getSearch());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
+	@ResponseBody
+	public String delete(HttpServletRequest request, @RequestParam("hostid") String hostId, @RequestParam("hostname") String hostName) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getHostManager().deleteAction(hostId, hostName, user.getUserId());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+	
+	@RequestMapping(value = "/Issamesr", method = { RequestMethod.POST })
+	@ResponseBody
+	public String isSameSR(HttpServletRequest request,@RequestParam("uuidjsonstr") String uuidJsonStr) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getHostManager().isSameSr(uuidJsonStr);
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/RemoveFromPool", method = { RequestMethod.POST })
+	@ResponseBody
+	public String removeFromPool(HttpServletRequest request,@RequestParam("hostuuid") String hostuuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getHostManager().r4Pool(hostuuid, user.getUserId());
 			return ja.toString();
 		} else {
 			return "";

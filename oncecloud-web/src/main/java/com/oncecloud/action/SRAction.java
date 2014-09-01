@@ -52,12 +52,6 @@ public class SRAction extends HttpServlet {
 				JSONArray ja = this.getSrManager().addStorage(userId, srname,
 						srAddress, srDesc, srType, srDir, rackId, rackName);
 				out.print(ja.toString());
-			}else if (action.equals("delete")) {
-				String srId = request.getParameter("srid");
-				String srName = request.getParameter("srname");
-				JSONArray ja = this.getSrManager().deleteStorage(userId, srId,
-						srName);
-				out.print(ja.toString());
 			} else if (action.equals("load2server")) {
 				String srUuid = request.getParameter("sruuid");
 				String hostUuid = request.getParameter("hostuuid");

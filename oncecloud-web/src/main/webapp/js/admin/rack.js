@@ -105,15 +105,14 @@ function getRackList(page, limit, search) {
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var rackid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/RackAction',
-        data: {action: "detail", rackid: rackid},
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/topology.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/rack/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="rackid" value="' + rackid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 
@@ -151,8 +150,8 @@ $('#delete').on('click', function (event) {
 function deleteRack(rackid, rackname) {
     $.ajax({
         type: 'post',
-        url: '/RackAction',
-        data: {action: "delete", rackid: rackid, rackname: rackname},
+        url: '/RackAction/Delete',
+        data: {rackid: rackid, rackname: rackname},
         dataType: 'json',
         success: function (array) {
         }

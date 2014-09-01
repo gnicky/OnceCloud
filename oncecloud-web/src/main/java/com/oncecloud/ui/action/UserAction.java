@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -48,6 +49,19 @@ public class UserAction {
 		if (user != null) {
 			int userId = user.getUserId();
 			JSONObject jo = this.getUserManager().getBalance(userId);
+			return jo.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/Delete", method = { RequestMethod.GET })
+	@ResponseBody
+	public String delete(HttpServletRequest request, @RequestParam("userid") int changeId, @RequestParam String username) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			int userId = user.getUserId();
+			JSONObject jo = this.getUserManager().doDeleteUser(userId, changeId, username);
 			return jo.toString();
 		} else {
 			return "";

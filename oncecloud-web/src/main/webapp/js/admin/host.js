@@ -84,8 +84,7 @@ $('#tablebody').on('click', '.srdetail', function (event) {
     event.preventDefault();
     var hostuuid = $(this).parent().parent().attr('hostid');
     var hostname = $(this).parent().parent().attr('hostname');
-    var url = $("#platformcontent").attr('platformBasePath')
-        + 'admin/modal/storageofhost.jsp';
+    var url = basePath + 'admin/modal/storageofhost.jsp';
     $('#ServerModalContainer').load(url, {
         "hostuuid": hostuuid,
         "hostname": hostname
@@ -100,17 +99,14 @@ $('#tablebody').on('click', '.srdetail', function (event) {
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var hostid = $(this).parent().parent().attr('hostid');
-    $.ajax({
-        type: 'get',
-        url: '/HostAction',
-        data: {action: "detail", hostid: hostid},
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent')
-                .attr('platformBasePath')
-                + "admin/detail/hostdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/host/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="hostid" value="' + hostid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#add2pool').on('click', function (event) {
@@ -133,17 +129,15 @@ $('#add2pool').on('click', function (event) {
     uuidStr = uuidStr + ']';
     $.ajax({
         type: 'get',
-        url: '/HostAction',
-        data: {action: "issamesr", uuidjsonstr: uuidStr},
+        url: '/HostAction/Issamesr',
+        data: {uuidjsonstr: uuidStr},
         dataType: 'json',
         success: function (array) {
             var obj1 = array[0];
             array.shift();
-            var url = $("#platformcontent").attr('platformBasePath')
-                + 'admin/modal/addtopool.jsp';
             if (obj1.isSuccess) {
                 uuidStr.replace(new RegExp('"', "gm"), '_');
-                $('#ServerModalContainer').load(url, {
+                $('#ServerModalContainer').load("/admin/modal/addtopool", {
                     "uuidjsonstr": uuidStr
                 }, function () {
                     $('#ServerModalContainer').modal({
@@ -219,8 +213,8 @@ $('#remove4pool').on('click', function (event) {
 function ejectPool(hostid) {
     $.ajax({
         type: 'post',
-        url: '/HostAction',
-        data: {action: "r4pool", hostuuid: hostid},
+        url: '/HostAction/RemoveFromPool',
+        data: {hostuuid: hostid},
         dataType: 'json',
         success: function (array) {
             var obj = array[0];
@@ -357,8 +351,8 @@ $('#delete').on('click', function (event) {
 function deleteHost(hostid, hostname) {
     $.ajax({
         type: 'post',
-        url: '/HostAction',
-        data: {action: "delete", hostid: hostid, hostname: hostname},
+        url: '/HostAction/Delete',
+        data: {hostid: hostid, hostname: hostname},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {
