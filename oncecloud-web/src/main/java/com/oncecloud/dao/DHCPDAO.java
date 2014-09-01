@@ -62,11 +62,10 @@ public class DHCPDAO {
 	public boolean addDHCPPool(String prefix, int start, int end, Date date) {
 		boolean result = true;
 		Session session = null;
-		Transaction tx = null;
 		Connection c = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			c = this.getConstant().getConnection(1);
 			List<DHCP> dhcpList = new ArrayList<DHCP>();
 			JSONObject total = new JSONObject();
@@ -95,8 +94,8 @@ public class DHCPDAO {
 					this.getOverViewDAO().updateOverViewfield(session,
 							"viewDhcp", true);
 				}
+				session.getTransaction().commit();
 				result = true;
-				tx.commit();
 			} else {
 				result = false;
 			}
@@ -110,37 +109,32 @@ public class DHCPDAO {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	public synchronized DHCP getFreeDHCP(String tenantUuid, int depenType) {
 		DHCP dhcp = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Query query = session
 					.createQuery("from DHCP where tenantUuid = null order by rand()");
 			query.setFirstResult(0);
 			query.setMaxResults(1);
-			List<DHCP> iplist = query.list();
-			if (iplist.size() == 1) {
-				dhcp = iplist.get(0);
-				tx = session.beginTransaction();
+			dhcp = (DHCP) query.list().get(0);
+			if (dhcp != null) {
 				dhcp.setTenantUuid(tenantUuid);
 				dhcp.setDepenType(depenType);
 				session.update(dhcp);
-				tx.commit();
 			}
-			return dhcp;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return dhcp;
 	}
 
-	@SuppressWarnings("unchecked")
 	public DHCP getDHCP(String dhcpMac) {
 		DHCP dhcp = null;
 		Session session = null;
@@ -150,22 +144,17 @@ public class DHCPDAO {
 			String queryString = "from DHCP where dhcpMac = :dhcpMac";
 			Query query = session.createQuery(queryString);
 			query.setString("dhcpMac", dhcpMac);
-			List<DHCP> dhcpList = query.list();
-			if (dhcpList.size() == 1) {
-				dhcp = dhcpList.get(0);
-			}
+			dhcp = (DHCP) query.uniqueResult();
 			session.getTransaction().commit();
-			return dhcp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return dhcp;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean ipExist(String dhcpIp) {
 		boolean result = false;
 		Session session = null;
@@ -175,44 +164,39 @@ public class DHCPDAO {
 			String queryString = "from DHCP where dhcpIp = :dhcpIp";
 			Query query = session.createQuery(queryString);
 			query.setString("dhcpIp", dhcpIp);
-			List<DHCP> dhcpList = query.list();
-			if (dhcpList.size() == 1) {
-				result = true;
-			}
+			query.uniqueResult();
 			session.getTransaction().commit();
-			return result;
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	public synchronized boolean returnDHCP(String dhcpMac) {
 		DHCP dhcp = this.getDHCP(dhcpMac);
 		Session session = null;
-		Transaction tx = null;
 		boolean result = false;
 		try {
 			if (dhcp != null) {
 				dhcp.setTenantUuid(null);
 				dhcp.setDepenType(null);
 				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
+				session.beginTransaction();
 				session.update(dhcp);
-				tx.commit();
+				session.getTransaction().commit();
 				result = true;
 			}
-			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
