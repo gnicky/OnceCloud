@@ -16,13 +16,13 @@ import com.oncecloud.dao.HostSRDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.HostSR;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.Storage;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -35,6 +35,16 @@ public class SRManager {
 	private HostSRDAO hostSRDAO;
 	private LogDAO logDAO;
 	private RackDAO rackDAO;
+	private MessagePush messagePush;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 
 	private StorageDAO getStorageDAO() {
 		return storageDAO;
@@ -160,7 +170,7 @@ public class SRManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -168,7 +178,7 @@ public class SRManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -237,7 +247,7 @@ public class SRManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -245,7 +255,7 @@ public class SRManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -273,7 +283,7 @@ public class SRManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -281,7 +291,7 @@ public class SRManager {
 					LogConstant.logAction.添加.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -306,10 +316,11 @@ public class SRManager {
 				rackId);
 		// push message
 		if (result) {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToSuccess("存储更新成功"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("存储更新成功"));
 		} else {
-			MessagePush.pushMessage(userId, Utilities.stickyToError("存储更新失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("存储更新失败"));
 		}
 	}
 }

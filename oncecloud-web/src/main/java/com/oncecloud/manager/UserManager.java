@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.User;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai tangzhen
@@ -37,6 +37,16 @@ public class UserManager {
 	private UserDAO userDAO;
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
+	private MessagePush messagePush;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 
 	private UserDAO getUserDAO() {
 		return userDAO;
@@ -99,7 +109,7 @@ public class UserManager {
 		this.userRegister("admin", "onceas", "admin@beyondcent.com",
 				"12345678901", "BeyondCent", "0");
 	}
-	
+
 	/**
 	 * 获取用户余额
 	 * 
@@ -247,7 +257,7 @@ public class UserManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userid,
@@ -255,7 +265,7 @@ public class UserManager {
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userid,
+			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError(log.toString()));
 		}
 		return ja;
@@ -269,11 +279,11 @@ public class UserManager {
 		newQuota.setQuotaID(quotaid);
 		boolean result = this.getQuotaDAO().updateQuota(newQuota);
 		if (result) {
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess("资源配额更新成功"));
 		} else {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToError("资源配额更新失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("资源配额更新失败"));
 		}
 	}
 
@@ -335,11 +345,11 @@ public class UserManager {
 		boolean result = this.userUpdate(changeId, userName, userEmail,
 				userTel, userCom, userLevel);
 		if (result) {
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess("用户信息修改成功"));
 		} else {
-			MessagePush
-					.pushMessage(userId, Utilities.stickyToError("用户信息修改失败"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("用户信息修改失败"));
 		}
 	}
 
@@ -360,7 +370,7 @@ public class UserManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
 			OCLog log = this.getLogDAO().insertLog(userId,
@@ -368,7 +378,7 @@ public class UserManager {
 					LogConstant.logAction.删除.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			MessagePush.pushMessage(userId,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;

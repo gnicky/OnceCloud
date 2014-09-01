@@ -10,16 +10,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.VMDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.main.NoVNC;
 import com.oncecloud.manager.VMManager;
+import com.oncecloud.message.MessagePush;
 
 @Component
 public class ProcessMsg {
 	private VMDAO vmDAO;
 	private HostDAO hostDAO;
 	private VMManager vmManager;
+	private MessagePush messagePush;
 
 	private VMDAO getVmDAO() {
 		return vmDAO;
@@ -46,6 +47,15 @@ public class ProcessMsg {
 	@Autowired
 	private void setVmManager(VMManager vmManager) {
 		this.vmManager = vmManager;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	public void ProcessSync(String message) {
@@ -114,20 +124,22 @@ public class ProcessMsg {
 										NoVNC.createToken(
 												vmUuid.substring(0, 8),
 												hostAddress, port);
-										MessagePush.editRowStatus(userId,
-												vmUuid, "running", "正常运行");
-										MessagePush.editRowConsole(userId,
-												vmUuid, "add");
+										this.getMessagePush().editRowStatus(
+												userId, vmUuid, "running",
+												"正常运行");
+										this.getMessagePush().editRowConsole(
+												userId, vmUuid, "add");
 									} else if (powerAttrvalue == 0
 											&& ocvm.getVmPower() == 1) {
 										this.getVmDAO().setVMPowerStatus(
 												vmUuid, powerAttrvalue);
 										NoVNC.deleteToken(vmUuid
 												.substring(0, 8));
-										MessagePush.editRowStatus(userId,
-												vmUuid, "stopped", "已关机");
-										MessagePush.editRowConsole(userId,
-												vmUuid, "del");
+										this.getMessagePush().editRowStatus(
+												userId, vmUuid, "stopped",
+												"已关机");
+										this.getMessagePush().editRowConsole(
+												userId, vmUuid, "del");
 									}
 								}
 							}

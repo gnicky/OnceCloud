@@ -15,12 +15,12 @@ import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.DatabaseDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.ImageDAO;
-import com.oncecloud.dwr.MessagePush;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Database;
 import com.oncecloud.entity.Image;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.message.MessagePush;
 
 /**
  * @author hehai
@@ -35,6 +35,7 @@ public class DatabaseManager {
 	private EIPManager eipManager;
 	private VMManager vmManager;
 	private Constant constant;
+	private MessagePush messagePush;
 
 	private ImageDAO getImageDAO() {
 		return imageDAO;
@@ -97,6 +98,15 @@ public class DatabaseManager {
 	@Autowired
 	private void setConstant(Constant constant) {
 		this.constant = constant;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	public final static int POWER_HALTED = 0;
@@ -338,9 +348,10 @@ public class DatabaseManager {
 				dbPwd, dbType, dbPort, dbthroughout, hostUuid);
 		// push message
 		if (result == true) {
-			MessagePush.editRowStatus(userId, dbUuid, "running", "活跃");
+			this.getMessagePush()
+					.editRowStatus(userId, dbUuid, "running", "活跃");
 		} else {
-			MessagePush.deleteRow(userId, dbUuid);
+			this.getMessagePush().deleteRow(userId, dbUuid);
 		}
 	}
 
@@ -348,9 +359,11 @@ public class DatabaseManager {
 		boolean result = this.shutdownDB(userId, dbUuid, forse);
 		// push message
 		if (result) {
-			MessagePush.editRowStatus(userId, dbUuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, dbUuid, "stopped",
+					"已关机");
 		} else {
-			MessagePush.editRowStatus(userId, dbUuid, "running", "活跃");
+			this.getMessagePush()
+					.editRowStatus(userId, dbUuid, "running", "活跃");
 		}
 	}
 
@@ -358,7 +371,7 @@ public class DatabaseManager {
 		// push message
 		boolean result = this.deleteDB(userId, dbUuid);
 		if (result) {
-			MessagePush.deleteRow(userId, dbUuid);
+			this.getMessagePush().deleteRow(userId, dbUuid);
 		}
 	}
 
@@ -366,9 +379,11 @@ public class DatabaseManager {
 		boolean result = this.startDB(userId, dbUuid);
 		// push message
 		if (result) {
-			MessagePush.editRowStatus(userId, dbUuid, "running", "活跃");
+			this.getMessagePush()
+					.editRowStatus(userId, dbUuid, "running", "活跃");
 		} else {
-			MessagePush.editRowStatus(userId, dbUuid, "stopped", "已关机");
+			this.getMessagePush().editRowStatus(userId, dbUuid, "stopped",
+					"已关机");
 		}
 	}
 }
