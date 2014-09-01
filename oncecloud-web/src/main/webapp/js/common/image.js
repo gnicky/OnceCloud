@@ -112,17 +112,16 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var imageuuid = $(this).parent().parent().attr('imageUId');
     var imagetype = $(this).parent().parent().attr('imageType');
-    $.ajax({
-        type: 'get',
-        url: '/ImageAction',
-        data: {action: "detail", imageuuid: imageuuid, imagetype: imagetype},
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "common/detail/imagedetail.jsp";
-        },
-        error: function () {
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/image/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="imageuuid" value="' + imageuuid + '" />');
+    var input1 = $('<input type="text" name="imagetype" value="' + imagetype + '" />');
+    form.append(input);
+    form.append(input1);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#delete').on('click', function (event) {
@@ -159,8 +158,8 @@ $('#delete').on('click', function (event) {
 function deleteImage(imageId, imageName) {
     $.ajax({
         type: 'post',
-        url: '/ImageAction',
-        data: {action: "delete", imageId: imageId, imageName: imageName},
+        url: '/ImageAction/Delete',
+        data: {imageId: imageId, imageName: imageName},
         dataType: 'json',
         success: function (obj) {
             if (obj.result) {

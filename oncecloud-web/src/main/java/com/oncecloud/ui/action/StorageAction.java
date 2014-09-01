@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -34,6 +35,18 @@ public class StorageAction {
 		if (user != null) {
 			JSONArray ja = this.getSrManager().getStorageList(list.getPage(),
 					list.getLimit(), list.getSearch());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/Delete", method = { RequestMethod.GET })
+	@ResponseBody
+	public String delete(HttpServletRequest request, @RequestParam String srid, @RequestParam String srname) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getSrManager().deleteStorage(user.getUserId(), srid, srname);
 			return ja.toString();
 		} else {
 			return "";

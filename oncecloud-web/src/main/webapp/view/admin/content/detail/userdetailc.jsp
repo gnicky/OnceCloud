@@ -4,7 +4,7 @@
 		padding: 0 10px 0 0;
 	}
 </style>
-<div class="content detail" id="platformcontent" userid="<%=userid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" userid="${userid}" platformBasePath="${basePath}">
 	<div class="intro">
 		<h1>用户&nbsp;Users</h1>
 		<p class="lead" style="margin-top:10px">
@@ -12,8 +12,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>admin/user.jsp"><span class="glyphicon glyphicon-user cool-green"></span><span class="ctext">USER</span></a></li>
-		<li class="active"><a href="<%=basePath %>admin/detail/userdetail.jsp"><%=username %></a></li>
+		<li><a href="/user"><span class="glyphicon glyphicon-user cool-green"></span><span class="ctext">USER</span></a></li>
+		<li class="active"><a href="/user/detail">${username}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
@@ -24,7 +24,7 @@
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
-							<li><a id="modify" url="<%=basePath %>admin/create/createuser.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+							<li><a id="modify" url="${basePath}admin/create/createuser.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 						</ul>
 					</div>
 				</h3>

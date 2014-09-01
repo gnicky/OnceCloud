@@ -276,7 +276,7 @@ public class PoolManager {
 		}
 	}
 
-	public void unbind(String poolId, int userId) {
+	public JSONArray unbind(String poolId, int userId) {
 		Date startTime = new Date();
 		JSONArray ja = new JSONArray();
 		boolean result = this.getPoolDAO().unbindPool(poolId);
@@ -306,6 +306,7 @@ public class PoolManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
+		return ja;
 	}
 
 	public void updatePool(String poolUuid, String poolName, String poolDesc,

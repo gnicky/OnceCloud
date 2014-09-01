@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     getHostBasicList();
 
-    $('#modify').on('click', function (event) {
+/*    $('#modify').on('click', function (event) {
         event.preventDefault();
         var url = $("#platformcontent").attr(
             'platformBasePath')
@@ -36,6 +36,7 @@ $(document).ready(function () {
             });
         });
     });
+*/
 
     function thirtymin() {
         resetChart();
@@ -184,9 +185,8 @@ $(document).ready(function () {
         basiclist.innerHTML = "";
         $.ajax({
             type: 'get',
-            url: '/HostAction',
-            data: "action=getonehost&hostUuid="
-                + hostUuid,
+            url: '/HostAction/OneHost',
+            data: {hostUuid:hostUuid},
             dataType: 'json',
             success: function (response) {
                 if (response.length > 0) {
@@ -288,7 +288,7 @@ $(document).ready(function () {
                 text: ''
             },
             xAxis: {
-                type: 'datetime',
+                type: 'datetime'
                 //tickPixelInterval: 100
             },
             yAxis: {
@@ -362,7 +362,7 @@ $(document).ready(function () {
                 text: ''
             },
             xAxis: {
-                type: 'datetime',
+                type: 'datetime'
                 //tickPixelInterval: 100
             },
             yAxis: {
@@ -436,7 +436,7 @@ $(document).ready(function () {
                 text: ''
             },
             xAxis: {
-                type: 'datetime',
+                type: 'datetime'
                 // tickPixelInterval: 100
             },
             yAxis: {
@@ -489,8 +489,8 @@ $(document).ready(function () {
     function updateCpuData(uuid, type) {
         $.ajax({
             type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getcpu&uuid=" + uuid + "&type=" + type,
+            url: '/PerformanceAction/CPU',
+            data: {uuid:uuid, type:type},
             dataType: 'text',
             success: function (response) {
                 var obj = jQuery.parseJSON(response);
@@ -524,8 +524,8 @@ $(document).ready(function () {
     function updateMemoryData(uuid, type) {
         $.ajax({
             type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getmemory&uuid=" + uuid + "&type=" + type,
+            url: '/PerformanceAction/Memory',
+            data: {uuid:uuid,type:type},
             dataType: 'text',
             success: function (response) {
                 var array = jQuery.parseJSON(response);
@@ -564,8 +564,8 @@ $(document).ready(function () {
     function updatePifData(uuid, type) {
         $.ajax({
             type: 'get',
-            url: '/PerformanceAction',
-            data: "action=getpif&uuid=" + uuid + "&type=" + type,
+            url: '/PerformanceAction/PIF',
+            data: {uuid:uuid,type:type},
             dataType: 'text',
             success: function (response) {
                 var obj = jQuery.parseJSON(response);

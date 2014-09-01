@@ -117,4 +117,53 @@ public class CommonController {
 		model.put("title", "表单");
 		return new ModelAndView("common/service", model);
 	}
+	
+	@RequestMapping(value = "/image/detail")
+	@ResponseBody
+	public ModelAndView imageDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "映像");
+		model.put("sideActive", 2);
+		String imageuuid = request.getParameter("imageuuid");
+		String imagetype = request.getParameter("imagetype");
+		if (imageuuid != null) {
+			request.getSession().setAttribute("imageuuid", imageuuid);
+			request.getSession().setAttribute("imagetype", imagetype);
+			return new ModelAndView("common/detail/imagedetail", model);
+		} else {
+			if (request.getSession().getAttribute("imageuuid") != null) {
+				return new ModelAndView("common/detail/imagedetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+
+	@RequestMapping(value = "/question/detail")
+	@ResponseBody
+	public ModelAndView questionDetail(HttpServletRequest request) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "表单");
+		model.put("sideActive", 11);
+		String qaid = request.getParameter("qaid");
+		if (qaid != null) {
+			request.getSession().setAttribute("qaid", qaid);
+			return new ModelAndView("common/detail/servicedetail", model);
+		} else {
+			if (request.getSession().getAttribute("imageuuid") != null) {
+				return new ModelAndView("common/detail/servicedetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
 }

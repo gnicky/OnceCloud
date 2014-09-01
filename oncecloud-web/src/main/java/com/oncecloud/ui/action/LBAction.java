@@ -44,7 +44,6 @@ public class LBAction {
 	}
 	
 	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
-	@ResponseBody
 	public void lbAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
@@ -54,7 +53,6 @@ public class LBAction {
 	}
 
 	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
-	@ResponseBody
 	public void lbAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {

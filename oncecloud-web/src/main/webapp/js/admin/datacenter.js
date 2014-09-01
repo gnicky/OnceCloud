@@ -114,18 +114,14 @@ function getDCList(page, limit, search) {
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var dcid = $(this).parent().parent().attr('dcid');
-    $.ajax({
-        type: 'get',
-        url: '/DatacenterAction/Detail',
-        data: {dcid: dcid},
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/detail/datacenterdetail.jsp";
-        },
-        error: function () {
-
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/datacenter/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="dcid" value="' + dcid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 
@@ -168,8 +164,8 @@ $('#delete').on('click', function (event) {
 function deleteDC(dcid, dcname) {
     $.ajax({
         type: 'post',
-        url: '/DatacenterAction',
-        data: 'action=delete&dcid=' + dcid + '&dcname=' + dcname,
+        url: '/DatacenterAction/Delete',
+        data: {dcid:dcid, dcname:dcname},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {
@@ -182,12 +178,3 @@ function deleteDC(dcid, dcname) {
         }
     });
 }
-
-function removeAllCheck() {
-    var boxes = document.getElementsByName("dcrow");
-    for (var i = 0; i < boxes.length; i++) {
-        boxes[i].checked = false;
-        $(boxes[i]).change();
-    }
-}
-

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
@@ -35,6 +36,18 @@ public class QAAction {
 			JSONArray ja = this.getQaManager().getQuestionList(
 					user.getUserId(), user.getUserLevel(), list.getPage(),
 					list.getLimit(), list.getSearch());
+			return ja.toString();
+		} else {
+			return "";
+		}
+	}
+
+	@RequestMapping(value = "/CloseQuestion", method = { RequestMethod.GET })
+	@ResponseBody
+	public String closeQuestion(HttpServletRequest request, @RequestParam int qaid) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			JSONArray ja = this.getQaManager().closeQuestion(user.getUserId(), qaid);
 			return ja.toString();
 		} else {
 			return "";
