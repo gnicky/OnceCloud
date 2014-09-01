@@ -4,4 +4,4 @@
 .settings
 target/
 oncecloud-web/BeyondCloud.log
-
+oncecloud-web/BeyondCLoud.log.*
