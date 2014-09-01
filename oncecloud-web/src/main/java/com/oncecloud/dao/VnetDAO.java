@@ -269,8 +269,8 @@ public class VnetDAO {
 	}
 
 	public String getVnetName(String vnetuuid) {
-		Session session = null;
 		String result = null;
+		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
