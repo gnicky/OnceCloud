@@ -153,15 +153,14 @@ $('#shutdown').on('click', function (event) {
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/VMAction/Detail',
-        data: {uuid: uuid},
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('basePath') + "instance/detail";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/instance/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#platformcontent').on('click', '.backup', function (event) {

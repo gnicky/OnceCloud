@@ -1,11 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String vnid = "vn-" + vnUuid.substring(0, 8);
-%>
-<script src="<%=basePath%>js/jquery.validate.js"></script>
-<script src="<%=basePath%>js/uuid.js"></script>
-<div class="content detail" id="platformcontent" vnUuid="<%=vnUuid%>"
-	platformBasePath="<%=basePath%>" routerUuid="<%=routerUuid %>">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<div class="content detail" id="platformcontent" vnetUuid="${vnetUuid}" routerUuid="${routerUuid}">
 	<div class="intro">
 		<h1>网络&nbsp;Networks</h1>
 		<p class="lead">
@@ -13,8 +8,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/vnet.jsp"><span class="glyphicon glyphicon-barcode cool-green"></span><span class="ctext">VNET</span></a></li>
-		<li class="active"><a href="<%=basePath %>user/detail/vnetdetail.jsp"><%=vnid %></a></li>
+		<li><a href="${basePath}vnet"><span class="glyphicon glyphicon-barcode cool-green"></span><span class="ctext">VNET</span></a></li>
+		<li class="active"><a href="${basePath}vnet/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
@@ -47,17 +42,13 @@
 					</a>
 				</h3>
 			</div>
-			<%
-				if (!routerUuid.equals("null")) {
-			%>
-			<div class="col-div">
-				<p class="alert alert-info">
-					提示：更多&nbsp;DHCP&nbsp;服务设置，请前往所属&nbsp;<a class="" id="router-a">路由器功能</a>&nbsp;页面进行操作。
-				</p>
-			</div>
-			<%
-				}
-			%>
+			<c:if test="${!empty routerUuid}">
+				<div class="col-div">
+					<p class="alert alert-info">
+						提示：更多&nbsp;DHCP&nbsp;服务设置，请前往所属&nbsp;<a class="" id="router-a">路由器功能</a>&nbsp;页面进行操作。
+					</p>
+				</div>
+			</c:if>
 			<div class="vxnets" id="vxnets-t"></div>
 		</div>
 	</div>

@@ -94,10 +94,6 @@ public class VnetAction extends HttpServlet {
 				session.setAttribute("vnetUuid", vnetuuid);
 				String routerid = request.getParameter("routerid");
 				session.setAttribute("routerUuid", routerid);
-			} else if (action.equals("getonevnet")) {
-				String vnetuuid = request.getParameter("vnUuid");
-				JSONObject jo = this.getVnetManager().vnetGetOneVnet(vnetuuid);
-				out.print(jo.toString());
 			} else if (action.equals("checknet")) {
 				String routerid = request.getParameter("routerid");
 				Integer net = Integer.parseInt(request.getParameter("net"));

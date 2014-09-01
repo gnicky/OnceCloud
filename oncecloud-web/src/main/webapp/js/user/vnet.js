@@ -112,18 +112,16 @@ function getVnetList(page, limit, search) {
 }
 
 $('#tablebody').on('click', '.id', function (event) {
-    event.preventDefault();
+	event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    var routerid = $(this).parent().parent().attr('routerrid');
-    $.ajax({
-        type: 'get',
-        url: '/VnetAction',
-        data: 'action=detail&vnetUuid=' + uuid + '&routerid=' + routerid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/vnetdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/vnet/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="vnetUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getInfoList() {

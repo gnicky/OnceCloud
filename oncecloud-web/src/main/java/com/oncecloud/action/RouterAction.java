@@ -86,11 +86,6 @@ public class RouterAction extends HttpServlet {
 			} else if (action.equals("detail")) {
 				String routeruuid = request.getParameter("routerUuid");
 				session.setAttribute("routerUuid", routeruuid);
-			} else if (action.equals("getonerouter")) {
-				String routeruuid = request.getParameter("routerUuid");
-				JSONObject jo = this.getRouterManager().routerGetOneRouter(
-						routeruuid);
-				out.print(jo.toString());
 			} else if (action.equals("getvxnets")) {
 				String routeruuid = request.getParameter("routerUuid");
 				JSONArray jo = this.getRouterManager().getVxnets(routeruuid);

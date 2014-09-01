@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String volumeid = "vol-" + volumeUuid.substring(0, 8);
-%>
-<div class="content detail" id="platformcontent" volumeUuid="<%=volumeUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" volumeUuid="${volumeUuid}">
 	<div class="intro">
 		<h1>硬盘&nbsp;Volumes</h1>
 		<p class="lead">
@@ -10,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/volume.jsp"><span class="glyphicon glyphicon-hdd cool-blue"></span><span class="ctext">VOLUME</span></a></li>
-		<li class="active"><a href="<%=basePath %>user/detail/volumedetail.jsp"><%=volumeid %></a></li>
+		<li><a href="${basePath}volume"><span class="glyphicon glyphicon-hdd cool-blue"></span><span class="ctext">VOLUME</span></a></li>
+		<li class="active"><a href="${basePath}volume/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">

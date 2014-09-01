@@ -29,7 +29,7 @@ $('.resource-item').on('click', function (event) {
 });
 
 function getQuestionList(page, limit, search) {
-	$('#service-area').html("");
+    $('#service-area').html("");
     $.ajax({
         type: 'get',
         url: '/QAAction/QuestionList',
@@ -73,7 +73,7 @@ function getLogList(status, start) {
     $('#act-area').html("");
     $.ajax({
         type: 'get',
-         url: '/LogAction',
+        url: '/LogAction',
         data: {status: status, start: start, num: "10"},
         dataType: 'json',
         success: function (jsonArray) {
