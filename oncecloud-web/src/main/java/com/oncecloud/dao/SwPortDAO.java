@@ -28,12 +28,20 @@ public class SwPortDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<SwPort> getSwPortOfVlan(String vlanid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from SwPort where vlanUuid ='" + vlanid + "'";
-		Query query = session.createQuery(queryString);
-		List<SwPort> vlanList = query.list();
-		session.close();
+	public List<SwPort> getSwPortOfVlan(String vlanId) {
+		List<SwPort> vlanList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from SwPort where vlanUuid = :vlanId";
+			Query query = session.createQuery(queryString);
+			query.setString("vlanId", vlanId);
+			vlanList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return vlanList;
 	}
 }

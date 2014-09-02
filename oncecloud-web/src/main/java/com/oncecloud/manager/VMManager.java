@@ -381,7 +381,7 @@ public class VMManager {
 		Connection c = null;
 		try {
 			c = this.getConstant().getConnectionFromPool(poolUuid);
-			boolean preDeleteVM = this.getVmDAO().setVMPowerStatus(uuid,
+			boolean preDeleteVM = this.getVmDAO().updatePowerStatus(uuid,
 					VMManager.POWER_DESTROY);
 			if (preDeleteVM == true) {
 				VM thisVM = VM.getByUuid(c, uuid);
@@ -420,7 +420,7 @@ public class VMManager {
 
 	private void emptyAttachedVolume(Connection c, String uuid) {
 		try {
-			List<String> volumeList = this.getVolumeDAO().getVolumeListByVM(
+			List<String> volumeList = this.getVolumeDAO().getVolumesOfVM(
 					uuid);
 			for (String volume : volumeList) {
 				try {
@@ -478,7 +478,7 @@ public class VMManager {
 		try {
 			currentVM = this.getVmDAO().getVM(uuid);
 			if (currentVM != null) {
-				boolean preRestartVM = this.getVmDAO().setVMPowerStatus(uuid,
+				boolean preRestartVM = this.getVmDAO().updatePowerStatus(uuid,
 						VMManager.POWER_RESTART);
 				if (preRestartVM == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
@@ -495,8 +495,8 @@ public class VMManager {
 					} else {
 						thisVM.start(c, false, true);
 					}
-					this.getVmDAO().setVMHostUuid(uuid, hostUuid);
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updateHostUuid(uuid, hostUuid);
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_RUNNING);
 					result = true;
 				}
@@ -505,14 +505,14 @@ public class VMManager {
 			e.printStackTrace();
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_RUNNING);
 				} else {
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_HALTED);
 				}
 			} else {
-				this.getVmDAO().setVMPowerStatus(hostUuid,
+				this.getVmDAO().updatePowerStatus(hostUuid,
 						VMManager.POWER_RUNNING);
 			}
 		} finally {
@@ -579,7 +579,7 @@ public class VMManager {
 		try {
 			currentVM = this.getVmDAO().getVM(uuid);
 			if (currentVM != null) {
-				boolean preStartVM = this.getVmDAO().setVMPowerStatus(uuid,
+				boolean preStartVM = this.getVmDAO().updatePowerStatus(uuid,
 						VMManager.POWER_BOOT);
 				if (preStartVM == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
@@ -594,8 +594,8 @@ public class VMManager {
 					} else {
 						hostUuid = thisVM.getResidentOn(c).toWireString();
 					}
-					this.getVmDAO().setVMHostUuid(uuid, hostUuid);
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updateHostUuid(uuid, hostUuid);
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_RUNNING);
 					result = true;
 				}
@@ -604,14 +604,14 @@ public class VMManager {
 			e.printStackTrace();
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_RUNNING);
 				} else {
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_HALTED);
 				}
 			} else {
-				this.getVmDAO().setVMPowerStatus(uuid, VMManager.POWER_HALTED);
+				this.getVmDAO().updatePowerStatus(uuid, VMManager.POWER_HALTED);
 			}
 		} finally {
 			if (result = true) {
@@ -677,7 +677,7 @@ public class VMManager {
 		try {
 			OCVM currentVM = this.getVmDAO().getVM(uuid);
 			if (currentVM != null) {
-				boolean preShutdownVM = this.getVmDAO().setVMPowerStatus(uuid,
+				boolean preShutdownVM = this.getVmDAO().updatePowerStatus(uuid,
 						VMManager.POWER_SHUTDOWN);
 				if (preShutdownVM == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
@@ -695,8 +695,8 @@ public class VMManager {
 							}
 						}
 					}
-					this.getVmDAO().setVMHostUuid(uuid, hostUuid);
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updateHostUuid(uuid, hostUuid);
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_HALTED);
 					result = true;
 				}
@@ -705,14 +705,14 @@ public class VMManager {
 			e.printStackTrace();
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_RUNNING);
 				} else {
-					this.getVmDAO().setVMPowerStatus(uuid,
+					this.getVmDAO().updatePowerStatus(uuid,
 							VMManager.POWER_HALTED);
 				}
 			} else {
-				this.getVmDAO().setVMPowerStatus(uuid, VMManager.POWER_RUNNING);
+				this.getVmDAO().updatePowerStatus(uuid, VMManager.POWER_RUNNING);
 			}
 		} finally {
 			if (result == true) {
@@ -906,8 +906,8 @@ public class VMManager {
 	 */
 	public JSONArray getVMList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVmDAO().countAllVMList(userId, search);
-		List<OCVM> VMList = this.getVmDAO().getOnePageVmList(userId, page,
+		int totalNum = this.getVmDAO().countVMs(userId, search);
+		List<OCVM> VMList = this.getVmDAO().getOnePageVMs(userId, page,
 				limit, search);
 		ja.put(totalNum);
 		if (VMList != null) {
@@ -957,8 +957,8 @@ public class VMManager {
 	public JSONArray getAdminVMList(int page, int limit, String host,
 			int importance, String type) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVmDAO().countAllAdminVMList(host, importance);
-		List<OCVM> vmList = this.getVmDAO().getOnePageAdminVmList(page, limit,
+		int totalNum = this.getVmDAO().countVMsOfAdmin(host, importance);
+		List<OCVM> vmList = this.getVmDAO().getOnePageVMsOfAdmin(page, limit,
 				host, importance);
 		ja.put(totalNum);
 		if (vmList != null) {
@@ -996,9 +996,9 @@ public class VMManager {
 
 	public JSONArray getAbleVMs(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVmDAO().countAllVMList(userId, search);
+		int totalNum = this.getVmDAO().countVMs(userId, search);
 		ja.put(totalNum);
-		List<OCVM> vmList = this.getVmDAO().getOnePageVmList(userId, page,
+		List<OCVM> vmList = this.getVmDAO().getOnePageVMs(userId, page,
 				limit, search);
 		if (vmList != null) {
 			for (int i = 0; i < vmList.size(); i++) {
@@ -1045,7 +1045,7 @@ public class VMManager {
 			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(ocvm
 					.getCreateDate()));
 			List<String> volList = this.getVolumeDAO()
-					.getVolumeListByVM(vmUuid);
+					.getVolumesOfVM(vmUuid);
 			if (volList == null || volList.size() == 0) {
 				jo.put("volList", "&nbsp;");
 			} else {

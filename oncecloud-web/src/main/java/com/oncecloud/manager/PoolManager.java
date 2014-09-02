@@ -369,7 +369,7 @@ public class PoolManager {
 					String powerStatus = sr.powerStatus;
 					String hostUuid = sr.hostUuid;
 					int power = powerStatus.equals("Running") ? 1 : 0;
-					this.getVmDAO().updatePowerAndHost(session, uuid, power,
+					this.getVmDAO().updatePowerAndHostNoTransaction(uuid, power,
 							hostUuid);
 				}
 				tx.commit();

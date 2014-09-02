@@ -39,6 +39,12 @@ public class VolumeDAO {
 		this.quotaDAO = quotaDAO;
 	}
 
+	/**
+	 * 获取硬盘
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
 	public Volume getVolume(String volumeUuid) {
 		Volume volume = null;
 		Session session = null;
@@ -59,7 +65,7 @@ public class VolumeDAO {
 	}
 
 	/**
-	 * 获取用户硬盘列表
+	 * 获取一页用户硬盘列表
 	 * 
 	 * @param userId
 	 * @param page
@@ -68,7 +74,7 @@ public class VolumeDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Volume> getOnePageVolumeList(int userId, int page, int limit,
+	public List<Volume> getOnePageVolumes(int userId, int page, int limit,
 			String search) {
 		List<Volume> volumeList = null;
 		Session session = null;
@@ -96,42 +102,13 @@ public class VolumeDAO {
 	}
 
 	/**
-	 * 获取用户硬盘总数
-	 * 
-	 * @param userId
-	 * @param search
-	 * @return
-	 */
-	public int countAllVolumeList(int userId, String search) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			StringBuilder builder = new StringBuilder(
-					"select count(*) from Volume where volumeUID = :userId and ");
-			builder.append("volumeName like :search and volumeStatus != 0");
-			Query query = session.createQuery(builder.toString());
-			query.setInteger("userId", userId);
-			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	/**
 	 * 获取主机硬盘列表
 	 * 
 	 * @param vmUuid
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<String> getVolumeListByVM(String vmUuid) {
+	public List<String> getVolumesOfVM(String vmUuid) {
 		List<String> volumeList = null;
 		Session session = null;
 		try {
@@ -148,6 +125,55 @@ public class VolumeDAO {
 			}
 		}
 		return volumeList;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Volume> getVolListByVM(String vmUuid) {
+		List<Volume> volumeList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Volume where volumeDependency=:vmUuid and volumeStatus=4";
+			Query query = session.createQuery(queryString);
+			query.setString("vmUuid", vmUuid);
+			volumeList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return volumeList;
+	}
+
+	/**
+	 * 获取用户硬盘总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public int countVolumes(int userId, String search) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			StringBuilder builder = new StringBuilder(
+					"select count(*) from Volume where volumeUID = :userId and ");
+			builder.append("volumeName like :search and volumeStatus != 0");
+			Query query = session.createQuery(builder.toString());
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.uniqueResult()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
 	}
 
 	/**
@@ -186,15 +212,12 @@ public class VolumeDAO {
 		return result;
 	}
 
-	public boolean isExist(String volumeUuid) {
-		boolean result = false;
-		Volume volume = this.getVolume(volumeUuid);
-		if (volume != null && volume.getVolumeStatus() > 0) {
-			result = true;
-		}
-		return result;
-	}
-
+	/**
+	 * 删除硬盘
+	 * 
+	 * @param userId
+	 * @param volumeUuid
+	 */
 	public void deleteVolume(int userId, String volumeUuid) {
 		Volume volume = this.getVolume(volumeUuid);
 		if (volume != null) {
@@ -216,6 +239,21 @@ public class VolumeDAO {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 硬盘是否存在
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public boolean isExist(String volumeUuid) {
+		boolean result = false;
+		Volume volume = this.getVolume(volumeUuid);
+		if (volume != null && volume.getVolumeStatus() > 0) {
+			result = true;
+		}
+		return result;
 	}
 
 	public void addDependency(String volumeUuid, String vmUuid) {
@@ -293,47 +331,7 @@ public class VolumeDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Volume> getAbledVolumes(int userId) {
-		List<Volume> volumeList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Volume where volumeUID=:userId and volumeDependency=null and volumeStatus=1";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			volumeList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return volumeList;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Volume> getVolListByVM(String vmUuid) {
-		List<Volume> volumeList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Volume where volumeDependency=:vmUuid and volumeStatus=4";
-			Query query = session.createQuery(queryString);
-			query.setString("vmUuid", vmUuid);
-			volumeList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return volumeList;
-	}
-
-	public boolean setVolumeStatus(String volUuid, int status) {
+	public boolean updateVolumeStatus(String volUuid, int status) {
 		boolean result = false;
 		Volume volume = this.getVolume(volUuid);
 		if (volume != null) {
@@ -352,5 +350,25 @@ public class VolumeDAO {
 			}
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Volume> getAbledVolumes(int userId) {
+		List<Volume> volumeList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Volume where volumeUID=:userId and volumeDependency=null and volumeStatus=1";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			volumeList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return volumeList;
 	}
 }

@@ -64,66 +64,6 @@ $('body').delegate("textarea", 'focusout', function (event) {
     }
 });
 
-function initReverseAjax() {
-    dwr.engine.setActiveReverseAjax(true);
-    dwr.engine.setNotifyServerOnPageUnload(true);
-}
-
-function showMessage(pmessage) {
-    $.sticky(pmessage);
-}
-
-function dwrDeleteRow(rowid) {
-    var thistr = $('#tablebody').find('[rowid="' + rowid + '"]');
-    $(thistr).remove();
-}
-
-function dwrEditRowStatus(rowid, icon, word) {
-    var thistr = $('#tablebody').find('[rowid="' + rowid + '"]');
-    if (thistr.size() == 1) {
-        thistr.find('[name="stateicon"]').removeClass();
-        thistr.find('[name="stateicon"]').addClass("icon-status");
-        thistr.find('[name="stateicon"]').addClass("icon-" + icon);
-        thistr.find('[name="stateword"]').text(word);
-    }
-}
-
-function dwrEditRowIP(rowid, network, ip) {
-    var thistr = $('#tablebody').find('[rowid="' + rowid + '"]');
-    if (thistr.size() == 1) {
-        thistr.find('[name="sip"]').html('<a>(' + network + ')&nbsp;/&nbsp;' + ip + '</a>');
-    }
-}
-
-function dwrEditRowConsole(rowid, option) {
-    var thistr = $('#tablebody').find('[rowid="' + rowid + '"]');
-    if (thistr.size() == 1) {
-        if (option == "add") {
-            var thistd = thistr.find('[name="console"]');
-            if (thistd.find('.console').size() == 0) {
-                thistd.append('<a class="console" data-uuid='
-                    + rowid + '><img src="../img/user/console.png"></a>');
-            }
-        } else {
-            thistr.find('.console').remove();
-        }
-    }
-}
-
-function dwrEditRowStatusForUnbindVolume(rowid) {
-    var thistr = $('#tablebody').find('[rowid="' + rowid + '"]');
-    if (thistr.size() == 1) {
-        var vmtd = thistr.find('[vmuuid]').attr('vmuuid', "").text("");
-    }
-}
-
-function dwrEditRowStatusForBindVolume(rowid, vmuuid, vmname) {
-    var thistr = $('#tablebody').find('[rowid="' + rowid + '"]');
-    if (thistr.size() == 1) {
-        var vmtd = thistr.find('[vmuuid]').attr('vmuuid', vmuuid).html('<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + vmname + '</a>');
-    }
-}
-
 var options = {
     bootstrapMajorVersion: 3,
     currentPage: 1,

@@ -555,11 +555,11 @@ public class RouterManager {
 	 */
 	public JSONArray getVxnets(String rtuuid) {
 		JSONArray ja = new JSONArray();
-		List<Vnet> vxnetsList = this.getVnetDAO().getVxnets(rtuuid);
+		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(rtuuid);
 		if (vxnetsList != null) {
 			for (Vnet vnet : vxnetsList) {
 				JSONObject jo = new JSONObject();
-				List<OCVM> ocvmList = this.getVmDAO().getVxnetsList(
+				List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(
 						vnet.getVnetUuid());
 				if (ocvmList.size() == 0) {
 					jo.put("ocvm", "null");
@@ -600,8 +600,8 @@ public class RouterManager {
 	public JSONArray getRouterList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
-		int total = this.getRouterDAO().countAllRouterList(userId, search);
-		List<Router> routerList = this.getRouterDAO().getOnePageRouterList(
+		int total = this.getRouterDAO().countRouters(userId, search);
+		List<Router> routerList = this.getRouterDAO().getOnePageRouters(
 				userId, page, limit, search);
 		ja.put(total);
 		if (routerList != null) {
@@ -638,9 +638,9 @@ public class RouterManager {
 
 	public JSONArray getAbleRTs(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getRouterDAO().countAllRouterList(userId, search);
+		int totalNum = this.getRouterDAO().countRouters(userId, search);
 		ja.put(totalNum);
-		List<Router> rtList = this.getRouterDAO().getOnePageRouterList(userId,
+		List<Router> rtList = this.getRouterDAO().getOnePageRouters(userId,
 				page, limit, search);
 		if (rtList != null) {
 			for (int i = 0; i < rtList.size(); i++) {
@@ -861,8 +861,8 @@ public class RouterManager {
 			int importance, String type) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO()
-				.countAllAdminList(host, importance);
-		List<Router> rtList = this.getRouterDAO().getOnePageAdminList(page,
+				.countRoutersOfAdmin(host, importance);
+		List<Router> rtList = this.getRouterDAO().getOnePageRoutersOfAdmin(page,
 				limit, host, importance);
 		ja.put(totalNum);
 		if (rtList != null) {

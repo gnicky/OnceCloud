@@ -27,25 +27,53 @@ public class SwitchDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
+	/**
+	 * 获取交换机列表
+	 * 
+	 * @param switchId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Switch> getSwitchOfRack(String rackid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from Switch where swState = 1 and rackUuid ='"
-				+ rackid + "' order by createDate desc";
-		Query query = session.createQuery(queryString);
-		List<Switch> switchList = query.list();
-		session.close();
+	public List<Switch> getSwitch(String switchId) {
+		List<Switch> switchList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Switch where swState = 1 and swUuid = :switchId "
+					+ "order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setString("switchId", switchId);
+			switchList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return switchList;
 	}
 
+	/**
+	 * 获取机架交换机列表
+	 * 
+	 * @param rackUuid
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<Switch> getSwitch(String switchid) {
-		Session session = this.getSessionHelper().getMainSession();
-		String queryString = "from Switch where swState = 1 and swUuid ='"
-				+ switchid + "' order by createDate desc";
-		Query query = session.createQuery(queryString);
-		List<Switch> switchList = query.list();
-		session.close();
+	public List<Switch> getSwitchOfRack(String rackUuid) {
+		List<Switch> switchList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Switch where swState = 1 and rackUuid = :rackUuid "
+					+ "order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setString("rackUuid", rackUuid);
+			switchList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return switchList;
 	}
 }

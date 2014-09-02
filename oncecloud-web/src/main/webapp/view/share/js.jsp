@@ -6,8 +6,6 @@
 <script src="${basePath}js/bootstrap-paginator.min.js"></script>
 <script src='${basePath}js/bootbox.min.js'></script>
 <script src="${basePath}js/sticky.full.js"></script>
-<%-- <script src='${basePath}js/engine.js'></script> --%>
-<%-- <script src='${basePath}dwr/util.js'></script> --%>
 <script src='${basePath}js/uuid.js'></script>
 <script src="${basePath}js/oncecloud.js"></script>
 <script src="${basePath}js/message.js"></script>

@@ -163,7 +163,7 @@ public class RackDAO {
 			String queryString = "select count(*) from Rack where rackName like :search and rackStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

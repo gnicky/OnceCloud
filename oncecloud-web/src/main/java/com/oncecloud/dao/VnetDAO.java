@@ -41,6 +41,12 @@ public class VnetDAO {
 	private final static int VNETMIN = 2;
 	private final static int VNETMAX = 4096;
 
+	/**
+	 * 获取用户私有网络
+	 * 
+	 * @param vnetUuid
+	 * @return
+	 */
 	public Vnet getVnet(String vnetUuid) {
 		Vnet vnet = null;
 		Session session = null;
@@ -62,83 +68,22 @@ public class VnetDAO {
 	}
 
 	/**
-	 * 获取用户私有网络列表
+	 * 获取私有网络名称
 	 * 
-	 * @param userId
-	 * @param page
-	 * @param limit
-	 * @param search
+	 * @param vnetuuid
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public List<Vnet> getOnePageVnetList(int userId, int page, int limit,
-			String search) {
-		List<Vnet> vnetList = null;
+	public String getVnetName(String vnetuuid) {
+		String result = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "from Vnet where vnetUID = :userId and vnetName like :search order by createDate desc";
+			String queryString = "select vnetName from Vnet where vnetUuid = :vnetUuid";
 			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", "%" + search + "%");
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			vnetList = query.list();
+			query.setString("vnetUuid", vnetuuid);
+			result = (String) query.uniqueResult();
 			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return vnetList;
-	}
-
-	/**
-	 * 获取用户私有网络总数
-	 * 
-	 * @param userId
-	 * @param search
-	 * @return
-	 */
-	public int countAllVnetList(int userId, String search) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select count(*) from Vnet where vnetUID = :usrId and vnetName like :search";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	public boolean createVnet(String uuid, int userId, String name, String desc) {
-		Session session = null;
-		boolean result = false;
-		try {
-			Vnet vnet = new Vnet(uuid, userId, name, desc, null, null, null,
-					null, 1, null, new Date());
-			vnet.setVnetID(getFreeVnetID());
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.beginTransaction();
-			session.save(vnet);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaVlan", 1, true);
-			session.getTransaction().commit();
-			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -148,6 +93,11 @@ public class VnetDAO {
 		return result;
 	}
 
+	/**
+	 * 获取空闲的私有网络ID
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public int getFreeVnetID() {
 		int freeVnet = 0;
@@ -175,6 +125,194 @@ public class VnetDAO {
 		return freeVnet;
 	}
 
+	/**
+	 * 获取一页用户私有网络列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Vnet> getOnePageVnets(int userId, int page, int limit,
+			String search) {
+		List<Vnet> vnetList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "from Vnet where vnetUID = :userId and vnetName like :search order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			vnetList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return vnetList;
+	}
+
+	/**
+	 * 获取用户私有网络列表
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Vnet> getVnetsOfUser(int userId) {
+		List<Vnet> vxnetsList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Vnet where vnetUID = :userid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userid", userId);
+			vxnetsList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return vxnetsList;
+	}
+
+	/**
+	 * 获取路由器私有网络列表
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Vnet> getVnetsOfRouter(String routerUuid) {
+		List<Vnet> vxnetsList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Vnet where vnetRouter = :routerid";
+			Query query = session.createQuery(queryString);
+			query.setString("routerid", routerUuid);
+			vxnetsList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return vxnetsList;
+	}
+
+	/**
+	 * 获取用户私有网络总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public int countVnets(int userId, String search) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from Vnet where vnetUID = :usrId and vnetName like :search";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.uniqueResult()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * 查看是否被占用
+	 * 
+	 * @param userId
+	 * @param routerid
+	 * @param net
+	 * @return
+	 */
+	public int countAbleNet(int userId, String routerid, Integer net) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from Vnet where vnetUID = :userid "
+					+ " and vnetNet = :net and vnetRouter = :routerid";
+			Query query = session.createQuery(queryString);
+			query.setString("routerid", routerid);
+			query.setInteger("userid", userId);
+			query.setInteger("net", net);
+			count = ((Number) query.uniqueResult()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * 创建私有网络
+	 * 
+	 * @param uuid
+	 * @param userId
+	 * @param name
+	 * @param desc
+	 * @return
+	 */
+	public boolean createVnet(String uuid, int userId, String name, String desc) {
+		Session session = null;
+		boolean result = false;
+		try {
+			Vnet vnet = new Vnet(uuid, userId, name, desc, null, null, null,
+					null, 1, null, new Date());
+			vnet.setVnetID(getFreeVnetID());
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.beginTransaction();
+			session.save(vnet);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+					"quotaVlan", 1, true);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 删除私有网络
+	 * 
+	 * @param userId
+	 * @param uuid
+	 * @return
+	 */
 	public boolean removeVnet(int userId, String uuid) {
 		boolean result = false;
 		Session session = null;
@@ -197,53 +335,15 @@ public class VnetDAO {
 		}
 		return result;
 	}
-
-	public boolean setVlan2VM(String vnetUuid, String vmUuid, String vmIp) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "update OCVM set vmVlan=:vnetUuid,vmIp=:ip where vmUuid =:vmUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("vnetUuid", vnetUuid);
-			query.setString("ip", vnetUuid);
-			query.setString("vmUuid", vmUuid);
-			query.executeUpdate();
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean setDhcpStatus(String vnetUuid, int state) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "update Vnet set dhcpStatus = :state "
-					+ "where vnetUuid = :vnetUuid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("state", state);
-			query.setString("vnetUuid", vnetUuid);
-			query.executeUpdate();
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
+	
+	/**
+	 * 更新私有网络
+	 * 
+	 * @param vnetuuid
+	 * @param newName
+	 * @param description
+	 * @return
+	 */
 	public boolean updateVnet(String vnetuuid, String newName,
 			String description) {
 		boolean result = false;
@@ -251,7 +351,7 @@ public class VnetDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update Vnet set vnetName=:name, vnetDesc=:desc where vnetUuid=:uuid";
+			String queryString = "update Vnet set vnetName = :name, vnetDesc = :desc where vnetUuid = :uuid";
 			Query query = session.createQuery(queryString);
 			query.setString("name", newName);
 			query.setString("uuid", vnetuuid);
@@ -268,26 +368,19 @@ public class VnetDAO {
 		return result;
 	}
 
-	public String getVnetName(String vnetuuid) {
-		String result = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select vnetName from Vnet where vnetUuid = :vnetUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("vnetUuid", vnetuuid);
-			result = (String) query.list().get(0);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
+	/**
+	 * 私有网络连接路由器
+	 * 
+	 * @param vnetuuid
+	 * @param routerUuid
+	 * @param net
+	 * @param gate
+	 * @param start
+	 * @param end
+	 * @param dhcpStatus
+	 * @param mac
+	 * @return
+	 */
 	public boolean linkToRouter(String vnetuuid, String routerUuid,
 			Integer net, Integer gate, Integer start, Integer end,
 			Integer dhcpStatus, String mac) {
@@ -320,7 +413,13 @@ public class VnetDAO {
 		return result;
 	}
 
-	public boolean unlink(String vnetuuid) {
+	/**
+	 * 私有网络离开路由器
+	 * 
+	 * @param vnetuuid
+	 * @return
+	 */
+	public boolean unLinkToRouter(String vnetuuid) {
 		boolean result = false;
 		Session session = null;
 		try {
@@ -341,70 +440,5 @@ public class VnetDAO {
 			}
 		}
 		return result;
-	}
-
-	public int countAbleNet(int userId, String routerid, Integer net) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select count(*) from Vnet where vnetUID = :userid "
-					+ " and vnetNet = :net and vnetRouter = :routerid";
-			Query query = session.createQuery(queryString);
-			query.setString("routerid", routerid);
-			query.setInteger("userid", userId);
-			query.setInteger("net", net);
-			count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Vnet> getVxnets(String routerUuid) {
-		List<Vnet> vxnetsList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Vnet where vnetRouter = :routerid";
-			Query query = session.createQuery(queryString);
-			query.setString("routerid", routerUuid);
-			vxnetsList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return vxnetsList;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Vnet> getallVnetList(int userId) {
-		List<Vnet> vxnetsList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Vnet where vnetUID = :userid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userid", userId);
-			vxnetsList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return vxnetsList;
 	}
 }

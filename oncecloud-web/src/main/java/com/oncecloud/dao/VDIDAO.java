@@ -1,11 +1,9 @@
 package com.oncecloud.dao;
 
 import java.util.Date;
-import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,91 +27,104 @@ public class VDIDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	public int countFreeVDI(String tplUuid) {
-		int count = -1;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "select count(*) from OCVDI where tplUuid=:tplUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("tplUuid", tplUuid);
-			count = ((Number) query.iterate().next()).intValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return count;
-	}
-
-	@SuppressWarnings("unchecked")
+	/**
+	 * 获取指定模板空闲VDI
+	 * 
+	 * @param tplUuid
+	 * @return
+	 */
 	public OCVDI getFreeVDI(String tplUuid) {
 		OCVDI vdi = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "from OCVDI where tplUuid=:tplUuid";
+			session.beginTransaction();
+			String queryString = "from OCVDI where tplUuid= :tplUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("tplUuid", tplUuid);
-			List<OCVDI> vdiList = query.list();
-			vdi = vdiList.get(0);
+			vdi = (OCVDI) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vdi;
 	}
 
+	/**
+	 * 获取指定模板空闲VDI总数
+	 * 
+	 * @param tplUuid
+	 * @return
+	 */
+	public int countFreeVDI(String tplUuid) {
+		int count = -1;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from OCVDI where tplUuid= :tplUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("tplUuid", tplUuid);
+			count = ((Number) query.uniqueResult()).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * 删除VDI
+	 * 
+	 * @param vdi
+	 * @return
+	 */
 	public boolean deleteVDI(OCVDI vdi) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.delete(vdi);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
 	}
 
+	/**
+	 * 添加VDI
+	 * 
+	 * @param tplUuid
+	 * @param vmUuid
+	 * @return
+	 */
 	public OCVDI saveVDI(String tplUuid, String vmUuid) {
 		OCVDI vdi = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			vdi = new OCVDI();
 			vdi.setTplUuid(tplUuid);
 			vdi.setVdiUuid(vmUuid);
 			vdi.setCreateDate(new Date());
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.save(vdi);
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-			return null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vdi;

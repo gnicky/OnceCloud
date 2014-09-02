@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,34 +54,34 @@ public class EIPDAO {
 			int eipBandwidth, Date createDate, String eipUuid) {
 		EIP eip = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			Query query = session.createQuery("from EIP where eipUID = null");
-			query.setFirstResult(0);
-			query.setMaxResults(1);
-			List<EIP> eipList = query.list();
-			eip = eipList.get(0);
-			eip.setEipName(eipName);
-			eip.setEipUuid(eipUuid);
-			eip.setEipUID(userId);
-			eip.setEipBandwidth(eipBandwidth);
-			eip.setCreateDate(createDate);
-			session.update(eip);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId, "quotaIP",
-					1, true);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaBandwidth", eipBandwidth, true);
-			tx.commit();
-			return eip;
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(EIP.class)
+					.add(Restrictions.isNull("eipUID")).setFirstResult(0)
+					.setMaxResults(1);
+			List<EIP> eipList = criteria.list();
+			if (eipList.size() > 0) {
+				eip = eipList.get(0);
+				eip.setEipName(eipName);
+				eip.setEipUuid(eipUuid);
+				eip.setEipUID(userId);
+				eip.setEipBandwidth(eipBandwidth);
+				eip.setCreateDate(createDate);
+				session.update(eip);
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+						"quotaIP", 1, true);
+				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+						"quotaBandwidth", eipBandwidth, true);
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eip;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -88,22 +91,24 @@ public class EIPDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from EIP where eipUID = :userId and eipName like '%:search%' order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", search);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			eipList = query.list();
-			return eipList;
+			Criteria criteria = session
+					.createCriteria(EIP.class)
+					.add(Restrictions.eq("eipUID", userId))
+					.add(Restrictions.like("eipName", search,
+							MatchMode.ANYWHERE))
+					.addOrder(Order.desc("createDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
+			eipList = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipList;
 	}
 
 	/**
@@ -117,29 +122,29 @@ public class EIPDAO {
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEipListAlarm(int page, int limit, String search,
 			int eipUID) {
+		List<EIP> eipList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "from EIP where eipUID=:eipUID and eipName like '%"
-					+ search
-					+ "%' and alarmUuid is null order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("eipUID", eipUID);
-			List<EIP> eipList = query.list();
+			Criteria criteria = session
+					.createCriteria(EIP.class)
+					.add(Restrictions.eq("eipUID", eipUID))
+					.add(Restrictions.like("eipName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.isNull("alarmUuid"))
+					.addOrder(Order.desc("createDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
+			eipList = criteria.list();
 			session.getTransaction().commit();
-			return eipList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipList;
 	}
 
 	public int countAllEipList(int userId, String search) {
@@ -148,21 +153,21 @@ public class EIPDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) from EIP where eipUID = :userId and eipName like '%:search%'";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", search);
-			count = ((Number) query.iterate().next()).intValue();
+			Criteria criteria = session
+					.createCriteria(EIP.class)
+					.add(Restrictions.eq("eipUID", userId))
+					.add(Restrictions.like("eipName", search,
+							MatchMode.ANYWHERE))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
 	/**
@@ -172,39 +177,39 @@ public class EIPDAO {
 	 * @return
 	 */
 	public int countAllEipListAlarm(String search, int eipUID) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) from EIP where eipUID=:eipUID and eipName like '%"
-					+ search + "%' and alarmUuid is null ";
-			Query query = session.createQuery(queryString);
-			query.setInteger("eipUID", eipUID);
-			int total = ((Number) query.iterate().next()).intValue();
+			Criteria criteria = session
+					.createCriteria(EIP.class)
+					.add(Restrictions.eq("eipUID", eipUID))
+					.add(Restrictions.like("eipName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.isNull("alarmUuid"))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void abandonEip(String eipIp, int userId) {
+	public boolean abandonEip(String eipIp, int userId) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			Query query = session.createQuery("from EIP where eipIp = :ip");
-			query.setString("ip", eipIp);
-			List<EIP> eipList = query.list();
-			EIP eip = eipList.get(0);
-			if (eip.getEipUID() == userId) {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(EIP.class).add(
+					Restrictions.eq("eipIp", eipIp));
+			EIP eip = (EIP) criteria.uniqueResult();
+			if (eip != null && eip.getEipUID() == userId) {
 				int bandwith = eip.getEipBandwidth();
 				eip.setEipBandwidth(null);
 				eip.setEipDependency(null);
@@ -216,152 +221,141 @@ public class EIPDAO {
 						"quotaIP", 1, false);
 				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaBandwidth", bandwith, false);
-				tx.commit();
+				result = true;
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	public EIP getEip(String eipIp) {
+		EIP eip = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from EIP where eipIp=:ip");
-			query.setString("ip", eipIp);
-			List<EIP> eipList = query.list();
+			eip = this.doGetEip(session, eipIp);
 			session.getTransaction().commit();
-			return eipList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eip;
 	}
 
-	@SuppressWarnings("unchecked")
+	private EIP doGetEip(Session session, String eipIp) {
+		EIP eip;
+		Criteria criteria = session.createCriteria(EIP.class).add(
+				Restrictions.eq("eipIp", eipIp));
+		eip = (EIP) criteria.uniqueResult();
+		return eip;
+	}
+
 	public String getEipId(String eip) {
-		String eipid = null;
+		String eipId = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select eipUuid from EIP where eipIp =:eip";
-			Query query = session.createQuery(queryString);
-			query.setString("eip", eip);
-			List<Object> objlist = query.list();
-			if (objlist.size() == 1) {
-				eipid = (String) objlist.get(0);
+			Criteria criteria = session.createCriteria(EIP.class).add(
+					Restrictions.eq("eipIp", eip));
+			EIP ip = (EIP) criteria.uniqueResult();
+			if (ip != null) {
+				eipId = ip.getEipUuid();
 			}
 			session.getTransaction().commit();
-			return eipid;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipId;
 	}
 
-	@SuppressWarnings("unchecked")
-	public EIP getEipByUuid(String eipUuid) {
+	public boolean bindEip(String eipIp, String dependencyUuid, int type) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from EIP where eipUuid=:Uuid");
-			query.setString("Uuid", eipUuid);
-			List<EIP> eipList = query.list();
+			EIP eip = this.doGetEip(session, eipIp);
+			if (eip != null) {
+				eip.setEipDependency(dependencyUuid);
+				eip.setDepenType(type);
+				session.update(eip);
+				result = true;
+			}
 			session.getTransaction().commit();
-			return eipList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return result;
 	}
 
-	public void bindEip(String eipIp, String dependencyUuid, int type) {
+	public boolean unBindEip(String eipIp) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session
-					.createQuery("update EIP set eipDependency=:uuid,depenType=:type where eipIp=:ip");
-			query.setString("uuid", dependencyUuid);
-			query.setInteger("type", type);
-			query.setString("ip", eipIp);
-			query.executeUpdate();
-			tx.commit();
+			session.beginTransaction();
+			EIP eip = this.doGetEip(session, eipIp);
+			if (eip != null) {
+				eip.setEipDependency(null);
+				eip.setDepenType(null);
+				session.update(eip);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void unBindEip(String eipIp) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session
-					.createQuery("update EIP set eipDependency=null,depenType=null where eipIp=:ip");
-			query.setString("ip", eipIp);
-			query.executeUpdate();
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	public String getEipIp(String dependencyUuid) {
 		String eipIp = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session
-					.createQuery("select eipIp from EIP where eipDependency=:dependency");
-			query.setString("dependency", dependencyUuid);
-			List<Object> dependList = query.list();
-			if (dependList != null && dependList.size() == 1) {
-				eipIp = (String) dependList.get(0);
+			Criteria criteria = session.createCriteria(EIP.class).add(
+					Restrictions.eq("eipDependency", dependencyUuid));
+			EIP eip = (EIP) criteria.uniqueResult();
+			if (eip != null) {
+				eipIp = eip.getEipIp();
 			}
 			session.getTransaction().commit();
-			return eipIp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipIp;
 	}
 
 	public boolean changeBandwidth(int userId, EIP eipObj, int size) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int origin = eipObj.getEipBandwidth();
 			eipObj.setEipBandwidth(size);
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
 			session.update(eipObj);
 			if (size > origin) {
 				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
@@ -370,27 +364,27 @@ public class EIPDAO {
 				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 						"quotaBandwidth", origin - size, false);
 			}
-			tx.commit();
-			return true;
+			session.getTransaction().commit();
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	public boolean addEIP(String prefix, int start, int end, Date date,
 			int eiptype, String eipInterface) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			for (int i = start; i <= end; i++) {
 				String currentIp = prefix + i;
-				boolean check = ipExist(currentIp);
+				boolean check = this.ipExist(session, currentIp);
 				if (check == false) {
 					EIP eip = new EIP();
 					eip.setEipIp(currentIp);
@@ -401,42 +395,23 @@ public class EIPDAO {
 					session.save(eip);
 					this.getOverViewDAO().updateOverViewfieldNoTransaction(
 							"viewOutip", true);
+					result = true;
 				}
 			}
-			tx.commit();
-			return true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean ipExist(String eIp) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from EIP where eipIp = :eIp";
-			Query query = session.createQuery(queryString);
-			query.setString("eIp", eIp);
-			List<EIP> eipList = query.list();
-			if (eipList.size() == 1) {
-				result = true;
-			}
-			session.getTransaction().commit();
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
+	public boolean ipExist(Session session, String eIp) {
+		Criteria criteria = session.createCriteria(EIP.class).add(
+				Restrictions.eq("eipIp", eIp));
+		return (criteria.uniqueResult() != null);
 	}
 
 	/**
@@ -451,92 +426,95 @@ public class EIPDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from EIP where alarmUuid = :alarmUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("alarmUuid", alarmUuid);
-			List<EIP> eipList = query.list();
+			Criteria criteria = session.createCriteria(EIP.class).add(
+					Restrictions.eq("alarmUuid", alarmUuid));
+			List<EIP> eipList = criteria.list();
 			if (eipList.size() > 0) {
 				result = false;
 			}
 			session.getTransaction().commit();
-			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	public int countAllEipListNoUserid(String searchStr) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) from EIP where eipIp like '%"
-					+ searchStr + "%'";
-			Query query = session.createQuery(queryString);
-			int total = ((Number) query.iterate().next()).intValue();
+			Criteria criteria = session
+					.createCriteria(EIP.class)
+					.add(Restrictions.like("eipIp", searchStr,
+							MatchMode.ANYWHERE))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEIPListNoUserid(int page, int limit,
 			String searchStr) {
+		List<EIP> eipList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "from EIP where eipIp like '%" + searchStr
-					+ "%' order by eipDependency desc, eipUID desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			List<EIP> eipList = query.list();
+			Criteria criteria = session
+					.createCriteria(EIP.class)
+					.add(Restrictions.like("eipIp", searchStr,
+							MatchMode.ANYWHERE))
+					.addOrder(Order.desc("eipDependency"))
+					.addOrder(Order.desc("eipUID")).setFirstResult(startPos)
+					.setMaxResults(limit);
+			eipList = criteria.list();
 			session.getTransaction().commit();
-			return eipList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipList;
 	}
 
 	public boolean deleteEIP(String ip, String uuid) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "delete from EIP where eipUuid = '" + uuid
-					+ "'";
-			Query query = session.createQuery(queryString);
-			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewOutip",
-					false);
-			tx.commit();
-			return true;
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(EIP.class)
+					.add(Restrictions.eq("eipIp", ip))
+					.add(Restrictions.eq("eipUuid", uuid));
+			EIP eip = (EIP) criteria.uniqueResult();
+			if (eip != null) {
+				session.delete(eip);
+				this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewOutip", false);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	/**
@@ -545,47 +523,51 @@ public class EIPDAO {
 	 * @param description
 	 * @author xpx 2014-7-8
 	 */
-	public void updateName(String eipip, String newName, String description) {
+	public boolean updateName(String eipip, String newName, String description) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "update EIP set eipName=:name,eipDescription=:desc where eipIp=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", eipip);
-			query.setString("desc", description);
-			query.executeUpdate();
-			tx.commit();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(EIP.class).add(
+					Restrictions.eq("eipIp", eipip));
+			EIP eip = (EIP) criteria.uniqueResult();
+			if (eip != null) {
+				eip.setEipName(newName);
+				eip.setEipDescription(description);
+				session.update(eip);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
 	// 获取可用公网IP
 	@SuppressWarnings("unchecked")
 	public List<EIP> getableeips(int uid) {
+		List<EIP> eipList = null;
 		Session session = null;
-		List<EIP> list = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session
-					.createQuery("from EIP where eipDependency is null and eipUID ="
-							+ uid);
-			list = query.list();
+			Criteria criteria = session.createCriteria(EIP.class)
+					.add(Restrictions.isNull("eipDependency"))
+					.add(Restrictions.eq("eipUID", uid));
+			eipList = criteria.list();
 			session.getTransaction().commit();
-			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipList;
 	}
 
 	/**
@@ -593,23 +575,27 @@ public class EIPDAO {
 	 * @param eipip
 	 * @param alarmUuid
 	 */
-	public void updateAlarm(String eipUuid, String alarmUuid) {
+	public boolean updateAlarm(String eipUuid, String alarmUuid) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "update EIP set alarmUuid=:alarmUuid where eipUuid=:eipUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("alarmUuid", alarmUuid);
-			query.setString("eipUuid", eipUuid);
-			query.executeUpdate();
-			tx.commit();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(EIP.class).add(
+					Restrictions.eq("eipUuid", eipUuid));
+			EIP eip = (EIP) criteria.uniqueResult();
+			if (eip != null) {
+				eip.setAlarmUuid(alarmUuid);
+				session.update(eip);
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
 	/**
@@ -620,24 +606,23 @@ public class EIPDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<EIP> getAllListAlarm(int eipUID, String alarmUuid) {
-		List<EIP> list = null;
+		List<EIP> eipList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from EIP where eipUID =:eipUID and alarmUuid =:alarmUuid order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setInteger("eipUID", eipUID);
-			query.setString("alarmUuid", alarmUuid);
-			list = query.list();
+			Criteria criteria = session.createCriteria(EIP.class)
+					.add(Restrictions.eq("eipUID", eipUID))
+					.add(Restrictions.eq("alarmUuid", alarmUuid))
+					.addOrder(Order.desc("createDate"));
+			eipList = criteria.list();
 			session.getTransaction().commit();
-			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return eipList;
 	}
 }

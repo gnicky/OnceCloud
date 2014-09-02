@@ -393,11 +393,9 @@ public class FirewallDAO {
 		}
 	}
 
-	public void createDefaultFirewall(Session session, Integer userId)
+	public void createDefaultFirewallNoTransaction(Integer userId)
 			throws Exception {
-		if (session == null || !session.isOpen()) {
-			throw new Exception("Session not open");
-		}
+		Session session = this.getSessionHelper().getMainSession();
 		String firewallUuid = UUID.randomUUID().toString();
 		String ruleIcmpId = UUID.randomUUID().toString();
 		String rule22Id = UUID.randomUUID().toString();

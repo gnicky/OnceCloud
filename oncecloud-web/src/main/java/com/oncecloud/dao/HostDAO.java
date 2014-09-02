@@ -76,32 +76,6 @@ public class HostDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public OCHost getRandomHost(String poolUuid) {
-		OCHost host = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Query query = session
-					.createQuery("from OCHost where poolUuid = :poolUuid and hostStatus = 1 order by rand()");
-			query.setString("poolUuid", poolUuid);
-			query.setFirstResult(0);
-			query.setMaxResults(1);
-			List<OCHost> hostList = query.list();
-			if (hostList.size() == 1) {
-				host = hostList.get(0);
-			}
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return host;
-	}
-
-	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageHostList(int page, int limit, String search) {
 		Session session = null;
 		try {

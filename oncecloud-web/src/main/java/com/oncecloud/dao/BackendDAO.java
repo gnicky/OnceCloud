@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -28,33 +27,15 @@ public class BackendDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	public Backend getBackend(String backUuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.getTransaction().commit();
-			Criteria criteria = session.createCriteria(Backend.class).add(
-					Restrictions.eq("backUuid", backUuid));
-			Backend backend = (Backend) criteria.uniqueResult();
-			session.getTransaction().commit();
-			return backend;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
 	public Backend createBackend(String backUuid, String backName,
 			String vmUuid, String vmIp, Integer vmPort, Integer backWeight,
 			String foreUuid) {
+		Backend backend = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Backend backend = new Backend();
+			backend = new Backend();
 			backend.setBackUuid(backUuid);
 			backend.setBackName(backName);
 			backend.setVmUuid(vmUuid);
@@ -66,89 +47,13 @@ public class BackendDAO {
 			backend.setCreateDate(new Date());
 			session.save(backend);
 			session.getTransaction().commit();
-			return backend;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
-	}
-
-	public boolean updateBackend(String backUuid, String backName,
-			Integer vmPort, Integer backWeight) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Backend.class).add(
-					Restrictions.eq("backUuid", backUuid));
-			Backend backend = (Backend) criteria.uniqueResult();
-			if (backend != null) {
-				backend.setBackName(backName);
-				backend.setVmPort(vmPort);
-				backend.setBackWeight(backWeight);
-				session.update(backend);
-			}
-			session.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Backend> getOnePageBEList(int page, int limit, String search) {
-		List<Backend> backList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			Criteria criteria = session
-					.createCriteria(Backend.class)
-					.add(Restrictions.like("backName", search,
-							MatchMode.ANYWHERE))
-					.addOrder(Order.desc("createDate"))
-					.setFirstResult(startPos).setMaxResults(limit);
-			backList = criteria.list();
-			session.getTransaction().commit();
-			return backList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Backend> getBEListByFE(String foreUuid) {
-		List<Backend> backList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Backend.class)
-					.add(Restrictions.eq("foreUuid", foreUuid))
-					.addOrder(Order.desc("createDate"));
-			backList = criteria.list();
-			session.getTransaction().commit();
-			return backList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
+		return backend;
 	}
 
 	/**
@@ -160,50 +65,26 @@ public class BackendDAO {
 	 * @author xpx 2014-7-18
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Backend> getBEListByFE(Session session, String foreUuid,
-			int forbid) {
-		List<Backend> backList = null;
+	public List<Backend> doGetBackendListByFrontend(Session session,
+			String foreUuid, int forbid) {
+		List<Backend> backendList = null;
 		try {
-			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Backend.class)
 					.add(Restrictions.eq("foreUuid", foreUuid))
 					.add(Restrictions.ge("backStatus", forbid))
 					.addOrder(Order.desc("createDate"));
-			backList = criteria.list();
-			session.getTransaction().commit();
-			return backList;
+			backendList = criteria.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
-	}
-
-	public int countAllBackend(String search) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Backend.class)
-					.add(Restrictions.like("backName", search,
-							MatchMode.ANYWHERE))
-					.setProjection(Projections.rowCount());
-			int count = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
+		return backendList;
 	}
 
 	public boolean deleteBackend(String backUuid) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -213,34 +94,35 @@ public class BackendDAO {
 			Backend backend = (Backend) criteria.uniqueResult();
 			if (backend != null) {
 				session.delete(backend);
+				result = true;
 			}
 			session.getTransaction().commit();
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
-	public void deleteBackendByFE(Session session, String foreUuid) {
+	public boolean deleteBackendByFrontend(Session session, String foreUuid) {
+		boolean result = false;
 		try {
-			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Backend.class).add(
 					Restrictions.eq("foreUuid", foreUuid));
 			Backend backend = (Backend) criteria.uniqueResult();
 			if (backend != null) {
 				session.delete(backend);
+				result = true;
 			}
-			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
 	/**
@@ -251,6 +133,7 @@ public class BackendDAO {
 	 * @author xpx 2014-7-11
 	 */
 	public boolean changeBackendStatus(String backUuid, int state) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -261,37 +144,16 @@ public class BackendDAO {
 			if (backend != null) {
 				backend.setBackStatus(state);
 				session.update(backend);
+				result = true;
 			}
 			session.getTransaction().commit();
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Backend> getAllPageBEList() {
-		List<Backend> backList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Backend.class).addOrder(
-					Order.desc("createDate"));
-			backList = criteria.list();
-			session.getTransaction().commit();
-			return backList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
+		return result;
 	}
 
 	/**
@@ -303,6 +165,7 @@ public class BackendDAO {
 	 * @author xpx 2014-7-16
 	 */
 	public boolean checkRepeat(String beuuid, int port) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -314,16 +177,15 @@ public class BackendDAO {
 			int total = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			if (0 == total) {
-				return true;
+				result = true;
 			}
-			return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 }

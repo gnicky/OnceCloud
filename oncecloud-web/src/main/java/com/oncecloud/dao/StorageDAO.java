@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -152,6 +151,12 @@ public class StorageDAO {
 		return srList;
 	}
 
+	/**
+	 * 获取主机存储列表
+	 * 
+	 * @param hostUuid
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Storage> getStorageListOfHost(String hostUuid) {
 		List<Storage> srList = null;
@@ -174,6 +179,32 @@ public class StorageDAO {
 	}
 
 	/**
+	 * 获取对应目标IP的存储
+	 * 
+	 * @param address
+	 * @return
+	 */
+	public Storage getStorageOfAddress(String address) {
+		Session session = null;
+		Storage sr = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from Storage where srAddress = :address "
+							+ "and srstatus = 1");
+			sr = (Storage) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return sr;
+	}
+
+	/**
 	 * 获取存储总数
 	 * 
 	 * @param search
@@ -188,7 +219,7 @@ public class StorageDAO {
 			String queryString = "select count(*) from Storage where srName like :search and srstatus = 1 ";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -197,6 +228,32 @@ public class StorageDAO {
 			}
 		}
 		return count;
+	}
+
+	/**
+	 * 获取挂载该存储的服务器数目
+	 * 
+	 * @param srUuid
+	 * @return
+	 */
+	public int countHostsOfStorage(String srUuid) {
+		int total = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from HostSR where srUuid = :srUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("srUuid", srUuid);
+			total = ((Number) query.uniqueResult()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return total;
 	}
 
 	/**
@@ -242,104 +299,65 @@ public class StorageDAO {
 		return storage;
 	}
 
-	public int getHostSizeOfStorage(String srUuid) {
-		int total = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "select count(*) from HostSR where srUuid = :srUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("srUuid", srUuid);
-			total = ((Number) query.iterate().next()).intValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return total;
-	}
-
+	/**
+	 * 删除存储
+	 * 
+	 * @param storageId
+	 * @return
+	 */
 	public boolean removeStorage(String storageId) {
-		Session session = null;
-		Transaction tx = null;
 		boolean result = false;
+		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Storage set srstatus = 0 where srUuid='"
-					+ storageId + "'";
+			session.beginTransaction();
+			String queryString = "update Storage set srstatus = 0 where srUuid = :storageId";
 			Query query = session.createQuery(queryString);
+			query.setString("storageId", storageId);
 			query.executeUpdate();
 			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewSr",
 					false);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
 	}
 
-	/* 用于判断ip地址是否已经存在 */
-	@SuppressWarnings("unchecked")
-	public Storage getStorageByAddress(String address) {
-		Session session = null;
-		Storage sr = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Query query = session
-					.createQuery("from Storage where srAddress = '"
-							+ address.trim() + "' and srstatus = 1");
-			List<Storage> srList = query.list();
-			System.out.print(srList.size());
-			if (srList.size() == 1) {
-				sr = srList.get(0);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return sr;
-	}
-
-	public boolean updateSR(String srid, String srName, String srDesc,
-			String rackid) {
+	/**
+	 * 更新存储
+	 * 
+	 * @param srId
+	 * @param srName
+	 * @param srDesc
+	 * @param rackId
+	 * @return
+	 */
+	public boolean updateSR(String srId, String srName, String srDesc,
+			String rackId) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			Query query = session
-					.createQuery("update Storage set srName=:name,"
-							+ "srDesc=:desc,rackuuid=:rackid where srUuid =:srid");
-			query.setString("name", srName);
-			query.setString("desc", srDesc);
-			query.setString("srid", srid);
-			query.setString("rackid", rackid);
+					.createQuery("update Storage set srName= :srName, "
+							+ "srDesc= :srDesc, rackuuid= :rackId where srUuid = :srId");
+			query.setString("srName", srName);
+			query.setString("srDesc", srDesc);
+			query.setString("srId", srId);
+			query.setString("rackId", rackId);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
