@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<script src="${basePath}js/jquery.validate.js"></script>
 <script src="${basePath}js/user/create/createimage.js"></script>
 <div class="modal-dialog" id="modal-dialog" style="margin-top:100px; width:550px" rsid="${rsid}">
 	<div class="modal-content">

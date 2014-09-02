@@ -121,7 +121,7 @@ public class VMAction {
 	@RequestMapping(value = "/CreateVM", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
-	public void CreateVM(HttpServletRequest request, CreateVMModel createvmModel) {
+	public void createVM(HttpServletRequest request, CreateVMModel createvmModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVmManager().doCreateVM(createvmModel.getVmUuid(),
 				createvmModel.getImageUuid(), user.getUserId(),

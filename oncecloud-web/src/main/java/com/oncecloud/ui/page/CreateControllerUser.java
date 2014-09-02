@@ -18,20 +18,31 @@ public class CreateControllerUser {
 	public ModelAndView createVM(HttpServletRequest request) {
 		return new ModelAndView("user/create/createinstance");
 	}
-	
+
 	@RequestMapping(value = "/instance/createsnapshot", method = { RequestMethod.GET })
-	public ModelAndView createSnapshot(HttpServletRequest request,@RequestParam String rsid,@RequestParam String rstype,@RequestParam String rsname) {
+	public ModelAndView createSnapshot(HttpServletRequest request,
+			@RequestParam String rsid, @RequestParam String rstype,
+			@RequestParam String rsname) {
 		Map<String, String> model = new HashMap<String, String>();
 		model.put("resourceId", rsid);
 		model.put("resourceType", rstype);
 		model.put("resourceName", rsname);
-		return new ModelAndView("user/create/createsnapshot",model);
+		return new ModelAndView("user/create/createsnapshot", model);
 	}
-	
+
 	@RequestMapping(value = "/instance/createimage", method = { RequestMethod.GET })
-	public ModelAndView createimage(HttpServletRequest request,@RequestParam String rsid) {
+	public ModelAndView createimage(HttpServletRequest request,
+			@RequestParam String rsid) {
 		Map<String, String> model = new HashMap<String, String>();
 		model.put("rsid", rsid);
-		return new ModelAndView("user/create/createimage",model);
+		return new ModelAndView("user/create/createimage", model);
+	}
+
+	@RequestMapping(value = "/instance/createvolume", method = { RequestMethod.GET })
+	public ModelAndView createvolume(HttpServletRequest request,
+			@RequestParam String rsid) {
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("rsid", rsid);
+		return new ModelAndView("user/create/createvolume", model);
 	}
 }
