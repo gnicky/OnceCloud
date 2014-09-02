@@ -40,7 +40,7 @@ public class SnapshotAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/quota", method = { RequestMethod.GET,
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request, @RequestParam int count) {
@@ -50,10 +50,10 @@ public class SnapshotAction {
 		return result;
 	}
 
-	@RequestMapping(value = "/create", method = { RequestMethod.GET,
+	@RequestMapping(value = "/CreateSnapshot", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
-	public String create(HttpServletRequest request,
+	public String createSnapshot(HttpServletRequest request,
 			CreateSnapshotModel createsnapshotModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jsonobect = this.getSnapshotManager().createSnapshot(
@@ -64,10 +64,10 @@ public class SnapshotAction {
 		return jsonobect.toString();
 	}
 
-	@RequestMapping(value = "/detaillist", method = { RequestMethod.GET,
+	@RequestMapping(value = "/DetailList", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
-	public String detaillist(HttpServletRequest request,
+	public String detailList(HttpServletRequest request,
 			CreateSnapshotModel createsnapshotModel) {
 		JSONArray ja = this.getSnapshotManager().getDetailList(
 				createsnapshotModel.getResourceUuid(),
@@ -75,10 +75,10 @@ public class SnapshotAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/getresource", method = { RequestMethod.GET,
+	@RequestMapping(value = "/BasicList", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
-	public String getresource(HttpServletRequest request,
+	public String basicList(HttpServletRequest request,
 			CreateSnapshotModel createsnapshotModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jsonobect = this.getSnapshotManager().getOneResource(
