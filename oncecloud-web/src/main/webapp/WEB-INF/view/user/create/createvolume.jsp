@@ -1,24 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>user/js/create/createvolume.js"></script>
+<script src="${basePath}user/js/create/createvolume.js"></script>
 <div class="modal-dialog" style="margin-top:100px">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -36,7 +17,7 @@
 					<div class="item">
 						<div class="control-label">名称</div>
 						<div class="controls">
-							<input type="text" id="volume_name" name="volume_name" autofocus="">
+							<input type="text" id="volume_name" name="volume_name">
 						</div>
 					</div>
 					<div class="item">

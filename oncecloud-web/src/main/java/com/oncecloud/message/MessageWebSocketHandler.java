@@ -37,13 +37,11 @@ public class MessageWebSocketHandler implements WebSocketHandler {
 		MessageWebSocketHandler.getCurrentUsers().add(session);
 		User user = (User) session.getAttributes().get("user");
 		if (user != null) {
-			// TODO: Get unread news and send
 		}
 	}
 
 	public void handleMessage(WebSocketSession session,
 			WebSocketMessage<?> message) throws Exception {
-		// TODO: Handle read news
 	}
 
 	public void handleTransportError(WebSocketSession session,

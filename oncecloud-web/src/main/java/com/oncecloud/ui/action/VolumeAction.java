@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.VolumeManager;
+import com.oncecloud.ui.model.CreateVolumeModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/VolumeAction")
@@ -37,6 +38,27 @@ public class VolumeAction {
 		JSONArray ja = this.getVolumeManager().getVolumeList(userId,
 				list.getPage(), list.getLimit(), list.getSearch());
 		return ja.toString();
+	}
+
+	@RequestMapping(value = "/CreateVolume", method = { RequestMethod.GET })
+	@ResponseBody
+	public void createVolume(HttpServletRequest request,
+			CreateVolumeModel cvModel) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVolumeManager().createVolume(userId, cvModel.getVolumeUuid(),
+				cvModel.getVolumeName(), cvModel.getVolumeSize());
+	}
+
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	@ResponseBody
+	public String quota(HttpServletRequest request, @RequestParam int count,
+			@RequestParam int size) {
+		User user = (User) request.getSession().getAttribute("user");
+		String quota = this.getVolumeManager().getQuota(user.getUserId(),
+				count, size);
+		return quota;
 	}
 
 	@RequestMapping(value = "/VolumeDetail", method = { RequestMethod.GET })
