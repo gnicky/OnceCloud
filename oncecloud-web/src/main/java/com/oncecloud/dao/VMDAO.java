@@ -437,7 +437,7 @@ public class VMDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -497,7 +497,7 @@ public class VMDAO {
 					+ "and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -526,7 +526,7 @@ public class VMDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -555,7 +555,7 @@ public class VMDAO {
 					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -581,7 +581,7 @@ public class VMDAO {
 			String queryString = "select count(*) from OCVM where vmVlan = :vnetUuid and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("vnetUuid", vnetUuid);
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -606,7 +606,7 @@ public class VMDAO {
 			session.beginTransaction();
 			String queryString = "select count(*) from OCVM where vmStatus != 0 and hostUuid = :hostUuid";
 			Query query = session.createQuery(queryString);
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

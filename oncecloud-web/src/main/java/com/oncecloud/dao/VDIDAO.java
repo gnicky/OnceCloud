@@ -68,7 +68,7 @@ public class VDIDAO {
 			String queryString = "select count(*) from OCVDI where tplUuid= :tplUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("tplUuid", tplUuid);
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

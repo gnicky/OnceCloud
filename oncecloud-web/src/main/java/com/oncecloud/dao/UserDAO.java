@@ -203,7 +203,7 @@ public class UserDAO {
 			String queryString = "select count(*) from User where userName like :search and userId != 1 and userStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

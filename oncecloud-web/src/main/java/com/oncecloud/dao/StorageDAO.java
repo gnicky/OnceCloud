@@ -219,7 +219,7 @@ public class StorageDAO {
 			String queryString = "select count(*) from Storage where srName like :search and srstatus = 1 ";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -245,7 +245,7 @@ public class StorageDAO {
 			String queryString = "select count(*) from HostSR where srUuid = :srUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("srUuid", srUuid);
-			total = (Integer) query.uniqueResult();
+			total = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
