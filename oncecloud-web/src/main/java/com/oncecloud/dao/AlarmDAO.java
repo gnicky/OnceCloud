@@ -28,6 +28,52 @@ public class AlarmDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
+	public boolean addAlarm(String alarmUuid, String alarmName,
+			Integer alarmType, Integer alarmIsalarm, Integer alarmTouch,
+			Integer alarmPeriod, int userId) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Date alarmDate = new Date();
+			Alarm alarm = new Alarm(alarmUuid, alarmName, alarmType, alarmDate,
+					alarmIsalarm, alarmTouch, alarmPeriod, userId);
+			session.save(alarm);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public int countAlarmList(int userId, String keyword) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Alarm.class)
+					.add(Restrictions.eq("alarmUid", userId))
+					.add(Restrictions.like("alarmName", keyword,
+							MatchMode.ANYWHERE))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
 	public Alarm getAlarm(String alarmUuid) {
 		Alarm alarm = null;
 		Session session = null;
@@ -74,41 +120,13 @@ public class AlarmDAO {
 		return alarmList;
 	}
 
-	public int countAlarmList(int userId, String keyword) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Alarm.class)
-					.add(Restrictions.eq("alarmUid", userId))
-					.add(Restrictions.like("alarmName", keyword,
-							MatchMode.ANYWHERE))
-					.setProjection(Projections.rowCount());
-			count = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	public boolean addAlarm(String alarmUuid, String alarmName,
-			Integer alarmType, Integer alarmIsalarm, Integer alarmTouch,
-			Integer alarmPeriod, int userId) {
+	public boolean removeAlarm(Alarm alarm) {
 		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Date alarmDate = new Date();
-			Alarm alarm = new Alarm(alarmUuid, alarmName, alarmType, alarmDate,
-					alarmIsalarm, alarmTouch, alarmPeriod, userId);
-			session.save(alarm);
+			session.delete(alarm);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -179,24 +197,6 @@ public class AlarmDAO {
 				result = true;
 			}
 			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean removeAlarm(Alarm alarm) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.delete(alarm);
-			session.getTransaction().commit();
-			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

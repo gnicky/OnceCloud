@@ -3,9 +3,11 @@ package com.oncecloud.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,116 +32,379 @@ public class FeeDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	public boolean insertFeeVM(Integer vmUID, Date startDate, Date endDate,
-			Double vmPrice, Integer vmState, String vmUuid, String vmName) {
-		boolean result = false;
+	@SuppressWarnings({ "unchecked" })
+	public void abandonEip(Date endDate, String eipUuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			String queryStr = "from FeeEip fe where fe.eipUuid=:uuid and fe.eipState<>0";
+			Query query = session.createQuery(queryStr);
+			query.setString("uuid", eipUuid);
+			List<FeeEip> feeEipList = query.list();
+			if (feeEipList.size() == 1) {
+				FeeEip feeEip = feeEipList.get(0);
+				feeEip.setEndDate(endDate);
+				feeEip.setEipExpense();
+				feeEip.setEipState(0);
+				session.update(feeEip);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	public int countAllFeeEipList(String search, int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			FeeVM feeVM = new FeeVM(vmUID, startDate, endDate, vmPrice,
-					vmState, vmUuid, vmName);
-			feeVM.setVmExpense();
-			session.save(feeVM);
+			String queryString = "";
+			queryString = "select count(distinct fe.eipUuid) "
+					+ "from FeeEip fe " + "where fe.eipUID=:uid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
 			session.getTransaction().commit();
+			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-		}
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public void destoryVM(Date endDate, String vmUuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryStr = "from FeeVM fv where fv.vmUuid=:uuid and fv.vmState<>0";
-			Query query = session.createQuery(queryStr);
-			query.setString("uuid", vmUuid);
-			List<FeeVM> feeVMList = query.list();
-			if (feeVMList.size() == 1) {
-				FeeVM feeVM = feeVMList.get(0);
-				feeVM.setEndDate(endDate);
-				feeVM.setVmExpense();
-				feeVM.setVmState(0);
-				session.update(feeVM);
-			}
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
+			return 0;
 		}
 	}
 
-	public void insertFeeVolume(Integer volumeUID, Date startDate,
-			Date endDate, Double volumePrice, Integer volumeState,
-			String volumeUuid, String volumeName) {
+	public int countAllFeeImageList(String search, int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			FeeVolume feeVolume = new FeeVolume(volumeUID, startDate, endDate,
-					volumePrice, volumeState, volumeUuid, volumeName);
-			feeVolume.setVolumeExpense();
-			Transaction tx = session.beginTransaction();
-			session.save(feeVolume);
-			tx.commit();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(distinct fi.imageUuid) "
+					+ "from FeeImage fi " + "where fi.imageUID=:uid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
+			return 0;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public void deleteVolume(Date endDate, String volumeUuid) {
+	public int countAllFeeSnapshotList(String search, int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryStr = "from FeeVolume fv where fv.volumeUuid=:uuid and fv.volumeState<>0";
-			Query query = session.createQuery(queryStr);
-			query.setString("uuid", volumeUuid);
-			List<FeeVolume> feeVolumeList = query.list();
-			if (feeVolumeList.size() == 1) {
-				FeeVolume feeVolume = feeVolumeList.get(0);
-				feeVolume.setEndDate(endDate);
-				feeVolume.setVolumeExpense();
-				feeVolume.setVolumeState(0);
-				session.update(feeVolume);
-			}
-			tx.commit();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(distinct fs.vmUuid) "
+					+ "from FeeSnapshot fs " + "where fs.snapshotUID=:uid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
+			return 0;
 		}
 	}
 
-	public void insertFeeSnapshot(Integer snapshotUID, Date startDate,
-			Date endDate, Double snapshotPrice, Integer snapshotState,
-			String vmUuid, String vmName) {
+	public int countAllFeeVMList(String search, int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			FeeSnapshot feeSnapshot = new FeeSnapshot(snapshotUID, startDate,
-					endDate, snapshotPrice, snapshotState, vmUuid, vmName);
-			feeSnapshot.setSnapshotExpense();
-			Transaction tx = session.beginTransaction();
-			session.save(feeSnapshot);
-			tx.commit();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(distinct fv.vmUuid) "
+					+ "from FeeVM fv " + "where fv.vmUID=:uid ";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
+			return 0;
+		}
+	}
+
+	public int countAllFeeVolumeList(String search, int uid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(distinct fv.volumeUuid) "
+					+ "from FeeVolume fv " + "where fv.volumeUID=:uid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeEipDetailList(int uid, Date startMonth, Date endMonth) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) "
+					+ "from FeeEip fe "
+					+ "where fe.eipUID=:uid and fe.startDate>=:start and fe.startDate<:end";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			query.setTimestamp("start", startMonth);
+			query.setTimestamp("end", endMonth);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeEipDetailList(int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) " + "from FeeEip fe "
+					+ "where fe.eipUID=:uid and fe.eipUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeImageDetailList(int uid, Date startMonth, Date endMonth) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) "
+					+ "from FeeImage fi "
+					+ "where fi.imageUID=:uid and fi.startDate>=:start and fi.startDate<:end";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			query.setTimestamp("start", startMonth);
+			query.setTimestamp("end", endMonth);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeImageDetailList(int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			String queryString = "";
+			queryString = "select count(*) " + "from FeeImage fi "
+					+ "where fi.imageUID=:uid and fi.imageUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.close();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeSnapshotDetailList(int uid, Date startMonth,
+			Date endMonth) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) "
+					+ "from FeeSnapshot fs "
+					+ "where fs.snapshotUID=:uid and fs.startDate>=:start and fs.startDate<:end";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			query.setTimestamp("start", startMonth);
+			query.setTimestamp("end", endMonth);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeSnapshotDetailList(int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) " + "from FeeSnapshot fs "
+					+ "where fs.snapshotUID=:uid and fs.vmUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeVMDetailList(int uid, Date startMonth, Date endMonth) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) "
+					+ "from FeeVM fv "
+					+ "where fv.vmUID=:uid and fv.startDate>=:start and fv.startDate<:end";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			query.setTimestamp("start", startMonth);
+			query.setTimestamp("end", endMonth);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeVMDetailList(int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) " + "from FeeVM fv "
+					+ "where fv.vmUID=:uid and fv.vmUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeVolumeDetailList(int uid, Date startMonth, Date endMonth) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) "
+					+ "from FeeVolume fv "
+					+ "where fv.volumeUID=:uid and fv.startDate>=:start and fv.startDate<:end";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			query.setTimestamp("start", startMonth);
+			query.setTimestamp("end", endMonth);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	public int countFeeVolumeDetailList(int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) " + "from FeeVolume fv "
+					+ "where fv.volumeUID=:uid and fv.volumeUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
 		}
 	}
 
@@ -169,399 +434,97 @@ public class FeeDAO {
 		}
 	}
 
-	public void insertFeeEip(Integer eipUID, Date startDate, Date endDate,
-			Double eipPrice, Integer eipState, String eipUuid, String eipName) {
+	public boolean deleteVolume(Date endDate, String volumeUuid) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			FeeEip feeEip = new FeeEip(eipUID, startDate, endDate, eipPrice,
-					eipState, eipUuid, eipName);
-			feeEip.setEipExpense();
-			Transaction tx = session.beginTransaction();
-			session.save(feeEip);
-			tx.commit();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(FeeVolume.class)
+					.add(Restrictions.eq("volumeUuid", volumeUuid))
+					.add(Restrictions.ne("volumeState", 0));
+			FeeVolume feeVolume = (FeeVolume) criteria.uniqueResult();
+			if (feeVolume != null) {
+				feeVolume.setEndDate(endDate);
+				feeVolume.setVolumeExpense();
+				feeVolume.setVolumeState(0);
+				session.update(feeVolume);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	@SuppressWarnings({ "unchecked" })
-	public void abandonEip(Date endDate, String eipUuid) {
+	public boolean destoryVM(Date endDate, String vmUuid) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryStr = "from FeeEip fe where fe.eipUuid=:uuid and fe.eipState<>0";
-			Query query = session.createQuery(queryStr);
-			query.setString("uuid", eipUuid);
-			List<FeeEip> feeEipList = query.list();
-			if (feeEipList.size() == 1) {
-				FeeEip feeEip = feeEipList.get(0);
-				feeEip.setEndDate(endDate);
-				feeEip.setEipExpense();
-				feeEip.setEipState(0);
-				session.update(feeEip);
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(FeeVM.class)
+					.add(Restrictions.eq("vmUuid", vmUuid))
+					.add(Restrictions.ne("vmState", 0));
+			FeeVM feeVM = (FeeVM) criteria.uniqueResult();
+			if (feeVM != null) {
+				feeVM.setEndDate(endDate);
+				feeVM.setVmExpense();
+				feeVM.setVmState(0);
+				session.update(feeVM);
+				result = true;
 			}
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void insertFeeImage(Integer imageUID, Date startDate, Date endDate,
-			Double imagePrice, Integer imageState, String imageUuid,
-			String imageName) {
+	public double getEipTotalFee(int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			FeeImage feeImage = new FeeImage(imageUID, startDate, endDate,
-					imagePrice, imageState, imageUuid, imageName);
-			feeImage.setImageExpense();
-			Transaction tx = session.beginTransaction();
-			session.save(feeImage);
-			tx.commit();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select sum(fe.eipExpense) from FeeEip fe where fe.eipUID=:uid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("uid", uid);
+			Number number = (Number) query.iterate().next();
+			session.getTransaction().commit();
+			if (number != null) {
+				return number.doubleValue();
+			} else {
+				return 0.0;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
+			return 0.0;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void deleteImage(Date endDate, String imageUuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryStr = "from FeeImage fi where fi.imageUuid=:uuid and fi.imageState<>0";
-			Query query = session.createQuery(queryStr);
-			query.setString("uuid", imageUuid);
-			List<FeeImage> feeImageList = query.list();
-			if (feeImageList.size() == 1) {
-				FeeImage feeImage = feeImageList.get(0);
-				feeImage.setEndDate(endDate);
-				feeImage.setImageExpense();
-				feeImage.setImageState(0);
-				session.update(feeImage);
-			}
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageFeeVMList(int page, int limit, String search,
-			int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "select sum(fv.vmExpense), fv1.vmName, fv.vmUuid, fv1.vmState, fv1.vmPrice, min(fv.startDate) "
-					+ "from FeeVM fv, FeeVM fv1 "
-					+ "where fv.vmUuid=fv1.vmUuid and fv.vmUID=:uid "
-					+ "group by fv.vmUuid, fv1.vmUuid, fv1.endDate "
-					+ "having fv1.endDate=max(fv.endDate) "
-					+ "order by max(fv.endDate) desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public int countAllFeeVMList(String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(distinct fv.vmUuid) "
-					+ "from FeeVM fv " + "where fv.vmUID=:uid ";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageFeeVolumeList(int page, int limit,
-			String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "select sum(fv.volumeExpense), fv.volumeName, fv.volumeUuid, fv1.volumeState, fv1.volumePrice, min(fv.startDate) "
-					+ "from FeeVolume fv, FeeVolume fv1 "
-					+ "where fv.volumeUuid=fv1.volumeUuid and fv.volumeUID=:uid "
-					+ "group by fv.volumeUuid, fv1.volumeUuid, fv1.endDate "
-					+ "having fv1.endDate=max(fv.endDate) "
-					+ "order by max(fv.endDate) desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public int countAllFeeVolumeList(String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(distinct fv.volumeUuid) "
-					+ "from FeeVolume fv " + "where fv.volumeUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageFeeImageList(int page, int limit,
-			String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "select sum(fi.imageExpense), fi.imageName, fi.imageUuid, fi1.imageState, fi1.imagePrice, min(fi.startDate) "
-					+ "from FeeImage fi, FeeImage fi1 "
-					+ "where fi.imageUuid=fi1.imageUuid and fi.imageUID=:uid "
-					+ "group by fi.imageUuid, fi1.imageUuid, fi1.endDate "
-					+ "having fi1.endDate=max(fi.endDate) "
-					+ "order by max(fi.endDate) desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public int countAllFeeImageList(String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(distinct fi.imageUuid) "
-					+ "from FeeImage fi " + "where fi.imageUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageFeeEipList(int page, int limit,
-			String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "select sum(fe.eipExpense), fe.eipName, fe.eipUuid, fe1.eipState, fe1.eipPrice, min(fe.startDate) "
-					+ "from FeeEip fe, FeeEip fe1 "
-					+ "where fe.eipUuid=fe1.eipUuid and fe.eipUID=:uid "
-					+ "group by fe.eipUuid, fe1.eipUuid, fe1.endDate "
-					+ "having fe1.endDate=max(fe.endDate) "
-					+ "order by max(fe.endDate) desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public int countAllFeeEipList(String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(distinct fe.eipUuid) "
-					+ "from FeeEip fe " + "where fe.eipUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getOnePageFeeSnapshotList(int page, int limit,
-			String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "select sum(fs.snapshotExpense), fs.vmName, fs.vmUuid, fs1.snapshotState, fs1.snapshotPrice, min(fs.startDate) "
-					+ "from FeeSnapshot fs, FeeSnapshot fs1 "
-					+ "where fs.vmUuid=fs1.vmUuid and fs.snapshotUID=:uid "
-					+ "group by fs.vmUuid, fs1.vmUuid, fs1.endDate "
-					+ "having fs1.endDate=max(fs.endDate) "
-					+ "order by max(fs.endDate) desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public int countAllFeeSnapshotList(String search, int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(distinct fs.vmUuid) "
-					+ "from FeeSnapshot fs " + "where fs.snapshotUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getFeeVMDetailList(int page, int limit, String search,
-			int uid, String uuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "select fv.startDate, fv.endDate, fv.vmExpense, fv.vmPrice from FeeVM fv where fv.vmUuid=:uuid and fv.vmUID=:uid order by fv.startDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getFeeVMDetailList(int page, int limit, String search,
+	public List<Object> getFeeEipDetailList(int page, int limit, String search,
 			int uid, Date startMonth, Date endMonth) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "select fv.vmUuid, fv.startDate, fv.endDate, fv.vmExpense, fv.vmPrice "
-					+ "from FeeVM fv where fv.vmUID=:uid "
-					+ "and fv.startDate>=:start and fv.startDate<:end order by fv.startDate desc";
+			String queryString = "select fe.eipUuid, fe.startDate, fe.endDate, fe.eipExpense, fe.eipPrice "
+					+ "from FeeEip fe "
+					+ "where fe.eipUID=:uid "
+					+ "and fe.startDate>=:start and fe.startDate<:end order by fe.startDate desc";
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
@@ -581,69 +544,14 @@ public class FeeDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Object> getFeeVolumeDetailList(int page, int limit,
-			String search, int uid, String uuid) {
+	public List<Object> getFeeEipDetailList(int page, int limit, String search,
+			int uid, String uuid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "select fv.startDate, fv.endDate, fv.volumeExpense, fv.volumePrice from FeeVolume fv where fv.volumeUuid=:uuid and fv.volumeUID=:uid order by fv.startDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getFeeVolumeDetailList(int page, int limit,
-			String search, int uid, Date startMonth, Date endMonth) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "select fv.volumeUuid, fv.startDate, fv.endDate, fv.volumeExpense, fv.volumePrice "
-					+ "from FeeVolume fv where fv.volumeUID=:uid and "
-					+ "fv.startDate>=:start and fv.startDate<:end order by fv.startDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			query.setTimestamp("start", startMonth);
-			query.setTimestamp("end", endMonth);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getFeeImageDetailList(int page, int limit,
-			String search, int uid, String uuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "select fi.startDate, fi.endDate, fi.imageExpense, fi.imagePrice from FeeImage fi where fi.imageUuid=:uuid and fi.imageUID=:uid order by fi.startDate desc";
+			String queryString = "select fe.startDate, fe.endDate, fe.eipExpense, fe.eipPrice from FeeEip fe where fe.eipUuid=:uuid and fe.eipUID=:uid order by fe.startDate desc";
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
@@ -691,70 +599,14 @@ public class FeeDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Object> getFeeEipDetailList(int page, int limit, String search,
-			int uid, String uuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "select fe.startDate, fe.endDate, fe.eipExpense, fe.eipPrice from FeeEip fe where fe.eipUuid=:uuid and fe.eipUID=:uid order by fe.startDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getFeeEipDetailList(int page, int limit, String search,
-			int uid, Date startMonth, Date endMonth) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "select fe.eipUuid, fe.startDate, fe.endDate, fe.eipExpense, fe.eipPrice "
-					+ "from FeeEip fe "
-					+ "where fe.eipUID=:uid "
-					+ "and fe.startDate>=:start and fe.startDate<:end order by fe.startDate desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			query.setInteger("uid", uid);
-			query.setTimestamp("start", startMonth);
-			query.setTimestamp("end", endMonth);
-			List<Object> ObjList = query.list();
-			session.getTransaction().commit();
-			return ObjList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getFeeSnapshotDetailList(int page, int limit,
+	public List<Object> getFeeImageDetailList(int page, int limit,
 			String search, int uid, String uuid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "select fs.startDate, fs.endDate, fs.snapshotExpense, fs.snapshotPrice from FeeSnapshot fs where fs.vmUuid=:uuid and fs.snapshotUID=:uid order by fs.startDate desc";
+			String queryString = "select fi.startDate, fi.endDate, fi.imageExpense, fi.imagePrice from FeeImage fi where fi.imageUuid=:uuid and fi.imageUID=:uid order by fi.startDate desc";
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
@@ -801,243 +653,344 @@ public class FeeDAO {
 		}
 	}
 
-	public int countFeeVMDetailList(int uid, String uuid) {
+	@SuppressWarnings("unchecked")
+	public List<Object> getFeeSnapshotDetailList(int page, int limit,
+			String search, int uid, String uuid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) " + "from FeeVM fv "
-					+ "where fv.vmUID=:uid and fv.vmUuid=:uuid";
+			int startPos = (page - 1) * limit;
+			String queryString = "select fs.startDate, fs.endDate, fs.snapshotExpense, fs.snapshotPrice from FeeSnapshot fs where fs.vmUuid=:uuid and fs.snapshotUID=:uid order by fs.startDate desc";
 			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
 			query.setString("uuid", uuid);
 			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
+			List<Object> ObjList = query.list();
 			session.getTransaction().commit();
-			return count;
+			return ObjList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
+			return null;
 		}
 	}
 
-	public int countFeeVolumeDetailList(int uid, String uuid) {
+	@SuppressWarnings("unchecked")
+	public List<Object> getFeeVMDetailList(int page, int limit, String search,
+			int uid, Date startMonth, Date endMonth) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) " + "from FeeVolume fv "
-					+ "where fv.volumeUID=:uid and fv.volumeUuid=:uuid";
+			int startPos = (page - 1) * limit;
+			String queryString = "select fv.vmUuid, fv.startDate, fv.endDate, fv.vmExpense, fv.vmPrice "
+					+ "from FeeVM fv where fv.vmUID=:uid "
+					+ "and fv.startDate>=:start and fv.startDate<:end order by fv.startDate desc";
 			Query query = session.createQuery(queryString);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	public int countFeeEipDetailList(int uid, String uuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) " + "from FeeEip fe "
-					+ "where fe.eipUID=:uid and fe.eipUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	public int countFeeSnapshotDetailList(int uid, String uuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) " + "from FeeSnapshot fs "
-					+ "where fs.snapshotUID=:uid and fs.vmUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	public int countFeeImageDetailList(int uid, String uuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			String queryString = "";
-			queryString = "select count(*) " + "from FeeImage fi "
-					+ "where fi.imageUID=:uid and fi.imageUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("uuid", uuid);
-			query.setInteger("uid", uid);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.close();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	public int countFeeVMDetailList(int uid, Date startMonth, Date endMonth) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) "
-					+ "from FeeVM fv "
-					+ "where fv.vmUID=:uid and fv.startDate>=:start and fv.startDate<:end";
-			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
 			query.setInteger("uid", uid);
 			query.setTimestamp("start", startMonth);
 			query.setTimestamp("end", endMonth);
-			int count = ((Number) query.iterate().next()).intValue();
+			List<Object> ObjList = query.list();
 			session.getTransaction().commit();
-			return count;
+			return ObjList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
+			return null;
 		}
 	}
 
-	public int countFeeVolumeDetailList(int uid, Date startMonth, Date endMonth) {
+	@SuppressWarnings("unchecked")
+	public List<Object> getFeeVMDetailList(int page, int limit, String search,
+			int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "select fv.startDate, fv.endDate, fv.vmExpense, fv.vmPrice from FeeVM fv where fv.vmUuid=:uuid and fv.vmUID=:uid order by fv.startDate desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getFeeVolumeDetailList(int page, int limit,
+			String search, int uid, Date startMonth, Date endMonth) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "select fv.volumeUuid, fv.startDate, fv.endDate, fv.volumeExpense, fv.volumePrice "
+					+ "from FeeVolume fv where fv.volumeUID=:uid and "
+					+ "fv.startDate>=:start and fv.startDate<:end order by fv.startDate desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setInteger("uid", uid);
+			query.setTimestamp("start", startMonth);
+			query.setTimestamp("end", endMonth);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getFeeVolumeDetailList(int page, int limit,
+			String search, int uid, String uuid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "select fv.startDate, fv.endDate, fv.volumeExpense, fv.volumePrice from FeeVolume fv where fv.volumeUuid=:uuid and fv.volumeUID=:uid order by fv.startDate desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setString("uuid", uuid);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	public double getImageTotalFee(int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "";
-			queryString = "select count(*) "
-					+ "from FeeVolume fv "
-					+ "where fv.volumeUID=:uid and fv.startDate>=:start and fv.startDate<:end";
+			queryString = "select sum(fi.imageExpense) from FeeImage fi where fi.imageUID=:uid";
 			Query query = session.createQuery(queryString);
 			query.setInteger("uid", uid);
-			query.setTimestamp("start", startMonth);
-			query.setTimestamp("end", endMonth);
-			int count = ((Number) query.iterate().next()).intValue();
+			Number number = (Number) query.iterate().next();
 			session.getTransaction().commit();
-			return count;
+			if (number != null) {
+				return number.doubleValue();
+			} else {
+				return 0.0;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
+			return 0.0;
 		}
 	}
 
-	public int countFeeEipDetailList(int uid, Date startMonth, Date endMonth) {
+	@SuppressWarnings("unchecked")
+	public List<Object> getOnePageFeeEipList(int page, int limit,
+			String search, int uid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "select sum(fe.eipExpense), fe.eipName, fe.eipUuid, fe1.eipState, fe1.eipPrice, min(fe.startDate) "
+					+ "from FeeEip fe, FeeEip fe1 "
+					+ "where fe.eipUuid=fe1.eipUuid and fe.eipUID=:uid "
+					+ "group by fe.eipUuid, fe1.eipUuid, fe1.endDate "
+					+ "having fe1.endDate=max(fe.endDate) "
+					+ "order by max(fe.endDate) desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getOnePageFeeImageList(int page, int limit,
+			String search, int uid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "select sum(fi.imageExpense), fi.imageName, fi.imageUuid, fi1.imageState, fi1.imagePrice, min(fi.startDate) "
+					+ "from FeeImage fi, FeeImage fi1 "
+					+ "where fi.imageUuid=fi1.imageUuid and fi.imageUID=:uid "
+					+ "group by fi.imageUuid, fi1.imageUuid, fi1.endDate "
+					+ "having fi1.endDate=max(fi.endDate) "
+					+ "order by max(fi.endDate) desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getOnePageFeeSnapshotList(int page, int limit,
+			String search, int uid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "select sum(fs.snapshotExpense), fs.vmName, fs.vmUuid, fs1.snapshotState, fs1.snapshotPrice, min(fs.startDate) "
+					+ "from FeeSnapshot fs, FeeSnapshot fs1 "
+					+ "where fs.vmUuid=fs1.vmUuid and fs.snapshotUID=:uid "
+					+ "group by fs.vmUuid, fs1.vmUuid, fs1.endDate "
+					+ "having fs1.endDate=max(fs.endDate) "
+					+ "order by max(fs.endDate) desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getOnePageFeeVMList(int page, int limit, String search,
+			int uid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "select sum(fv.vmExpense), fv1.vmName, fv.vmUuid, fv1.vmState, fv1.vmPrice, min(fv.startDate) "
+					+ "from FeeVM fv, FeeVM fv1 "
+					+ "where fv.vmUuid=fv1.vmUuid and fv.vmUID=:uid "
+					+ "group by fv.vmUuid, fv1.vmUuid, fv1.endDate "
+					+ "having fv1.endDate=max(fv.endDate) "
+					+ "order by max(fv.endDate) desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getOnePageFeeVolumeList(int page, int limit,
+			String search, int uid) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "select sum(fv.volumeExpense), fv.volumeName, fv.volumeUuid, fv1.volumeState, fv1.volumePrice, min(fv.startDate) "
+					+ "from FeeVolume fv, FeeVolume fv1 "
+					+ "where fv.volumeUuid=fv1.volumeUuid and fv.volumeUID=:uid "
+					+ "group by fv.volumeUuid, fv1.volumeUuid, fv1.endDate "
+					+ "having fv1.endDate=max(fv.endDate) "
+					+ "order by max(fv.endDate) desc";
+			Query query = session.createQuery(queryString);
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			query.setInteger("uid", uid);
+			List<Object> ObjList = query.list();
+			session.getTransaction().commit();
+			return ObjList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	public double getSnapshotTotalFee(int uid) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "";
-			queryString = "select count(*) "
-					+ "from FeeEip fe "
-					+ "where fe.eipUID=:uid and fe.startDate>=:start and fe.startDate<:end";
+			queryString = "select sum(fs.snapshotExpense) from FeeSnapshot fs where fs.snapshotUID=:uid";
 			Query query = session.createQuery(queryString);
 			query.setInteger("uid", uid);
-			query.setTimestamp("start", startMonth);
-			query.setTimestamp("end", endMonth);
-			int count = ((Number) query.iterate().next()).intValue();
+			Number number = (Number) query.iterate().next();
 			session.getTransaction().commit();
-			return count;
+			if (number != null) {
+				return number.doubleValue();
+			} else {
+				return 0.0;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
-		}
-	}
-
-	public int countFeeSnapshotDetailList(int uid, Date startMonth,
-			Date endMonth) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) "
-					+ "from FeeSnapshot fs "
-					+ "where fs.snapshotUID=:uid and fs.startDate>=:start and fs.startDate<:end";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			query.setTimestamp("start", startMonth);
-			query.setTimestamp("end", endMonth);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	public int countFeeImageDetailList(int uid, Date startMonth, Date endMonth) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) "
-					+ "from FeeImage fi "
-					+ "where fi.imageUID=:uid and fi.startDate>=:start and fi.startDate<:end";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			query.setTimestamp("start", startMonth);
-			query.setTimestamp("end", endMonth);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
+			return 0.0;
 		}
 	}
 
@@ -1091,104 +1044,16 @@ public class FeeDAO {
 		}
 	}
 
-	public double getEipTotalFee(int uid) {
+	public void insertFeeEip(Integer eipUID, Date startDate, Date endDate,
+			Double eipPrice, Integer eipState, String eipUuid, String eipName) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select sum(fe.eipExpense) from FeeEip fe where fe.eipUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			Number number = (Number) query.iterate().next();
-			session.getTransaction().commit();
-			if (number != null) {
-				return number.doubleValue();
-			} else {
-				return 0.0;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0.0;
-		}
-	}
-
-	public double getImageTotalFee(int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select sum(fi.imageExpense) from FeeImage fi where fi.imageUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			Number number = (Number) query.iterate().next();
-			session.getTransaction().commit();
-			if (number != null) {
-				return number.doubleValue();
-			} else {
-				return 0.0;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0.0;
-		}
-	}
-
-	public double getSnapshotTotalFee(int uid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select sum(fs.snapshotExpense) from FeeSnapshot fs where fs.snapshotUID=:uid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("uid", uid);
-			Number number = (Number) query.iterate().next();
-			session.getTransaction().commit();
-			if (number != null) {
-				return number.doubleValue();
-			} else {
-				return 0.0;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0.0;
-		}
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	public void updateAliveVmEndDate(Date nowDate) {
-		List<FeeVM> feeVmList = null;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "from FeeVM fv where fv.vmState<>0 and fv.endDate<:date";
-			Query query = session.createQuery(queryString);
-			query.setTimestamp("date", nowDate);
-			feeVmList = query.list();
-			for (int i = 0; i < feeVmList.size(); i++) {
-				FeeVM feeVM = feeVmList.get(0);
-				Date nowEndDate = feeVM.getEndDate();
-				long miliDis = nowDate.getTime() - nowEndDate.getTime();
-				int addHourNum = (int) Math.ceil(miliDis / (1000 * 60 * 60.0));
-				Date updateEndDate = Helper.addMinuteForDate(nowEndDate,
-						60 * addHourNum);
-				feeVM.setEndDate(updateEndDate);
-				feeVM.setVmExpense();
-				session.update(feeVM);
-			}
+			FeeEip feeEip = new FeeEip(eipUID, startDate, endDate, eipPrice,
+					eipState, eipUuid, eipName);
+			feeEip.setEipExpense();
+			Transaction tx = session.beginTransaction();
+			session.save(feeEip);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1198,36 +1063,69 @@ public class FeeDAO {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked" })
-	public void updateAliveVolumeEndDate(Date nowDate) {
-		List<FeeVolume> feeVolumeList = null;
+	public boolean insertFeeSnapshot(Integer snapshotUID, Date startDate,
+			Date endDate, Double snapshotPrice, Integer snapshotState,
+			String vmUuid, String vmName) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "from FeeVolume fv where fv.volumeState<>0 and fv.endDate<:date";
-			Query query = session.createQuery(queryString);
-			query.setTimestamp("date", nowDate);
-			feeVolumeList = query.list();
-			for (int i = 0; i < feeVolumeList.size(); i++) {
-				FeeVolume feeVolume = feeVolumeList.get(0);
-				Date nowEndDate = feeVolume.getEndDate();
-				long miliDis = nowDate.getTime() - nowEndDate.getTime();
-				int addHourNum = (int) Math.ceil(miliDis / (1000 * 60 * 60.0));
-				Date updateEndDate = Helper.addMinuteForDate(nowEndDate,
-						60 * addHourNum);
-				feeVolume.setEndDate(updateEndDate);
-				feeVolume.setVolumeExpense();
-				session.update(feeVolume);
-			}
-			tx.commit();
+			session.beginTransaction();
+			FeeSnapshot feeSnapshot = new FeeSnapshot(snapshotUID, startDate,
+					endDate, snapshotPrice, snapshotState, vmUuid, vmName);
+			feeSnapshot.setSnapshotExpense();
+			session.save(feeSnapshot);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
+	}
+
+	public boolean insertFeeVM(Integer vmUID, Date startDate, Date endDate,
+			Double vmPrice, Integer vmState, String vmUuid, String vmName) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			FeeVM feeVM = new FeeVM(vmUID, startDate, endDate, vmPrice,
+					vmState, vmUuid, vmName);
+			feeVM.setVmExpense();
+			session.save(feeVM);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean insertFeeVolume(Integer volumeUID, Date startDate,
+			Date endDate, Double volumePrice, Integer volumeState,
+			String volumeUuid, String volumeName) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			FeeVolume feeVolume = new FeeVolume(volumeUID, startDate, endDate,
+					volumePrice, volumeState, volumeUuid, volumeName);
+			feeVolume.setVolumeExpense();
+			session.save(feeVolume);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -1326,6 +1224,145 @@ public class FeeDAO {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked" })
+	public void updateAliveVmEndDate(Date nowDate) {
+		List<FeeVM> feeVmList = null;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "from FeeVM fv where fv.vmState<>0 and fv.endDate<:date";
+			Query query = session.createQuery(queryString);
+			query.setTimestamp("date", nowDate);
+			feeVmList = query.list();
+			for (int i = 0; i < feeVmList.size(); i++) {
+				FeeVM feeVM = feeVmList.get(0);
+				Date nowEndDate = feeVM.getEndDate();
+				long miliDis = nowDate.getTime() - nowEndDate.getTime();
+				int addHourNum = (int) Math.ceil(miliDis / (1000 * 60 * 60.0));
+				Date updateEndDate = Helper.addMinuteForDate(nowEndDate,
+						60 * addHourNum);
+				feeVM.setEndDate(updateEndDate);
+				feeVM.setVmExpense();
+				session.update(feeVM);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	@SuppressWarnings({ "unchecked" })
+	public void updateAliveVolumeEndDate(Date nowDate) {
+		List<FeeVolume> feeVolumeList = null;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "from FeeVolume fv where fv.volumeState<>0 and fv.endDate<:date";
+			Query query = session.createQuery(queryString);
+			query.setTimestamp("date", nowDate);
+			feeVolumeList = query.list();
+			for (int i = 0; i < feeVolumeList.size(); i++) {
+				FeeVolume feeVolume = feeVolumeList.get(0);
+				Date nowEndDate = feeVolume.getEndDate();
+				long miliDis = nowDate.getTime() - nowEndDate.getTime();
+				int addHourNum = (int) Math.ceil(miliDis / (1000 * 60 * 60.0));
+				Date updateEndDate = Helper.addMinuteForDate(nowEndDate,
+						60 * addHourNum);
+				feeVolume.setEndDate(updateEndDate);
+				feeVolume.setVolumeExpense();
+				session.update(feeVolume);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	/**
+	 * @param eipuuid
+	 * @param newName
+	 * @author xpx 2014-7-8
+	 */
+	public void updateEipName(String eipuuid, String newName) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "update FeeEip set eipName=:name where eipState<>0 and eipUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("name", newName);
+			query.setString("uuid", eipuuid);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	/**
+	 * @param imageuuid
+	 * @param newName
+	 * @author xpx 2014-7-8
+	 */
+	public void updateImageName(String imageuuid, String newName) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "update FeeImage set imageName=:name where imageState<>0 and imageUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("name", newName);
+			query.setString("uuid", imageuuid);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	/**
+	 * @param vmUuid
+	 * @param newName
+	 * @author xpx 2014-7-8
+	 */
+	public void updateSnapshotVMName(String vmUuid, String newName) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "update FeeSnapshot set vmName=:name where snapshotState<>0 and vmUuid=:uuid";
+			Query query = session.createQuery(queryString);
+			query.setString("name", newName);
+			query.setString("uuid", vmUuid);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
 	/**
 	 * @param vmuuid
 	 * @param newName
@@ -1367,81 +1404,6 @@ public class FeeDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("name", newName);
 			query.setString("uuid", volumeuuid);
-			query.executeUpdate();
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	/**
-	 * @param eipuuid
-	 * @param newName
-	 * @author xpx 2014-7-8
-	 */
-	public void updateEipName(String eipuuid, String newName) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update FeeEip set eipName=:name where eipState<>0 and eipUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", eipuuid);
-			query.executeUpdate();
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	/**
-	 * @param vmUuid
-	 * @param newName
-	 * @author xpx 2014-7-8
-	 */
-	public void updateSnapshotVMName(String vmUuid, String newName) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update FeeSnapshot set vmName=:name where snapshotState<>0 and vmUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", vmUuid);
-			query.executeUpdate();
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	/**
-	 * @param imageuuid
-	 * @param newName
-	 * @author xpx 2014-7-8
-	 */
-	public void updateImageName(String imageuuid, String newName) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update FeeImage set imageName=:name where imageState<>0 and imageUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", newName);
-			query.setString("uuid", imageuuid);
 			query.executeUpdate();
 			tx.commit();
 		} catch (Exception e) {

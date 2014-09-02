@@ -25,21 +25,37 @@ public class AlarmRuleDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	private AlarmRule doGetAlarmRule(Session session, String ruleAUuid) {
-		AlarmRule alarmRule;
-		Criteria criteria = session.createCriteria(AlarmRule.class).add(
-				Restrictions.eq("ruleAUuid", ruleAUuid));
-		alarmRule = (AlarmRule) criteria.uniqueResult();
-		return alarmRule;
-	}
-
-	public AlarmRule getAlarmRule(String ruleAUuid) {
-		AlarmRule alarmRule = null;
+	public boolean addRule(String ruleAUuid, Integer ruleAType,
+			Integer ruleAThreshold, String ruleAAlarmUuid, Integer ruleAPeriod) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			alarmRule = this.doGetAlarmRule(session, ruleAUuid);
+			AlarmRule rule = new AlarmRule(ruleAUuid, ruleAType,
+					ruleAThreshold, ruleAAlarmUuid, ruleAPeriod);
+			session.save(rule);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public int countAlarmList(String ruleAAlarmUuid) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(AlarmRule.class)
+					.add(Restrictions.eq("ruleAAlarmUuid", ruleAAlarmUuid))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,6 +63,14 @@ public class AlarmRuleDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return count;
+	}
+
+	private AlarmRule doGetAlarmRule(Session session, String ruleAUuid) {
+		AlarmRule alarmRule;
+		Criteria criteria = session.createCriteria(AlarmRule.class).add(
+				Restrictions.eq("ruleAUuid", ruleAUuid));
+		alarmRule = (AlarmRule) criteria.uniqueResult();
 		return alarmRule;
 	}
 
@@ -71,78 +95,6 @@ public class AlarmRuleDAO {
 			}
 		}
 		return alarmRuleList;
-	}
-
-	public int countAlarmList(String ruleAAlarmUuid) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(AlarmRule.class)
-					.add(Restrictions.eq("ruleAAlarmUuid", ruleAAlarmUuid))
-					.setProjection(Projections.rowCount());
-			count = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	public boolean addRule(String ruleAUuid, Integer ruleAType,
-			Integer ruleAThreshold, String ruleAAlarmUuid, Integer ruleAPeriod) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			AlarmRule rule = new AlarmRule(ruleAUuid, ruleAType,
-					ruleAThreshold, ruleAAlarmUuid, ruleAPeriod);
-			session.save(rule);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean updateRule(String ruleAUuid, int ruleAPeriod,
-			int ruleAThreshold, int ruleAType) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			AlarmRule alarmRule = this.doGetAlarmRule(session, ruleAUuid);
-			if (alarmRule != null) {
-				if (ruleAPeriod > 0) {
-					alarmRule.setRuleAPeriod(ruleAPeriod);
-				}
-				if (ruleAThreshold > 0) {
-					alarmRule.setRuleAThreshold(ruleAThreshold);
-				}
-				if (ruleAType > 0) {
-					alarmRule.setRuleAType(ruleAType);
-				}
-				session.update(alarmRule);
-				result = true;
-			}
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
 	}
 
 	public boolean removeAlarmRule(AlarmRule alarmrule) {
@@ -178,6 +130,37 @@ public class AlarmRuleDAO {
 			}
 			session.getTransaction().commit();
 			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean updateRule(String ruleAUuid, int ruleAPeriod,
+			int ruleAThreshold, int ruleAType) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			AlarmRule alarmRule = this.doGetAlarmRule(session, ruleAUuid);
+			if (alarmRule != null) {
+				if (ruleAPeriod > 0) {
+					alarmRule.setRuleAPeriod(ruleAPeriod);
+				}
+				if (ruleAThreshold > 0) {
+					alarmRule.setRuleAThreshold(ruleAThreshold);
+				}
+				if (ruleAType > 0) {
+					alarmRule.setRuleAType(ruleAType);
+				}
+				session.update(alarmRule);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

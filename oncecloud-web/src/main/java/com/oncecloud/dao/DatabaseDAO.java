@@ -16,10 +16,6 @@ import com.oncecloud.entity.Database;
 import com.oncecloud.entity.EIP;
 import com.oncecloud.helper.SessionHelper;
 
-/**
- * @author hehai
- * @version 2014/08/23
- */
 @Component
 public class DatabaseDAO {
 	private SessionHelper sessionHelper;
@@ -33,13 +29,19 @@ public class DatabaseDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	public Database getDatabase(String dbUuid) {
-		Database database = null;
+	public int countAllDatabaseList(String search, int uid) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			database = this.doGetDatabase(session, dbUuid);
+			Criteria criteria = session
+					.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUID", uid))
+					.add(Restrictions.like("databaseName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.eq("databaseStatus", 1));
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,7 +49,41 @@ public class DatabaseDAO {
 				session.getTransaction().rollback();
 			}
 		}
-		return database;
+		return count;
+	}
+
+	public int countDatabasesWithoutEIP(String search, int uid) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(Database.class)
+					.add(Restrictions.eq("databaseUID", uid))
+					.add(Restrictions.like("databaseName", search,
+							MatchMode.ANYWHERE))
+					.add(Restrictions.ne("databaseStatus", 0))
+					.add(Restrictions.not(Restrictions.in(
+							"databaseUuid",
+							session.createCriteria(EIP.class)
+									.add(Restrictions.eq("eipUID", uid))
+									.add(Restrictions
+											.isNotNull("eipDependency"))
+									.setProjection(
+											Projections
+													.property("eipDependency"))
+									.list())))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
 	}
 
 	private Database doGetDatabase(Session session, String dbUuid) {
@@ -78,6 +114,23 @@ public class DatabaseDAO {
 		return database;
 	}
 
+	public Database getDatabase(String dbUuid) {
+		Database database = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			database = this.doGetDatabase(session, dbUuid);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return database;
+	}
+
 	public String getDBName(String dbUuid) {
 		String result = null;
 		Session session = null;
@@ -89,74 +142,6 @@ public class DatabaseDAO {
 			Database database = (Database) criteria.uniqueResult();
 			session.getTransaction().commit();
 			result = (database == null) ? null : database.getDatabaseName();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean preCreateDatabase(String databaseUuid, String databaseName,
-			Integer databaseUID, String databaseUser, String databasePwd,
-			String databaseType, Integer databaseThroughout,
-			String databaseMac, String databaseIp, Integer databasePort,
-			Integer databasePower, Integer databaseStatus, Date createDate) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Database database = new Database(databaseUuid, databaseName,
-					databaseUID, databaseUser, databasePwd, databaseType,
-					databaseThroughout, databaseMac, databaseIp, databasePort,
-					databasePower, databaseStatus, createDate);
-			session.save(database);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean updateDatabase(String databaseUuid, int power,
-			String hostUuid) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Database database = this.doGetDatabase(session, databaseUuid);
-			database.setDatabasePower(power);
-			database.setHostUuid(hostUuid);
-			session.update(database);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean removeDatabase(String databaseUuid) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Database database = this.doGetDatabase(session, databaseUuid);
-			database.setDatabaseStatus(0);
-			session.update(database);
-			session.getTransaction().commit();
-			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -192,71 +177,6 @@ public class DatabaseDAO {
 			}
 		}
 		return databaseList;
-	}
-
-	public int countAllDatabaseList(String search, int uid) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Database.class)
-					.add(Restrictions.eq("databaseUID", uid))
-					.add(Restrictions.like("databaseName", search,
-							MatchMode.ANYWHERE))
-					.add(Restrictions.eq("databaseStatus", 1));
-			count = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	public boolean setDBPowerStatus(String uuid, int powerStatus) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Database database = this.doGetDatabase(session, uuid);
-			database.setDatabasePower(powerStatus);
-			session.update(database);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	public boolean setDBStatus(String uuid, int state) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Database.class).add(
-					Restrictions.eq("databaseUuid", uuid));
-			Database database = (Database) criteria.uniqueResult();
-			database.setDatabaseStatus(state);
-			session.update(database);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -296,37 +216,91 @@ public class DatabaseDAO {
 		return databaseList;
 	}
 
-	public int countDatabasesWithoutEIP(String search, int uid) {
-		int count = 0;
+	public boolean preCreateDatabase(String databaseUuid, String databaseName,
+			Integer databaseUID, String databaseUser, String databasePwd,
+			String databaseType, Integer databaseThroughout,
+			String databaseMac, String databaseIp, Integer databasePort,
+			Integer databasePower, Integer databaseStatus, Date createDate) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Database.class)
-					.add(Restrictions.eq("databaseUID", uid))
-					.add(Restrictions.like("databaseName", search,
-							MatchMode.ANYWHERE))
-					.add(Restrictions.ne("databaseStatus", 0))
-					.add(Restrictions.not(Restrictions.in(
-							"databaseUuid",
-							session.createCriteria(EIP.class)
-									.add(Restrictions.eq("eipUID", uid))
-									.add(Restrictions
-											.isNotNull("eipDependency"))
-									.setProjection(
-											Projections
-													.property("eipDependency"))
-									.list())))
-					.setProjection(Projections.rowCount());
-			count = ((Number) criteria.uniqueResult()).intValue();
+			Database database = new Database(databaseUuid, databaseName,
+					databaseUID, databaseUser, databasePwd, databaseType,
+					databaseThroughout, databaseMac, databaseIp, databasePort,
+					databasePower, databaseStatus, createDate);
+			session.save(database);
 			session.getTransaction().commit();
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
-		return count;
+		return result;
+	}
+
+	public boolean removeDatabase(String databaseUuid) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = this.doGetDatabase(session, databaseUuid);
+			database.setDatabaseStatus(0);
+			session.update(database);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean setDBPowerStatus(String uuid, int powerStatus) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = this.doGetDatabase(session, uuid);
+			database.setDatabasePower(powerStatus);
+			session.update(database);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean updateDatabase(String databaseUuid, int power,
+			String hostUuid) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Database database = this.doGetDatabase(session, databaseUuid);
+			database.setDatabasePower(power);
+			database.setHostUuid(hostUuid);
+			session.update(database);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
 	}
 }

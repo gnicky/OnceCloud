@@ -18,23 +18,9 @@ import com.oncecloud.entity.OCPool;
 import com.oncecloud.entity.Rack;
 import com.oncecloud.helper.SessionHelper;
 
-/**
- * @author hehai
- * @version 2014/06/25
- */
 @Component
 public class DatacenterDAO {
-	private SessionHelper sessionHelper;
 	private OverViewDAO overViewDAO;
-
-	private SessionHelper getSessionHelper() {
-		return sessionHelper;
-	}
-
-	@Autowired
-	private void setSessionHelper(SessionHelper sessionHelper) {
-		this.sessionHelper = sessionHelper;
-	}
 
 	private OverViewDAO getOverViewDAO() {
 		return overViewDAO;
@@ -45,13 +31,30 @@ public class DatacenterDAO {
 		this.overViewDAO = overViewDAO;
 	}
 
-	public Datacenter getDatacenter(String dcUuid) {
-		Datacenter datacenter = null;
+	private SessionHelper sessionHelper;
+
+	private SessionHelper getSessionHelper() {
+		return sessionHelper;
+	}
+
+	@Autowired
+	private void setSessionHelper(SessionHelper sessionHelper) {
+		this.sessionHelper = sessionHelper;
+	}
+
+	public int countAllDatacenter(String search) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			datacenter = this.doGetDatacenter(session, dcUuid);
+			Criteria criteria = session
+					.createCriteria(Datacenter.class)
+					.add(Restrictions
+							.like("dcName", search, MatchMode.ANYWHERE))
+					.add(Restrictions.eq("dcStatus", 1))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,15 +62,7 @@ public class DatacenterDAO {
 				session.getTransaction().rollback();
 			}
 		}
-		return datacenter;
-	}
-
-	private Datacenter doGetDatacenter(Session session, String dcUuid) {
-		Datacenter datacenter;
-		Criteria criteria = session.createCriteria(Datacenter.class).add(
-				Restrictions.eq("dcUuid", dcUuid));
-		datacenter = (Datacenter) criteria.uniqueResult();
-		return datacenter;
+		return count;
 	}
 
 	public Datacenter createDatacenter(String dcName, String dcLocation,
@@ -95,55 +90,6 @@ public class DatacenterDAO {
 			}
 		}
 		return datacenter;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Datacenter> getOnePageDCList(int page, int limit, String search) {
-		List<Datacenter> datacenterList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			Criteria criteria = session
-					.createCriteria(Datacenter.class)
-					.add(Restrictions
-							.like("dcName", search, MatchMode.ANYWHERE))
-					.add(Restrictions.eq("dcStatus", 1))
-					.addOrder(Order.desc("createDate"))
-					.setFirstResult(startPos).setMaxResults(limit);
-			datacenterList = criteria.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return datacenterList;
-	}
-
-	public int countAllDatacenter(String search) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Datacenter.class)
-					.add(Restrictions
-							.like("dcName", search, MatchMode.ANYWHERE))
-					.add(Restrictions.eq("dcStatus", 1))
-					.setProjection(Projections.rowCount());
-			count = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -183,6 +129,14 @@ public class DatacenterDAO {
 		return result;
 	}
 
+	private Datacenter doGetDatacenter(Session session, String dcUuid) {
+		Datacenter datacenter;
+		Criteria criteria = session.createCriteria(Datacenter.class).add(
+				Restrictions.eq("dcUuid", dcUuid));
+		datacenter = (Datacenter) criteria.uniqueResult();
+		return datacenter;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Datacenter> getAllPageDCList() {
 		List<Datacenter> datacenterList = null;
@@ -193,6 +147,49 @@ public class DatacenterDAO {
 			Criteria criteria = session.createCriteria(Datacenter.class)
 					.add(Restrictions.eq("dcStatus", 1))
 					.addOrder(Order.desc("createDate"));
+			datacenterList = criteria.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return datacenterList;
+	}
+
+	public Datacenter getDatacenter(String dcUuid) {
+		Datacenter datacenter = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			datacenter = this.doGetDatacenter(session, dcUuid);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return datacenter;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Datacenter> getOnePageDCList(int page, int limit, String search) {
+		List<Datacenter> datacenterList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			Criteria criteria = session
+					.createCriteria(Datacenter.class)
+					.add(Restrictions
+							.like("dcName", search, MatchMode.ANYWHERE))
+					.add(Restrictions.eq("dcStatus", 1))
+					.addOrder(Order.desc("createDate"))
+					.setFirstResult(startPos).setMaxResults(limit);
 			datacenterList = criteria.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
