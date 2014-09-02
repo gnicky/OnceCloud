@@ -1395,8 +1395,7 @@ function bingfirewall(bdtype) {
     var tablelist = "";
     $.ajax({
         type: 'post',
-        url: '/FirewallAction',
-        data: 'action=getabledfirewalls',
+        url: '/FirewallAction/AvailableFirewalls',
         dataType: 'json',
         success: function (array) {
             if (array.length > 0) {
@@ -1431,8 +1430,8 @@ function bingfirewall(bdtype) {
                             if (bdtype == "vm") {
                                 $.ajax({
                                     type: 'get',
-                                    url: '/FirewallAction',
-                                    data: 'action=bindfirewall&firewallId=' + firewallId + '&vmuuidStr=' + vmuuid + '&bindtype=' + bdtype,
+                                    url: '/FirewallAction/Bind',
+                                    data: {firewallId:firewallId,vmUuidStr:vmuuid,bindType:bdtype},
                                     dataType: 'json',
                                     success: function (response) {
                                         if (response.isSuccess) {
@@ -1449,8 +1448,8 @@ function bingfirewall(bdtype) {
                             } else if (bdtype == "rt") {
                                 $.ajax({
                                     type: 'get',
-                                    url: '/FirewallAction',
-                                    data: 'action=bindfirewall&firewallId=' + firewallId + '&vmuuidStr=' + router + '&bindtype=' + bdtype,
+                                    url: '/FirewallAction/Bind',
+                                    data: {firewallId:firewallId,vmUuidStr:router,bindType:bdtype},
                                     dataType: 'json',
                                     success: function (response) {
                                         if (response.isSuccess) {
