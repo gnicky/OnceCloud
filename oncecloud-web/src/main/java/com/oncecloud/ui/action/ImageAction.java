@@ -54,7 +54,7 @@ public class ImageAction {
 		return jo.toString();
 	}
 	
-	@RequestMapping(value = "/clone", method = {RequestMethod.POST })
+	@RequestMapping(value = "/Clone", method = {RequestMethod.POST })
 	@ResponseBody
 	public void clone(HttpServletRequest request, ImageCloneModel imagecloneModel) {
 		User user = (User) request.getSession().getAttribute("user");

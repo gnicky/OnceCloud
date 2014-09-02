@@ -192,7 +192,7 @@
 	        <a class="btn btn-forbidden" href="#">
 	        <span class="glyphicon glyphicon-cog"></span>
 	        <span class="text">更改配置</span></a> -->
-            <a id="createimage" class="btn" href="#" url="${basePath}user/create/createimage.jsp">
+            <a id="createimage" class="btn" href="#" url="${basePath}instance/createimage">
             <span class="glyphicon glyphicon-record">
             </span>
             <span class="text">

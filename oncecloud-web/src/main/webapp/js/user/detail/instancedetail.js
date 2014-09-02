@@ -874,8 +874,8 @@ function getInstanceBasicList() {
                 $("#vnUuid").val(obj.instancevlan);
                 $.ajax({
                     type: 'get',
-                    url: '/VnetAction',
-                    data: "action=getonevnet&vnUuid=" + obj.instancevlan,
+                    url: '/VnetAction/VnetDetail',
+                    data: {uuid:obj.instancevlan},
                     dataType: 'json',
                     success: function (obj) {
                         $("#vxnetName").text(decodeURI(obj.vnetName));
@@ -885,8 +885,8 @@ function getInstanceBasicList() {
                             $("#componentInstanceRouterDiv").show();
                             $.ajax({
                                 type: 'get',
-                                url: '/RouterAction',
-                                data: "action=getonerouter&routerUuid=" + obj.vnetRouter,
+                                url: '/RouterAction/RouterDetail',
+                                data: {uuid:obj.vnetRouter},
                                 dataType: 'json',
                                 success: function (obj) {
                                     $("#componentRouterDiv").find(".private-ip").text(obj.routerIp);
