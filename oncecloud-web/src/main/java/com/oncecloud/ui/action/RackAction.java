@@ -31,21 +31,16 @@ public class RackAction {
 	@RequestMapping(value = "/RackList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String rackList(HttpServletRequest request, ListModel list) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getRackManager().getRackList(list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getRackManager().getRackList(list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public void delete(HttpServletRequest request, @RequestParam String rackid, @RequestParam String rackname) {
+	public void delete(HttpServletRequest request, @RequestParam String rackid,
+			@RequestParam String rackname) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			this.getRackManager().deleteRack(rackid, rackname, user.getUserId());
-		}
+		this.getRackManager().deleteRack(rackid, rackname, user.getUserId());
 	}
 }

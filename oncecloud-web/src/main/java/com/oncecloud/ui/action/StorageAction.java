@@ -31,25 +31,18 @@ public class StorageAction {
 	@RequestMapping(value = "/StorageList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String storageList(HttpServletRequest request, ListModel list) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getSrManager().getStorageList(list.getPage(),
-					list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getSrManager().getStorageList(list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.GET })
 	@ResponseBody
-	public String delete(HttpServletRequest request, @RequestParam String srid, @RequestParam String srname) {
+	public String delete(HttpServletRequest request, @RequestParam String srid,
+			@RequestParam String srname) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getSrManager().deleteStorage(user.getUserId(), srid, srname);
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getSrManager().deleteStorage(user.getUserId(),
+				srid, srname);
+		return ja.toString();
 	}
 }

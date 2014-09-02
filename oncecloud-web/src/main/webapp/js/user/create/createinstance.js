@@ -121,7 +121,7 @@
             var loginPwd = $('#login_passwd').val();
             $.ajax({
                 type: 'post',
-                url: '/VMAction/quota',
+                url: '/VMAction/Quota',
                 data: {count:vmCount},
                 dataType: 'text',
                 success: function (msg) {

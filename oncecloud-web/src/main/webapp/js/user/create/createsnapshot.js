@@ -115,10 +115,10 @@ function initResourceList() {
                 + rsid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-inbox"></span>&nbsp;' + rsname + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
         }
     } else {
-        $('input[name="volumerow"]:checked').each(function () {
-            var vmuuid = $(vmboxes[i]).parent().parent().attr("rowid");
+        $('input[name="vmrow"]:checked').each(function () {
+            var vmuuid = $(this).parent().parent().attr("rowid");
             var showuuid = "i-" + vmuuid.substring(0, 8);
-            var vmName = $(vmboxes[i]).parent().parent().find('[name="vmname"]').text();
+            var vmName = $(this).parent().parent().find('[name="vmname"]').text();
             $('#resource-list').append('<div name="vm-select-item" uuid="' + vmuuid + '"><label class="inline" style="margin:0; padding:0 !important"><span class="glyphicon glyphicon-cloud"></span>&nbsp;' + vmName + '&nbsp;<a>(' + showuuid + ')</a></label></div>');
         });
         removeAllCheck("vmrow");

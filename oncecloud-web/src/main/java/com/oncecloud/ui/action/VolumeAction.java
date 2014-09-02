@@ -28,30 +28,22 @@ public class VolumeAction {
 	public void setVolumeManager(VolumeManager volManager) {
 		this.volumeManager = volManager;
 	}
-	
+
 	@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String volumeList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getVolumeManager().getVolumeList(userId, list.getPage(),
-					list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getVolumeManager().getVolumeList(userId,
+				list.getPage(), list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/VolumeDetail", method = { RequestMethod.GET })
 	@ResponseBody
-	public String volumeDetail(HttpServletRequest request, @RequestParam String uuid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getVolumeManager().getVolumeDetail(uuid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+	public String volumeDetail(HttpServletRequest request,
+			@RequestParam String uuid) {
+		JSONObject jo = this.getVolumeManager().getVolumeDetail(uuid);
+		return jo.toString();
 	}
 }

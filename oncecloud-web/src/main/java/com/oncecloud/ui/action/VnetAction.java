@@ -33,26 +33,17 @@ public class VnetAction {
 	@ResponseBody
 	public String vnetList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getVnetManager().getVnetList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getVnetManager().getVnetList(userId,
+				list.getPage(), list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/VnetDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vnetDetail(HttpServletRequest request,
 			@RequestParam String uuid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getVnetManager().getVnetDetail(uuid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+		JSONObject jo = this.getVnetManager().getVnetDetail(uuid);
+		return jo.toString();
 	}
 }

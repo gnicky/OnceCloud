@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createuser.jsp">
+			<button id="create" class="btn btn-primary" url="/user/create">
 				<span class="glyphicon glyphicon-user"></span>新建用户
 			</button>
             <div class="btn-group">

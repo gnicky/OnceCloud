@@ -33,62 +33,45 @@ public class RouterAction {
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String adminList(HttpServletRequest request, AdminListModel alrModel) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getRouterManager().getAdminRouterList(
-					alrModel.getPage(), alrModel.getLimit(),
-					alrModel.getHost(), alrModel.getImportance(),
-					alrModel.getType());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getRouterManager().getAdminRouterList(
+				alrModel.getPage(), alrModel.getLimit(), alrModel.getHost(),
+				alrModel.getImportance(), alrModel.getType());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/RouterList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String routerList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getRouterManager().getRouterList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getRouterManager().getRouterList(userId,
+				list.getPage(), list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
 	@ResponseBody
-	public void routerAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+	public void routerAdminStartUp(HttpServletRequest request,
+			@RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			this.getRouterManager().routerAdminStartUp(uuid, userId);
-		}
+		int userId = user.getUserId();
+		this.getRouterManager().routerAdminStartUp(uuid, userId);
 	}
 
 	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
 	@ResponseBody
-	public void routerAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+	public void routerAdminShutDown(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			this.getRouterManager().routerAdminShutDown(uuid, force, userId);
-		}
+		int userId = user.getUserId();
+		this.getRouterManager().routerAdminShutDown(uuid, force, userId);
 	}
 
 	@RequestMapping(value = "/RouterDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String routerDetail(HttpServletRequest request,
 			@RequestParam String uuid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getRouterManager().getRouterDetail(uuid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+		JSONObject jo = this.getRouterManager().getRouterDetail(uuid);
+		return jo.toString();
 	}
 }

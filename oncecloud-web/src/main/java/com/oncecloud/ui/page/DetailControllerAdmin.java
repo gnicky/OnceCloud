@@ -17,10 +17,6 @@ public class DetailControllerAdmin {
 	@RequestMapping(value = "/datacenter/detail")
 	@ResponseBody
 	public ModelAndView datacenterDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "数据中心管理");
 		model.put("sideActive", 12);
@@ -40,10 +36,6 @@ public class DetailControllerAdmin {
 	@RequestMapping(value = "/host/detail")
 	@ResponseBody
 	public ModelAndView hostDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "服务器");
 		model.put("sideActive", 15);
@@ -64,10 +56,6 @@ public class DetailControllerAdmin {
 	@RequestMapping(value = "/rack/detail")
 	@ResponseBody
 	public ModelAndView rackDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "机架");
 		model.put("sideActive", 13);
@@ -87,10 +75,6 @@ public class DetailControllerAdmin {
 	@RequestMapping(value = "/user/detail")
 	@ResponseBody
 	public ModelAndView userDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "用户");
 		model.put("sideActive", 3);

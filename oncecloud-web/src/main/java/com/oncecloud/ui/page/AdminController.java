@@ -20,10 +20,6 @@ public class AdminController {
 	@RequestMapping(value = "/user", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView user(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 3);
@@ -38,10 +34,6 @@ public class AdminController {
 	@RequestMapping(value = "/storage", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView storage(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 16);
@@ -56,10 +48,6 @@ public class AdminController {
 	@RequestMapping(value = "/host", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView host(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 15);
@@ -74,10 +62,6 @@ public class AdminController {
 	@RequestMapping(value = "/pool", method = {RequestMethod.GET})
 	@ResponseBody
 	public ModelAndView pool(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 14);
@@ -92,10 +76,6 @@ public class AdminController {
 	@RequestMapping(value = "/address", method = {RequestMethod.GET})
 	@ResponseBody
 	public ModelAndView address(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 4);
@@ -110,10 +90,6 @@ public class AdminController {
 	@RequestMapping(value = "/datacenter", method = {RequestMethod.GET})
 	@ResponseBody
 	public ModelAndView datacenter(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 12);
@@ -128,10 +104,6 @@ public class AdminController {
 	@RequestMapping(value = "/rack", method = {RequestMethod.GET})
 	@ResponseBody
 	public ModelAndView rack(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/backdoor"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 13);

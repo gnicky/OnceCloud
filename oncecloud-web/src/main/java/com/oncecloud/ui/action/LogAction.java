@@ -35,13 +35,9 @@ public class LogAction {
 			@RequestParam int start, @RequestParam int num)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getLogManager().getLogList(userId, status,
-					start, num);
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getLogManager().getLogList(userId, status, start,
+				num);
+		return ja.toString();
 	}
 }

@@ -20,10 +20,6 @@ public class UserController {
 	@RequestMapping(value = "/volume", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView volume(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 3);
@@ -38,10 +34,6 @@ public class UserController {
 	@RequestMapping(value = "/snapshot", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView snapshot(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 4);
@@ -56,10 +48,6 @@ public class UserController {
 	@RequestMapping(value = "/router", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView router(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 5);
@@ -74,10 +62,6 @@ public class UserController {
 	@RequestMapping(value = "/vnet", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView vnet(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 5);
@@ -92,10 +76,6 @@ public class UserController {
 	@RequestMapping(value = "/elasticip", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView elasticIP(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 6);
@@ -110,10 +90,6 @@ public class UserController {
 	@RequestMapping(value = "/loadbalance", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView loadBalance(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 7);
@@ -128,10 +104,6 @@ public class UserController {
 	@RequestMapping(value = "/firewall", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView firewall(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 8);
@@ -146,10 +118,6 @@ public class UserController {
 	@RequestMapping(value = "/alarm", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView alarm(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 13);
@@ -164,10 +132,6 @@ public class UserController {
 	@RequestMapping(value = "/expense/summary", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView expenseSummary(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 10);
@@ -182,10 +146,6 @@ public class UserController {
 	@RequestMapping(value = "/expense/query", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView expenseQuery(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 10);

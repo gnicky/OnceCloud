@@ -26,18 +26,14 @@ public class AlarmAction {
 	public void setAlarmManager(AlarmManager alarmManager) {
 		this.alarmManager = alarmManager;
 	}
-	
+
 	@RequestMapping(value = "/AlarmList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String alarmList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getAlarmManager().getAlarmList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getAlarmManager().getAlarmList(userId,
+				list.getPage(), list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 }

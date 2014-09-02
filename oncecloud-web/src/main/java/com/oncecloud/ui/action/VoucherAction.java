@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.oncecloud.entity.User;
 import com.oncecloud.manager.VoucherManager;
 
 @RequestMapping("/VoucherAction")
@@ -27,29 +26,19 @@ public class VoucherAction {
 	public void setVoucherManager(VoucherManager voucherManager) {
 		this.voucherManager = voucherManager;
 	}
-	
+
 	@RequestMapping(value = "/Confirm", method = { RequestMethod.POST })
 	@ResponseBody
 	public String confirm(HttpServletRequest request, @RequestParam int userid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getVoucherManager().confirmVoucher(userid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+		JSONObject jo = this.getVoucherManager().confirmVoucher(userid);
+		return jo.toString();
 	}
 
 	@RequestMapping(value = "/Deny", method = { RequestMethod.POST })
 	@ResponseBody
 	public String deny(HttpServletRequest request, @RequestParam int userid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getVoucherManager().denyVoucher(userid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+		JSONObject jo = this.getVoucherManager().denyVoucher(userid);
+		return jo.toString();
 	}
-	
+
 }

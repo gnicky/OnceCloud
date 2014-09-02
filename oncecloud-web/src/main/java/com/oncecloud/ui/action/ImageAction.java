@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.ImageManager;
+import com.oncecloud.ui.model.ImageCloneModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/ImageAction")
@@ -30,31 +31,36 @@ public class ImageAction {
 		this.imageManager = imageManager;
 	}
 
-	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET,RequestMethod.POST })
+	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	@ResponseBody
 	public String imageList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			int userLevel = user.getUserLevel();
-			JSONArray ja = this.getImageManager().getImageList(userId, userLevel, list.getPage(),
-					list.getLimit(), list.getSearch(), list.getType());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		int userLevel = user.getUserLevel();
+		JSONArray ja = this.getImageManager().getImageList(userId, userLevel,
+				list.getPage(), list.getLimit(), list.getSearch(),
+				list.getType());
+		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Delete", method = {RequestMethod.POST })
+	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public String imageList(HttpServletRequest request, @RequestParam String imageId, @RequestParam String imageName) {
+	public String imageList(HttpServletRequest request,
+			@RequestParam String imageId, @RequestParam String imageName) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getImageManager().deleteImage(user.getUserId(),
+				imageId, imageName);
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/clone", method = {RequestMethod.POST })
+	@ResponseBody
+	public void clone(HttpServletRequest request, ImageCloneModel imagecloneModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
-			JSONObject jo = this.getImageManager().deleteImage(user.getUserId(), imageId, imageName);
-			return jo.toString();
-		} else {
-			return "";
-		}
+			this.getImageManager().cloneImage(user.getUserId(), user.getUserLevel(),imagecloneModel.getVmUuid(),imagecloneModel.getImageName(),imagecloneModel.getImageDesc());
+		} 
 	}
 
 }

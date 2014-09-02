@@ -42,10 +42,6 @@ public class CommonController {
 	
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public ModelAndView dashboard(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("title", "控制台");
@@ -62,10 +58,6 @@ public class CommonController {
 	@RequestMapping(value = "/instance", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView instance(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		User user = (User) request.getSession().getAttribute("user");
 		model.put("sideActive", 1);
@@ -82,10 +74,6 @@ public class CommonController {
 	@RequestMapping(value = "/image", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView image(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("sideActive", 2);
 		model.put("title", "映像");
@@ -95,10 +83,6 @@ public class CommonController {
 	@RequestMapping(value = "/log", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView log(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("sideActive", 9);
 		model.put("title", "操作日志");
@@ -108,10 +92,6 @@ public class CommonController {
 	@RequestMapping(value = "/service", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView service(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("sideActive", 11);
 		model.put("title", "表单");
@@ -121,10 +101,6 @@ public class CommonController {
 	@RequestMapping(value = "/image/detail")
 	@ResponseBody
 	public ModelAndView imageDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "映像");
 		model.put("sideActive", 2);
@@ -146,10 +122,6 @@ public class CommonController {
 	@RequestMapping(value = "/question/detail")
 	@ResponseBody
 	public ModelAndView questionDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "表单");
 		model.put("sideActive", 11);

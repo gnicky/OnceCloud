@@ -26,18 +26,14 @@ public class FirewallAction {
 	public void setFirewallManager(FirewallManager firewallManager) {
 		this.firewallManager = firewallManager;
 	}
-	
+
 	@RequestMapping(value = "/FirewallList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String firewallList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getFirewallManager().getFirewallList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getFirewallManager().getFirewallList(userId,
+				list.getPage(), list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 }
