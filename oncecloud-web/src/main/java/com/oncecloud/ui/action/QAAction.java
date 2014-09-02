@@ -32,25 +32,19 @@ public class QAAction {
 	@ResponseBody
 	public String questionList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getQaManager().getQuestionList(
-					user.getUserId(), user.getUserLevel(), list.getPage(),
-					list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getQaManager().getQuestionList(user.getUserId(),
+				user.getUserLevel(), list.getPage(), list.getLimit(),
+				list.getSearch());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/CloseQuestion", method = { RequestMethod.GET })
 	@ResponseBody
-	public String closeQuestion(HttpServletRequest request, @RequestParam int qaid) {
+	public String closeQuestion(HttpServletRequest request,
+			@RequestParam int qaid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getQaManager().closeQuestion(user.getUserId(), qaid);
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getQaManager()
+				.closeQuestion(user.getUserId(), qaid);
+		return ja.toString();
 	}
 }

@@ -30,31 +30,27 @@ public class ImageAction {
 		this.imageManager = imageManager;
 	}
 
-	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET,RequestMethod.POST })
+	@RequestMapping(value = "/ImageList", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	@ResponseBody
 	public String imageList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			int userLevel = user.getUserLevel();
-			JSONArray ja = this.getImageManager().getImageList(userId, userLevel, list.getPage(),
-					list.getLimit(), list.getSearch(), list.getType());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		int userLevel = user.getUserLevel();
+		JSONArray ja = this.getImageManager().getImageList(userId, userLevel,
+				list.getPage(), list.getLimit(), list.getSearch(),
+				list.getType());
+		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Delete", method = {RequestMethod.POST })
+	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public String imageList(HttpServletRequest request, @RequestParam String imageId, @RequestParam String imageName) {
+	public String imageList(HttpServletRequest request,
+			@RequestParam String imageId, @RequestParam String imageName) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getImageManager().deleteImage(user.getUserId(), imageId, imageName);
-			return jo.toString();
-		} else {
-			return "";
-		}
+		JSONObject jo = this.getImageManager().deleteImage(user.getUserId(),
+				imageId, imageName);
+		return jo.toString();
 	}
 
 }

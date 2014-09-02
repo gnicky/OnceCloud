@@ -28,41 +28,31 @@ public class PoolAction {
 	public void setPoolManager(PoolManager poolManager) {
 		this.poolManager = poolManager;
 	}
-	
+
 	@RequestMapping(value = "/PoolList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String poolList(HttpServletRequest request, ListModel list) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.poolManager.getPoolList(list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.poolManager.getPoolList(list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public String delete(HttpServletRequest request, @RequestParam String poolid, @RequestParam String poolname) {
+	public String delete(HttpServletRequest request,
+			@RequestParam String poolid, @RequestParam String poolname) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.poolManager.deletePool(poolid, poolname, user.getUserId());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.poolManager.deletePool(poolid, poolname,
+				user.getUserId());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/UnBind", method = { RequestMethod.GET })
 	@ResponseBody
 	public String unBind(HttpServletRequest request, @RequestParam String poolid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.poolManager.unbind(poolid, user.getUserId());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.poolManager.unbind(poolid, user.getUserId());
+		return ja.toString();
 	}
-	
+
 }

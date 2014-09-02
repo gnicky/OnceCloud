@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.oncecloud.entity.User;
 import com.oncecloud.manager.LBManager;
 import com.oncecloud.ui.model.AdminListModel;
 
@@ -29,17 +28,10 @@ public class LoadBalanceAction {
 
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
 	@ResponseBody
-	public String adminList(HttpServletRequest request,
-			AdminListModel alrModel) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getLbManager().getAdminLBList(
-					alrModel.getPage(), alrModel.getLimit(),
-					alrModel.getHost(), alrModel.getImportance(),
-					alrModel.getType());
-			return ja.toString();
-		} else {
-			return "";
-		}
+	public String adminList(HttpServletRequest request, AdminListModel alrModel) {
+		JSONArray ja = this.getLbManager().getAdminLBList(alrModel.getPage(),
+				alrModel.getLimit(), alrModel.getHost(),
+				alrModel.getImportance(), alrModel.getType());
+		return ja.toString();
 	}
 }

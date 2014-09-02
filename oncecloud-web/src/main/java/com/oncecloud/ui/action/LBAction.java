@@ -33,27 +33,23 @@ public class LBAction {
 	@ResponseBody
 	public String lbList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getLbManager().getLBList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getLbManager().getLBList(userId, list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
-	public void lbAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+	public void lbAdminStartUp(HttpServletRequest request,
+			@RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			this.getLbManager().lbAdminShutUp(uuid, userId);
-		}
+		int userId = user.getUserId();
+		this.getLbManager().lbAdminShutUp(uuid, userId);
 	}
 
 	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
-	public void lbAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+	public void lbAdminShutDown(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null) {
 			int userId = user.getUserId();
@@ -63,13 +59,9 @@ public class LBAction {
 
 	@RequestMapping(value = "/LBDetail", method = { RequestMethod.GET })
 	@ResponseBody
-	public String volumeDetail(HttpServletRequest request, @RequestParam String uuid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getLbManager().getLBDetail(uuid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+	public String volumeDetail(HttpServletRequest request,
+			@RequestParam String uuid) {
+		JSONObject jo = this.getLbManager().getLBDetail(uuid);
+		return jo.toString();
 	}
 }

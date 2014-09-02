@@ -19,10 +19,6 @@ public class DetailControllerUser {
 	@RequestMapping(value = "/instance/detail")
 	@ResponseBody
 	public ModelAndView instanceDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "主机");
 		model.put("sideActive", 1);
@@ -44,10 +40,6 @@ public class DetailControllerUser {
 	@RequestMapping(value = "/volume/detail")
 	@ResponseBody
 	public ModelAndView volumeDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "硬盘");
 		model.put("sideActive", 3);
@@ -68,10 +60,6 @@ public class DetailControllerUser {
 	@RequestMapping(value = "/router/detail")
 	@ResponseBody
 	public ModelAndView routerDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "路由器");
 		model.put("sideActive", 5);
@@ -92,10 +80,6 @@ public class DetailControllerUser {
 	@RequestMapping(value = "/vnet/detail")
 	@ResponseBody
 	public ModelAndView vnetDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "私有网络");
 		model.put("sideActive", 5);
@@ -116,10 +100,6 @@ public class DetailControllerUser {
 	@RequestMapping(value = "/elasticip/detail")
 	@ResponseBody
 	public ModelAndView elasticIPDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "公网IP");
 		model.put("sideActive", 6);
@@ -140,10 +120,6 @@ public class DetailControllerUser {
 	@RequestMapping(value = "/loadbalance/detail")
 	@ResponseBody
 	public ModelAndView loadBalanceDetail(HttpServletRequest request) {
-		if (request.getSession().getAttribute("user") == null) {
-			return new ModelAndView(new RedirectView("/login"));
-		}
-		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "负载均衡");
 		model.put("sideActive", 7);

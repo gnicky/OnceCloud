@@ -33,11 +33,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		
 		String requestUrl = request.getRequestURI();
-		if(requestUrl.contains(".jsp")) {
-			response.sendRedirect("/login");
-			return false;
-		}
-		
+		System.out.println("hello");
 		if(uncheckUrls.contains(requestUrl)){ 
 			return true; 
 		} else { 

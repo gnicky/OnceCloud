@@ -34,127 +34,100 @@ public class VMAction {
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String adminList(HttpServletRequest request, AdminListModel alrModel) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getVmManager().getAdminVMList(
-					alrModel.getPage(), alrModel.getLimit(),
-					alrModel.getHost(), alrModel.getImportance(),
-					alrModel.getType());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getVmManager().getAdminVMList(alrModel.getPage(),
+				alrModel.getLimit(), alrModel.getHost(),
+				alrModel.getImportance(), alrModel.getType());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/VMList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vmList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getVmManager().getVMList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getVmManager().getVMList(userId, list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/AdminStartUp", method = { RequestMethod.GET })
 	@ResponseBody
-	public void vmAdminStartUp(HttpServletRequest request, @RequestParam String uuid) {
+	public void vmAdminStartUp(HttpServletRequest request,
+			@RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			this.getVmManager().doAdminStartVm(userId, uuid);
-		}
+		int userId = user.getUserId();
+		this.getVmManager().doAdminStartVm(userId, uuid);
 	}
 
 	@RequestMapping(value = "/AdminShutDown", method = { RequestMethod.GET })
 	@ResponseBody
-	public void vmAdminShutDown(HttpServletRequest request, @RequestParam String uuid, @RequestParam String force) {
+	public void vmAdminShutDown(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			this.getVmManager().doAdminShutDown(userId, uuid, force);
-		}
+		int userId = user.getUserId();
+		this.getVmManager().doAdminShutDown(userId, uuid, force);
 	}
 
 	@RequestMapping(value = "/VMDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vmDetail(HttpServletRequest request, @RequestParam String uuid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONObject jo = this.getVmManager().getVMDetail(uuid);
-			return jo.toString();
-		} else {
-			return "";
-		}
+		JSONObject jo = this.getVmManager().getVMDetail(uuid);
+		return jo.toString();
 	}
-	
-	@RequestMapping(value = "/quota", method = { RequestMethod.GET, RequestMethod.POST})
+
+	@RequestMapping(value = "/quota", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request, @RequestParam int count) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			String quota = this.getVmManager().getQuota(user.getUserId(), user.getUserLevel(),
-					count);
-			return quota;
-		} else {
-			return "";
-		}
+		String quota = this.getVmManager().getQuota(user.getUserId(),
+				user.getUserLevel(), count);
+		return quota;
 	}
-	
+
 	@RequestMapping(value = "/StartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void startVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			String poolUuid = user.getUserAllocate();
-			this.getVmManager().startVM(uuid, poolUuid);
-		}
+		String poolUuid = user.getUserAllocate();
+		this.getVmManager().startVM(uuid, poolUuid);
 	}
-	
+
 	@RequestMapping(value = "/restartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void restartVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			String poolUuid = user.getUserAllocate();
-			this.getVmManager().restartVM(uuid, poolUuid);
-		}
+		String poolUuid = user.getUserAllocate();
+		this.getVmManager().restartVM(uuid, poolUuid);
 	}
-	
-	
+
 	@RequestMapping(value = "/deleteVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void deleteVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			String poolUuid = user.getUserAllocate();
-			this.getVmManager().deleteVM(user.getUserId(), uuid, poolUuid);
-		}
+		String poolUuid = user.getUserAllocate();
+		this.getVmManager().deleteVM(user.getUserId(), uuid, poolUuid);
 	}
-	
+
 	@RequestMapping(value = "/shutdownVM", method = { RequestMethod.GET })
 	@ResponseBody
-	public void shutdownVM(HttpServletRequest request, @RequestParam String uuid,@RequestParam String force) {
+	public void shutdownVM(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			String poolUuid = user.getUserAllocate();
-			this.getVmManager().shutdownVM(uuid, force, poolUuid);
-		}
+		String poolUuid = user.getUserAllocate();
+		this.getVmManager().shutdownVM(uuid, force, poolUuid);
 	}
-	
-	@RequestMapping(value = "/CreateVM", method = { RequestMethod.GET, RequestMethod.POST })
+
+	@RequestMapping(value = "/CreateVM", method = { RequestMethod.GET,
+			RequestMethod.POST })
 	@ResponseBody
 	public void CreateVM(HttpServletRequest request, CreateVMModel createvmModel) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			this.getVmManager().doCreateVM(createvmModel.getVmUuid(),createvmModel.getImageUuid(), user.getUserId(), createvmModel.getVmName(),
-				createvmModel.getCpu(), createvmModel.getMemory(), createvmModel.getPassword(), user.getUserAllocate());
-		}
+		this.getVmManager().doCreateVM(createvmModel.getVmUuid(),
+				createvmModel.getImageUuid(), user.getUserId(),
+				createvmModel.getVmName(), createvmModel.getCpu(),
+				createvmModel.getMemory(), createvmModel.getPassword(),
+				user.getUserAllocate());
 	}
-	
-	
+
 }
