@@ -75,7 +75,7 @@ public class VMAction {
 		return jo.toString();
 	}
 
-	@RequestMapping(value = "/quota", method = { RequestMethod.GET,
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request, @RequestParam int count) {
@@ -90,32 +90,32 @@ public class VMAction {
 	public void startVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().startVM(uuid, poolUuid);
+		this.getVmManager().doStartVM(user.getUserId(),uuid, poolUuid);
 	}
 
-	@RequestMapping(value = "/restartVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/RestartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void restartVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().restartVM(uuid, poolUuid);
+		this.getVmManager().doRestartVM(user.getUserId(),uuid, poolUuid);
 	}
 
-	@RequestMapping(value = "/deleteVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/DeleteVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void deleteVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().deleteVM(user.getUserId(), uuid, poolUuid);
+		this.getVmManager().doDelete(user.getUserId(), uuid, poolUuid);
 	}
 
-	@RequestMapping(value = "/shutdownVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ShutdownVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void shutdownVM(HttpServletRequest request,
 			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().shutdownVM(uuid, force, poolUuid);
+		this.getVmManager().doShutdownVM(user.getUserId(),uuid, force, poolUuid);
 	}
 
 	@RequestMapping(value = "/CreateVM", method = { RequestMethod.GET,

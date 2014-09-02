@@ -53,7 +53,7 @@ public class FirewallDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -219,6 +219,7 @@ public class FirewallDAO {
 			session.beginTransaction();
 			String queryString = "from Firewall where firewallId = :firewallId";
 			Query query = session.createQuery(queryString);
+			query.setString("firewallId", firewallId);
 			firewall = (Firewall) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
