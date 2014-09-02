@@ -294,7 +294,7 @@ function restartVM(uuid) {
     thistr.find('.console').remove();
     $.ajax({
         type: 'get',
-        url: '/VMAction/restartVM',
+        url: '/VMAction/RestartVM',
         data:{uuid:uuid},
         dataType: 'json',
     });
@@ -309,7 +309,7 @@ function destroyVM(uuid) {
     thistr.find('[name="stateword"]').text('销毁中');
     $.ajax({
         type: 'get',
-        url: '/VMAction/deleteVM',
+        url: '/VMAction/DeleteVM',
         data:{uuid:uuid},
         dataType: 'json',
     });
@@ -323,7 +323,7 @@ function shutdownVM(uuid, force) {
     thistr.find('.console').remove();
     $.ajax({
         type: 'get',
-        url: '/VMAction/shutdownVM',
+        url: '/VMAction/ShutdownVM',
         data: {uuid:uuid,force:force},
         dataType: 'json',
     });

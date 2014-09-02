@@ -75,7 +75,7 @@ public class VMAction {
 		return jo.toString();
 	}
 
-	@RequestMapping(value = "/quota", method = { RequestMethod.GET,
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request, @RequestParam int count) {
@@ -93,7 +93,7 @@ public class VMAction {
 		this.getVmManager().doStartVM(user.getUserId(),uuid, poolUuid);
 	}
 
-	@RequestMapping(value = "/restartVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/RestartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void restartVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -101,7 +101,7 @@ public class VMAction {
 		this.getVmManager().doRestartVM(user.getUserId(),uuid, poolUuid);
 	}
 
-	@RequestMapping(value = "/deleteVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/DeleteVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void deleteVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -109,7 +109,7 @@ public class VMAction {
 		this.getVmManager().doDelete(user.getUserId(), uuid, poolUuid);
 	}
 
-	@RequestMapping(value = "/shutdownVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ShutdownVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void shutdownVM(HttpServletRequest request,
 			@RequestParam String uuid, @RequestParam String force) {
