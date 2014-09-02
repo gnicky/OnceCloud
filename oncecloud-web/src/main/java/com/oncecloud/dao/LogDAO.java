@@ -13,10 +13,6 @@ import com.oncecloud.entity.OCLog;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.log.LogConstant;
 
-/**
- * @author hehai
- * @version 2014/05/06
- */
 @Component
 public class LogDAO {
 	private SessionHelper sessionHelper;
@@ -92,4 +88,5 @@ public class LogDAO {
 		}
 		return log;
 	}
+
 }

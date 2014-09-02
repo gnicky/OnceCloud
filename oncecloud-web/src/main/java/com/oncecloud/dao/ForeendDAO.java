@@ -20,17 +20,7 @@ import com.oncecloud.helper.SessionHelper;
 
 @Component
 public class ForeendDAO {
-	private SessionHelper sessionHelper;
 	private BackendDAO backendDAO;
-
-	private SessionHelper getSessionHelper() {
-		return sessionHelper;
-	}
-
-	@Autowired
-	private void setSessionHelper(SessionHelper sessionHelper) {
-		this.sessionHelper = sessionHelper;
-	}
 
 	private BackendDAO getBackendDAO() {
 		return backendDAO;
@@ -41,12 +31,79 @@ public class ForeendDAO {
 		this.backendDAO = backendDAO;
 	}
 
-	private Foreend doGetForeend(Session session, String foreUuid) {
-		Foreend foreend;
-		Criteria criteria = session.createCriteria(Foreend.class).add(
-				Restrictions.eq("foreUuid", foreUuid));
-		foreend = (Foreend) criteria.uniqueResult();
-		return foreend;
+	private SessionHelper sessionHelper;
+
+	private SessionHelper getSessionHelper() {
+		return sessionHelper;
+	}
+
+	@Autowired
+	private void setSessionHelper(SessionHelper sessionHelper) {
+		this.sessionHelper = sessionHelper;
+	}
+
+	/**
+	 * @param foreUuid
+	 * @param state
+	 *            1可用,0 禁用
+	 * @return true 成功,false 失败
+	 * @author xpx 2014-7-11
+	 */
+	public boolean changeForeendStatus(String foreUuid, int state) {
+		boolean result = false;
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "update Foreend set foreStatus = :state where foreUuid = :foreUuid";
+			Query query = session.createQuery(queryString);
+			query.setInteger("state", state);
+			query.setString("foreUuid", foreUuid);
+			query.executeUpdate();
+			tx.commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 检查端口的重复性
+	 * 
+	 * @param lbUuid
+	 *            负载均衡id
+	 * @param forePort
+	 *            新建端口
+	 * @return true 端口可用,false 端口不可用
+	 * @author xpx 2014-7-11
+	 */
+	public boolean checkRepeat(String lbUuid, Integer forePort) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int count = 1;
+			Criteria criteria = session.createCriteria(Foreend.class)
+					.add(Restrictions.eq("lbUuid", lbUuid))
+					.add(Restrictions.eq("forePort", forePort));
+			count = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			if (0 == count) {
+				result = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -93,31 +150,20 @@ public class ForeendDAO {
 		return foreend;
 	}
 
-	/**
-	 * 检查端口的重复性
-	 * 
-	 * @param lbUuid
-	 *            负载均衡id
-	 * @param forePort
-	 *            新建端口
-	 * @return true 端口可用,false 端口不可用
-	 * @author xpx 2014-7-11
-	 */
-	public boolean checkRepeat(String lbUuid, Integer forePort) {
+	public boolean deleteForeend(String foreUuid) {
 		boolean result = false;
 		Session session = null;
+		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int count = 1;
-			Criteria criteria = session.createCriteria(Foreend.class)
-					.add(Restrictions.eq("lbUuid", lbUuid))
-					.add(Restrictions.eq("forePort", forePort));
-			count = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-			if (0 == count) {
-				result = true;
-			}
+			tx = session.beginTransaction();
+			this.getBackendDAO().deleteBackendByFrontend(session, foreUuid);
+			String queryString = "delete from Foreend where foreUuid = :foreUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("foreUuid", foreUuid);
+			query.executeUpdate();
+			tx.commit();
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -127,37 +173,12 @@ public class ForeendDAO {
 		return result;
 	}
 
-	/**
-	 * 更新前端监听
-	 * 
-	 * @param foreUuid
-	 * @param foreName
-	 * @param forePolicy
-	 * @return
-	 * @author xpx 2014-7-11
-	 */
-	public boolean updateForeend(String foreUuid, String foreName,
-			Integer forePolicy) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Foreend foreend = this.doGetForeend(session, foreUuid);
-			if (foreend != null) {
-				foreend.setForeName(foreName);
-				foreend.setForePolicy(forePolicy);
-				session.update(foreend);
-				result = true;
-			}
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
+	private Foreend doGetForeend(Session session, String foreUuid) {
+		Foreend foreend;
+		Criteria criteria = session.createCriteria(Foreend.class).add(
+				Restrictions.eq("foreUuid", foreUuid));
+		foreend = (Foreend) criteria.uniqueResult();
+		return foreend;
 	}
 
 	/**
@@ -278,50 +299,30 @@ public class ForeendDAO {
 		return feArray;
 	}
 
-	public boolean deleteForeend(String foreUuid) {
-		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			this.getBackendDAO().deleteBackendByFrontend(session, foreUuid);
-			String queryString = "delete from Foreend where foreUuid = :foreUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("foreUuid", foreUuid);
-			query.executeUpdate();
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
 	/**
+	 * 更新前端监听
+	 * 
 	 * @param foreUuid
-	 * @param state
-	 *            1可用,0 禁用
-	 * @return true 成功,false 失败
+	 * @param foreName
+	 * @param forePolicy
+	 * @return
 	 * @author xpx 2014-7-11
 	 */
-	public boolean changeForeendStatus(String foreUuid, int state) {
+	public boolean updateForeend(String foreUuid, String foreName,
+			Integer forePolicy) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Foreend set foreStatus = :state where foreUuid = :foreUuid";
-			Query query = session.createQuery(queryString);
-			query.setInteger("state", state);
-			query.setString("foreUuid", foreUuid);
-			query.executeUpdate();
-			tx.commit();
-			result = true;
+			session.beginTransaction();
+			Foreend foreend = this.doGetForeend(session, foreUuid);
+			if (foreend != null) {
+				foreend.setForeName(foreName);
+				foreend.setForePolicy(forePolicy);
+				session.update(foreend);
+				result = true;
+			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
