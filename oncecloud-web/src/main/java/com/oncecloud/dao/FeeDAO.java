@@ -30,23 +30,25 @@ public class FeeDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	public void insertFeeVM(Integer vmUID, Date startDate, Date endDate,
+	public boolean insertFeeVM(Integer vmUID, Date startDate, Date endDate,
 			Double vmPrice, Integer vmState, String vmUuid, String vmName) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			FeeVM feeVM = new FeeVM(vmUID, startDate, endDate, vmPrice,
 					vmState, vmUuid, vmName);
 			feeVM.setVmExpense();
-			Transaction tx = session.beginTransaction();
 			session.save(feeVM);
-			tx.commit();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")

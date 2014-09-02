@@ -4,9 +4,13 @@ import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,20 +50,13 @@ public class ForeendDAO {
 	 * @return
 	 * @author xpx 2014-7-11
 	 */
-	@SuppressWarnings("unchecked")
 	public Foreend getForeend(String foreUuid) {
-		Foreend fore = null;
+		Foreend foreend = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from Foreend where foreUuid = :foreUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("foreUuid", foreUuid);
-			List<Foreend> foreList = query.list();
-			if (foreList.size() == 1) {
-				fore = foreList.get(0);
-			}
+			foreend = this.doGetForeend(session, foreUuid);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,7 +64,15 @@ public class ForeendDAO {
 				session.getTransaction().rollback();
 			}
 		}
-		return fore;
+		return foreend;
+	}
+
+	private Foreend doGetForeend(Session session, String foreUuid) {
+		Foreend foreend;
+		Criteria criteria = session.createCriteria(Foreend.class).add(
+				Restrictions.eq("foreUuid", foreUuid));
+		foreend = (Foreend) criteria.uniqueResult();
+		return foreend;
 	}
 
 	/**
@@ -89,31 +94,29 @@ public class ForeendDAO {
 	public Foreend createForeend(String foreUuid, String foreName,
 			String foreProtocol, Integer forePort, Integer forePolicy,
 			String lbUuid) {
-		Foreend fore = null;
+		Foreend foreend = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
-			fore = new Foreend();
-			fore.setForeUuid(foreUuid);
-			fore.setForeName(foreName);
-			fore.setForeProtocol(foreProtocol);
-			fore.setForePort(forePort);
-			fore.setForePolicy(forePolicy);
-			fore.setLbUuid(lbUuid);
-			fore.setForeStatus(1);// 设置正常运行0/禁用,1/正常
-			fore.setCreateDate(new Date());
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.save(fore);
-			tx.commit();
-			return fore;
+			session.beginTransaction();
+			foreend = new Foreend();
+			foreend.setForeUuid(foreUuid);
+			foreend.setForeName(foreName);
+			foreend.setForeProtocol(foreProtocol);
+			foreend.setForePort(forePort);
+			foreend.setForePolicy(forePolicy);
+			foreend.setLbUuid(lbUuid);
+			foreend.setForeStatus(1);// 设置正常运行0/禁用,1/正常
+			foreend.setCreateDate(new Date());
+			session.save(foreend);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return foreend;
 	}
 
 	/**
@@ -129,27 +132,25 @@ public class ForeendDAO {
 	public boolean checkRepeat(String lbUuid, Integer forePort) {
 		boolean result = false;
 		Session session = null;
-		int total = 1;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Foreend where lbUuid=:lbuuid and forePort=:port";
-			Query query = session.createQuery(queryString);
-			query.setString("lbuuid", lbUuid);
-			query.setInteger("port", forePort);
-			total = ((Number) query.iterate().next()).intValue();
+			int count = 1;
+			Criteria criteria = session.createCriteria(Foreend.class)
+					.add(Restrictions.eq("lbUuid", lbUuid))
+					.add(Restrictions.eq("forePort", forePort));
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			if (0 == total) {
+			if (0 == count) {
 				result = true;
 			}
-			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	/**
@@ -163,42 +164,18 @@ public class ForeendDAO {
 	 */
 	public boolean updateForeend(String foreUuid, String foreName,
 			Integer forePolicy) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "update Foreend set foreName = :name, forePolicy = :policy where foreUuid=:uuid";
-			Query query = session.createQuery(queryString);
-			query.setString("name", foreName);
-			query.setString("uuid", foreUuid);
-			query.setInteger("policy", forePolicy);
-			query.executeUpdate();
-			tx.commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Foreend> getOnePageFEList(int page, int limit, String search) {
-		List<Foreend> foreList = null;
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "from Foreend where foreName like '%" + search
-					+ "%' order by foreStatus desc";
-			Query query = session.createQuery(queryString);
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			foreList = query.list();
+			Foreend foreend = this.doGetForeend(session, foreUuid);
+			if (foreend != null) {
+				foreend.setForeName(foreName);
+				foreend.setForePolicy(forePolicy);
+				session.update(foreend);
+				result = true;
+			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -206,7 +183,32 @@ public class ForeendDAO {
 				session.getTransaction().rollback();
 			}
 		}
-		return foreList;
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Foreend> getOnePageFEList(int page, int limit, String search) {
+		List<Foreend> foreendList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			Criteria criteria = session
+					.createCriteria(Foreend.class)
+					.add(Restrictions.like("foreName", search,
+							MatchMode.ANYWHERE))
+					.addOrder(Order.desc("foreStatus"))
+					.setFirstResult(startPos).setMaxResults(limit);
+			foreendList = criteria.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return foreendList;
 	}
 
 	/**
@@ -241,7 +243,8 @@ public class ForeendDAO {
 					feJo.put("forePolicy", foreend.getForePolicy());
 					feJo.put("foreStatus", foreend.getForeStatus());
 					List<Backend> backList = this.getBackendDAO()
-							.getBEListByFE(session, foreend.getForeUuid(), 0);
+							.doGetBackendListByFrontend(session,
+									foreend.getForeUuid(), 0);
 					JSONArray beArray = new JSONArray();
 					if (null != backList && backList.size() > 0) {
 						for (Backend backend : backList) {
@@ -301,7 +304,8 @@ public class ForeendDAO {
 					feJo.put("port", foreend.getForePort());
 					feJo.put("policy", foreend.getForePolicy());
 					List<Backend> backList = this.getBackendDAO()
-							.getBEListByFE(session, foreend.getForeUuid(), 1);
+							.doGetBackendListByFrontend(session,
+									foreend.getForeUuid(), 1);
 					JSONArray beArray = new JSONArray();
 					if (null != backList && backList.size() > 0) {
 						for (Backend backend : backList) {
@@ -352,7 +356,7 @@ public class ForeendDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
-			this.getBackendDAO().deleteBackendByFE(session, foreUuid);
+			this.getBackendDAO().deleteBackendByFrontend(session, foreUuid);
 			String queryString = "delete from Foreend where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("foreUuid", foreUuid);
