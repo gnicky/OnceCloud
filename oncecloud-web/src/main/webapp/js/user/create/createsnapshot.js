@@ -134,7 +134,7 @@ function initResourceList() {
 function snapshot(snapshotId, snapshotName, resourceUuid, resourceType) {
     $.ajax({
         type: 'post',
-        url: '/SnapshotAction/create',
+        url: '/SnapshotAction/CreateSnapshot',
         data: {snapshotId: snapshotId, snapshotName: snapshotName, resourceUuid: resourceUuid, resourceType: resourceType},
         dataType: 'json',
         success: function (obj) {
