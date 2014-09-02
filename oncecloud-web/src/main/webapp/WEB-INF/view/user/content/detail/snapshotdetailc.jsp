@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String backupid = "bk-" + resourceUuid.substring(0, 8);
-%>
-<div class="content detail" id="platformcontent" resourceUuid="<%=resourceUuid%>" resourceType="<%=resourceType%>" resourceName="<%=resourceName%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" resourceUuid="${resourceUuid}" resourceType="${resourceType}" resourceName="${resourceName}" platformBasePath="${basePath}">
 	<div class="intro">
 		<h1>备份&nbsp;Snapshots</h1>
 		<p class="lead" style="margin-top:10px">
@@ -10,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/snapshot.jsp"><span class="glyphicon glyphicon-camera cool-blue"></span><span class="ctext">SNAPSHOTS</span></a></li>
-		<li class="active"><a href="<%=basePath %>user/detail/snapshotdetail.jsp"><%=backupid %></a></li>
+		<li><a href="${basePath}user/snapshot.jsp"><span class="glyphicon glyphicon-camera cool-blue"></span><span class="ctext">SNAPSHOTS</span></a></li>
+		<li class="active"><a href="${basePath}snapshot/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
@@ -46,7 +43,7 @@
 	<div class="col-md-8">
 		<div class="detail-item detail-right">
 			<div class="title">
-				<h3 class="uppercase">备份链:&nbsp;&nbsp;<%=backupid%>
+				<h3 class="uppercase">备份链:&nbsp;&nbsp;${showId}
 					<a href="javascript:void(0)" class="bk-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
 				</h3>
 			</div>

@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="content" id="platformcontent">	<div class="intro">
+<input name="hidden-area" type="hidden" value="${user.userId}">
+<div class="content" id="platformcontent">
+	<div class="intro">
 		<h1>映像&nbsp;Images</h1>
 		<p class="lead" style="margin-top: 10px">
 			<em>映像&nbsp;(Image)</em>是带有操作系统的主机模板。云平台官方会提供主流的 Linux、Windows

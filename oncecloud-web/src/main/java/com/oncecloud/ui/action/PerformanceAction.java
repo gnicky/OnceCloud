@@ -51,4 +51,20 @@ public class PerformanceAction {
 		JSONObject jo = this.getPerformanceManger().getPif(uuid, type);
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/VIF", method = { RequestMethod.GET })
+	@ResponseBody
+	public String vif(HttpServletRequest request, @RequestParam String uuid,
+			@RequestParam String type) {
+		JSONObject jo = this.getPerformanceManger().getVif(uuid, type);
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/VBD", method = { RequestMethod.GET })
+	@ResponseBody
+	public String vbd(HttpServletRequest request, @RequestParam String uuid,
+			@RequestParam String type) {
+		JSONObject jo = this.getPerformanceManger().getVbd(uuid, type);
+		return jo.toString();
+	}
 }

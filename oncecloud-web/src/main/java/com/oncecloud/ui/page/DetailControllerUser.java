@@ -5,12 +5,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.oncecloud.entity.User;
 import com.oncecloud.main.Constant;
 
 @Controller
@@ -131,6 +134,50 @@ public class DetailControllerUser {
 		} else {
 			if (request.getSession().getAttribute("lbUuid") != null) {
 				return new ModelAndView("user/detail/loadbalancedetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/firewall/detail")
+	@ResponseBody
+	public ModelAndView firewallDetail(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "防火墙");
+		model.put("sideActive", 8);
+		String firewallId = request.getParameter("firewallId");
+		if (firewallId != null) {
+			request.getSession().setAttribute("firewallId", firewallId);
+			request.getSession().setAttribute("showId", "fw-" + firewallId.substring(0, 8));
+			return new ModelAndView("user/detail/firewalldetail", model);
+		} else {
+			if (request.getSession().getAttribute("firewallId") != null) {
+				return new ModelAndView("user/detail/firewalldetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
+	@RequestMapping(value = "/snapshot/detail")
+	@ResponseBody
+	public ModelAndView snapshotDetail(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "备份");
+		model.put("sideActive", 4);
+		String resourceUuid = request.getParameter("resourceUuid");
+		String resourceType = request.getParameter("resourceType");
+		String resourceName = request.getParameter("resourceName");
+		if (resourceUuid != null) {
+			request.getSession().setAttribute("resourceUuid", resourceUuid);
+			request.getSession().setAttribute("resourceType", resourceType);
+			request.getSession().setAttribute("resourceName", resourceName);
+			request.getSession().setAttribute("showId", "bk-" + resourceUuid.substring(0, 8));
+			return new ModelAndView("user/detail/firewalldetail", model);
+		} else {
+			if (request.getSession().getAttribute("resourceUuid") != null) {
+				return new ModelAndView("user/detail/firewalldetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));
 			}

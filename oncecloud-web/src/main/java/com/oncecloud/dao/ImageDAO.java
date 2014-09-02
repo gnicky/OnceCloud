@@ -252,8 +252,8 @@ public class ImageDAO {
 	}
 
 	public boolean deleteImage(String imageId) {
-		Session session = null;
 		boolean result = false;
+		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
@@ -304,7 +304,9 @@ public class ImageDAO {
 	 * @param description
 	 * @author xpx 2014-7-11
 	 */
-	public void updateName(String imageuuid, String newName, String description) {
+	public boolean updateName(String imageuuid, String newName,
+			String description) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -315,11 +317,13 @@ public class ImageDAO {
 			query.setString("uuid", imageuuid);
 			query.setString("desc", description);
 			query.executeUpdate();
+			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 }

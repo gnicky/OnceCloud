@@ -3,13 +3,11 @@
 <%
 	String path = request.getContextPath();
   	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	String title = "备份";
-	int sideActive = 8;
+	String title = "机架拓扑图";
+	int sideActive = 0;
 	User user = null;
-	String firewallId = null;
 	if (session.getAttribute("user") != null) {
 		user = (User)session.getAttribute("user");
-		firewallId = (String)session.getAttribute("firewallId");
 	} else {
 %>
 <script>
@@ -22,12 +20,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<%@ include file="../../share/head.jsp" %>
+	<%@ include file="../share/head.jsp" %>
+	<link rel="stylesheet" href="<%=basePath %>css/tuoputu.css" />
 </head>
 <body class="cloud-body">
-	<%@ include file="../../share/sidebar.jsp" %>
-	<%@ include file="../content/detail/firewalldetailc.jsp" %>
-	<%@ include file="../../share/js.jsp" %>
-	<script src="<%=basePath %>user/js/detail/firewalldetail.js"></script>
+	<%@ include file="../share/sidebar.jsp" %>
+	<%@ include file="content/topologyc.jsp" %>
+	<%@ include file="../share/js.jsp" %>
+	<script src="<%=basePath %>js/jquery.jsPlumb-1.6.2-min.js"></script>
+	<script src="js/topology.js"></script>
 </body>
 </html>

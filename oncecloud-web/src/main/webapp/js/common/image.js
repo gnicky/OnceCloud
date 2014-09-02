@@ -8,7 +8,7 @@ function reloadList(page) {
     if (page == 1) {
         options = {
             currentPage: 1
-        }
+        };
         $('#pageDivider').bootstrapPaginator(options);
     }
     allDisable();
@@ -69,7 +69,7 @@ function getImageList(page, limit, search, type) {
                 }
                 options = {
                     totalPages: totalp
-                }
+                };
                 $('#pageDivider').bootstrapPaginator(options);
                 pageDisplayUpdate(page, totalp);
                 var tableStr = "";
@@ -79,14 +79,14 @@ function getImageList(page, limit, search, type) {
                     var imageUId = obj.imageid;
                     var imageSize = obj.imagesize;
                     var imageplatform = decodeURI(obj.imageplatform);
-                    var imagestr = obj.imagestr;
                     var createDate = obj.createDate;
                     var showid = "img-" + imageUId.substring(0, 8);
                     var type = $('.once-tab').find('.active').attr("type");
                     $('#image-area').text("可见范围");
                     var typeStr = "公有";
+                    var userId = $('input[name="hidden-area"]').val();
                     if (type == "user") {
-                        if (userid == 1) {
+                        if (userId == 1) {
                             typeStr = obj.imageuser;
                             $('#image-area').text("所属用户");
                         } else {

@@ -7,7 +7,6 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,17 +51,16 @@ public class ForeendDAO {
 	public boolean changeForeendStatus(String foreUuid, int state) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "update Foreend set foreStatus = :state where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
 			query.setInteger("state", state);
 			query.setString("foreUuid", foreUuid);
 			query.executeUpdate();
-			tx.commit();
 			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -153,17 +151,16 @@ public class ForeendDAO {
 	public boolean deleteForeend(String foreUuid) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			this.getBackendDAO().deleteBackendByFrontend(session, foreUuid);
 			String queryString = "delete from Foreend where foreUuid = :foreUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("foreUuid", foreUuid);
 			query.executeUpdate();
-			tx.commit();
 			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

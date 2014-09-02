@@ -1,24 +1,30 @@
-getInstanceBasicList();
-var cpuChart;
-var memoryChart;
-var vbdChart;
-var vifChart;
-drawCpuLine('sixhours');
-drawMemoryLine('sixhours');
-drawVbdLine('sixhours');
-drawVifLine('sixhours');
-cpuTimer = setInterval(function () {
-    drawCpuLine('sixhours');
-}, 5 * 60 * 1000);
-memoryTimer = setInterval(function () {
-    drawMemoryLine('sixhours');
-}, 5 * 60 * 1000);
-vbdTimer = setInterval(function () {
-    drawVbdLine('sixhours');
-}, 5 * 60 * 1000);
-vifTimer = setInterval(function () {
-    drawVifLine('sixhours');
-}, 5 * 60 * 1000);
+$(function(){
+	getInstanceBasicList();
+	var cpuChart;
+	var memoryChart;
+	var vbdChart;
+	var vifChart;
+	drawCpuLine('sixhours');
+	drawMemoryLine('sixhours');
+	drawVbdLine('sixhours');
+	drawVifLine('sixhours');
+	cpuTimer = setInterval(function () {
+	    drawCpuLine('sixhours');
+	}, 5 * 60 * 1000);
+	memoryTimer = setInterval(function () {
+	    drawMemoryLine('sixhours');
+	}, 5 * 60 * 1000);
+	vbdTimer = setInterval(function () {
+	    drawVbdLine('sixhours');
+	}, 5 * 60 * 1000);
+	vifTimer = setInterval(function () {
+	    drawVifLine('sixhours');
+	}, 5 * 60 * 1000);
+	
+	///add by cyh
+	init();
+})
+
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
@@ -40,46 +46,36 @@ $('#InstanceModalContainer').on('hide', function (event) {
 $('#basic-list, #basic-list2').on('click', '.console', function (event) {
     event.preventDefault();
     var uuid = $(this).data("uuid");
-    var vnc = document.getElementById("platformcontent").getAttribute("vncServer");
+    var vnc = document.getElementById("platformcontent").getAttribute("novnc");
     var token = uuid.substring(0, 8);
     var url = vnc + "console.html?id=" + token;
     window.open(url, "newwindow", 'height=600,width=810,top=0,left=0');
 });
 
 $('#depend-list').on('click', '#firewallid', function (event) {
-    event.preventDefault();
     var firewallId = $(this).attr("firewallid");
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/FirewallAction',
-        data: 'action=detail&firewallId=' + firewallId,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/firewalldetail.jsp";
-        },
-        error: function () {
-
-        }
-    });
+    event.preventDefault();
+    var form = $("<form></form>");
+    form.attr("action","/firewall/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#depend-list').on('click', '#eip', function (event) {
     event.preventDefault();
     var eip = $(this).attr("eipip");
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/EipAction',
-        data: 'action=detail&eip=' + eip,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/elasticipdetail.jsp";
-        },
-        error: function () {
-
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/elasticip/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="eipUuid" value="' + eip + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 /**
@@ -89,17 +85,17 @@ $('#depend-list').on('click', '#vnetip', function (event) {
     event.preventDefault();
     var uuid = $(this).attr("vnetip");
     var routerid = $(this).attr("routerUuid");
-    $.ajax({
-        type: 'get',
-        url: '/VnetAction',
-        data: 'action=detail&vnetUuid=' + uuid + '&routerid=' + routerid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/vnetdetail.jsp";
-        },
-        error: function () {
-        }
-    });
+ 
+    var form = $("<form></form>");
+    form.attr("action","/vnet/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="vnetUuid" value="' + uuid + '" />');
+    form.append(input);
+    var input2 = $('<input type="text" name="routerId" value="' + routerid + '" />');
+    form.append(input2);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 
@@ -118,36 +114,31 @@ $('#depend-list').on('click', '#snapshotid', function (event) {
     event.preventDefault();
     var resourceUuid = $(this).attr('rsuuid');
     var resourceName = $(this).attr('rsname');
-    var userid = document.getElementById("platformcontent").getAttribute("platformUserId");
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/SnapshotAction',
-        data: 'action=detail&resourceUuid=' + resourceUuid + '&resourceType=instance&resourceName=' + resourceName,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/snapshotdetail.jsp";
-        },
-        error: function () {
-
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/snapshot/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="resourceUuid" value="' + resourceUuid + '" />');
+    form.append(input);
+    var input2 = $('<input type="text" name="resourceName" value="' + resourceName + '" />');
+    form.append(input2);
+    var input3 = $('<input type="text" name="resourceType" value="instance" />');
+    form.append(input3);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#depend-list').on('click', '.volid', function (event) {
     event.preventDefault();
     var volid = $(this).attr('voluuid');
-    $.ajax({
-        type: 'get',
-        url: '/VolumeAction',
-        data: 'action=detail&volumeuuid=' + volid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/volumedetail.jsp";
-        },
-        error: function () {
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/volume/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="volumeUuid" value="' + volid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function thirtymin() {
@@ -605,8 +596,8 @@ function drawVifLine(types) {
 function updateCpuData(uuid, type) {
     $.ajax({
         type: 'get',
-        url: '/PerformanceAction',
-        data: "action=getcpu&uuid=" + uuid + "&type=" + type,
+        url: '/PerformanceAction/CPU',
+        data: {uuid:uuid,type:type},
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
@@ -638,8 +629,8 @@ function updateCpuData(uuid, type) {
 function updateMemoryData(uuid, type) {
     $.ajax({
         type: 'get',
-        url: '/PerformanceAction',
-        data: "action=getmemory&uuid=" + uuid + "&type=" + type,
+        url: '/PerformanceAction/Memory',
+        data:{uuid:uuid,type:type},
         dataType: 'text',
         success: function (response) {
             var array = jQuery.parseJSON(response);
@@ -676,8 +667,8 @@ function updateMemoryData(uuid, type) {
 function updateVbdData(uuid, type) {
     $.ajax({
         type: 'get',
-        url: '/PerformanceAction',
-        data: "action=getvbd&uuid=" + uuid + "&type=" + type,
+        url: '/PerformanceAction/VBD',
+        data: {uuid:uuid,type:type},
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
@@ -716,8 +707,8 @@ function updateVbdData(uuid, type) {
 function updateVifData(uuid, type) {
     $.ajax({
         type: 'get',
-        url: '/PerformanceAction',
-        data: "action=getvif&uuid=" + uuid + "&type=" + type,
+        url: '/PerformanceAction/VIF',
+        data: {uuid:uuid,type:type},
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
@@ -765,9 +756,7 @@ $('.oc-switch').on('switchChange.bootstrapSwitch', function (event, state) {
     }
 });
 
-///add by cyh
-init();
-doShowPic();
+
 
 function getInstanceBasicList() {
     var instanceUuid = $("#platformcontent").attr("instanceUuid");
@@ -851,7 +840,7 @@ function getInstanceBasicList() {
             } else {
                 backDate = "&nbsp;";
             }
-            basiclist.innerHTML = '<dt>ID</dt><dd>' + showstr + '</dd><dt>名称</dt><dd id="instancename">'
+            $('#basic-list').html('<dt>ID</dt><dd>' + showstr + '</dd><dt>名称</dt><dd id="instancename">'
                 + instanceName + '</dd><dt>描述</dt><dd id="instancedesc">'
                 + instanceDesc + '</dd><dt>状态</dt><dd>'
                 + stateStr + '</dd><dt>CPU</dt><dd>'
@@ -859,7 +848,7 @@ function getInstanceBasicList() {
                 + instanceMemory + '</dd><dt>MAC地址</dt><dd>'
                 + instanceMAC + '</dd><dt>创建时间</dt><dd class="time">'
                 + createDate + '</dd><dt>运行时间</dt><dd class="time">'
-                + useDate + '</dd>';
+                + useDate + '</dd>');
             $('#depend-list').html('<dt>网络</dt><dd>'
                 + network + '</dd><dt>硬盘</dt><dd>'
                 + instanceDisk + '</dd><dt>公网IP</dt><dd>'
@@ -885,8 +874,8 @@ function getInstanceBasicList() {
                 $("#vnUuid").val(obj.instancevlan);
                 $.ajax({
                     type: 'get',
-                    url: '/VnetAction',
-                    data: "action=getonevnet&vnUuid=" + obj.instancevlan,
+                    url: '/VnetAction/VnetDetail',
+                    data: {uuid:obj.instancevlan},
                     dataType: 'json',
                     success: function (obj) {
                         $("#vxnetName").text(decodeURI(obj.vnetName));
@@ -896,8 +885,8 @@ function getInstanceBasicList() {
                             $("#componentInstanceRouterDiv").show();
                             $.ajax({
                                 type: 'get',
-                                url: '/RouterAction',
-                                data: "action=getonerouter&routerUuid=" + obj.vnetRouter,
+                                url: '/RouterAction/RouterDetail',
+                                data: {uuid:obj.vnetRouter},
                                 dataType: 'json',
                                 success: function (obj) {
                                     $("#componentRouterDiv").find(".private-ip").text(obj.routerIp);
@@ -942,7 +931,7 @@ function getInstanceBasicList() {
 
             $("#instanceID").find(".instance-name").text(instanceName);
 
-            $("#basic-list2").html($(basiclist).html());
+            $("#basic-list2").html($('#basic-list').html());
         }
     });
 }
@@ -1109,8 +1098,6 @@ function init() {
     });
 
 }
-
-var imageIsShow = false;
 
 function changeNet() {
     var infoList = $("#instanceid").val();
@@ -1353,8 +1340,8 @@ function deletevolumes(obj) {
                     var volumeuuid = $(obj).data("id");
                     $.ajax({
                         type: 'post',
-                        url: '/VolumeAction',
-                        data: "action=unbind&volumeuuid=" + volumeuuid,
+                        url: '/VolumeAction/Unbind',
+                        data: {volumeUuid:volumeuuid},
                         dataType: 'json',
                         success: function (obj) {
                             bindvolumesshow();
@@ -1509,8 +1496,7 @@ function bindvolumes() {
     var tablelist = "";
     $.ajax({
         type: 'post',
-        url: '/VolumeAction',
-        data: 'action=getabledvolumes',
+        url: '/VolumeAction/AvailableVolumes',
         dataType: 'json',
         success: function (array) {
             if (array.length > 0) {
@@ -1543,19 +1529,11 @@ function bindvolumes() {
                             var vmuuid = $("#platformcontent").attr("instanceUuid");
                             $.ajax({
                                 type: 'get',
-                                url: '/VolumeAction',
-                                data: 'action=bind&volumeuuid=' + volumeId + '&vmuuid=' + vmuuid,
+                                url: '/VolumeAction/Bind',
+                                data: {volumeUuid:volumeId,vmUuid:vmuuid},
                                 dataType: 'json',
-                                success: function (response) {
-                                    if (response.isSuccess) {
-                                        //$("#firewallId").html(firewallName);
-                                        bindvolumesshow();
-                                    }
-                                    else {
-                                        //alert("失败");
-                                    }
-                                },
-                                error: function () {
+                                complete: function (response) {
+                                     bindvolumesshow();
                                 }
                             });
                         }
@@ -1585,8 +1563,8 @@ function bindvolumesshow() {
     var vmuuid = $("#platformcontent").attr("instanceUuid");
     $.ajax({
         type: 'get',
-        url: '/VolumeAction',
-        data: 'action=getvolumesbyvm&vmuuid=' + vmuuid,
+        url: '/VolumeAction/VolumesOfVM',
+        data: {vmUuid:vmuuid},
         dataType: 'json',
         success: function (array) {
             var i = array.length;
@@ -1616,8 +1594,8 @@ function startVM(uuid) {
     $("#basic-list2").find("[name='stateword']").text('启动中');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=startup&uuid=' + uuid,
+        url: '/VMAction/StartVM',
+        data: {uuid:uuid},
         dataType: 'json',
         complete: function (array) {
             getInstanceBasicList();
@@ -1630,8 +1608,8 @@ function restartVM(uuid) {
     $("#basic-list2").find("[name='stateword']").text('重启中');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=restart&uuid=' + uuid,
+        url: '/VMAction/RestartVM',
+        data:{uuid:uuid},
         dataType: 'json',
         complete: function (array) {
             getInstanceBasicList();
@@ -1644,8 +1622,8 @@ function destroyVM(uuid) {
     $("#basic-list2").find("[name='stateword']").text('销毁中');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=destroy&uuid=' + uuid,
+        url: '/VMAction/DeleteVM',
+        data:{uuid:uuid},
         dataType: 'json',
         complete: function (array) {
             window.location.href = 'instance.jsp';
@@ -1658,8 +1636,8 @@ function shutdownVM(uuid, force) {
     $("#basic-list2").find("[name='stateword']").text('关机中');
     $.ajax({
         type: 'get',
-        url: '/VMAction',
-        data: 'action=shutdown&uuid=' + uuid + '&force=' + force,
+        url: '/VMAction/ShutdownVM',
+        data: {uuid:uuid,force:force},
         dataType: 'json',
         complete: function (array) {
             getInstanceBasicList();
@@ -1667,10 +1645,3 @@ function shutdownVM(uuid, force) {
     });
 }
 
-//add by cyh 
-function doShowPic() {
-    if (!imageIsShow) {
-
-    }
-    imageIsShow = true;
-}

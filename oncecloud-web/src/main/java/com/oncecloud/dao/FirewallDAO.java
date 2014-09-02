@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,16 +107,17 @@ public class FirewallDAO {
 		session.save(rule3389);
 	}
 
-	public void deleteAllRuleOfFirewall(String firewallId) {
+	public boolean deleteAllRuleOfFirewall(String firewallId) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "delete Rule where ruleFirewall=:id";
 			Query query = session.createQuery(queryString);
 			query.setString("id", firewallId);
 			query.executeUpdate();
-			tx.commit();
+			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,52 +125,57 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void deleteFirewall(Integer userId, String firewallId) {
+	public boolean deleteFirewall(Integer userId, String firewallId) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "delete Firewall where firewallId=:id";
 			Query query = session.createQuery(queryString);
 			query.setString("id", firewallId);
 			query.executeUpdate();
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
 					"quotaFirewall", 1, false);
-			tx.commit();
+			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void deleteRule(String ruleId) {
+	public boolean deleteRule(String ruleId) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "delete Rule where ruleId= :ruleId";
 			Query query = session.createQuery(queryString);
 			query.setString("ruleId", ruleId);
 			query.executeUpdate();
-			tx.commit();
+			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
 	// /获取可用防火墙
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getabledfirewalls(int uid) {
-		List<Firewall> list = null;
+		List<Firewall> firewallList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -178,7 +183,7 @@ public class FirewallDAO {
 			String queryString = "from Firewall where firewallUID=" + uid
 					+ " order by isDefault desc";
 			Query query = session.createQuery(queryString);
-			list = query.list();
+			firewallList = query.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,10 +191,9 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
-		return list;
+		return firewallList;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Firewall getDefaultFirewall(int userId) {
 		Firewall firewall = null;
 		Session session = null;
@@ -199,8 +203,7 @@ public class FirewallDAO {
 			String queryString = "from Firewall where firewallUID = :userId and isDefault = 1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
-			List<Firewall> firewallList = query.list();
-			firewall = firewallList.get(0);
+			firewall = (Firewall) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -320,8 +323,8 @@ public class FirewallDAO {
 		return rsList;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Rule getRule(String ruleId) {
+		Rule rule = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -329,16 +332,15 @@ public class FirewallDAO {
 			String queryString = "";
 			queryString = "from Rule where ruleId='" + ruleId + "'";
 			Query query = session.createQuery(queryString);
-			List<Rule> ruleList = query.list();
+			rule = (Rule) query.uniqueResult();
 			session.getTransaction().commit();
-			return ruleList.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return rule;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -363,6 +365,7 @@ public class FirewallDAO {
 	}
 
 	public int getRuleSize(String firewallId) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -371,16 +374,15 @@ public class FirewallDAO {
 			queryString = "select count(*) from Rule where ruleFirewall='"
 					+ firewallId + "'";
 			Query query = session.createQuery(queryString);
-			int count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.iterate().next()).intValue();
 			session.getTransaction().commit();
-			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -422,8 +424,9 @@ public class FirewallDAO {
 		return jo;
 	}
 
-	public void insertFirewall(String firewallId, String firewallName,
+	public boolean insertFirewall(String firewallId, String firewallName,
 			int firewallUID, Date createDate) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -433,6 +436,7 @@ public class FirewallDAO {
 			session.save(firewall);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(firewallUID,
 					"quotaFirewall", 1, true);
+			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -440,12 +444,14 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void insertRule(String ruleId, String ruleName,
+	public boolean insertRule(String ruleId, String ruleName,
 			Integer rulePriority, String ruleProtocol, Integer ruleStartPort,
 			Integer ruleEndPort, Integer ruleState, String ruleIp,
 			String ruleFirewall) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -453,6 +459,7 @@ public class FirewallDAO {
 			Rule rule = new Rule(ruleId, ruleName, rulePriority, ruleProtocol,
 					ruleStartPort, ruleEndPort, ruleState, ruleIp, ruleFirewall);
 			session.save(rule);
+			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -460,9 +467,11 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void updateConfirm(String firewallId, int isConfirm) {
+	public boolean updateConfirm(String firewallId, int isConfirm) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -472,6 +481,7 @@ public class FirewallDAO {
 			query.setInteger("confirm", isConfirm);
 			query.setString("firewallId", firewallId);
 			query.executeUpdate();
+			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -479,9 +489,11 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
-	public void updateRuleState(String ruleId, int state) {
+	public boolean updateRuleState(String ruleId, int state) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -491,6 +503,7 @@ public class FirewallDAO {
 			query.setInteger("state", state);
 			query.setString("id", ruleId);
 			query.executeUpdate();
+			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -498,5 +511,6 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 }

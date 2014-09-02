@@ -90,7 +90,7 @@ public class VMAction {
 	public void startVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().doStartVM(user.getUserId(),uuid, poolUuid);
+		this.getVmManager().doStartVM(user.getUserId(), uuid, poolUuid);
 	}
 
 	@RequestMapping(value = "/RestartVM", method = { RequestMethod.GET })
@@ -98,7 +98,7 @@ public class VMAction {
 	public void restartVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().doRestartVM(user.getUserId(),uuid, poolUuid);
+		this.getVmManager().doRestartVM(user.getUserId(), uuid, poolUuid);
 	}
 
 	@RequestMapping(value = "/DeleteVM", method = { RequestMethod.GET })
@@ -115,13 +115,13 @@ public class VMAction {
 			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().doShutdownVM(user.getUserId(),uuid, force, poolUuid);
+		this.getVmManager().doShutdownVM(user.getUserId(), uuid, force,
+				poolUuid);
 	}
 
-	@RequestMapping(value = "/CreateVM", method = { RequestMethod.GET,
-			RequestMethod.POST })
+	@RequestMapping(value = "/CreateVM", method = { RequestMethod.POST })
 	@ResponseBody
-	public void CreateVM(HttpServletRequest request, CreateVMModel createvmModel) {
+	public void createVM(HttpServletRequest request, CreateVMModel createvmModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVmManager().doCreateVM(createvmModel.getVmUuid(),
 				createvmModel.getImageUuid(), user.getUserId(),
@@ -129,5 +129,4 @@ public class VMAction {
 				createvmModel.getMemory(), createvmModel.getPassword(),
 				user.getUserAllocate());
 	}
-
 }

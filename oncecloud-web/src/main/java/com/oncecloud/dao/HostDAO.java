@@ -1,12 +1,10 @@
 package com.oncecloud.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +26,7 @@ public class HostDAO {
 	}
 
 	public int countAllHostList(String search) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -35,22 +34,21 @@ public class HostDAO {
 			String queryString = "select count(*) from OCHost where hostName like '%"
 					+ search + "%' and hostStatus = 1";
 			Query query = session.createQuery(queryString);
-			int total = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.iterate().next()).intValue();
 			session.getTransaction().commit();
-			return total;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getAllHost() {
+		List<OCHost> list = null;
 		Session session = null;
-		List<OCHost> list = new ArrayList<OCHost>();
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
@@ -69,11 +67,11 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public OCHost getHost(String hostUuid) {
+		OCHost host = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			OCHost host = null;
 			Query query = session.createQuery("from OCHost where hostUuid = '"
 					+ hostUuid + "'");
 			List<OCHost> hostList = query.list();
@@ -81,14 +79,13 @@ public class HostDAO {
 				host = hostList.get(0);
 			}
 			session.getTransaction().commit();
-			return host;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return host;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,11 +110,11 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public OCHost getHostFromIp(String hostIp) {
+		OCHost host = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			OCHost host = null;
 			Query query = session.createQuery("from OCHost where hostIP = '"
 					+ hostIp + "' and hostStatus = 1");
 			List<OCHost> hostList = query.list();
@@ -125,14 +122,13 @@ public class HostDAO {
 				host = hostList.get(0);
 			}
 			session.getTransaction().commit();
-			return host;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return host;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -179,6 +175,7 @@ public class HostDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageHostList(int page, int limit, String search) {
+		List<OCHost> hostList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -189,21 +186,21 @@ public class HostDAO {
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
-			List<OCHost> hostList = query.list();
+			hostList = query.list();
 			session.getTransaction().commit();
-			return hostList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return hostList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageLoadHostList(int page, int limit,
 			String search, String sruuid) {
+		List<OCHost> hostList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -216,20 +213,20 @@ public class HostDAO {
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
-			List<OCHost> hostList = query.list();
+			hostList = query.list();
 			session.getTransaction().commit();
-			return hostList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return hostList;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Storage> getSROfHost(String hostUuid) {
+		List<Storage> storageList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -237,16 +234,15 @@ public class HostDAO {
 			String queryString = "select sr from Storage sr where sr.srUuid in (select hs.srUuid from HostSR hs where hs.hostUuid='"
 					+ hostUuid + "')";
 			Query query = session.createQuery(queryString);
-			List<Storage> storageList = query.list();
+			storageList = query.list();
 			session.getTransaction().commit();
-			return storageList;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return storageList;
 	}
 
 	public boolean isSameSr(Set<String> sr1, Set<String> sr2) {
@@ -262,40 +258,41 @@ public class HostDAO {
 		}
 	}
 
-	public void setPool(String hostUuid, String poolUuid) {
+	public boolean setPool(String hostUuid, String poolUuid) {
+		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "update OCHost set poolUuid = :poolUuid where hostUuid = :hostUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("hostUuid", hostUuid);
 			query.setString("poolUuid", poolUuid);
 			query.executeUpdate();
-			tx.commit();
+			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
+		return result;
 	}
 
 	public boolean unbindSr(String hostUuid, String srUuid) {
-		Session session = null;
-		Transaction tx = null;
 		boolean result = false;
+		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String queryString = "delete from HostSR where hostUuid=:hid and srUuid=:sid";
 			Query query = session.createQuery(queryString);
 			query.setString("hid", hostUuid);
 			query.setString("sid", srUuid);
 			query.executeUpdate();
-			tx.commit();
 			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -309,10 +306,9 @@ public class HostDAO {
 			String rackUuid) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			String querysString = "update OCHost set hostName=:name,"
 					+ "hostDesc=:desc,rackUuid=:rackid where hostUuid =:hostid";
 			Query query = session.createQuery(querysString);
@@ -321,8 +317,8 @@ public class HostDAO {
 			query.setString("rackid", rackUuid);
 			query.setString("hostid", hostId);
 			query.executeUpdate();
-			tx.commit();
 			result = true;
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

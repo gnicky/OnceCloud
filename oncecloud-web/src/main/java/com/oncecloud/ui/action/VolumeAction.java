@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.VolumeManager;
+import com.oncecloud.ui.model.CreateVolumeModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/VolumeAction")
@@ -39,11 +40,66 @@ public class VolumeAction {
 		return ja.toString();
 	}
 
+	@RequestMapping(value = "/CreateVolume", method = { RequestMethod.POST })
+	@ResponseBody
+	public void createVolume(HttpServletRequest request,
+			CreateVolumeModel cvModel) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVolumeManager().createVolume(userId, cvModel.getVolumeUuid(),
+				cvModel.getVolumeName(), cvModel.getVolumeSize());
+	}
+
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	@ResponseBody
+	public String quota(HttpServletRequest request, @RequestParam int count,
+			@RequestParam int size) {
+		User user = (User) request.getSession().getAttribute("user");
+		String quota = this.getVolumeManager().getQuota(user.getUserId(),
+				count, size);
+		return quota;
+	}
+
 	@RequestMapping(value = "/VolumeDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String volumeDetail(HttpServletRequest request,
 			@RequestParam String uuid) {
 		JSONObject jo = this.getVolumeManager().getVolumeDetail(uuid);
 		return jo.toString();
+	}
+
+	@RequestMapping(value = "/VolumesOfVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public String volumeOfVm(HttpServletRequest request,
+			@RequestParam String vmUuid) {
+		JSONArray ja = this.getVolumeManager().getVolumeListByVM(vmUuid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
+	@ResponseBody
+	public void bind(HttpServletRequest request,
+			@RequestParam String volumeUuid, @RequestParam String vmUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVolumeManager().bindVolume(userId, volumeUuid, vmUuid);
+	}
+
+	@RequestMapping(value = "/AvailableVolumes", method = { RequestMethod.GET })
+	@ResponseBody
+	public String availableVolumes(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getVolumeManager().getAbledVolumeList(
+				user.getUserId());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Unbind", method = { RequestMethod.GET })
+	@ResponseBody
+	public void unbind(HttpServletRequest request,
+			@RequestParam String volumeUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVolumeManager().unbindVolume(user.getUserId(), volumeUuid);
 	}
 }
