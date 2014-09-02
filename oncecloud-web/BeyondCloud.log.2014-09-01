@@ -1,0 +1,420 @@
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/DHCPList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.adressDHCPList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/EIPList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.addressEIPList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/DeleteDHCP],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.deleteDHCP(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/DeleteEIP],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.deleteEIP(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AlarmAction/AlarmList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AlarmAction.alarmList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/DatacenterAction/DCList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.DatacenterAction.dcList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/DatacenterAction/Overview],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.DatacenterAction.overview(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/EIPAction/EIPList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.EIPAction.eipList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FeeAction/FeeList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FeeAction.feeList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FeeAction/QueryList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FeeAction.queryList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FeeAction/FeeSummary],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FeeAction.feeSummary(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FirewallAction/FirewallList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FirewallAction.firewallList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/HostAction/HostList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.HostAction.hostList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/HostAction/ALLList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.HostAction.allList(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/ImageAction/ImageList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.ImageAction.imageList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/LBList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LBAction.lbList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/AdminShutDown],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.LBAction.lbAdminShutDown(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/AdminStartUp],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.LBAction.lbAdminStartUp(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/LBDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LBAction.volumeDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/AdminList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LoadBalanceAction.adminList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.AdminListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LogAction.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/PoolAction/PoolList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.PoolAction.poolList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/QAAction/QuestionList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.QAAction.questionList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RackAction/RackList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RackAction.rackList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/AdminStartUp],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.RouterAction.routerAdminStartUp(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/AdminShutDown],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.RouterAction.routerAdminShutDown(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/RouterList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RouterAction.routerList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/AdminList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RouterAction.adminList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.AdminListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/RouterDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RouterAction.routerDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/SnapshotAction/SnapshotList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.SnapshotAction.snapshotList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/StorageAction/StorageList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.StorageAction.storageList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/UserAction/UserList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.UserAction.userList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/UserAction/Balance],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.UserAction.balance(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/VMList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VMAction.vmList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/AdminList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VMAction.adminList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.AdminListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/AdminStartUp],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.VMAction.vmAdminStartUp(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/AdminShutDown],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.VMAction.vmAdminShutDown(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/VMDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VMAction.vmDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VnetAction/VnetList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VnetAction.vnetList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VnetAction/VnetDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VnetAction.vnetDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VolumeAction/VolumeList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VolumeAction.volumeList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VolumeAction/VolumeDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VolumeAction.volumeDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.page.AccountController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/logout],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.logout(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.backdoor(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnModel)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/address],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.address(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/host],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.host(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.user(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/pool],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.pool(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/rack],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.rack(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/storage],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.storage(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/datacenter],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.datacenter(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/log],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.log(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/instance],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.instance(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/image],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.image(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/service],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.service(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.home(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/volume/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.volumeDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/router/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.routerDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/vnet/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.vnetDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/instance/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.instanceDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/elasticip/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.elasticIPDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/loadbalance/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.loadBalanceDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.ModalControllerUser.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/snapshot],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.snapshot(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/firewall],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.firewall(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/router],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.router(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/vnet],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.vnet(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/volume],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.volume(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/elasticip],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.elasticIP(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/loadbalance],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.loadBalance(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/expense/summary],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.expenseSummary(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/expense/query],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.expenseQuery(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/alarm],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.alarm(javax.servlet.http.HttpServletRequest)
+2014-09-01 11:30:47 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-09-01 11:30:47 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-09-01 11:30:47 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-09-01 11:30:47 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/user/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-09-01 11:30:47 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/admin/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-09-01 11:30:47 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-09-01 11:30:47 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 8934 ms
+2014-09-01 11:31:02 [com.oncecloud.manager.UserManager:89] [qtp64317759-12]
+INFO: Check Login: User [hehai] Password [onceas] Result [0]
+2014-09-01 11:31:03 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:03 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-35]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:16 [com.oncecloud.manager.UserManager:89] [qtp64317759-35]
+INFO: Check Login: User [hehai] Password [onceas] Result [0]
+2014-09-01 11:31:17 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-34]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:17 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:25 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:26 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-16]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:27 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-34]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:27 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-13]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:28 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-19]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:28 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-35]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:29 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-12]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:29 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-16]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:29 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-13]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:29 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:30 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-35]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:30 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-34]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:30 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-16]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:30 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-19]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-16]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-12]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:31 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:34 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-13]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:34 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-12]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:35 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-34]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:35 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-12]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:36 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-35]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:36 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-34]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:37 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-19]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 11:31:37 [org.springframework.web.servlet.PageNotFound:1114] [qtp64317759-36]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 12:58:39 [org.springframework.web.context.support.XmlWebApplicationContext:873] [Thread-1]
+INFO: Closing WebApplicationContext for namespace 'dispatcherServlet-servlet': startup date [Mon Sep 01 11:30:38 CST 2014]; root of context hierarchy
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/DeleteDHCP],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.deleteDHCP(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/DeleteEIP],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.deleteEIP(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/DHCPList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.adressDHCPList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AddressAction/EIPList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AddressAction.addressEIPList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/AlarmAction/AlarmList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.AlarmAction.alarmList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/DatacenterAction/DCList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.DatacenterAction.dcList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/DatacenterAction/Overview],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.DatacenterAction.overview(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/EIPAction/EIPList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.EIPAction.eipList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FeeAction/FeeList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FeeAction.feeList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FeeAction/QueryList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FeeAction.queryList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FeeAction/FeeSummary],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FeeAction.feeSummary(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/FirewallAction/FirewallList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.FirewallAction.firewallList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/HostAction/HostList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.HostAction.hostList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/HostAction/ALLList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.HostAction.allList(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/ImageAction/ImageList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.ImageAction.imageList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/LBList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LBAction.lbList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/AdminShutDown],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.LBAction.lbAdminShutDown(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/AdminStartUp],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.LBAction.lbAdminStartUp(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/LBDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LBAction.volumeDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LBAction/AdminList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LoadBalanceAction.adminList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.AdminListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/LogAction],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.LogAction.logList(javax.servlet.http.HttpServletRequest,int,int,int) throws javax.servlet.ServletException,java.io.IOException
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/PoolAction/PoolList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.PoolAction.poolList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/QAAction/QuestionList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.QAAction.questionList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RackAction/RackList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RackAction.rackList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/RouterList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RouterAction.routerList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/AdminStartUp],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.RouterAction.routerAdminStartUp(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/AdminShutDown],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.RouterAction.routerAdminShutDown(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/AdminList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RouterAction.adminList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.AdminListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/RouterAction/RouterDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.RouterAction.routerDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/SnapshotAction/SnapshotList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.SnapshotAction.snapshotList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/StorageAction/StorageList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.StorageAction.storageList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/UserAction/UserList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.UserAction.userList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/UserAction/Balance],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.UserAction.balance(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/VMList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VMAction.vmList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/StartVM],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.VMAction.startVM(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/AdminList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VMAction.adminList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.AdminListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/AdminStartUp],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.VMAction.vmAdminStartUp(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/AdminShutDown],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public void com.oncecloud.ui.action.VMAction.vmAdminShutDown(javax.servlet.http.HttpServletRequest,java.lang.String,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VMAction/VMDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VMAction.vmDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VnetAction/VnetList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VnetAction.vnetList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VnetAction/VnetDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VnetAction.vnetDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VolumeAction/VolumeList],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VolumeAction.volumeList(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.ListModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/VolumeAction/VolumeDetail],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public java.lang.String com.oncecloud.ui.action.VolumeAction.volumeDetail(javax.servlet.http.HttpServletRequest,java.lang.String)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/captcha],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.http.ResponseEntity<[B> com.oncecloud.ui.page.AccountController.image(javax.servlet.http.HttpServletRequest) throws java.io.IOException
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.login(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/login],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.login(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/logout],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.logout(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[POST],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.backdoor(javax.servlet.http.HttpServletRequest,com.oncecloud.ui.model.LogOnModel)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/backdoor],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AccountController.backdoor(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/address],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.address(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/host],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.host(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/rack],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.rack(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/storage],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.storage(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.user(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/pool],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.pool(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/datacenter],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.AdminController.datacenter(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/log],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.log(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/instance],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.instance(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/image],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.image(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/service],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.service(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.home(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/dashboard],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.CommonController.dashboard(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/volume/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.volumeDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/router/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.routerDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/vnet/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.vnetDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/instance/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.instanceDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/elasticip/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.elasticIPDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/loadbalance/detail],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.DetailControllerUser.loadBalanceDetail(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/user/modal/viewquota],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.ModalControllerUser.viewQuota(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/router],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.router(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/vnet],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.vnet(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/volume],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.volume(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/snapshot],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.snapshot(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/alarm],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.alarm(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/firewall],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.firewall(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/elasticip],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.elasticIP(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/loadbalance],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.loadBalance(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/expense/summary],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.expenseSummary(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:26 [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping:197] [main]
+INFO: Mapped "{[/expense/query],methods=[GET],params=[],headers=[],consumes=[],produces=[],custom=[]}" onto public org.springframework.web.servlet.ModelAndView com.oncecloud.ui.page.UserController.expenseQuery(javax.servlet.http.HttpServletRequest)
+2014-09-01 01:49:27 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/bootstrap/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#0'
+2014-09-01 01:49:27 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/css/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#1'
+2014-09-01 01:49:27 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#2'
+2014-09-01 01:49:27 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/user/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#3'
+2014-09-01 01:49:27 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/js/admin/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#4'
+2014-09-01 01:49:27 [org.springframework.web.servlet.handler.SimpleUrlHandlerMapping:315] [main]
+INFO: Mapped URL path [/img/**] onto handler 'org.springframework.web.servlet.resource.ResourceHttpRequestHandler#5'
+2014-09-01 01:49:27 [org.springframework.web.servlet.DispatcherServlet:498] [main]
+INFO: FrameworkServlet 'dispatcherServlet': initialization completed in 9850 ms
+2014-09-01 01:49:36 [com.oncecloud.manager.UserManager:89] [qtp380289740-14]
+INFO: Check Login: User [hehai] Password [onceas] Result [0]
+2014-09-01 01:49:37 [org.springframework.web.servlet.PageNotFound:1114] [qtp380289740-14]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 01:49:37 [org.springframework.web.servlet.PageNotFound:1114] [qtp380289740-15]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 01:49:51 [org.springframework.web.servlet.PageNotFound:1114] [qtp380289740-15]
+WARN: No mapping found for HTTP request with URI [/dwr/util.js] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 01:49:51 [org.springframework.web.servlet.PageNotFound:1114] [qtp380289740-18]
+WARN: No mapping found for HTTP request with URI [/dwr/call/plaincall/__System.generateId.dwr] in DispatcherServlet with name 'dispatcherServlet'
+2014-09-01 01:55:49 [org.springframework.web.context.support.XmlWebApplicationContext:873] [Thread-1]
+INFO: Closing WebApplicationContext for namespace 'dispatcherServlet-servlet': startup date [Mon Sep 01 13:49:17 CST 2014]; root of context hierarchy
