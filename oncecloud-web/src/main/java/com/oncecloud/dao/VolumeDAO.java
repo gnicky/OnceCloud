@@ -166,7 +166,7 @@ public class VolumeDAO {
 			Query query = session.createQuery(builder.toString());
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {

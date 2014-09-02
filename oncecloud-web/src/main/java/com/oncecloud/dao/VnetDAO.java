@@ -231,7 +231,7 @@ public class VnetDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -262,7 +262,7 @@ public class VnetDAO {
 			query.setString("routerid", routerid);
 			query.setInteger("userid", userId);
 			query.setInteger("net", net);
-			count = ((Number) query.iterate().next()).intValue();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

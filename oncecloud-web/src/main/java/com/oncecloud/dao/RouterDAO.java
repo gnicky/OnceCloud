@@ -340,7 +340,7 @@ public class RouterDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -402,7 +402,7 @@ public class RouterDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("routerUID", routerUID);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -433,7 +433,7 @@ public class RouterDAO {
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

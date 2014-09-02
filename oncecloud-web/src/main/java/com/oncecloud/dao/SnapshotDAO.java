@@ -317,7 +317,7 @@ public class SnapshotDAO {
 			String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVm = :vmUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("vmUuid", vmUuid);
-			size = (Integer) query.uniqueResult();
+			size = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
@@ -342,7 +342,7 @@ public class SnapshotDAO {
 			String queryString = "select sum(ss.snapshotSize) from Snapshot ss where ss.snapshotVolume = :volumeUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("volumeUuid", volumeUuid);
-			size = (Integer) query.uniqueResult();
+			size = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
@@ -372,7 +372,7 @@ public class SnapshotDAO {
 			Query query = session.createQuery(queryString1);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
-			count = (Integer) query.uniqueResult();
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
@@ -432,6 +432,7 @@ public class SnapshotDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Snapshot where snapshotVm = :uuid or snapshotVolume = :uuid";
 			Query query = session.createQuery(queryString);
 			query.setString("uuid", uuid);
@@ -439,6 +440,7 @@ public class SnapshotDAO {
 			if (size == 0) {
 				result = true;
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
