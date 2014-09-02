@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.ImageManager;
+import com.oncecloud.ui.model.ImageCloneModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/ImageAction")
@@ -51,6 +52,15 @@ public class ImageAction {
 		JSONObject jo = this.getImageManager().deleteImage(user.getUserId(),
 				imageId, imageName);
 		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/clone", method = {RequestMethod.POST })
+	@ResponseBody
+	public void clone(HttpServletRequest request, ImageCloneModel imagecloneModel) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			this.getImageManager().cloneImage(user.getUserId(), user.getUserLevel(),imagecloneModel.getVmUuid(),imagecloneModel.getImageName(),imagecloneModel.getImageDesc());
+		} 
 	}
 
 }

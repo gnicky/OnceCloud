@@ -27,4 +27,14 @@ public class CreateControllerUser {
 		model.put("resourceName", rsname);
 		return new ModelAndView("user/create/createsnapshot",model);
 	}
+	
+	@RequestMapping(value = "/instance/createimage", method = { RequestMethod.GET })
+	public ModelAndView createimage(HttpServletRequest request,@RequestParam String rsid) {
+		if (request.getSession().getAttribute("user") == null) {
+			return new ModelAndView(new RedirectView("/login"));
+		}
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("rsid", rsid);
+		return new ModelAndView("user/create/createimage",model);
+	}
 }
