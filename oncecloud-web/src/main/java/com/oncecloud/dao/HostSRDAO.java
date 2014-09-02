@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,41 +26,44 @@ public class HostSRDAO {
 	}
 
 	public HostSR createHostSR(String hostUuid, String srUuid) {
-		HostSR hsr = new HostSR();
-		hsr.setHostUuid(hostUuid);
-		hsr.setSrUuid(srUuid);
+		HostSR hostSR = null;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.save(hsr);
-			tx.commit();
+			session.beginTransaction();
+			hostSR = new HostSR();
+			hostSR.setHostUuid(hostUuid);
+			hostSR.setSrUuid(srUuid);
+			session.save(hostSR);
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
 			e.printStackTrace();
-			return null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
-		return hsr;
+		return hostSR;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Set<String> getSRList(String hostUuid) {
-		Session session = this.getSessionHelper().getMainSession();
-		Set<String> srList = new HashSet<String>();
-		Query query = session.createQuery("from HostSR where hostUuid = '"
-				+ hostUuid + "'");
-		List<HostSR> hsrList = query.list();
-		for (HostSR hsr : hsrList) {
-			srList.add(hsr.getSrUuid());
+		Set<String> srList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			srList = new HashSet<String>();
+			Query query = session.createQuery("from HostSR where hostUuid = '"
+					+ hostUuid + "'");
+			List<HostSR> hsrList = query.list();
+			for (HostSR hsr : hsrList) {
+				srList.add(hsr.getSrUuid());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
-		session.close();
 		return srList;
 	}
 

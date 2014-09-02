@@ -57,12 +57,11 @@ public class AlarmDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Alarm.class)
-					.add(Restrictions.eq("alarmUid", userId))
-					.add(Restrictions.like("alarmName", keyword,
-							MatchMode.ANYWHERE))
-					.setProjection(Projections.rowCount());
+			Criteria criteria = session.createCriteria(Alarm.class);
+			criteria.add(Restrictions.eq("alarmUid", userId));
+			criteria.add(Restrictions.like("alarmName", keyword,
+					MatchMode.ANYWHERE));
+			criteria.setProjection(Projections.rowCount());
 			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -74,15 +73,20 @@ public class AlarmDAO {
 		return count;
 	}
 
+	private Alarm doGetAlarm(Session session, String alarmUuid) {
+		Criteria criteria = session.createCriteria(Alarm.class);
+		criteria.add(Restrictions.eq("alarmUuid", alarmUuid));
+		Alarm alarm = (Alarm) criteria.uniqueResult();
+		return alarm;
+	}
+
 	public Alarm getAlarm(String alarmUuid) {
 		Alarm alarm = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Alarm.class).add(
-					Restrictions.eq("alarmUuid", alarmUuid));
-			alarm = (Alarm) criteria.uniqueResult();
+			alarm = this.doGetAlarm(session, alarmUuid);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,13 +106,13 @@ public class AlarmDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPosition = (pageIndex - 1) * itemPerPage;
-			Criteria criteria = session
-					.createCriteria(Alarm.class)
-					.add(Restrictions.eq("alarmUid", userId))
-					.add(Restrictions.like("alarmName", keyword,
-							MatchMode.ANYWHERE))
-					.addOrder(Order.desc("alarmDate"))
-					.setFirstResult(startPosition).setMaxResults(itemPerPage);
+			Criteria criteria = session.createCriteria(Alarm.class);
+			criteria.add(Restrictions.eq("alarmUid", userId));
+			criteria.add(Restrictions.like("alarmName", keyword,
+					MatchMode.ANYWHERE));
+			criteria.addOrder(Order.desc("alarmDate"));
+			criteria.setFirstResult(startPosition);
+			criteria.setMaxResults(itemPerPage);
 			alarmList = criteria.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -163,9 +167,7 @@ public class AlarmDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Alarm.class).add(
-					Restrictions.eq("alarmUuid", alarmUuid));
-			Alarm alarm = (Alarm) criteria.uniqueResult();
+			Alarm alarm = this.doGetAlarm(session, alarmUuid);
 			if (alarm != null) {
 				alarm.setAlarmName(newName);
 				alarm.setAlarmDesc(description);
@@ -188,9 +190,7 @@ public class AlarmDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Alarm.class).add(
-					Restrictions.eq("alarmUuid", alarmUuid));
-			Alarm alarm = (Alarm) criteria.uniqueResult();
+			Alarm alarm = this.doGetAlarm(session, alarmUuid);
 			if (alarm != null) {
 				alarm.setAlarmPeriod(alarmPeriod);
 				session.update(alarm);
