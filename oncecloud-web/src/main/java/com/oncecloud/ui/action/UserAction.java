@@ -84,4 +84,36 @@ public class UserAction {
 				list.getRt(), list.getVlan(), list.getLb(), list.getDisk(),
 				list.getBw(), list.getMem(), list.getCpu(), user.getUserId());
 	}
+
+	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
+	@ResponseBody
+	public String create(HttpServletRequest request,
+			@RequestParam String userName, @RequestParam String userPassword,
+			@RequestParam String userEmail, @RequestParam String userTelephone,
+			@RequestParam String userCompany, @RequestParam String userLevel) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getUserManager().doCreateUser(userName,
+				userPassword, userEmail, userTelephone, userCompany, userLevel,
+				user.getUserId());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
+	@ResponseBody
+	public void update(HttpServletRequest request,
+			@RequestParam String userName, @RequestParam int changeId,
+			@RequestParam String userEmail, @RequestParam String userTelephone,
+			@RequestParam String userCompany, @RequestParam String userLevel) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getUserManager().doUpdateUser(user.getUserId(),
+				changeId, userName, userEmail, userTelephone, userCompany,
+				userLevel);
+	}
+
+	@RequestMapping(value = "/QueryUser", method = { RequestMethod.GET })
+	@ResponseBody
+	public String queryUser(HttpServletRequest request, @RequestParam String userName) {
+		JSONArray ja = this.getUserManager().doQueryUser(userName);
+		return ja.toString();
+	}
 }

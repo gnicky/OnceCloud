@@ -25,6 +25,7 @@ public class AdminController {
 		model.put("sideActive", 3);
 		model.put("title", "用户管理");
 		if (user.getUserLevel() == 0) {
+			request.getSession().setAttribute("userid", request.getParameter("userid"));
 			return new ModelAndView("admin/user", model);
 		} else {
 			return new ModelAndView(new RedirectView("/dashboard"));

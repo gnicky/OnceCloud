@@ -12,7 +12,7 @@ public class CreateControllerAdmin {
 
 	@RequestMapping(value = "/user/create", method = { RequestMethod.GET })
 	public ModelAndView createVM(HttpServletRequest request) {
-		return new ModelAndView("user/create/createinstance");
+		return new ModelAndView("admin/create/createuser");
 	}
 	
 }

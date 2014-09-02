@@ -80,31 +80,7 @@ public class UserAction extends HttpServlet {
 		// 其他业务流程
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("create")) {
-				String userName = request.getParameter("username");
-				String userPassword = request.getParameter("userpwd");
-				String userEmail = request.getParameter("useremail");
-				String userTelephone = request.getParameter("usertel");
-				String userCompany = request.getParameter("usercom");
-				String userLevel = request.getParameter("userlevel");
-				JSONArray ja = this.getUserManager().doCreateUser(userName,
-						userPassword, userEmail, userTelephone, userCompany,
-						userLevel, userId);
-				out.print(ja.toString());
-			} else if (action.equals("queryuser")) {
-				String userName = request.getParameter("username");
-				JSONArray ja = this.getUserManager().doQueryUser(userName);
-				out.print(ja.toString());
-			} else if (action.equals("update")) {
-				int changeId = Integer.parseInt(request.getParameter("userid"));
-				String userName = request.getParameter("username");
-				String userEmail = request.getParameter("useremail");
-				String userTel = request.getParameter("usertel");
-				String userCom = request.getParameter("usercom");
-				String userLevel = request.getParameter("userlevel");
-				this.getUserManager().doUpdateUser(userId, changeId, userName,
-						userEmail, userTel, userCom, userLevel);
-			} else if (action.equals("getcompanylist")) {
+			if (action.equals("getcompanylist")) {
 				JSONArray ja = this.getUserManager().doGetCompanyList();
 				out.print(ja.toString());
 			}
