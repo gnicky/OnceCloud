@@ -7,6 +7,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,20 +57,20 @@ public class LBDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			Criteria criteria = session.createCriteria(LB.class);
-			criteria.add(Restrictions.ne("lbStatus", 0));
+			criteria = criteria.add(Restrictions.ne("lbStatus", 0));
 			if (!host.equals("all")) {
-				criteria.add(Restrictions.eq("hostUuid", host));
+				criteria = criteria.add(Restrictions.eq("hostUuid", host));
 			}
 			if (importance != 6) {
-				criteria.add(Restrictions.eq("lbImportance", importance));
+				criteria = criteria.add(Restrictions.eq("lbImportance",
+						importance));
 			}
-			criteria.setProjection(Projections.rowCount());
+			criteria = criteria.setProjection(Projections.rowCount());
 			count = Integer.parseInt(criteria.uniqueResult().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -80,27 +81,24 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			String queryString = "select count(*) from LB where lbUID=:lbUID  and lbName like '%"
-					+ search + "%' and lbStatus > 0";
-			Query query = session.createQuery(queryString);
-			query.setInteger("lbUID", lbUID);
-			count = ((Number) query.iterate().next()).intValue();
+			session.beginTransaction();
+			Criteria criteria = session
+					.createCriteria(LB.class)
+					.add(Restrictions.eq("lbUID", lbUID))
+					.add(Restrictions
+							.like("lbName", search, MatchMode.ANYWHERE))
+					.add(Restrictions.gt("lbStatus", 0));
+			count = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
 	}
 
-	/**
-	 * @author hty
-	 * @param search
-	 * @param uid
-	 * @return
-	 */
 	public int countAllLBListAlarm(String search, int lbUID) {
 		int count = 0;
 		Session session = null;
@@ -113,9 +111,8 @@ public class LBDAO {
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -137,9 +134,8 @@ public class LBDAO {
 			count = ((Number) query.iterate().next()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return count;
@@ -156,9 +152,8 @@ public class LBDAO {
 			lb = (LB) query.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return lb;
@@ -183,9 +178,8 @@ public class LBDAO {
 			list = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return list;
@@ -202,9 +196,8 @@ public class LBDAO {
 			lb = (LB) query.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return lb;
@@ -223,9 +216,8 @@ public class LBDAO {
 			result = list.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -252,9 +244,8 @@ public class LBDAO {
 			lbList = criteria.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return lbList;
@@ -277,9 +268,8 @@ public class LBDAO {
 			lbList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return lbList;
@@ -311,9 +301,8 @@ public class LBDAO {
 			lbList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return lbList;
@@ -340,9 +329,8 @@ public class LBDAO {
 			lbList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return lbList;
@@ -368,9 +356,8 @@ public class LBDAO {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -394,11 +381,8 @@ public class LBDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -418,12 +402,8 @@ public class LBDAO {
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
@@ -442,6 +422,9 @@ public class LBDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return result;
 	}
@@ -460,9 +443,9 @@ public class LBDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return result;
 	}
@@ -482,12 +465,8 @@ public class LBDAO {
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return result;
@@ -512,9 +491,9 @@ public class LBDAO {
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 	}
 
@@ -532,9 +511,9 @@ public class LBDAO {
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 	}
 
@@ -557,12 +536,8 @@ public class LBDAO {
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
@@ -582,12 +557,8 @@ public class LBDAO {
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 	}
