@@ -33,14 +33,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Cpu";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -52,14 +52,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Cpu1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -71,14 +71,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Cpu1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -90,14 +90,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Cpu6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -109,14 +109,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Cpu2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -128,14 +128,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Memory";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -147,14 +147,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Memory1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -166,14 +166,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Memory1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -185,14 +185,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Memory6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -204,14 +204,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Memory2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -223,14 +223,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Pif";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -242,14 +242,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Pif1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -261,14 +261,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Pif1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -280,14 +280,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Pif6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -299,14 +299,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Pif2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -318,14 +318,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vbd";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -337,14 +337,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vbd1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -356,14 +356,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vbd1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -375,14 +375,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vbd6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -394,14 +394,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vbd2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -413,14 +413,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vif";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -432,14 +432,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vif1d";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -451,14 +451,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vif1m";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -470,14 +470,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vif6h";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -489,14 +489,14 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "select distinct time from Vif2w";
 			Query query = session.createQuery(queryString);
 			timeList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return timeList;
@@ -508,15 +508,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Cpu30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			cpuList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return cpuList;
@@ -528,15 +528,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Cpu1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			cpuList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return cpuList;
@@ -548,15 +548,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Cpu1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			cpuList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return cpuList;
@@ -568,15 +568,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Cpu6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			cpuList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return cpuList;
@@ -588,15 +588,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Cpu2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			cpuList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return cpuList;
@@ -608,15 +608,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Memory30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			memoryList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return memoryList;
@@ -628,15 +628,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Memory1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			memoryList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return memoryList;
@@ -648,15 +648,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Memory1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			memoryList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return memoryList;
@@ -668,15 +668,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Memory6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			memoryList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return memoryList;
@@ -688,15 +688,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Memory2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			memoryList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return memoryList;
@@ -708,15 +708,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Pif30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			pifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return pifList;
@@ -728,15 +728,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Pif1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			pifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return pifList;
@@ -748,15 +748,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Pif1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			pifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return pifList;
@@ -768,15 +768,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Pif6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			pifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return pifList;
@@ -788,15 +788,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Pif2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			pifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return pifList;
@@ -808,15 +808,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vbd30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vbdList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vbdList;
@@ -828,15 +828,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vbd1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vbdList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vbdList;
@@ -848,15 +848,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vbd1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vbdList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vbdList;
@@ -869,15 +869,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vbd6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vbdList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vbdList;
@@ -889,15 +889,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vbd2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vbdList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vbdList;
@@ -909,15 +909,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vif30min where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vifList;
@@ -929,15 +929,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vif1d where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vifList;
@@ -949,15 +949,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vif1m where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vifList;
@@ -969,15 +969,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vif6h where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vifList;
@@ -989,15 +989,15 @@ public class PerformanceDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getPerformaceSession();
+			session.beginTransaction();
 			String queryString = "from Vif2w where uuid=:id order by time";
 			Query query = session.createQuery(queryString);
 			query.setString("id", uuid);
 			vifList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return vifList;
