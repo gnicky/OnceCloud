@@ -20,6 +20,7 @@ public class ImageDAO {
 	private SessionHelper sessionHelper;
 	private UserDAO userDAO;
 	private OverViewDAO overViewDAO;
+	private QuotaDAO quotaDAO;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -37,6 +38,15 @@ public class ImageDAO {
 	@Autowired
 	private void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+
+	private QuotaDAO getQuotaDAO() {
+		return quotaDAO;
+	}
+
+	@Autowired
+	private void setQuotaDAO(QuotaDAO quotaDAO) {
+		this.quotaDAO = quotaDAO;
 	}
 
 	private OverViewDAO getOverViewDAO() {
@@ -153,7 +163,7 @@ public class ImageDAO {
 		return total;
 	}
 
-	public Image createImage(String imageUId, String imageName, int imageUID,
+	public Image createImage(String imageUuid, String imageName, int imageUID,
 			int imagePlatform, String imageServer, String imageDesc,
 			String imagePwd) {
 		Image image = null;
@@ -161,10 +171,12 @@ public class ImageDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			image = new Image(imageUId, imageName, imagePwd, imageUID, 20,
+			image = new Image(imageUuid, imageName, imagePwd, imageUID, 20,
 					imagePlatform, 1, imageServer, imageDesc, new Date());
 			image.setPreAllocate(0);
 			session.saveOrUpdate(image);
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(imageUID,
+					"quotaImage", 1, true);
 			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
 					true);
 			session.getTransaction().commit();

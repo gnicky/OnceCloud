@@ -96,8 +96,7 @@ public class UserManager {
 					}
 				}
 			}
-			logger.info("Check Login: User [" + userName + "] Password ["
-					+ userPass + "] Result [" + result + "]");
+			logger.info("Check Login: User [" + userName + "] Result [" + result + "]");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

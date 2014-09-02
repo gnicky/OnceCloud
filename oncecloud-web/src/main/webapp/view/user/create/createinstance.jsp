@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="${basePath}css/bwizard.css" />
 <script src="${basePath}js/bwizard.js"></script>
 <script src="${basePath}js/user/create/createinstance.js"></script>
-<div class="modal-dialog" style="width:1000px; margin-top:100px">
+<div class="modal-dialog" style="width:1000px">
 	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-title">创建新主机<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>

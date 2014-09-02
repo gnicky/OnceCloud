@@ -2,6 +2,10 @@ $(function () {
     connect();
 });
 
+$(window).unload(function() {
+	disconnect();
+});
+
 function connect() {
     if ('WebSocket' in window) {
         console.log('Websocket supported');
@@ -10,11 +14,11 @@ function connect() {
 
         socket.onopen = function () {
             console.log('Connection open!');
-        }
+        };
 
         socket.onclose = function () {
             console.log('Disconnecting connection');
-        }
+        };
 
         socket.onmessage = function (event) {
             console.log(event.data);
@@ -22,7 +26,7 @@ function connect() {
             console.log('message type: ' + obj.messageType);
             console.log('content: ' + obj.content);
             eval("(" + obj.messageType + "(" + obj + ")" + ")");
-        }
+        };
 
     } else {
         console.log('Websocket not supported');
@@ -74,14 +78,14 @@ function ws_edit_row_ip(rowId, network, ip) {
 function ws_edit_row_for_bind_volume(rowId, vmId, vmName) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
-        var vmtd = thistr.find('[vmuuid]').attr('vmuuid', obj.vmId).html('<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + obj.vmName + '</a>');
+        thistr.find('[vmuuid]').attr('vmuuid', obj.vmId).html('<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + obj.vmName + '</a>');
     }
 }
 
 function ws_edit_row_for_unbind_volume(rowId) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
-        var vmtd = thistr.find('[vmuuid]').attr('vmuuid', "").text("");
+        thistr.find('[vmuuid]').attr('vmuuid', "").text("");
     }
 }
 

@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import com.once.xenapi.VM;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
-import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.Image;
@@ -26,7 +23,6 @@ import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.User;
-import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
@@ -40,17 +36,7 @@ import com.oncecloud.message.MessagePush;
 public class ImageManager {
 	private final static Logger logger = Logger.getLogger(ImageManager.class);
 
-	private SessionHelper sessionHelper;
 	private MessagePush messagePush;
-
-	private SessionHelper getSessionHelper() {
-		return sessionHelper;
-	}
-
-	@Autowired
-	private void setSessionHelper(SessionHelper sessionHelper) {
-		this.sessionHelper = sessionHelper;
-	}
 
 	private MessagePush getMessagePush() {
 		return messagePush;
@@ -67,7 +53,6 @@ public class ImageManager {
 	private LogDAO logDAO;
 	private VMDAO vmDAO;
 	private HostDAO hostDAO;
-	private QuotaDAO quotaDAO;
 	private Constant constant;
 
 	private HostManager getHostManager() {
@@ -122,15 +107,6 @@ public class ImageManager {
 	@Autowired
 	private void setHostDAO(HostDAO hostDAO) {
 		this.hostDAO = hostDAO;
-	}
-
-	private QuotaDAO getQuotaDAO() {
-		return quotaDAO;
-	}
-
-	@Autowired
-	private void setQuotaDAO(QuotaDAO quotaDAO) {
-		this.quotaDAO = quotaDAO;
 	}
 
 	private Constant getConstant() {
@@ -232,32 +208,23 @@ public class ImageManager {
 			String desc) {
 		JSONObject result = new JSONObject();
 		result.put("result", false);
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			OCVM fromVM = this.getVmDAO().getVM(uuid);
-			Connection c = this.getConstant().getConnection(uid);
-			VM thisVM = VM.getByUuid(c, uuid);
-			String imageUuid = UUID.randomUUID().toString();
-			thisVM.createImage(c, imageUuid);
-			String poolUuid = this.getHostDAO().getHost(fromVM.getHostUuid())
-					.getPoolUuid();
-			this.getImageDAO().createImage(imageUuid, newName, uid,
-					fromVM.getVmPlatform(), poolUuid, desc, fromVM.getVmPWD());
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(uid, "quotaImage",
-					1, true);
-			tx.commit();
-			result.put("result", true);
-		} catch (Exception e) {
-			if (tx != null) {
-				tx.rollback();
-			}
-			e.printStackTrace();
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+		OCVM fromVM = this.getVmDAO().getVM(uuid);
+		if (fromVM != null) {
+			try {
+				String poolUuid = this.getHostDAO()
+						.getHost(fromVM.getHostUuid()).getPoolUuid();
+				Connection c = this.getConstant().getConnection(uid);
+				VM thisVM = VM.getByUuid(c, uuid);
+				String imageUuid = UUID.randomUUID().toString();
+				boolean createResult = thisVM.createImage(c, imageUuid);
+				if (createResult == true) {
+					this.getImageDAO().createImage(imageUuid, newName, uid,
+							fromVM.getVmPlatform(), poolUuid, desc,
+							fromVM.getVmPWD());
+					result.put("result", true);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return result;
