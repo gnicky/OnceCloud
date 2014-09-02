@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<script src="${basePath}user/js/create/createvolume.js"></script>
+<script src="${basePath}js/user/create/createvolume.js"></script>
 <div class="modal-dialog" style="margin-top:100px">
 	<div class="modal-content">
 		<div class="modal-header">

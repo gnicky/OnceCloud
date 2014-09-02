@@ -19,7 +19,7 @@ public class CreateControllerUser {
 		return new ModelAndView("user/create/createinstance");
 	}
 
-	@RequestMapping(value = "/instance/createsnapshot", method = { RequestMethod.GET })
+	@RequestMapping(value = "/snapshot/create", method = { RequestMethod.GET })
 	public ModelAndView createSnapshot(HttpServletRequest request,
 			@RequestParam String rsid, @RequestParam String rstype,
 			@RequestParam String rsname) {
@@ -30,7 +30,7 @@ public class CreateControllerUser {
 		return new ModelAndView("user/create/createsnapshot", model);
 	}
 
-	@RequestMapping(value = "/instance/createimage", method = { RequestMethod.GET })
+	@RequestMapping(value = "/image/clone", method = { RequestMethod.GET })
 	public ModelAndView createimage(HttpServletRequest request,
 			@RequestParam String rsid) {
 		Map<String, String> model = new HashMap<String, String>();
@@ -38,11 +38,8 @@ public class CreateControllerUser {
 		return new ModelAndView("user/create/createimage", model);
 	}
 
-	@RequestMapping(value = "/instance/createvolume", method = { RequestMethod.GET })
-	public ModelAndView createvolume(HttpServletRequest request,
-			@RequestParam String rsid) {
-		Map<String, String> model = new HashMap<String, String>();
-		model.put("rsid", rsid);
-		return new ModelAndView("user/create/createvolume", model);
+	@RequestMapping(value = "/volume/create", method = { RequestMethod.GET })
+	public ModelAndView createvolume(HttpServletRequest request) {
+		return new ModelAndView("user/create/createvolume");
 	}
 }
