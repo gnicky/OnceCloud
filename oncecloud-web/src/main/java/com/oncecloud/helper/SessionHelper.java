@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public final class SessionHelper {
 	private SessionFactory mainSessionFactory;
 	private SessionFactory performanceSessionFactory;
+	private SessionFactory testSessionFactory;
 
 	private SessionFactory getMainSessionFactory() {
 		return mainSessionFactory;
@@ -29,10 +30,19 @@ public final class SessionHelper {
 		this.performanceSessionFactory = performanceSessionFactory;
 	}
 
+	private SessionFactory getTestSessionFactory() {
+		return testSessionFactory;
+	}
+
+	private void setTestSessionFactory(SessionFactory testSessionFactory) {
+		this.testSessionFactory = testSessionFactory;
+	}
+
 	public SessionHelper() {
 		try {
 			this.configureMainDatabase();
 			this.configurePerformanceDatabase();
+			this.configureTestDatabase();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,11 +67,24 @@ public final class SessionHelper {
 				.buildSessionFactory(mainServiceRegistry));
 	}
 
+	private void configureTestDatabase() {
+		Configuration testConfiguration = new Configuration()
+				.configure("com/oncecloud/config/hibernate-main-test.cfg.xml");
+		ServiceRegistry mainServiceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(testConfiguration.getProperties()).build();
+		this.setTestSessionFactory(testConfiguration
+				.buildSessionFactory(mainServiceRegistry));
+	}
+
 	public Session getMainSession() {
 		return this.getMainSessionFactory().getCurrentSession();
 	}
 
 	public Session getPerformaceSession() {
 		return this.getPerformanceSessionFactory().getCurrentSession();
+	}
+
+	public Session getTestSession() {
+		return this.getTestSessionFactory().getCurrentSession();
 	}
 }
