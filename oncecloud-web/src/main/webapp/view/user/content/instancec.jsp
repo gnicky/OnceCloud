@@ -19,8 +19,8 @@
 				<ul class="dropdown-menu">
 					<li><a class="btn-forbidden" id="restart"><span class="glyphicon glyphicon-repeat"></span>重启</a></li>
 					<li><a class="btn-forbidden" id="addtovlan" url="${basePath}instance/bindnetwork"><span class="glyphicon glyphicon-barcode"></span>加入网络</a></li>
-					<li><a class="btn-forbidden backup" id="backup" url="${basePath}instance/createsnapshot"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
-					<li><a class="btn-forbidden" id="image" url="${basePath}instance/createimage"><span class="glyphicon glyphicon-record"></span>制作映像</a></li>
+					<li><a class="btn-forbidden backup" id="backup" url="${basePath}instance/createsnapshot?rsid=null&rstype=null&rsname=null"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
+					<li><a class="btn-forbidden" id="image" url="${basePath}instance/createimage?rsid="><span class="glyphicon glyphicon-record"></span>制作映像</a></li>
 					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 				</ul>
 			</div>
