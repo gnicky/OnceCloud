@@ -13,7 +13,7 @@ function connect() {
         console.log('Connection attempted');
 
         socket.onopen = function () {
-            console.log('Connection open!');
+            console.log('Connection open');
         };
 
         socket.onclose = function () {
@@ -25,7 +25,7 @@ function connect() {
             var obj = JSON.parse(event.data);
             console.log('message type: ' + obj.messageType);
             console.log('content: ' + obj.content);
-            eval("(" + obj.messageType + "(" + obj + ")" + ")");
+            eval("(" + obj.messageType + "(obj)" + ")");
         };
 
     } else {
@@ -53,7 +53,7 @@ function ws_delete_row(obj) {
     $(thistr).remove();
 }
 
-function ws_edit_row_console(rowId, option) {
+function ws_edit_row_console(obj) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
         if (obj.option == "add") {
@@ -68,28 +68,28 @@ function ws_edit_row_console(rowId, option) {
     }
 }
 
-function ws_edit_row_ip(rowId, network, ip) {
+function ws_edit_row_ip(obj) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
         thistr.find('[name="sip"]').html('<a>(' + obj.network + ')&nbsp;/&nbsp;' + obj.ip + '</a>');
     }
 }
 
-function ws_edit_row_for_bind_volume(rowId, vmId, vmName) {
+function ws_edit_row_for_bind_volume(obj) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
         thistr.find('[vmuuid]').attr('vmuuid', obj.vmId).html('<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + obj.vmName + '</a>');
     }
 }
 
-function ws_edit_row_for_unbind_volume(rowId) {
+function ws_edit_row_for_unbind_volume(obj) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
         thistr.find('[vmuuid]').attr('vmuuid', "").text("");
     }
 }
 
-function ws_edit_row_status(rowId, icon, word) {
+function ws_edit_row_status(obj) {
     var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
     if (thistr.size() == 1) {
         thistr.find('[name="stateicon"]').removeClass();
