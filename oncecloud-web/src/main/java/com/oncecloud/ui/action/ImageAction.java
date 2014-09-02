@@ -53,14 +53,23 @@ public class ImageAction {
 				imageId, imageName);
 		return jo.toString();
 	}
+
+	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
+	@ResponseBody
+	public String create(HttpServletRequest request,
+			@RequestParam String imageUUId, @RequestParam String imageName
+			, @RequestParam String imageServer, @RequestParam int imageOs
+			, @RequestParam String imageDesc, @RequestParam String imagePwd) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getImageManager().createImage(user.getUserId(), user.getUserLevel(), imageUUId, imageName, imageServer, imageOs, imageDesc, imagePwd);
+		return ja.toString();
+	}
 	
 	@RequestMapping(value = "/clone", method = {RequestMethod.POST })
 	@ResponseBody
 	public void clone(HttpServletRequest request, ImageCloneModel imagecloneModel) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			this.getImageManager().cloneImage(user.getUserId(), user.getUserLevel(),imagecloneModel.getVmUuid(),imagecloneModel.getImageName(),imagecloneModel.getImageDesc());
-		} 
+		this.getImageManager().cloneImage(user.getUserId(), user.getUserLevel(),imagecloneModel.getVmUuid(),imagecloneModel.getImageName(),imagecloneModel.getImageDesc());
 	}
 
 }

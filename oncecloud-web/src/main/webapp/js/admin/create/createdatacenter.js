@@ -38,8 +38,8 @@ $(document).ready(function () {
             if ('new' == type) {
                 $.ajax({
                     type: 'post',
-                    url: '/DatacenterAction',
-                    data: 'action=create&dcname=' + dcName + '&dclocation=' + dcLocation + '&dcdesc=' + dcDesc,
+                    url: '/DatacenterAction/Create',
+                    data: {dcname:dcName, dclocation:dcLocation, dcdesc:dcDesc},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -64,8 +64,8 @@ $(document).ready(function () {
                 var dcid = $('#modalcontent').attr('dcid');
                 $.ajax({
                     type: 'post',
-                    url: '/DatacenterAction',
-                    data: 'action=update&dcuuid=' + dcid + '&dcname=' + dcName + '&dclocation=' + dcLocation + '&dcdesc=' + dcDesc,
+                    url: '/DatacenterAction/Update',
+                    data: {dcuuid:dcid, dcname:dcName, dclocation:dcLocation, dcdesc:dcDesc},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[dcid="' + dcid + '"]');

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.PoolManager;
+import com.oncecloud.ui.model.ImageCloneModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/PoolAction")
@@ -32,7 +33,7 @@ public class PoolAction {
 	@RequestMapping(value = "/PoolList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String poolList(HttpServletRequest request, ListModel list) {
-		JSONArray ja = this.poolManager.getPoolList(list.getPage(),
+		JSONArray ja = this.getPoolManager().getPoolList(list.getPage(),
 				list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
@@ -42,7 +43,7 @@ public class PoolAction {
 	public String delete(HttpServletRequest request,
 			@RequestParam String poolid, @RequestParam String poolname) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.poolManager.deletePool(poolid, poolname,
+		JSONArray ja = this.getPoolManager().deletePool(poolid, poolname,
 				user.getUserId());
 		return ja.toString();
 	}
@@ -51,8 +52,30 @@ public class PoolAction {
 	@ResponseBody
 	public String unBind(HttpServletRequest request, @RequestParam String poolid) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.poolManager.unbind(poolid, user.getUserId());
+		JSONArray ja = this.getPoolManager().unbind(poolid, user.getUserId());
 		return ja.toString();
 	}
 
+	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
+	@ResponseBody
+	public String create(HttpServletRequest request, @RequestParam String poolname, @RequestParam String pooldesc
+			,@RequestParam String dcuuid, @RequestParam String dcname) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getPoolManager().createPool(poolname, pooldesc, dcuuid, dcname, user.getUserId());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
+	@ResponseBody
+	public void update(HttpServletRequest request, @RequestParam String pooluuid, @RequestParam String poolname
+			,@RequestParam String pooldesc, @RequestParam String dcuuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getPoolManager().updatePool(pooluuid, poolname, pooldesc, dcuuid, user.getUserId());
+	}
+	
+	@RequestMapping(value = "/AllPool", method = {RequestMethod.POST })
+	@ResponseBody
+	public void allPool(HttpServletRequest request, ImageCloneModel imagecloneModel) {
+		this.getPoolManager().getAllPool();
+	}
 }

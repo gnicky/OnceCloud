@@ -53,4 +53,30 @@ public class DatacenterAction {
 				dcName, user.getUserId());
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/AllList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String allList(HttpServletRequest request) {
+		JSONArray ja = this.getDatacenterManager().getDatacenterAllList();
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
+	@ResponseBody
+	public String create(HttpServletRequest request,
+			@RequestParam String dcname, @RequestParam String dclocation,
+			@RequestParam String dcdesc) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getDatacenterManager().createDatacenter(dcname, dclocation, dcdesc, user.getUserId());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
+	@ResponseBody
+	public void update(HttpServletRequest request,
+			@RequestParam String dcuuid, @RequestParam String dcname,
+			@RequestParam String dclocation, @RequestParam String dcdesc) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getDatacenterManager().update(dcuuid, dcname, dclocation, dcdesc, user.getUserId());
+	}
 }

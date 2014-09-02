@@ -45,4 +45,40 @@ public class StorageAction {
 				srid, srname);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/Add", method = { RequestMethod.POST })
+	@ResponseBody
+	public String add(HttpServletRequest request, @RequestParam String srname,
+			@RequestParam String srAddress, @RequestParam String srDesc,
+			@RequestParam String srType, @RequestParam String srDir,
+			@RequestParam String rackId, @RequestParam String rackName) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getSrManager().addStorage(user.getUserId(), srname,
+				srAddress, srDesc, srType, srDir, rackId, rackName);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
+	@ResponseBody
+	public void update(HttpServletRequest request, @RequestParam String srid,
+			@RequestParam String srName, @RequestParam String srDesc,
+			@RequestParam String rackid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getSrManager().updateStorage(user.getUserId(), srid, srName, srDesc, rackid);
+	}
+
+	@RequestMapping(value = "/QueryAddress", method = { RequestMethod.GET })
+	@ResponseBody
+	public String queryAddress(HttpServletRequest request, @RequestParam String address) {
+		JSONArray ja = this.getSrManager().getStorageByAddress(address);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/LoadToServer", method = { RequestMethod.GET })
+	@ResponseBody
+	public String loadToServer(HttpServletRequest request, @RequestParam String sruuid, @RequestParam String hostuuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getSrManager().load2Server(user.getUserId(), sruuid, hostuuid);
+		return ja.toString();
+	}
 }

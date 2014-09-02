@@ -11,8 +11,43 @@ import org.springframework.web.servlet.ModelAndView;
 public class CreateControllerAdmin {
 
 	@RequestMapping(value = "/user/create", method = { RequestMethod.GET })
-	public ModelAndView createVM(HttpServletRequest request) {
+	public ModelAndView createUser(HttpServletRequest request) {
 		return new ModelAndView("admin/create/createuser");
+	}
+
+	@RequestMapping(value = "/storage/create", method = { RequestMethod.GET })
+	public ModelAndView createStorage(HttpServletRequest request) {
+		return new ModelAndView("admin/create/createstorage");
+	}
+
+	@RequestMapping(value = "/rack/create", method = { RequestMethod.GET })
+	public ModelAndView createRack(HttpServletRequest request) {
+		return new ModelAndView("admin/create/createrack");
+	}
+
+	@RequestMapping(value = "/pool/create", method = { RequestMethod.GET })
+	public ModelAndView createPool(HttpServletRequest request) {
+		return new ModelAndView("admin/create/createpool");
+	}
+
+	@RequestMapping(value = "/host/create", method = { RequestMethod.GET })
+	public ModelAndView createHost(HttpServletRequest request) {
+		return new ModelAndView("admin/create/createhost");
+	}
+
+	@RequestMapping(value = "/datacenter/create", method = { RequestMethod.GET })
+	public ModelAndView createDatecenter(HttpServletRequest request) {
+		return new ModelAndView("admin/create/datacenter");
+	}
+
+	@RequestMapping(value = "/address/create", method = { RequestMethod.GET })
+	public ModelAndView createAddress(HttpServletRequest request) {
+		return new ModelAndView("admin/create/address");
+	}
+
+	@RequestMapping(value = "/image/create", method = { RequestMethod.GET })
+	public ModelAndView createImage(HttpServletRequest request) {
+		return new ModelAndView("admin/create/image");
 	}
 	
 }

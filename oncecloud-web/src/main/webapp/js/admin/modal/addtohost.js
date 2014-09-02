@@ -52,8 +52,8 @@ $(document).ready(function () {
     function getServerList(page, limitnum, search, sruuid, srname) {
         $.ajax({
             type: 'get',
-            url: '/HostAction',
-            data: 'action=getloadlist&page=' + page + '&limitnum=' + limitnum + '&search=' + search + '&sruuid=' + sruuid,
+            url: '/HostAction/LoadList',
+            data: {page:page, limit:limitnum, search:search, sruuid:sruuid},
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {
@@ -86,9 +86,6 @@ $(document).ready(function () {
                         btable.innerHTML = tableStr;
                     }
                 }
-            },
-            error: function () {
-
             }
         });
     }
@@ -96,8 +93,8 @@ $(document).ready(function () {
     function load2server(hostuuid, sruuid) {
         $.ajax({
             type: 'get',
-            url: '/SRAction',
-            data: 'action=load2server&sruuid=' + sruuid + '&hostuuid=' + hostuuid,
+            url: '/StorageAction/LoadToServer',
+            data: {sruuid:sruuid, hostuuid:hostuuid},
             dataType: 'json',
             success: function (array) {
                 var obj = array[0];

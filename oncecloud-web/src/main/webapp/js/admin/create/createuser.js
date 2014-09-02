@@ -37,7 +37,9 @@ $(document).ready(function () {
             var userTel = document.getElementById("user_tel").value;
             var userCom = document.getElementById("user_company").value;
             var userLevel = document.getElementById("user_level").value;
+            console.log(type);
             if ('new' == type) {
+            	console.log("aaa");
                 $.ajax({
                     type: 'post',
                     url: '/UserAction/Create',
@@ -51,6 +53,7 @@ $(document).ready(function () {
 					},
                     dataType: 'json',
                     success: function (array) {
+                    	console.log(array);
                         if (array.length == 1) {
                             var obj = array[0];
                             var username = decodeURI(obj.username);

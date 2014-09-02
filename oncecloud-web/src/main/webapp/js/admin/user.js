@@ -38,6 +38,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
 
 $('#create').on('click', function (event) {
     event.preventDefault();
+    $('#UserModalContainer').attr("type","new");
     $('#UserModalContainer').load($(this).attr('url'), '', function () {
         $('#UserModalContainer').modal({
             backdrop: false,

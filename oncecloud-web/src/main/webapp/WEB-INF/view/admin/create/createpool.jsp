@@ -1,22 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>admin/js/create/createpool.js"></script>
+<script src="${basePath}js/jquery.validate.js"></script>
+<script src="${basePath}js/admin/create/createpool.js"></script>
 <div class="modal-dialog" style="margin-top:100px; width:550px">
 	<div class="modal-content" id="modalcontent" poolid="">
 		<div class="modal-header">

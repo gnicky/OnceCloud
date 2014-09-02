@@ -65,8 +65,8 @@ $(document).ready(function () {
         ustr = ustr + ']';
         $.ajax({
             type: 'post',
-            url: '/HostAction',
-            data: "action=a2pool&uuidjsonstr=" + ustr + "&hasmaster=" + hmaster + "&pooluuid=" + poolUuid,
+            url: '/HostAction/AddToPool',
+            data: {uuidjsonstr:ustr, hasmaster:hmaster, pooluuid:poolUuid},
             dataType: 'json',
             success: function (array) {
                 for (var i = 0; i < array.length; i++) {
@@ -99,8 +99,8 @@ $(document).ready(function () {
         var uuidJsonStr = $("#hostjson").attr('jsonstr');
         $.ajax({
             type: 'post',
-            url: '/HostAction',
-            data: "action=getablepool&uuidjsonstr=" + uuidJsonStr,
+            url: '/HostAction/TablePool',
+            data: {uuidjsonstr:uuidJsonStr},
             dataType: 'json',
             success: function (array) {
                 var choosepoollist = document.getElementById("choosepool");
