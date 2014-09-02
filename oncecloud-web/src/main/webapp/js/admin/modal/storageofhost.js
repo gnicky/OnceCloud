@@ -19,8 +19,8 @@ $(document).ready(function () {
                     callback: function () {
                         $.ajax({
                             type: 'get',
-                            url: '/HostAction',
-                            data: "action=unbindsr&hostuuid=" + hostUuid + "&sruuid=" + srUuid,
+                            url: '/HostAction/UnbindSR',
+                            data: {hostuuid:hostUuid, sruuid:srUuid},
                             dataType: 'json',
                             success: function (array) {
                                 var thistr = $("#tablebody").find('[hostid="' + hostUuid + '"]');
@@ -30,9 +30,6 @@ $(document).ready(function () {
                                 thisa.attr('size', currentsize);
                                 thisa.html('<span class="glyphicon glyphicon-hdd"></span>&nbsp;&nbsp;' + currentsize);
                                 $('#ServerModalContainer').modal('hide');
-                            },
-                            error: function () {
-
                             }
                         });
                     }
@@ -56,8 +53,8 @@ $(document).ready(function () {
         var tableStr = "";
         $.ajax({
             type: 'get',
-            url: '/HostAction',
-            data: "action=getsrofhost&hostuuid=" + hostUuid,
+            url: '/HostAction/SRofhost',
+            data: {hostuuid:hostUuid},
             dataType: 'json',
             success: function (array) {
                 if (array.length == 0) {
@@ -75,9 +72,6 @@ $(document).ready(function () {
                     }
                     btable.innerHTML = tableStr;
                 }
-            },
-            error: function () {
-
             }
         });
     }

@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createrack.jsp">
+			<button id="create" class="btn btn-primary" url="${basePath}rack/create">
 				+&nbsp;添加机架
 			</button>
             <div class="btn-group">
@@ -17,7 +17,7 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="update"  url="${basePath}admin/create/createrack.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+					<li><a class="btn-forbidden" id="update"  url="${basePath}rack/create"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>

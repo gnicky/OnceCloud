@@ -37,14 +37,23 @@ $(document).ready(function () {
             var userTel = document.getElementById("user_tel").value;
             var userCom = document.getElementById("user_company").value;
             var userLevel = document.getElementById("user_level").value;
+            console.log(type);
             if ('new' == type) {
+            	console.log("aaa");
                 $.ajax({
                     type: 'post',
-                    url: '/UserAction',
-                    data: 'action=create&username=' + userName + '&userpwd=' + userPwd
-                        + '&useremail=' + userEmail + '&usertel=' + userTel + '&usercom=' + userCom + '&userlevel=' + userLevel,
+                    url: '/UserAction/Create',
+                    data : {
+						userName : userName,
+						userPassword : userPwd,
+						userEmail : userEmail,
+						userTelephone : userTel,
+						userCompany : userCom,
+						userLevel : userLevel
+					},
                     dataType: 'json',
                     success: function (array) {
+                    	console.log(array);
                         if (array.length == 1) {
                             var obj = array[0];
                             var username = decodeURI(obj.username);
@@ -73,9 +82,15 @@ $(document).ready(function () {
                 var userId = $('#platformcontent').attr('userid');
                 $.ajax({
                     type: 'post',
-                    url: '/UserAction',
-                    data: 'action=update&username=' + userName + '&useremail=' + userEmail + '&userid=' + userId
-                        + '&usertel=' + userTel + '&usercom=' + userCom + '&userlevel=' + userLevel,
+                    url: '/UserAction/Update',
+                    data: {
+						userName : userName,
+						changeId : changeId,
+						userEmail : userEmail,
+						userTelephone : userTel,
+						userCompany : userCom,
+						userLevel : userLevel
+					},
                     dataType: 'text',
                     success: function () {
                         var levelstr = "<a><span id='userlevel' level='1' class='glyphicon glyphicon-user' style='margin-right:7px'></span>平台用户</a>";
@@ -137,8 +152,8 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 async: false,
-                url: '/UserAction',
-                data: 'action=queryuser&username=' + userName,
+                url: '/UserAction/QueryUser',
+                data: {userName:userName},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {

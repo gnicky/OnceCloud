@@ -34,7 +34,7 @@
 
 			<c:if test="${user.userLevel==0}">
 				<button id="create" class="btn btn-primary"
-					url="${basePath}admin/create/createimage.jsp">
+					url="${basePath}image/create">
 					+&nbsp;添加映像</button>
 
 				<div class="btn-group">

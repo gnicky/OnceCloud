@@ -6,8 +6,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             async: false,
-            url: '/DatacenterAction',
-            data: 'action=getalllist',
+            url: '/DatacenterAction/AllList',
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {
@@ -71,8 +70,8 @@ $(document).ready(function () {
             if ('new' == type) {
                 $.ajax({
                     type: 'post',
-                    url: '/RackAction',
-                    data: 'action=create&rackname=' + rackName + '&rackdesc=' + rackDesc + '&dcid=' + dcid,
+                    url: '/RackAction/Create',
+                    data: {rackname:rackName, rackdesc:rackDesc, dcid:dcid},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {

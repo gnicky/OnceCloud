@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createhost.jsp">
+			<button id="create" class="btn btn-primary" url="${basePath}host/create">
 				+&nbsp;添加服务器
 			</button>
             <div class="btn-group">
@@ -19,7 +19,7 @@
 				<ul class="dropdown-menu">
 					<li><a class="btn-forbidden" id="add2pool"><span class="glyphicon glyphicon-tint"></span>添加到资源池</a></li>
 					<li><a class="btn-forbidden" id="remove4pool"><span class="glyphicon glyphicon-save"></span>从资源池移除</a></li>
-					<li><a class="btn-forbidden" id="update" url="${basePath}admin/create/createhost.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+					<li><a class="btn-forbidden" id="update" url="${basePath}host/create"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>

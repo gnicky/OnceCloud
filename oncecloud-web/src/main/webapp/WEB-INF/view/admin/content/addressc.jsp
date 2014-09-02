@@ -13,7 +13,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createaddress.jsp">
+			<button id="create" class="btn btn-primary" url="${basePath}address/create">
 				+&nbsp;地址池
 			</button>
             <div class="btn-group">

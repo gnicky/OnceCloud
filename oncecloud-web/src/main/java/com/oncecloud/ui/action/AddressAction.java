@@ -63,4 +63,23 @@ public class AddressAction {
 				ip, mac);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/AddDHCP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String addDHCP(HttpServletRequest request,
+			@RequestParam String prefix, @RequestParam int start, @RequestParam int end) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getAddressManager().addDHCPPool(user.getUserId(), prefix, start, end);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/AddEIP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String addEIP(HttpServletRequest request,
+			@RequestParam String prefix, @RequestParam int start, @RequestParam int end
+			, @RequestParam int eiptype, @RequestParam String eipif) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getAddressManager().addPublicIP(user.getUserId(), prefix, start, end, eiptype, eipif);
+		return ja.toString();
+	}
 }

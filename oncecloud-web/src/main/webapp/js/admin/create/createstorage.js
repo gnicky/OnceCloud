@@ -6,8 +6,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             async: false,
-            url: '/RackAction',
-            data: 'action=getalllist',
+            url: '/RackAction/AllList',
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {
@@ -96,8 +95,16 @@ $(document).ready(function () {
             if ('new' == type) {
                 $.ajax({
                     type: 'post',
-                    url: '/SRAction',
-                    data: 'action=add&srname=' + srName + '&srAddress=' + srAddress + '&srDesc=' + srDesc + '&srType=' + srType + '&srdir=' + srdir + '&rackid=' + rackid + '&rackname=' + rackname,
+                    url: '/StorageAction/Add',
+                    data : {
+						srName : srName,
+						srAddress : srAddress,
+						srDesc : srDesc,
+						srType : srType,
+						srDir : srdir,
+						rackId : rackid,
+						rackName : rackname
+					},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -125,8 +132,8 @@ $(document).ready(function () {
                 var srid = $('#modalcontent').attr('srid');
                 $.ajax({
                     type: 'post',
-                    url: '/SRAction',
-                    data: 'action=update&srid=' + srid + '&srname=' + srName + '&srDesc=' + srDesc + '&rackid=' + rackid,
+                    url: '/SRAction/Update',
+                    data: {srid:srid, srname:srName, srDesc:srDesc, rackid:rackid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[srid="' + srid + '"]');
@@ -199,8 +206,8 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 async: true,
-                url: '/SRAction',
-                data: 'action=queryaddress&address=' + ip,
+                url: '/SRAction/QueryAddress',
+                data: {address:ip},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {

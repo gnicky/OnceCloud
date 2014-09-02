@@ -50,14 +50,6 @@ public class HostAction extends HttpServlet {
 				JSONArray ja = this.getHostManager().createHost(hostName,
 						hostPwd, hostDesc, hostIp, rackUuid, rackName, userId);
 				out.print(ja.toString());
-			} else if (action.equals("getloadlist")) {
-				String pageStr = request.getParameter("page");
-				String limitStr = request.getParameter("limitnum");
-				String searchStr = request.getParameter("search");
-				String srUuid = request.getParameter("sruuid");
-				JSONArray ja = this.getHostManager().getHostLoadList(pageStr,
-						limitStr, searchStr, srUuid);
-				out.print(ja.toString());
 			} else if (action.equals("bind")) {
 				String srUuid = request.getParameter("sruuid");
 				String hostUuid = request.getParameter("hostuuid");

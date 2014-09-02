@@ -84,7 +84,7 @@ $('#tablebody').on('click', '.srdetail', function (event) {
     event.preventDefault();
     var hostuuid = $(this).parent().parent().attr('hostid');
     var hostname = $(this).parent().parent().attr('hostname');
-    var url = basePath + 'admin/modal/storageofhost.jsp';
+    var url = basePath + 'admin/modal/storageofhost';
     $('#ServerModalContainer').load(url, {
         "hostuuid": hostuuid,
         "hostname": hostname

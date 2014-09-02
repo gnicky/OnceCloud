@@ -46,4 +46,21 @@ public class VnetAction {
 		JSONObject jo = this.getVnetManager().getVnetDetail(uuid);
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/ListOfUser", method = { RequestMethod.GET })
+	@ResponseBody
+	public String vnetList(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONArray ja = this.getVnetManager().vnetGetAllList(userId);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/BindVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public void bindVm(HttpServletRequest request,@RequestParam String vnId,@RequestParam String vmUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVnetManager().vnetAddOnevm(vnId,vmUuid, userId, user.getUserAllocate());
+	}
 }

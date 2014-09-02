@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}admin/create/createpool.jsp">
+			<button id="create" class="btn btn-primary" url="${basePath}pool/create">
 				+&nbsp;新建资源池
 			</button>
             <div class="btn-group">
@@ -17,9 +17,8 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li style="display:none"><a class="btn-forbidden" id="load" url="${basePath}admin/modal/addtorack.jsp"><span class="glyphicon glyphicon-road"></span>添加到机架</a></li>
 					<li style="display:none"><a class="btn-forbidden" id="unload"><span class="glyphicon glyphicon-save"></span>从机架中移除</a></li>
-					<li><a class="btn-forbidden" id="update" url="${basePath}admin/create/createpool.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+					<li><a class="btn-forbidden" id="update" url="${basePath}pool/create"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 					<li><a class="btn-forbidden" id="consistency"><span class="glyphicon glyphicon-check""></span>校验一致性</a></li> 
 					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li> 
 				</ul>

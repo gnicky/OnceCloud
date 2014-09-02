@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent">
+<div class="content" id="platformcontent" userid="${userid}">
 	<div class="intro">
 		<h1>用户&nbsp;Users</h1>
 		<p class="lead" style="margin-top:10px">
@@ -9,7 +9,7 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="/user/create">
+			<button id="create" class="btn btn-primary" url="${basePath}user/create">
 				<span class="glyphicon glyphicon-user"></span>新建用户
 			</button>
             <div class="btn-group">

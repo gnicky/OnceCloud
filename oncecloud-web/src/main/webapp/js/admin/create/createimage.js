@@ -13,8 +13,15 @@ $(document).ready(function () {
             var imageDesc = $("#image_desc").val();
             $.ajax({
                 type: 'post',
-                url: '/ImageAction',
-                data: {action: 'create', imageUUId: imageUUId, imageName: imageName, imageServer: imageServer, imageOs: imageOs, imageDesc: imageDesc, imagePwd: imagePwd},
+                url: '/ImageAction/Create',
+                data : {
+					imageUUId : imageUUId,
+					imageName : imageName,
+					imageServer : imageServer,
+					imageOs : imageOs,
+					imageDesc : imageDesc,
+					imagePwd : imagePwd
+				},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length = 1) {
@@ -97,8 +104,7 @@ $(document).ready(function () {
     function getHostlist() {
         $.ajax({
             type: 'post',
-            url: '/PoolAction',
-            data: 'action=getallpool',
+            url: '/PoolAction/AllPool',
             dataType: 'json',
             success: function (array) {
                 if (array.length > 0) {

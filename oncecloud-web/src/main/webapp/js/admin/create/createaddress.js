@@ -27,8 +27,8 @@ $(document).ready(function () {
             if (type == "dhcp") {
                 $.ajax({
                     type: 'post',
-                    url: '/AddressAction',
-                    data: 'action=adddhcp&prefix=' + prefix + '&start=' + start_addr_d + '&end=' + end_addr_d,
+                    url: '/AddressAction/AddDHCP',
+                    data: {prefix:prefix, start:start_addr_d, end:end_addr_d},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -44,8 +44,14 @@ $(document).ready(function () {
             } else {
                 $.ajax({
                     type: 'post',
-                    url: '/AddressAction',
-                    data: 'action=addpublicip&prefix=' + prefix + '&start=' + start_addr_d + '&end=' + end_addr_d + '&eiptype=' + eiptype + '&eipif=' + eipif,
+                    url: '/AddressAction/AddEIP',
+                    data : {
+								prefix : prefix,
+								start : start_addr_d,
+								end : end_addr_d,
+								eiptype : eiptype,
+								eipif : eipif
+							},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -145,8 +151,8 @@ $(document).ready(function () {
         if (type == "dhcp") {
             $.ajax({
                 type: 'get',
-                url: '/AddressAction',
-                data: 'action=getdhcplist&page=' + page + '&limitnum=' + limitnum + '&search=' + search,
+                url: '/AddressAction/DHCPList',
+                data: {page:page, limit:limitnum, search:search},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length >= 1) {
@@ -200,8 +206,8 @@ $(document).ready(function () {
         } else if (type == "publicip") {
             $.ajax({
                 type: 'get',
-                url: '/AddressAction',
-                data: 'action=getpubliciplist&page=' + page + '&limitnum=' + limitnum + '&search=' + search,
+                url: '/AddressAction/EIPList',
+                data: {page:page, limit:limitnum, search:search},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length >= 1) {

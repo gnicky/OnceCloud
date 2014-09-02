@@ -5,8 +5,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             async: false,
-            url: '/RackAction',
-            data: 'action=getalllist',
+            url: '/RackAction/AllList',
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {
@@ -79,8 +78,15 @@ $(document).ready(function () {
             if ('new' == type) {
                 $.ajax({
                     type: 'post',
-                    url: '/HostAction',
-                    data: 'action=create&hostname=' + serverName + '&hostpwd=' + serverPwd + '&hostdesc=' + serverDesc + '&hostip=' + serverIp + '&rackUuid=' + rackUuid + '&rackName=' + rackName,
+                    url: '/HostAction/Create',
+                    data : {
+						hostname : serverName,
+						hostpwd : serverPwd,
+						hostdesc : serverDesc,
+						hostip : serverIp,
+						rackUuid : rackUuid,
+						rackName : rackName
+					},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -131,8 +137,8 @@ $(document).ready(function () {
                 var hostid = $('#modalcontent').attr('hostid');
                 $.ajax({
                     type: 'post',
-                    url: '/HostAction',
-                    data: 'action=update&hostid=' + hostid + '&hostname=' + serverName + '&hostdesc=' + serverDesc + '&rackUuid=' + rackUuid,
+                    url: '/HostAction/Update',
+                    data: {hostid:hostid, hostname:serverName, hostdesc:serverDesc,rackUuid:rackUuid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[hostid="' + hostid + '"]');
@@ -166,8 +172,8 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 async: true,
-                url: '/HostAction',
-                data: 'action=queryaddress&address=' + ip,
+                url: '/HostAction/QueryAddress',
+                data: {address:ip},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {

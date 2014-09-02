@@ -11,9 +11,24 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ModalControllerAdmin {
 
-	public ModelAndView addtopool(HttpServletRequest request, @RequestParam String uuidjsonstr) {
+	@RequestMapping(value = "/addtopool")
+	public ModelAndView addtopool(HttpServletRequest request,
+			@RequestParam String uuidjsonstr) {
 		request.setAttribute("uuidjsonstr", uuidjsonstr);
 		return new ModelAndView("admin/modal/addtopool");
 	}
-	
+
+	@RequestMapping(value = "/addtohost")
+	public ModelAndView addtohost(HttpServletRequest request) {
+		return new ModelAndView("admin/modal/addtopool");
+	}
+
+	@RequestMapping(value = "/storageofhost")
+	public ModelAndView storageofhost(HttpServletRequest request,
+			@RequestParam String hostuuid, @RequestParam String hostname) {
+		request.setAttribute("hostuuid", hostuuid);
+		request.setAttribute("hostname", hostname);
+		return new ModelAndView("admin/modal/storageofhost");
+	}
+
 }

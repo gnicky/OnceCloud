@@ -244,10 +244,8 @@ public class HostManager {
 		return qaArray;
 	}
 
-	public JSONArray getHostLoadList(String pageStr, String limitStr,
+	public JSONArray getHostLoadList(int page, int limit,
 			String searchStr, String srUuid) {
-		int page = Integer.parseInt(pageStr);
-		int limit = Integer.parseInt(limitStr);
 		int totalNum = this.getHostDAO().countAllHostList(searchStr);
 		JSONArray qaArray = new JSONArray();
 		List<OCHost> hostList = this.getHostDAO().getOnePageLoadHostList(page,

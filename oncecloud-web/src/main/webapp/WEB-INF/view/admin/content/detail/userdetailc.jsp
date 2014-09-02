@@ -24,7 +24,7 @@
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
-							<li><a id="modify" url="${basePath}admin/create/createuser.jsp"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
+							<li><a id="modify" url="${basePath}user/create"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 						</ul>
 					</div>
 				</h3>

@@ -6,8 +6,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             async: false,
-            url: '/DatacenterAction',
-            data: 'action=getalllist',
+            url: '/DatacenterAction/AllList',
             dataType: 'json',
             success: function (array) {
                 if (array.length >= 1) {
@@ -70,8 +69,8 @@ $(document).ready(function () {
             if ('new' == type) {
                 $.ajax({
                     type: 'post',
-                    url: '/PoolAction',
-                    data: 'action=create&poolname=' + poolName + '&pooldesc=' + poolDesc + '&dcuuid=' + dcuuid + '&dcname=' + dcname,
+                    url: '/PoolAction/Create',
+                    data: {poolname:poolName, pooldesc:poolDesc, dcuuid:dcuuid, dcname:dcname},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -98,8 +97,8 @@ $(document).ready(function () {
                 var poolid = $('#modalcontent').attr('poolid');
                 $.ajax({
                     type: 'post',
-                    url: '/PoolAction',
-                    data: 'action=update&pooluuid=' + poolid + '&poolname=' + poolName + '&pooldesc=' + poolDesc + '&dcuuid=' + dcuuid,
+                    url: '/PoolAction/Update',
+                    data: {pooluuid:poolid, poolname:poolName, pooldesc:poolDesc,dcuuid:dcuuid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[poolid="' + poolid + '"]');

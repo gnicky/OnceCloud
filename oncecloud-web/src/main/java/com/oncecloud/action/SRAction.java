@@ -41,34 +41,12 @@ public class SRAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("add")) {
-				String srname = request.getParameter("srname");
-				String srAddress = request.getParameter("srAddress");
-				String srDesc = request.getParameter("srDesc");
-				String srType = request.getParameter("srType");
-				String srDir = request.getParameter("srdir");
-				String rackId = request.getParameter("rackid");
-				String rackName = request.getParameter("rackname");
-				JSONArray ja = this.getSrManager().addStorage(userId, srname,
-						srAddress, srDesc, srType, srDir, rackId, rackName);
-				out.print(ja.toString());
-			} else if (action.equals("load2server")) {
+			if (action.equals("load2server")) {
 				String srUuid = request.getParameter("sruuid");
 				String hostUuid = request.getParameter("hostuuid");
 				JSONArray ja = this.getSrManager().load2Server(userId, srUuid,
 						hostUuid);
 				out.print(ja.toString());
-			} else if (action.equals("queryaddress")) {
-				String address = request.getParameter("address");
-				JSONArray ja = this.getSrManager().getStorageByAddress(address);
-				out.print(ja.toString());
-			} else if (action.equals("update")) {
-				String srId = request.getParameter("srid");
-				String srName = request.getParameter("srname");
-				String srDesc = request.getParameter("srDesc");
-				String rackId = request.getParameter("rackid");
-				this.getSrManager().updateStorage(userId, srId, srName, srDesc,
-						rackId);
 			}
 		}
 	}
