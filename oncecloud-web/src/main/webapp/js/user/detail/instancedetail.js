@@ -1104,8 +1104,7 @@ function changeNet() {
     var tablelist = "";
     $.ajax({
         type: 'post',
-        url: '/VnetAction',
-        data: 'action=getalllist',
+        url: '/VnetAction/ListOfUser',
         dataType: 'json',
         success: function (array) {
             if (array.length > 0) {
@@ -1138,10 +1137,10 @@ function changeNet() {
 
                             $.ajax({
                                 type: 'get',
-                                url: '/VnetAction',
-                                data: 'action=addonevm&vnId=' + vnetuuid + '&vmuuid=' + vmuuid,
+                                url: '/VnetAction/BindVM',
+                                data: {vnId:vnetuuid,vmUuid:vmuuid},
                                 dataType: 'text',
-                                success: function (response) {
+                                complete: function () {
                                     getInstanceBasicList();
                                 }
                             });
@@ -1222,8 +1221,7 @@ function bindpublicip(bdtype) {
     var tablelist = "";
     $.ajax({
         type: 'post',
-        url: '/EipAction',
-        data: 'action=getableeips',
+        url: '/EipAction/AvailableIPs',
         dataType: 'json',
         success: function (array) {
             if (array.length > 0) {
@@ -1258,8 +1256,8 @@ function bindpublicip(bdtype) {
                             if (bdtype == "vm") {
                                 $.ajax({
                                     type: 'get',
-                                    url: '/EipAction',
-                                    data: 'action=bind&vmuuid=' + vmuuid + '&eipIp=' + eipIp + '&bindtype=' + bdtype,
+                                    url: '/EipAction/Bind',
+                                    data:{vmUuid:vmuuid,eipIp:eipIp,bindType:bdtype},
                                     dataType: 'json',
                                     success: function (obj) {
                                         if (obj.result == true) {
@@ -1276,8 +1274,8 @@ function bindpublicip(bdtype) {
                             } else if (bdtype == "rt") {
                                 $.ajax({
                                     type: 'get',
-                                    url: '/EipAction',
-                                    data: 'action=bind&vmuuid=' + router + '&eipIp=' + eipIp + '&bindtype=' + bdtype,
+                                    url: '/EipAction/Bind',
+                                    data:{vmUuid:router,eipIp:eipIp,bindType:bdtype},
                                     dataType: 'json',
                                     success: function (obj) {
                                         if (obj.result == true) {
@@ -1373,8 +1371,8 @@ function unbingpublicip(bdtype) {
     }
     $.ajax({
         type: 'get',
-        url: '/EipAction',
-        data: "action=unbind&eipIp=" + eipIp + "&vmuuid=" + vmuuid + '&bindtype=' + bdtype,
+        url: '/EipAction/UnBind',
+        data: {eipIp:eipIp,vmUuid:vmuuid,bindType:bdtype},
         dataType: 'json',
         success: function (obj) {
             if (bdtype == "vm") {

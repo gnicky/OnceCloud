@@ -192,14 +192,14 @@
 	        <a class="btn btn-forbidden" href="#">
 	        <span class="glyphicon glyphicon-cog"></span>
 	        <span class="text">更改配置</span></a> -->
-            <a id="createimage" class="btn" href="#" url="${basePath}instance/createimage">
+            <a id="createimage" class="btn" href="#" url="${basePath}image/clone">
             <span class="glyphicon glyphicon-record">
             </span>
             <span class="text">
             制作映像
             </span>
             </a>
-            <a id="backup" class="btn" href="#" url="${basePath}user/create/createsnapshot.jsp">
+            <a id="backup" class="btn" href="#" url="${basePath}snapshot/create">
             <span class="glyphicon glyphicon-camera">
             </span>
             <span class="text">

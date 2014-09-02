@@ -40,7 +40,7 @@ public class SnapshotAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/quota", method = { RequestMethod.GET,
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request, @RequestParam int count) {
@@ -50,7 +50,7 @@ public class SnapshotAction {
 		return result;
 	}
 
-	@RequestMapping(value = "/create", method = { RequestMethod.GET,
+	@RequestMapping(value = "/Create", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String create(HttpServletRequest request,
@@ -64,7 +64,7 @@ public class SnapshotAction {
 		return jsonobect.toString();
 	}
 
-	@RequestMapping(value = "/detaillist", method = { RequestMethod.GET,
+	@RequestMapping(value = "/DetailList", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String detaillist(HttpServletRequest request,
@@ -75,7 +75,7 @@ public class SnapshotAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/getresource", method = { RequestMethod.GET,
+	@RequestMapping(value = "/GetResource", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
 	public String getresource(HttpServletRequest request,
