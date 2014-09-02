@@ -36,11 +36,12 @@ public class FeeManager {
 	 * @param type
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public JSONArray getFeeList(int userId, int page, int limit, String search,
 			String type) {
 		JSONArray ja = new JSONArray();
 		int totalNum = 0;
-		List<Object> feeObjList = new ArrayList<Object>();
+		List feeObjList = new ArrayList<Object>();
 		if (type.equals("instance")) {
 			totalNum = this.getFeeDAO().countAllFeeVMList(search, userId);
 			feeObjList = this.getFeeDAO().getOnePageFeeVMList(page, limit,
@@ -77,11 +78,12 @@ public class FeeManager {
 		return ja;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public JSONArray feeGetDetailList(int page, int limit, String search,
 			String type, String uuid, User user) {
 		JSONArray ja = new JSONArray();
 		int totalNum = 0;
-		List<Object> feeObjList = new ArrayList<Object>();
+		List feeObjList = new ArrayList<Object>();
 		if (type.equals("instance")) {
 			totalNum = this.getFeeDAO().countFeeVMDetailList(user.getUserId(),
 					uuid);
@@ -158,13 +160,14 @@ public class FeeManager {
 	 * @param month
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public JSONArray getQueryList(int userId, int page, int limit,
 			String search, String type, String month) {
 		JSONArray ja = new JSONArray();
 		Date thisMonth = Utilities.String2Month(month);
 		Date nextMonth = Utilities.AddMonthForDate(thisMonth, 1);
 		int totalNum = 0;
-		List<Object> feeObjList = new ArrayList<Object>();
+		List feeObjList = new ArrayList<Object>();
 		if (type.equals("instance")) {
 			totalNum = this.getFeeDAO().countFeeVMDetailList(userId, thisMonth,
 					nextMonth);
