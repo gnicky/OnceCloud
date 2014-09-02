@@ -396,13 +396,13 @@ public class SnapshotManager {
 		JSONObject jo = new JSONObject();
 		Date startTime = new Date();
 		if (resourceType.equals("instance")) {
-			if (this.getVmDAO().isExist(resourceUuid)) {
+			if (this.getVmDAO().getAliveVM(resourceUuid) != null) {
 				try {
 					Connection c = this.getConstant().getConnection(userId);
 					VM vm = Types.toVM(resourceUuid);
-					if (this.getVmDAO().getVmPowerState(resourceUuid) == 1) {
+					if (this.getVmDAO().getVM(resourceUuid).getVmPower() == 1) {
 						vm.hardShutdown(c);
-						this.getVmDAO().setVMPowerStatus(resourceUuid,
+						this.getVmDAO().updatePowerStatus(resourceUuid,
 								VMManager.POWER_HALTED);
 					}
 					if (vm.rollback(c, snapshotId)) {
@@ -444,10 +444,10 @@ public class SnapshotManager {
 					String dependenVm = volume.getVolumeDependency();
 					try {
 						Connection c = this.getConstant().getConnection(userId);
-						if (this.getVmDAO().getVmPowerState(dependenVm) == 1) {
+						if (this.getVmDAO().getVM(resourceUuid).getVmPower() == 1) {
 							VM vm = Types.toVM(dependenVm);
 							vm.hardShutdown(c);
-							this.getVmDAO().setVMPowerStatus(dependenVm,
+							this.getVmDAO().updatePowerStatus(dependenVm,
 									VMManager.POWER_HALTED);
 						}
 						VDI vdi = Types.toVDI(resourceUuid);

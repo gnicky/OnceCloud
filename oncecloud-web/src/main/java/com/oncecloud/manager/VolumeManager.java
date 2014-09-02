@@ -115,8 +115,8 @@ public class VolumeManager {
 	public JSONArray getVolumeList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getVolumeDAO().countAllVolumeList(userId, search);
-		List<Volume> volumeList = this.getVolumeDAO().getOnePageVolumeList(
+		int totalNum = this.getVolumeDAO().countVolumes(userId, search);
+		List<Volume> volumeList = this.getVolumeDAO().getOnePageVolumes(
 				userId, page, limit, search);
 		ja.put(totalNum);
 		if (volumeList != null) {
@@ -169,7 +169,7 @@ public class VolumeManager {
 				Connection c = this.getConstant().getConnection(userId);
 				VDI vdi = VDI.createDataDisk(c, volUuid, (long) volSize);
 				if (vdi != null) {
-					this.getVolumeDAO().setVolumeStatus(volUuid,
+					this.getVolumeDAO().updateVolumeStatus(volUuid,
 							VolumeStatus.STATUS_FREE);
 					Calendar calendar = Calendar.getInstance();
 					calendar.setTime(startTime);
@@ -224,7 +224,7 @@ public class VolumeManager {
 		Connection c = null;
 		try {
 			c = this.getConstant().getConnection(userId);
-			boolean preDelete = this.getVolumeDAO().setVolumeStatus(volUuid,
+			boolean preDelete = this.getVolumeDAO().updateVolumeStatus(volUuid,
 					VMManager.POWER_DESTROY);
 			if (preDelete) {
 				boolean deleteResult = VDI.deleteDataDisk(c, volUuid);
@@ -279,7 +279,7 @@ public class VolumeManager {
 		String vmName = null;
 		try {
 			c = this.getConstant().getConnection(userId);
-			boolean preBind = this.getVolumeDAO().setVolumeStatus(volUuid,
+			boolean preBind = this.getVolumeDAO().updateVolumeStatus(volUuid,
 					VolumeStatus.STATUS_MOUNTING);
 			if (preBind) {
 				boolean bindResult = VM.createDataVBD(c, vmUuid, volUuid);
@@ -293,7 +293,7 @@ public class VolumeManager {
 			e.printStackTrace();
 		} finally {
 			if (result == false) {
-				this.getVolumeDAO().setVolumeStatus(volUuid,
+				this.getVolumeDAO().updateVolumeStatus(volUuid,
 						VolumeStatus.STATUS_FREE);
 			}
 		}
@@ -335,7 +335,7 @@ public class VolumeManager {
 		Connection c = null;
 		try {
 			c = this.getConstant().getConnection(userId);
-			boolean preUnbind = this.getVolumeDAO().setVolumeStatus(volUuid,
+			boolean preUnbind = this.getVolumeDAO().updateVolumeStatus(volUuid,
 					VolumeStatus.STATUS_UNMOUNTING);
 			if (preUnbind) {
 				String vmUuid = this.getVolumeDAO().getVolume(volUuid)
@@ -350,7 +350,7 @@ public class VolumeManager {
 			e.printStackTrace();
 		} finally {
 			if (result == false) {
-				this.getVolumeDAO().setVolumeStatus(volUuid,
+				this.getVolumeDAO().updateVolumeStatus(volUuid,
 						VolumeStatus.STATUS_MOUNTED);
 			}
 		}

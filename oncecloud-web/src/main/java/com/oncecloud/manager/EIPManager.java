@@ -241,7 +241,7 @@ public class EIPManager {
 						switch (eip.getDepenType()) {
 						case 0:
 							jo.put("depenName", Utilities.encodeText(this
-									.getVmDAO().getVmName(vmuuid)));
+									.getVmDAO().getVM(vmuuid).getVmName()));
 							break;
 						case 1:
 							jo.put("depenName", Utilities.encodeText(this

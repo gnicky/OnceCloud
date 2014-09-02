@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +77,59 @@ public class UserDAO {
 	}
 
 	/**
-	 * 获取用户列表
+	 * 获取用户
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public User getUser(int userId) {
+		User user = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from User where userId = :userId");
+			query.setInteger("userId", userId);
+			user = (User) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return user;
+	}
+
+	/**
+	 * 获取用户（通过用户名）
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	public User getUser(String userName) {
+		User user = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Query query = session
+					.createQuery("from User where userName = :userName");
+			query.setString("userName", userName);
+			user = (User) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return user;
+	}
+
+	/**
+	 * 获取一页用户列表
 	 * 
 	 * @param page
 	 * @param limit
@@ -110,6 +161,34 @@ public class UserDAO {
 	}
 
 	/**
+	 * 获取全部用户列表
+	 * 
+	 * @param searchStr
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<User> getCompanyUserList(String search) {
+		List<User> userList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from User where userName like :search "
+					+ "and userLevel != 0 and userStatus = 1 order by userDate desc";
+			Query query = session.createQuery(queryString);
+			query.setString("search", "%" + search + "%");
+			userList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return userList;
+	}
+
+	/**
 	 * 获取用户总数
 	 * 
 	 * @param search
@@ -124,7 +203,7 @@ public class UserDAO {
 			String queryString = "select count(*) from User where userName like :search and userId != 1 and userStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
+			count = (Integer) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -135,82 +214,20 @@ public class UserDAO {
 		return count;
 	}
 
-	@SuppressWarnings("unchecked")
-	public User getUser(String userName) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			User user = null;
-			Query query = session.createQuery("from User where userName = '"
-					+ userName + "'");
-			List<User> userList = query.list();
-			if (userList.size() == 1) {
-				user = userList.get(0);
-			}
-			session.getTransaction().commit();
-			return user;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public User getUser(int userId) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			User user = null;
-			Query query = session
-					.createQuery("from User where userId = :userId");
-			query.setInteger("userId", userId);
-			List<User> userList = query.list();
-			if (userList.size() == 1) {
-				user = userList.get(0);
-			}
-			session.getTransaction().commit();
-			return user;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public boolean disableUser(int userId) {
-		User delUser = getUser(userId);
-		boolean result = false;
-		if (delUser != null) {
-			delUser.setUserStatus(0);
-			Session session = null;
-			Transaction tx = null;
-			try {
-				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
-				session.update(delUser);
-				tx.commit();
-				result = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				if (session != null) {
-					session.getTransaction().rollback();
-				}
-			}
-		}
-		return result;
-	}
-
+	/**
+	 * 添加用户
+	 * 
+	 * @param userName
+	 * @param userPass
+	 * @param userMail
+	 * @param userPhone
+	 * @param userCompany
+	 * @param userLevel
+	 * @param userDate
+	 */
 	public void insertUser(String userName, String userPass, String userMail,
 			String userPhone, String userCompany, int userLevel, Date userDate) {
 		Session session = null;
-		Transaction tx = null;
 		try {
 			User user = new User();
 			user.setUserName(userName);
@@ -225,12 +242,12 @@ public class UserDAO {
 			String allocatePool = this.getPoolDAO().getRandomPool();
 			user.setUserAllocate(allocatePool);
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.save(user);
 			int userId = user.getUserId();
 			this.getQuotaDAO().initQuotaNoTransaction(userId);
-			this.getFirewallDAO().createDefaultFirewall(session, userId);
-			tx.commit();
+			this.getFirewallDAO().createDefaultFirewallNoTransaction(userId);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -239,123 +256,150 @@ public class UserDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public void updatePwd(String userName, String newPwd) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("from User where userName = '"
-					+ userName + "'");
-			List<User> userList = query.list();
-			if (userList.size() == 1) {
-				User user = userList.get(0);
-				user.setUserPass(this.getHashHelper().md5Hash(newPwd));
-				session.update(user);
-				tx.commit();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	public boolean applyVoucher(int userId, int voucher) {
+	/**
+	 * 禁用用户
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public boolean disableUser(int userId) {
 		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			User user = this.getUser(userId);
-			if (user.getUserLevel() == 2) {
-				user.setUserVoucher(voucher);
-				user.setUserLevel(1);
-				session.update(user);
-				tx.commit();
+		User delUser = getUser(userId);
+		if (delUser != null) {
+			delUser.setUserStatus(0);
+			Session session = null;
+			try {
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(delUser);
+				session.getTransaction().commit();
 				result = true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return result;
 	}
 
+	/**
+	 * 申请代金券
+	 * 
+	 * @param userId
+	 * @param voucher
+	 * @return
+	 */
+	public boolean applyVoucher(int userId, int voucher) {
+		boolean result = false;
+		User user = this.getUser(userId);
+		if (user != null && user.getUserLevel() == 2) {
+			Session session = null;
+			try {
+				user.setUserVoucher(voucher);
+				user.setUserLevel(1);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(user);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 确认代金券
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public boolean confirmVoucher(int userId) {
 		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			User user = this.getUser(userId);
-			if (user.getUserLevel() == 1) {
+		User user = this.getUser(userId);
+		if (user.getUserLevel() == 1) {
+			Session session = null;
+			try {
 				int voucher = user.getUserVoucher();
 				user.setUserBalance(user.getUserBalance()
 						+ user.getUserVoucher());
 				user.setUserVoucher(null);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
 				Date date = new Date();
 				String uuid = UUID.randomUUID().toString();
 				session.update(user);
-				tx.commit();
+				session.getTransaction().commit();
 				this.getChargeDAO().createChargeRecord(uuid, (double) voucher,
 						1, date, userId, 1);
 				result = true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean denyVoucher(int userid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("from User where userId = '"
-					+ userid + "'");
-			List<User> userList = query.list();
-			if (userList.size() == 1) {
-				User user = userList.get(0);
-				if (user.getUserLevel() == 1) {
-					user.setUserVoucher(null);
-					user.setUserLevel(2);
-					session.update(user);
-					tx.commit();
-					return true;
+	/**
+	 * 拒绝代金券
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	public boolean denyVoucher(int userId) {
+		boolean result = false;
+		User user = this.getUser(userId);
+		if (user != null && user.getUserLevel() == 1) {
+			Session session = null;
+			try {
+				user.setUserVoucher(null);
+				user.setUserLevel(2);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(user);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
 				}
 			}
-			tx.commit();
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return false;
 		}
+		return result;
 	}
 
+	/**
+	 * 更新用户
+	 * 
+	 * @param userid
+	 * @param userName
+	 * @param userMail
+	 * @param userPhone
+	 * @param userCompany
+	 * @param userLevel
+	 * @return
+	 */
 	public boolean updateUser(Integer userid, String userName, String userMail,
 			String userPhone, String userCompany, int userLevel) {
 		boolean result = false;
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			Query query = session
-					.createQuery("update User set userName=:name, userMail=:mail,userPhone=:phone,userCompany=:com,userLevel=:level where userId =:id");
+					.createQuery("update User set userName= :name, userMail= :mail, "
+							+ "userPhone = :phone, userCompany = :com, userLevel = :level "
+							+ "where userId = :id");
 			query.setString("name", userName);
 			query.setString("mail", userMail);
 			query.setString("phone", userPhone);
@@ -363,7 +407,7 @@ public class UserDAO {
 			query.setInteger("level", userLevel);
 			query.setInteger("id", userid);
 			query.executeUpdate();
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -374,49 +418,31 @@ public class UserDAO {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean updateBalance(int userid, int bill) {
-		Session session = this.getSessionHelper().getMainSession();
-		Transaction tx = session.beginTransaction();
-		Query query = session.createQuery("from User where userId = '" + userid
-				+ "'");
-		List<User> userList = query.list();
-		if (userList.size() == 1) {
-			User user = userList.get(0);
-			if (user.getUserLevel() == 1) {
+	/**
+	 * 更新用户余额
+	 * 
+	 * @param userid
+	 * @param bill
+	 * @return
+	 */
+	public boolean updateBalance(int userId, int bill) {
+		boolean result = false;
+		User user = this.getUser(userId);
+		if (user != null) {
+			Session session = null;
+			try {
 				user.setUserBalance(user.getUserBalance() + bill);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
 				session.update(user);
-				tx.commit();
-				session.close();
-				return true;
-			} else {
-				session.close();
-				return false;
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
-		session.close();
-		return false;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<User> getCompanyUserList(String searchStr) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from User where userName like '%"
-					+ searchStr
-					+ "%' and userLevel != 0 and userStatus = 1 order by userDate desc";
-			Query query = session.createQuery(queryString);
-			List<User> userList = query.list();
-			session.getTransaction().commit();
-			return userList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
+		return result;
 	}
 }

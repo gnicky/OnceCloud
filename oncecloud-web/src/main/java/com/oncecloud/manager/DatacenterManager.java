@@ -333,9 +333,8 @@ public class DatacenterManager {
 			for (OCPool pool : poolList) {
 				JSONObject tpool = new JSONObject();
 				tpool.put("poolobj", pool.toJsonString());
-
 				List<Storage> srlist = this.getStorageDAO()
-						.getStorageListByHostId(pool.getPoolMaster());
+						.getStorageListOfHost(pool.getPoolMaster());
 				JSONArray jsonArrayStorage = new JSONArray();
 				if (srlist != null) {
 					for (Storage sr : srlist)
@@ -352,7 +351,7 @@ public class DatacenterManager {
 					thost.put("imagecount",
 							this.getImageDAO().countByHost(host.getHostUuid()));
 					thost.put("vmcount",
-							this.getVmDAO().countByHost(host.getHostUuid()));
+							this.getVmDAO().countVMsOfHost(host.getHostUuid()));
 					jsonArrayServer.put(thost);
 				}
 
@@ -399,7 +398,7 @@ public class DatacenterManager {
 					thost.put("imagecount",
 							this.getImageDAO().countByHost(host.getHostUuid()));
 					thost.put("vmcount",
-							this.getVmDAO().countByHost(host.getHostUuid()));
+							this.getVmDAO().countVMsOfHost(host.getHostUuid()));
 					jsonArrayServer.put(thost);
 				}
 

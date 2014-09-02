@@ -189,7 +189,7 @@ public class VnetManager {
 
 	public JSONArray getVMs(String vnUuid) {
 		JSONArray ja = new JSONArray();
-		List<OCVM> ocvmList = this.getVmDAO().getVxnetsList(vnUuid);
+		List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(vnUuid);
 		if (ocvmList != null) {
 			for (OCVM ocvm : ocvmList) {
 				JSONObject jovm = new JSONObject();
@@ -256,7 +256,7 @@ public class VnetManager {
 	public DeleteVnetResult deleteVnet(int userId, String vnetUuid) {
 		Date startTime = new Date();
 		DeleteVnetResult result = DeleteVnetResult.Failed;
-		int using = this.getVmDAO().countVMOfVnet(vnetUuid);
+		int using = this.getVmDAO().countVMsOfVnet(vnetUuid);
 		if (using == 0) {
 			boolean ret = this.getVnetDAO().removeVnet(userId, vnetUuid);
 			result = ret ? DeleteVnetResult.Success : result;
@@ -304,8 +304,8 @@ public class VnetManager {
 	 */
 	public JSONArray getVnetList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
-		int total = this.getVnetDAO().countAllVnetList(userId, search);
-		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnetList(userId,
+		int total = this.getVnetDAO().countVnets(userId, search);
+		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnets(userId,
 				page, limit, search);
 		ja.put(total);
 		if (vnetList != null) {
@@ -433,7 +433,7 @@ public class VnetManager {
 	}
 
 	public void vnetUnlink(String vnetuuid, int userId) {
-		boolean result = this.getVnetDAO().unlink(vnetuuid);
+		boolean result = this.getVnetDAO().unLinkToRouter(vnetuuid);
 		// push message
 		if (result) {
 			this.getMessagePush().pushMessage(userId,
@@ -457,7 +457,7 @@ public class VnetManager {
 
 	public JSONArray vnetGetAllList(int userId) {
 		JSONArray ja = new JSONArray();
-		List<Vnet> vnetList = this.getVnetDAO().getallVnetList(userId);
+		List<Vnet> vnetList = this.getVnetDAO().getVnetsOfUser(userId);
 		if (vnetList != null) {
 			for (Vnet vnet : vnetList) {
 				JSONObject jo = new JSONObject();

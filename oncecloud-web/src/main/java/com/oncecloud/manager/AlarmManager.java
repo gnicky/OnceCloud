@@ -146,9 +146,9 @@ public class AlarmManager {
 		int totalNum = 0;
 		JSONArray ja = new JSONArray();
 		if (type == 0) {
-			list = this.getVmDAO().getOnePageVmListAlarm(page, limit, search,
+			list = this.getVmDAO().getOnePageVMsWithoutAlarm(page, limit, search,
 					uid);
-			totalNum = this.getVmDAO().countAllVMListAlarm(search, uid);
+			totalNum = this.getVmDAO().countVMsWithoutAlarm(search, uid);
 			ja.put(totalNum);
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
@@ -180,9 +180,10 @@ public class AlarmManager {
 				}
 			}
 		} else if (type == 2) {
-			list = this.getRouterDAO().getOnePageRouterListAlarm(page, limit,
-					search, uid);
-			totalNum = this.getRouterDAO().countAllRouterListAlarm(search, uid);
+			list = this.getRouterDAO().getOnePageRoutersWithoutAlarm(page,
+					limit, search, uid);
+			totalNum = this.getRouterDAO().countRoutersWithoutAlarm(search,
+					uid);
 			ja.put(totalNum);
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
@@ -261,7 +262,7 @@ public class AlarmManager {
 				: Utilities.encodeText(alarm.getAlarmDesc()));
 		JSONArray ja = new JSONArray();
 		if (type == 0) {
-			for (OCVM ocvm : this.getVmDAO().getAllListAlarm(uid, alarmUuid)) {
+			for (OCVM ocvm : this.getVmDAO().getVMsOfAlarm(uid, alarmUuid)) {
 				JSONObject js = new JSONObject();
 				js.put("rsName", Utilities.encodeText(ocvm.getVmName()));
 				js.put("rsUuid", ocvm.getVmUuid());
@@ -275,7 +276,7 @@ public class AlarmManager {
 				ja.put(js);
 			}
 		} else if (type == 2) {
-			for (Router router : this.getRouterDAO().getAllListAlarm(uid,
+			for (Router router : this.getRouterDAO().getRoutersOfAlarm(uid,
 					alarmUuid)) {
 				JSONObject js = new JSONObject();
 				js.put("rsName", Utilities.encodeText(router.getRouterName()));
@@ -315,6 +316,7 @@ public class AlarmManager {
 
 	/**
 	 * 获取监控警告列表
+	 * 
 	 * @param userId
 	 * @param page
 	 * @param limit

@@ -29,61 +29,28 @@ public class AlarmDAO {
 	}
 
 	public Alarm getAlarm(String alarmUuid) {
+		Alarm alarm = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Alarm.class).add(
 					Restrictions.eq("alarmUuid", alarmUuid));
-			Alarm alarm = (Alarm) criteria.uniqueResult();
+			alarm = (Alarm) criteria.uniqueResult();
 			session.getTransaction().commit();
-			return alarm;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
-	}
-
-	public boolean updateAlarm(Alarm alarm) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.update(alarm);
-			session.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
-	}
-
-	public boolean removeAlarm(Alarm alarm) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			session.delete(alarm);
-			session.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return false;
-		}
+		return alarm;
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Alarm> getOnePageList(int userId, int pageIndex,
 			int itemPerPage, String keyword) {
+		List<Alarm> alarmList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -96,19 +63,19 @@ public class AlarmDAO {
 							MatchMode.ANYWHERE))
 					.addOrder(Order.desc("alarmDate"))
 					.setFirstResult(startPosition).setMaxResults(itemPerPage);
-			List<Alarm> list = criteria.list();
+			alarmList = criteria.list();
 			session.getTransaction().commit();
-			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
 		}
+		return alarmList;
 	}
 
 	public int countAlarmList(int userId, String keyword) {
+		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -119,21 +86,21 @@ public class AlarmDAO {
 					.add(Restrictions.like("alarmName", keyword,
 							MatchMode.ANYWHERE))
 					.setProjection(Projections.rowCount());
-			int count = ((Number) criteria.uniqueResult()).intValue();
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
-			return count;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return 0;
 		}
+		return count;
 	}
 
 	public boolean addAlarm(String alarmUuid, String alarmName,
 			Integer alarmType, Integer alarmIsalarm, Integer alarmTouch,
 			Integer alarmPeriod, int userId) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -143,18 +110,37 @@ public class AlarmDAO {
 					alarmIsalarm, alarmTouch, alarmPeriod, userId);
 			session.save(alarm);
 			session.getTransaction().commit();
-			return true;
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
+	}
+
+	public boolean updateAlarm(Alarm alarm) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.update(alarm);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
 	}
 
 	public boolean updateName(String alarmUuid, String newName,
 			String description) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -166,19 +152,20 @@ public class AlarmDAO {
 				alarm.setAlarmName(newName);
 				alarm.setAlarmDesc(description);
 				session.update(alarm);
+				result = true;
 			}
 			session.getTransaction().commit();
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
 	}
 
 	public boolean updatePeriod(String alarmUuid, int alarmPeriod) {
+		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
@@ -189,15 +176,33 @@ public class AlarmDAO {
 			if (alarm != null) {
 				alarm.setAlarmPeriod(alarmPeriod);
 				session.update(alarm);
+				result = true;
 			}
 			session.getTransaction().commit();
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return false;
 		}
+		return result;
+	}
+
+	public boolean removeAlarm(Alarm alarm) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.delete(alarm);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
 	}
 }
