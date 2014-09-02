@@ -29,7 +29,7 @@
                     return true;
             }
         }
-    }
+    };
     $('#tplpage').bootstrapPaginator(options);
     getImageList(1, 8, "", "system");
 
@@ -52,7 +52,7 @@
                     }
                     options = {
                         totalPages: totalp
-                    }
+                    };
                     $('#tplpage').bootstrapPaginator(options);
                     modalPageUpdate(page, totalp);
                     for (var i = 1; i < array.length; i++) {
@@ -244,11 +244,13 @@
     }
 
     function priceDisplayUpdate() {
-        var selected = $('.cpu').find('.selected');
-        var cpuCore = selected.get(0).getAttribute("core");
-        selected = $('.memory').find('.selected');
-        var memoryCapacity = selected.get(0).getAttribute("capacity");
-        var vmCount = document.getElementById("count").value;
+        var cpuCore = $('.cpu').find('.selected').attr("core");
+        var memoryCapacity = $('.memory').find('.selected').attr("capacity");
+        var vmCount = $('#count').val();
+        updatePrice(cpuCore, memoryCapacity, vmCount);
+    }
+    
+    function updatePrice(cpuCore, memoryCapacity, vmCount) {
     }
 
     $('.types').on('click', '.types-item', function (event) {
