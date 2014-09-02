@@ -33,7 +33,6 @@ public class CommonInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		
 		String requestUrl = request.getRequestURI();
-		System.out.println("hello");
 		if(uncheckUrls.contains(requestUrl)){ 
 			return true; 
 		} else { 
