@@ -31,72 +31,51 @@ public class HostAction {
 	@RequestMapping(value = "/ALLList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String allList(HttpServletRequest request) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getHostManager().getAllList();
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getHostManager().getAllList();
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/HostList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String hostList(HttpServletRequest request, ListModel list) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getHostManager().getHostList(list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getHostManager().getHostList(list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public String delete(HttpServletRequest request, @RequestParam("hostid") String hostId, @RequestParam("hostname") String hostName) {
+	public String delete(HttpServletRequest request,
+			@RequestParam("hostid") String hostId,
+			@RequestParam("hostname") String hostName) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getHostManager().deleteAction(hostId, hostName, user.getUserId());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getHostManager().deleteAction(hostId, hostName,
+				user.getUserId());
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/Issamesr", method = { RequestMethod.POST })
 	@ResponseBody
-	public String isSameSR(HttpServletRequest request,@RequestParam("uuidjsonstr") String uuidJsonStr) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getHostManager().isSameSr(uuidJsonStr);
-			return ja.toString();
-		} else {
-			return "";
-		}
+	public String isSameSR(HttpServletRequest request,
+			@RequestParam("uuidjsonstr") String uuidJsonStr) {
+		JSONArray ja = this.getHostManager().isSameSr(uuidJsonStr);
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/RemoveFromPool", method = { RequestMethod.POST })
 	@ResponseBody
-	public String removeFromPool(HttpServletRequest request,@RequestParam("hostuuid") String hostuuid) {
+	public String removeFromPool(HttpServletRequest request,
+			@RequestParam("hostuuid") String hostuuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getHostManager().r4Pool(hostuuid, user.getUserId());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getHostManager().r4Pool(hostuuid, user.getUserId());
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/OneHost", method = { RequestMethod.GET })
 	@ResponseBody
-	public String oneHost(HttpServletRequest request,@RequestParam("hostUuid") String hostUuid) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getHostManager().getOneHost(hostUuid);
-			return ja.toString();
-		} else {
-			return "";
-		}
+	public String oneHost(HttpServletRequest request,
+			@RequestParam("hostUuid") String hostUuid) {
+		JSONArray ja = this.getHostManager().getOneHost(hostUuid);
+		return ja.toString();
 	}
 }

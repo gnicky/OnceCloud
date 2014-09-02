@@ -31,13 +31,9 @@ public class EIPAction {
 	@ResponseBody
 	public String eipList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			int userId = user.getUserId();
-			JSONArray ja = this.getEipManager().getEIPList(userId,
-					list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		int userId = user.getUserId();
+		JSONArray ja = this.getEipManager().getEIPList(userId, list.getPage(),
+				list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
 }

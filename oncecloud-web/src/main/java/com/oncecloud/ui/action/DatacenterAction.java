@@ -31,36 +31,26 @@ public class DatacenterAction {
 	@RequestMapping(value = "/Overview", method = { RequestMethod.GET })
 	@ResponseBody
 	public String overview(HttpServletRequest request) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getDatacenterManager().getOverview();
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getDatacenterManager().getOverview();
+		return ja.toString();
 	}
 
 	@RequestMapping(value = "/DCList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String dcList(HttpServletRequest request, ListModel list) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getDatacenterManager().getDatacenterList(list.getPage(), list.getLimit(), list.getSearch());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getDatacenterManager().getDatacenterList(
+				list.getPage(), list.getLimit(), list.getSearch());
+		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public String delete(HttpServletRequest request,@RequestParam("dcid") String dcId, @RequestParam("dcname") String dcName) {
+	public String delete(HttpServletRequest request,
+			@RequestParam("dcid") String dcId,
+			@RequestParam("dcname") String dcName) {
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			JSONArray ja = this.getDatacenterManager().deleteDatacenter(dcId, dcName, user.getUserId());
-			return ja.toString();
-		} else {
-			return "";
-		}
+		JSONArray ja = this.getDatacenterManager().deleteDatacenter(dcId,
+				dcName, user.getUserId());
+		return ja.toString();
 	}
 }
