@@ -30,7 +30,7 @@ $("#size").on('focusout', function (event) {
 
 $("#count").on('focusout', function (event) {
     event.preventDefault();
-    $("#hour-number").text(document.getElementById("count").value);
+    $("#hour-number").text($('#count').val());
 });
 
 $("#createinfo-form").validate({
@@ -61,13 +61,13 @@ $("#createvolumeAction").on('click', function (event) {
     var valid = $("#createinfo-form").valid();
     if (valid) {
         var volumeName = $('#volume_name').val();
-        var volumeCount = parseInt($('count').val(), 10);
+        var volumeCount = parseInt($('#count').val(), 10);
         var volumeSize = parseInt($('#size').val(), 10);
         var volumeTotalSize = volumeSize * volumeCount;
         $.ajax({
             type: 'post',
             url: '/VolumeAction/Quota',
-            data: {count: volumeCount, size: volumeSize},
+            data: {count: volumeCount, size: volumeTotalSize},
             dataType: 'text',
             success: function (msg) {
                 if (msg != "ok") {

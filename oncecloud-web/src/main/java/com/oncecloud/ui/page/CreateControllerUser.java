@@ -31,7 +31,7 @@ public class CreateControllerUser {
 	}
 
 	@RequestMapping(value = "/image/clone", method = { RequestMethod.GET })
-	public ModelAndView createimage(HttpServletRequest request,
+	public ModelAndView cloneImage(HttpServletRequest request,
 			@RequestParam String rsid) {
 		Map<String, String> model = new HashMap<String, String>();
 		model.put("rsid", rsid);
