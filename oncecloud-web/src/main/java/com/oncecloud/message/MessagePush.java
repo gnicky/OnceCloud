@@ -1,5 +1,6 @@
 package com.oncecloud.message;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MessagePush {
+	private final static Logger logger = Logger.getLogger(MessagePush.class);
+	
 	private MessageWebSocketHandler messageWebSocketHandler;
 
 	private MessageWebSocketHandler getMessageWebSocketHandler() {
@@ -22,16 +25,19 @@ public class MessagePush {
 	}
 
 	public void pushMessage(int userId, String content) {
+		logger.info("User [" + userId + "] Content [" + content + "]");
 		this.getMessageWebSocketHandler().sendMessageToUser(userId,
 				new StickyMessage(content));
 	}
 
 	public void deleteRow(int userId, String rowId) {
+		logger.info("User [" + userId + "] RowId [" + rowId + "]");
 		this.getMessageWebSocketHandler().sendMessageToUser(userId,
 				new DeleteRowMessage(rowId));
 	}
 
 	public void editRowStatus(int userId, String rowId, String icon, String word) {
+		logger.info("User [" + userId + "] RowId [" + rowId + "] Icon [" + icon + "] Word [" + word + "]");
 		this.getMessageWebSocketHandler().sendMessageToUser(userId,
 				new EditRowStatusMessage(rowId, icon, word));
 	}

@@ -13,10 +13,6 @@ import org.springframework.stereotype.Component;
 import com.oncecloud.entity.HostSR;
 import com.oncecloud.helper.SessionHelper;
 
-/**
- * @author hehai
- * @version 2014/04/04
- */
 @Component
 public class HostSRDAO {
 	private SessionHelper sessionHelper;
@@ -68,4 +64,5 @@ public class HostSRDAO {
 		session.close();
 		return srList;
 	}
+
 }

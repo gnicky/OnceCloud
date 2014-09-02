@@ -81,7 +81,7 @@ var options = {
                 return true;
         }
     }
-}
+};
 
 $('#pageDivider').bootstrapPaginator(options);
 

@@ -19,8 +19,19 @@ import com.oncecloud.helper.SessionHelper;
 
 @Component
 public class FirewallDAO {
-	private SessionHelper sessionHelper;
+
 	private QuotaDAO quotaDAO;
+
+	private QuotaDAO getQuotaDAO() {
+		return quotaDAO;
+	}
+
+	@Autowired
+	private void setQuotaDAO(QuotaDAO quotaDAO) {
+		this.quotaDAO = quotaDAO;
+	}
+
+	private SessionHelper sessionHelper;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -31,13 +42,173 @@ public class FirewallDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	private QuotaDAO getQuotaDAO() {
-		return quotaDAO;
+	public int countAllFirewallList(String search, int userId) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from Firewall where firewallUID = :userId "
+					+ "and firewallName like :search";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
 	}
 
-	@Autowired
-	private void setQuotaDAO(QuotaDAO quotaDAO) {
-		this.quotaDAO = quotaDAO;
+	public int countAllRuleList(String search, String firewallId) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) from Rule where ruleFirewall = :firewallId "
+					+ "and ruleName like :search order by ruleName";
+			Query query = session.createQuery(queryString);
+			query.setString("firewallId", firewallId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
+	public void createDefaultFirewallNoTransaction(Integer userId)
+			throws Exception {
+		Session session = this.getSessionHelper().getMainSession();
+		String firewallUuid = UUID.randomUUID().toString();
+		String ruleIcmpId = UUID.randomUUID().toString();
+		String rule22Id = UUID.randomUUID().toString();
+		String rule3389Id = UUID.randomUUID().toString();
+		Firewall fw = new Firewall(firewallUuid, "缺省防火墙", userId, new Date(),
+				1, 1);
+		session.save(fw);
+		Rule ruleIcmp = new Rule(ruleIcmpId, "", 1, "ICMP", null, null, 1, "",
+				firewallUuid);
+		Rule rule22 = new Rule(rule22Id, "", 2, "TCP", 22, 22, 1, "",
+				firewallUuid);
+		Rule rule3389 = new Rule(rule3389Id, "", 3, "TCP", 3389, 3389, 1, "",
+				firewallUuid);
+		session.save(ruleIcmp);
+		session.save(rule22);
+		session.save(rule3389);
+	}
+
+	public void deleteAllRuleOfFirewall(String firewallId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Transaction tx = session.beginTransaction();
+			String queryString = "delete Rule where ruleFirewall=:id";
+			Query query = session.createQuery(queryString);
+			query.setString("id", firewallId);
+			query.executeUpdate();
+			tx.commit();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	public void deleteFirewall(Integer userId, String firewallId) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "delete Firewall where firewallId=:id";
+			Query query = session.createQuery(queryString);
+			query.setString("id", firewallId);
+			query.executeUpdate();
+			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
+					"quotaFirewall", 1, false);
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	public void deleteRule(String ruleId) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			String queryString = "delete Rule where ruleId= :ruleId";
+			Query query = session.createQuery(queryString);
+			query.setString("ruleId", ruleId);
+			query.executeUpdate();
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	// /获取可用防火墙
+	@SuppressWarnings("unchecked")
+	public List<Firewall> getabledfirewalls(int uid) {
+		List<Firewall> list = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Firewall where firewallUID=" + uid
+					+ " order by isDefault desc";
+			Query query = session.createQuery(queryString);
+			list = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Firewall getDefaultFirewall(int userId) {
+		Firewall firewall = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Firewall where firewallUID = :userId and isDefault = 1";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			List<Firewall> firewallList = query.list();
+			firewall = firewallList.get(0);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return firewall;
 	}
 
 	public Firewall getFirewall(String firewallId) {
@@ -57,6 +228,197 @@ public class FirewallDAO {
 			}
 		}
 		return firewall;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Firewall> getOnePageFirewallList(int page, int limit,
+			String search, int userId) {
+		List<Firewall> firewallList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "from Firewall where firewallUID = :userId"
+					+ " and firewallName like :search order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			firewallList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return firewallList;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Rule> getOnePageRuleList(int page, int limit, String search,
+			String firewallId) {
+		List<Rule> ruleList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			int startPos = (page - 1) * limit;
+			String queryString = "";
+			queryString = "from Rule where ruleFirewall = :firewallId "
+					+ "and ruleName like :search order by ruleName";
+			Query query = session.createQuery(queryString);
+			query.setString("firewallId", firewallId);
+			query.setString("search", "%" + search + "%");
+			query.setFirstResult(startPos);
+			query.setMaxResults(limit);
+			ruleList = query.list();
+			session.getTransaction().commit();
+			return ruleList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return ruleList;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Object> getRSListOfFirewall(String firewallId) {
+		List<Object> rsList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1";
+			Query query = session.createQuery(queryString);
+			query.setString("firewallId", firewallId);
+			rsList = query.list();
+			String queryString1 = "select lbUuid, lbIP from LB where firewallUuid = :firewallId and lbStatus = 1";
+			Query query1 = session.createQuery(queryString1);
+			query1.setString("firewallId", firewallId);
+			rsList.addAll(query1.list());
+			String queryString3 = "select routerUuid, routerIP from Router where firewallUuid = :firewallId and routerStatus = 1";
+			Query query3 = session.createQuery(queryString3);
+			query3.setString("firewallId", firewallId);
+			rsList.addAll(query3.list());
+			String queryString2 = "select databaseUuid, databaseIp from Database where databaseUuid = :firewallId and databaseStatus = 1";
+			Query query2 = session.createQuery(queryString2);
+			query2.setString("firewallId", firewallId);
+			rsList.addAll(query2.list());
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return rsList;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Rule getRule(String ruleId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "from Rule where ruleId='" + ruleId + "'";
+			Query query = session.createQuery(queryString);
+			List<Rule> ruleList = query.list();
+			session.getTransaction().commit();
+			return ruleList.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Rule> getRuleList(String firewallId) {
+		List<Rule> ruleList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Rule where ruleFirewall= :firewallId and ruleState = 1 order by rulePriority";
+			Query query = session.createQuery(queryString);
+			query.setString("firewallId", firewallId);
+			ruleList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return ruleList;
+	}
+
+	public int getRuleSize(String firewallId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "";
+			queryString = "select count(*) from Rule where ruleFirewall='"
+					+ firewallId + "'";
+			Query query = session.createQuery(queryString);
+			int count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
+			return count;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getSimpleFWList(int userId) {
+		JSONObject jo = new JSONObject();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select firewallId, firewallName from Firewall where firewallUID=:userid order by isDefault desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userid", userId);
+			List<Object[]> resultList = query.list();
+			JSONArray array = new JSONArray();
+			JSONObject defaultItem = new JSONObject();
+			defaultItem.put("uuid", (String) resultList.get(0)[0]);
+			defaultItem.put("rtname",
+					URLEncoder.encode((String) resultList.get(0)[1], "utf-8")
+							.replace("+", "%20"));
+			jo.put("first", defaultItem);
+
+			for (int i = 1; i < resultList.size(); i++) {
+				JSONObject itemjo = new JSONObject();
+				itemjo.put("uuid", (String) resultList.get(i)[0]);
+				itemjo.put(
+						"rtname",
+						URLEncoder.encode((String) resultList.get(i)[1],
+								"utf-8").replace("+", "%20"));
+				array.put(itemjo);
+			}
+			jo.put("list", array);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return jo;
 	}
 
 	public void insertFirewall(String firewallId, String firewallName,
@@ -99,55 +461,6 @@ public class FirewallDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Firewall> getOnePageFirewallList(int page, int limit,
-			String search, int userId) {
-		List<Firewall> firewallList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "from Firewall where firewallUID = :userId"
-					+ " and firewallName like :search order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", "%" + search + "%");
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			firewallList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return firewallList;
-	}
-
-	public int countAllFirewallList(String search, int userId) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select count(*) from Firewall where firewallUID = :userId "
-					+ "and firewallName like :search";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
 	public void updateConfirm(String firewallId, int isConfirm) {
 		Session session = null;
 		try {
@@ -158,96 +471,6 @@ public class FirewallDAO {
 			query.setInteger("confirm", isConfirm);
 			query.setString("firewallId", firewallId);
 			query.executeUpdate();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Rule> getOnePageRuleList(int page, int limit, String search,
-			String firewallId) {
-		List<Rule> ruleList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "";
-			queryString = "from Rule where ruleFirewall = :firewallId "
-					+ "and ruleName like :search order by ruleName";
-			Query query = session.createQuery(queryString);
-			query.setString("firewallId", firewallId);
-			query.setString("search", "%" + search + "%");
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			ruleList = query.list();
-			session.getTransaction().commit();
-			return ruleList;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return ruleList;
-	}
-
-	public int countAllRuleList(String search, String firewallId) {
-		int count = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) from Rule where ruleFirewall = :firewallId "
-					+ "and ruleName like :search order by ruleName";
-			Query query = session.createQuery(queryString);
-			query.setString("firewallId", firewallId);
-			query.setString("search", "%" + search + "%");
-			count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return count;
-	}
-
-	public void deleteRule(String ruleId) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "delete Rule where ruleId= :ruleId";
-			Query query = session.createQuery(queryString);
-			query.setString("ruleId", ruleId);
-			query.executeUpdate();
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	public void deleteAllRuleOfFirewall(String firewallId) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryString = "delete Rule where ruleFirewall=:id";
-			Query query = session.createQuery(queryString);
-			query.setString("id", firewallId);
-			query.executeUpdate();
-			tx.commit();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -274,226 +497,5 @@ public class FirewallDAO {
 				session.getTransaction().rollback();
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Object> getRSListOfFirewall(String firewallId) {
-		List<Object> rsList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1";
-			Query query = session.createQuery(queryString);
-			query.setString("firewallId", firewallId);
-			rsList = query.list();
-			String queryString1 = "select lbUuid, lbIP from LB where firewallUuid = :firewallId and lbStatus = 1";
-			Query query1 = session.createQuery(queryString1);
-			query1.setString("firewallId", firewallId);
-			rsList.addAll(query1.list());
-			String queryString3 = "select routerUuid, routerIP from Router where firewallUuid = :firewallId and routerStatus = 1";
-			Query query3 = session.createQuery(queryString3);
-			query3.setString("firewallId", firewallId);
-			rsList.addAll(query3.list());
-			String queryString2 = "select databaseUuid, databaseIp from Database where databaseUuid = :firewallId and databaseStatus = 1";
-			Query query2 = session.createQuery(queryString2);
-			query2.setString("firewallId", firewallId);
-			rsList.addAll(query2.list());
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return rsList;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Rule> getRuleList(String firewallId) {
-		List<Rule> ruleList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Rule where ruleFirewall= :firewallId and ruleState = 1 order by rulePriority";
-			Query query = session.createQuery(queryString);
-			query.setString("firewallId", firewallId);
-			ruleList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return ruleList;
-	}
-
-	public void deleteFirewall(Integer userId, String firewallId) {
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			String queryString = "delete Firewall where firewallId=:id";
-			Query query = session.createQuery(queryString);
-			query.setString("id", firewallId);
-			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaFirewall", 1, false);
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public Rule getRule(String ruleId) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "from Rule where ruleId='" + ruleId + "'";
-			Query query = session.createQuery(queryString);
-			List<Rule> ruleList = query.list();
-			session.getTransaction().commit();
-			return ruleList.get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return null;
-		}
-	}
-
-	public int getRuleSize(String firewallId) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "";
-			queryString = "select count(*) from Rule where ruleFirewall='"
-					+ firewallId + "'";
-			Query query = session.createQuery(queryString);
-			int count = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-			return count;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-			return 0;
-		}
-	}
-
-	public void createDefaultFirewallNoTransaction(Integer userId)
-			throws Exception {
-		Session session = this.getSessionHelper().getMainSession();
-		String firewallUuid = UUID.randomUUID().toString();
-		String ruleIcmpId = UUID.randomUUID().toString();
-		String rule22Id = UUID.randomUUID().toString();
-		String rule3389Id = UUID.randomUUID().toString();
-		Firewall fw = new Firewall(firewallUuid, "缺省防火墙", userId, new Date(),
-				1, 1);
-		session.save(fw);
-		Rule ruleIcmp = new Rule(ruleIcmpId, "", 1, "ICMP", null, null, 1, "",
-				firewallUuid);
-		Rule rule22 = new Rule(rule22Id, "", 2, "TCP", 22, 22, 1, "",
-				firewallUuid);
-		Rule rule3389 = new Rule(rule3389Id, "", 3, "TCP", 3389, 3389, 1, "",
-				firewallUuid);
-		session.save(ruleIcmp);
-		session.save(rule22);
-		session.save(rule3389);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Firewall getDefaultFirewall(int userId) {
-		Firewall firewall = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Firewall where firewallUID = :userId and isDefault = 1";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			List<Firewall> firewallList = query.list();
-			firewall = firewallList.get(0);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return firewall;
-	}
-
-	@SuppressWarnings("unchecked")
-	public JSONObject getSimpleFWList(int userId) {
-		JSONObject jo = new JSONObject();
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select firewallId, firewallName from Firewall where firewallUID=:userid order by isDefault desc";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userid", userId);
-			List<Object[]> resultList = query.list();
-			JSONArray array = new JSONArray();
-			JSONObject defaultItem = new JSONObject();
-			defaultItem.put("uuid", (String) resultList.get(0)[0]);
-			defaultItem.put("rtname",
-					URLEncoder.encode((String) resultList.get(0)[1], "utf-8")
-							.replace("+", "%20"));
-			jo.put("first", defaultItem);
-
-			for (int i = 1; i < resultList.size(); i++) {
-				JSONObject itemjo = new JSONObject();
-				itemjo.put("uuid", (String) resultList.get(i)[0]);
-				itemjo.put(
-						"rtname",
-						URLEncoder.encode((String) resultList.get(i)[1],
-								"utf-8").replace("+", "%20"));
-				array.put(itemjo);
-			}
-			jo.put("list", array);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return jo;
-	}
-
-	// /获取可用防火墙
-	@SuppressWarnings("unchecked")
-	public List<Firewall> getabledfirewalls(int uid) {
-		List<Firewall> list = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Firewall where firewallUID=" + uid
-					+ " order by isDefault desc";
-			Query query = session.createQuery(queryString);
-			list = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return list;
 	}
 }

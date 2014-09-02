@@ -27,6 +27,54 @@ public class BackendDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
+	public boolean changeBackendStatus(String backUuid, int state) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Backend.class).add(
+					Restrictions.eq("backUuid", backUuid));
+			Backend backend = (Backend) criteria.uniqueResult();
+			if (backend != null) {
+				backend.setBackStatus(state);
+				session.update(backend);
+				result = true;
+			}
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean checkRepeat(String beuuid, int port) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Backend.class)
+					.add(Restrictions.eq("vmUuid", beuuid))
+					.add(Restrictions.eq("vmPort", port))
+					.setProjection(Projections.rowCount());
+			int total = ((Number) criteria.uniqueResult()).intValue();
+			session.getTransaction().commit();
+			if (0 == total) {
+				result = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
 	public Backend createBackend(String backUuid, String backName,
 			String vmUuid, String vmIp, Integer vmPort, Integer backWeight,
 			String foreUuid) {
@@ -54,33 +102,6 @@ public class BackendDAO {
 			}
 		}
 		return backend;
-	}
-
-	/**
-	 * @param session
-	 * @param foreUuid
-	 * @param forbid
-	 *            获取类型,0表示所有监听器,1表示只获取未禁用的
-	 * @return
-	 * @author xpx 2014-7-18
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Backend> doGetBackendListByFrontend(Session session,
-			String foreUuid, int forbid) {
-		List<Backend> backendList = null;
-		try {
-			Criteria criteria = session.createCriteria(Backend.class)
-					.add(Restrictions.eq("foreUuid", foreUuid))
-					.add(Restrictions.ge("backStatus", forbid))
-					.addOrder(Order.desc("createDate"));
-			backendList = criteria.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return backendList;
 	}
 
 	public boolean deleteBackend(String backUuid) {
@@ -125,67 +146,22 @@ public class BackendDAO {
 		return result;
 	}
 
-	/**
-	 * @param backUuid
-	 * @param state
-	 *            1可用,0 禁用
-	 * @return true 成功,false 失败
-	 * @author xpx 2014-7-11
-	 */
-	public boolean changeBackendStatus(String backUuid, int state) {
-		boolean result = false;
-		Session session = null;
+	@SuppressWarnings("unchecked")
+	public List<Backend> doGetBackendListByFrontend(Session session,
+			String foreUuid, int forbid) {
+		List<Backend> backendList = null;
 		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Backend.class).add(
-					Restrictions.eq("backUuid", backUuid));
-			Backend backend = (Backend) criteria.uniqueResult();
-			if (backend != null) {
-				backend.setBackStatus(state);
-				session.update(backend);
-				result = true;
-			}
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * 检测创建的后端端口是否重复
-	 * 
-	 * @param foreuuid
-	 * @param port
-	 * @return
-	 * @author xpx 2014-7-16
-	 */
-	public boolean checkRepeat(String beuuid, int port) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Backend.class)
-					.add(Restrictions.eq("vmUuid", beuuid))
-					.add(Restrictions.eq("vmPort", port))
-					.setProjection(Projections.rowCount());
-			int total = ((Number) criteria.uniqueResult()).intValue();
-			session.getTransaction().commit();
-			if (0 == total) {
-				result = true;
-			}
+					.add(Restrictions.eq("foreUuid", foreUuid))
+					.add(Restrictions.ge("backStatus", forbid))
+					.addOrder(Order.desc("createDate"));
+			backendList = criteria.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
-		return result;
+		return backendList;
 	}
-
 }
