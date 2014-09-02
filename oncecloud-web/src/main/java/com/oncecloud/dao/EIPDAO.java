@@ -280,25 +280,6 @@ public class EIPDAO {
 		return eipId;
 	}
 
-	public EIP getEipByUuid(String eipUuid) {
-		EIP eip = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(EIP.class).add(
-					Restrictions.eq("eipUuid", eipUuid));
-			eip = (EIP) criteria.uniqueResult();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return eip;
-	}
-
 	public boolean bindEip(String eipIp, String dependencyUuid, int type) {
 		boolean result = false;
 		Session session = null;

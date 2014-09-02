@@ -214,52 +214,6 @@ public class FeeDAO {
 		}
 	}
 
-	public void insertFeeImage(Integer imageUID, Date startDate, Date endDate,
-			Double imagePrice, Integer imageState, String imageUuid,
-			String imageName) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			FeeImage feeImage = new FeeImage(imageUID, startDate, endDate,
-					imagePrice, imageState, imageUuid, imageName);
-			feeImage.setImageExpense();
-			Transaction tx = session.beginTransaction();
-			session.save(feeImage);
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public void deleteImage(Date endDate, String imageUuid) {
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			Transaction tx = session.beginTransaction();
-			String queryStr = "from FeeImage fi where fi.imageUuid=:uuid and fi.imageState<>0";
-			Query query = session.createQuery(queryStr);
-			query.setString("uuid", imageUuid);
-			List<FeeImage> feeImageList = query.list();
-			if (feeImageList.size() == 1) {
-				FeeImage feeImage = feeImageList.get(0);
-				feeImage.setEndDate(endDate);
-				feeImage.setImageExpense();
-				feeImage.setImageState(0);
-				session.update(feeImage);
-			}
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<Object> getOnePageFeeVMList(int page, int limit, String search,
 			int uid) {

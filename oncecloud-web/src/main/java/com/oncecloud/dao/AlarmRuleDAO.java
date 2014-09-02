@@ -33,23 +33,6 @@ public class AlarmRuleDAO {
 		return alarmRule;
 	}
 
-	public AlarmRule getAlarmRule(String ruleAUuid) {
-		AlarmRule alarmRule = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			alarmRule = this.doGetAlarmRule(session, ruleAUuid);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return alarmRule;
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<AlarmRule> getOnePageList(int page, int limit,
 			String ruleAAlarmUuid) {

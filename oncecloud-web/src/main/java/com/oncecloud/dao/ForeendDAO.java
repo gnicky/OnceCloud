@@ -8,8 +8,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,30 +39,6 @@ public class ForeendDAO {
 	@Autowired
 	private void setBackendDAO(BackendDAO backendDAO) {
 		this.backendDAO = backendDAO;
-	}
-
-	/**
-	 * 通过id获取前端监听
-	 * 
-	 * @param foreUuid
-	 * @return
-	 * @author xpx 2014-7-11
-	 */
-	public Foreend getForeend(String foreUuid) {
-		Foreend foreend = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			foreend = this.doGetForeend(session, foreUuid);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return foreend;
 	}
 
 	private Foreend doGetForeend(Session session, String foreUuid) {
@@ -186,31 +160,6 @@ public class ForeendDAO {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Foreend> getOnePageFEList(int page, int limit, String search) {
-		List<Foreend> foreendList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			Criteria criteria = session
-					.createCriteria(Foreend.class)
-					.add(Restrictions.like("foreName", search,
-							MatchMode.ANYWHERE))
-					.addOrder(Order.desc("foreStatus"))
-					.setFirstResult(startPos).setMaxResults(limit);
-			foreendList = criteria.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return foreendList;
-	}
-
 	/**
 	 * 根据负载均衡的id获取前端监听器的列表
 	 * 
@@ -329,26 +278,6 @@ public class ForeendDAO {
 		return feArray;
 	}
 
-	public int countAllForeend(String search) {
-		int total = 0;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "select count(*) from Foreend where foreName like '%"
-					+ search + "%'";
-			Query query = session.createQuery(queryString);
-			total = ((Number) query.iterate().next()).intValue();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return total;
-	}
-
 	public boolean deleteForeend(String foreUuid) {
 		boolean result = false;
 		Session session = null;
@@ -400,25 +329,5 @@ public class ForeendDAO {
 			}
 		}
 		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Foreend> getAllPageFEList() {
-		List<Foreend> foreList = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String queryString = "from Foreend order by createDate desc";
-			Query query = session.createQuery(queryString);
-			foreList = query.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return foreList;
 	}
 }

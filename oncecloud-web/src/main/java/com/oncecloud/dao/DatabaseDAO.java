@@ -237,28 +237,6 @@ public class DatabaseDAO {
 		return result;
 	}
 
-	public boolean setDBStatus(String uuid, int state) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Database.class).add(
-					Restrictions.eq("databaseUuid", uuid));
-			Database database = (Database) criteria.uniqueResult();
-			database.setDatabaseStatus(state);
-			session.update(database);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<Database> getOnePageDatabasesWithoutEip(int page, int limit,
 			String searchStr, int uid) {
