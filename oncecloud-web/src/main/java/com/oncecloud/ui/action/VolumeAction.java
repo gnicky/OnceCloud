@@ -46,4 +46,36 @@ public class VolumeAction {
 		JSONObject jo = this.getVolumeManager().getVolumeDetail(uuid);
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/VolumesOfVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public String volumeOfVm(HttpServletRequest request,
+			@RequestParam String vmUuid) {
+		JSONArray ja = this.getVolumeManager().getVolumeListByVM(vmUuid);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
+	@ResponseBody
+	public void bind(HttpServletRequest request,
+			@RequestParam String volumeUuid,@RequestParam String vmUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVolumeManager().bindVolume(userId,volumeUuid,vmUuid);
+	}
+	
+	@RequestMapping(value = "/AvailableVolumes", method = { RequestMethod.GET })
+	@ResponseBody
+	public String availableVolumes(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getVolumeManager().getAbledVolumeList(user.getUserId());
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/Unbind", method = { RequestMethod.GET })
+	@ResponseBody
+	public void unbind(HttpServletRequest request,@RequestParam String volumeUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVolumeManager().unbindVolume(user.getUserId(), volumeUuid);
+	}
 }
