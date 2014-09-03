@@ -85,7 +85,7 @@ $(document).ready(function () {
                     url: '/UserAction/Update',
                     data: {
 						userName : userName,
-						changeId : changeId,
+						changeId : userId,
 						userEmail : userEmail,
 						userTelephone : userTel,
 						userCompany : userCom,

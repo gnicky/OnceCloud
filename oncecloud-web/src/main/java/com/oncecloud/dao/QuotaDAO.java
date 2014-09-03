@@ -122,9 +122,9 @@ public class QuotaDAO {
 					10, 20, 10, 0);
 			session.save(quota);
 		} else {
-			Quota def = getQuotaTotalNoTransaction(1);
+			Quota def = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
+					10, 20, 10, 0);
 			def.setQuotaUID(userId);
-			def.setQuotaID(null);
 			Quota current = new Quota(userId, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
 					0, 0, 0, 1);
 			session.save(def);
