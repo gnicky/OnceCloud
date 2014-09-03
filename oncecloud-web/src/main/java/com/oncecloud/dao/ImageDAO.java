@@ -245,8 +245,10 @@ public class ImageDAO {
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
 			session.getTransaction().commit();
-		} catch (Exception e) {
-			session.getTransaction().rollback();
+		}  catch (Exception e) {
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
 		}
 		return total;
 	}
