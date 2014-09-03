@@ -188,4 +188,253 @@ public class UserService {
 		}
 	}
 
+	public double getBalance(int userId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getTestSession();
+			session.beginTransaction();
+			User user = (User) session.get(User.class, userId);
+			session.getTransaction().commit();
+			if (user == null) {
+				return 0;
+			}
+			return user.getBalance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return 0;
+		}
+	}
+	//
+	// private boolean userUpdate(Integer userid, String userName,
+	// String userMail, String userPhone, String userCompany, String uLevel)
+	// {
+	// try {
+	// if (userName == null || null == userid) {
+	// logger.error("User Update: User [" + userName
+	// + "] Failed: Null Exception");
+	// return false;
+	// }
+	// int userLevel = Integer.valueOf(uLevel);
+	// User user = this.getUserDAO().getUser(userid);
+	// if (user == null) {
+	// logger.error("User Update: User- [" + userid
+	// + "] Failed: Not Exist");
+	// return false;
+	// }
+	// boolean result = this.getUserDAO().updateUser(userid, userName,
+	// userMail, userPhone, userCompany, userLevel);
+	// if (!result) {
+	// logger.error("User Update: User- [" + userid
+	// + "] Failed: Update Failed");
+	// return false;
+	// }
+	// logger.info("User Update To: User [" + userid + "] UserName ["
+	// + userName + "] Mail [" + userMail + "] Telephone ["
+	// + userPhone + "] Company [" + userCompany + "] UserLevel ["
+	// + userLevel + "] Successful");
+	// return true;
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return false;
+	// }
+	// }
+	//
+	// public JSONArray doRegister(String userName, String userPassword,
+	// String userEmail, String userTelephone)
+	// throws UnsupportedEncodingException {
+	// JSONArray ja = new JSONArray();
+	// User result = this.userRegister(userName, userPassword, userEmail,
+	// userTelephone, "", "2");
+	// if (result != null) {
+	// JSONObject tObj = new JSONObject();
+	// tObj.put("username",
+	// URLEncoder.encode(result.getUserName(), "utf-8"));
+	// tObj.put("userid", result.getUserId());
+	// tObj.put("usercom",
+	// URLEncoder.encode(result.getUserCompany(), "utf-8"));
+	// tObj.put("userdate", Utilities.formatTime(result.getUserDate()));
+	// tObj.put("userlevel", result.getUserLevel());
+	// tObj.put("usermail", result.getUserMail());
+	// tObj.put("userphone", result.getUserPhone());
+	// ja.put(tObj);
+	// }
+	// return ja;
+	// }
+	//
+	// public JSONArray doQueryUser(String userName) {
+	// JSONArray ja = new JSONArray();
+	// User query = this.getUserDAO().getUser(userName);
+	// JSONObject tObj = new JSONObject();
+	// if (query != null) {
+	// tObj.put("exist", true);
+	// } else {
+	// tObj.put("exist", false);
+	// }
+	// ja.put(tObj);
+	// return ja;
+	// }
+	//
+	// public JSONArray doCreateUser(String userName, String userPassword,
+	// String userEmail, String userTelephone, String userCompany,
+	// String userLevel, int userid) {
+	// JSONArray ja = new JSONArray();
+	// Date startTime = new Date();
+	// User result = this.userRegister(userName, userPassword, userEmail,
+	// userTelephone, userCompany, userLevel);
+	// if (result != null) {
+	// JSONObject tObj = new JSONObject();
+	// tObj.put("username", Utilities.encodeText(result.getUserName()));
+	// tObj.put("userid", result.getUserId());
+	// tObj.put("usercom", Utilities.encodeText(result.getUserCompany()));
+	// tObj.put("userdate", Utilities.formatTime(result.getUserDate()));
+	// tObj.put("userlevel", result.getUserLevel());
+	// tObj.put("usermail", result.getUserMail());
+	// tObj.put("userphone", result.getUserPhone());
+	// ja.put(tObj);
+	// }
+	// // write log and push message
+	// Date endTime = new Date();
+	// int elapse = Utilities.timeElapse(startTime, endTime);
+	// JSONArray infoArray = new JSONArray();
+	// infoArray.put(Utilities.createLogInfo(
+	// LogConstant.logObject.用户.toString(), userName));
+	// if (result != null) {
+	// OCLog log = this.getLogDAO().insertLog(userid,
+	// LogConstant.logObject.用户.ordinal(),
+	// LogConstant.logAction.创建.ordinal(),
+	// LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+	// startTime, elapse);
+	// this.getMessagePush().pushMessage(userid,
+	// Utilities.stickyToSuccess(log.toString()));
+	// } else {
+	// OCLog log = this.getLogDAO().insertLog(userid,
+	// LogConstant.logObject.用户.ordinal(),
+	// LogConstant.logAction.创建.ordinal(),
+	// LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+	// startTime, elapse);
+	// this.getMessagePush().pushMessage(userid,
+	// Utilities.stickyToError(log.toString()));
+	// }
+	// return ja;
+	// }
+	//
+	// public void doQuotaUpdate(int quotaid, int changerId, int eip, int
+	// vm,
+	// int bk, int img, int vol, int ssh, int fw, int rt, int vlan,
+	// int lb, int disk, int bw, int mem, int cpu, int userId) {
+	// Quota newQuota = new Quota(changerId, eip, vm, bk, img, vol, disk,
+	// ssh,
+	// fw, rt, vlan, lb, bw, mem, cpu, 0);
+	// newQuota.setQuotaID(quotaid);
+	// boolean result = this.getQuotaDAO().updateQuota(newQuota);
+	// if (result) {
+	// this.getMessagePush().pushMessage(userId,
+	// Utilities.stickyToSuccess("资源配额更新成功"));
+	// } else {
+	// this.getMessagePush().pushMessage(userId,
+	// Utilities.stickyToError("资源配额更新失败"));
+	// }
+	// }
+	//
+	// public JSONObject doGetUserQuota(int userId) {
+	// Quota quotaU = this.getQuotaDAO().getQuotaUsed(userId);
+	// Quota quotaT = this.getQuotaDAO().getQuotaTotal(userId);
+	// JSONObject obj = new JSONObject();
+	// obj.put("quotaU", new JSONObject(quotaU));
+	// obj.put("quotaT", new JSONObject(quotaT));
+	// return obj;
+	// }
+	//
+	// public JSONObject doGetOneUser(int userId) {
+	// User myuser = this.getUserDAO().getUser(userId);
+	// JSONObject obj = new JSONObject();
+	// obj.put("username", Utilities.encodeText(myuser.getUserName()));
+	// obj.put("userid", myuser.getUserId());
+	// obj.put("usercom", Utilities.encodeText(myuser.getUserCompany()));
+	// obj.put("userdate", Utilities.formatTime(myuser.getUserDate()));
+	// obj.put("userlevel", myuser.getUserLevel());
+	// obj.put("usermail", myuser.getUserMail());
+	// obj.put("userphone", myuser.getUserPhone());
+	// obj.put("balance", myuser.getUserBalance());
+	// return obj;
+	// }
+	//
+	// public JSONArray doGetCompanyList() {
+	// JSONArray ja = new JSONArray();
+	// String searchStr = "";
+	// List<User> userList =
+	// this.getUserDAO().getCompanyUserList(searchStr);
+	// for (User myuser : userList) {
+	// JSONObject obj = new JSONObject();
+	// obj.put("username", Utilities.encodeText(myuser.getUserName()));
+	// obj.put("userid", myuser.getUserId());
+	// obj.put("usercom", Utilities.encodeText(myuser.getUserCompany()));
+	// obj.put("userlevel", myuser.getUserLevel());
+	// obj.put("usermail", myuser.getUserMail());
+	// obj.put("userphone", myuser.getUserPhone());
+	// Quota quota = this.getQuotaDAO().getQuotaUsed(myuser.getUserId());
+	// obj.put("usedVM", quota.getQuotaVM());
+	// obj.put("usedDiskN", quota.getQuotaDiskN());
+	// obj.put("usedDiskS", quota.getQuotaDiskS());
+	// obj.put("usedIP", quota.getQuotaIP());
+	// obj.put("usedBandwidth", quota.getQuotaBandwidth());
+	// obj.put("usedCpu", quota.getQuotaCpu());
+	// obj.put("usedQuotaMemory", quota.getQuotaMemory());
+	// if (myuser.getUserVoucher() == null) {
+	// obj.put("uservoucher", 0);
+	// } else {
+	// obj.put("uservoucher", myuser.getUserVoucher());
+	// }
+	// ja.put(obj);
+	// }
+	// return ja;
+	// }
+	//
+	// public void doUpdateUser(int userId, int changeId, String userName,
+	// String userEmail, String userTel, String userCom, String userLevel) {
+	// boolean result = this.userUpdate(changeId, userName, userEmail,
+	// userTel, userCom, userLevel);
+	// if (result) {
+	// this.getMessagePush().pushMessage(userId,
+	// Utilities.stickyToSuccess("用户信息修改成功"));
+	// } else {
+	// this.getMessagePush().pushMessage(userId,
+	// Utilities.stickyToError("用户信息修改失败"));
+	// }
+	// }
+	//
+	// public JSONObject doDeleteUser(int userId, int changeId, String
+	// userName) {
+	// JSONObject jo = new JSONObject();
+	// Date startTime = new Date();
+	// boolean result = this.getUserDAO().disableUser(changeId);
+	// jo.put("result", result);
+	// // write log and push message
+	// Date endTime = new Date();
+	// int elapse = Utilities.timeElapse(startTime, endTime);
+	// JSONArray infoArray = new JSONArray();
+	// infoArray.put(Utilities.createLogInfo(
+	// LogConstant.logObject.用户.toString(), userName));
+	// if (result) {
+	// OCLog log = this.getLogDAO().insertLog(userId,
+	// LogConstant.logObject.用户.ordinal(),
+	// LogConstant.logAction.删除.ordinal(),
+	// LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+	// startTime, elapse);
+	// this.getMessagePush().pushMessage(userId,
+	// Utilities.stickyToSuccess(log.toString()));
+	// } else {
+	// OCLog log = this.getLogDAO().insertLog(userId,
+	// LogConstant.logObject.用户.ordinal(),
+	// LogConstant.logAction.删除.ordinal(),
+	// LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+	// startTime, elapse);
+	// this.getMessagePush().pushMessage(userId,
+	// Utilities.stickyToError(log.toString()));
+	// }
+	// return jo;
+	// }
 }
