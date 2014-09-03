@@ -965,7 +965,6 @@ function init() {
         } else {
             $("#textview").hide();
             $("#imageview").show();
-            doShowPic();
         }
     });
 
@@ -1220,8 +1219,8 @@ function bindpublicip(bdtype) {
     var infoList = $("#instanceid").val();
     var tablelist = "";
     $.ajax({
-        type: 'post',
-        url: '/EipAction/AvailableIPs',
+        type: 'get',
+        url: '/EIPAction/AvailableEIPs',
         dataType: 'json',
         success: function (array) {
             if (array.length > 0) {
@@ -1255,8 +1254,8 @@ function bindpublicip(bdtype) {
                             var router = $("#vnrouterUuid").val();
                             if (bdtype == "vm") {
                                 $.ajax({
-                                    type: 'get',
-                                    url: '/EipAction/Bind',
+                                    type: 'post',
+                                    url: '/EIPAction/Bind',
                                     data:{vmUuid:vmuuid,eipIp:eipIp,bindType:bdtype},
                                     dataType: 'json',
                                     success: function (obj) {
@@ -1273,8 +1272,8 @@ function bindpublicip(bdtype) {
                                 });
                             } else if (bdtype == "rt") {
                                 $.ajax({
-                                    type: 'get',
-                                    url: '/EipAction/Bind',
+                                    type: 'post',
+                                    url: '/EIPAction/Bind',
                                     data:{vmUuid:router,eipIp:eipIp,bindType:bdtype},
                                     dataType: 'json',
                                     success: function (obj) {
@@ -1371,7 +1370,7 @@ function unbingpublicip(bdtype) {
     }
     $.ajax({
         type: 'get',
-        url: '/EipAction/UnBind',
+        url: '/EIPAction/UnBind',
         data: {eipIp:eipIp,vmUuid:vmuuid,bindType:bdtype},
         dataType: 'json',
         success: function (obj) {
