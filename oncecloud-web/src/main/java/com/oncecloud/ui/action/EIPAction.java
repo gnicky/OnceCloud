@@ -116,4 +116,12 @@ public class EIPAction {
 		JSONObject jo = getEipManager().eipBandwidth(eip, size, userId);
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/BasicList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String basicList(HttpServletRequest request,
+			@RequestParam String eip) {
+		JSONObject jo = this.getEipManager().getBasicList(eip);
+		return jo.toString();
+	}
 }

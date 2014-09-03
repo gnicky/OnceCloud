@@ -6,7 +6,7 @@ $('#EipModalContainer').on('hide', function (event) {
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
-    var url = $("#platformcontent").attr('platformBasePath') + 'common/modify.jsp';
+    var url = $("#platformcontent").attr('basePath') + 'common/modify';
     var eip = $("#platformcontent").attr("eip");
     var eipName = $("#eipname").text();
     var eipDesc = $("#eipdesc").text();
@@ -33,18 +33,18 @@ $('#depend-list').on('click', '#depenid', function (event) {
         data: 'action=detail&instanceuuid=' + depenUuid,
         dataType: 'text',
         success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
+            window.location.href = $("#platformcontent").attr('basePath') + "user/detail/instancedetail.jsp";
         }
     });
 });
 function getEipBasicList() {
-    var eipUuid = $("#platformcontent").attr("eipUuid");
+    var eip = $("#platformcontent").attr("eip");
     $('#basic-list').html("");
     $('#depend-list').html("");
     $.ajax({
         type: 'get',
-        url: '/EIPAction/EIPDetail',
-        data: {uuid: eipUuid},
+        url: '/EIPAction/BasicList',
+        data: {eip: eip},
         dataType: 'json',
         success: function (obj) {
             var eipName = decodeURI(obj.eipName);

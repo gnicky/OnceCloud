@@ -323,12 +323,15 @@ function changeBandwidth(eip, bandwidth) {
 
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
-    var uuid = $(this).parent().parent().attr('eipId');
+    var eip = $(this).parent().parent().attr('eip');
+    var eipUuid = $(this).parent().parent().attr('eipId');
     var form = $("<form></form>");
     form.attr("action", "/elasticip/detail");
     form.attr('method', 'post');
-    var input = $('<input type="text" name="eipUuid" value="' + uuid + '" />');
-    form.append(input);
+    var input1 = $('<input type="text" name="eip" value="' + eip + '" />');
+    var input2 = $('<input type="text" name="eipUuid" value="' + eipUuid + '" />');
+    form.append(input1);
+    form.append(input2);
     form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
@@ -354,9 +357,9 @@ function unbind(eipIp) {
     var vmuuid = thistr.find('[vmuuid]').attr('vmuuid');
     var bindtype = thistr.find('[vmuuid]').attr('type');
     $.ajax({
-        type: 'get',
-        url: '/EIPAction',
-        data: "action=unbind&eipIp=" + eipIp + "&vmuuid=" + vmuuid + '&bindtype=' + bindtype,
+        type: 'post',
+        url: '/EIPAction/UnBind',
+        data: {eipIp: eipIp, vmUuid: vmuuid, bindType: bindtype},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
