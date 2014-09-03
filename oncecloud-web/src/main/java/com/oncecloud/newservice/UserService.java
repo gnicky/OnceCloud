@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -156,6 +158,34 @@ public class UserService {
 			pool = poolList.get(randomIndex);
 		}
 		return pool;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> getUserList(int page, int limit, String search) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getTestSession();
+			session.beginTransaction();
+			int firstResult = (page - 1) * limit;
+			Criteria criteria = session.createCriteria(User.class);
+			criteria.add(Restrictions.like("userName", search,
+					MatchMode.ANYWHERE));
+			// Skip super administrator
+			criteria.add(Restrictions.ne("id", 1));
+			criteria.add(Restrictions.eq("status", Status.NORMAL));
+			criteria.addOrder(Order.desc("createDate"));
+			criteria.setFirstResult(firstResult);
+			criteria.setMaxResults(limit);
+			List<User> userList = criteria.list();
+			session.getTransaction().commit();
+			return userList;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
 	}
 
 }
