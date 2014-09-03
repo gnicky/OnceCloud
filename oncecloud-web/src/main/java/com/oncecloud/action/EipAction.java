@@ -53,18 +53,7 @@ public class EipAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("apply")) {
-				String eipName = request.getParameter("eipName");
-				int eipBandwidth = Integer.parseInt(request
-						.getParameter("eipSize"));
-				String eipUuid = request.getParameter("eipUuid");
-				JSONObject jo = this.getEipManager().eipApply(eipName, userId,
-						eipBandwidth, eipUuid);
-				out.print(jo.toString());
-			} else if (action.equals("delete")) {
-				String eipIp = request.getParameter("eip");
-				this.getEipManager().eipDelete(eipIp, userId);
-			} else if (action.equals("bind")) {
+			if (action.equals("bind")) {
 				String vmUuid = request.getParameter("vmuuid");
 				String eipIp = request.getParameter("eipIp");
 				String bindtype = request.getParameter("bindtype");
@@ -86,18 +75,6 @@ public class EipAction extends HttpServlet {
 				JSONArray ja = this.getEipManager().eipGetAbleVMs(page, limit,
 						searchStr, bindtype, userId);
 				out.print(ja.toString());
-			} else if (action.equals("quota")) {
-				int count = Integer.parseInt(request.getParameter("count"));
-				int size = Integer.parseInt(request.getParameter("size"));
-				String quota = this.getEipManager().getQuota(userId, count,
-						size);
-				out.print(quota);
-			} else if (action.equals("bandwidth")) {
-				String eip = request.getParameter("eip");
-				int size = Integer.parseInt(request.getParameter("size"));
-				JSONObject jo = this.getEipManager().eipBandwidth(eip, size,
-						user, userId);
-				out.print(jo.toString());
 			} else if (action.equals("detail")) {
 				String eip = request.getParameter("eip");
 				String eipid = this.getEipDAO().getEipId(eip);
