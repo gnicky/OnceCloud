@@ -47,4 +47,9 @@ public class CreateControllerUser {
 	public ModelAndView createElasticIP(HttpServletRequest request) {
 		return new ModelAndView("user/create/createelasticip");
 	}
+	
+	@RequestMapping(value = "/service/create", method = { RequestMethod.GET })
+	public ModelAndView createService(HttpServletRequest request) {
+		return new ModelAndView("user/create/createservice");
+	}
 }

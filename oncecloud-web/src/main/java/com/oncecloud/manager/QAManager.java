@@ -127,10 +127,14 @@ public class QAManager {
 		return jo;
 	}
 
-	public JSONArray addReply(int userId, int qaTid, String qaContent) {
+	public JSONArray reply(int userId, int userLevel, int qaTid, String qaContent) {
 		JSONArray ja = new JSONArray();
 		Date qaTime = new Date();
-		int qaId = this.getQaDAO().insertAnswer(userId, qaContent, qaTid, 3,
+		int status = 3;
+		if (userLevel == 0) {
+			status = 2;
+		}
+		int qaId = this.getQaDAO().insertAnswer(userId, qaContent, qaTid, status,
 				qaTime);
 		JSONObject jo = new JSONObject();
 		jo.put("isSuccess", qaId);
@@ -162,7 +166,7 @@ public class QAManager {
 		return ja;
 	}
 
-	public JSONArray getAnswerList(int qaId) {
+	public JSONArray getReplyList(int qaId) {
 		JSONArray ja = new JSONArray();
 		List<Object> qaList = this.getQaDAO().getAnswerList(qaId);
 		if (qaList != null) {

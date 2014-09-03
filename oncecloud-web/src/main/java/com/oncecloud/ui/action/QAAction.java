@@ -3,6 +3,7 @@ package com.oncecloud.ui.action;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,15 @@ public class QAAction {
 				list.getSearch());
 		return ja.toString();
 	}
+	
+	@RequestMapping(value = "/CreateQuestion", method = { RequestMethod.POST })
+	@ResponseBody
+	public String createQuestion(HttpServletRequest request,
+			@RequestParam String title, @RequestParam String content) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getQaManager().createQuestion(user.getUserId(), title, content);
+		return jo.toString();
+	}
 
 	@RequestMapping(value = "/CloseQuestion", method = { RequestMethod.GET })
 	@ResponseBody
@@ -45,6 +55,31 @@ public class QAAction {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONArray ja = this.getQaManager()
 				.closeQuestion(user.getUserId(), qaid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/QuestionDetail", method = { RequestMethod.GET })
+	@ResponseBody
+	public String questionDetail(HttpServletRequest request,
+			@RequestParam int qaId) {
+		JSONArray ja = this.getQaManager().getQuestionDetail(qaId);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Reply", method = { RequestMethod.POST })
+	@ResponseBody
+	public String reply(HttpServletRequest request, @RequestParam int qaId,
+			@RequestParam String content) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getQaManager().reply(user.getUserId(),
+				user.getUserLevel(), qaId, content);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/ReplyList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String replyList(HttpServletRequest request, @RequestParam int qaId) {
+		JSONArray ja = this.getQaManager().getReplyList(qaId);
 		return ja.toString();
 	}
 }

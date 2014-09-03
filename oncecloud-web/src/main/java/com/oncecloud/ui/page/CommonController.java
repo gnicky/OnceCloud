@@ -120,18 +120,18 @@ public class CommonController {
 		}
 	}
 
-	@RequestMapping(value = "/question/detail")
+	@RequestMapping(value = "/service/detail")
 	@ResponseBody
 	public ModelAndView questionDetail(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "表单");
 		model.put("sideActive", 11);
-		String qaid = request.getParameter("qaid");
-		if (qaid != null) {
-			request.getSession().setAttribute("qaid", qaid);
+		String qaId = request.getParameter("qaId");
+		if (qaId != null) {
+			request.getSession().setAttribute("qaId", qaId);
 			return new ModelAndView("common/detail/servicedetail", model);
 		} else {
-			if (request.getSession().getAttribute("imageuuid") != null) {
+			if (request.getSession().getAttribute("qaId") != null) {
 				return new ModelAndView("common/detail/servicedetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));

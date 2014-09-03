@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="content" id="platformcontent">
+<div class="content" id="platformcontent" userLevel="${user.userLevel}">
 	<div class="intro">
 		<h1>表单&nbsp;Services</h1>
 		<p class="lead" style="margin-top:10px">
@@ -11,7 +11,7 @@
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
 			<c:if test="${user.userLevel!=0}">
-				<button id="apply" class="btn btn-primary" url="${basePath}user/create/createservice.jsp">
+				<button id="apply" class="btn btn-primary" url="${basePath}service/create">
 					<span class="glyphicon glyphicon-tags"></span>提交表单
 				</button>
 			</c:if>
