@@ -43,8 +43,6 @@ $('#modifyinfomation').on('click', function (event) {
                         $('#alDesc').html('<div>' + modifydesc + '</div>');
                     }
                 }
-            },
-            error: function () {
             }
         });
 

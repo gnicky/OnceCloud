@@ -10,7 +10,7 @@ $('#modify').on('click', function (event) {
     var eip = $("#platformcontent").attr("eip");
     var eipName = $("#eipname").text();
     var eipDesc = $("#eipdesc").text();
-    $('#EipModalContainer').load(url, {"modifytype": "eip", "modifyuuid": eip, "modifyname": eipName, "modifydesc": eipDesc}, function () {
+    $('#EipModalContainer').load(url, {"modifyType": "eip", "modifyUuid": eip, "modifyName": eipName, "modifyDesc": eipDesc}, function () {
         $('#EipModalContainer').modal({
             backdrop: false,
             show: true
@@ -55,7 +55,7 @@ function getEipBasicList() {
             var eipBandwidth = obj.eipBandwidth;
             var usedStr = '';
             var showstr = '';
-            var showuuid = "ip-" + eipUuid.substring(0, 8);
+            var showuuid = "eip-" + eipUuid.substring(0, 8);
             if ('&nbsp;' != eipDepen) {
                 usedStr = usedStr + '<td state="using"><span class="icon-status icon-using" name="stateicon"></span><span name="stateword">已分配</span></td>';
                 eipDepen = '<a class="id" id="depenid" depenUuid="' + eipDepen + '">i-' + eipDepen.substring(0, 8) + '</a>';
