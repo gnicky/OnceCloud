@@ -91,8 +91,8 @@ public class RouterAction {
 	
 	@RequestMapping(value = "/ShutDown", method = { RequestMethod.POST })
 	@ResponseBody
-	public void shutDown(HttpServletRequest request,@RequestParam String uuid) {
+	public void shutDown(HttpServletRequest request,@RequestParam String uuid,@RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-		//this.getRouterManager().routerShutDown(uuid, user.getUserId(), user.getUserAllocate());
+	//	this.getRouterManager().routerShutDown(uuid, user.getUserId(),force,user.getUserId(), user.getUserAllocate());
 	}
 }
