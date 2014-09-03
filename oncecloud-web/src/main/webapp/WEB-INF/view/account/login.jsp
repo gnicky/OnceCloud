@@ -4,10 +4,10 @@
 <head>
 <title>网驰管理平台</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="${basePath}bootstrap/css/bootstrap.min.css" />
-<link rel="stylesheet" href="${basePath}css/login.css" />
+<link rel="stylesheet" type="text/css"  href="${basePath}bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"  href="${basePath}css/login.css" />
 <link rel="shortcut icon" href="fav.ico" />
-<script src="${basePath}js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${basePath}js/jquery-1.11.1.min.js" ></script>
 </head>
 <body class="login-body">
 
@@ -46,11 +46,14 @@
 		</div>
 	</div>
 	<script>
-		refresh();
+	$(function(){
+        refresh();
+	});
+	
+	function refresh() {
+		$("#authImg").attr("src", "${basePath}captcha?" + Math.random());
+	}
 		
-		function refresh() {
-			$("#authImg").attr("src", "${basePath}captcha?" + Math.random());
-		}
 	</script>
 </body>
 </html>
