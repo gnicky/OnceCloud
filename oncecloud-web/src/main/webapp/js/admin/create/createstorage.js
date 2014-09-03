@@ -97,7 +97,7 @@ $(document).ready(function () {
                     type: 'post',
                     url: '/StorageAction/Add',
                     data : {
-						srName : srName,
+						srname : srName,
 						srAddress : srAddress,
 						srDesc : srDesc,
 						srType : srType,
@@ -132,8 +132,8 @@ $(document).ready(function () {
                 var srid = $('#modalcontent').attr('srid');
                 $.ajax({
                     type: 'post',
-                    url: '/SRAction/Update',
-                    data: {srid:srid, srname:srName, srDesc:srDesc, rackid:rackid},
+                    url: '/StorageAction/Update',
+                    data: {srid:srid, srName:srName, srDesc:srDesc, rackid:rackid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[srid="' + srid + '"]');
@@ -206,7 +206,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 async: true,
-                url: '/SRAction/QueryAddress',
+                url: '/StorageAction/QueryAddress',
                 data: {address:ip},
                 dataType: 'json',
                 success: function (array) {

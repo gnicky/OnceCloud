@@ -95,8 +95,8 @@ $(document).ready(function () {
                 var rackid = $('#modalcontent').attr('rackid');
                 $.ajax({
                     type: 'post',
-                    url: '/RackAction',
-                    data: 'action=update&rackid=' + rackid + '&rackname=' + rackName + '&rackdesc=' + rackDesc + '&dcid=' + dcid,
+                    url: '/RackAction/Update',
+                    data: {rackid:rackid, rackname:rackName, rackdesc:rackDesc, dcid:dcid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[rowid="' + rackid + '"]');
@@ -105,8 +105,6 @@ $(document).ready(function () {
                         thistr.attr('dcid', dcid);
                         thistr.children('td').eq(2).html(rackName);
                         thistr.children('td').eq(3).html(rackLocation);
-                    },
-                    error: function () {
                     }
                 });
             }

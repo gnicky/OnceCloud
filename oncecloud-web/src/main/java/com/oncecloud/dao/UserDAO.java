@@ -102,6 +102,24 @@ public class UserDAO {
 		return user;
 	}
 
+	public User getUserNoTransactional(int userId) {
+		User user = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Query query = session
+					.createQuery("from User where userId = :userId");
+			query.setInteger("userId", userId);
+			user = (User) query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return user;
+	}
+
 	/**
 	 * 获取用户（通过用户名）
 	 * 

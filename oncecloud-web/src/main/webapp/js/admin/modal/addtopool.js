@@ -79,9 +79,6 @@ $(document).ready(function () {
                     pooltd.attr('state', 'load');
                     pooltd.html('<a>' + pname + '</a>');
                 }
-            },
-            error: function () {
-
             }
         });
         removeAllCheck();

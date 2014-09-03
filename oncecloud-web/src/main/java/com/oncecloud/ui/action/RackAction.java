@@ -60,4 +60,13 @@ public class RackAction {
 		JSONArray ja = this.getRackManager().createRack(rackname, dcid, rackdesc, user.getUserId());
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
+	@ResponseBody
+	public void update(HttpServletRequest request,@RequestParam String rackid,
+			@RequestParam String rackname, @RequestParam String rackdesc,
+			@RequestParam String dcid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getRackManager().update(rackid, rackname, rackdesc, dcid, user.getUserId());
+	}
 }
