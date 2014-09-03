@@ -217,8 +217,8 @@ function startRouter(uuid) {
     thistr.find('[name="stateword"]').text('启动中');
     $.ajax({
         type: 'post',
-        url: '/RouterAction',
-        data: 'action=startup&uuid=' + uuid,
+        url: '/RouterAction/StartUp',
+        data: {uuid:uuid},
         dataType: 'json',
     });
 }
@@ -231,9 +231,9 @@ function destroyRouter(uuid) {
     thisicon.addClass('icon-process');
     thistr.find('[name="stateword"]').text('销毁中');
     $.ajax({
-        type: 'get',
-        url: '/RouterAction',
-        data: 'action=destroy&uuid=' + uuid,
+        type: 'post',
+        url: '/RouterAction/Destroy',
+        data: {uuid:uuid},
         dataType: 'json',
     });
 }
@@ -245,13 +245,9 @@ function shutdownRouter(uuid, force) {
     thistr.find('[name="stateword"]').text('关机中');
     thistr.find('.console').remove();
     $.ajax({
-        type: 'get',
-        url: '/RouterAction',
-        data: 'action=shutdown&uuid=' + uuid + '&force=' + force,
+        type: 'post',
+        url: '/RouterAction/ShutDown',
+        data: {uuid:uuid,force:force},
         dataType: 'json',
-        success: function (array) {
-        },
-        error: function () {
-        }
     });
 }

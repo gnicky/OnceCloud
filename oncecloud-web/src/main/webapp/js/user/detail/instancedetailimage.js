@@ -541,10 +541,8 @@ function deletevolumes(obj) {
                         url: '/VolumeAction/Unbind',
                         data: {volumeUuid: volumeuuid},
                         dataType: 'json',
-                        success: function (obj) {
+                        complete: function (obj) {
                             bindvolumesshow();
-                        },
-                        error: function () {
                         }
                     });
                 }

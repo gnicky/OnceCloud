@@ -89,10 +89,25 @@ public class RouterAction {
 		this.getRouterManager().routerDestory(uuid, user.getUserId(), user.getUserAllocate());
 	}
 	
+	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
+	@ResponseBody
+	public void create(HttpServletRequest request,@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		//this.getRouterManager().createRouter(uuid, user.getUserId(), name, capacity, fwuuid,  user.getUserAllocate());
+	}
+	
 	@RequestMapping(value = "/ShutDown", method = { RequestMethod.POST })
 	@ResponseBody
 	public void shutDown(HttpServletRequest request,@RequestParam String uuid,@RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-	//	this.getRouterManager().routerShutDown(uuid, user.getUserId(),force,user.getUserId(), user.getUserAllocate());
+     	this.getRouterManager().routerShutDown(uuid, force,user.getUserId(), user.getUserAllocate());
+	}
+	
+	@RequestMapping(value = "/Quota", method = { RequestMethod.POST })
+	@ResponseBody
+	public String quota(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getRouterManager().routerQuota(user.getUserId());
+		return ja.toString();
 	}
 }
