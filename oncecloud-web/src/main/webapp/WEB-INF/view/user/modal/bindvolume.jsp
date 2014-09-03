@@ -1,21 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>user/js/modal/bindvolume.js"></script>
+<script src="${basPath}js/user/modal/bindvolume.js"></script>
 <div class="modal-dialog" style="width:600px; margin-top:100px">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -27,7 +11,7 @@
 					<div class="toolbar-right">
 						<table>
 							<tr>
-								<td>&nbsp;页数&nbsp;<a id="currentP"></a>&nbsp;/&nbsp;<a id="totalP"></a></td>
+								<td>&nbsp;页数&nbsp;<a id="currentPS"></a>&nbsp;/&nbsp;<a id="totalPS"></a></td>
 								<td style="padding-left:10px"><div class="pagination-small"><ul id="pageDivider" style="display:inline"></ul></div></td>
 							</tr>
 						</table>

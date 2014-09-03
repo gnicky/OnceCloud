@@ -102,4 +102,12 @@ public class VolumeAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVolumeManager().unbindVolume(user.getUserId(), volumeUuid);
 	}
+	
+	@RequestMapping(value = "/DeleteVolume", method = { RequestMethod.POST })
+	@ResponseBody
+	public void deleteVolume(HttpServletRequest request,
+			@RequestParam String volumeUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVolumeManager().deleteVolume(user.getUserId(), volumeUuid);
+	}
 }
