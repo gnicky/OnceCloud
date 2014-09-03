@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.EIPManager;
+import com.oncecloud.ui.model.CreateEIPModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/EIPAction")
@@ -38,7 +39,7 @@ public class EIPAction {
 				list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/AvailableIPs", method = { RequestMethod.GET })
 	@ResponseBody
 	public String eipList(HttpServletRequest request) {
@@ -47,25 +48,46 @@ public class EIPAction {
 		JSONArray ja = this.getEipManager().eipGetAbleEips(userId);
 		return ja.toString();
 	}
-	
 
 	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
 	@ResponseBody
-	public String bind(HttpServletRequest request, @RequestParam String vmUuid,@RequestParam String eipIp,@RequestParam String bindType) {
+	public String bind(HttpServletRequest request, @RequestParam String vmUuid,
+			@RequestParam String eipIp, @RequestParam String bindType) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
-		JSONObject jo = this.getEipManager().eipBind(userId, vmUuid,
-				eipIp, bindType);
+		JSONObject jo = this.getEipManager().eipBind(userId, vmUuid, eipIp,
+				bindType);
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/UnBind", method = { RequestMethod.GET })
 	@ResponseBody
-	public String unbind(HttpServletRequest request, @RequestParam String eipIp,@RequestParam String vmUuid,@RequestParam String bindType) {
+	public String unbind(HttpServletRequest request,
+			@RequestParam String eipIp, @RequestParam String vmUuid,
+			@RequestParam String bindType) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
-		JSONObject jo = this.getEipManager().eipUnbind(userId, vmUuid,
-				eipIp, bindType);
+		JSONObject jo = this.getEipManager().eipUnbind(userId, vmUuid, eipIp,
+				bindType);
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET })
+	@ResponseBody
+	public String quota(HttpServletRequest request, @RequestParam int count,
+			@RequestParam int size) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		String quota = this.getEipManager().getQuota(userId, count, size);
+		return quota;
+	}
+	
+	@RequestMapping(value = "/createEIP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String createEIP(HttpServletRequest request, CreateEIPModel ceModel) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = this.getEipManager().eipApply(ceModel.getEipName(), userId, ceModel.getEipSize(), ceModel.getEipUuid());
 		return jo.toString();
 	}
 }
