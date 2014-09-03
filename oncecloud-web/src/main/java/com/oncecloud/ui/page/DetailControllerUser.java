@@ -5,15 +5,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.oncecloud.entity.User;
 import com.oncecloud.main.Constant;
 
 @Controller
@@ -184,4 +181,23 @@ public class DetailControllerUser {
 		}
 	}
 	
+	@RequestMapping(value = "/alarm/detail")
+	@ResponseBody
+	public ModelAndView alarmDetail(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "监控警告");
+		model.put("sideActive", 13);
+		String alarmUuid = request.getParameter("alarmUuid");
+		if (alarmUuid != null) {
+			request.getSession().setAttribute("alarmUuid", alarmUuid);
+			request.getSession().setAttribute("showId", "al-" + alarmUuid.substring(0, 8));
+			return new ModelAndView("user/detail/alarmdetail", model);
+		} else {
+			if (request.getSession().getAttribute("alarmUuid") != null) {
+				return new ModelAndView("user/detail/alarmdetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
 }
