@@ -17,6 +17,7 @@ import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.User;
 import com.oncecloud.main.Constant;
 import com.oncecloud.manager.QuotaManager;
+import com.oncecloud.ui.model.CommonModifyModel;
 
 @Controller
 public class CommonController {
@@ -138,4 +139,14 @@ public class CommonController {
 		}
 	}
 	
+	@RequestMapping(value = "/common/modify")
+	@ResponseBody
+	public ModelAndView commonmodify(HttpServletRequest request,CommonModifyModel commonModifyModel) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("modifyType", commonModifyModel.getModifyType());
+		model.put("modifyUuid", commonModifyModel.getModifyUuid());
+		model.put("modifyName", commonModifyModel.getModifyName());
+		model.put("modifyDesc", commonModifyModel.getModifyDesc());
+		return new ModelAndView("common/modify", model);
+	}
 }
