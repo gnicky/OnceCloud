@@ -58,7 +58,7 @@ public class EIPAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
 	public String bind(HttpServletRequest request, @RequestParam String vmUuid,
 			@RequestParam String eipIp, @RequestParam String bindType) {
@@ -69,7 +69,7 @@ public class EIPAction {
 		return jo.toString();
 	}
 
-	@RequestMapping(value = "/UnBind", method = { RequestMethod.GET })
+	@RequestMapping(value = "/UnBind", method = { RequestMethod.POST })
 	@ResponseBody
 	public String unbind(HttpServletRequest request,
 			@RequestParam String eipIp, @RequestParam String vmUuid,
