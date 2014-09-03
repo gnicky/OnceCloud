@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,6 @@ import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCPool;
 import com.oncecloud.entity.Storage;
-import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
@@ -45,7 +42,6 @@ public class HostManager {
 	public final static String DEFAULT_USER = "root";
 	public final static String DEFAULT_PORT = "9363";
 
-	private SessionHelper sessionHelper;
 	private SRManager srManager;
 	private MessagePush messagePush;
 	private LogDAO logDAO;
@@ -54,15 +50,6 @@ public class HostManager {
 	private RackDAO rackDAO;
 	private StorageDAO storageDAO;
 	private HostSRDAO hostSRDAO;
-
-	private SessionHelper getSessionHelper() {
-		return sessionHelper;
-	}
-
-	@Autowired
-	private void setSessionHelper(SessionHelper sessionHelper) {
-		this.sessionHelper = sessionHelper;
-	}
 
 	private SRManager getSrManager() {
 		return srManager;
@@ -719,42 +706,26 @@ public class HostManager {
 	@SuppressWarnings("deprecation")
 	public boolean ejectHostFromPool(String hostUuid) {
 		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
+		OCHost host = this.getHostDAO().getHost(hostUuid);
+		String poolUuid = host.getPoolUuid();
+		OCHost master = this.getPoolMaster(poolUuid);
+		String masterUuid = master.getHostUuid();
 		try {
-			OCHost host = this.getHostDAO().getHost(hostUuid);
-			String poolUuid = host.getPoolUuid();
 			if (host != null && poolUuid != null) {
-				OCHost master = this.getPoolMaster(poolUuid);
 				if (master != null) {
-					String masterUuid = master.getHostUuid();
 					Connection conn = new Connection("http://"
 							+ master.getHostIP() + ":9363",
 							HostManager.DEFAULT_USER, master.getHostPwd());
 					Host ejectHost = Types.toHost(hostUuid);
 					Pool.eject(conn, ejectHost);
-					session = this.getSessionHelper().getMainSession();
-					tx = session.beginTransaction();
-					host.setPoolUuid(null);
-					session.update(host);
-					if (hostUuid.equals(masterUuid)) {
-						OCPool pool = this.getPoolDAO().getPool(poolUuid);
-						pool.setPoolMaster(null);
-						session.update(pool);
-					}
-					tx.commit();
 					result = true;
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+		}
+		if (result == true) {
+			result = this.getHostDAO().eject(host, poolUuid, masterUuid);
 		}
 		return result;
 	}
@@ -762,8 +733,6 @@ public class HostManager {
 	@SuppressWarnings("deprecation")
 	public boolean createPool(String hostUuid, String poolUuid) {
 		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
 		try {
 			OCHost targetHost = this.getHostDAO().getHost(hostUuid);
 			OCPool pool = this.getPoolDAO().getPool(poolUuid);
@@ -772,24 +741,11 @@ public class HostManager {
 						+ targetHost.getHostIP() + ":9363",
 						HostManager.DEFAULT_USER, targetHost.getHostPwd());
 				Pool.create(conn, poolUuid);
-				targetHost.setPoolUuid(poolUuid);
-				pool.setPoolMaster(hostUuid);
-				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
-				session.update(targetHost);
-				session.update(pool);
-				tx.commit();
-				result = true;
+				result = this.getHostDAO().updatePoolMaster(pool, targetHost);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
 		}
 		return result;
 	}
