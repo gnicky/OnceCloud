@@ -535,7 +535,7 @@ public class VMManager {
 		OCVM ocvm = this.getVmDAO().getVM(uuid);
 		String hostUuid = ocvm.getHostUuid();
 		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
-		this.doStartVM(userId, hostUuid, poolUuid);
+		this.doStartVM(userId, uuid, poolUuid);
 	}
 
 	public void doStartVM(int userId, String uuid, String poolUuid) {
@@ -633,7 +633,7 @@ public class VMManager {
 		OCVM ocvm = this.getVmDAO().getVM(uuid);
 		String hostUuid = ocvm.getHostUuid();
 		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
-		this.doAdminShutDown(userId, poolUuid, force);
+		this.doShutdownVM(userId, uuid, force, poolUuid);
 	}
 
 	public void doShutdownVM(int userId, String uuid, String force,

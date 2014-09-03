@@ -56,6 +56,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(LB.class);
 			criteria = criteria.add(Restrictions.ne("lbStatus", 0));
 			if (!host.equals("all")) {
@@ -67,6 +68,7 @@ public class LBDAO {
 			}
 			criteria = criteria.setProjection(Projections.rowCount());
 			count = Integer.parseInt(criteria.uniqueResult().toString());
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -104,11 +106,13 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from LB where lbUID=:lbUID and lbName like '%"
 					+ search + "%' and lbStatus > 0 and alarmUuid is null";
 			Query query = session.createQuery(queryString);
 			query.setInteger("lbUID", lbUID);
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -123,6 +127,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from LB where lbUID= "
 					+ uid
 					+ " and lbName like '%"
@@ -132,6 +137,7 @@ public class LBDAO {
 					+ uid + " and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
 			count = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -146,10 +152,12 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from LB where lbUuid = :lbUuid and lbStatus = 0";
 			Query query = session.createQuery(queryString);
 			query.setString("lbUuid", lbUuid);
 			lb = (LB) query.list().get(0);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -171,11 +179,13 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from LB where lbUID =:lbUID and lbStatus > 0 and alarmUuid =:alarmUuid order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("lbUID", lbUID);
 			query.setString("alarmUuid", alarmUuid);
 			list = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -190,10 +200,12 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from LB where lbUuid = :lbUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("lbUuid", lbUuid);
 			lb = (LB) query.list().get(0);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -209,11 +221,13 @@ public class LBDAO {
 		String result = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select lbName from LB where lbUuid='"
 					+ lbuuid + "'";
 			Query query = session.createQuery(queryString);
 			List<String> list = query.list();
 			result = list.get(0);
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -230,6 +244,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			Criteria criteria = session.createCriteria(LB.class);
 			criteria.add(Restrictions.ne("lbStatus", 0));
@@ -242,6 +257,7 @@ public class LBDAO {
 				criteria.add(Restrictions.eq("lbImportance", importance));
 			}
 			lbList = criteria.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -258,6 +274,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from LB where lbUID = :userId and lbName like '%:search%' and lbStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
@@ -266,6 +283,7 @@ public class LBDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			lbList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -290,6 +308,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from LB where lbUID =:lbUID and lbName like '%"
 					+ search
@@ -299,6 +318,7 @@ public class LBDAO {
 			query.setMaxResults(limit);
 			query.setInteger("lbUID", lbUID);
 			lbList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -315,6 +335,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from LB where lbUID = "
 					+ uid
@@ -327,6 +348,7 @@ public class LBDAO {
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			lbList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
@@ -347,6 +369,7 @@ public class LBDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from LB where alarmUuid = :alarmUuid and lbStatus >0";
 			Query query = session.createQuery(queryString);
 			query.setString("alarmUuid", alarmUuid);
@@ -354,6 +377,7 @@ public class LBDAO {
 			if (lbList.size() > 0) {
 				result = false;
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

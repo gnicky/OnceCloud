@@ -37,17 +37,17 @@ public class CreateControllerAdmin {
 
 	@RequestMapping(value = "/datacenter/create", method = { RequestMethod.GET })
 	public ModelAndView createDatecenter(HttpServletRequest request) {
-		return new ModelAndView("admin/create/datacenter");
+		return new ModelAndView("admin/create/createdatacenter");
 	}
 
 	@RequestMapping(value = "/address/create", method = { RequestMethod.GET })
 	public ModelAndView createAddress(HttpServletRequest request) {
-		return new ModelAndView("admin/create/address");
+		return new ModelAndView("admin/create/createaddress");
 	}
 
 	@RequestMapping(value = "/image/create", method = { RequestMethod.GET })
 	public ModelAndView createImage(HttpServletRequest request) {
-		return new ModelAndView("admin/create/image");
+		return new ModelAndView("admin/create/createimage");
 	}
 	
 }

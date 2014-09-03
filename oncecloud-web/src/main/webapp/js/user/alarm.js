@@ -99,15 +99,14 @@ $('#destroy').on('click', function (event) {
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/AlarmAction',
-        data: 'action=detail&alarmUuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/alarmdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/alarm/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="alarmUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getAlarmList(page, limit, search) {

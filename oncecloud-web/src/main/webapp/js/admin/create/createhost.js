@@ -155,6 +155,7 @@ $(document).ready(function () {
                     }
 
                 });
+                removeAllCheck();
                 $('#ServerModalContainer').modal('hide');
             }
         }

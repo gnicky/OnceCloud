@@ -76,10 +76,12 @@ public class StorageDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "select count(*) from HostSR where hostUuid = :hostUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("hostUuid", hostUuid);
 			total = ((Number) query.iterate().next()).intValue();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

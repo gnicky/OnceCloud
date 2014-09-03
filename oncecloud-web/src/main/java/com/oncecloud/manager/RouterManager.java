@@ -734,7 +734,7 @@ public class RouterManager {
 		Router router = this.getRouterDAO().getRouter(uuid);
 		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
 				.getPoolUuid();
-		this.routerShutDown(poolUuid, force, userId, poolUuid);
+		this.routerShutDown(uuid, force, userId, poolUuid);
 	}
 
 	public void routerShutDown(String uuid, String force, int userId,

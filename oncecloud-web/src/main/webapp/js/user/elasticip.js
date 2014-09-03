@@ -318,16 +318,15 @@ function changeBandwidth(eip, bandwidth) {
 
 $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
-    var eip = $(this).parent().parent().attr('eip');
-    $.ajax({
-        type: 'get',
-        url: '/EipAction',
-        data: 'action=detail&eip=' + eip,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/elasticipdetail.jsp";
-        }
-    });
+    var uuid = $(this).parent().parent().attr('eipId');
+    var form = $("<form></form>");
+    form.attr("action","/elasticip/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="eipUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function deleteEip(eip) {

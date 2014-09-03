@@ -20,7 +20,7 @@
 	</bean>
 	<mvc:interceptors>  
 		<mvc:interceptor>  
-			<mvc:mapping path="/*" /> 
+			<mvc:mapping path="/**" /> 
 			<bean class="com.oncecloud.interceptor.CommonInterceptor"> 
 				<property name="uncheckUrls"> 
 					<list> 

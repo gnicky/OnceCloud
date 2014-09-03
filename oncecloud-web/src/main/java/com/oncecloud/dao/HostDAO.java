@@ -15,6 +15,7 @@ import com.oncecloud.helper.SessionHelper;
 @Component
 public class HostDAO {
 	private SessionHelper sessionHelper;
+	private OverViewDAO overViewDAO;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -23,6 +24,15 @@ public class HostDAO {
 	@Autowired
 	private void setSessionHelper(SessionHelper sessionHelper) {
 		this.sessionHelper = sessionHelper;
+	}
+
+	private OverViewDAO getOverViewDAO() {
+		return overViewDAO;
+	}
+
+	@Autowired
+	private void setOverViewDAO(OverViewDAO overViewDAO) {
+		this.overViewDAO = overViewDAO;
 	}
 
 	public int countAllHostList(String search) {
@@ -108,19 +118,16 @@ public class HostDAO {
 		return hostList;
 	}
 
-	@SuppressWarnings("unchecked")
 	public OCHost getHostFromIp(String hostIp) {
 		OCHost host = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Query query = session.createQuery("from OCHost where hostIP = '"
-					+ hostIp + "' and hostStatus = 1");
-			List<OCHost> hostList = query.list();
-			if (hostList.size() == 1) {
-				host = hostList.get(0);
-			}
+			Query query = session
+					.createQuery("from OCHost where hostIP = :hostIp and hostStatus = 1");
+			query.setString("hostIp", hostIp);
+			host = (OCHost) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -302,6 +309,28 @@ public class HostDAO {
 		return result;
 	}
 
+	public boolean saveHost(OCHost host) {
+		boolean result = false;
+		if (host != null) {
+			Session session = null;
+			try {
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.save(host);
+				this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewServer", true);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+		return result;
+	}
+
 	public boolean updateHost(String hostId, String hostName, String hostDesc,
 			String rackUuid) {
 		boolean result = false;
@@ -323,6 +352,34 @@ public class HostDAO {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean deleteHost(String hostId) {
+		boolean result = false;
+		OCHost host = this.getHost(hostId);
+		if (host != null) {
+			Session session = null;
+			try {
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				host.setHostStatus(0);
+				Query query = session
+						.createQuery("delete from HostSR where hostUuid = '"
+								+ hostId + "'");
+				session.update(host);
+				query.executeUpdate();
+				this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewServer", false);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return result;
