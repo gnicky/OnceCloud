@@ -32,7 +32,7 @@ $('#modify').on('click', function (event) {
     var instanceUuid = $("#platformcontent").attr("instanceUuid");
     var instanceName = $("#instancename").text();
     var instanceDesc = $("#instancedesc").text();
-    $('#InstanceModalContainer').load(url, {"modifytype": "instance", "modifyuuid": instanceUuid, "modifyname": instanceName, "modifydesc": instanceDesc}, function () {
+    $('#InstanceModalContainer').load(url, {"modifyType": "instance", "modifyUuid": instanceUuid, "modifyName": instanceName, "modifyDesc": instanceDesc}, function () {
         $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true
