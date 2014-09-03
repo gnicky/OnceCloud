@@ -5,7 +5,7 @@ $("#InstanceModalContainer").on("hidden", function () {
 
 $("#wizard").bwizard({
     backBtnText: "",
-    nextBtnText: "",
+    nextBtnText: ""
 });
 
 var options = {
@@ -150,8 +150,6 @@ $('#createvmAction').on('click', function (event) {
                     }
                     $('#InstanceModalContainer').modal('hide');
                 }
-            },
-            error: function () {
             }
         });
     }

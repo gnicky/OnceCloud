@@ -107,9 +107,8 @@ $('#bandwidth').on('click', function (event) {
     });
 });
 
-$("#changeBandwidth").on("hidden", function () {
+$('#changeBandwidth').on("hidden", function () {
     $(this).removeData("modal");
-    removeAllCheck();
 });
 
 function getEIPList(page, limit, search) {
@@ -231,6 +230,12 @@ function getInfoList() {
     return infoList;
 }
 
+$('#cancelBandwidth').on('click', function (event) {
+    event.preventDefault();
+    $('#changeBandwidth').modal('hide');
+    removeAllCheck();
+});
+
 $("#bandwidthAction").on('click', function (event) {
     event.preventDefault();
     var valid = $('#changebw-form').valid();
@@ -243,9 +248,9 @@ $("#bandwidthAction").on('click', function (event) {
             apply = apply + bandwidthS - currentInt;
         });
         $.ajax({
-            type: 'post',
-            url: '/EipAction',
-            data: 'action=quota&count=0&size=' + apply,
+            type: 'get',
+            url: '/EIPAction/Quota',
+            data: {count: 0, size: apply},
             dataType: 'text',
             cache: false,
             success: function (msg) {
@@ -266,6 +271,7 @@ $("#bandwidthAction").on('click', function (event) {
                                 className: "btn-default",
                                 callback: function () {
                                     $('#changeBandwidth').modal('hide');
+                                    removeAllCheck();
                                 }
                             }
                         }
@@ -276,8 +282,8 @@ $("#bandwidthAction").on('click', function (event) {
                         changeBandwidth(currentIp, bandwidthS);
                     });
                     $('#changeBandwidth').modal('hide');
+                    removeAllCheck();
                 }
-                removeAllCheck();
             }
         });
     }
@@ -303,7 +309,7 @@ $("#changebw-form").validate({
 function changeBandwidth(eip, bandwidth) {
     $.ajax({
         type: 'post',
-        url: '/EipAction/Bandwidth',
+        url: '/EIPAction/Bandwidth',
         data: {eip: eip, size: bandwidth},
         dataType: 'json',
         success: function (obj) {
@@ -350,7 +356,7 @@ function unbind(eipIp) {
     var bindtype = thistr.find('[vmuuid]').attr('type');
     $.ajax({
         type: 'get',
-        url: '/EipAction',
+        url: '/EIPAction',
         data: "action=unbind&eipIp=" + eipIp + "&vmuuid=" + vmuuid + '&bindtype=' + bindtype,
         dataType: 'json',
         success: function (obj) {

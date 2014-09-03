@@ -76,7 +76,7 @@
 			</div>
 			<div class="modal-footer">
 				<button id="bandwidthAction" type="button" class="btn btn-primary" style="margin-left:-100px">修改</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" id="cancelBandwidth" class="btn btn-default" data-dismiss="modal">取消</button>
 			</div>
 		</div>
 	</div>
