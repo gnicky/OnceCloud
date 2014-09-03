@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.JSONArray;
@@ -24,7 +23,6 @@ import com.once.xenapi.Types;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.HostSRDAO;
 import com.oncecloud.dao.LogDAO;
-import com.oncecloud.dao.OverViewDAO;
 import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
@@ -50,6 +48,12 @@ public class HostManager {
 	private SessionHelper sessionHelper;
 	private SRManager srManager;
 	private MessagePush messagePush;
+	private LogDAO logDAO;
+	private HostDAO hostDAO;
+	private PoolDAO poolDAO;
+	private RackDAO rackDAO;
+	private StorageDAO storageDAO;
+	private HostSRDAO hostSRDAO;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -77,14 +81,6 @@ public class HostManager {
 	private void setMessagePush(MessagePush messagePush) {
 		this.messagePush = messagePush;
 	}
-
-	private LogDAO logDAO;
-	private HostDAO hostDAO;
-	private PoolDAO poolDAO;
-	private RackDAO rackDAO;
-	private StorageDAO storageDAO;
-	private HostSRDAO hostSRDAO;
-	private OverViewDAO overViewDAO;
 
 	private LogDAO getLogDAO() {
 		return logDAO;
@@ -140,22 +136,12 @@ public class HostManager {
 		this.hostSRDAO = hostSRDAO;
 	}
 
-	private OverViewDAO getOverViewDAO() {
-		return overViewDAO;
-	}
-
-	@Autowired
-	private void setOverViewDAO(OverViewDAO overViewDAO) {
-		this.overViewDAO = overViewDAO;
-	}
-
 	public JSONArray createHost(String hostName, String hostPwd,
 			String hostDesc, String hostIp, String rackUuid, String rackName,
 			int userid) {
 		Date startTime = new Date();
 		JSONArray qaArray = new JSONArray();
-		HostManager hm = new HostManager();
-		OCHost result = hm.addHost(hostName, hostPwd, hostDesc, hostIp,
+		OCHost result = this.addHost(hostName, hostPwd, hostDesc, hostIp,
 				rackUuid);
 		if (result != null) {
 			JSONObject tObj = new JSONObject();
@@ -244,8 +230,8 @@ public class HostManager {
 		return qaArray;
 	}
 
-	public JSONArray getHostLoadList(int page, int limit,
-			String searchStr, String srUuid) {
+	public JSONArray getHostLoadList(int page, int limit, String searchStr,
+			String srUuid) {
 		int totalNum = this.getHostDAO().countAllHostList(searchStr);
 		JSONArray qaArray = new JSONArray();
 		List<OCHost> hostList = this.getHostDAO().getOnePageLoadHostList(page,
@@ -410,9 +396,8 @@ public class HostManager {
 
 	public JSONArray deleteAction(String hostId, String hostName, int userid) {
 		Date startTime = new Date();
-		HostManager hm = new HostManager();
 		JSONArray qaArray = new JSONArray();
-		boolean result = hm.deleteHost(hostId);
+		boolean result = this.getHostDAO().deleteHost(hostId);
 		JSONObject tObj = new JSONObject();
 		tObj.put("result", result);
 		qaArray.put(tObj);
@@ -817,8 +802,6 @@ public class HostManager {
 			return null;
 		}
 		OCHost host = null;
-		Session session = null;
-		Transaction tx = null;
 		try {
 			Connection conn = new Connection("http://" + hostIp + ":"
 					+ DEFAULT_PORT, DEFAULT_USER, hostPwd);
@@ -841,56 +824,13 @@ public class HostManager {
 						hostStatus, rackUuid, current);
 				break;
 			}
-			// Insert into database
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			session.saveOrUpdate(host);
-			this.getOverViewDAO().updateOverViewfieldNoTransaction(
-					"viewServer", true);
-			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			host = null;
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
+		}
+		if (host != null) {
+			this.getHostDAO().saveHost(host);
 		}
 		return host;
-	}
-
-	public boolean deleteHost(String hostId) {
-		OCHost host = this.getHostDAO().getHost(hostId);
-		boolean result = false;
-		Session session = null;
-		Transaction tx = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
-			host.setHostStatus(0);
-			Query query = session
-					.createQuery("delete from HostSR where hostUuid = '"
-							+ hostId + "'");
-			session.update(host);
-			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfieldNoTransaction(
-					"viewServer", false);
-			tx.commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-		return result;
 	}
 
 	public boolean updateHost(String hostId, String hostName, String hostDesc,
