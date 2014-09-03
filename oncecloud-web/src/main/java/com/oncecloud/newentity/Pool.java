@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "oc_pool")
 public class Pool {
@@ -24,6 +26,7 @@ public class Pool {
 	private Date createDate;
 
 	@Id
+	@Type(type = "uuid-char")
 	@Column(name = "pool_uuid")
 	public UUID getUuid() {
 		return uuid;
