@@ -15,7 +15,7 @@ import com.oncecloud.main.Constant;
 
 @Controller
 public class DetailControllerUser {
-	
+
 	@RequestMapping(value = "/instance/detail")
 	@ResponseBody
 	public ModelAndView instanceDetail(HttpServletRequest request) {
@@ -26,7 +26,8 @@ public class DetailControllerUser {
 		String uuid = request.getParameter("instanceUuid");
 		if (uuid != null) {
 			request.getSession().setAttribute("instanceUuid", uuid);
-			request.getSession().setAttribute("showId", "i-" + uuid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"i-" + uuid.substring(0, 8));
 			return new ModelAndView("user/detail/instancedetail", model);
 		} else {
 			if (request.getSession().getAttribute("instanceUuid") != null) {
@@ -36,7 +37,7 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/volume/detail")
 	@ResponseBody
 	public ModelAndView volumeDetail(HttpServletRequest request) {
@@ -46,7 +47,8 @@ public class DetailControllerUser {
 		String uuid = request.getParameter("volumeUuid");
 		if (uuid != null) {
 			request.getSession().setAttribute("volumeUuid", uuid);
-			request.getSession().setAttribute("showId", "vol-" + uuid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"vol-" + uuid.substring(0, 8));
 			return new ModelAndView("user/detail/volumedetail", model);
 		} else {
 			if (request.getSession().getAttribute("volumeUuid") != null) {
@@ -56,7 +58,7 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/router/detail")
 	@ResponseBody
 	public ModelAndView routerDetail(HttpServletRequest request) {
@@ -66,7 +68,8 @@ public class DetailControllerUser {
 		String uuid = request.getParameter("routerUuid");
 		if (uuid != null) {
 			request.getSession().setAttribute("routerUuid", uuid);
-			request.getSession().setAttribute("showId", "rt-" + uuid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"rt-" + uuid.substring(0, 8));
 			return new ModelAndView("user/detail/routerdetail", model);
 		} else {
 			if (request.getSession().getAttribute("routerUuid") != null) {
@@ -76,7 +79,7 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/vnet/detail")
 	@ResponseBody
 	public ModelAndView vnetDetail(HttpServletRequest request) {
@@ -86,7 +89,8 @@ public class DetailControllerUser {
 		String uuid = request.getParameter("vnetUuid");
 		if (uuid != null) {
 			request.getSession().setAttribute("vnetUuid", uuid);
-			request.getSession().setAttribute("showId", "vn-" + uuid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"vn-" + uuid.substring(0, 8));
 			return new ModelAndView("user/detail/vnetdetail", model);
 		} else {
 			if (request.getSession().getAttribute("vnetUuid") != null) {
@@ -96,27 +100,31 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/elasticip/detail")
 	@ResponseBody
 	public ModelAndView elasticIPDetail(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "公网IP");
 		model.put("sideActive", 6);
-		String uuid = request.getParameter("eipUuid");
-		if (uuid != null) {
-			request.getSession().setAttribute("eipUuid", uuid);
-			request.getSession().setAttribute("showId", "eip-" + uuid.substring(0, 8));
+		String eip = request.getParameter("eip");
+		String eipUuid = request.getParameter("eipUuid");
+		if (eipUuid != null && eip != null) {
+			request.getSession().setAttribute("eip", eip);
+			request.getSession().setAttribute("eipUuid", eipUuid);
+			request.getSession().setAttribute("showId",
+					"eip-" + eipUuid.substring(0, 8));
 			return new ModelAndView("user/detail/elasticipdetail", model);
 		} else {
-			if (request.getSession().getAttribute("eipUuid") != null) {
+			if (request.getSession().getAttribute("eip") != null
+					&& request.getSession().getAttribute("eipUuid") != null) {
 				return new ModelAndView("user/detail/elasticipdetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/loadbalance/detail")
 	@ResponseBody
 	public ModelAndView loadBalanceDetail(HttpServletRequest request) {
@@ -126,7 +134,8 @@ public class DetailControllerUser {
 		String uuid = request.getParameter("lbUuid");
 		if (uuid != null) {
 			request.getSession().setAttribute("lbUuid", uuid);
-			request.getSession().setAttribute("showId", "lb-" + uuid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"lb-" + uuid.substring(0, 8));
 			return new ModelAndView("user/detail/loadbalancedetail", model);
 		} else {
 			if (request.getSession().getAttribute("lbUuid") != null) {
@@ -136,7 +145,7 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/firewall/detail")
 	@ResponseBody
 	public ModelAndView firewallDetail(HttpServletRequest request) {
@@ -146,7 +155,8 @@ public class DetailControllerUser {
 		String firewallId = request.getParameter("firewallId");
 		if (firewallId != null) {
 			request.getSession().setAttribute("firewallId", firewallId);
-			request.getSession().setAttribute("showId", "fw-" + firewallId.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"fw-" + firewallId.substring(0, 8));
 			return new ModelAndView("user/detail/firewalldetail", model);
 		} else {
 			if (request.getSession().getAttribute("firewallId") != null) {
@@ -156,7 +166,7 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/snapshot/detail")
 	@ResponseBody
 	public ModelAndView snapshotDetail(HttpServletRequest request) {
@@ -180,7 +190,7 @@ public class DetailControllerUser {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/alarm/detail")
 	@ResponseBody
 	public ModelAndView alarmDetail(HttpServletRequest request) {
@@ -190,7 +200,8 @@ public class DetailControllerUser {
 		String alarmUuid = request.getParameter("alarmUuid");
 		if (alarmUuid != null) {
 			request.getSession().setAttribute("alarmUuid", alarmUuid);
-			request.getSession().setAttribute("showId", "al-" + alarmUuid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"al-" + alarmUuid.substring(0, 8));
 			return new ModelAndView("user/detail/alarmdetail", model);
 		} else {
 			if (request.getSession().getAttribute("alarmUuid") != null) {

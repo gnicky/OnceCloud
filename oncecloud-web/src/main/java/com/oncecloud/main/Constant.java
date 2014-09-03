@@ -94,6 +94,21 @@ public class Constant {
 	}
 
 	@SuppressWarnings("deprecation")
+	public Connection getConnectionNoTransactional(int userId) {
+		User user = this.getUserDAO().getUserNoTransactional(userId);
+		OCPool pool = this.getPoolDAO().getPoolNoTransactional(user.getUserAllocate());
+		OCHost master = this.getHostDAO().getHostNoTransactional(pool.getPoolMaster());
+		String url = "http://" + master.getHostIP() + ":9363";
+		try {
+			Connection c = new Connection(url, "root", master.getHostPwd());
+			logger.info("Create new connection to " + url);
+			return c;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("deprecation")
 	public Connection getConnectionFromPool(String poolUuid) {
 		OCPool pool = this.getPoolDAO().getPool(poolUuid);
 		OCHost master = this.getHostDAO().getHost(pool.getPoolMaster());

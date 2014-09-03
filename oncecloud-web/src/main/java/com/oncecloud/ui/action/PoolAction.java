@@ -75,7 +75,8 @@ public class PoolAction {
 	
 	@RequestMapping(value = "/AllPool", method = {RequestMethod.POST })
 	@ResponseBody
-	public void allPool(HttpServletRequest request, ImageCloneModel imagecloneModel) {
-		this.getPoolManager().getAllPool();
+	public String allPool(HttpServletRequest request, ImageCloneModel imagecloneModel) {
+		JSONArray ja = this.getPoolManager().getAllPool();
+		return ja.toString();
 	}
 }

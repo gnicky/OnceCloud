@@ -45,7 +45,7 @@
 					<th width="12%">应用资源</th>
 					<th>带宽&nbsp;(Mbps)</th>
 					<th>IP分组</th>
-					<th width="12%">创建于</th>
+					<th width="12%">创建时间</th>
 				</tr>
 			</thead>
 			<tbody id="tablebody">

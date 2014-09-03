@@ -327,6 +327,7 @@ public class RackDAO {
 			query.setString("dcUuid", dcUuid);
 			query.setString("rackUuid", rackUuid);
 			query.executeUpdate();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();

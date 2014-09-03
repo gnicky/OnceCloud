@@ -110,6 +110,27 @@ public class HostDAO {
 	}
 
 	@SuppressWarnings("unchecked")
+	public OCHost getHostNoTransactional(String hostUuid) {
+		OCHost host = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			Query query = session.createQuery("from OCHost where hostUuid = '"
+					+ hostUuid + "'");
+			List<OCHost> hostList = query.list();
+			if (hostList.size() == 1) {
+				host = hostList.get(0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return host;
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<OCHost> getHostForImage() {
 		List<OCHost> hostList = null;
 		Session session = null;
@@ -431,6 +452,7 @@ public class HostDAO {
 			session.update(targetHost);
 			session.update(pool);
 			session.getTransaction().commit();
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

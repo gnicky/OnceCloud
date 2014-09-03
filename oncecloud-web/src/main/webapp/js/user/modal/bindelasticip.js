@@ -94,7 +94,7 @@ function bindeip(vmuuid, eipIp) {
     $.ajax({
         type: 'post',
         url: '/EIPAction/Bind',
-        data: {vmUuid: vmuuid, eipIp: eipIP, bindType: bindtype},
+        data: {vmUuid: vmuuid, eipIp: eipIp, bindType: bindtype},
         dataType: 'json',
         success: function (obj) {
             if (obj.result) {

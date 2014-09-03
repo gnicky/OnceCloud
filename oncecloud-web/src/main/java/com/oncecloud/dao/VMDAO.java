@@ -317,7 +317,7 @@ public class VMDAO {
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "select vm from OCVM vm where vm.vmUID = :userId "
-					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmUuid not in "
+					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmVlan is null and vm.vmUuid not in "
 					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :uid "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
