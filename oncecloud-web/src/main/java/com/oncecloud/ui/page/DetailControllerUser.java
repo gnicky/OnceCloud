@@ -180,12 +180,11 @@ public class DetailControllerUser {
 			request.getSession().setAttribute("resourceUuid", resourceUuid);
 			request.getSession().setAttribute("resourceType", resourceType);
 			request.getSession().setAttribute("resourceName", resourceName);
-			request.getSession().setAttribute("showId",
-					"bk-" + resourceUuid.substring(0, 8));
-			return new ModelAndView("user/detail/firewalldetail", model);
+			request.getSession().setAttribute("showId", "bk-" + resourceUuid.substring(0, 8));
+			return new ModelAndView("user/detail/snapshotdetail", model);
 		} else {
 			if (request.getSession().getAttribute("resourceUuid") != null) {
-				return new ModelAndView("user/detail/firewalldetail", model);
+				return new ModelAndView("user/detail/snapshotdetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));
 			}

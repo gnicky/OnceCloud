@@ -39,7 +39,7 @@ public class FirewallAction {
 		return ja.toString();
 	}
 	
-	@RequestMapping(value = "/AvailableFirewalls", method = { RequestMethod.GET })
+	@RequestMapping(value = "/AvailableFirewalls", method = { RequestMethod.POST })
 	@ResponseBody
 	public String availablefirewalls(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -49,13 +49,13 @@ public class FirewallAction {
 		return ja.toString();
 	}
 	
-	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
 	public String availablefirewalls(HttpServletRequest request,@RequestParam String firewallId,@RequestParam String vmUuidStr,@RequestParam String bindType) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
 		JSONObject jo = this.getFirewallManager().bindFirewall(userId,
-				firewallId, vmUuidStr, bindType);
+				vmUuidStr,firewallId,  bindType);
 		return jo.toString();
 	}
 }

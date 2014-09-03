@@ -1118,7 +1118,7 @@ function changeNet() {
             }
 
             ///1 查询出所有可用的 公网ip。
-            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:10px 10px 0">' + tablelist + '</div>';
+            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
             var showTitle = '选择主机 &nbsp;' + infoList + ' 要绑定的网络';
 
@@ -1135,7 +1135,7 @@ function changeNet() {
                             var vmuuid = $("#platformcontent").attr("instanceUuid");
 
                             $.ajax({
-                                type: 'get',
+                                type: 'post',
                                 url: '/VnetAction/BindVM',
                                 data: {vnId:vnetuuid,vmUuid:vmuuid},
                                 dataType: 'text',
@@ -1154,7 +1154,7 @@ function changeNet() {
                     }
                 }
             });
-            $("#epubliciplist").parents(".modal-dialog").width(600);
+            $("#epubliciplist").parents(".modal-dialog").width(500);
             $('.epubliciplist').on('click', '.image-item', function (event) {
                 event.preventDefault();
                 $('div', $('.epubliciplist')).removeClass('selected');
@@ -1234,8 +1234,8 @@ function bindpublicip(bdtype) {
             }
 
             ///1 查询出所有可用的 公网ip。
-            var showMessage = '<div class="alert alert-warning" style="margin:10px 10px 0">默认情况下，除了少数安全端口之外，主机的大部分端口都是关闭的，您需要在防火墙中打开相应的下行规则以允许外网访问。</div>'
-                + '<div class="epubliciplist" id="epubliciplist" style="margin:10px 10px 0">' + tablelist + '</div>';
+            var showMessage = '<div class="alert alert-warning" style="margin:10px 30px">默认情况下，除了少数安全端口之外，主机的大部分端口都是关闭的，您需要在防火墙中打开相应的下行规则以允许外网访问。</div>'
+                + '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
             var showTitle = '选择主机 &nbsp;' + infoList + ' 要绑定的公网IP';
 
@@ -1300,7 +1300,7 @@ function bindpublicip(bdtype) {
                     }
                 }
             });
-            $("#epubliciplist").parents(".modal-dialog").width(600);
+            $("#epubliciplist").parents(".modal-dialog").width(500);
             $('.epubliciplist').on('click', '.image-item', function (event) {
                 event.preventDefault();
                 $('div', $('.epubliciplist')).removeClass('selected');
@@ -1369,7 +1369,7 @@ function unbingpublicip(bdtype) {
         eipIp = $("#routerunbingpublic .component-id").text();
     }
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: '/EIPAction/UnBind',
         data: {eipIp:eipIp,vmUuid:vmuuid,bindType:bdtype},
         dataType: 'json',
@@ -1408,7 +1408,7 @@ function bingfirewall(bdtype) {
             }
 
             ///1 查询出所有可用的 公网ip。
-            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:10px 10px 0">' + tablelist + '</div>';
+            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
             var showTitle = '选择主机 &nbsp;' + infoList + ' 要绑定的防火墙';
 
@@ -1428,7 +1428,7 @@ function bingfirewall(bdtype) {
                             var router = "[" + $("#vnrouterUuid").val() + "]";
                             if (bdtype == "vm") {
                                 $.ajax({
-                                    type: 'get',
+                                    type: 'post',
                                     url: '/FirewallAction/Bind',
                                     data: {firewallId:firewallId,vmUuidStr:vmuuid,bindType:bdtype},
                                     dataType: 'json',
@@ -1446,7 +1446,7 @@ function bingfirewall(bdtype) {
                                 });
                             } else if (bdtype == "rt") {
                                 $.ajax({
-                                    type: 'get',
+                                    type: 'post',
                                     url: '/FirewallAction/Bind',
                                     data: {firewallId:firewallId,vmUuidStr:router,bindType:bdtype},
                                     dataType: 'json',
@@ -1474,7 +1474,7 @@ function bingfirewall(bdtype) {
                     }
                 }
             });
-            $("#epubliciplist").parents(".modal-dialog").width(600);
+            $("#epubliciplist").parents(".modal-dialog").width(500);
             $('.epubliciplist').on('click', '.image-item', function (event) {
                 event.preventDefault();
                 $('div', $('.epubliciplist')).removeClass('selected');
@@ -1506,7 +1506,7 @@ function bindvolumes() {
             }
 
             ///1 查询出所有可用的 公网ip。
-            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:10px 10px 0">' + tablelist + '</div>';
+            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px 0">' + tablelist + '</div>';
 
             var showTitle = '选择主机 &nbsp;' + infoList + ' 要 挂载的硬盘';
 
@@ -1542,7 +1542,7 @@ function bindvolumes() {
                     }
                 }
             });
-            $("#epubliciplist").parents(".modal-dialog").width(600);
+            $("#epubliciplist").parents(".modal-dialog").width(500);
             $('.epubliciplist').on('click', '.image-item', function (event) {
                 event.preventDefault();
                 $('div', $('.epubliciplist')).removeClass('selected');

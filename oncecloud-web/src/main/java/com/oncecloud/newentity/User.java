@@ -24,7 +24,7 @@ public class User {
 	private String company;
 	private UserLevel level;
 	private Status status;
-	private Date date;
+	private Date createDate;
 	private Pool pool;
 	private Double balance;
 	private Integer voucher;
@@ -106,12 +106,12 @@ public class User {
 	}
 
 	@Column(name = "user_date")
-	public Date getDate() {
-		return date;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	protected void setDate(Date date) {
-		this.date = date;
+	protected void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 	@ManyToOne
@@ -146,4 +146,19 @@ public class User {
 
 	}
 
+	public User(String userName, String password, String email,
+			String telephone, String company, UserLevel level, Status status,
+			Date createDate, Pool pool, Double balance, Integer voucher) {
+		this.setUserName(userName);
+		this.setPassword(password);
+		this.setEmail(email);
+		this.setTelephone(telephone);
+		this.setCompany(company);
+		this.setLevel(level);
+		this.setStatus(status);
+		this.setCreateDate(createDate);
+		this.setPool(pool);
+		this.setBalance(balance);
+		this.setVoucher(voucher);
+	}
 }
