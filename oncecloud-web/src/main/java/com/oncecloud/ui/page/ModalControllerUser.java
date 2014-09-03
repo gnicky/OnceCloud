@@ -48,4 +48,9 @@ public class ModalControllerUser {
 		model.put("type", type);
 		return new ModelAndView("user/modal/bindelasticip", model);
 	}
+	
+	@RequestMapping(value = "/volume/bind", method = { RequestMethod.GET })
+	public ModelAndView bindVolume(HttpServletRequest request) {
+		return new ModelAndView("user/modal/bindvolume");
+	}
 }
