@@ -107,9 +107,8 @@ $('#bandwidth').on('click', function (event) {
     });
 });
 
-$("#changeBandwidth").on("hidden", function () {
+$('#changeBandwidth').on("hidden", function () {
     $(this).removeData("modal");
-    removeAllCheck();
 });
 
 function getEIPList(page, limit, search) {
@@ -231,6 +230,11 @@ function getInfoList() {
     return infoList;
 }
 
+$('#cancelBandwidth').on('click', function (event) {
+    event.preventDefault();
+    $('#changeBandwidth').modal('hide');
+});
+
 $("#bandwidthAction").on('click', function (event) {
     event.preventDefault();
     var valid = $('#changebw-form').valid();
@@ -243,9 +247,9 @@ $("#bandwidthAction").on('click', function (event) {
             apply = apply + bandwidthS - currentInt;
         });
         $.ajax({
-            type: 'post',
-            url: '/EipAction',
-            data: 'action=quota&count=0&size=' + apply,
+            type: 'get',
+            url: '/EIPAction/Quota',
+            data: {count: 0, size: apply},
             dataType: 'text',
             cache: false,
             success: function (msg) {
@@ -266,6 +270,7 @@ $("#bandwidthAction").on('click', function (event) {
                                 className: "btn-default",
                                 callback: function () {
                                     $('#changeBandwidth').modal('hide');
+                                    removeAllCheck();
                                 }
                             }
                         }
@@ -276,8 +281,8 @@ $("#bandwidthAction").on('click', function (event) {
                         changeBandwidth(currentIp, bandwidthS);
                     });
                     $('#changeBandwidth').modal('hide');
+                    removeAllCheck();
                 }
-                removeAllCheck();
             }
         });
     }
@@ -303,8 +308,8 @@ $("#changebw-form").validate({
 function changeBandwidth(eip, bandwidth) {
     $.ajax({
         type: 'post',
-        url: '/EipAction',
-        data: 'action=bandwidth&eip=' + eip + '&size=' + bandwidth,
+        url: '/EIPAction/Bandwidth',
+        data: {eip: eip, size: bandwidth},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -320,11 +325,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('eipId');
     var form = $("<form></form>");
-    form.attr("action","/elasticip/detail");
-    form.attr('method','post');
+    form.attr("action", "/elasticip/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="eipUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -332,8 +337,8 @@ $('#tablebody').on('click', '.id', function (event) {
 function deleteEip(eip) {
     $.ajax({
         type: 'get',
-        url: '/EipAction',
-        data: "action=delete&eip=" + eip,
+        url: '/EIPAction/DeleteEIP',
+        data: {eip: eip},
         dataType: 'text',
         success: function (response) {
             $("#tablebody").find('[eip="' + eip + '"]').remove();
@@ -350,7 +355,7 @@ function unbind(eipIp) {
     var bindtype = thistr.find('[vmuuid]').attr('type');
     $.ajax({
         type: 'get',
-        url: '/EipAction',
+        url: '/EIPAction',
         data: "action=unbind&eipIp=" + eipIp + "&vmuuid=" + vmuuid + '&bindtype=' + bindtype,
         dataType: 'json',
         success: function (obj) {

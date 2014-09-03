@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.OCHost;
+import com.oncecloud.entity.OCPool;
 import com.oncecloud.entity.Storage;
 import com.oncecloud.helper.SessionHelper;
 
@@ -16,6 +17,7 @@ import com.oncecloud.helper.SessionHelper;
 public class HostDAO {
 	private SessionHelper sessionHelper;
 	private OverViewDAO overViewDAO;
+	private PoolDAO poolDAO;
 
 	private SessionHelper getSessionHelper() {
 		return sessionHelper;
@@ -33,6 +35,15 @@ public class HostDAO {
 	@Autowired
 	private void setOverViewDAO(OverViewDAO overViewDAO) {
 		this.overViewDAO = overViewDAO;
+	}
+
+	private PoolDAO getPoolDAO() {
+		return poolDAO;
+	}
+
+	@Autowired
+	private void setPoolDAO(PoolDAO poolDAO) {
+		this.poolDAO = poolDAO;
 	}
 
 	public int countAllHostList(String search) {
@@ -383,5 +394,50 @@ public class HostDAO {
 			}
 		}
 		return result;
+	}
+
+	public boolean eject(OCHost host, String poolUuid, String masterUuid) {
+		boolean result = false;
+		Session session = null;
+		OCPool pool = this.getPoolDAO().getPool(poolUuid);
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			host.setPoolUuid(null);
+			session.update(host);
+			if (host.getHostUuid().equals(masterUuid)) {
+				pool.setPoolMaster(null);
+				session.update(pool);
+			}
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
+	public boolean updatePoolMaster(OCPool pool, OCHost targetHost) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			targetHost.setPoolUuid(pool.getPoolUuid());
+			pool.setPoolMaster(targetHost.getHostUuid());
+			session.update(targetHost);
+			session.update(pool);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+
 	}
 }

@@ -82,12 +82,29 @@ public class EIPAction {
 		return quota;
 	}
 	
-	@RequestMapping(value = "/createEIP", method = { RequestMethod.POST })
+	@RequestMapping(value = "/CreateEIP", method = { RequestMethod.POST })
 	@ResponseBody
 	public String createEIP(HttpServletRequest request, CreateEIPModel ceModel) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
 		JSONObject jo = this.getEipManager().eipApply(ceModel.getEipName(), userId, ceModel.getEipSize(), ceModel.getEipUuid());
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/DeleteEIP", method = { RequestMethod.GET })
+	@ResponseBody
+	public void deleteEIP(HttpServletRequest request, @RequestParam String eip) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getEipManager().eipDelete(eip, userId);
+	}
+	
+	@RequestMapping(value = "/Bandwidth", method = { RequestMethod.POST })
+	@ResponseBody
+	public String bandwidth(HttpServletRequest request, @RequestParam String eip, @RequestParam int size) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = getEipManager().eipBandwidth(eip, size, userId);
 		return jo.toString();
 	}
 }
