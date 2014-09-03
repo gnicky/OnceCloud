@@ -25,25 +25,16 @@ $('#tagdiv').on('click', '.id', function(event) {
     form.submit();
 });
 
-/*$('#tagdiv').on('click', '.switchid', function(event) {
-	event.preventDefault();
-	var switchid = $(this).attr('switchid');
-	$.ajax({
-				type : 'get',
-				url : '/DashboardAction',
-				data : 'action=switchdetail&switchid=' + switchid,
-				dataType : 'text',
-				success : function(response) {
-					window.location.href = $('#platformcontent')
-							.attr('platformBasePath')
-							+ "admin/detail/switchdetail.jsp";
-				},
-				error : function() {
-
-				}
-			});
-});
-*/
+/*
+ * $('#tagdiv').on('click', '.switchid', function(event) {
+ * event.preventDefault(); var switchid = $(this).attr('switchid'); $.ajax({
+ * type : 'get', url : '/DashboardAction', data :
+ * 'action=switchdetail&switchid=' + switchid, dataType : 'text', success :
+ * function(response) { window.location.href = $('#platformcontent')
+ * .attr('platformBasePath') + "admin/detail/switchdetail.jsp"; }, error :
+ * function() {
+ *  } }); });
+ */
 
 $('#tagdiv').on('mouseenter', 'li', function(event) {
 			event.preventDefault();
@@ -52,7 +43,7 @@ $('#tagdiv').on('mouseenter', 'li', function(event) {
 $('#tagdiv').on('mouseleave', 'li', function(event) {
 			event.preventDefault();
 			$(this).find(".t_tips").hide();
-		});});
+		});
 
 
 function getrackList() {
@@ -216,3 +207,4 @@ function getPoolList() {
             $("#tagdiv").append(srhtml);
         }
     });
+}

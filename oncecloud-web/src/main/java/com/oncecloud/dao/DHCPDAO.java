@@ -85,7 +85,7 @@ public class DHCPDAO {
 				}
 			}
 			total.put("hosts", ipMacArray);
-			Connection connection = this.getConstant().getConnection(1);
+			Connection connection = this.getConstant().getConnectionNoTransactional(1);
 			boolean bindResult = Host.bindIpMac(connection, total.toString());
 			if (bindResult) {
 				for (DHCP dhcp : dhcpList) {
@@ -236,11 +236,9 @@ public class DHCPDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
 			Criteria criteria = session.createCriteria(DHCP.class).add(
 					Restrictions.eq("dhcpIp", dhcpIp));
 			DHCP dhcp = (DHCP) criteria.uniqueResult();
-			session.getTransaction().commit();
 			result = (dhcp != null);
 		} catch (Exception e) {
 			e.printStackTrace();

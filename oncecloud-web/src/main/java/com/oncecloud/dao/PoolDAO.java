@@ -61,6 +61,24 @@ public class PoolDAO {
 		return pool;
 	}
 
+	public OCPool getPoolNoTransactional(String poolUuid) {
+		OCPool pool = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			String builder = "from OCPool where poolUuid = :poolUuid";
+			Query query = session.createQuery(builder);
+			query.setString("poolUuid", poolUuid);
+			pool = (OCPool) query.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return pool;
+	}
+
 	/**
 	 * 获取随机资源池
 	 * 

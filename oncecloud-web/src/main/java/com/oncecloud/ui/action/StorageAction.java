@@ -36,7 +36,7 @@ public class StorageAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Delete", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
 	public String delete(HttpServletRequest request, @RequestParam String srid,
 			@RequestParam String srname) {

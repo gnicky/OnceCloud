@@ -79,4 +79,20 @@ public class DatacenterAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getDatacenterManager().update(dcuuid, dcname, dclocation, dcdesc, user.getUserId());
 	}
+
+	@RequestMapping(value = "/PoolList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String poolList(HttpServletRequest request) {
+		String dcid = (String) request.getSession().getAttribute("dcid");
+		JSONArray ja = this.getDatacenterManager().getPoolList(dcid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/RackList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String rackList(HttpServletRequest request) {
+		String dcid = (String) request.getSession().getAttribute("dcid");
+		JSONArray ja = this.getDatacenterManager().getRackList(dcid);
+		return ja.toString();
+	}
 }

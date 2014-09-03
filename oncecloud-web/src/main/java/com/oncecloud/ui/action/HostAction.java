@@ -63,7 +63,7 @@ public class HostAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Issamesr", method = { RequestMethod.POST })
+	@RequestMapping(value = "/Issamesr", method = { RequestMethod.GET })
 	@ResponseBody
 	public String isSameSR(HttpServletRequest request,
 			@RequestParam("uuidjsonstr") String uuidJsonStr) {

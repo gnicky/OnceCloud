@@ -195,6 +195,7 @@ public class StorageDAO {
 			Query query = session
 					.createQuery("from Storage where srAddress = :address "
 							+ "and srstatus = 1");
+			query.setString("srAddress", address);
 			sr = (Storage) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {

@@ -51,6 +51,7 @@ public class HostSRDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			srList = new HashSet<String>();
 			Query query = session.createQuery("from HostSR where hostUuid = '"
 					+ hostUuid + "'");
@@ -58,6 +59,7 @@ public class HostSRDAO {
 			for (HostSR hsr : hsrList) {
 				srList.add(hsr.getSrUuid());
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
