@@ -12,6 +12,7 @@
 	<%@ include file="../content/detail/instancedetailc.jsp" %>
 	<script src="${basePath}js/highcharts.js"></script>
 	<script src="${basePath}js/bootstrap-switch.min.js"></script>
+    <script src="${basePath}js/user/detail/instancedetailimage.js"></script>
 	<script src="${basePath}js/user/detail/instancedetail.js"></script>
 </body>
 </html>

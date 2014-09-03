@@ -74,4 +74,25 @@ public class RouterAction {
 		JSONObject jo = this.getRouterManager().getRouterDetail(uuid);
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/StartUp", method = { RequestMethod.POST })
+	@ResponseBody
+	public void startUp(HttpServletRequest request,@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getRouterManager().routerStartUp(uuid, user.getUserId(), user.getUserAllocate());
+	}
+	
+	@RequestMapping(value = "/Destroy", method = { RequestMethod.POST })
+	@ResponseBody
+	public void destroy(HttpServletRequest request,@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getRouterManager().routerDestory(uuid, user.getUserId(), user.getUserAllocate());
+	}
+	
+	@RequestMapping(value = "/ShutDown", method = { RequestMethod.POST })
+	@ResponseBody
+	public void shutDown(HttpServletRequest request,@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		//this.getRouterManager().routerShutDown(uuid, user.getUserId(), user.getUserAllocate());
+	}
 }

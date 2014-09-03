@@ -216,14 +216,10 @@ function startRouter(uuid) {
     thistr.find('[name="stateicon"]').addClass('icon-process');
     thistr.find('[name="stateword"]').text('启动中');
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: '/RouterAction',
         data: 'action=startup&uuid=' + uuid,
         dataType: 'json',
-        success: function (array) {
-        },
-        error: function () {
-        }
     });
 }
 
@@ -239,10 +235,6 @@ function destroyRouter(uuid) {
         url: '/RouterAction',
         data: 'action=destroy&uuid=' + uuid,
         dataType: 'json',
-        success: function (array) {
-        },
-        error: function () {
-        }
     });
 }
 
