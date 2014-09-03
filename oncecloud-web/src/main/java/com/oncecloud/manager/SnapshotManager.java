@@ -289,7 +289,7 @@ public class SnapshotManager {
 		return jo;
 	}
 
-	public JSONObject deleteSnapshot(int userId, String resourceUuid,
+	public JSONObject deleteSnapshotSeries(int userId, String resourceUuid,
 			String resourceType) {
 		JSONObject jo = new JSONObject();
 		Date startTime = new Date();

@@ -62,7 +62,7 @@ public class SnapshotAction extends HttpServlet {
 			} else if (action.equals("delete")) {
 				String resourceUuid = request.getParameter("rsuuid");
 				String resourceType = request.getParameter("rstype");
-				JSONObject jo = this.getSnapshotManager().deleteSnapshot(
+				JSONObject jo = this.getSnapshotManager().deleteSnapshotSeries(
 						userId, resourceUuid, resourceType);
 				out.print(jo.toString());
 			} else if (action.equals("detail")) {

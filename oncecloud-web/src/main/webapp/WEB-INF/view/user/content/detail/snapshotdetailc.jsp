@@ -7,7 +7,7 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="${basePath}user/snapshot.jsp"><span class="glyphicon glyphicon-camera cool-blue"></span><span class="ctext">SNAPSHOTS</span></a></li>
+		<li><a href="${basePath}snapshot"><span class="glyphicon glyphicon-camera cool-blue"></span><span class="ctext">SNAPSHOTS</span></a></li>
 		<li class="active"><a href="${basePath}snapshot/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">

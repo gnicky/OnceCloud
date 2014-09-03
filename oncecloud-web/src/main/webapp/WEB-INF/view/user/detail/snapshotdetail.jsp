@@ -8,10 +8,10 @@
 </head>
 <body class="cloud-body">
 	<%@ include file="../../share/sidebar.jsp" %>
+    <%@ include file="../content/detail/snapshotdetailc.jsp" %>
 	<%@ include file="../../share/js.jsp" %>
 	<script src="${basePath}js/jquery.ui.position.js"></script>
 	<script src="${basePath}js/jquery.contextMenu.js"></script>
-	<script src="${basePath}user/js/detail/snapshotdetail.js"></script>
-	<%@ include file="../content/detail/snapshotdetailc.jsp" %>
+	<script src="${basePath}js/user/detail/snapshotdetail.js"></script>
 </body>
 </html>

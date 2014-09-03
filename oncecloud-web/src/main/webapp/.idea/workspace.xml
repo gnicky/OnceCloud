@@ -23,58 +23,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="volume.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/user/volume.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="4170">
-              <caret line="270" column="9" selection-start-line="270" selection-start-column="9" selection-end-line="270" selection-end-column="9" />
-              <folding>
-                <marker date="1409730291000" expanded="true" signature="2337:2363" placeholder="..." />
-                <marker date="1409730291000" expanded="true" signature="2695:2706" placeholder="..." />
-                <marker date="1409730291000" expanded="true" signature="4249:4275" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bindvolume.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/user/modal/bindvolume.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="997" max-vertical-offset="1665">
-              <caret line="88" column="53" selection-start-line="88" selection-start-column="53" selection-end-line="88" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="instancedetail.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/user/detail/instancedetail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.192307" vertical-offset="13191" max-vertical-offset="14175">
-              <caret line="904" column="46" selection-start-line="904" selection-start-column="46" selection-end-line="904" selection-end-column="46" />
+            <state vertical-scroll-proportion="-9.576923" vertical-offset="1446" max-vertical-offset="14175">
+              <caret line="113" column="4" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="instancedetailimage.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/user/detail/instancedetailimage.js">
+      <file leaf-file-name="snapshot.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/user/snapshot.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3795" max-vertical-offset="10680">
-              <caret line="271" column="57" selection-start-line="271" selection-start-column="57" selection-end-line="271" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2023" max-vertical-offset="2640">
+              <caret line="167" column="18" selection-start-line="167" selection-start-column="18" selection-end-line="167" selection-end-column="18" />
               <folding>
-                <marker date="1409735568000" expanded="false" signature="3565:3591" placeholder="..." />
-                <marker date="1409735568000" expanded="true" signature="7410:7511" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="8743:8759" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="11830:11846" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="13806:13824" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="13951:13959" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="13990:14007" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="14253:14264" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="16443:16459" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="16597:16613" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="20194:20220" placeholder="..." />
-                <marker date="1409735568000" expanded="false" signature="23608:23624" placeholder="..." />
+                <marker date="1409737933000" expanded="false" signature="3426:3437" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -110,31 +75,58 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="instancedetailc.jsp" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="instancedetailc.jsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/instancedetailc.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.3010949" vertical-offset="225" max-vertical-offset="4530">
+            <state vertical-scroll-proportion="-2.5" vertical-offset="0" max-vertical-offset="4530">
               <caret line="4" column="2" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="volumec.jsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/volumec.jsp">
+      <file leaf-file-name="snapshotdetail.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/user/detail/snapshotdetail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.416667" vertical-offset="29" max-vertical-offset="915">
-              <caret line="17" column="86" selection-start-line="17" selection-start-column="86" selection-end-line="17" selection-end-column="86" />
+            <state vertical-scroll-proportion="0.47202796" vertical-offset="1980" max-vertical-offset="3870">
+              <caret line="150" column="44" selection-start-line="150" selection-start-column="30" selection-end-line="150" selection-end-column="44" />
+              <folding>
+                <marker date="1409738484000" expanded="true" signature="1149:1175" placeholder="..." />
+                <marker date="1409738484000" expanded="true" signature="2237:2248" placeholder="..." />
+                <marker date="1409738484000" expanded="true" signature="6881:6907" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="oncecloud.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/oncecloud.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="1800">
+              <caret line="114" column="1" selection-start-line="114" selection-start-column="1" selection-end-line="114" selection-end-column="1" />
+              <folding>
+                <marker date="1409625964000" expanded="false" signature="862:923" placeholder="..." />
+                <marker date="1409625964000" expanded="false" signature="1794:1855" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="snapshotdetailc.jsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/snapshotdetailc.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-8.125" vertical-offset="15" max-vertical-offset="945">
+              <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="elasticipc.jsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/elasticipc.jsp">
+      <file leaf-file-name="snapshotdetail.jsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/detail/snapshotdetail.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-29.375" vertical-offset="0" max-vertical-offset="1335">
-              <caret line="47" column="40" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="40" />
+            <state vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="330">
+              <caret line="14" column="71" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -153,7 +145,6 @@
         <option value="$PROJECT_DIR$/admin/js/user.js" />
         <option value="$PROJECT_DIR$/admin/js/storage.js" />
         <option value="$PROJECT_DIR$/js/user/dashboard.js" />
-        <option value="$PROJECT_DIR$/js/user/snapshot.js" />
         <option value="$PROJECT_DIR$/js/user/router.js" />
         <option value="$PROJECT_DIR$/js/user/vnet.js" />
         <option value="$PROJECT_DIR$/js/user/firewall.js" />
@@ -197,11 +188,15 @@
         <option value="$PROJECT_DIR$/js/user/detail/volumedetail.js" />
         <option value="$PROJECT_DIR$/WEB-INF/view/user/content/detail/volumedetailc.jsp" />
         <option value="$PROJECT_DIR$/WEB-INF/view/user/content/detail/instancedetailc.jsp" />
+        <option value="$PROJECT_DIR$/js/user/snapshot.js" />
+        <option value="$PROJECT_DIR$/WEB-INF/view/user/content/detail/snapshotdetailc.jsp" />
+        <option value="$PROJECT_DIR$/WEB-INF/view/user/detail/snapshotdetail.jsp" />
+        <option value="$PROJECT_DIR$/js/user/detail/snapshotdetail.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-5" />
+    <option name="x" value="-3" />
     <option name="y" value="35" />
     <option name="width" value="1260" />
     <option name="height" value="705" />
@@ -493,68 +488,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="user" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="modal" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="user" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="detail" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -620,8 +553,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-5" y="35" width="1260" height="705" extended-state="0" />
-    <editor active="true" />
+    <frame x="-3" y="35" width="1260" height="705" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -662,34 +595,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/user/database.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22181146" vertical-offset="165" max-vertical-offset="3075">
-          <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/router.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4080">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="13" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/firewall.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05042017" vertical-offset="0" max-vertical-offset="3585">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="13" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/expensesummary.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="1755">
-          <caret line="93" column="16" selection-start-line="93" selection-start-column="16" selection-end-line="95" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/user/expensequery.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="155" max-vertical-offset="1350">
@@ -785,14 +690,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1544" max-vertical-offset="3765">
           <caret line="114" column="46" selection-start-line="114" selection-start-column="46" selection-end-line="114" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/oncecloud.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.6386554" vertical-offset="0" max-vertical-offset="1800">
-          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1001,9 +898,9 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="4170">
           <caret line="270" column="9" selection-start-line="270" selection-start-column="9" selection-end-line="270" selection-end-column="9" />
           <folding>
-            <marker date="1409730291000" expanded="true" signature="2337:2363" placeholder="..." />
-            <marker date="1409730291000" expanded="true" signature="2695:2706" placeholder="..." />
-            <marker date="1409730291000" expanded="true" signature="4249:4275" placeholder="..." />
+            <marker date="1409730291000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1409730291000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1409730291000" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1016,31 +913,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/detail/instancedetail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.192307" vertical-offset="13191" max-vertical-offset="14175">
-          <caret line="904" column="46" selection-start-line="904" selection-start-column="46" selection-end-line="904" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/user/detail/instancedetailimage.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3795" max-vertical-offset="10680">
           <caret line="271" column="57" selection-start-line="271" selection-start-column="57" selection-end-line="271" selection-end-column="57" />
           <folding>
-            <marker date="1409735568000" expanded="false" signature="3565:3591" placeholder="..." />
-            <marker date="1409735568000" expanded="true" signature="7410:7511" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="8743:8759" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="11830:11846" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="13806:13824" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="13951:13959" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="13990:14007" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="14253:14264" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="16443:16459" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="16597:16613" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="20194:20220" placeholder="..." />
-            <marker date="1409735568000" expanded="false" signature="23608:23624" placeholder="..." />
+            <marker date="1409736452000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1409736452000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1409736452000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1409736452000" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -1069,11 +950,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/detail/instancedetail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.576923" vertical-offset="1446" max-vertical-offset="14175">
+          <caret line="113" column="4" selection-start-line="113" selection-start-column="4" selection-end-line="127" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/snapshot.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2023" max-vertical-offset="2640">
+          <caret line="167" column="18" selection-start-line="167" selection-start-column="18" selection-end-line="167" selection-end-column="18" />
+          <folding>
+            <marker date="1409737933000" expanded="false" signature="3426:3437" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/instancedetailc.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.3010949" vertical-offset="225" max-vertical-offset="4530">
+        <state vertical-scroll-proportion="-2.5" vertical-offset="0" max-vertical-offset="4530">
           <caret line="4" column="2" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/detail/snapshotdetail.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.75" vertical-offset="0" max-vertical-offset="330">
+          <caret line="14" column="71" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/snapshotdetailc.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.125" vertical-offset="15" max-vertical-offset="945">
+          <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/oncecloud.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="1800">
+          <caret line="114" column="1" selection-start-line="114" selection-start-column="1" selection-end-line="114" selection-end-column="1" />
+          <folding>
+            <marker date="1409625964000" expanded="false" signature="862:923" placeholder="..." />
+            <marker date="1409625964000" expanded="false" signature="1794:1855" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/detail/snapshotdetail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47202796" vertical-offset="1980" max-vertical-offset="3870">
+          <caret line="150" column="44" selection-start-line="150" selection-start-column="30" selection-end-line="150" selection-end-column="44" />
+          <folding>
+            <marker date="1409738484000" expanded="true" signature="1149:1175" placeholder="..." />
+            <marker date="1409738484000" expanded="true" signature="2237:2248" placeholder="..." />
+            <marker date="1409738484000" expanded="true" signature="6881:6907" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

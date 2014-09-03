@@ -82,4 +82,25 @@ public class SnapshotAction {
 				createsnapshotModel.getResourceType());
 		return jsonobect.toString();
 	}
+
+	@RequestMapping(value = "/DeleteSnapshotSeries", method = { RequestMethod.GET })
+	@ResponseBody
+	public String deleteSnapshotSeries(HttpServletRequest request,
+			@RequestParam String resourceUuid, @RequestParam String resourceType) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jsonobect = this.getSnapshotManager().deleteSnapshotSeries(
+				userId, resourceUuid, resourceType);
+		return jsonobect.toString();
+	}
+
+	@RequestMapping(value = "/DeleteSnapshot", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteSnapshot(HttpServletRequest request, @RequestParam String snapshotId,
+			@RequestParam String resourceUuid, @RequestParam String resourceType) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = this.getSnapshotManager().deleteOneSnapshot(userId, snapshotId, resourceUuid, resourceType);
+		return jo.toString();
+	}
 }

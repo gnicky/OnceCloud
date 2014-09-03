@@ -138,8 +138,8 @@ function getInfoList() {
 function deleteSnapshot(rsuuid, rstype) {
     $.ajax({
         type: 'get',
-        url: '/SnapshotAction',
-        data: "action=delete&rsuuid=" + rsuuid + "&rstype=" + rstype,
+        url: '/SnapshotAction/DeleteSnapshotSeries',
+        data: {resourceUuid: rsuuid, resourceType: rstype},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -150,18 +150,21 @@ function deleteSnapshot(rsuuid, rstype) {
 }
 
 $('#tablebody').on('click', '.viewDetail', function (event) {
+    event.preventDefault();
     var resourceUuid = $(this).parent().parent().attr('rsuuid');
-    var resourceType = $(this).parent().parent().attr('rstype');
     var resourceName = $(this).parent().parent().attr('rsname');
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'post',
-        url: '/SnapshotAction',
-        data: 'action=detail&resourceUuid=' + resourceUuid + '&resourceType=' + resourceType + '&resourceName=' + resourceName,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/snapshotdetail.jsp";
-        }
-    });
+    var resourceType = $(this).parent().parent().attr('rstype');
+    var form = $("<form></form>");
+    form.attr("action", "/snapshot/detail");
+    form.attr('method', 'post');
+    var input = $('<input type="text" name="resourceUuid" value="' + resourceUuid + '" />');
+    form.append(input);
+    var input2 = $('<input type="text" name="resourceName" value="' + resourceName + '" />');
+    form.append(input2);
+    var input3 = $('<input type="text" name="resourceType" value="' + resourceType + '" />');
+    form.append(input3);
+    form.css('display', 'none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
