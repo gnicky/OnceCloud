@@ -92,7 +92,7 @@ function bindeip(vmuuid, eipIp) {
     thistr.find('[name="stateicon"]').addClass('icon-process');
     thistr.find('[name="stateword"]').text('绑定中');
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: '/EIPAction/Bind',
         data: {vmUuid: vmuuid, eipIp: eipIP, bindType: bindtype},
         dataType: 'json',

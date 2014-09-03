@@ -241,11 +241,12 @@ public class RouterDAO {
 			int startPos = (page - 1) * limit;
 			String queryString = "from Router where routerUID = :userId and routerName like :search "
 					+ "and routerStatus <>0 and routerUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :uid "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
-			query.setString("search", "%" + search + "%");
 			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			query.setInteger("uid", userId);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			routerList = query.list();
@@ -428,11 +429,12 @@ public class RouterDAO {
 			session.beginTransaction();
 			String queryString = "select count(*) from Router where routerUID = :userId "
 					+ "and routerName like :search and routerStatus <> 0 and routerUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :uid "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
+			query.setInteger("uid", userId);
 			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
