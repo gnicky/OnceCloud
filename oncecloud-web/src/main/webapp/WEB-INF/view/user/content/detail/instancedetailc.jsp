@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 
-<div class="content detail" id="platformcontent"  novnc="${vncServer}" instanceUuid="${instanceUuid}">
+<div class="content detail" id="platformcontent" platformBasePath="${basePath}"  novnc="${vncServer}" instanceUuid="${instanceUuid}">
   <div class="intro">
     <h1>主机&nbsp;Instance</h1>
     <p class="lead"> 云平台为您提供一种随时获取的、弹性的计算能力，这种计算能力的体现就是<em>主机&nbsp;(Instance)</em>。主机就是一台配置好了的服务器，它有您期望的硬件配置、操作系统和网络配置。通常情况下，您的请求可以在10秒到60秒的时间之内完成，所以您完全可以动态地、按需使用计算能力。 </p>

@@ -82,7 +82,7 @@ public class EipAction extends HttpServlet {
 				session.setAttribute("eip", eip);
 			} else if (action.equals("getoneeip")) {
 				String eipIp = request.getParameter("eip");
-				JSONObject jo = this.getEipManager().eipGetOneEip(eipIp);
+				JSONObject jo = this.getEipManager().getBasicList(eipIp);
 				out.print(jo.toString());
 			} else if (action.equals("getableeips")) {
 				JSONArray ja = this.getEipManager().eipGetAbleEips(userId);

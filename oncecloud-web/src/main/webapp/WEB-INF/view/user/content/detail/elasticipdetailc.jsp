@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content detail" id="platformcontent" eip="${eip}">
+<div class="content detail" id="platformcontent" eip="${eip}" basePath="${basePath}">
 	<div class="intro">
 		<h1>公网IP&nbsp;Elastic&nbsp;IPs</h1>
 		<p class="lead">
@@ -9,11 +9,11 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="${basePath}user/volume.jsp"><span
+		<li><a href="${basePath}elasticip"><span
 				class="glyphicon glyphicon-globe cool-green"></span><span
 				class="ctext">ElASTICIP</span></a></li>
 		<li class="active"><a
-			href="${basePath}user/detail/elasticipdetail.jsp">${showId}</a></li>
+			href="${basePath}elasticip/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.oncecloud.entity.Quota;
@@ -27,7 +28,7 @@ public class ModalControllerUser {
 	private void setQuotaManager(QuotaManager quotaManager) {
 		this.quotaManager = quotaManager;
 	}
-	
+
 	@RequestMapping(value = "/user/modal/viewquota", method = { RequestMethod.GET })
 	public ModelAndView viewQuota(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -38,5 +39,13 @@ public class ModalControllerUser {
 		model.put("quotaUsed", quotaUsed);
 		model.put("quotaTotal", quotaTotal);
 		return new ModelAndView("user/modal/viewquota", model);
+	}
+
+	@RequestMapping(value = "/elasticip/bind", method = { RequestMethod.POST })
+	public ModelAndView bindElasticIP(HttpServletRequest request,
+			@RequestParam String type) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("type", type);
+		return new ModelAndView("user/modal/bindelasticip", model);
 	}
 }

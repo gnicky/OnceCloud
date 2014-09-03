@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "oc_host")
 public class Host {
@@ -30,6 +32,7 @@ public class Host {
 	private Date createDate;
 
 	@Id
+	@Type(type = "uuid-char")
 	@Column(name = "host_uuid")
 	public UUID getUuid() {
 		return uuid;

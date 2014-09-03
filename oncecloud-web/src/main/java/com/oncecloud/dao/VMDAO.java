@@ -317,12 +317,13 @@ public class VMDAO {
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "select vm from OCVM vm where vm.vmUID = :userId "
-					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId"
+					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmVlan is null and vm.vmUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :uid "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
-			query.setString("search", search);
+			query.setString("search", "%" + search + "%");
+			query.setInteger("uid", userId);
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			vmList = query.list();
@@ -544,7 +545,7 @@ public class VMDAO {
 	 * @param userId
 	 * @return
 	 */
-	public int countVMsWithoutEIP(String search, int uid) {
+	public int countVMsWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -552,9 +553,12 @@ public class VMDAO {
 			session.beginTransaction();
 			String queryString = "select count(*) from OCVM vm where vm.vmUID = :userId "
 					+ "and vm.vmName like :search and vm.vmStatus = 1 and vm.vmUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :uid "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			query.setInteger("uid", userId);
 			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {

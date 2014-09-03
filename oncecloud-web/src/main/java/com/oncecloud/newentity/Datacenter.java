@@ -10,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "oc_datacenter")
 public class Datacenter {
@@ -21,6 +23,7 @@ public class Datacenter {
 	private Date createDate;
 
 	@Id
+	@Type(type = "uuid-char")
 	@Column(name = "dc_uuid")
 	public UUID getUuid() {
 		return uuid;

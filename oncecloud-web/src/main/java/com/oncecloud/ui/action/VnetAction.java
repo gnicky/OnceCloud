@@ -47,7 +47,7 @@ public class VnetAction {
 		return jo.toString();
 	}
 	
-	@RequestMapping(value = "/ListOfUser", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ListOfUser", method = { RequestMethod.POST })
 	@ResponseBody
 	public String vnetList(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -56,7 +56,7 @@ public class VnetAction {
 		return ja.toString();
 	}
 	
-	@RequestMapping(value = "/BindVM", method = { RequestMethod.GET })
+	@RequestMapping(value = "/BindVM", method = { RequestMethod.POST })
 	@ResponseBody
 	public void bindVm(HttpServletRequest request,@RequestParam String vnId,@RequestParam String vmUuid) {
 		User user = (User) request.getSession().getAttribute("user");

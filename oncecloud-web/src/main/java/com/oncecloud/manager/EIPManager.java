@@ -625,7 +625,7 @@ public class EIPManager {
 		return jo;
 	}
 
-	public JSONObject eipGetOneEip(String eipIp) {
+	public JSONObject getBasicList(String eipIp) {
 		EIP eip = this.getEipDAO().getEip(eipIp);
 		JSONObject jo = new JSONObject();
 		jo.put("eipName", Utilities.encodeText(eip.getEipName()));
