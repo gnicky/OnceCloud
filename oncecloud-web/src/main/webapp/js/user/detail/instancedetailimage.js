@@ -250,9 +250,9 @@ function bindvolumes() {
             }
 
             ///1 查询出所有可用的 公网ip。
-            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px 0">' + tablelist + '</div>';
+            var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
-            var showTitle = '选择主机 &nbsp;' + infoList + ' 要 挂载的硬盘';
+            var showTitle = '选择主机&nbsp;' + infoList + '&nbsp;要挂载的硬盘';
 
             bootbox.dialog({
                 className: "oc-bootbox",
@@ -321,7 +321,7 @@ function changeNet() {
             ///1 查询出所有可用的 公网ip。
             var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
-            var showTitle = '选择主机 &nbsp;' + infoList + ' 要绑定的网络';
+            var showTitle = '选择主机&nbsp;' + infoList + '&nbsp;要绑定的网络';
 
             bootbox.dialog({
                 className: "oc-bootbox",
@@ -376,11 +376,11 @@ function showbox(type) {
             + '2. 为保证数据的完整性，请在强制关机前暂停所有文件的写操作，或进行正常关机。</div>'
             + '<div class="item" style="margin:0"><div class="controls" style="margin-left:100px">'
             + '<label class="inline"><input type="checkbox" id="force">&nbsp;强制关机</label></div></div>';
-        showTitle = infoArray[type] + '&nbsp;' + infoList + '?';
+        showTitle = infoArray[type] + '&nbsp;' + infoList + '&nbsp;?';
     } else {
         showMessage = '<div class="alert alert-info" style="margin:10px">'
             + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;'
-            + infoArray[type] + '&nbsp;' + infoList + '?</div>';
+            + infoArray[type] + '&nbsp;' + infoList + '&nbsp;?</div>';
         showTitle = '提示';
     }
     bootbox.dialog({
@@ -438,7 +438,7 @@ function bindpublicip(bdtype) {
             var showMessage = '<div class="alert alert-warning" style="margin:10px 30px">默认情况下，除了少数安全端口之外，主机的大部分端口都是关闭的，您需要在防火墙中打开相应的下行规则以允许外网访问。</div>'
                 + '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
-            var showTitle = '选择主机 &nbsp;' + infoList + ' 要绑定的公网IP';
+            var showTitle = '选择主机&nbsp;' + infoList + '&nbsp;要绑定的公网IP';
 
             bootbox.dialog({
                 className: "oc-bootbox",
@@ -524,7 +524,7 @@ function deletevolumes(obj) {
     showMessage = '<div class="alert alert-warning" style="margin:10px; color:#c09853">'
         + '<span class="glyphicon glyphicon-warning-sign"></span>&nbsp;物理卸载硬盘时，需要注意以下几点:'
         + '<br/><br/>1. 卸载硬盘时会丢失位于缓存中的数据；<br/>2. 为保证数据的完整性，最好确保该硬盘在主机的操作系统中处于非加载状态。</div>';
-    showTitle = '卸载硬盘' + '&nbsp;' + '?';
+    showTitle = '卸载硬盘&nbsp;?';
 
     bootbox.dialog({
         className: "oc-bootbox",
@@ -611,7 +611,7 @@ function bingfirewall(bdtype) {
             ///1 查询出所有可用的 公网ip。
             var showMessage = '<div class="epubliciplist" id="epubliciplist" style="margin:20px 30px">' + tablelist + '</div>';
 
-            var showTitle = '选择主机 &nbsp;' + infoList + ' 要绑定的防火墙';
+            var showTitle = '选择主机&nbsp;' + infoList + '&nbsp;要绑定的防火墙';
 
             bootbox.dialog({
                 className: "oc-bootbox",

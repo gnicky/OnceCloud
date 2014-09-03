@@ -580,6 +580,9 @@ input[type=checkbox] {
 .oc-crumb .ctext {
 	line-height: 22px;
 }
+.img-crumb li.active {
+	position:relative; top:-19px;
+}
 .oc-crumb li a {
 	color: #000;
 }

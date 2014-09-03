@@ -23,19 +23,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="elasticip.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/user/elasticip.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3780" max-vertical-offset="5760">
-              <caret line="280" column="63" selection-start-line="280" selection-start-column="23" selection-end-line="280" selection-end-column="63" />
-              <folding>
-                <marker date="1409728751000" expanded="false" signature="6472:6483" placeholder="..." />
-                <marker date="1409728751000" expanded="false" signature="8808:8819" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="volume.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/user/volume.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -76,18 +63,18 @@
             <state vertical-scroll-proportion="0.0" vertical-offset="3795" max-vertical-offset="10680">
               <caret line="271" column="57" selection-start-line="271" selection-start-column="57" selection-end-line="271" selection-end-column="57" />
               <folding>
-                <marker date="1409732396000" expanded="false" signature="3565:3591" placeholder="..." />
-                <marker date="1409732396000" expanded="true" signature="7410:7511" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="8743:8761" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="11833:11849" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="13809:13827" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="13954:13962" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="13993:14010" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="14256:14267" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="16446:16462" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="16600:16616" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="20197:20223" placeholder="..." />
-                <marker date="1409732396000" expanded="false" signature="23611:23627" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="3565:3591" placeholder="..." />
+                <marker date="1409735568000" expanded="true" signature="7410:7511" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="8743:8759" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="11830:11846" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="13806:13824" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="13951:13959" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="13990:14007" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="14253:14264" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="16443:16459" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="16597:16613" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="20194:20220" placeholder="..." />
+                <marker date="1409735568000" expanded="false" signature="23608:23624" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -103,11 +90,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="volumedetailc.jsp" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="volumedetailc.jsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/volumedetailc.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.027372263" vertical-offset="0" max-vertical-offset="780">
+            <state vertical-scroll-proportion="-0.625" vertical-offset="0" max-vertical-offset="780">
               <caret line="1" column="97" selection-start-line="1" selection-start-column="97" selection-end-line="1" selection-end-column="97" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="instancedetail.jsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/detail/instancedetail.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="345">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="instancedetailc.jsp" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/instancedetailc.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.3010949" vertical-offset="225" max-vertical-offset="4530">
+              <caret line="4" column="2" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -128,16 +135,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-29.375" vertical-offset="0" max-vertical-offset="1335">
               <caret line="47" column="40" selection-start-line="47" selection-start-column="40" selection-end-line="47" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="instancec.jsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/instancec.jsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.25" vertical-offset="45" max-vertical-offset="990">
-              <caret line="21" column="133" selection-start-line="21" selection-start-column="100" selection-end-line="21" selection-end-column="133" />
               <folding />
             </state>
           </provider>
@@ -199,6 +196,7 @@
         <option value="$PROJECT_DIR$/js/user/detail/instancedetailimage.js" />
         <option value="$PROJECT_DIR$/js/user/detail/volumedetail.js" />
         <option value="$PROJECT_DIR$/WEB-INF/view/user/content/detail/volumedetailc.jsp" />
+        <option value="$PROJECT_DIR$/WEB-INF/view/user/content/detail/instancedetailc.jsp" />
       </list>
     </option>
   </component>
@@ -664,20 +662,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/user/vnet.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.4444447" vertical-offset="1695" max-vertical-offset="3780">
-          <caret line="129" column="4" selection-start-line="129" selection-start-column="4" selection-end-line="132" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/alarm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1605" max-vertical-offset="3135">
-          <caret line="117" column="57" selection-start-line="0" selection-start-column="0" selection-end-line="203" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/user/database.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.22181146" vertical-offset="165" max-vertical-offset="3075">
@@ -982,8 +966,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="3780" max-vertical-offset="5760">
           <caret line="280" column="63" selection-start-line="280" selection-start-column="23" selection-end-line="280" selection-end-column="63" />
           <folding>
-            <marker date="1409728751000" expanded="false" signature="6472:6483" placeholder="..." />
-            <marker date="1409728751000" expanded="false" signature="8808:8819" placeholder="..." />
+            <marker date="1409728751000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1409728751000" expanded="false" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1045,18 +1029,18 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="3795" max-vertical-offset="10680">
           <caret line="271" column="57" selection-start-line="271" selection-start-column="57" selection-end-line="271" selection-end-column="57" />
           <folding>
-            <marker date="1409732396000" expanded="false" signature="3565:3591" placeholder="..." />
-            <marker date="1409732396000" expanded="true" signature="7410:7511" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="8743:8761" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="11833:11849" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="13809:13827" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="13954:13962" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="13993:14010" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="14256:14267" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="16446:16462" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="16600:16616" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="20197:20223" placeholder="..." />
-            <marker date="1409732396000" expanded="false" signature="23611:23627" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="3565:3591" placeholder="..." />
+            <marker date="1409735568000" expanded="true" signature="7410:7511" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="8743:8759" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="11830:11846" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="13806:13824" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="13951:13959" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="13990:14007" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="14253:14264" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="16443:16459" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="16597:16613" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="20194:20220" placeholder="..." />
+            <marker date="1409735568000" expanded="false" signature="23608:23624" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1071,8 +1055,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/volumedetailc.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.027372263" vertical-offset="0" max-vertical-offset="780">
+        <state vertical-scroll-proportion="-0.625" vertical-offset="0" max-vertical-offset="780">
           <caret line="1" column="97" selection-start-line="1" selection-start-column="97" selection-end-line="1" selection-end-column="97" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/detail/instancedetail.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WEB-INF/view/user/content/detail/instancedetailc.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.3010949" vertical-offset="225" max-vertical-offset="4530">
+          <caret line="4" column="2" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
