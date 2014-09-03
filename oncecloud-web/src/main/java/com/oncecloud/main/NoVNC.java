@@ -10,6 +10,14 @@ import java.net.URLConnection;
  */
 public class NoVNC {
 
+	/**
+	 * 创建NoVNC的密钥
+	 * 
+	 * @param token
+	 * @param host
+	 * @param port
+	 * @return
+	 */
 	public static boolean createToken(String token, String host, int port) {
 		try {
 			StringBuffer urlbuffer = new StringBuffer();
@@ -39,6 +47,12 @@ public class NoVNC {
 		}
 	}
 
+	/**
+	 * 删除NoVNC的密钥
+	 * 
+	 * @param token
+	 * @return
+	 */
 	public static boolean deleteToken(String token) {
 		try {
 			URL url = new URL(Constant.noVNCServer + "VncAction?action=delete&token=" + token);

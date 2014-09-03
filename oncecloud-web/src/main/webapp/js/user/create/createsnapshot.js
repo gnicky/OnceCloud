@@ -13,7 +13,7 @@ $('#createsnapshotAction').on('click', function (event) {
             var chain = getNewChain();
             $.ajax({
                 type: 'get',
-                url: '/SnapshotAction/quota',
+                url: '/SnapshotAction/Quota',
                 data: {count: chain},
                 dataType: 'text',
                 success: function (msg) {
@@ -44,7 +44,6 @@ $('#createsnapshotAction').on('click', function (event) {
                             var snapshotid = uuid.v4();
                             snapshot(snapshotid, $("#snapshot_name").val(), $(vmitems[i]).attr('uuid'), "instance");
                         }
-
                         var volumeitems = document.getElementsByName("volume-select-item");
                         for (var i = 0; i < volumeitems.length; i++) {
                             var snapshotid = uuid.v4();
@@ -135,7 +134,7 @@ function initResourceList() {
 function snapshot(snapshotId, snapshotName, resourceUuid, resourceType) {
     $.ajax({
         type: 'post',
-        url: '/SnapshotAction/create',
+        url: '/SnapshotAction/CreateSnapshot',
         data: {snapshotId: snapshotId, snapshotName: snapshotName, resourceUuid: resourceUuid, resourceType: resourceType},
         dataType: 'json',
         success: function (obj) {
@@ -150,7 +149,7 @@ function snapshot(snapshotId, snapshotName, resourceUuid, resourceType) {
 function syncsnapshot(snapshotId, snapshotName, resourceUuid, resourceType) {
     $.ajax({
         type: 'post',
-        url: '/SnapshotAction/create',
+        url: '/SnapshotAction/CreateSnapshot',
         async: false,
         data: {snapshotId: snapshotId, snapshotName: snapshotName, resourceUuid: resourceUuid, resourceType: resourceType},
         dataType: 'json',
@@ -163,14 +162,13 @@ function syncsnapshot(snapshotId, snapshotName, resourceUuid, resourceType) {
 }
 
 function getSnapshotDetailList() {
-    var uid = $("#platformcontent").attr("platformUserId");
     var resourceUuid = $("#platformcontent").attr("resourceUuid");
     var resourceType = $("#platformcontent").attr("resourceType");
     var btable = document.getElementById("snapshot-graph");
     btable.innerHTML = "";
     $.ajax({
         type: 'get',
-        url: '/SnapshotAction/detaillist',
+        url: '/SnapshotAction/DetailList',
         data: {resourceUuid: resourceUuid, resourceType: resourceType},
         dataType: 'json',
         success: function (msg) {
@@ -196,7 +194,7 @@ function getSnapshotDetailList() {
                         svgStr = svgStr + '<path d="M0,' + current + 'L0,' + step + '"></path><circle id="' + showid + '" r="5" cx="0" cy="' + step + '"></circle>';
                     }
                     if (i % 2 == 1) {
-                        var title = '<ul snapshotId="' + snapshotId + '" class="odd">';
+                        title = '<ul snapshotId="' + snapshotId + '" class="odd">';
                     }
                     listStr = listStr + title + '<li class="background"></li><li class="id"><span>'
                         + showid + '</span></li><li class="time">' + backupDate + '</li><li>'
@@ -215,12 +213,11 @@ function getSnapshotBasicList() {
     $("#basic-list").html("");
     $.ajax({
         type: 'get',
-        url: '/SnapshotAction/getresource',
+        url: '/SnapshotAction/BasicList',
         data: {resourceUuid: resourceUuid, resourceType: resourceType},
         dataType: 'json',
         success: function (obj) {
             if (obj != "") {
-                var resourceName = obj.resourceName;
                 var snapshotCount = obj.snapshotCount;
                 var snapshotSize = obj.snapshotSize;
                 var backupDate = obj.backupDate;
