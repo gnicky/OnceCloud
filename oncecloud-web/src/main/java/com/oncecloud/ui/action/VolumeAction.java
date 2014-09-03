@@ -95,7 +95,7 @@ public class VolumeAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Unbind", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Unbind", method = { RequestMethod.POST })
 	@ResponseBody
 	public void unbind(HttpServletRequest request,
 			@RequestParam String volumeUuid) {

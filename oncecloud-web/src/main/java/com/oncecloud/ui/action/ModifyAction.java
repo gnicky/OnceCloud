@@ -32,7 +32,7 @@ public class ModifyAction {
 		this.modifyManager = modifyManager;
 	}
 
-	@RequestMapping(value = "/ModifyBasicInfo", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ModifyBasicInfo", method = { RequestMethod.POST })
 	@ResponseBody
 	public String modifyBasicInfo(HttpServletRequest request, CommonModifyModel commonModifyModel) {
 		String modifyType = commonModifyModel.getModifyType();
