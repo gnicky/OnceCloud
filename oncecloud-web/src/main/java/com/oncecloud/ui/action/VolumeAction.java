@@ -77,7 +77,7 @@ public class VolumeAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
 	public void bind(HttpServletRequest request,
 			@RequestParam String volumeUuid, @RequestParam String vmUuid) {

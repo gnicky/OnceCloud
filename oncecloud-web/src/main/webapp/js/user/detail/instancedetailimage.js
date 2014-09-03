@@ -145,14 +145,13 @@ function init() {
 }
 
 
-
 function destroyVM(uuid) {
     $("#basic-list2").find("[name='stateicon']").removeClass("icon-running").removeClass("icon-stopped").addClass('icon-process');
     $("#basic-list2").find("[name='stateword']").text('销毁中');
     $.ajax({
         type: 'get',
         url: '/VMAction/DeleteVM',
-        data:{uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json',
         complete: function (array) {
             window.location.href = 'instance.jsp';
@@ -166,7 +165,7 @@ function shutdownVM(uuid, force) {
     $.ajax({
         type: 'get',
         url: '/VMAction/ShutdownVM',
-        data: {uuid:uuid,force:force},
+        data: {uuid: uuid, force: force},
         dataType: 'json',
         complete: function (array) {
             getInstanceBasicList();
@@ -180,7 +179,7 @@ function startVM(uuid) {
     $.ajax({
         type: 'get',
         url: '/VMAction/StartVM',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json',
         complete: function (array) {
             getInstanceBasicList();
@@ -194,7 +193,7 @@ function restartVM(uuid) {
     $.ajax({
         type: 'get',
         url: '/VMAction/RestartVM',
-        data:{uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json',
         complete: function (array) {
             getInstanceBasicList();
@@ -207,7 +206,7 @@ function bindvolumesshow() {
     $.ajax({
         type: 'get',
         url: '/VolumeAction/VolumesOfVM',
-        data: {vmUuid:vmuuid},
+        data: {vmUuid: vmuuid},
         dataType: 'json',
         success: function (array) {
             var i = array.length;
@@ -269,12 +268,12 @@ function bindvolumes() {
                             var bindtype = 'vm';
                             var vmuuid = $("#platformcontent").attr("instanceUuid");
                             $.ajax({
-                                type: 'get',
+                                type: 'post',
                                 url: '/VolumeAction/Bind',
-                                data: {volumeUuid:volumeId,vmUuid:vmuuid},
+                                data: {volumeUuid: volumeId, vmUuid: vmuuid},
                                 dataType: 'json',
                                 complete: function (response) {
-                                     bindvolumesshow();
+                                    bindvolumesshow();
                                 }
                             });
                         }
@@ -339,7 +338,7 @@ function changeNet() {
                             $.ajax({
                                 type: 'post',
                                 url: '/VnetAction/BindVM',
-                                data: {vnId:vnetuuid,vmUuid:vmuuid},
+                                data: {vnId: vnetuuid, vmUuid: vmuuid},
                                 dataType: 'text',
                                 complete: function () {
                                     getInstanceBasicList();
@@ -458,7 +457,7 @@ function bindpublicip(bdtype) {
                                 $.ajax({
                                     type: 'post',
                                     url: '/EIPAction/Bind',
-                                    data:{vmUuid:vmuuid,eipIp:eipIp,bindType:bdtype},
+                                    data: {vmUuid: vmuuid, eipIp: eipIp, bindType: bdtype},
                                     dataType: 'json',
                                     success: function (obj) {
                                         if (obj.result == true) {
@@ -476,7 +475,7 @@ function bindpublicip(bdtype) {
                                 $.ajax({
                                     type: 'post',
                                     url: '/EIPAction/Bind',
-                                    data:{vmUuid:router,eipIp:eipIp,bindType:bdtype},
+                                    data: {vmUuid: router, eipIp: eipIp, bindType: bdtype},
                                     dataType: 'json',
                                     success: function (obj) {
                                         if (obj.result == true) {
@@ -540,7 +539,7 @@ function deletevolumes(obj) {
                     $.ajax({
                         type: 'post',
                         url: '/VolumeAction/Unbind',
-                        data: {volumeUuid:volumeuuid},
+                        data: {volumeUuid: volumeuuid},
                         dataType: 'json',
                         success: function (obj) {
                             bindvolumesshow();
@@ -573,7 +572,7 @@ function unbingpublicip(bdtype) {
     $.ajax({
         type: 'post',
         url: '/EIPAction/UnBind',
-        data: {eipIp:eipIp,vmUuid:vmuuid,bindType:bdtype},
+        data: {eipIp: eipIp, vmUuid: vmuuid, bindType: bdtype},
         dataType: 'json',
         success: function (obj) {
             if (bdtype == "vm") {
@@ -632,7 +631,7 @@ function bingfirewall(bdtype) {
                                 $.ajax({
                                     type: 'post',
                                     url: '/FirewallAction/Bind',
-                                    data: {firewallId:firewallId,vmUuidStr:vmuuid,bindType:bdtype},
+                                    data: {firewallId: firewallId, vmUuidStr: vmuuid, bindType: bdtype},
                                     dataType: 'json',
                                     success: function (response) {
                                         if (response.isSuccess) {
@@ -650,7 +649,7 @@ function bingfirewall(bdtype) {
                                 $.ajax({
                                     type: 'post',
                                     url: '/FirewallAction/Bind',
-                                    data: {firewallId:firewallId,vmUuidStr:router,bindType:bdtype},
+                                    data: {firewallId: firewallId, vmUuidStr: router, bindType: bdtype},
                                     dataType: 'json',
                                     success: function (response) {
                                         if (response.isSuccess) {
