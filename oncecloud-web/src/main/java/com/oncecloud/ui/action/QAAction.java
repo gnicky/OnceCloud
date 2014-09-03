@@ -76,7 +76,7 @@ public class QAAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/ReplyList", method = { RequestMethod.POST })
+	@RequestMapping(value = "/ReplyList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String replyList(HttpServletRequest request, @RequestParam int qaId) {
 		JSONArray ja = this.getQaManager().getReplyList(qaId);

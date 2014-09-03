@@ -40,6 +40,7 @@ $('#platformcontent').on('click', '#area-submit', function (event) {
     var content = $('#qa-reply').val();
     var qaId = $("#platformcontent").attr("qaId");
     var userName = $("#platformcontent").attr("userName");
+    var userLevel = $("#platformcontent").attr("userLevel");
     $.ajax({
         type: 'post',
         url: '/QAAction/Reply',
@@ -49,10 +50,13 @@ $('#platformcontent').on('click', '#area-submit', function (event) {
             if (array.length == 1) {
                 var obj = array[0];
                 var qaId = obj.isSuccess;
+                var imgStr = "../../img/user/avartar.png";
+                if (userLevel > 0) {
+                    imgStr = "../../img/user/user.png";
+                }
                 if (qaId > 0) {
                     var qaContent = decodeURI(obj.qaContent);
                     var qaTime = obj.qaTime;
-                    var imgStr = "../../img/user/user.png";
                     var innerStr = '<div class="attachments"></div><div class="reply-item">'
                         + '<div class="owner"><a class="avatar" href="#" style="background-image: url(' + imgStr + ')"></a></div>'
                         + '<div class="reply-content"><p>' + qaContent + '</p><p>' + userName + '</p><span class="time">' + qaTime + '</span></div></div>';

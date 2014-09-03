@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content detail" id="platformcontent" qaId="${qaId}" userName="${user.userName}">
+<div class="content detail" id="platformcontent" qaId="${qaId}" userName="${user.userName}" userLevel="${user.userLevel}">
 	<div class="intro">
 		<h1>表单&nbsp;Services</h1>
 		<p class="lead" style="margin-top:10px">
