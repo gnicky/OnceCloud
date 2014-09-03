@@ -303,8 +303,8 @@ $("#changebw-form").validate({
 function changeBandwidth(eip, bandwidth) {
     $.ajax({
         type: 'post',
-        url: '/EipAction',
-        data: 'action=bandwidth&eip=' + eip + '&size=' + bandwidth,
+        url: '/EipAction/Bandwidth',
+        data: {eip: eip, size: bandwidth},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -320,11 +320,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('eipId');
     var form = $("<form></form>");
-    form.attr("action","/elasticip/detail");
-    form.attr('method','post');
+    form.attr("action", "/elasticip/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="eipUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -332,8 +332,8 @@ $('#tablebody').on('click', '.id', function (event) {
 function deleteEip(eip) {
     $.ajax({
         type: 'get',
-        url: '/EipAction',
-        data: "action=delete&eip=" + eip,
+        url: '/EIPAction/DeleteEIP',
+        data: {eip: eip},
         dataType: 'text',
         success: function (response) {
             $("#tablebody").find('[eip="' + eip + '"]').remove();

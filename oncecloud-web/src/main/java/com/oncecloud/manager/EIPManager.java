@@ -26,7 +26,6 @@ import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.Router;
-import com.oncecloud.entity.User;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
@@ -566,7 +565,7 @@ public class EIPManager {
 		return ja;
 	}
 
-	public JSONObject eipBandwidth(String eip, int size, User user, int uid) {
+	public JSONObject eipBandwidth(String eip, int size, int userId) {
 		Date startTime = new Date();
 		EIP eipObj = this.getEipDAO().getEip(eip);
 		JSONObject jo = new JSONObject();
@@ -576,17 +575,17 @@ public class EIPManager {
 			eipVM = eipObj.getEipDependency();
 			if (eipObj.getEipDependency() != null) {
 				limitResult = this.getVmManager().changeBandwidth(
-						user.getUserId(), eipVM, size);
+						userId, eipVM, size);
 			}
 			if (limitResult == true) {
 				boolean cr = this.getEipDAO()
-						.changeBandwidth(uid, eipObj, size);
+						.changeBandwidth(userId, eipObj, size);
 				if (cr) {
 					Date endDate = new Date();
 					String eipUuid = eipObj.getEipUuid();
 					String eipName = eipObj.getEipName();
 					this.getFeeDAO().abandonEip(endDate, eipUuid);
-					this.getFeeDAO().insertFeeEip(uid, endDate,
+					this.getFeeDAO().insertFeeEip(userId, endDate,
 							Utilities.AddMinuteForDate(endDate, 60),
 							size * Constant.EIP_PRICE, 1, eipUuid, eipName);
 					jo.put("result", true);
@@ -607,20 +606,20 @@ public class EIPManager {
 					"i-" + eipVM.substring(0, 8)));
 		}
 		if (jo.getBoolean("result") == true) {
-			OCLog log = this.getLogDAO().insertLog(uid,
+			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.公网带宽.ordinal(),
 					LogConstant.logAction.调整.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			this.getMessagePush().pushMessage(uid,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			OCLog log = this.getLogDAO().insertLog(uid,
+			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.公网带宽.ordinal(),
 					LogConstant.logAction.调整.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			this.getMessagePush().pushMessage(uid,
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
