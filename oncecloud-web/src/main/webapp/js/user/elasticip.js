@@ -233,7 +233,6 @@ function getInfoList() {
 $('#cancelBandwidth').on('click', function (event) {
     event.preventDefault();
     $('#changeBandwidth').modal('hide');
-    removeAllCheck();
 });
 
 $("#bandwidthAction").on('click', function (event) {

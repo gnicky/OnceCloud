@@ -11,9 +11,9 @@
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作... <span class="caret" style="margin-left:15px"></span> </button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="bind" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-cloud"></span>分配到主机</a></li>
-					<li><a class="btn-forbidden" id="bindlb" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-random"></span>分配到负载均衡</a></li>
-					<li><a class="btn-forbidden" id="bindrt" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-fullscreen"></span>分配到路由器</a></li>
+					<li><a class="btn-forbidden" id="bind" url="${basePath}elasticip/bind"><span class="glyphicon glyphicon-cloud"></span>分配到主机</a></li>
+					<li><a class="btn-forbidden" id="bindlb" url="${basePath}elasticip/bind"><span class="glyphicon glyphicon-random"></span>分配到负载均衡</a></li>
+					<li><a class="btn-forbidden" id="bindrt" url="${basePath}elasticip/bind"><span class="glyphicon glyphicon-fullscreen"></span>分配到路由器</a></li>
 					<!--<li><a class="btn-forbidden" id="binddb" url="${basePath}user/modal/bindelasticip.jsp"><span class="glyphicon glyphicon-inbox"></span>分配到数据库</a></li>-->
 					<li><a class="btn-forbidden" id="unbind"><span class="glyphicon glyphicon-cloud-download"></span>解绑</a></li>
 					<li><a class="btn-forbidden" id="bandwidth"><span class="glyphicon glyphicon-stats"></span>修改带宽</a></li>
