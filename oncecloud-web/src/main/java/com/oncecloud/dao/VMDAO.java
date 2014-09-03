@@ -322,7 +322,7 @@ public class VMDAO {
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
-			query.setString("search", search);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			vmList = query.list();
@@ -544,7 +544,7 @@ public class VMDAO {
 	 * @param userId
 	 * @return
 	 */
-	public int countVMsWithoutEIP(String search, int uid) {
+	public int countVMsWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -555,6 +555,8 @@ public class VMDAO {
 					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
 					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {

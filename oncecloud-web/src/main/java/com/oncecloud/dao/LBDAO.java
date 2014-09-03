@@ -122,21 +122,20 @@ public class LBDAO {
 		return count;
 	}
 
-	public int countLBsWithoutEIP(String search, int uid) {
+	public int countLBsWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from LB where lbUID= "
-					+ uid
-					+ " and lbName like '%"
-					+ search
-					+ "%' and lbStatus <> 0 and lbUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
+			String queryString = "select count(*) from LB where lbUID = :userId "
+					+ "and lbName like :search and lbStatus <> 0 and lbUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
-			count = ((Number) query.iterate().next()).intValue();
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
+			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -279,7 +278,7 @@ public class LBDAO {
 			String queryString = "from LB where lbUID = :userId and lbName like '%:search%' and lbStatus > 0 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
-			query.setString("search", search);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			lbList = query.list();
@@ -330,21 +329,20 @@ public class LBDAO {
 
 	@SuppressWarnings("unchecked")
 	public List<LB> getOnePageLBsWithoutEip(int page, int limit, String search,
-			int uid) {
+			int userId) {
 		List<LB> lbList = null;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
-			String queryString = "from LB where lbUID = "
-					+ uid
-					+ " and lbName like '%"
-					+ search
-					+ "%' and lbStatus <>0 and lbUuid not in "
-					+ "(select eip.eipDependency from EIP eip where eip.eipUID="
-					+ uid + " and eip.eipDependency is not null)";
+			String queryString = "from LB where lbUID = :userId "
+					+ "and lbName like :search and lbStatus <> 0 and lbUuid not in "
+					+ "(select eip.eipDependency from EIP eip where eip.eipUID = :userId "
+					+ "and eip.eipDependency is not null)";
 			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			query.setString("search", "%" + search + "%");
 			query.setFirstResult(startPos);
 			query.setMaxResults(limit);
 			lbList = query.list();

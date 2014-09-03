@@ -40,12 +40,21 @@ public class EIPAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/AvailableIPs", method = { RequestMethod.GET })
+	@RequestMapping(value = "/AvailableEIPs", method = { RequestMethod.GET })
 	@ResponseBody
-	public String eipList(HttpServletRequest request) {
+	public String availableEIPs(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
 		JSONArray ja = this.getEipManager().eipGetAbleEips(userId);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/AvailableVMs", method = { RequestMethod.GET })
+	@ResponseBody
+	public String availableVMs(HttpServletRequest request, ListModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONArray ja = this.getEipManager().eipGetAbleVMs(list.getPage(), list.getLimit(), list.getSearch(), list.getType(), userId);
 		return ja.toString();
 	}
 
