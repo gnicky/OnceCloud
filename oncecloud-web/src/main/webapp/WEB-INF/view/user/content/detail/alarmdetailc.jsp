@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String alshowid = "al-" + alarmUuid.substring(0, 8);
-%>
-<div class="content detail" id="platformcontent" platformUserId="<%=user.getUserId()%>" alarmUuid="<%=alarmUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent">
 	<div class="intro">
 		<h1>监控告警&nbsp;Alarms</h1>
 		<p class="lead">
@@ -10,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/alarm.jsp"><span class="glyphicon glyphicon-flash cool-green"></span><span class="ctext">ALARMS</span></a></li>
-		<li class="active"><a href="<%=basePath %>user/detail/alarmdetail.jsp"><%=alshowid %></a></li>
+		<li><a href="${basePath}alarm"><span class="glyphicon glyphicon-flash cool-green"></span><span class="ctext">ALARMS</span></a></li>
+		<li class="active"><a href="${basePath}alarm/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
@@ -41,7 +38,7 @@
 				<div class="title"><h3 class="uppercase">规则</h3><span class="oc-update" id="suggestion" style="display: none;">修改尚未更新，请点击"应用修改"</span></div>
 				<div class="once-toolbar">
 					<button class="btn btn-default rule-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-					<button id="createrule" class="btn btn-default" url="<%=basePath %>user/create/createalarmrule.jsp">+&nbsp;新建</button>
+					<button id="createrule" class="btn btn-default" url="${basePath}user/create/createalarmrule.jsp">+&nbsp;新建</button>
 					<button id="confirm" class="btn btn-default btn-disable" disabled><span class="glyphicon glyphicon-pencil"></span>修改</button>
 					<button id="deleterule" class="btn btn-default btn-disable" disabled><span class="glyphicon glyphicon-trash"></span>删除</button>
 					<div class="toolbar-right">
