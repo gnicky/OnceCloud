@@ -7,7 +7,7 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="apply" class="btn btn-primary" url="${basePath}user/create/createelasticip.jsp">+&nbsp;申请</button>
+			<button id="apply" class="btn btn-primary" url="${basePath}elasticip/create">+&nbsp;申请</button>
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作... <span class="caret" style="margin-left:15px"></span> </button>
 				<ul class="dropdown-menu">

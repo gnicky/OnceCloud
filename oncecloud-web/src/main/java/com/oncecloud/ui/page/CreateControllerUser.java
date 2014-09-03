@@ -39,7 +39,12 @@ public class CreateControllerUser {
 	}
 
 	@RequestMapping(value = "/volume/create", method = { RequestMethod.GET })
-	public ModelAndView createvolume(HttpServletRequest request) {
+	public ModelAndView createVolume(HttpServletRequest request) {
 		return new ModelAndView("user/create/createvolume");
+	}
+	
+	@RequestMapping(value = "/elasticip/create", method = { RequestMethod.GET })
+	public ModelAndView createElasticIP(HttpServletRequest request) {
+		return new ModelAndView("user/create/createelasticip");
 	}
 }
