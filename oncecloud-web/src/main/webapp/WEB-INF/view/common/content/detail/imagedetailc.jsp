@@ -4,7 +4,7 @@
 	Integer userlevel = user.getUserLevel();
 	String imagetype = imageType;
 %>
-<div class="content detail" id="platformcontent" imageUuid="<%=imageUuid%>" platformBasePath="<%=basePath %>">
+<div class="content detail" id="platformcontent" imageUuid="${imageUuid}" basePath="${basePath}">
 	<div class="intro">
 		<h1>映像&nbsp;Images</h1>
 		<p class="lead">
@@ -13,14 +13,14 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>user/images.jsp"><span class="glyphicon glyphicon-inbox cool-blue"></span><span class="ctext">IMAGE</span></a></li>
+		<li><a href="${basePath}user/images.jsp"><span class="glyphicon glyphicon-inbox cool-blue"></span><span class="ctext">IMAGE</span></a></li>
 		<li class="active"><%
 		if(imagetype.equals("user"))
 			{
 			if(userlevel==0) {out.print("用户");}else{out.print("自有");}
 			}
 		else{out.print("系统");}%></a></li>
-		<li class="active"><a href="<%=basePath %>common/detail/imagedetail.jsp"><%=imageid %></a></li>
+		<li class="active"><a href="${basePath}common/detail/imagedetail.jsp"><%=imageid %></a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
