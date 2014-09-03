@@ -32,7 +32,7 @@ function getQueryList(page, limit, search, type, month) {
     $.ajax({
         type: 'get',
         url: '/FeeAction/QueryList',
-        data: {page: page, limit: limit, search: search, type: type, month: month},
+        data: {page: page, limit: limit, search: search, type: type, uuid: month},
         dataType: 'json',
         success: function (array) {
             var totalnum = array[0];
@@ -58,7 +58,7 @@ function getQueryList(page, limit, search, type, month) {
                 if (type == "instance") {
                     resourceStr = "<a class='viewdetail' href='javascript:void(0)'>i-" + feeId.substring(0, 8) + "</a>";
                 } else if (type == "eip") {
-                    resourceStr = "<a class='viewdetail' href='javascript:void(0)'>ip-" + feeId.substring(0, 8) + "</a>";
+                    resourceStr = "<a class='viewdetail' href='javascript:void(0)'>eip-" + feeId.substring(0, 8) + "</a>";
                 } else if (type == "volume") {
                     resourceStr = "<a class='viewdetail' href='javascript:void(0)'>vol-" + feeId.substring(0, 8) + "</a>";
                 } else if (type == "snapshot") {

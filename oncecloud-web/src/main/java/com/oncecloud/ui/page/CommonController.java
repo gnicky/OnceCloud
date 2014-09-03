@@ -146,7 +146,8 @@ public class CommonController {
 		model.put("modifyType", commonModifyModel.getModifyType());
 		model.put("modifyUuid", commonModifyModel.getModifyUuid());
 		model.put("modifyName", commonModifyModel.getModifyName());
-		model.put("modifyDesc", commonModifyModel.getModifyDesc());
+		String desc = commonModifyModel.getModifyDesc();
+		model.put("modifyDesc", desc.equals("&nbsp;") ? "" : desc);
 		return new ModelAndView("common/modify", model);
 	}
 }

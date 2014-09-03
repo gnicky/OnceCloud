@@ -45,7 +45,7 @@ public class FeeAction {
 		int userId = user.getUserId();
 		JSONArray ja = this.getFeeManager().getQueryList(userId,
 				list.getPage(), list.getLimit(), list.getSearch(),
-				list.getType(), list.getMonth());
+				list.getType(), list.getUuid());
 		return ja.toString();
 	}
 
@@ -56,5 +56,16 @@ public class FeeAction {
 		int userId = user.getUserId();
 		JSONObject jo = this.getFeeManager().getFeeSummary(userId);
 		return jo.toString();
+	}
+
+	@RequestMapping(value = "/DetailList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String detailList(HttpServletRequest request, ListModel list) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONArray ja = this.getFeeManager().getDetailList(list.getPage(),
+				list.getLimit(), list.getSearch(), list.getType(),
+				list.getUuid(), userId);
+		return ja.toString();
 	}
 }

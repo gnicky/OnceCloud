@@ -65,7 +65,6 @@ function getEipBasicList() {
             }
             showstr = "<a class='id'>" + showuuid + '</a>';
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="eipname">'
                 + eipName + '</dd><dt>描述</dt><dd id="eipdesc">'
@@ -74,8 +73,7 @@ function getEipBasicList() {
                 + eipBandwidth + '&nbsp;Mbps</dd><dt>使用状态</dt><dd>'
                 + usedStr + '</dd><dt>IP分组</dt><dd>'
                 + '电信' + '</dd><dt>创建时间</dt><dd class="time">'
-                + createDate + '</dd><dt>创建于</dt><dd class="time">'
-                + useDate + '</dd>');
+                + createDate + '</dd>');
         }
     });
 }
