@@ -71,7 +71,7 @@ function getFeeList(page, limit, search, type) {
                 if (type == "instance") {
                     resourceStr = "<a class='viewdetail' href='javascript:void(0)'>i-" + resourceId.substring(0, 8) + "</a>";
                 } else if (type == "eip") {
-                    resourceStr = "<a class='viewdetail' href='javascript:void(0)'>ip-" + resourceId.substring(0, 8) + "</a>";
+                    resourceStr = "<a class='viewdetail' href='javascript:void(0)'>eip-" + resourceId.substring(0, 8) + "</a>";
                 } else if (type == "volume") {
                     resourceStr = "<a class='viewdetail' href='javascript:void(0)'>vol-" + resourceId.substring(0, 8) + "</a>";
                 } else if (type == "snapshot") {
@@ -98,12 +98,12 @@ function getFeeList(page, limit, search, type) {
     });
 }
 
-$(".viewdetail").on('click', function (event) {
+$("#tablebody").on('click', ".viewdetail", function (event) {
     event.preventDefault();
-    var url = $("#platformcontent").attr('platformBasePath') + 'user/modal/viewexpense.jsp';
+    var url = $("#platformcontent").attr('basePath') + 'expense/view';
     var type = $(this).parent().attr('type');
     var resourceId = $(this).parent().attr('resourceId');
-    $('#SummaryModalContainer').load(url, {"detailtype": type, "detailuuid": resourceId}, function () {
+    $('#SummaryModalContainer').load(url, {"type": type, "resourceUuid": resourceId}, function () {
         $('#SummaryModalContainer').modal({
             backdrop: false,
             show: true

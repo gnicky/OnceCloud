@@ -105,14 +105,14 @@ public class CommonController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "映像");
 		model.put("sideActive", 2);
-		String imageuuid = request.getParameter("imageuuid");
-		String imagetype = request.getParameter("imagetype");
-		if (imageuuid != null) {
-			request.getSession().setAttribute("imageuuid", imageuuid);
-			request.getSession().setAttribute("imagetype", imagetype);
+		String imageUuid = request.getParameter("imageUuid");
+		String imageType = request.getParameter("imageType");
+		if (imageUuid != null) {
+			request.getSession().setAttribute("imageUuid", imageUuid);
+			request.getSession().setAttribute("imageType", imageType);
 			return new ModelAndView("common/detail/imagedetail", model);
 		} else {
-			if (request.getSession().getAttribute("imageuuid") != null) {
+			if (request.getSession().getAttribute("imageUuid") != null) {
 				return new ModelAndView("common/detail/imagedetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));
@@ -120,18 +120,18 @@ public class CommonController {
 		}
 	}
 
-	@RequestMapping(value = "/question/detail")
+	@RequestMapping(value = "/service/detail")
 	@ResponseBody
 	public ModelAndView questionDetail(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "表单");
 		model.put("sideActive", 11);
-		String qaid = request.getParameter("qaid");
-		if (qaid != null) {
-			request.getSession().setAttribute("qaid", qaid);
+		String qaId = request.getParameter("qaId");
+		if (qaId != null) {
+			request.getSession().setAttribute("qaId", qaId);
 			return new ModelAndView("common/detail/servicedetail", model);
 		} else {
-			if (request.getSession().getAttribute("imageuuid") != null) {
+			if (request.getSession().getAttribute("qaId") != null) {
 				return new ModelAndView("common/detail/servicedetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));
@@ -146,7 +146,8 @@ public class CommonController {
 		model.put("modifyType", commonModifyModel.getModifyType());
 		model.put("modifyUuid", commonModifyModel.getModifyUuid());
 		model.put("modifyName", commonModifyModel.getModifyName());
-		model.put("modifyDesc", commonModifyModel.getModifyDesc());
+		String desc = commonModifyModel.getModifyDesc();
+		model.put("modifyDesc", desc.equals("&nbsp;") ? "" : desc);
 		return new ModelAndView("common/modify", model);
 	}
 }

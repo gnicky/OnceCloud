@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.FeeDAO;
-import com.oncecloud.entity.User;
 import com.oncecloud.main.Utilities;
 
 @Component
@@ -78,41 +77,46 @@ public class FeeManager {
 		return ja;
 	}
 
+	/**
+	 * 获得资源计费详细列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param type
+	 * @param uuid
+	 * @param userId
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
-	public JSONArray feeGetDetailList(int page, int limit, String search,
-			String type, String uuid, User user) {
+	public JSONArray getDetailList(int page, int limit, String search,
+			String type, String uuid, int userId) {
 		JSONArray ja = new JSONArray();
 		int totalNum = 0;
 		List feeObjList = new ArrayList<Object>();
 		if (type.equals("instance")) {
-			totalNum = this.getFeeDAO().countFeeVMDetailList(user.getUserId(),
-					uuid);
+			totalNum = this.getFeeDAO().countFeeVMDetailList(userId, uuid);
 			feeObjList = this.getFeeDAO().getFeeVMDetailList(page, limit,
-					search, user.getUserId(), uuid);
+					search, userId, uuid);
 		} else if (type.equals("volume")) {
-			totalNum = this.getFeeDAO().countFeeVolumeDetailList(
-					user.getUserId(), uuid);
+			totalNum = this.getFeeDAO().countFeeVolumeDetailList(userId, uuid);
 			feeObjList = this.getFeeDAO().getFeeVolumeDetailList(page, limit,
-					search, user.getUserId(), uuid);
+					search, userId, uuid);
 		} else if (type.equals("snapshot")) {
-			totalNum = this.getFeeDAO().countFeeSnapshotDetailList(
-					user.getUserId(), uuid);
+			totalNum = this.getFeeDAO()
+					.countFeeSnapshotDetailList(userId, uuid);
 			feeObjList = this.getFeeDAO().getFeeSnapshotDetailList(page, limit,
-					search, user.getUserId(), uuid);
+					search, userId, uuid);
 		} else if (type.equals("image")) {
-			totalNum = this.getFeeDAO().countFeeImageDetailList(
-					user.getUserId(), uuid);
+			totalNum = this.getFeeDAO().countFeeImageDetailList(userId, uuid);
 			feeObjList = this.getFeeDAO().getFeeImageDetailList(page, limit,
-					search, user.getUserId(), uuid);
+					search, userId, uuid);
 		} else if (type.equals("eip")) {
-			totalNum = this.getFeeDAO().countFeeEipDetailList(user.getUserId(),
-					uuid);
+			totalNum = this.getFeeDAO().countFeeEipDetailList(userId, uuid);
 			feeObjList = this.getFeeDAO().getFeeEipDetailList(page, limit,
-					search, user.getUserId(), uuid);
+					search, userId, uuid);
 		}
-		JSONObject tn = new JSONObject();
-		tn.put("totalpage", totalNum);
-		ja.put(tn);
+		ja.put(totalNum);
 		for (int i = 0; i < feeObjList.size(); i++) {
 			JSONObject jo = new JSONObject();
 			Object[] obj = (Object[]) feeObjList.get(i);

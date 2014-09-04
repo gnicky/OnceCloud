@@ -115,8 +115,8 @@ $('#tablebody').on('click', '.id', function (event) {
     var form = $("<form></form>");
     form.attr("action","/image/detail");
     form.attr('method','post');
-    var input = $('<input type="text" name="imageuuid" value="' + imageuuid + '" />');
-    var input1 = $('<input type="text" name="imagetype" value="' + imagetype + '" />');
+    var input = $('<input type="text" name="imageUuid" value="' + imageuuid + '" />');
+    var input1 = $('<input type="text" name="imageType" value="' + imagetype + '" />');
     form.append(input);
     form.append(input1);
     form.css('display','none');

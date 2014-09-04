@@ -175,7 +175,7 @@ public class EIPManager {
 						eipBandwidth * Constant.EIP_PRICE, 1, eipUuid, eipName);
 				jo.put("result", true);
 				jo.put("eipIp", eip.getEipIp());
-				jo.put("eipId", "ip-" + eipUuid.substring(0, 8));
+				jo.put("eipId", "eip-" + eipUuid.substring(0, 8));
 				jo.put("createDime",
 						Utilities.encodeText(Utilities.dateToUsed(startTime)));
 				eipIp = eip.getEipIp();

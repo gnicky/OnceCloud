@@ -77,7 +77,7 @@ public class ImageAction extends HttpServlet {
 			} else if (action.equals("getoneimage")) {
 				String imageUuid = request.getParameter("imageUuid");
 				JSONObject jo = this.getImageManager()
-						.getImageDetail(imageUuid);
+						.getBasciList(imageUuid);
 				out.print(jo.toString());
 			}
 		}

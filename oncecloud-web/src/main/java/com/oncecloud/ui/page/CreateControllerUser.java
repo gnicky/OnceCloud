@@ -52,4 +52,9 @@ public class CreateControllerUser {
 	public ModelAndView createrouter(HttpServletRequest request) {
 		return new ModelAndView("user/create/createrouter");
 	}
+		
+	@RequestMapping(value = "/service/create", method = { RequestMethod.GET })
+	public ModelAndView createService(HttpServletRequest request) {
+		return new ModelAndView("user/create/createservice");
+	}
 }
