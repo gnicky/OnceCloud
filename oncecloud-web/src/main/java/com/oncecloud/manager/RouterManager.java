@@ -25,13 +25,11 @@ import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.UserDAO;
-import com.oncecloud.dao.VDIDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCLog;
-import com.oncecloud.entity.OCVDI;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Router;
 import com.oncecloud.entity.Vnet;
@@ -58,7 +56,6 @@ public class RouterManager {
 	private ImageDAO imageDAO;
 	private DHCPDAO dhcpDAO;
 	private RouterDAO routerDAO;
-	private VDIDAO vdiDAO;
 	private EIPDAO eipDAO;
 	private VnetDAO vnetDAO;
 	private VMDAO vmDAO;
@@ -67,7 +64,7 @@ public class RouterManager {
 	private FirewallDAO firewallDAO;
 	private HostDAO hostDAO;
 	private UserDAO userDAO;
-	
+
 	private MessagePush messagePush;
 
 	private EIPManager eipManager;
@@ -109,15 +106,6 @@ public class RouterManager {
 	@Autowired
 	private void setRouterDAO(RouterDAO routerDAO) {
 		this.routerDAO = routerDAO;
-	}
-
-	private VDIDAO getVdiDAO() {
-		return vdiDAO;
-	}
-
-	@Autowired
-	private void setVdiDAO(VDIDAO vdiDAO) {
-		this.vdiDAO = vdiDAO;
 	}
 
 	private EIPDAO getEipDAO() {
@@ -270,30 +258,14 @@ public class RouterManager {
 				logger.info("Router [" + backendName + "] Pre Create Time ["
 						+ elapse + "]");
 				if (preCreate == true) {
-					OCVDI freeVDI = this.getVdiDAO().getFreeVDI(tplUuid);
-					Record rtrecord = null;
-					// 如果不能获取该模板的空闲VDI，则直接创建该路由器，否则使用该VDI创建路由器
-					if (freeVDI == null) {
-						rtrecord = this.getVmManager().createVMOnHost(c, uuid,
-								tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
-								allocateHost, imagePwd, backendName);
-						Date createEndDate = new Date();
-						int elapse1 = Utilities.timeElapse(createDate,
-								createEndDate);
-						logger.info("Router [" + backendName
-								+ "] Create Time [" + elapse1 + "]");
-					} else {
-						String vdiUuid = freeVDI.getVdiUuid();
-						this.getVdiDAO().deleteVDI(freeVDI);
-						rtrecord = this.getVmManager().createVMFromVDI(c, uuid,
-								vdiUuid, tplUuid, "root", pwd, 1, 1024, mac,
-								ip, OS, allocateHost, imagePwd, backendName);
-						Date createEndDate = new Date();
-						int elapse1 = Utilities.timeElapse(createDate,
-								createEndDate);
-						logger.info("Router [" + backendName
-								+ "] Create From VDI Time [" + elapse1 + "]");
-					}
+					Record rtrecord = this.getVmManager().createVMOnHost(c, uuid,
+							tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
+							allocateHost, imagePwd, backendName);
+					Date createEndDate = new Date();
+					int elapse1 = Utilities.timeElapse(createDate,
+							createEndDate);
+					logger.info("Router [" + backendName + "] Create Time ["
+							+ elapse1 + "]");
 					if (rtrecord != null) {
 						String hostuuid = rtrecord.residentOn.toWireString();
 						if (hostuuid.equals(allocateHost)) {
@@ -384,8 +356,8 @@ public class RouterManager {
 		try {
 			Router currentRT = this.getRouterDAO().getRouter(uuid);
 			if (currentRT != null) {
-				boolean preStartRouter = this.getRouterDAO()
-						.updatePowerStatus(uuid, RouterManager.POWER_BOOT);
+				boolean preStartRouter = this.getRouterDAO().updatePowerStatus(
+						uuid, RouterManager.POWER_BOOT);
 				if (preStartRouter == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
 							poolUuid);
@@ -431,8 +403,7 @@ public class RouterManager {
 			Router currentRT = this.getRouterDAO().getRouter(uuid);
 			if (currentRT != null) {
 				boolean preShutdownRouter = this.getRouterDAO()
-						.updatePowerStatus(uuid,
-								RouterManager.POWER_SHUTDOWN);
+						.updatePowerStatus(uuid, RouterManager.POWER_SHUTDOWN);
 				if (preShutdownRouter == true) {
 					Connection c = this.getConstant().getConnectionFromPool(
 							poolUuid);
@@ -601,8 +572,8 @@ public class RouterManager {
 			String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getRouterDAO().countRouters(userId, search);
-		List<Router> routerList = this.getRouterDAO().getOnePageRouters(
-				userId, page, limit, search);
+		List<Router> routerList = this.getRouterDAO().getOnePageRouters(userId,
+				page, limit, search);
 		ja.put(total);
 		if (routerList != null) {
 			for (Router router : routerList) {
@@ -862,8 +833,8 @@ public class RouterManager {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO()
 				.countRoutersOfAdmin(host, importance);
-		List<Router> rtList = this.getRouterDAO().getOnePageRoutersOfAdmin(page,
-				limit, host, importance);
+		List<Router> rtList = this.getRouterDAO().getOnePageRoutersOfAdmin(
+				page, limit, host, importance);
 		ja.put(totalNum);
 		if (rtList != null) {
 			for (int i = 0; i < rtList.size(); i++) {
@@ -884,7 +855,9 @@ public class RouterManager {
 						.dateToUsed(router.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", router.getRouterImportance());
-				jo.put("userName", Utilities.encodeText(this.getUserDAO().getUser(router.getRouterUID()).getUserName()));
+				jo.put("userName",
+						Utilities.encodeText(this.getUserDAO()
+								.getUser(router.getRouterUID()).getUserName()));
 				ja.put(jo);
 			}
 		}

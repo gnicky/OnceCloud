@@ -243,11 +243,15 @@ function loadList(action, page, limit, str) {
                     }
                 }
                 var starArray = "";
-                for (var j = 0; j < importance; j++) {
-                    starArray += '<span class="glyphicon glyphicon-star"></span>';
+                var starNum = obj.importance;
+                for (var j = 0; j < 5; j++) {
+                    if (j < starNum) {
+                        starArray += '<span class="glyphicon glyphicon-star"></span>';
+                    } else {
+                        starArray += '<span class="glyphicon glyphicon-star-empty"></span>';
+                    }
                 }
                 var importanceStr = '<a>'+ starArray + '</a>';
-                var importance = obj.importance;
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
                     + vmName + '</td>' + stateStr + '<td name="vmimportance">' + importanceStr + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
