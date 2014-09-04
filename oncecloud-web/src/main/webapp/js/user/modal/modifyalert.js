@@ -18,10 +18,10 @@ $(document).ready(function () {
             }
             $.ajax({
                 type: 'post',
-                url: '/AlarmAction',
-                data: "action=mtouch&alarmTouch=" + alarmTouch + "&alarmUuid=" + alarmUuid + "&alarmIsalarm=" + alarmIsalarm,
+                url: '/AlarmAction/ModifyTouch',
+                data : {alarmTouch:alarmTouch, alarmUuid:alarmUuid, alarmIsalarm:alarmIsalarm},
                 dataType: 'text',
-                success: function (response) {
+                success: function () {
                     if (alarmIsalarm == "0") {
                         $("#isalarm").text("否");
                         $("#iscondition").hide();
@@ -44,8 +44,6 @@ $(document).ready(function () {
                             $("#iscontent").addClass("none");
                         }
                     }
-                },
-                error: function () {
                 }
             });
 

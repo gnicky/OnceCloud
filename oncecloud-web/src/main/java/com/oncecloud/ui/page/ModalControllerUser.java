@@ -41,11 +41,49 @@ public class ModalControllerUser {
 		return new ModelAndView("user/modal/viewquota", model);
 	}
 
+	@RequestMapping(value = "/user/modal/bindalarm")
+	public ModelAndView bindAlarm(HttpServletRequest request) {
+		String uuid = request.getParameter("uuid");
+		request.setAttribute("showid", "al-" + uuid.substring(0, 8));
+		return new ModelAndView("user/modal/bindalarm");
+	}
+
+	@RequestMapping(value = "/user/modal/modifyperiod")
+	public ModelAndView modifyperiod(HttpServletRequest request) {
+		String alarmUuid = request.getParameter("alarmUuid");
+		request.setAttribute("alarmUuid", alarmUuid);
+		return new ModelAndView("user/modal/modifyperiod");
+	}
+
+	@RequestMapping(value = "/user/modal/modifyalert")
+	public ModelAndView modifyalert(HttpServletRequest request) {
+		String alarmUuid = request.getParameter("alarmUuid");
+		request.setAttribute("alarmUuid", alarmUuid);
+		return new ModelAndView("user/modal/modifyalert");
+	}
+
 	@RequestMapping(value = "/elasticip/bind", method = { RequestMethod.POST })
 	public ModelAndView bindElasticIP(HttpServletRequest request,
 			@RequestParam String type) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("type", type);
 		return new ModelAndView("user/modal/bindelasticip", model);
+	}
+
+	@RequestMapping(value = "user/modal/modifyalarmrule")
+	public ModelAndView modifyAlarmRule(HttpServletRequest request,
+			@RequestParam String alarmType, @RequestParam String ruleId,
+			@RequestParam String ruleName, @RequestParam String ruleprio,
+			@RequestParam String ruleprot, @RequestParam String rulesport,
+			@RequestParam String unit) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("alarmType", alarmType);
+		model.put("ruleId", ruleId);
+		model.put("ruleName", ruleName);
+		model.put("ruleprio", ruleprio);
+		model.put("ruleprot", ruleprot);
+		model.put("rulesport", rulesport);
+		model.put("unit", unit);
+		return new ModelAndView("user/modal/modifyalarmrule", model);
 	}
 }

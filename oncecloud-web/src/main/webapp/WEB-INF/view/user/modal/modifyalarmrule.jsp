@@ -1,32 +1,9 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	String alarmType = request.getParameter("alarmType");
-	String ruleId = request.getParameter("ruleId");
-	String ruleName = request.getParameter("ruleName");
-	String ruleprio = request.getParameter("ruleprio");
-	String ruleprot = request.getParameter("ruleprot");
-	String rulesport = request.getParameter("rulesport");
-	String unit = request.getParameter("unit");
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<script src="<%=basePath %>user/js/modal/modifyalarmrule.js"></script>
-<div class="modal-dialog" style="margin-top:100px" id="modal-type" alatype=<%=alarmType %> ruleId=<%=ruleId %> ruleName=<%=ruleName %> ruleprio=<%=ruleprio %> ruleprot=<%=ruleprot %> rulesport=<%=rulesport %> unit=<%=unit %>>
+<script src="${basePath}js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="${basePath}js/jquery.validate.js"></script>
+<script src="${basePath}js/uuid.js"></script>
+<script src="${basePath}js/user/modal/modifyalarmrule.js"></script>
+<div class="modal-dialog" style="margin-top:100px" id="modal-type" alatype="${alarmType}" ruleId="${ruleId}" ruleName="${ruleName}" ruleprio="${ruleprio}" ruleprot="${ruleprot}" rulesport="${rulesport}" unit="${ruunitleId}">
 	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-title">添加警告策略规则<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>

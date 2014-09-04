@@ -140,14 +140,15 @@ public class AlarmManager {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public JSONArray getResourceList(int page, int limit, String search,
-			int type, int uid) {
+	public JSONArray getResourceList(String alarmUuid, int page, int limit,
+			String search, int uid) {
+		int type = this.getAlarmDAO().getAlarm(alarmUuid).getAlarmType();
 		List list = null;
 		int totalNum = 0;
 		JSONArray ja = new JSONArray();
 		if (type == 0) {
-			list = this.getVmDAO().getOnePageVMsWithoutAlarm(page, limit, search,
-					uid);
+			list = this.getVmDAO().getOnePageVMsWithoutAlarm(page, limit,
+					search, uid);
 			totalNum = this.getVmDAO().countVMsWithoutAlarm(search, uid);
 			ja.put(totalNum);
 			if (list != null) {
@@ -182,8 +183,8 @@ public class AlarmManager {
 		} else if (type == 2) {
 			list = this.getRouterDAO().getOnePageRoutersWithoutAlarm(page,
 					limit, search, uid);
-			totalNum = this.getRouterDAO().countRoutersWithoutAlarm(search,
-					uid);
+			totalNum = this.getRouterDAO()
+					.countRoutersWithoutAlarm(search, uid);
 			ja.put(totalNum);
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
@@ -346,5 +347,37 @@ public class AlarmManager {
 			}
 		}
 		return ja;
+	}
+
+	public void modifyRule(int ruletype, int rulethreshold, int ruleperiod,
+			String ruleId) {
+		this.getAlarmRuleDAO().updateRule(ruleId, ruleperiod, rulethreshold,
+				ruletype);
+	}
+
+	public void addRule(String alarmUuid, int ruletype, int rulethreshold, int ruleperiod,
+			String ruleId) {
+		this.getAlarmRuleDAO().addRule(ruleId, ruletype, rulethreshold,
+				alarmUuid, ruleperiod);
+	}
+
+	public JSONObject modifyPeriod(String alarmUuid,int period) {
+		this.getAlarmDAO().updatePeriod(alarmUuid, period);
+		JSONObject jo = new JSONObject();
+		jo.put("isSuccess", true);
+		return jo;
+	}
+	
+	public void deleteRule(String ruleId) {
+		AlarmRule ar = new AlarmRule();
+		ar.setRuleAUuid(ruleId);
+		this.getAlarmRuleDAO().removeAlarmRule(ar);
+	}
+	
+	public void modifyTouch(String alarmUuid, int alarmTouch, int alarmIsalarm) {
+		Alarm alarm = this.getAlarmDAO().getAlarm(alarmUuid);
+		alarm.setAlarmIsalarm(alarmIsalarm);
+		alarm.setAlarmTouch(alarmTouch);
+		this.getAlarmDAO().updateAlarm(alarm);
 	}
 }

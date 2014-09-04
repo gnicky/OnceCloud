@@ -1043,8 +1043,8 @@ public class VMDAO {
 			session.beginTransaction();
 			Query query = session
 					.createQuery("from OCVM where alarmUuid = :alarmUuid and vmStatus = 1");
-			List<OCVM> vmList = query.list();
 			query.setString("alarmUuid", alarmUuid);
+			List<OCVM> vmList = query.list();
 			session.getTransaction().commit();
 			if (vmList.size() > 0) {
 				result = false;

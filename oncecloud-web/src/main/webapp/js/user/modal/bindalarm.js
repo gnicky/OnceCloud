@@ -92,8 +92,8 @@ $(document).ready(function () {
         $('#instancelist').html("");
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: 'action=getResource&page=' + page + '&limit=' + limit + '&search=' + search + '&alarmUuid=' + alarmUuid,
+            url: '/AlarmAction/Resource',
+            data: {page:page, limit:limit, search:search, alarmUuid:alarmUuid},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -149,8 +149,8 @@ $(document).ready(function () {
     function bindvn(alarmUuid, rsuuidStr) {
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: 'action=addresource&alarmUuid=' + alarmUuid + '&rsuuidStr=' + rsuuidStr,
+            url: '/AlarmAction/AddResource',
+            data: {alarmUuid:alarmUuid, rsuuidStr:rsuuidStr},
             dataType: 'text',
             success: function (response) {
                 bootbox.dialog({

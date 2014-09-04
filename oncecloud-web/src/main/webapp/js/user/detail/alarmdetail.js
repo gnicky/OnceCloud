@@ -32,7 +32,7 @@ $(document).ready(function () {
         } else {
             ruleprio = "&gt;";
         }
-        var url = $('#platformcontent').attr('platformBasePath') + 'user/modal/modifyalarmrule.jsp';
+        var url = basePath + 'user/modal/modifyalarmrule';
         $('#RuleModalContainer').load(url, {"alarmType": alaType, "ruleId": ruleId, "ruleName": ruleName,
             "ruleprio": ruleprio, "ruleprot": ruleprot, "rulesport": rulesport, "unit": unit}, function () {
             $('#RuleModalContainer').modal({
@@ -44,7 +44,7 @@ $(document).ready(function () {
 
     $('#basic-modify').on('click', function (event) {
         event.preventDefault();
-        var url = $('#platformcontent').attr('platformBasePath') + 'common/modify.jsp';
+        var url = basePath + 'common/modify';
         var alName = $('#alName').text();
         var alDesc = $('#alDesc').text();
         var alarmUuid = $('#platformcontent').attr("alarmUuid");
@@ -59,7 +59,7 @@ $(document).ready(function () {
 
     $('#basic-period').on('click', function (event) {
         event.preventDefault();
-        var url = $('#platformcontent').attr('platformBasePath') + 'user/modal/modifyperiod.jsp';
+        var url = basePath + 'user/modal/modifyperiod';
         var alarmUuid = $('#platformcontent').attr("alarmUuid");
         $('#RuleModalContainer').load(url, {"alarmUuid": alarmUuid}, function () {
             $('#RuleModalContainer').modal({
@@ -71,7 +71,7 @@ $(document).ready(function () {
 
     $('#basic-touch').on('click', function (event) {
         event.preventDefault();
-        var url = $('#platformcontent').attr('platformBasePath') + 'user/modal/modifyalert.jsp';
+        var url = basePath + 'user/modal/modifyalert';
         var alarmUuid = $('#platformcontent').attr("alarmUuid");
         $('#RuleModalContainer').load(url, {"alarmUuid": alarmUuid}, function () {
             $('#RuleModalContainer').modal({
@@ -83,7 +83,7 @@ $(document).ready(function () {
 
     $('#basic-resource').on('click', function (event) {
         event.preventDefault();
-        var url = $('#platformcontent').attr('platformBasePath') + 'user/modal/bindalarm.jsp';
+        var url = basePath+ 'user/modal/bindalarm';
         var alarmUuid = $('#platformcontent').attr("alarmUuid");
         $('#ResourceModalContainer').load(url, {"uuid": alarmUuid}, function () {
             $('#ResourceModalContainer').modal({
@@ -140,13 +140,12 @@ $(document).ready(function () {
     function destroyAlarm(uuid) {
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: 'action=destroy&uuid=' + uuid,
+            url: '/AlarmAction/Destory',
+            data: {uuid:uuid},
             dataType: 'json',
             success: function (result) {
-                var basePath = $("#platformcontent").attr("platformBasePath");
                 if (result) {
-                    window.location.href = basePath + "user/alarm.jsp";
+                    window.location.href = basePath + "user/alarm";
                 } else {
                     bootbox.dialog({
                         message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;该策略已绑定资源，请先卸载资源</div>',
@@ -157,7 +156,7 @@ $(document).ready(function () {
                                 className: "btn-primary",
                                 callback: function () {
                                 }
-                            },
+                            }
                         }
                     });
                 }
@@ -237,8 +236,8 @@ $(document).ready(function () {
         $('#basic-list').html("");
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: "action=getalarm&alarmUuid=" + alarmUuid,
+            url: '/AlarmAction/GetAlarm',
+            data: {alarmUuid:alarmUuid},
             dataType: 'json',
             success: function (obj) {
                 var showid = "al-" + alarmUuid.substring(0, 8);
@@ -309,16 +308,14 @@ $(document).ready(function () {
         var othis = $(this);
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: "action=removeRs&rsUuid=" + rsUuid + "&rsType=" + rsType,
-            dataType: 'json',
+            url: '/AlarmAction/Remove',
+            data: {rsUuid:rsUuid, rsType:rsType},
+            dataType: 'text',
             success: function (obj) {
                 othis.parent().remove();
                 if ($("#rsTable").html() == "") {
                     $("#rsTable").html('<span class="none">尚无资源</span>');
                 }
-            },
-            error: function () {
             }
         });
     });
@@ -347,8 +344,8 @@ $(document).ready(function () {
         $('#tablebody').html("");
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: 'action=getrulelist&alarmUuid=' + alarmUuid + '&page=' + page + '&limit=' + limit,
+            url: '/AlarmAction/RuleList',
+            data: {alarmUuid:alarmUuid, page:page, limit:limit},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -518,15 +515,13 @@ $(document).ready(function () {
         var thistr = $("#tablebody").find('[ruleid="' + ruleId + '"]');
         $.ajax({
             type: 'get',
-            url: '/AlarmAction',
-            data: 'action=deleterule&ruleId=' + ruleId,
+            url: '/AlarmAction/DeleteRule',
+            data: {ruleId:ruleId},
             dataType: 'json',
-            success: function (obj) {
+            success: function () {
                 $(thistr).remove();
                 $('#deleterule').addClass('btn-disable').attr('disabled', true);
                 getAlarmBasic();
-            },
-            error: function () {
             }
         });
     }

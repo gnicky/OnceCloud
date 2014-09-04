@@ -1,27 +1,9 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-  	String uuid = request.getParameter("uuid");
-  	String showid = "al-"+uuid.substring(0,8);
-	User user = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>user/js/modal/bindalarm.js"></script>
+<script src="${basePath}js/user/modal/bindalarm.js"></script>
 <div class="modal-dialog" style="width:600px; margin-top:100px">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h4 class="modal-title" id="modaltitle">选择要绑定警告策略[<%=showid %>]的资源<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" id="resourceRemove"></span></a></h4>
+			<h4 class="modal-title" id="modaltitle">选择要绑定警告策略[${showid}]的资源<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" id="resourceRemove"></span></a></h4>
 		</div>
 		<div class="modal-body" style="padding:15px 30px">
 			<div id="alert" class="alert alert-warning" style="margin-bottom:10px; padding:10px; color:#c09853">本档位告警策略免费</div>
