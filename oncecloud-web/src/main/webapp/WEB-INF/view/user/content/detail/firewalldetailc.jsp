@@ -7,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="{basePath}user/firewall.jsp"><span class="glyphicon glyphicon-flash cool-green"></span><span class="ctext">FIREWALL</span></a></li>
-		<li class="active"><a href="{basePath}firewall/detail">${showId}</a></li>
+		<li><a href="${basePath}firewall"><span class="glyphicon glyphicon-flash cool-green"></span><span class="ctext">FIREWALL</span></a></li>
+		<li class="active"><a href="${basePath}firewall/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">

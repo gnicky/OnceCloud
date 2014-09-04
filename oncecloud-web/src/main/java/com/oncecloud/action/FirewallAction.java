@@ -86,28 +86,7 @@ public class FirewallAction extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("create")) {
-				String firewallName = request.getParameter("firewallName");
-				String firewallUuid = request.getParameter("firewallUuid");
-				JSONObject jo = this.getFirewallManager().createFirewall(
-						userId, firewallName, firewallUuid);
-				out.print(jo.toString());
-			} else if (action.equals("detail")) {
-				String firewallId = request.getParameter("firewallId");
-				session.setAttribute("firewallId", firewallId);
-			} else if (action.equals("getlist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray ja = this.getFirewallManager().getFirewallList(
-						userId, page, limit, search);
-				out.print(ja.toString());
-			} else if (action.equals("getfirewall")) {
-				String firewallId = request.getParameter("firewallId");
-				JSONObject jo = this.getFirewallManager().getFirewallDetail(
-						userId, firewallId);
-				out.print(jo.toString());
-			} else if (action.equals("createrule")) {
+			if (action.equals("createrule")) {
 				String ruleId = request.getParameter("ruleId");
 				String ruleName = request.getParameter("ruleName");
 				int rulePriority = Integer.parseInt(request
@@ -127,23 +106,11 @@ public class FirewallAction extends HttpServlet {
 						ruleId, ruleName, rulePriority, ruleProtocol, ruleIp,
 						ruleFirewall, ruleSport, ruleEport);
 				out.print(jo);
-			} else if (action.equals("getrulelist")) {
-				int page = Integer.parseInt(request.getParameter("page"));
-				int limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				String firewallId = request.getParameter("firewallId");
-				JSONArray ja = this.getFirewallManager().getRuleList(page,
-						limit, search, firewallId);
-				out.print(ja.toString());
 			} else if (action.equals("deleterule")) {
 				String ruleId = request.getParameter("ruleId");
 				String firewallId = request.getParameter("firewallId");
 				JSONObject jo = this.getFirewallManager().deleteRule(ruleId,
 						firewallId);
-				out.print(jo.toString());
-			} else if (action.equals("banrule")) {
-				String ruleId = request.getParameter("ruleId");
-				JSONObject jo = this.getFirewallManager().banRule(ruleId);
 				out.print(jo.toString());
 			} else if (action.equals("bindfirewall")) {
 				String firewallId = request.getParameter("firewallId");
@@ -152,16 +119,6 @@ public class FirewallAction extends HttpServlet {
 				JSONObject jo = this.getFirewallManager().bindFirewall(userId,
 						firewallId, vmuuidStr, bindtype);
 				out.print(jo.toString());
-			} else if (action.equals("deletefirewall")) {
-				String firewallId = request.getParameter("firewallId");
-				JSONObject jo = this.getFirewallManager().deleteFirewall(
-						userId, firewallId);
-				out.print(jo.toString());
-			} else if (action.equals("quota")) {
-				int count = Integer.parseInt(request.getParameter("count"));
-				String quota = this.getFirewallManager()
-						.getQuota(userId, count);
-				out.print(quota);
 			} else if (action.equals("applyfirewall")) {
 				String firewallId = request.getParameter("firewallId");
 				JSONObject jo = this.getFirewallManager().updateFirewall(
@@ -196,7 +153,7 @@ public class FirewallAction extends HttpServlet {
 						page, limit, search);
 				out.print(ja.toString());
 			} else if (action.equals("getabledfirewalls")) {
-				JSONArray ja = this.getFirewallManager().getAbledFirewallList(
+				JSONArray ja = this.getFirewallManager().getAvailableFirewalls(
 						userId);
 				out.print(ja.toString());
 			}

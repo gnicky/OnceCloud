@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.FirewallManager;
+import com.oncecloud.ui.model.CreateFirewallModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/FirewallAction")
@@ -29,6 +30,28 @@ public class FirewallAction {
 		this.firewallManager = firewallManager;
 	}
 
+	@RequestMapping(value = "/CreateFirewall", method = { RequestMethod.POST })
+	@ResponseBody
+	public String createFirewall(HttpServletRequest request,
+			CreateFirewallModel cfm) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = this.getFirewallManager().createFirewall(userId,
+				cfm.getFirewallName(), cfm.getFirewallUuid());
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/DeleteFirewall", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteFirewall(HttpServletRequest request,
+			@RequestParam String firewallId) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = this.getFirewallManager().deleteFirewall(userId,
+				firewallId);
+		return jo.toString();
+	}
+
 	@RequestMapping(value = "/FirewallList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String firewallList(HttpServletRequest request, ListModel list) {
@@ -38,24 +61,68 @@ public class FirewallAction {
 				list.getPage(), list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-	
+
+	@RequestMapping(value = "/RuleList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String ruleList(HttpServletRequest request, ListModel list) {
+		JSONArray ja = this.getFirewallManager().getRuleList(list.getPage(),
+				list.getLimit(), list.getSearch(), list.getUuid());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/BasicList", method = { RequestMethod.GET })
+	@ResponseBody
+	public String basicList(HttpServletRequest request,
+			@RequestParam String firewallId) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = this.getFirewallManager().getBasicList(userId,
+				firewallId);
+		return jo.toString();
+	}
+
 	@RequestMapping(value = "/AvailableFirewalls", method = { RequestMethod.POST })
 	@ResponseBody
 	public String availablefirewalls(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
-		JSONArray ja = this.getFirewallManager().getAbledFirewallList(
-				userId);
+		JSONArray ja = this.getFirewallManager().getAvailableFirewalls(userId);
 		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
-	public String availablefirewalls(HttpServletRequest request,@RequestParam String firewallId,@RequestParam String vmUuidStr,@RequestParam String bindType) {
+	public String bindFirewall(HttpServletRequest request,
+			@RequestParam String firewallId, @RequestParam String vmUuidStr,
+			@RequestParam String bindType) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
 		JSONObject jo = this.getFirewallManager().bindFirewall(userId,
-				vmUuidStr,firewallId,  bindType);
+				vmUuidStr, firewallId, bindType);
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/Quota", method = { RequestMethod.GET })
+	@ResponseBody
+	public String quota(HttpServletRequest request, @RequestParam int count) {
+		User user = (User) request.getSession().getAttribute("user");
+		String quota = this.getFirewallManager().getQuota(user.getUserId(),
+				count);
+		return quota;
+	}
+	
+	@RequestMapping(value = "/OperateRule", method = { RequestMethod.GET })
+	@ResponseBody
+	public String operateRule(HttpServletRequest request, @RequestParam String ruleId) {
+		JSONObject jo = this.getFirewallManager().operateRule(ruleId);
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/UpdateFirewall", method = { RequestMethod.GET })
+	@ResponseBody
+	public String updateFirewall(HttpServletRequest request, @RequestParam String firewallId) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getFirewallManager().updateFirewall(user.getUserId(), firewallId);
 		return jo.toString();
 	}
 }
