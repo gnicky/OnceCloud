@@ -105,14 +105,14 @@ public class CommonController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("title", "映像");
 		model.put("sideActive", 2);
-		String imageuuid = request.getParameter("imageuuid");
-		String imagetype = request.getParameter("imagetype");
-		if (imageuuid != null) {
-			request.getSession().setAttribute("imageuuid", imageuuid);
-			request.getSession().setAttribute("imagetype", imagetype);
+		String imageUuid = request.getParameter("imageUuid");
+		String imageType = request.getParameter("imageType");
+		if (imageUuid != null) {
+			request.getSession().setAttribute("imageUuid", imageUuid);
+			request.getSession().setAttribute("imageType", imageType);
 			return new ModelAndView("common/detail/imagedetail", model);
 		} else {
-			if (request.getSession().getAttribute("imageuuid") != null) {
+			if (request.getSession().getAttribute("imageUuid") != null) {
 				return new ModelAndView("common/detail/imagedetail", model);
 			} else {
 				return new ModelAndView(new RedirectView("/dashboard"));

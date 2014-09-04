@@ -72,4 +72,11 @@ public class ImageAction {
 		this.getImageManager().cloneImage(user.getUserId(), user.getUserLevel(),imagecloneModel.getVmUuid(),imagecloneModel.getImageName(),imagecloneModel.getImageDesc());
 	}
 
+	@RequestMapping(value = "/BasicList", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	@ResponseBody
+	public String basicList(HttpServletRequest request, @RequestParam String uuid) {
+		JSONObject jo = this.getImageManager().getBasciList(uuid);
+		return jo.toString();
+	}
 }

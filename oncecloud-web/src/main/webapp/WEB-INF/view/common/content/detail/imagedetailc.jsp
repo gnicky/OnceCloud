@@ -1,9 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String imageid = "img-" + imageUuid.substring(0, 8);
-	Integer userlevel = user.getUserLevel();
-	String imagetype = imageType;
-%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="content detail" id="platformcontent" imageUuid="${imageUuid}" basePath="${basePath}">
 	<div class="intro">
 		<h1>映像&nbsp;Images</h1>
@@ -13,20 +9,30 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="${basePath}user/images.jsp"><span class="glyphicon glyphicon-inbox cool-blue"></span><span class="ctext">IMAGE</span></a></li>
-		<li class="active"><%
-		if(imagetype.equals("user"))
-			{
-			if(userlevel==0) {out.print("用户");}else{out.print("自有");}
-			}
-		else{out.print("系统");}%></a></li>
-		<li class="active"><a href="${basePath}common/detail/imagedetail.jsp"><%=imageid %></a></li>
+		<li><a href="${basePath}image"><span class="glyphicon glyphicon-inbox cool-blue"></span><span class="ctext">IMAGE</span></a></li>
+		<li class="active">
+		<c:choose>
+			<c:when test="${imageType=='user'}">
+				<c:choose>
+					<c:when test="${user.userLevel==0}">
+						用户
+					</c:when>
+					<c:otherwise>
+						自有
+					</c:otherwise>
+				</c:choose>
+			</c:when>
+			<c:otherwise>
+				系统
+			</c:otherwise>
+		</c:choose>
+		<li class="active"><a href="${basePath}image/detail">${showId}</a></li>
 	</ol>
 	<div class="col-md-4">
 		<div class="detail-item">
 			<div class="title">
 				<h3>基本属性&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
-				<% if(userlevel==0) { %>
+				<c:if test="${user.userLevel==0}">
 					<div class="btn-group">
 						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
@@ -35,7 +41,7 @@
 							<li><a id="modify"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 						</ul>
 					</div>
-					<%} %>
+				</c:if>
 				</h3>
 			</div>
 			<dl id="basic-list" class="my-horizontal"></dl>
