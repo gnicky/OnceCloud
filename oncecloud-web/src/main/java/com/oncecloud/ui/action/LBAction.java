@@ -57,6 +57,12 @@ public class LBAction {
 		}
 	}
 
+	@RequestMapping(value = "/UpdateStar", method = { RequestMethod.POST })
+	public void lbupdateStar(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam int num) {
+		this.getLbManager().updateImportance(uuid, num);
+	}
+
 	@RequestMapping(value = "/LBDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String volumeDetail(HttpServletRequest request,

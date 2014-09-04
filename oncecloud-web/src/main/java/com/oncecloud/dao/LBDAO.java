@@ -475,6 +475,27 @@ public class LBDAO {
 		return result;
 	}
 
+	public boolean updateLBImportance(String uuid, int lbImportance) {
+		boolean result = false;
+		LB lb = this.getLB(uuid);
+		Session session = null;
+		Transaction tx = null;
+		try {
+			lb.setLbImportance(lbImportance);
+			session = this.getSessionHelper().getMainSession();
+			tx = session.beginTransaction();
+			session.update(lb);
+			tx.commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+
 	public boolean setLBStatus(String lbUuid, int state) {
 		boolean result = false;
 		Session session = null;
@@ -496,6 +517,7 @@ public class LBDAO {
 		}
 		return result;
 	}
+
 
 	/**
 	 * @author hty

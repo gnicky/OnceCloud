@@ -578,6 +578,7 @@ public class RouterDAO {
 		return result;
 	}
 
+
 	/**
 	 * 更新路由器电源状态
 	 * 
@@ -592,6 +593,28 @@ public class RouterDAO {
 			Session session = null;
 			try {
 				router.setRouterPower(powerStatus);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(router);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+		return result;
+	}
+
+	public boolean updateImportance(String uuid, int routerImportance) {
+		boolean result = false;
+		Router router = this.getRouter(uuid);
+		if (router != null) {
+			Session session = null;
+			try {
+				router.setRouterImportance(routerImportance);
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(router);

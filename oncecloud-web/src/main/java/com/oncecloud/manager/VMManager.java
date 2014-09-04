@@ -1141,4 +1141,8 @@ public class VMManager {
 		}
 		return result;
 	}
+	
+	public void updateImportance(String uuid, int importance) {
+		this.getVmDAO().updateVMImportance(uuid, importance);
+	}
 }

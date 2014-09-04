@@ -863,4 +863,8 @@ public class RouterManager {
 		}
 		return ja;
 	}
+	
+	public void updateImportance(String uuid, int importance) {
+		this.getRouterDAO().updateImportance(uuid, importance);
+	}
 }

@@ -93,6 +93,12 @@ public class VMAction {
 		this.getVmManager().doStartVM(user.getUserId(), uuid, poolUuid);
 	}
 
+	@RequestMapping(value = "/UpdateStar", method = { RequestMethod.POST })
+	@ResponseBody
+	public void updateStar(HttpServletRequest request, @RequestParam String uuid, @RequestParam int num) {
+		this.getVmManager().updateImportance(uuid, num);
+	}
+
 	@RequestMapping(value = "/RestartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void restartVM(HttpServletRequest request, @RequestParam String uuid) {
