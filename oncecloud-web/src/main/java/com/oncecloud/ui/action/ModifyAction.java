@@ -2,19 +2,15 @@ package com.oncecloud.ui.action;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.oncecloud.entity.User;
 import com.oncecloud.manager.ModifyManager;
 import com.oncecloud.ui.model.CommonModifyModel;
-import com.oncecloud.ui.model.ListModel;
 
 
 @RequestMapping("/ModifyAction")

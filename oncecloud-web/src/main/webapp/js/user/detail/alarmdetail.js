@@ -48,8 +48,8 @@ $(document).ready(function () {
         var alName = $('#alName').text();
         var alDesc = $('#alDesc').text();
         var alarmUuid = $('#platformcontent').attr("alarmUuid");
-        $('#RuleModalContainer').load(url, {"modifytype": "al", "modifyuuid": alarmUuid,
-            "modifyname": alName, "modifydesc": alDesc}, function () {
+        $('#RuleModalContainer').load(url, {"modifyType": "al", "modifyUuid": alarmUuid,
+            "modifyName": alName, "modifyDesc": alDesc}, function () {
             $('#RuleModalContainer').modal({
                 backdrop: false,
                 show: true
@@ -517,8 +517,8 @@ $(document).ready(function () {
             type: 'get',
             url: '/AlarmAction/DeleteRule',
             data: {ruleId:ruleId},
-            dataType: 'json',
-            success: function () {
+            dataType: 'text',
+            complete: function () {
                 $(thistr).remove();
                 $('#deleterule').addClass('btn-disable').attr('disabled', true);
                 getAlarmBasic();

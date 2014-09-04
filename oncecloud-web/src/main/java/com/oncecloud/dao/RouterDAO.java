@@ -398,8 +398,7 @@ public class RouterDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Router where routerUID :routerUID and routerName like :search "
-					+ "and routerStatus > 0 and alarmUuid is null";
+			String queryString = "select count(*) from Router where routerUID :routerUID and routerName like :search and routerStatus > 0 and alarmUuid is null";
 			Query query = session.createQuery(queryString);
 			query.setInteger("routerUID", routerUID);
 			query.setString("search", "%" + search + "%");

@@ -48,11 +48,11 @@ public class CreateControllerUser {
 		return new ModelAndView("user/create/createalarm");
 	}
 
-	@RequestMapping(value = "/alarm/alarmrule", method = { RequestMethod.GET })
+	@RequestMapping(value = "/alarmrule/create", method = { RequestMethod.POST })
 	public ModelAndView createAlarmRule(HttpServletRequest request) {
 		String alarmType = request.getParameter("alarmType");
 		request.setAttribute("alarmType", alarmType);
-		return new ModelAndView("user/create/alarmrule");
+		return new ModelAndView("user/create/createalarmrule");
 	}
 	
 	@RequestMapping(value = "/elasticip/create", method = { RequestMethod.POST })

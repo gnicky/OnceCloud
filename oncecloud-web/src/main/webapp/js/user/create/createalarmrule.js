@@ -112,7 +112,7 @@ $(document).ready(function () {
 					ruleId : ruleId,
 					alarmUuid : alarmUuid
 				},
-                dataType: 'json',
+                dataType: 'text',
                 success: function () {
                     $("#tablebody").append('<tr ruleid="' + ruleId + '"><td class="rcheck"><input type="checkbox" name="rulerow"></td><td name="rulename" id="rulename">'
                         + ruleName + '</td><td name="priority" id="priority">' + rulePriority + '</td><td name="protocol"><span id="protocol">'

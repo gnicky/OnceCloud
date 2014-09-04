@@ -126,7 +126,7 @@ $(document).ready(function () {
                 type: 'post',
                 url: '/AlarmAction/ModifyRule',
                 data: {ruletype:ruletype, rulethreshold:rulethreshold, ruleperiod:ruleperiod, ruleId:ruleId},
-                dataType: 'json',
+                dataType: 'text',
                 success: function () {
                     $('input[name="rulerow"]:checked').each(function () {
                         $(this).parent().parent().find("#rulename").text(ruleName);

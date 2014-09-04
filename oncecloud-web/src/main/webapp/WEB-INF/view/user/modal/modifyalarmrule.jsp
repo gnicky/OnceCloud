@@ -3,7 +3,7 @@
 <script src="${basePath}js/jquery.validate.js"></script>
 <script src="${basePath}js/uuid.js"></script>
 <script src="${basePath}js/user/modal/modifyalarmrule.js"></script>
-<div class="modal-dialog" style="margin-top:100px" id="modal-type" alatype="${alarmType}" ruleId="${ruleId}" ruleName="${ruleName}" ruleprio="${ruleprio}" ruleprot="${ruleprot}" rulesport="${rulesport}" unit="${ruunitleId}">
+<div class="modal-dialog" style="margin-top:100px" id="modal-type" alatype="${alarmType}" ruleId="${ruleId}" ruleName="${ruleName}" ruleprio="${ruleprio}" ruleprot="${ruleprot}" rulesport="${rulesport}" unit="${unit}">
 	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-title">添加警告策略规则<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>
