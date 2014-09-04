@@ -164,11 +164,11 @@ function getAlarmList(page, limit, search) {
 function destroyAlarm(uuid) {
     $.ajax({
         type: 'get',
-        url: '/AlarmAction',
-        data: 'action=destroy&uuid=' + uuid,
+        url: '/AlarmAction/Destory',
+        data: {uuid:uuid},
         dataType: 'json',
         success: function (result) {
-            if (result) {
+            if (result.obj) {
                 $("#tablebody").find('[rowid="' + uuid + '"]').remove();
             } else {
                 bootbox.dialog({

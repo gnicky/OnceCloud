@@ -42,6 +42,18 @@ public class CreateControllerUser {
 	public ModelAndView createVolume(HttpServletRequest request) {
 		return new ModelAndView("user/create/createvolume");
 	}
+
+	@RequestMapping(value = "/alarm/create", method = { RequestMethod.GET })
+	public ModelAndView createAlarm(HttpServletRequest request) {
+		return new ModelAndView("user/create/createalarm");
+	}
+
+	@RequestMapping(value = "/alarmrule/create", method = { RequestMethod.POST })
+	public ModelAndView createAlarmRule(HttpServletRequest request) {
+		String alarmType = request.getParameter("alarmType");
+		request.setAttribute("alarmType", alarmType);
+		return new ModelAndView("user/create/createalarmrule");
+	}
 	
 	@RequestMapping(value = "/elasticip/create", method = { RequestMethod.POST })
 	public ModelAndView createElasticIP(HttpServletRequest request) {

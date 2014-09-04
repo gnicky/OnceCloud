@@ -124,11 +124,10 @@ $(document).ready(function () {
             var ruleId = $("#modal-type").attr("ruleId");
             $.ajax({
                 type: 'post',
-                url: '/AlarmAction',
-                data: 'action=modifyrule&ruletype=' + ruletype + '&rulethreshold=' + rulethreshold
-                    + '&ruleperiod=' + ruleperiod + '&ruleId=' + ruleId,
-                dataType: 'json',
-                success: function (obj) {
+                url: '/AlarmAction/ModifyRule',
+                data: {ruletype:ruletype, rulethreshold:rulethreshold, ruleperiod:ruleperiod, ruleId:ruleId},
+                dataType: 'text',
+                success: function () {
                     $('input[name="rulerow"]:checked').each(function () {
                         $(this).parent().parent().find("#rulename").text(ruleName);
                         $(this).parent().parent().find("#priority").text(rulePriority);
@@ -139,8 +138,6 @@ $(document).ready(function () {
                         $(this).change();
                     });
                     $("#RuleModalContainer").modal('hide');
-                },
-                error: function () {
                 }
             });
         }
@@ -155,17 +152,17 @@ $(document).ready(function () {
                 required: true,
                 digits: true,
                 range: [1, 100]
-            },
+            }
         },
         messages: {
             rule_threshold: {
-                required: "<span class='unit'>阈值不能为空</span>",
+                required: "<span class='unit'>阈值不能为空</span>"
             },
             rule_period: {
                 required: "<span class='unit'>周期不能为空</span>",
                 digits: "<span class='unit'>周期必须是整数</span>",
                 range: "<span class='unit'>周期必须在1到100之间</span>"
-            },
+            }
         }
     });
 });

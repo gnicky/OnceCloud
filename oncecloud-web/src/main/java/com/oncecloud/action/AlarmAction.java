@@ -67,39 +67,13 @@ public class AlarmAction extends HttpServlet {
 		String action = request.getParameter("action");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("create")) {
-				String alarmUuid = request.getParameter("alarmUuid");
-				String alarmName = request.getParameter("alarmName");
-				int alarmType = Integer.parseInt(request
-						.getParameter("alarmType"));
-				int alarmIsalarm = Integer.parseInt(request
-						.getParameter("alarmIsalarm"));
-				int alarmTouch = Integer.parseInt(request
-						.getParameter("alarmTouch"));
-				int alarmPeriod = Integer.parseInt(request
-						.getParameter("alarmPeriod"));
-				String alarmRules = request.getParameter("alarmRules");
-				String alarmThreshold = request.getParameter("alarmThreshold");
-				boolean result = this.getAlarmManager().saveAlarm(alarmUuid,
-						alarmName, alarmType, alarmIsalarm, alarmTouch,
-						alarmPeriod, alarmRules, alarmThreshold, userId);
-				out.print(result);
-			} else if (action.equals("destroy")) {
-				String uuid = request.getParameter("uuid");
-				boolean result = this.getAlarmManager().deleteAlarm(uuid);
-				out.print(result);
-			} else if (action.equals("detail")) {
-				String alarmUuid = request.getParameter("alarmUuid");
-				session.setAttribute("alarmUuid", alarmUuid);
-			} else if (action.equals("getResource")) {
+			if (action.equals("getResource")) {
 				int page = Integer.parseInt(request.getParameter("page"));
 				int limit = Integer.parseInt(request.getParameter("limit"));
 				String search = request.getParameter("search");
 				String alarmUuid = request.getParameter("alarmUuid");
-				int type = this.getAlarmDAO().getAlarm(alarmUuid)
-						.getAlarmType();
-				JSONArray ja = this.getAlarmManager().getResourceList(page,
-						limit, search, type, userId);
+				JSONArray ja = this.getAlarmManager().getResourceList(alarmUuid, page,
+						limit, search, userId);
 				out.print(ja.toString());
 			} else if (action.equals("addresource")) {
 				String alarmUuid = request.getParameter("alarmUuid");
