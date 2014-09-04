@@ -23,7 +23,7 @@
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
 			<button id="create" class="btn btn-primary"
-				url="${basePath}user/create/createrouter.jsp">
+				url="${basePath}router/create">
 				+&nbsp;新建</button>	
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle"

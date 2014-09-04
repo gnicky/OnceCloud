@@ -41,7 +41,7 @@ $('#createRouterAction').on('click', function (event) {
         var capacity = $('input[name="rt_type"]:checked').val();
         var firewall = $('#rt_firewall').val();
         $.ajax({
-            type: 'get',
+            type: 'post',
             url: '/RouterAction/Quota',
             dataType: 'json',
             success: function (array) {
