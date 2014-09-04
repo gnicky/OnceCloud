@@ -156,8 +156,8 @@ public class RouterDAO {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Router> getOnePageRoutersOfAdmin(int page, int limit, String host,
-			int importance) {
+	public List<Router> getOnePageRoutersOfAdmin(int page, int limit,
+			String host, int importance) {
 		List<Router> rtList = null;
 		Session session = null;
 		try {
@@ -392,17 +392,19 @@ public class RouterDAO {
 	 * @param routerUID
 	 * @return
 	 */
-	public int countRoutersWithoutAlarm(String search, int routerUID) {
+	public int countRoutersWithoutAlarm(String search, int uuid) {
 		int count = 0;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Router where routerUID :routerUID and routerName like :search and routerStatus > 0 and alarmUuid is null";
-			Query query = session.createQuery(queryString);
-			query.setInteger("routerUID", routerUID);
-			query.setString("search", "%" + search + "%");
-			count = ((Number) query.uniqueResult()).intValue();
+			Criteria criteria = session
+					.createCriteria(Router.class)
+					.add(Restrictions.eq("routerUID", uuid))
+					.add(Restrictions.ne("routerStatus", 0))
+					.add(Restrictions.isNull("alarmUuid"))
+					.setProjection(Projections.rowCount());
+			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
