@@ -77,7 +77,7 @@ public class VolumeAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/Bind", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
 	public void bind(HttpServletRequest request,
 			@RequestParam String volumeUuid, @RequestParam String vmUuid) {
@@ -101,5 +101,13 @@ public class VolumeAction {
 			@RequestParam String volumeUuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVolumeManager().unbindVolume(user.getUserId(), volumeUuid);
+	}
+	
+	@RequestMapping(value = "/DeleteVolume", method = { RequestMethod.POST })
+	@ResponseBody
+	public void deleteVolume(HttpServletRequest request,
+			@RequestParam String volumeUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVolumeManager().deleteVolume(user.getUserId(), volumeUuid);
 	}
 }

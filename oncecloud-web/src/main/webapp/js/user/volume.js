@@ -248,24 +248,24 @@ function deleteVolume(uuid) {
     }
     $.ajax({
         type: 'post',
-        url: '/VolumeAction',
-        data: "action=delete&volumeuuid=" + uuid,
+        url: '/VolumeAction/DeleteVolume',
+        data: {volumeUuid: uuid},
         dataType: 'json',
         success: function (obj) {
         }
     });
 }
 
-function unbind(volumeuuid) {
-    var thistr = $('#tablebody').find('[rowid="' + volumeuuid + '"]');
+function unbind(uuid) {
+    var thistr = $('#tablebody').find('[rowid="' + uuid + '"]');
     if (thistr.size() == 1) {
         thistr.find('[name="stateicon"]').removeClass("icon-using").addClass('icon-process');
         thistr.find('[name="stateword"]').text('卸载中');
     }
     $.ajax({
         type: 'post',
-        url: '/VolumeAction',
-        data: "action=unbind&volumeuuid=" + volumeuuid,
+        url: '/VolumeAction/Unbind',
+        data: {volumeUuid: uuid},
         dataType: 'json',
         success: function (obj) {
         }

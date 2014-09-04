@@ -6,11 +6,11 @@ $('#VolumeModalContainer').on('hide', function (event) {
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
-    var url = $("#platformcontent").attr('platformBasePath') + 'common/modify.jsp';
+    var url = $("#platformcontent").attr('basePath') + 'common/modify';
     var volumeUuid = $("#platformcontent").attr("volumeUuid");
     var volumeName = $("#volumename").text();
     var volumeDesc = $("#volumedesc").text();
-    $('#VolumeModalContainer').load(url, {"modifytype": "volume", "modifyuuid": volumeUuid, "modifyname": volumeName, "modifydesc": volumeDesc}, function () {
+    $('#VolumeModalContainer').load(url, {"modifyType": "volume", "modifyUuid": volumeUuid, "modifyName": volumeName, "modifyDesc": volumeDesc}, function () {
         $('#VolumeModalContainer').modal({
             backdrop: false,
             show: true

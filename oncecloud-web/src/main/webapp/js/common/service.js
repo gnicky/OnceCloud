@@ -139,9 +139,9 @@ $('#tablebody').on('click', '.view-detail', function (event) {
     event.preventDefault();
     var qaid = $(this).parent().parent().attr("qaId");
     var form = $("<form></form>");
-    form.attr("action", "/question/detail");
+    form.attr("action", "/service/detail");
     form.attr('method', 'post');
-    var input = $('<input type="text" name="qaid" value="' + qaid + '" />');
+    var input = $('<input type="text" name="qaId" value="' + qaid + '" />');
     form.append(input);
     form.css('display', 'none');
     form.appendTo($('body'));

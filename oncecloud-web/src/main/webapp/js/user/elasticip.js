@@ -162,7 +162,7 @@ function getEIPList(page, limit, search) {
                 }
                 var eipBandwidth = obj.eipBandwidth;
                 var createDate = obj.createDate;
-                var thistr = '<tr eip="' + eipIp + '" eipId="' + eipId + '"><td class="rcheck"><input type="checkbox" name="eiprow"></td><td><a class="id">ip-' + eipId.substring(0, 8) + '</a></td><td name="eipname">'
+                var thistr = '<tr eip="' + eipIp + '" eipId="' + eipId + '"><td class="rcheck"><input type="checkbox" name="eiprow"></td><td><a class="id">eip-' + eipId.substring(0, 8) + '</a></td><td name="eipname">'
                     + eipName + '</td><td>'
                     + eipIp + '</td>' + usedStr + '<td vmuuid="' + eipDepen + '" ' + typeStr + '>' + depenName + '</td><td name="bandwidth">'
                     + eipBandwidth + '</td><td>电信</td><td name="createdate" class="time">' + decodeURI(createDate) + '</td></tr>';

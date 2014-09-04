@@ -15,9 +15,9 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="bind" url="${basePath}user/modal/bindvolume.jsp"><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
+					<li><a class="btn-forbidden" id="bind" url="${basePath}volume/bind"><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
 					<li><a class="btn-forbidden" id="unbind"><span class="glyphicon glyphicon-cloud-download"></span>卸载硬盘</a></li>
-					<li><a class="btn-forbidden backup" id="backup" url="${basePath}user/create/createsnapshot.jsp"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
+					<li><a class="btn-forbidden backup" id="backup" url="${basePath}snapshot/create?rsid=null&rstype=null&rsname=null"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
 					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
 			</div>

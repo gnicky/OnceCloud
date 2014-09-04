@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%
-	String serviceStr = "qa-" + qaId;
-%>
-<div class="content detail" id="platformcontent" qaId="<%=qaId%>" userName="<%=user.getUserName()%>">
+<div class="content detail" id="platformcontent" qaId="${qaId}" userName="${user.userName}" userLevel="${user.userLevel}">
 	<div class="intro">
 		<h1>表单&nbsp;Services</h1>
 		<p class="lead" style="margin-top:10px">
@@ -10,8 +7,8 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="<%=basePath %>common/service.jsp"><span class="glyphicon glyphicon-question-sign cool-cyan"></span><span class="ctext">SERVICES</span></a></li>
-		<li class="active"><a href="<%=basePath %>common/detail/servicedetail.jsp"><%=serviceStr%></a></li>
+		<li><a href="${basePath}common/service"><span class="glyphicon glyphicon-question-sign cool-cyan"></span><span class="ctext">SERVICES</span></a></li>
+		<li class="active"><a href="${basePath}service/detail">qa-${qaId}</a></li>
 	</ol>
 	<div class="once-pane">
 		<h3 style="margin-top:0" id="qa-title"></h3>

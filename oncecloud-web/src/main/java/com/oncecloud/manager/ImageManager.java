@@ -326,7 +326,7 @@ public class ImageManager {
 		return jo;
 	}
 
-	public JSONObject getImageDetail(String imageUuid) {
+	public JSONObject getBasciList(String imageUuid) {
 		JSONObject jo = new JSONObject();
 		Image image = this.getImageDAO().getImage(imageUuid);
 		if (image != null) {

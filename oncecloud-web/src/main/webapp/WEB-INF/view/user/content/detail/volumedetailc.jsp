@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content detail" id="platformcontent" volumeUuid="${volumeUuid}">
+<div class="content detail" id="platformcontent" volumeUuid="${volumeUuid}" basePath="${basePath}">
 	<div class="intro">
 		<h1>硬盘&nbsp;Volumes</h1>
 		<p class="lead">

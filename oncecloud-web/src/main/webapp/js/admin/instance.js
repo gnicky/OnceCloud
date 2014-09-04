@@ -242,9 +242,14 @@ function loadList(action, page, limit, str) {
                         network = '<a>(' + vlan + ')&nbsp;/&nbsp;' + ip + '</a>';
                     }
                 }
+                var starArray = "";
+                for (var j = 0; j < importance; j++) {
+                    starArray += '<span class="glyphicon glyphicon-star"></span>';
+                }
+                var importanceStr = '<a>'+ starArray + '</a>';
                 var importance = obj.importance;
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
-                    + vmName + '</td>' + stateStr + '<td name="vmimportance">' + importance + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
+                    + vmName + '</td>' + stateStr + '<td name="vmimportance">' + importanceStr + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
                     + memory + '</td><td name="sip">' + network + '</td><td name="createtime" class="time">' + decodeURI(obj.createdate) + '</td></tr>';
                 tableStr += thistr;

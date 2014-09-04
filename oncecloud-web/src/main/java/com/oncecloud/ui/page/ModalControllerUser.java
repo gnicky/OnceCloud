@@ -86,4 +86,31 @@ public class ModalControllerUser {
 		model.put("unit", unit);
 		return new ModelAndView("user/modal/modifyalarmrule", model);
 	}
+	
+	@RequestMapping(value = "/volume/bind", method = { RequestMethod.GET })
+	public ModelAndView bindVolume(HttpServletRequest request) {
+		return new ModelAndView("user/modal/bindvolume");
+	}
+	
+	@RequestMapping(value = "/expense/view", method = { RequestMethod.POST })
+	public ModelAndView viewExpense(HttpServletRequest request, @RequestParam String type, @RequestParam String resourceUuid) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("type", type);
+		model.put("resourceUuid", resourceUuid);
+		String showId = "";
+		if (type.equals("instance")) {
+			showId = "i-" + resourceUuid.substring(0, 8);
+		} else if (type.equals("eip")) {
+			showId = "eip-" + resourceUuid.substring(0, 8);
+		} else if (type.equals("volume")) {
+			showId = "vol-" + resourceUuid.substring(0, 8);
+		} else if (type.equals("snapshot")) {
+			showId = "ss-" + resourceUuid.substring(0, 8);
+		} else if (type.equals("image")) {
+			showId = "image-" + resourceUuid.substring(0, 8);
+		}
+		model.put("showId", showId);
+		return new ModelAndView("user/modal/viewexpense", model);
+	}
+	
 }
