@@ -247,14 +247,14 @@ function loadList(action, page, limit, str) {
                 starArray += '<div id="star"><ul>';
                 for (var j = 0; j < 5; j++) {
                 	if (importanceTem > 0) {
-	                    starArray += '<li class="on"><a href="javascript:;">1</a></li>';
+	                    starArray += '<li><a href="javascript:;"><span class="glyphicon glyphicon-star"></span></a></li>';
 	                    importanceTem--;
                 	} else {
-                		starArray += '<li><a href="javascript:;">1</a></li>';
+                		starArray += '<li><a href="javascript:;"><span class="glyphicon glyphicon-star-empty"></span></a></li>';
                 	}
 
                 }
-                starArray += '</ul><a><span id="emptystar" class="glyphicon glyphicon-star-empty" style="font-size:18px"></span></a></div>';
+                starArray += '</ul></div>';
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
                     + vmName + '</td>' + stateStr + '<td id="vmimportance" star="'+obj.importance+'">' + starArray + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
@@ -351,9 +351,11 @@ $(function(){
 		var iScore = ($(this).index() + 1);
 		for (i = 0; i < 5; i++) {
 			if (i < iScore) {
-				$(this).parent("ul").find("li").eq(i).addClass("on");
+                $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star-empty");
+				$(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star");
 			} else {
-				$(this).parent("ul").find("li").eq(i).removeClass("on");
+				$(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star");
+                $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star-empty");
 			}
 		}
 	});
@@ -362,10 +364,12 @@ $(function(){
 		var iScore = $(this).parents("#vmimportance").attr("star");
 		for (i = 0; i < 5; i++) {
 			if (i < iScore) {
-				$(this).parent("ul").find("li").eq(i).addClass("on");
-			} else {
-				$(this).parent("ul").find("li").eq(i).removeClass("on");
-			}
+                $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star-empty");
+                $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star");
+            } else {
+                $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star");
+                $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star-empty");
+            }
 		}
 	});
 
@@ -378,21 +382,6 @@ $(function(){
 			updateStar('/RouterAction', $(this).index() + 1, uuid);
 		} else if (type == "loadbalance") {
 			updateStar('/LBAction', $(this).index() + 1, uuid);
-		}
-	});
-	
-	$(document).on('click', '#emptystar', function(){
-		$(this).parents("#vmimportance").attr("star",0);
-		$.each($(this).parents("#vmimportance").find("li"), function() {
-			$(this).removeClass("on");
-		});
-		var uuid = $(this).parents("tr").attr("rowid");
-		if(type == 'instance') {
-			updateStar('/VMAction', 0, uuid);
-		} else if (type == 'router') {
-			updateStar('/RouterAction', 0, uuid);
-		} else if (type == "loadbalance") {
-			updateStar('/LBAction', 0, uuid);
 		}
 	});
 	
