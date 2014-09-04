@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.RouterManager;
 import com.oncecloud.ui.model.AdminListModel;
+import com.oncecloud.ui.model.CreateRouterModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/RouterAction")
@@ -91,9 +92,9 @@ public class RouterAction {
 	
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
 	@ResponseBody
-	public void create(HttpServletRequest request,@RequestParam String uuid) {
+	public void create(HttpServletRequest request,CreateRouterModel createRouterModel) {
 		User user = (User) request.getSession().getAttribute("user");
-		//this.getRouterManager().createRouter(uuid, user.getUserId(), name, capacity, fwuuid,  user.getUserAllocate());
+		this.getRouterManager().createRouter(createRouterModel.getUuid(), user.getUserId(), createRouterModel.getName(), createRouterModel.getCapacity(), createRouterModel.getFwUuid(),  user.getUserAllocate());
 	}
 	
 	@RequestMapping(value = "/ShutDown", method = { RequestMethod.POST })
@@ -106,6 +107,14 @@ public class RouterAction {
 	@RequestMapping(value = "/Quota", method = { RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getRouterManager().routerQuota(user.getUserId());
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/ApplyRouter", method = { RequestMethod.POST })
+	@ResponseBody
+	public String applyRouter(HttpServletRequest request,@RequestParam String routerUuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONArray ja = this.getRouterManager().routerQuota(user.getUserId());
 		return ja.toString();

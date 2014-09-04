@@ -5,15 +5,14 @@ $('#RouterModalContainer').on('hide', function (event) {
     $(this).children().remove();
 });
 
-$('#modify').on('click', function (event) {
+$('#modify').on('click', function (event) {  
     event.preventDefault();
-    var url = $('#platformcontent').attr('platformBasePath') + 'common/modify.jsp';
+    var url = $("#platformcontent").attr('platformBasePath') + 'common/modify';
     var rtName = $('#rtname').text();
     var rtDesc = $('#rtdesc').text();
     var rtUuid = $('#platformcontent').attr("rtUuid");
-    $('#RouterModalContainer').load(url, {"modifytype": "rt", "modifyuuid": rtUuid,
-        "modifyname": rtName, "modifydesc": rtDesc}, function () {
-        $('#RouterModalContainer').modal({
+    $('#InstanceModalContainer').load(url, {"modifyType": "rt", "modifyUuid": rtUuid, "modifyName": rtName, "modifyDesc": rtDesc}, function () {
+        $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true
         });
@@ -27,18 +26,16 @@ $('.btn-refresh').on('click', function (event) {
 });
 
 $('#depend-list').on('click', '#firewallid', function (event) {
+    var firewallId = $(this).attr("uuid");
     event.preventDefault();
-    var uuid = $(this).attr('uuid');
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/FirewallAction',
-        data: 'action=detail&firewallId=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/firewalldetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/firewall/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getRouterBasicList() {
@@ -113,18 +110,17 @@ function getRouterBasicList() {
     });
 }
 
-$('#depend-list').on('click', '#eip', function (event) {
+$('#depend-list').on('click', '#eip', function (event) {    
     event.preventDefault();
     var eip = $(this).attr("eipip");
-    $.ajax({
-        type: 'get',
-        url: '/EipAction',
-        data: 'action=detail&eip=' + eip,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/elasticipdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/elasticip/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="eipUuid" value="' + eip + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 
@@ -135,8 +131,8 @@ $('#apply').on('click', function (event) {
         var routerUuid = $('#platformcontent').attr("routerUuid");
         $.ajax({
             type: 'get',
-            url: '/RouterAction',
-            data: "action=applyrouter&routeruuid=" + routerUuid,
+            url: '/RouterAction/ApplyRouter',
+            data: {routerUuid:routerUuid},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result == true) {

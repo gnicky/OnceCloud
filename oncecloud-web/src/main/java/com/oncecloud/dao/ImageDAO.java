@@ -84,21 +84,24 @@ public class ImageDAO {
 	@SuppressWarnings("unchecked")
 	public Image getLBImage(int userId) {
 		Image image = null;
-		Session session = null;
-		try {
-			String poolUuid = this.getUserDAO().getUser(userId)
-					.getUserAllocate();
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			Query query = session
-					.createQuery("from Image where imagePlatform = 2 and poolUuid = :poolUuid");
-			query.setString("poolUuid", poolUuid);
-			List<Image> imageList = query.list();
-			image = imageList.get(0);
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
+		if (poolUuid != null) {
+			Session session = null;
+
+			try {
+
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				Query query = session
+						.createQuery("from Image where imagePlatform = 2 and poolUuid = :poolUuid");
+				query.setString("poolUuid", poolUuid);
+				List<Image> imageList = query.list();
+				image = imageList.get(0);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return image;
@@ -106,20 +109,21 @@ public class ImageDAO {
 
 	public Image getRTImage(int userId) {
 		Image image = null;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			String poolUuid = this.getUserDAO().getUser(userId)
-					.getUserAllocate();
-			Query query = session
-					.createQuery("from Image where imagePlatform = 3 and poolUuid = :poolUuid");
-			query.setString("poolUuid", poolUuid);
-			image = (Image) query.uniqueResult();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			if (session != null) {
-				session.getTransaction().rollback();
+		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
+		if (poolUuid != null) {
+			Session session = null;
+			try {
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				Query query = session
+						.createQuery("from Image where imagePlatform = 3 and poolUuid = :poolUuid");
+				query.setString("poolUuid", poolUuid);
+				image = (Image) query.uniqueResult();
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
 			}
 		}
 		return image;
@@ -245,7 +249,7 @@ public class ImageDAO {
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
 			session.getTransaction().commit();
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
