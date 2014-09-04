@@ -610,6 +610,7 @@ public class VMDAO {
 			session.beginTransaction();
 			String queryString = "select count(*) from OCVM where vmStatus != 0 and hostUuid = :hostUuid";
 			Query query = session.createQuery(queryString);
+			query.setString("hostUuid", hostUuid);
 			count = ((Number) query.uniqueResult()).intValue();
 			session.getTransaction().commit();
 		} catch (Exception e) {
