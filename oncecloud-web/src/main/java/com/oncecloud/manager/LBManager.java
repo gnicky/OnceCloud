@@ -25,14 +25,12 @@ import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.UserDAO;
-import com.oncecloud.dao.VDIDAO;
 import com.oncecloud.entity.Backend;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Foreend;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.LB;
 import com.oncecloud.entity.OCLog;
-import com.oncecloud.entity.OCVDI;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
@@ -56,7 +54,6 @@ public class LBManager {
 	private ImageDAO imageDAO;
 	private DHCPDAO dhcpDAO;
 	private LBDAO lbDAO;
-	private VDIDAO vdiDAO;
 	private EIPDAO eipDAO;
 	private RouterDAO routerDAO;
 	private ForeendDAO foreendDAO;
@@ -68,7 +65,7 @@ public class LBManager {
 	private Constant constant;
 	private HostDAO hostDAO;
 	private UserDAO userDAO;
-	
+
 	private MessagePush messagePush;
 
 	private ImageDAO getImageDAO() {
@@ -96,15 +93,6 @@ public class LBManager {
 	@Autowired
 	private void setLbDAO(LBDAO lbDAO) {
 		this.lbDAO = lbDAO;
-	}
-
-	private VDIDAO getVdiDAO() {
-		return vdiDAO;
-	}
-
-	@Autowired
-	private void setVdiDAO(VDIDAO vdiDAO) {
-		this.vdiDAO = vdiDAO;
 	}
 
 	private EIPDAO getEipDAO() {
@@ -205,7 +193,7 @@ public class LBManager {
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
-	
+
 	private MessagePush getMessagePush() {
 		return messagePush;
 	}
@@ -266,30 +254,14 @@ public class LBManager {
 				logger.info("LB [" + backendName + "] Pre Create Time ["
 						+ elapse + "]");
 				if (preCreate == true) {
-					OCVDI freeVDI = this.getVdiDAO().getFreeVDI(tplUuid);
-					Record lbrecord = null;
-					// 如果不能获取该模板的空闲VDI，则直接创建该负载均衡，否则使用该VDI创建负载均衡
-					if (freeVDI == null) {
-						lbrecord = this.getVmManager().createVMOnHost(c, uuid,
-								tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
-								allocateHost, imagePwd, backendName);
-						Date createEndDate = new Date();
-						int elapse1 = Utilities.timeElapse(createDate,
-								createEndDate);
-						logger.info("LB [" + backendName + "] Create Time ["
-								+ elapse1 + "]");
-					} else {
-						String vdiUuid = freeVDI.getVdiUuid();
-						this.getVdiDAO().deleteVDI(freeVDI);
-						lbrecord = this.getVmManager().createVMFromVDI(c, uuid,
-								vdiUuid, tplUuid, "root", pwd, 1, 1024, mac,
-								ip, OS, allocateHost, imagePwd, backendName);
-						Date createEndDate = new Date();
-						int elapse1 = Utilities.timeElapse(createDate,
-								createEndDate);
-						logger.info("LB [" + backendName
-								+ "] Create From VDI Time [" + elapse1 + "]");
-					}
+					Record lbrecord = this.getVmManager().createVMOnHost(c,
+							uuid, tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
+							allocateHost, imagePwd, backendName);
+					Date createEndDate = new Date();
+					int elapse1 = Utilities.timeElapse(createDate,
+							createEndDate);
+					logger.info("LB [" + backendName + "] Create Time ["
+							+ elapse1 + "]");
 					if (lbrecord != null) {
 						String hostuuid = lbrecord.residentOn.toWireString();
 						if (hostuuid.equals(allocateHost)) {
@@ -949,7 +921,9 @@ public class LBManager {
 						.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", lb.getLbImportance());
-				jo.put("userName", Utilities.encodeText(this.getUserDAO().getUser(lb.getLbUID()).getUserName()));
+				jo.put("userName",
+						Utilities.encodeText(this.getUserDAO()
+								.getUser(lb.getLbUID()).getUserName()));
 				ja.put(jo);
 			}
 		}

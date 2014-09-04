@@ -252,6 +252,7 @@ function loadList(action, page, limit, str) {
                 	} else {
                 		starArray += '<li><a href="javascript:;">1</a></li>';
                 	}
+
                 }
                 starArray += '</ul><a><span id="emptystar" class="glyphicon glyphicon-star-empty" style="font-size:18px"></span></a></div>';
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'

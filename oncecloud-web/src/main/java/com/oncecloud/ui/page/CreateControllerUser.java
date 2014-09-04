@@ -69,4 +69,9 @@ public class CreateControllerUser {
 	public ModelAndView createService(HttpServletRequest request) {
 		return new ModelAndView("user/create/createservice");
 	}
+	
+	@RequestMapping(value = "/firewall/create", method = { RequestMethod.GET })
+	public ModelAndView createFirewall(HttpServletRequest request) {
+		return new ModelAndView("user/create/createfirewall");
+	}
 }
