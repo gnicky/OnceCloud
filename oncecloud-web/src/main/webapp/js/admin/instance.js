@@ -243,13 +243,19 @@ function loadList(action, page, limit, str) {
                     }
                 }
                 var starArray = "";
-                for (var j = 0; j < importance; j++) {
-                    starArray += '<span class="glyphicon glyphicon-star"></span>';
+                var importanceTem = obj.importance;
+                starArray += '<div id="star"><ul>';
+                for (var j = 0; j < 5; j++) {
+                	if (importanceTem > 0) {
+	                    starArray += '<li class="on"><a href="javascript:;">1</a></li>';
+	                    importanceTem--;
+                	} else {
+                		starArray += '<li><a href="javascript:;">1</a></li>';
+                	}
                 }
-                var importanceStr = '<a>'+ starArray + '</a>';
-                var importance = obj.importance;
+                starArray += '</ul><a><span id="emptystar" class="glyphicon glyphicon-star-empty" style="font-size:18px"></span></a></div>';
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
-                    + vmName + '</td>' + stateStr + '<td name="vmimportance">' + importanceStr + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
+                    + vmName + '</td>' + stateStr + '<td id="vmimportance" star="'+obj.importance+'">' + starArray + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
                     + memory + '</td><td name="sip">' + network + '</td><td name="createtime" class="time">' + decodeURI(obj.createdate) + '</td></tr>';
                 tableStr += thistr;
@@ -337,3 +343,68 @@ function initPage() {
         }
     });
 }
+
+$(function(){
+
+	$(document).on('mouseover','#star li',function(){
+		var iScore = ($(this).index() + 1);
+		for (i = 0; i < 5; i++) {
+			if (i < iScore) {
+				$(this).parent("ul").find("li").eq(i).addClass("on");
+			} else {
+				$(this).parent("ul").find("li").eq(i).removeClass("on");
+			}
+		}
+	});
+
+	$(document).on('mouseout','#star li',function(){
+		var iScore = $(this).parents("#vmimportance").attr("star");
+		for (i = 0; i < 5; i++) {
+			if (i < iScore) {
+				$(this).parent("ul").find("li").eq(i).addClass("on");
+			} else {
+				$(this).parent("ul").find("li").eq(i).removeClass("on");
+			}
+		}
+	});
+
+	$(document).on('click','#star li',function(){
+		$(this).parents("#vmimportance").attr("star",$(this).index() + 1);
+		var uuid = $(this).parents("tr").attr("rowid");
+		if(type == 'instance') {
+			updateStar('/VMAction', $(this).index() + 1, uuid);
+		} else if (type == 'router') {
+			updateStar('/RouterAction', $(this).index() + 1, uuid);
+		} else if (type == "loadbalance") {
+			updateStar('/LBAction', $(this).index() + 1, uuid);
+		}
+	});
+	
+	$(document).on('click', '#emptystar', function(){
+		$(this).parents("#vmimportance").attr("star",0);
+		$.each($(this).parents("#vmimportance").find("li"), function() {
+			$(this).removeClass("on");
+		});
+		var uuid = $(this).parents("tr").attr("rowid");
+		if(type == 'instance') {
+			updateStar('/VMAction', 0, uuid);
+		} else if (type == 'router') {
+			updateStar('/RouterAction', 0, uuid);
+		} else if (type == "loadbalance") {
+			updateStar('/LBAction', 0, uuid);
+		}
+	});
+	
+	function updateStar(action, num, uuid) {
+		$.ajax({
+				type: 'post',
+				url: action + '/UpdateStar',
+				data: {uuid:uuid, num:num},
+				dataType: 'text',
+				complete: function() {
+				
+				}
+			});
+	}
+});
+

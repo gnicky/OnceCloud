@@ -95,6 +95,12 @@ public class RouterAction {
 		User user = (User) request.getSession().getAttribute("user");
 		//this.getRouterManager().createRouter(uuid, user.getUserId(), name, capacity, fwuuid,  user.getUserAllocate());
 	}
+
+	@RequestMapping(value = "/UpdateStar", method = { RequestMethod.POST })
+	@ResponseBody
+	public void updateStar(HttpServletRequest request,@RequestParam String uuid, @RequestParam int num) {
+		this.getRouterManager().updateImportance(uuid, num);
+	}
 	
 	@RequestMapping(value = "/ShutDown", method = { RequestMethod.POST })
 	@ResponseBody

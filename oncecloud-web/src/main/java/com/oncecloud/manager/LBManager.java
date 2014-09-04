@@ -955,4 +955,8 @@ public class LBManager {
 		}
 		return ja;
 	}
+	
+	public void updateImportance(String uuid, int importance) {
+		this.getLbDAO().updateLBImportance(uuid, importance);
+	}
 }
