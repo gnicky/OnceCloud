@@ -104,11 +104,16 @@ $(document).ready(function () {
             var alarmUuid = $('#platformcontent').attr("alarmUuid");
             $.ajax({
                 type: 'post',
-                url: '/AlarmAction',
-                data: 'action=createrule&ruletype=' + ruletype + '&rulethreshold=' + rulethreshold
-                    + '&ruleperiod=' + ruleperiod + '&ruleId=' + ruleId + '&alarmUuid=' + alarmUuid,
-                dataType: 'json',
-                success: function (obj) {
+                url: '/AlarmAction/CreateRule',
+                data : {
+					ruletype : ruletype,
+					rulethreshold : rulethreshold,
+					ruleperiod : ruleperiod,
+					ruleId : ruleId,
+					alarmUuid : alarmUuid
+				},
+                dataType: 'text',
+                success: function () {
                     $("#tablebody").append('<tr ruleid="' + ruleId + '"><td class="rcheck"><input type="checkbox" name="rulerow"></td><td name="rulename" id="rulename">'
                         + ruleName + '</td><td name="priority" id="priority">' + rulePriority + '</td><td name="protocol"><span id="protocol">'
                         + rulethreshold + '</span>&nbsp;<span id="unit">' + $("#alarm-unit").text() + '</span></td><td name="sport" id="sport">' + ruleperiod + '</td></tr>');
@@ -129,17 +134,17 @@ $(document).ready(function () {
                 required: true,
                 digits: true,
                 range: [1, 100]
-            },
+            }
         },
         messages: {
             rule_threshold: {
-                required: "<span class='unit'>阈值不能为空</span>",
+                required: "<span class='unit'>阈值不能为空</span>"
             },
             rule_period: {
                 required: "<span class='unit'>周期不能为空</span>",
                 digits: "<span class='unit'>周期必须是整数</span>",
                 range: "<span class='unit'>周期必须在1到100之间</span>"
-            },
+            }
         }
     });
 });

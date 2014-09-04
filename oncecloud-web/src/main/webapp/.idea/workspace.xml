@@ -23,12 +23,52 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="imagedetail.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="imagedetail.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/common/detail/imagedetail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.42857143" vertical-offset="885" max-vertical-offset="1485">
+            <state vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="1485">
               <caret line="42" column="57" selection-start-line="42" selection-start-column="57" selection-end-line="42" selection-end-column="57" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userdetail.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/admin/detail/userdetail.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="3405">
+              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding>
+                <marker date="1409799445000" expanded="true" signature="1156:1172" placeholder="..." />
+                <marker date="1409799445000" expanded="true" signature="1328:1344" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="instance.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/admin/instance.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3345" max-vertical-offset="5235">
+              <caret line="247" column="32" selection-start-line="247" selection-start-column="32" selection-end-line="247" selection-end-column="32" />
+              <folding>
+                <marker date="1409803018000" expanded="false" signature="3431:3449" placeholder="..." />
+                <marker date="1409803018000" expanded="false" signature="3576:3584" placeholder="..." />
+                <marker date="1409803018000" expanded="false" signature="3615:3632" placeholder="..." />
+                <marker date="1409803018000" expanded="false" signature="3878:3889" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="createfirewall.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/user/create/createfirewall.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.394958" vertical-offset="635" max-vertical-offset="1230">
+              <caret line="58" column="3" selection-start-line="58" selection-start-column="3" selection-end-line="58" selection-end-column="3" />
+              <folding>
+                <marker date="1409810940000" expanded="true" signature="656:667" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -65,9 +105,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/js/user/database.js" />
-        <option value="$PROJECT_DIR$/js/user/instance.js" />
-        <option value="$PROJECT_DIR$/js/user/detail/routerdetail.js" />
         <option value="$PROJECT_DIR$/js/user/detail/vnetdetail.js" />
         <option value="$PROJECT_DIR$/js/admin/dashboard.js" />
         <option value="$PROJECT_DIR$/js/admin/host.js" />
@@ -116,6 +153,9 @@
         <option value="$PROJECT_DIR$/js/common/detail/servicedetail.js" />
         <option value="$PROJECT_DIR$/js/common/image.js" />
         <option value="$PROJECT_DIR$/js/common/detail/imagedetail.js" />
+        <option value="$PROJECT_DIR$/js/admin/detail/userdetail.js" />
+        <option value="$PROJECT_DIR$/js/admin/instance.js" />
+        <option value="$PROJECT_DIR$/js/user/create/createfirewall.js" />
       </list>
     </option>
   </component>
@@ -324,47 +364,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="detail" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webapp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="detail" />
+              <option name="myItemId" value="create" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -476,27 +476,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/message.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="35" max-vertical-offset="1575">
-          <caret line="94" column="5" selection-start-line="94" selection-start-column="5" selection-end-line="94" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/detail/loadbalancedetail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="6960">
-          <caret line="51" column="29" selection-start-line="0" selection-start-column="0" selection-end-line="458" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/user/create/createimage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1170">
-          <caret line="14" column="14" selection-start-line="0" selection-start-column="0" selection-end-line="72" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/user/create/createelasticip.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="905" max-vertical-offset="1935">
@@ -862,9 +841,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/common/detail/imagedetail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.42857143" vertical-offset="885" max-vertical-offset="1485">
+        <state vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="1485">
           <caret line="42" column="57" selection-start-line="42" selection-start-column="57" selection-end-line="42" selection-end-column="57" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/admin/detail/userdetail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="3405">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <marker date="1409799445000" expanded="true" signature="1156:1172" placeholder="..." />
+            <marker date="1409799445000" expanded="true" signature="1328:1344" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/admin/instance.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3345" max-vertical-offset="5235">
+          <caret line="247" column="32" selection-start-line="247" selection-start-column="32" selection-end-line="247" selection-end-column="32" />
+          <folding>
+            <marker date="1409803018000" expanded="false" signature="3431:3449" placeholder="..." />
+            <marker date="1409803018000" expanded="false" signature="3576:3584" placeholder="..." />
+            <marker date="1409803018000" expanded="false" signature="3615:3632" placeholder="..." />
+            <marker date="1409803018000" expanded="false" signature="3878:3889" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/user/create/createfirewall.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.394958" vertical-offset="635" max-vertical-offset="1230">
+          <caret line="58" column="3" selection-start-line="58" selection-start-column="3" selection-end-line="58" selection-end-column="3" />
+          <folding>
+            <marker date="1409810940000" expanded="true" signature="656:667" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -9,14 +9,14 @@
 	<div class="once-pane">
 		<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<button id="create" class="btn btn-primary" url="${basePath}user/create/createalarm.jsp">+&nbsp;新建</button>
+			<button id="create" class="btn btn-primary" url="${basePath}alarm/create">+&nbsp;新建</button>
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
 					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
-					<li><a class="btn-forbidden" id="bindalarm" url="${basePath}user/modal/bindalarm.jsp"><span class="glyphicon glyphicon-cloud"></span>绑定资源</a></li>
+					<li><a class="btn-forbidden" id="bindalarm" url="${basePath}user/modal/bindalarm"><span class="glyphicon glyphicon-cloud"></span>绑定资源</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

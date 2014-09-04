@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content detail" id="platformcontent">
+<div class="content detail" id="platformcontent" alarmUuid="${alarmUuid}">
 	<div class="intro">
 		<h1>监控告警&nbsp;Alarms</h1>
 		<p class="lead">
@@ -38,7 +38,7 @@
 				<div class="title"><h3 class="uppercase">规则</h3><span class="oc-update" id="suggestion" style="display: none;">修改尚未更新，请点击"应用修改"</span></div>
 				<div class="once-toolbar">
 					<button class="btn btn-default rule-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-					<button id="createrule" class="btn btn-default" url="${basePath}user/create/createalarmrule.jsp">+&nbsp;新建</button>
+					<button id="createrule" class="btn btn-default" url="${basePath}alarmrule/create">+&nbsp;新建</button>
 					<button id="confirm" class="btn btn-default btn-disable" disabled><span class="glyphicon glyphicon-pencil"></span>修改</button>
 					<button id="deleterule" class="btn btn-default btn-disable" disabled><span class="glyphicon glyphicon-trash"></span>删除</button>
 					<div class="toolbar-right">

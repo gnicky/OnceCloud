@@ -8,11 +8,10 @@ $(document).ready(function () {
             var period = $('#period').find("option:selected").val();
             $.ajax({
                 type: 'post',
-                url: '/AlarmAction',
-                data: "action=mperiod&period=" + period + "&alarmUuid=" + alarmUuid,
-                dataType: 'text',
-                success: function (response) {
-                    var obj = jQuery.parseJSON(response);
+                url: '/AlarmAction/ModifyPeriod',
+                data: {period:period, alarmUuid:alarmUuid},
+                dataType: 'json',
+                success: function (obj) {
                     if (obj.isSuccess) {
                         $("#alPeriod").text(period + "分钟");
                     }
