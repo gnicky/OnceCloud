@@ -297,7 +297,7 @@ public class FirewallDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString1 = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1 and vmIp != null";
+			String queryString1 = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1 and vmIP != null";
 			Query query1 = session.createQuery(queryString1);
 			query1.setString("firewallId", firewallId);
 			rsList = query1.list();
