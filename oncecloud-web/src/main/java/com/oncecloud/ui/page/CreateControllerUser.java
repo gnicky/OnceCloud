@@ -79,4 +79,9 @@ public class CreateControllerUser {
 	public ModelAndView createvnet(HttpServletRequest request) {
 		return new ModelAndView("user/create/createvnet");
 	}
+	
+	@RequestMapping(value = "/loadbalance/create", method = { RequestMethod.GET })
+	public ModelAndView createloadbalance(HttpServletRequest request) {
+		return new ModelAndView("user/create/createloadbalance");
+	}
 }
