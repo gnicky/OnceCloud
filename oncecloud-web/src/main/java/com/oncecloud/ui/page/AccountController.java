@@ -193,6 +193,12 @@ public class AccountController {
 			return new ModelAndView(new RedirectView("/login"));
 		}
 	}
+	
+	@RequestMapping(value = "/404", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView pageNotFound(HttpServletRequest request) {
+		return new ModelAndView("account/404");
+	}
 
 	@RequestMapping(value = "/captcha", method = { RequestMethod.GET })
 	public ResponseEntity<byte[]> image(HttpServletRequest request)
