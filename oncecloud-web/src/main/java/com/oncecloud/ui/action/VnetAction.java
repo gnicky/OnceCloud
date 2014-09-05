@@ -63,4 +63,18 @@ public class VnetAction {
 		int userId = user.getUserId();
 		this.getVnetManager().vnetAddOnevm(vnId,vmUuid, userId, user.getUserAllocate());
 	}
+	
+	@RequestMapping(value = "/Unlink", method = { RequestMethod.POST })
+	@ResponseBody
+	public void unlink(HttpServletRequest request,@RequestParam String vnetId) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVnetManager().vnetUnlink(vnetId, user.getUserId());
+	}
+	
+	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
+	@ResponseBody
+	public void delete(HttpServletRequest request,@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVnetManager().deleteVnet(user.getUserId(), uuid);
+	}
 }

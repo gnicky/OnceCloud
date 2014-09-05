@@ -92,6 +92,16 @@ public class ModalControllerUser {
 		return new ModelAndView("user/modal/bindvolume");
 	}
 	
+	@RequestMapping(value = "/vnet/bindvm", method = { RequestMethod.GET })
+	public ModelAndView bindVmToVnet(HttpServletRequest request) {
+		return new ModelAndView("user/modal/bindvnet");
+	}
+	
+	@RequestMapping(value = "/vnet/linkrouter", method = { RequestMethod.GET })
+	public ModelAndView linkRouterToVnet(HttpServletRequest request) {
+		return new ModelAndView("user/modal/addtorouter");
+	}
+	
 	@RequestMapping(value = "/expense/view", method = { RequestMethod.POST })
 	public ModelAndView viewExpense(HttpServletRequest request, @RequestParam String type, @RequestParam String resourceUuid) {
 		Map<String, Object> model = new HashMap<String, Object>();

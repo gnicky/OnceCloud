@@ -207,11 +207,11 @@ $('#link').on('click', function (event) {
 
 function unlink(uuid) {
     $.ajax({
-        type: 'get',
-        url: '/VnetAction',
-        data: 'action=unlink&vnetid=' + uuid,
+        type: 'post',
+        url: '/VnetAction/Unlink',
+        data: {vnetId:uuid},
         dataType: 'text',
-        success: function () {
+        complete: function () {
             var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
             thistr.children('td').eq(3).html('');
         }
@@ -220,9 +220,9 @@ function unlink(uuid) {
 
 function deleteVnet(uuid) {
     $.ajax({
-        type: 'get',
-        url: '/VnetAction',
-        data: 'action=delete&uuid=' + uuid,
+        type: 'post',
+        url: '/VnetAction/Delete',
+        data: {uuid:uuid},
         dataType: 'text',
         success: function (result) {
             if (result == "Using") {

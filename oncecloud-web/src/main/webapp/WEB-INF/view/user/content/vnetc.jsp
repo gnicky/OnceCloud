@@ -23,7 +23,7 @@
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
 			<button id="create" class="btn btn-primary"
-				url="${basePath}user/create/createvnet.jsp">
+				url="${basePath}vnet/create">
 				+&nbsp;新建</button>	
 			<div class="btn-group">
 				<button class="btn btn-default dropdown-toggle"
@@ -31,8 +31,8 @@
 					更多操作... <span class="caret" style="margin-left: 15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="addvm" url="${basePath}user/modal/bindvnet.jsp"><span class="glyphicon glyphicon-cloud"></span>添加主机</a></li>
-					<li><a class="btn-forbidden" id="link" url="${basePath}user/modal/addtorouter.jsp"><span class="glyphicon glyphicon-cloud-upload"></span>连接路由器</a></li>
+					<li><a class="btn-forbidden" id="addvm" url="${basePath}vnet/bindvm"><span class="glyphicon glyphicon-cloud"></span>添加主机</a></li>
+					<li><a class="btn-forbidden" id="link" url="${basePath}vnet/linkrouter"><span class="glyphicon glyphicon-cloud-upload"></span>连接路由器</a></li>
 		           <li><a class="btn-forbidden" id="unlink"><span class="glyphicon glyphicon-cloud-download"></span>离开路由器</a></li>
 		           <li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>
