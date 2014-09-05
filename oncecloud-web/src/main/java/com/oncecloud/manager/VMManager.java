@@ -277,7 +277,7 @@ public class VMManager {
 	/*
 	 * 如果vlan为null，则绑定到基础网络，否则绑定到对应到私有网络
 	 */
-	private int bindVlan(String uuid, String vlan, String hostUuid) {
+	private int bindVlan(String uuid, String vlan, String poolUuid) {
 		int vlanId = -1;
 		if (vlan != null) {
 			try {
@@ -285,13 +285,13 @@ public class VMManager {
 			} catch (Exception e) {
 			}
 		}
-		setVlan(uuid, vlanId, hostUuid);
+		setVlan(uuid, vlanId, poolUuid);
 		return vlanId;
 	}
 
-	public boolean setVlan(String uuid, int vlanId, String hostUuid) {
+	public boolean setVlan(String uuid, int vlanId, String poolUuid) {
 		try {
-			Connection c = this.getConstant().getConnectionFromPool(hostUuid);
+			Connection c = this.getConstant().getConnectionFromPool(poolUuid);
 			VM vm = VM.getByUuid(c, uuid);
 			vm.setTag(c, vm.getVIFs(c).iterator().next(),
 					String.valueOf(vlanId));
@@ -517,7 +517,7 @@ public class VMManager {
 			}
 		} finally {
 			if (result == true) {
-				int vlan = bindVlan(uuid, currentVM.getVmVlan(), hostUuid);
+				int vlan = bindVlan(uuid, currentVM.getVmVlan(), poolUuid);
 				logger.debug("Bind Vlan: VM [i-" + uuid.substring(0, 8)
 						+ "] Result [" + vlan + "]");
 				String hostAddress = this.getHostAddress(hostUuid);
@@ -615,7 +615,7 @@ public class VMManager {
 			}
 		} finally {
 			if (result = true) {
-				int vlan = bindVlan(uuid, currentVM.getVmVlan(), hostUuid);
+				int vlan = bindVlan(uuid, currentVM.getVmVlan(), poolUuid);
 				logger.debug("Bind Vlan: VM [i-" + uuid.substring(0, 8)
 						+ "] Result [" + vlan + "]");
 				String hostAddress = getHostAddress(hostUuid);

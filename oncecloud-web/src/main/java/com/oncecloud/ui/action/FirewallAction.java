@@ -129,6 +129,13 @@ public class FirewallAction {
 				crm.getRuleSport(), crm.getRuleEport());
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/DeleteRule", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteRule(HttpServletRequest request, @RequestParam String ruleId, @RequestParam String firewallId) {
+		JSONObject jo = this.getFirewallManager().deleteRule(ruleId, firewallId);
+		return jo.toString();
+	}
 
 	@RequestMapping(value = "/UpdateFirewall", method = { RequestMethod.GET })
 	@ResponseBody

@@ -145,7 +145,7 @@ $('#deleterule').on('click', function (event) {
 function deleteRule(ruleId, firewallId) {
     var thistr = $("#tablebody").find('[ruleid="' + ruleId + '"]');
     $.ajax({
-        type: 'get',
+        type: 'post',
         url: '/FirewallAction/DeleteRule',
         data: {ruleId: ruleId, firewallId: firewallId},
         dataType: 'json',

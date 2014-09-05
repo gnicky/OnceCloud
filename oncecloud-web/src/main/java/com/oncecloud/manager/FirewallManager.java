@@ -1,6 +1,5 @@
 package com.oncecloud.manager;
 
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
@@ -127,7 +126,7 @@ public class FirewallManager {
 	}
 
 	public JSONObject updateFirewall(int userId, String firewallId) {
-		JSONObject jo = new JSONObject();
+		JSONObject obj = new JSONObject();
 		boolean result = false;
 		Date startTime = new Date();
 		JSONArray infoArray = new JSONArray();
@@ -195,10 +194,10 @@ public class FirewallManager {
 			this.getFirewallDAO().updateConfirm(firewallId, 1);
 			result = true;
 		}
+		obj.put("result", result);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
-		jo.put("isSuccess", result);
 		if (result) {
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.防火墙.ordinal(),
@@ -216,7 +215,7 @@ public class FirewallManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
-		return jo;
+		return obj;
 	}
 
 	public boolean activeFirewall(Connection c, int userId, String ip,
