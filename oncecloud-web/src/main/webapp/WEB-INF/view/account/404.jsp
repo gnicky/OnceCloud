@@ -4,7 +4,6 @@
 <head>
 <title>404</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="${basePath}css/bootstrap.css">
 <link rel="stylesheet" href="${basePath}css/error.css">
 <link rel="shortcut icon" href="fav.ico" />
 </head>
