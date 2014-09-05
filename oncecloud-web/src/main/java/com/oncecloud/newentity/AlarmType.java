@@ -1,5 +1,0 @@
-package com.oncecloud.newentity;
-
-public enum AlarmType {
-	INSTANCE, ELASTIC_IP, ROUTER, LISTENER_HTTP, LISTENER_HTTPS, LISTENER_TCP, BACKEND_HTTP, BACKEND_TCP
-}
