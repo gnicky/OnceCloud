@@ -176,15 +176,14 @@ $('.filter-once-tab').on('click', '.tab-filter', function (event) {
 $('#vxnets-t').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/VMAction',
-        data: 'action=detail&instanceuuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/instance/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getVxnets() {
@@ -193,8 +192,8 @@ function getVxnets() {
     var basePath = $('#platformcontent').attr("platformBasePath");
     $.ajax({
         type: 'get',
-        url: '/RouterAction',
-        data: "action=getvxnets&routerUuid=" + routerUuid,
+        url: '/RouterAction/Vxnets',
+        data:{routerUuid:routerUuid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 0) {

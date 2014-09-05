@@ -39,8 +39,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: 'post',
-        url: '/DashboardAction',
-        data: 'action=getTuoputu',
+        url: '/RackAction/RackDetail',
         dataType: 'json',
         success: function (array) {
             if (array.length > 0) {
@@ -114,9 +113,6 @@ $(document).ready(function () {
 
 
             }
-        },
-        error: function () {
-
         }
     });
 });

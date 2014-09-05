@@ -43,8 +43,8 @@ public class ServerPortDAO {
 			String queryString = "from ServerPort where serverportUuid = :portId";
 			Query query = session.createQuery(queryString);
 			query.setString("portId", portId);
-			session.getTransaction().commit();
 			vlanList = query.list();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

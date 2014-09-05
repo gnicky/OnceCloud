@@ -227,7 +227,7 @@ public class VnetDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Vnet where vnetUID = :usrId and vnetName like :search";
+			String queryString = "select count(*) from Vnet where vnetUID = :userId and vnetName like :search";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");

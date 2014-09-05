@@ -79,4 +79,14 @@ public class CreateControllerUser {
 	public ModelAndView createFirewallRule(HttpServletRequest request) {
 		return new ModelAndView("user/create/createfirewallrule");
 	}
+	
+	@RequestMapping(value = "/loadbalance/create", method = { RequestMethod.GET })
+	public ModelAndView createLoadbalance(HttpServletRequest request) {
+		return new ModelAndView("user/create/createloadbalance");
+	}
+	
+	@RequestMapping(value = "/vnet/create", method = { RequestMethod.GET })
+	public ModelAndView createVnet(HttpServletRequest request) {
+		return new ModelAndView("user/create/createvnet");
+	}
 }

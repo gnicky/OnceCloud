@@ -20,7 +20,7 @@ public class ModalControllerAdmin {
 
 	@RequestMapping(value = "/addtohost")
 	public ModelAndView addtohost(HttpServletRequest request) {
-		return new ModelAndView("admin/modal/addtopool");
+		return new ModelAndView("admin/modal/addtohost");
 	}
 
 	@RequestMapping(value = "/storageofhost")
