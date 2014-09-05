@@ -122,7 +122,7 @@ public class VnetManager {
 	 * 添加主机到私有网络
 	 */
 	public boolean addVmToVnet(int userId, String vmArray, String vnetId,
-			String hostUuid) {
+			String poolUuid) {
 		boolean result = false;
 		Date startTime = new Date();
 		try {
@@ -141,7 +141,7 @@ public class VnetManager {
 							LogConstant.logObject.主机.toString(),
 							"i-" + vmUuid.substring(0, 8)));
 					if (vnetId.equals("-1")) {
-						this.getVmManager().setVlan(vmUuid, -1, hostUuid);
+						this.getVmManager().setVlan(vmUuid, -1, poolUuid);
 						String ip = this
 								.getDhcpDAO()
 								.getDHCP(
@@ -152,7 +152,7 @@ public class VnetManager {
 					} else {
 						this.getVmManager().setVlan(vmUuid,
 								this.getVnetDAO().getVnet(vnetId).getVnetID(),
-								hostUuid);
+								poolUuid);
 						result = this.getVmDAO().updateVMVlan(vmUuid, vnetId);
 					}
 					Date endTime = new Date();
@@ -205,7 +205,7 @@ public class VnetManager {
 	}
 
 	public boolean addOneVmToVnet(int userId, String vmuuid, String vnId,
-			String hostUuid) {
+			String poolUuid) {
 		boolean result = false;
 		Date startTime = new Date();
 		try {
@@ -220,7 +220,7 @@ public class VnetManager {
 						LogConstant.logObject.主机.toString(),
 						"i-" + vmUuid.substring(0, 8)));
 				this.getVmManager().setVlan(vmUuid,
-						this.getVnetDAO().getVnet(vnId).getVnetID(), hostUuid);
+						this.getVnetDAO().getVnet(vnId).getVnetID(), poolUuid);
 				result = this.getVmDAO().updateVMVlan(vmUuid, vnId);
 				Date endTime = new Date();
 				int elapse = Utilities.timeElapse(startTime, endTime);
@@ -445,9 +445,9 @@ public class VnetManager {
 	}
 
 	public JSONObject vnetAddvm(String vnId, String vmuuidStr, int userId,
-			String hostUuid) {
+			String poolUuid) {
 		JSONObject jo = new JSONObject();
-		if (this.addVmToVnet(userId, vmuuidStr, vnId, hostUuid)) {
+		if (this.addVmToVnet(userId, vmuuidStr, vnId, poolUuid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);
@@ -471,9 +471,9 @@ public class VnetManager {
 	}
 
 	public JSONObject vnetAddOnevm(String vnId, String vmuuid, int userId,
-			String hostUuid) {
+			String poolUuid) {
 		JSONObject jo = new JSONObject();
-		if (this.addOneVmToVnet(userId, vmuuid, vnId, hostUuid)) {
+		if (this.addOneVmToVnet(userId, vmuuid, vnId, poolUuid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);

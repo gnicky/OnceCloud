@@ -69,7 +69,7 @@ public class MessageWebSocketHandler implements WebSocketHandler {
 							.writeValueAsString(message)));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

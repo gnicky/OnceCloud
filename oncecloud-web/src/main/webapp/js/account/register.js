@@ -14,8 +14,8 @@ $(document).ready(function () {
             var vercode = $('#vercode').val();
             $.ajax({
                 type: 'get',
-                url: '/UserAction',
-                data: 'action=register&username=' + username + '&userpwd=' + pwd + '&useremail=' + email + '&usertel=' + telephone + '&vercode=' + vercode,
+                url: '/UserAction/Register',
+                data: {username:username, userpwd:pwd, useremail:email, usertel:telephone},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {
@@ -67,8 +67,8 @@ $(document).ready(function () {
         } else {
             $.ajax({
                 type: 'get',
-                url: '/UserAction',
-                data: 'action=queryuser&username=' + userName,
+                url: '/UserAction/QueryUser',
+                data: {username:userName},
                 dataType: 'json',
                 success: function (array) {
                     if (array[0].exist) {

@@ -5,12 +5,12 @@
 		</div>
 		<div class="col-md-8">
 			<div class="header-account">
-				<a class="btn btn-outline btn-signin" href="<%=basePath%>account/login.jsp">登录</a>
-				<a class="btn btn-green btn-signup" href="<%=basePath%>account/register.jsp">注册</a>
+				<a class="btn btn-outline btn-signin" href="${basePath}login">登录</a>
+				<a class="btn btn-green btn-signup" href="${basePath}account/register">注册</a>
 			</div>
 			<ul class="header-nav">
 				<li class="nav-item"><a href="javascript:void(0)">首页</a></li>
-				<li class="nav-item"><a href="<%=basePath%>account/login.jsp">控制台</a></li>
+				<li class="nav-item"><a href="${basePath}login">控制台</a></li>
 				<li class="nav-item"><a href="javascript:void(0)">文档</a></li>
 				<li class="nav-item"><a href="javascript:void(0)">关于</a></li>
 			</ul>
@@ -18,26 +18,19 @@
 	</div>
 </div>
 <script>
+	$(function() {
+		refresh();
+	});
+
 	function refresh() {
-		document.getElementById("authImg").src="<%=basePath%>AuthImg?now="+new Date();
-		$.ajax({
-			type: 'get',
-			url: '/UserAction',
-			data: 'action=queryvercode&now='+new Date(),
-			dataType: 'json',
-			success: function(array) {
-				var ver = array[0].vercode;
-				$("#register-form").data('vercode', ver);
-			},
-			error: function() {}
-		});
+		$("#authImg").attr("src", "${basePath}captcha?" + Math.random());
 	}
 </script>
 <div class="row" style="margin:0">
 	<div class="col-md-2">
 	</div>
 	<div class="col-md-8">
-		<form class="form form-horizontal form-wrapper" id="register-form" base="<%=basePath%>">
+		<form class="form form-horizontal form-wrapper" id="register-form" base="${basePath}">
 			<fieldset>
 				<legend>注册</legend>
 				<div class="item">
@@ -91,7 +84,7 @@
 		</div>
 		<div class="col-md-8">
 			<p>博纳云 BeyondCloud 使计算资源的交付更加简单、高效、可靠。</p>
-			<a class="btn btn-green btn-huge" href="<%=basePath %>account/register.jsp"><span class="glyphicon glyphicon-log-in"></span>&nbsp;现在就注册</a>
+			<a class="btn btn-green btn-huge" href="${basePath}account/register"><span class="glyphicon glyphicon-log-in"></span>&nbsp;现在就注册</a>
 		</div>
 	</div>
 </div>

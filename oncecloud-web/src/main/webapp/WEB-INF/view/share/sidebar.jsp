@@ -31,7 +31,7 @@
 					<a title="首页"><span class="glyphicon glyphicon-home"></span></a> <a
 						href="${basePath}dashboard" title="控制台"><span
 						class="glyphicon glyphicon-dashboard"></span></a> <a title="帐户充值"
-						href="${basePath}account/recharge.jsp"><span
+						href="${basePath}account/recharge"><span
 						class="glyphicon glyphicon-briefcase"></span></a> <a title="用户指南"><span
 						class="glyphicon glyphicon-book"></span></a> <a
 						href="${basePath}logout" title="退出登录"><span

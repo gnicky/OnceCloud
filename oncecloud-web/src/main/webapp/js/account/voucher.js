@@ -4,8 +4,8 @@ $(document).ready(function () {
         var voucher = $('#apply_list').find('.selected').attr("value");
         $.ajax({
             type: 'post',
-            url: '/VoucherAction',
-            data: 'action=apply&voucher=' + voucher,
+            url: '/ChargeAction/Apply',
+            data: {voucher:voucher},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result) {
