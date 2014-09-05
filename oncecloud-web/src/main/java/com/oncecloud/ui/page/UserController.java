@@ -156,4 +156,22 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
+
+	@RequestMapping(value = "/account/recharge", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView recharge(HttpServletRequest request) {
+		return new ModelAndView("account/recharge");
+	}
+	
+	@RequestMapping(value = "/account/history", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView history(HttpServletRequest request) {
+		return new ModelAndView("account/history");
+	}
+
+	@RequestMapping(value = "/account/voucher", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView voucher(HttpServletRequest request) {
+		return new ModelAndView("account/voucher");
+	}
 }

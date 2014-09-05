@@ -4,7 +4,7 @@ function reloadList() {
     var limit = $("#limit").val();
     getHistoryList(1, limit);
     options = {
-        currentPage: 1,
+        currentPage: 1
     }
     $('#pageDivider').bootstrapPaginator(options);
 }
@@ -13,8 +13,8 @@ function getHistoryList(page, limit) {
     $('#tablebody').html("");
     $.ajax({
         type: 'get',
-        url: '/ChargeAction',
-        data: "action=getlist&page=" + page + "&limit=" + limit,
+        url: '/ChargeAction/ChargeList',
+        data: {page:page, limit:limit},
         dataType: 'json',
         success: function (array) {
             var totalnum = array[0];

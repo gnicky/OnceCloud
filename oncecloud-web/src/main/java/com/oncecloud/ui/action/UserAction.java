@@ -1,5 +1,7 @@
 package com.oncecloud.ui.action;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
@@ -116,4 +118,19 @@ public class UserAction {
 		JSONArray ja = this.getUserManager().doQueryUser(userName);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/Register", method = { RequestMethod.GET })
+	@ResponseBody
+	public String register(HttpServletRequest request, @RequestParam String username
+			, @RequestParam String userpwd, @RequestParam String useremail
+			, @RequestParam String usertel) {
+		JSONArray ja = new JSONArray();
+		try {
+			ja = this.getUserManager().doRegister(username, userpwd, useremail, usertel);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return ja.toString();
+	}
+
 }

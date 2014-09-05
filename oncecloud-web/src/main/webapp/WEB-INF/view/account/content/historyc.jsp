@@ -5,11 +5,11 @@
 		</div>
 		<div class="col-md-8">
 			<div class="header-account">
-				<a class="btn btn-outline btn-signin" href="<%=basePath %>UserAction?action=logout">退出</a>
+				<a class="btn btn-outline btn-signin" href="${basePath}logout">退出</a>
 			</div>
 			<ul class="header-nav">
 				<li class="nav-item"><a href="javascript:void(0)">首页</a></li>
-				<li class="nav-item"><a href="<%=basePath%>account/login.jsp">控制台</a></li>
+				<li class="nav-item"><a href="${basePath}login">控制台</a></li>
 				<li class="nav-item"><a href="javascript:void(0)">文档</a></li>
 				<li class="nav-item"><a href="javascript:void(0)">关于</a></li>
 			</ul>
@@ -25,13 +25,13 @@
 			<p class="lead">账户充值、充值记录查询</p>
 			<ul>
 				<li>
-					<a href="<%=basePath%>account/recharge.jsp" data-permalink="">账户余额</a>
+					<a href="${basePath}account/recharge" data-permalink="">账户余额</a>
 				</li>
 				<li class="current">
-					<a href="<%=basePath%>account/history.jsp" data-permalink="">充值记录</a>
+					<a href="${basePath}account/history" data-permalink="">充值记录</a>
 				</li>
 				<li>
-					<a href="<%=basePath%>account/voucher.jsp" data-permalink="">体验券</a>
+					<a href="${basePath}account/voucher" data-permalink="">体验券</a>
 				</li>
 			</ul>
 		</div>
@@ -77,7 +77,7 @@
 		</div>
 		<div class="col-md-8">
 			<p>博纳云 BeyondCloud 使计算资源的交付更加简单、高效、可靠。</p>
-			<a class="btn btn-green btn-huge" href="<%=basePath %>user/dashboard.jsp"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;控制台</a>
+			<a class="btn btn-green btn-huge" href="${basePath}dashboard"><span class="glyphicon glyphicon-dashboard"></span>&nbsp;控制台</a>
 		</div>
 	</div>
 </div>

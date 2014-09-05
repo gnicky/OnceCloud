@@ -42,8 +42,7 @@ $(document).ready(function () {
     function getBalance() {
         $.ajax({
             type: 'get',
-            url: '/UserAction',
-            data: 'action=getbalance',
+            url: '/UserAction/Balance',
             dataType: 'json',
             success: function (obj) {
                 $('#balance').html(obj.balance.toFixed(2) + '<span class="my-unit">元</span>');
