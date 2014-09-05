@@ -450,7 +450,7 @@ public class FirewallManager {
 		return jo;
 	}
 
-	public JSONObject createRule(PrintWriter out, String ruleId,
+	public JSONObject createRule(String ruleId,
 			String ruleName, int rulePriority, String ruleProtocol,
 			String ruleIp, String ruleFirewall, int ruleSport, int ruleEport) {
 		JSONObject jo = new JSONObject();

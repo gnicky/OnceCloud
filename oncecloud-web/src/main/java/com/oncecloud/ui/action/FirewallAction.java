@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.FirewallManager;
 import com.oncecloud.ui.model.CreateFirewallModel;
+import com.oncecloud.ui.model.CreateRuleModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/FirewallAction")
@@ -110,19 +111,32 @@ public class FirewallAction {
 				count);
 		return quota;
 	}
-	
+
 	@RequestMapping(value = "/OperateRule", method = { RequestMethod.GET })
 	@ResponseBody
-	public String operateRule(HttpServletRequest request, @RequestParam String ruleId) {
+	public String operateRule(HttpServletRequest request,
+			@RequestParam String ruleId) {
 		JSONObject jo = this.getFirewallManager().operateRule(ruleId);
 		return jo.toString();
 	}
-	
+
+	@RequestMapping(value = "/CreateRule", method = { RequestMethod.POST })
+	@ResponseBody
+	public String createRule(HttpServletRequest request, CreateRuleModel crm) {
+		JSONObject jo = this.getFirewallManager().createRule(crm.getRuleId(),
+				crm.getRuleName(), crm.getRulePriority(),
+				crm.getRuleProtocol(), crm.getRuleIp(), crm.getFirewallId(),
+				crm.getRuleSport(), crm.getRuleEport());
+		return jo.toString();
+	}
+
 	@RequestMapping(value = "/UpdateFirewall", method = { RequestMethod.GET })
 	@ResponseBody
-	public String updateFirewall(HttpServletRequest request, @RequestParam String firewallId) {
+	public String updateFirewall(HttpServletRequest request,
+			@RequestParam String firewallId) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getFirewallManager().updateFirewall(user.getUserId(), firewallId);
+		JSONObject jo = this.getFirewallManager().updateFirewall(
+				user.getUserId(), firewallId);
 		return jo.toString();
 	}
 }

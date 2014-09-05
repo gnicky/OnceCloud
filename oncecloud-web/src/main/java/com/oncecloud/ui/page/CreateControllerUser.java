@@ -74,4 +74,9 @@ public class CreateControllerUser {
 	public ModelAndView createFirewall(HttpServletRequest request) {
 		return new ModelAndView("user/create/createfirewall");
 	}
+	
+	@RequestMapping(value = "/firewallrule/create", method = { RequestMethod.GET })
+	public ModelAndView createFirewallRule(HttpServletRequest request) {
+		return new ModelAndView("user/create/createfirewallrule");
+	}
 }

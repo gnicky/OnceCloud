@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.DatabaseManager;
@@ -102,8 +101,8 @@ public class FirewallAction extends HttpServlet {
 					ruleEport = Integer.parseInt(request
 							.getParameter("ruleEport"));
 				}
-				JSONObject jo = this.getFirewallManager().createRule(out,
-						ruleId, ruleName, rulePriority, ruleProtocol, ruleIp,
+				JSONObject jo = this.getFirewallManager().createRule(ruleId,
+						ruleName, rulePriority, ruleProtocol, ruleIp,
 						ruleFirewall, ruleSport, ruleEport);
 				out.print(jo);
 			} else if (action.equals("deleterule")) {

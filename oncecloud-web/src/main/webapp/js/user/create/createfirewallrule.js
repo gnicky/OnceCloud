@@ -17,10 +17,8 @@ $("#createruleAction").on('click', function (event) {
         var firewallId = $('#platformcontent').attr("firewallId");
         $.ajax({
             type: 'post',
-            url: '/FirewallAction',
-            data: 'action=createrule&ruleName=' + ruleName + '&rulePriority=' + rulePriority
-                + '&ruleProtocol=' + ruleProtocol + '&ruleSport=' + ruleSport + '&ruleEport=' + ruleEport
-                + '&ruleIp=' + ruleIp + '&firewallId=' + firewallId + '&ruleId=' + ruleId,
+            url: '/FirewallAction/CreateRule',
+            data: {ruleName: ruleName, rulePriority: rulePriority, ruleProtocol: ruleProtocol, ruleSport: ruleSport, ruleEport: ruleEport, ruleIp: ruleIp, firewallId: firewallId, ruleId: ruleId},
             dataType: 'json',
             success: function (obj) {
                 if (obj.isSuccess) {
