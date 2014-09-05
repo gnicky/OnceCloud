@@ -1,6 +1,6 @@
 <%@page import="com.oncecloud.listener.UserSessionListener"%>
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent" platformUserId="<%=user.getUserId()%>" platformBasePath="<%=basePath %>">
+<div class="content" id="platformcontent" platformUserId="${user.userId}" platformBasePath="${basePath}">
 	<div class="intro">
 		<h1>机架拓扑图&nbsp;Datacenters</h1>
 		<p class="lead" style="margin-top:10px">
