@@ -135,4 +135,12 @@ public class VMAction {
 				createvmModel.getMemory(), createvmModel.getPassword(),
 				user.getUserAllocate());
 	}
+	
+	@RequestMapping(value = "/SimpleList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String simpleList(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getVmManager().getSimpleVMList(user.getUserId());
+		return ja.toString();
+	}
 }

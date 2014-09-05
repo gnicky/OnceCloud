@@ -1,28 +1,10 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	String foreuuid = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-		foreuuid = request.getParameter("foreuuid");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="<%=basePath %>js/jquery.validate.js"></script>
-<script src="<%=basePath %>js/uuid.js"></script>
-<script src="<%=basePath %>user/js/create/createbackend.js"></script>
+<script src="${basePath}js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="${basePath}js/jquery.validate.js"></script>
+<script src="${basePath}js/uuid.js"></script>
+<script src="${basePath}js/user/create/createbackend.js"></script>
 <div class="modal-dialog" style="margin-top:100px; width:550px height:400px">
-	<div class="modal-content" id="backend" foreuuid="<%=foreuuid%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-content" id="backend" foreuuid="${foreUuid}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 				<h4 class="modal-title" id="title">添加后端<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>
 			</div>
