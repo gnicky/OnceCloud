@@ -203,12 +203,10 @@ function startLB(uuid) {
     thistr.find('[name="stateicon"]').addClass('icon-process');
     thistr.find('[name="stateword"]').text('启动中');
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: 'action=startup&uuid=' + uuid,
+        type: 'post',
+        url: '/LBAction/Start',
+        data: {uuid:uuid},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }
 
@@ -220,12 +218,10 @@ function destroyLB(uuid) {
     thisicon.addClass('icon-process');
     thistr.find('[name="stateword"]').text('销毁中');
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: 'action=destroy&uuid=' + uuid,
+        type: 'post',
+        url: '/LBAction/Destroy',
+        data: {uuid:uuid},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }
 
@@ -236,11 +232,9 @@ function shutdownLB(uuid, force) {
     thistr.find('[name="stateword"]').text('关机中');
     thistr.find('.console').remove();
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: 'action=shutdown&uuid=' + uuid + '&force=' + force,
+        type: 'post',
+        url: '/LBAction/ShutDown',
+        data: {uuid:uuid,force:force},
         dataType: 'json',
-        success: function (array) {
-        }
     });
 }

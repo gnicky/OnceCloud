@@ -1,4 +1,4 @@
-$(document).ready(function () {
+
     $('#createLBAction').on('click', function (event) {
         event.preventDefault();
         var valid = $("#create-form").valid();
@@ -7,8 +7,7 @@ $(document).ready(function () {
             var capacity = $('input[name="lb_type"]:checked').val();
             $.ajax({
                 type: 'get',
-                url: '/LBAction',
-                data: 'action=quota',
+                url: '/LBAction/Quota',
                 dataType: 'json',
                 success: function (array) {
                     var obj = array[0];
@@ -56,13 +55,9 @@ $(document).ready(function () {
     function createLB(lbuuid, name, capacity) {
         $.ajax({
             type: 'post',
-            url: '/LBAction',
-            data: 'action=create&uuid=' + lbuuid + '&name=' + name + '&capacity=' + capacity,
+            url: '/LBAction/Create',
+            data:{uuid:lbuuid,name:name,capacity:capacity},
             dataType: 'json',
-            success: function (array) {
-            },
-            error: function () {
-            }
         });
     }
 
@@ -82,4 +77,3 @@ $(document).ready(function () {
             }
         }
     });
-});
