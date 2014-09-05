@@ -297,22 +297,18 @@ public class FirewallDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1";
-			Query query = session.createQuery(queryString);
-			query.setString("firewallId", firewallId);
-			rsList = query.list();
-			String queryString1 = "select lbUuid, lbIP from LB where firewallUuid = :firewallId and lbStatus = 1";
+			String queryString1 = "select vmUuid, vmIP from OCVM where vmFirewall = :firewallId and vmStatus = 1 and vmIP != null";
 			Query query1 = session.createQuery(queryString1);
 			query1.setString("firewallId", firewallId);
-			rsList.addAll(query1.list());
+			rsList = query1.list();
+			String queryString2 = "select lbUuid, lbIP from LB where firewallUuid = :firewallId and lbStatus = 1";
+			Query query2 = session.createQuery(queryString2);
+			query2.setString("firewallId", firewallId);
+			rsList.addAll(query2.list());
 			String queryString3 = "select routerUuid, routerIP from Router where firewallUuid = :firewallId and routerStatus = 1";
 			Query query3 = session.createQuery(queryString3);
 			query3.setString("firewallId", firewallId);
 			rsList.addAll(query3.list());
-			String queryString2 = "select databaseUuid, databaseIp from Database where databaseUuid = :firewallId and databaseStatus = 1";
-			Query query2 = session.createQuery(queryString2);
-			query2.setString("firewallId", firewallId);
-			rsList.addAll(query2.list());
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

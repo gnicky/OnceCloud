@@ -438,13 +438,15 @@ public class FirewallManager {
 		return ja;
 	}
 
-	public JSONObject getFirewallDetail(int userId, String firewallId) {
+	public JSONObject getBasicList(int userId, String firewallId) {
 		JSONObject jo = new JSONObject();
 		Firewall fw = this.getFirewallDAO().getFirewall(firewallId);
-		jo.put("firewallName", Utilities.encodeText(fw.getFirewallName()));
-		int ruleSize = this.getFirewallDAO().getRuleSize(firewallId);
-		jo.put("ruleSize", ruleSize);
-		jo.put("createDate", Utilities.formatTime(fw.getCreateDate()));
+		if (fw != null) {
+			jo.put("firewallName", Utilities.encodeText(fw.getFirewallName()));
+			int ruleSize = this.getFirewallDAO().getRuleSize(firewallId);
+			jo.put("ruleSize", ruleSize);
+			jo.put("createDate", Utilities.formatTime(fw.getCreateDate()));
+		}
 		return jo;
 	}
 
@@ -502,7 +504,7 @@ public class FirewallManager {
 		return jo;
 	}
 
-	public JSONObject banRule(String ruleId) {
+	public JSONObject operateRule(String ruleId) {
 		JSONObject jo = new JSONObject();
 		Rule rule = this.getFirewallDAO().getRule(ruleId);
 		int ruleState = rule.getRuleState();
@@ -541,7 +543,7 @@ public class FirewallManager {
 		return result;
 	}
 
-	public JSONArray getAbledFirewallList(int userId) {
+	public JSONArray getAvailableFirewalls(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Firewall> firewallList = this.getFirewallDAO().getabledfirewalls(
 				userId);

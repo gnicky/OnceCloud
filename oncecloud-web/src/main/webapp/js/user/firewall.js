@@ -127,12 +127,10 @@ $('#delete').on('click', function (event) {
                 label: "确定",
                 className: "btn-primary",
                 callback: function () {
-                    for (var i = 0; i < boxes.length; i++) {
-                        if (boxes[i].checked == true) {
-                            var firewallId = $(boxes[i]).parent().parent().attr('firewallid');
-                            deleteFirewall(firewallId);
-                        }
-                    }
+                    $('input[name="firewallrow"]:checked').each(function () {
+                        var firewallId = $(this).parent().parent().attr('firewallid');
+                        deleteFirewall(firewallId);
+                    });
                     removeAllCheck();
                 }
             },
@@ -149,9 +147,9 @@ $('#delete').on('click', function (event) {
 
 function deleteFirewall(firewallId) {
     $.ajax({
-        type: 'get',
-        url: '/FirewallAction',
-        data: 'action=deletefirewall&firewallId=' + firewallId,
+        type: 'post',
+        url: '/FirewallAction/DeleteFirewall',
+        data: {firewallId: firewallId},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -219,15 +217,13 @@ function getFirewallList(page, limit, search) {
 
 $('#tablebody').on('click', '.firewallid', function (event) {
     event.preventDefault();
-    var firewallId = $(this).parent().attr("firewallid");
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/FirewallAction',
-        data: 'action=detail&firewallId=' + firewallId,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/firewalldetail.jsp";
-        }
-    });
+    var firewallId = $(this).parent().attr('firewallid');
+    var form = $("<form></form>");
+    form.attr("action","/firewall/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });

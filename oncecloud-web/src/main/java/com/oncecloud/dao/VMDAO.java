@@ -866,6 +866,28 @@ public class VMDAO {
 		return result;
 	}
 
+	public boolean updateVMImportance(String vmUuid, int vmImportance) {
+		boolean result = false;
+		OCVM vm = this.getVM(vmUuid);
+		if (vm != null) {
+			Session session = null;
+			try {
+				vm.setVmImportance(vmImportance);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(vm);
+				session.getTransaction().commit();
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * 更新主机电源状态和所在服务器
 	 * 

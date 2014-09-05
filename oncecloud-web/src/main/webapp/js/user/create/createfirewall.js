@@ -63,7 +63,7 @@ function createFirewall(firewallName) {
     $.ajax({
         type: 'post',
         url: '/FirewallAction/CreateFirewall',
-        data: {firewallName: firewallName, firewallUuuid: firewallUuid},
+        data: {firewallName: firewallName, firewallUuid: firewallUuid},
         dataType: 'json',
         success: function (obj) {
             var showid = '<a>fw-' + firewallUuid.substring(0, 8) + '</a>';
