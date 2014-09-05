@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Once Cloud</display-name>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404</location>
+	</error-page>
 	<servlet-mapping>       
 		<servlet-name>default</servlet-name>      
 		<url-pattern>*.png</url-pattern>     
@@ -19,7 +23,7 @@
 	<servlet-mapping>            
 		<servlet-name>default</servlet-name>           
 		<url-pattern>*.svg</url-pattern>      
-	</servlet-mapping>    
+	</servlet-mapping>  
 	<servlet>
 		<servlet-name>dispatcherServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

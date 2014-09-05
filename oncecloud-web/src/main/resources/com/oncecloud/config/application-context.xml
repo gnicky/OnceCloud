@@ -26,7 +26,8 @@
 					<list> 
 						<value>/login</value> 
 						<value>/backdoor</value>  
-						<value>/captcha</value>  
+						<value>/captcha</value>
+						<value>/404</value>
 					</list> 
 				</property> 
 			</bean> 
