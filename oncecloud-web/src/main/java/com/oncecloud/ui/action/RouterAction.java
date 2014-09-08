@@ -121,7 +121,6 @@ public class RouterAction {
 	@RequestMapping(value = "/Vxnets", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getVxnets(HttpServletRequest request,@RequestParam String routerUuid) {
-		User user = (User) request.getSession().getAttribute("user");
 		JSONArray jo = this.getRouterManager().getVxnets(routerUuid);
 		return jo.toString();
 	}

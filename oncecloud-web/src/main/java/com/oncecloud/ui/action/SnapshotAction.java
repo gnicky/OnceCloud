@@ -77,7 +77,7 @@ public class SnapshotAction {
 	public String basicList(HttpServletRequest request,
 			CreateSnapshotModel createsnapshotModel) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jsonobect = this.getSnapshotManager().getOneResource(
+		JSONObject jsonobect = this.getSnapshotManager().getBasicList(
 				user.getUserId(), createsnapshotModel.getResourceUuid(),
 				createsnapshotModel.getResourceType());
 		return jsonobect.toString();
@@ -100,7 +100,17 @@ public class SnapshotAction {
 			@RequestParam String resourceUuid, @RequestParam String resourceType) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
-		JSONObject jo = this.getSnapshotManager().deleteOneSnapshot(userId, snapshotId, resourceUuid, resourceType);
+		JSONObject jo = this.getSnapshotManager().deleteSnapshot(userId, snapshotId, resourceUuid, resourceType);
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/Rollback", method = { RequestMethod.POST })
+	@ResponseBody
+	public String rollbackSnapshot(HttpServletRequest request, @RequestParam String snapshotId,
+			@RequestParam String resourceUuid, @RequestParam String resourceType) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		JSONObject jo = this.getSnapshotManager().rollbackSnapshot(userId, snapshotId, resourceUuid, resourceType);
 		return jo.toString();
 	}
 }

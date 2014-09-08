@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.AlarmDAO;
 import com.oncecloud.dao.AlarmRuleDAO;

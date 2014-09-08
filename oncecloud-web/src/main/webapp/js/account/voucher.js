@@ -4,7 +4,7 @@ $(document).ready(function () {
         var voucher = $('#apply_list').find('.selected').attr("value");
         $.ajax({
             type: 'post',
-            url: '/ChargeAction/Apply',
+            url: '/VoucherAction/Apply',
             data: {voucher:voucher},
             dataType: 'json',
             success: function (obj) {
@@ -37,8 +37,6 @@ $(document).ready(function () {
                         }
                     });
                 }
-            },
-            error: function () {
             }
         });
     });

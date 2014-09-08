@@ -89,5 +89,4 @@ public class RackAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getRackManager().update(rackid, rackname, rackdesc, dcid, user.getUserId());
 	}
-	
 }

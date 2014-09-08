@@ -12,13 +12,11 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.VnetManager;
-import com.oncecloud.manager.VnetManager.DeleteVnetResult;
 
 /**
  * @author hehai hty
@@ -81,19 +79,9 @@ public class VnetAction extends HttpServlet {
 			} else if (action.equals("getablerts")) {
 				JSONArray jo = this.getRouterDAO().getRoutersOfUser(userId);
 				out.print(jo.toString());
-			} else if (action.equals("delete")) {
-				String uuid = request.getParameter("uuid");
-				DeleteVnetResult result = this.getVnetManager().deleteVnet(
-						userId, uuid);
-				out.print(result.toString());
 			} else if (action.equals("quota")) {
 				JSONArray ja = this.getVnetManager().vnetQuota(userId);
 				out.print(ja.toString());
-			} else if (action.equals("detail")) {
-				String vnetuuid = request.getParameter("vnetUuid");
-				session.setAttribute("vnetUuid", vnetuuid);
-				String routerid = request.getParameter("routerid");
-				session.setAttribute("routerUuid", routerid);
 			} else if (action.equals("checknet")) {
 				String routerid = request.getParameter("routerid");
 				Integer net = Integer.parseInt(request.getParameter("net"));
@@ -112,9 +100,6 @@ public class VnetAction extends HttpServlet {
 				JSONObject jo = this.getVnetManager().vnetLinkrouter(userId,
 						vnetuuid, routerid, net, gate, start, end, dhcpState);
 				out.print(jo);
-			} else if (action.equals("unlink")) {
-				String vnetuuid = request.getParameter("vnetid");
-				this.getVnetManager().vnetUnlink(vnetuuid, userId);
 			} else if (action.equals("addvm")) {
 				String poolUuid = user.getUserAllocate();
 				String vnId = request.getParameter("vnId");
@@ -126,16 +111,6 @@ public class VnetAction extends HttpServlet {
 				String vnUuid = request.getParameter("vnUuid");
 				JSONArray ja = this.getVnetManager().getVMs(vnUuid);
 				out.print(ja.toString());
-			} else if (action.equals("getalllist")) {
-				JSONArray ja = this.getVnetManager().vnetGetAllList(userId);
-				out.print(ja.toString());
-			} else if (action.equals("addonevm")) {
-				String poolUuid = user.getUserAllocate();
-				String vnId = request.getParameter("vnId");
-				String vmuuid = request.getParameter("vmuuid");
-				JSONObject jo = this.getVnetManager().vnetAddOnevm(vnId,
-						vmuuid, userId, poolUuid);
-				out.print(jo.toString());
 			}
 		}
 	}

@@ -432,7 +432,7 @@ public class VnetManager {
 		return jo;
 	}
 
-	public void vnetUnlink(String vnetuuid, int userId) {
+	public void unlink(String vnetuuid, int userId) {
 		boolean result = this.getVnetDAO().unLinkToRouter(vnetuuid);
 		// push message
 		if (result) {
@@ -455,7 +455,7 @@ public class VnetManager {
 		return jo;
 	}
 
-	public JSONArray vnetGetAllList(int userId) {
+	public JSONArray getVnetsOfUser(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Vnet> vnetList = this.getVnetDAO().getVnetsOfUser(userId);
 		if (vnetList != null) {
@@ -470,7 +470,7 @@ public class VnetManager {
 		return ja;
 	}
 
-	public JSONObject vnetAddOnevm(String vnId, String vmuuid, int userId,
+	public JSONObject bindVM(String vnId, String vmuuid, int userId,
 			String poolUuid) {
 		JSONObject jo = new JSONObject();
 		if (this.addOneVmToVnet(userId, vmuuid, vnId, poolUuid)) {

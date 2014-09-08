@@ -500,7 +500,7 @@ public class EIPManager {
 		return result;
 	}
 
-	public JSONArray eipGetAbleVMs(int page, int limit, String searchStr,
+	public JSONArray getAvailableVMs(int page, int limit, String searchStr,
 			String bindtype, int uid) {
 		JSONArray ja = new JSONArray();
 		if (bindtype.equals("vm")) {
@@ -647,7 +647,7 @@ public class EIPManager {
 		return jo;
 	}
 
-	public JSONArray eipGetAbleEips(int uid) {
+	public JSONArray getAvailableEIPs(int uid) {
 		List<EIP> eiplist = this.getEipDAO().getableeips(uid);
 		JSONArray ja = new JSONArray();
 		for (EIP eip : eiplist) {
