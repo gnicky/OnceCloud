@@ -1,28 +1,28 @@
-$(function(){
-	getInstanceBasicList();
-	var cpuChart;
-	var memoryChart;
-	var vbdChart;
-	var vifChart;
-	drawCpuLine('sixhours');
-	drawMemoryLine('sixhours');
-	drawVbdLine('sixhours');
-	drawVifLine('sixhours');
-	cpuTimer = setInterval(function () {
-	    drawCpuLine('sixhours');
-	}, 5 * 60 * 1000);
-	memoryTimer = setInterval(function () {
-	    drawMemoryLine('sixhours');
-	}, 5 * 60 * 1000);
-	vbdTimer = setInterval(function () {
-	    drawVbdLine('sixhours');
-	}, 5 * 60 * 1000);
-	vifTimer = setInterval(function () {
-	    drawVifLine('sixhours');
-	}, 5 * 60 * 1000);
-	
-	///add by cyh
-	init();
+$(function () {
+    getInstanceBasicList();
+    var cpuChart;
+    var memoryChart;
+    var vbdChart;
+    var vifChart;
+    drawCpuLine('sixhours');
+    drawMemoryLine('sixhours');
+    drawVbdLine('sixhours');
+    drawVifLine('sixhours');
+    cpuTimer = setInterval(function () {
+        drawCpuLine('sixhours');
+    }, 5 * 60 * 1000);
+    memoryTimer = setInterval(function () {
+        drawMemoryLine('sixhours');
+    }, 5 * 60 * 1000);
+    vbdTimer = setInterval(function () {
+        drawVbdLine('sixhours');
+    }, 5 * 60 * 1000);
+    vifTimer = setInterval(function () {
+        drawVifLine('sixhours');
+    }, 5 * 60 * 1000);
+
+    ///add by cyh
+    init();
 })
 
 
@@ -56,11 +56,11 @@ $('#depend-list').on('click', '#firewallid', function (event) {
     var firewallId = $(this).attr("firewallid");
     event.preventDefault();
     var form = $("<form></form>");
-    form.attr("action","/firewall/detail");
-    form.attr('method','post');
+    form.attr("action", "/firewall/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -68,12 +68,15 @@ $('#depend-list').on('click', '#firewallid', function (event) {
 $('#depend-list').on('click', '#eip', function (event) {
     event.preventDefault();
     var eip = $(this).attr("eipip");
+    var eipUuid = $(this).attr("eipid");
     var form = $("<form></form>");
-    form.attr("action","/elasticip/detail");
-    form.attr('method','post');
-    var input = $('<input type="text" name="eipUuid" value="' + eip + '" />');
-    form.append(input);
-    form.css('display','none');
+    form.attr("action", "/elasticip/detail");
+    form.attr('method', 'post');
+    var input1 = $('<input type="text" name="eip" value="' + eip + '" />');
+    var input2 = $('<input type="text" name="eipUuid" value="' + eipUuid + '" />');
+    form.append(input1);
+    form.append(input2);
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -85,15 +88,15 @@ $('#depend-list').on('click', '#vnetip', function (event) {
     event.preventDefault();
     var uuid = $(this).attr("vnetip");
     var routerid = $(this).attr("routerUuid");
- 
+
     var form = $("<form></form>");
-    form.attr("action","/vnet/detail");
-    form.attr('method','post');
+    form.attr("action", "/vnet/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="vnetUuid" value="' + uuid + '" />');
     form.append(input);
     var input2 = $('<input type="text" name="routerId" value="' + routerid + '" />');
     form.append(input2);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -115,15 +118,15 @@ $('#depend-list').on('click', '#snapshotid', function (event) {
     var resourceUuid = $(this).attr('rsuuid');
     var resourceName = $(this).attr('rsname');
     var form = $("<form></form>");
-    form.attr("action","/snapshot/detail");
-    form.attr('method','post');
+    form.attr("action", "/snapshot/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="resourceUuid" value="' + resourceUuid + '" />');
     form.append(input);
     var input2 = $('<input type="text" name="resourceName" value="' + resourceName + '" />');
     form.append(input2);
     var input3 = $('<input type="text" name="resourceType" value="instance" />');
     form.append(input3);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -132,11 +135,11 @@ $('#depend-list').on('click', '.volid', function (event) {
     event.preventDefault();
     var volid = $(this).attr('voluuid');
     var form = $("<form></form>");
-    form.attr("action","/volume/detail");
-    form.attr('method','post');
+    form.attr("action", "/volume/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="volumeUuid" value="' + volid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -597,7 +600,7 @@ function updateCpuData(uuid, type) {
     $.ajax({
         type: 'get',
         url: '/PerformanceAction/CPU',
-        data: {uuid:uuid,type:type},
+        data: {uuid: uuid, type: type},
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
@@ -630,7 +633,7 @@ function updateMemoryData(uuid, type) {
     $.ajax({
         type: 'get',
         url: '/PerformanceAction/Memory',
-        data:{uuid:uuid,type:type},
+        data: {uuid: uuid, type: type},
         dataType: 'text',
         success: function (response) {
             var array = jQuery.parseJSON(response);
@@ -668,7 +671,7 @@ function updateVbdData(uuid, type) {
     $.ajax({
         type: 'get',
         url: '/PerformanceAction/VBD',
-        data: {uuid:uuid,type:type},
+        data: {uuid: uuid, type: type},
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
@@ -708,7 +711,7 @@ function updateVifData(uuid, type) {
     $.ajax({
         type: 'get',
         url: '/PerformanceAction/VIF',
-        data: {uuid:uuid,type:type},
+        data: {uuid: uuid, type: type},
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
@@ -755,7 +758,6 @@ $('.oc-switch').on('switchChange.bootstrapSwitch', function (event, state) {
         sixhours();
     }
 });
-
 
 
 function getInstanceBasicList() {
@@ -811,10 +813,11 @@ function getInstanceBasicList() {
                 instanceDisk = volList;
             }
             var instanceEip = obj.instanceEip;
+            var instanceEipUuid = obj.instanceEipUuid;
             if (instanceEip == "null") {
                 instanceEip = "&nbsp;";
             } else {
-                instanceEip = '<a class="id" id="eip"  eipip="' + instanceEip + '">' + instanceEip + '</a>';
+                instanceEip = '<a class="id" id="eip" eipip="' + instanceEip + '" eipid="' + instanceEipUuid + '">' + instanceEip + '</a>';
             }
             var instanceMAC = obj.instanceMAC;
             var instanceIP = obj.instanceIP;
@@ -875,7 +878,7 @@ function getInstanceBasicList() {
                 $.ajax({
                     type: 'get',
                     url: '/VnetAction/VnetDetail',
-                    data: {uuid:obj.instancevlan},
+                    data: {uuid: obj.instancevlan},
                     dataType: 'json',
                     success: function (obj) {
                         $("#vxnetName").text(decodeURI(obj.vnetName));
@@ -886,7 +889,7 @@ function getInstanceBasicList() {
                             $.ajax({
                                 type: 'get',
                                 url: '/RouterAction/RouterDetail',
-                                data: {uuid:obj.vnetRouter},
+                                data: {uuid: obj.vnetRouter},
                                 dataType: 'json',
                                 success: function (obj) {
                                     $("#componentRouterDiv").find(".private-ip").text(obj.routerIp);

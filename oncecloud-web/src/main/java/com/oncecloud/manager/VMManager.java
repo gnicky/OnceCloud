@@ -1080,10 +1080,13 @@ public class VMManager {
 			}
 			jo.put("instanceMAC", ocvm.getVmMac());
 			String eip = this.getEipDAO().getEipIp(vmUuid);
+			String eipUuid = this.getEipDAO().getEipId(eip);
 			if (eip == null) {
 				jo.put("instanceEip", "null");
+				jo.put("instanceEipUuid", "null");
 			} else {
 				jo.put("instanceEip", eip);
+				jo.put("instanceEipUuid", eipUuid);
 			}
 			String vlan = ocvm.getVmVlan();
 			if (vlan == null) {
