@@ -240,9 +240,9 @@ input[type=disable] {
 
 #star li {
 	float: left;
-	width: 18px;
+	width: 17px;
 	cursor: pointer;
-	font-size: 18px;
+	font-size: 16px;
 	list-style: none;
 }
 

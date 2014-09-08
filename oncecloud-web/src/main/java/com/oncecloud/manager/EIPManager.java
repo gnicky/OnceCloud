@@ -634,7 +634,7 @@ public class EIPManager {
 		jo.put("eipUID", eip.getEipUID());
 		jo.put("eipDependency", (null == eip.getEipDependency()) ? "&nbsp;"
 				: eip.getEipDependency());
-		jo.put("depenType",
+		jo.put("dependType",
 				(null == eip.getDepenType()) ? "&nbsp;" : eip.getDepenType());
 		jo.put("eipDescription", (null == eip.getEipDescription()) ? "&nbsp;"
 				: Utilities.encodeText(eip.getEipDescription()));

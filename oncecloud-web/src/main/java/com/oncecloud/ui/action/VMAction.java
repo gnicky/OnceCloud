@@ -95,7 +95,8 @@ public class VMAction {
 
 	@RequestMapping(value = "/UpdateStar", method = { RequestMethod.POST })
 	@ResponseBody
-	public void updateStar(HttpServletRequest request, @RequestParam String uuid, @RequestParam int num) {
+	public void updateStar(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam int num) {
 		this.getVmManager().updateImportance(uuid, num);
 	}
 
@@ -135,12 +136,21 @@ public class VMAction {
 				createvmModel.getMemory(), createvmModel.getPassword(),
 				user.getUserAllocate());
 	}
-	
+
 	@RequestMapping(value = "/SimpleList", method = { RequestMethod.POST })
 	@ResponseBody
 	public String simpleList(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONArray ja = this.getVmManager().getSimpleVMList(user.getUserId());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/VMsOfUser", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getVMsOfUser(HttpServletRequest request, ListModel lm) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getVmManager().getVMsOfUser(user.getUserId(),
+				lm.getPage(), lm.getLimit(), lm.getSearch());
 		return ja.toString();
 	}
 }

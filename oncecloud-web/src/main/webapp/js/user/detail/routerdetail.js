@@ -1,11 +1,12 @@
 getRouterBasicList();
 getVxnets();
+
 $('#RouterModalContainer').on('hide', function (event) {
     $(this).removeData("modal");
     $(this).children().remove();
 });
 
-$('#modify').on('click', function (event) {  
+$('#modify').on('click', function (event) {
     event.preventDefault();
     var url = $("#platformcontent").attr('platformBasePath') + 'common/modify';
     var rtName = $('#rtname').text();
@@ -29,11 +30,11 @@ $('#depend-list').on('click', '#firewallid', function (event) {
     var firewallId = $(this).attr("uuid");
     event.preventDefault();
     var form = $("<form></form>");
-    form.attr("action","/firewall/detail");
-    form.attr('method','post');
+    form.attr("action", "/firewall/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -88,10 +89,11 @@ function getRouterBasicList() {
                 network = '<a class="id">(基础网络)&nbsp;/&nbsp;' + rtIp + '</a>';
             }
             var rtEip = obj.eip;
+            var rtEipUuid = obj.eipUuid;
             if (rtEip == "") {
                 rtEip = "&nbsp;";
             } else {
-                rtEip = '<a class="id" id="eip" eipip="' + rtEip + '">' + rtEip + '</a>';
+                rtEip = '<a class="id" id="eip" eipip="' + rtEip + '" eipid="' + rtEipUuid + '">' + rtEip + '</a>';
             }
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="rtname">'
@@ -110,15 +112,18 @@ function getRouterBasicList() {
     });
 }
 
-$('#depend-list').on('click', '#eip', function (event) {    
+$('#depend-list').on('click', '#eip', function (event) {
     event.preventDefault();
     var eip = $(this).attr("eipip");
+    var eipUuid = $(this).attr("eipid");
     var form = $("<form></form>");
-    form.attr("action","/elasticip/detail");
-    form.attr('method','post');
-    var input = $('<input type="text" name="eipUuid" value="' + eip + '" />');
-    form.append(input);
-    form.css('display','none');
+    form.attr("action", "/elasticip/detail");
+    form.attr('method', 'post');
+    var input1 = $('<input type="text" name="eip" value="' + eip + '" />');
+    var input2 = $('<input type="text" name="eipUuid" value="' + eipUuid + '" />');
+    form.append(input1);
+    form.append(input2);
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -132,7 +137,7 @@ $('#apply').on('click', function (event) {
         $.ajax({
             type: 'get',
             url: '/RouterAction/ApplyRouter',
-            data: {routerUuid:routerUuid},
+            data: {routerUuid: routerUuid},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result == true) {
@@ -177,11 +182,11 @@ $('#vxnets-t').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/instance/detail");
-    form.attr('method','post');
+    form.attr("action", "/instance/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -193,7 +198,7 @@ function getVxnets() {
     $.ajax({
         type: 'get',
         url: '/RouterAction/Vxnets',
-        data:{routerUuid:routerUuid},
+        data: {routerUuid: routerUuid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 0) {

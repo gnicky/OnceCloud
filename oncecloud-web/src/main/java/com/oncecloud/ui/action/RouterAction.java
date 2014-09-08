@@ -118,12 +118,19 @@ public class RouterAction {
 		return ja.toString();
 	}
 	
-	@RequestMapping(value = "/Vxnets", method = { RequestMethod.POST })
+	@RequestMapping(value = "/Vxnets", method = { RequestMethod.GET })
 	@ResponseBody
 	public String getVxnets(HttpServletRequest request,@RequestParam String routerUuid) {
 		JSONArray jo = this.getRouterManager().getVxnets(routerUuid);
 		return jo.toString();
 	}
 	
-	
+	@RequestMapping(value = "/RoutersOfUser", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getRoutersOfUser(HttpServletRequest request, ListModel lm) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getRouterManager().getRoutersOfUser(user.getUserId(),
+				lm.getPage(), lm.getLimit(), lm.getSearch());
+		return ja.toString();
+	}
 }

@@ -26,7 +26,7 @@
 		</div>
 		<div class="modal-footer">
 			<button id="load2server" class="btn btn-primary" type="button" data-dismiss="modal">提交</button>
-			<button class="btn btn-default" type="button" data-dismiss="modal">取消</button>
+			<button id="cancelload" class="btn btn-default" type="button" data-dismiss="modal">取消</button>
 		</div>
 	</div>
 </div>

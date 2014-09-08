@@ -607,7 +607,7 @@ public class RouterManager {
 		return ja;
 	}
 
-	public JSONArray getAbleRTs(int userId, int page, int limit, String search) {
+	public JSONArray getRoutersOfUser(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO().countRouters(userId, search);
 		ja.put(totalNum);
@@ -800,10 +800,13 @@ public class RouterManager {
 					: Utilities.encodeText(router.getRouterDesc()));
 			jo.put("routerIp", router.getRouterIP());
 			String eip = this.getEipDAO().getEipIp(routerUuid);
+			String eipUuid = this.getEipDAO().getEipId(eip);
 			if (eip == null) {
 				jo.put("eip", "");
+				jo.put("eipUuid", "");
 			} else {
 				jo.put("eip", eip);
+				jo.put("eipUuid", eipUuid);
 			}
 			jo.put("routerUID", router.getRouterUID());
 			jo.put("routerMac", router.getRouterMac());

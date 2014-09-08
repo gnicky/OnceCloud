@@ -37,6 +37,31 @@ $('#depend-list').on('click', '#depenid', function (event) {
         }
     });
 });
+
+$('#depend-list').on('click', '#rsuuid', function (event) {
+    event.preventDefault();
+    var uuid = $(this).attr('uuid');
+    var rsType = $(this).attr('type');
+    var form = $("<form></form>");
+    form.attr('method', 'post');
+    if (rsType == 0) {
+        form.attr("action", "/instance/detail");
+        var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+        form.append(input);
+    } else if (rsType == 1) {
+        form.attr("action", "/loadbalance/detail");
+        var input = $('<input type="text" name="lbUuid" value="' + uuid + '" />');
+        form.append(input);
+    } else if (rsType == 3) {
+        form.attr("action", "/router/detail");
+        var input = $('<input type="text" name="routerUuid" value="' + uuid + '" />');
+        form.append(input);
+    }
+    form.css('display', 'none');
+    form.appendTo($('body'));
+    form.submit();
+});
+
 function getEipBasicList() {
     var eip = $("#platformcontent").attr("eip");
     $('#basic-list').html("");
@@ -51,15 +76,24 @@ function getEipBasicList() {
             var eipUuid = obj.eipUuid;
             var eipIp = obj.eipIp;
             var eipDepen = obj.eipDependency;
+            var dependType = obj.dependType;
             var eipDescription = decodeURI(obj.eipDescription);
             var eipBandwidth = obj.eipBandwidth;
             var usedStr = '';
-            var showstr = '';
             var showuuid = "eip-" + eipUuid.substring(0, 8);
             if ('&nbsp;' != eipDepen) {
+                var showname = '<span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;主机';
+                var dependStr = '<a class="id" id="rsuuid" type="' + dependType + '" uuid="' + eipDepen + '">i-' + eipDepen.substring(0, 8) + '</a>';
+                if (dependType == 1) {
+                    showname = '<span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;负载均衡';
+                    dependStr = '<a class="id" id="rsuuid" type="' + dependType + '" uuid="' + eipDepen + '">lb-' + eipDepen.substring(0, 8) + '</a>';
+                } else if (dependType == 3) {
+                    showname = '<span class="glyphicon glyphicon-fullscreen"></span>&nbsp;&nbsp;路由器';
+                    dependStr = '<a class="id" id="rsuuid" type="' + dependType + '" uuid="' + eipDepen + '">rt-' + eipDepen.substring(0, 8) + '</a>';
+                }
                 usedStr = usedStr + '<td state="using"><span class="icon-status icon-using" name="stateicon"></span><span name="stateword">已分配</span></td>';
-                eipDepen = '<a class="id" id="depenid" depenUuid="' + eipDepen + '">i-' + eipDepen.substring(0, 8) + '</a>';
-                $('#depend-list').html('<dt>应用资源</dt><dd>' + eipDepen + '</dd>');
+                $('#depend-list').html('<dt>应用资源</dt><dd>' + dependStr + '</dd><dt>资源类型</dt><dd>'
+                    + showname + '</dd>');
             } else {
                 usedStr = usedStr + '<td state="able"><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">可用</span></td>';
             }

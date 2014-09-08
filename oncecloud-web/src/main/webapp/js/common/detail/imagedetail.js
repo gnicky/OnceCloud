@@ -27,16 +27,17 @@ $('.btn-refresh').on('click', function (event) {
 $('#basic-list').on('click', '#owner', function (event) {
     event.preventDefault();
     var userid = $(this).attr('ownerid');
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/UserAction',
-        data: 'action=detail&userid=' + userid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "admin/detail/userdetail.jsp";
-        }
-    });
+    var username = $(this).attr('username');
+    var form = $("<form></form>");
+    form.attr("action","/user/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="userid" value="' + userid + '" />');
+    var input1 = $('<input type="text" name="username" value="' + username + '" />');
+    form.append(input);
+    form.append(input1);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getImageBasicList() {
@@ -53,27 +54,24 @@ function getImageBasicList() {
             var imageUID = obj.imageUID;
             var imageDisk = obj.imageDisk.toFixed(2) + '&nbsp;GB';
             var poolUuid = obj.poolUuid;
-            console.log(poolUuid);
             var hostPlat = decodeURI(obj.imagePlatform);
             var imageStatus = obj.imageStatus;
             var owner = decodeURI(obj.imageUser);
             var stateStr = '';
-            var showstr = '';
+            var userLevel = $('#platformcontent').attr("userLevel");
             var showuuid = "img-" + imageUuid.substring(0, 8);
             var sight = '公有';
-            showstr = "<a class='showuuid'>" + showuuid + '</a>';
+            var showstr = "<a class='showuuid'>" + showuuid + '</a>';
             if (imageStatus == 1) {
                 stateStr = '<td><span class="icon-status icon-running" name="stateicon">'
                     + '</span><span name="stateword">可用</span></td>';
-            } else {
-
             }
             if ('&nbsp;' != poolUuid) {
                 poolUuid = '<a class="id" id="hostid" poolUuid="' + poolUuid + '">pool-' + poolUuid.substring(0, 8) + '</a>';
             }
-            if ('' != owner) {
+            if (owner != null && userLevel == 0 && imageUID != 1) {
                 sight = sight + '</dd><dt>所属用户</dt><dd><a id="owner" ownerid="'
-                    + imageUID + '">' + owner + '</a>'
+                    + imageUID + '" username="'+ owner +'">' + owner + '</a>'
             }
             var createDate = obj.createDate;
             var useDate = decodeURI(obj.useDate);

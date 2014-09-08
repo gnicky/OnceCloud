@@ -994,7 +994,7 @@ public class VMManager {
 		return ja;
 	}
 
-	public JSONArray getAbleVMs(int userId, int page, int limit, String search) {
+	public JSONArray getVMsOfUser(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getVmDAO().countVMs(userId, search);
 		ja.put(totalNum);
@@ -1006,6 +1006,7 @@ public class VMManager {
 				OCVM ocvm = vmList.get(i);
 				jo.put("vmid", ocvm.getVmUuid());
 				jo.put("vmname", Utilities.encodeText(ocvm.getVmName()));
+				jo.put("vmip", ocvm.getVmIP());
 				ja.put(jo);
 			}
 		}

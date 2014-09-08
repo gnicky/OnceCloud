@@ -201,4 +201,13 @@ public class LBAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getLbManager().lbCreateBack(createBackModel.getName(), createBackModel.getLbUuid(), createBackModel.getBackUuid(), createBackModel.getVmUuid(), createBackModel.getVmIP(), createBackModel.getPort(), createBackModel.getWeight(), createBackModel.getFeUuid(), user.getUserId());
 	}
+	
+	@RequestMapping(value = "/LBsOfUser", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getLBsOfUser(HttpServletRequest request, ListModel lm) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getLbManager().getLBsOfUser(user.getUserId(),
+				lm.getPage(), lm.getLimit(), lm.getSearch());
+		return ja.toString();
+	}
 }

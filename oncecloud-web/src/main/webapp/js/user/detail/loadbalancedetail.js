@@ -91,6 +91,12 @@ function getLbBasicList() {
                 network = '<a class="id">(基础网络)&nbsp;/&nbsp;' + lbIp + '</a>';
             }
             var lbEip = obj.eip;
+            var lbEipUuid = obj.eipUuid;
+            if (lbEip == "") {
+                lbEip = "&nbsp;";
+            } else {
+                lbEip = '<a class="id" id="eip" eipip="' + lbEip + '" eipid="' + lbEipUuid + '">' + lbEip + '</a>';
+            }
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="lbname">'
                 + lbName + '</dd><dt>描述</dt><dd id="lbdesc">'
@@ -107,6 +113,22 @@ function getLbBasicList() {
         }
     });
 }
+
+$('#depend-list').on('click', '#eip', function (event) {
+    event.preventDefault();
+    var eip = $(this).attr("eipip");
+    var eipUuid = $(this).attr("eipid");
+    var form = $("<form></form>");
+    form.attr("action", "/elasticip/detail");
+    form.attr('method', 'post');
+    var input1 = $('<input type="text" name="eip" value="' + eip + '" />');
+    var input2 = $('<input type="text" name="eipUuid" value="' + eipUuid + '" />');
+    form.append(input1);
+    form.append(input2);
+    form.css('display', 'none');
+    form.appendTo($('body'));
+    form.submit();
+});
 
 function getForeList() {
     $('#fore_list').html("");

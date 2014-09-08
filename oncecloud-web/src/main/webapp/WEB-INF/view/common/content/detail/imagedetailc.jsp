@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="content detail" id="platformcontent" imageUuid="${imageUuid}" basePath="${basePath}">
+<div class="content detail" id="platformcontent" imageUuid="${imageUuid}" basePath="${basePath}" userLevel="${user.userLevel}">
 	<div class="intro">
 		<h1>映像&nbsp;Images</h1>
 		<p class="lead">

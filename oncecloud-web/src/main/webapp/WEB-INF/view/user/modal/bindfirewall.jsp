@@ -1,23 +1,7 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<%@ page language="java" import="com.oncecloud.hbm.User"%>
-<%
-	String path = request.getContextPath();
-  	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-	User user = null;
-	if (session.getAttribute("user") != null) {
-		user = (User)session.getAttribute("user");
-	} else {
-%>
-<script>
-	window.location.href = "<%=basePath %>account/login.jsp";
-</script>
-<%
-		return;
-	}
-%>
-<script src="<%=basePath %>user/js/modal/bindfirewall.js"></script>
+<script src="${basePath}js/user/modal/bindfirewall.js"></script>
 <div class="modal-dialog" style="width:600px; margin-top:100px">
-	<div class="modal-content">
+	<div class="modal-content" id="firewall-modal" type="${type}">
 		<div class="modal-header">
 			<h4 class="modal-title" id="modaltitle">主机列表<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>
 		</div>
