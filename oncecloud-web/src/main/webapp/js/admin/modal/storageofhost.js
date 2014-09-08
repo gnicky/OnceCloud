@@ -21,8 +21,8 @@ $(document).ready(function () {
                             type: 'get',
                             url: '/HostAction/UnbindSR',
                             data: {hostuuid:hostUuid, sruuid:srUuid},
-                            dataType: 'json',
-                            success: function (array) {
+                            dataType: 'text',
+                            success: function (obj) {
                                 var thistr = $("#tablebody").find('[hostid="' + hostUuid + '"]');
                                 var thisa = thistr.find('.srdetail');
                                 var size = thisa.attr('size');
@@ -54,7 +54,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/HostAction/SRofhost',
-            data: {hostuuid:hostUuid},
+            data: {hostUuid:hostUuid},
             dataType: 'json',
             success: function (array) {
                 if (array.length == 0) {

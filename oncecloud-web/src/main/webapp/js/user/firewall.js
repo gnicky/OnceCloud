@@ -70,7 +70,7 @@ $('#createfw').on('click', function (event) {
 
 $('#bind').on('click', function (event) {
     event.preventDefault();
-    $('#FirewallModalContainer').attr('bindtype', 'vm');
+    $('#FirewallModalContainer').attr('type', 'vm');
     $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
         $('#FirewallModalContainer').modal({
             backdrop: false,
@@ -81,7 +81,7 @@ $('#bind').on('click', function (event) {
 
 $('#bindlb').on('click', function (event) {
     event.preventDefault();
-    $('#FirewallModalContainer').attr('bindtype', 'lb');
+    $('#FirewallModalContainer').attr('type', 'lb');
     $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
         $('#FirewallModalContainer').modal({
             backdrop: false,
@@ -93,18 +93,7 @@ $('#bindlb').on('click', function (event) {
 
 $('#bindrt').on('click', function (event) {
     event.preventDefault();
-    $('#FirewallModalContainer').attr('bindtype', 'rt');
-    $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
-        $('#FirewallModalContainer').modal({
-            backdrop: false,
-            show: true
-        });
-    });
-});
-
-$('#binddb').on('click', function (event) {
-    event.preventDefault();
-    $('#FirewallModalContainer').attr('bindtype', 'db');
+    $('#FirewallModalContainer').attr('type', 'rt');
     $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
         $('#FirewallModalContainer').modal({
             backdrop: false,

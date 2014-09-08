@@ -881,10 +881,13 @@ public class LBManager {
 							.encodeText(lb.getLbDesc()));
 			jo.put("lbIp", lb.getLbIP());
 			String eip = this.getEipDAO().getEipIp(lbUuid);
+			String eipUuid = this.getEipDAO().getEipId(eip);
 			if (eip == null) {
-				jo.put("eip", "&nbsp;");
+				jo.put("eip", "");
+				jo.put("eipUuid", "");
 			} else {
 				jo.put("eip", eip);
+				jo.put("eipUuid", eipUuid);
 			}
 			jo.put("lbUID", lb.getLbUID());
 			jo.put("lbMac", lb.getLbMac());

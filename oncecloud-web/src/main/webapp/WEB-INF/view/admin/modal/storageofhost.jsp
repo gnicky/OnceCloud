@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<script src="${basePath}js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="${basePath}js/uuid.js"></script>
 <script src="${basePath}js/admin/modal/storageofhost.js"></script>
 <div class="modal-dialog" style="margin-top:100px">
 	<div class="modal-content">

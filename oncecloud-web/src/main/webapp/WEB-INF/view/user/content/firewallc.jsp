@@ -15,9 +15,9 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu">
-					<li><a class="btn-forbidden" id="bind" url="${basePath}user/modal/bindfirewall.jsp"><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
-					<li><a class="btn-forbidden" id="bindlb" url="${basePath}user/modal/bindfirewall.jsp"><span class="glyphicon glyphicon-random"></span>加载到负载均衡</a></li>
-					<li><a class="btn-forbidden" id="bindrt" url="${basePath}user/modal/bindfirewall.jsp"><span class="glyphicon glyphicon-fullscreen"></span>加载到路由器</a></li>
+					<li><a class="btn-forbidden" id="bind" url="${basePath}firewall/bind"><span class="glyphicon glyphicon-cloud"></span>加载到主机</a></li>
+					<li><a class="btn-forbidden" id="bindlb" url="${basePath}firewall/bind"><span class="glyphicon glyphicon-random"></span>加载到负载均衡</a></li>
+					<li><a class="btn-forbidden" id="bindrt" url="${basePath}firewall/bind"><span class="glyphicon glyphicon-fullscreen"></span>加载到路由器</a></li>
 					<li><a class="btn-forbidden" style="display:none;" id="binddb" url="${basePath}user/modal/bindfirewall.jsp.jsp"><span class="glyphicon glyphicon-inbox"></span>加载到数据库</a></li>
 					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
 				</ul>

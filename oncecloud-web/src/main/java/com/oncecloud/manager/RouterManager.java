@@ -800,10 +800,13 @@ public class RouterManager {
 					: Utilities.encodeText(router.getRouterDesc()));
 			jo.put("routerIp", router.getRouterIP());
 			String eip = this.getEipDAO().getEipIp(routerUuid);
+			String eipUuid = this.getEipDAO().getEipId(eip);
 			if (eip == null) {
 				jo.put("eip", "");
+				jo.put("eipUuid", "");
 			} else {
 				jo.put("eip", eip);
+				jo.put("eipUuid", eipUuid);
 			}
 			jo.put("routerUID", router.getRouterUID());
 			jo.put("routerMac", router.getRouterMac());
