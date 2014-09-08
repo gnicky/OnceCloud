@@ -308,6 +308,14 @@ public class LBManager {
 		return jo;
 	}
 
+	public JSONArray getFEListByLB(String lbUuid) {
+		return this.getForeendDAO().getFEListByLB(lbUuid);
+	}
+	
+	public boolean checkFore(String lbUuid,int port) {
+		return this.getForeendDAO().checkRepeat(lbUuid,port);
+	}
+	
 	public boolean deleteLB(int userId, String uuid) {
 		boolean result = false;
 		Connection c = null;
@@ -549,7 +557,7 @@ public class LBManager {
 				LogConstant.logObject.负载均衡.toString(), name));
 		infoArray
 				.put(Utilities.createLogInfo("最大连接数", String.valueOf(capacity)));
-		if (result.getBoolean("isSuccess") == true) {
+		if (result.has("isSuccess") && result.getBoolean("isSuccess") == true) {
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.负载均衡.ordinal(),
 					LogConstant.logAction.创建.ordinal(),
@@ -559,8 +567,7 @@ public class LBManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			infoArray.put(Utilities.createLogInfo("原因",
-					result.getString("error")));
+			infoArray.put(Utilities.createLogInfo("原因",result.has("error")?result.getString("error"):""));
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.负载均衡.ordinal(),
 					LogConstant.logAction.创建.ordinal(),

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oncecloud.entity.User;
@@ -85,45 +84,7 @@ public class FirewallAction extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		if (user != null && action != null) {
 			int userId = user.getUserId();
-			if (action.equals("createrule")) {
-				String ruleId = request.getParameter("ruleId");
-				String ruleName = request.getParameter("ruleName");
-				int rulePriority = Integer.parseInt(request
-						.getParameter("rulePriority"));
-				String ruleProtocol = request.getParameter("ruleProtocol");
-				String ruleIp = request.getParameter("ruleIp");
-				String ruleFirewall = request.getParameter("firewallId");
-				int ruleSport = 0;
-				int ruleEport = 0;
-				if (ruleProtocol.equals("TCP") || ruleProtocol.equals("UDP")) {
-					ruleSport = Integer.parseInt(request
-							.getParameter("ruleSport"));
-					ruleEport = Integer.parseInt(request
-							.getParameter("ruleEport"));
-				}
-				JSONObject jo = this.getFirewallManager().createRule(ruleId,
-						ruleName, rulePriority, ruleProtocol, ruleIp,
-						ruleFirewall, ruleSport, ruleEport);
-				out.print(jo);
-			} else if (action.equals("deleterule")) {
-				String ruleId = request.getParameter("ruleId");
-				String firewallId = request.getParameter("firewallId");
-				JSONObject jo = this.getFirewallManager().deleteRule(ruleId,
-						firewallId);
-				out.print(jo.toString());
-			} else if (action.equals("bindfirewall")) {
-				String firewallId = request.getParameter("firewallId");
-				String vmuuidStr = request.getParameter("vmuuidStr");
-				String bindtype = request.getParameter("bindtype");
-				JSONObject jo = this.getFirewallManager().bindFirewall(userId,
-						firewallId, vmuuidStr, bindtype);
-				out.print(jo.toString());
-			} else if (action.equals("applyfirewall")) {
-				String firewallId = request.getParameter("firewallId");
-				JSONObject jo = this.getFirewallManager().updateFirewall(
-						userId, firewallId);
-				out.print(jo.toString());
-			} else if (action.equals("getablevms")) {
+			if (action.equals("getablevms")) {
 				int page = Integer.parseInt(request.getParameter("page"));
 				int limit = Integer.parseInt(request.getParameter("limit"));
 				String search = request.getParameter("search");

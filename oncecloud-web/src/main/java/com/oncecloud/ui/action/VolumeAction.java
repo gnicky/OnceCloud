@@ -73,10 +73,19 @@ public class VolumeAction {
 	@ResponseBody
 	public String volumeOfVm(HttpServletRequest request,
 			@RequestParam String vmUuid) {
-		JSONArray ja = this.getVolumeManager().getVolumeListByVM(vmUuid);
+		JSONArray ja = this.getVolumeManager().getVolumesOfVM(vmUuid);
 		return ja.toString();
 	}
 
+	@RequestMapping(value = "/AvailableVolumes", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getAvailableVolumes(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getVolumeManager().getAvailableVolumes(
+				user.getUserId());
+		return ja.toString();
+	}
+	
 	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
 	public void bind(HttpServletRequest request,
@@ -84,15 +93,6 @@ public class VolumeAction {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
 		this.getVolumeManager().bindVolume(userId, volumeUuid, vmUuid);
-	}
-
-	@RequestMapping(value = "/AvailableVolumes", method = { RequestMethod.POST })
-	@ResponseBody
-	public String availableVolumes(HttpServletRequest request) {
-		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getVolumeManager().getAbledVolumeList(
-				user.getUserId());
-		return ja.toString();
 	}
 
 	@RequestMapping(value = "/Unbind", method = { RequestMethod.POST })

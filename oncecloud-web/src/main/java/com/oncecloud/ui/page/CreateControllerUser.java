@@ -85,6 +85,28 @@ public class CreateControllerUser {
 		return new ModelAndView("user/create/createloadbalance");
 	}
 	
+	@RequestMapping(value = "/foreend/create", method = { RequestMethod.POST })
+	public ModelAndView createforeend(HttpServletRequest request,@RequestParam String name,
+			@RequestParam String protocol,@RequestParam String port,@RequestParam String policy,
+			@RequestParam String foreuuid,@RequestParam String type,@RequestParam String lbuuid) {
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("name", name);
+		model.put("protocol", protocol);
+		model.put("port", port);
+		model.put("policy", policy);
+		model.put("foreuuid", foreuuid);
+		model.put("type", type);
+		model.put("lbuuid", lbuuid);
+		return new ModelAndView("user/create/createforeend");
+	}
+	
+	@RequestMapping(value = "/backend/create", method = { RequestMethod.POST })
+	public ModelAndView createbackend(HttpServletRequest request,@RequestParam String foreuuid) {
+		Map<String, String> model = new HashMap<String, String>();
+		model.put("foreUuid", foreuuid);
+		return new ModelAndView("user/create/createbackend");
+	}
+
 	@RequestMapping(value = "/vnet/create", method = { RequestMethod.GET })
 	public ModelAndView createVnet(HttpServletRequest request) {
 		return new ModelAndView("user/create/createvnet");

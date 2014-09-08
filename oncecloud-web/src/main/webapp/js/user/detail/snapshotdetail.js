@@ -191,29 +191,22 @@ $('#snapshot-graph').on('click', '#backup', function (event) {
 
 $('#depend-list').on('click', '#rsuuid', function (event) {
     event.preventDefault();
-    var depenUuid = $(this).attr('uuid');
+    var uuid = $(this).attr('uuid');
     var rsType = $(this).attr('type');
+    var form = $("<form></form>");
+    form.attr('method', 'post');
     if ('instance' == rsType) {
-        $.ajax({
-            type: 'get',
-            url: '/VMAction',
-            data: 'action=detail&instanceuuid=' + depenUuid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
-            }
-        });
+        form.attr("action", "/instance/detail");
+        var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+        form.append(input);
     } else {
-        $.ajax({
-            type: 'get',
-            url: '/VolumeAction',
-            data: 'action=detail&volumeuuid=' + depenUuid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/volumedetail.jsp";
-            }
-        });
+        form.attr("action", "/volume/detail");
+        var input = $('<input type="text" name="volumeUuid" value="' + uuid + '" />');
+        form.append(input);
     }
+    form.css('display', 'none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getSnapshotBasicList() {

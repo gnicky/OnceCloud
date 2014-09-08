@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oncecloud.entity.User;
 import com.oncecloud.manager.VoucherManager;
 
 @RequestMapping("/VoucherAction")
@@ -41,4 +42,12 @@ public class VoucherAction {
 		return jo.toString();
 	}
 
+	@RequestMapping(value = "/Apply", method = { RequestMethod.POST })
+	@ResponseBody
+	public String apply(HttpServletRequest request, @RequestParam int voucher) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getVoucherManager().applyVoucher(user.getUserId(),
+				voucher);
+		return jo.toString();
+	}
 }

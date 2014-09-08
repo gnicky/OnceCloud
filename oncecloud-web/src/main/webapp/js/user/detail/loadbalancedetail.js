@@ -9,13 +9,12 @@ $('#LbModalContainer').on('hide', function (event) {
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
-    var url = $('#platformcontent').attr('platformBasePath') + 'common/modify.jsp';
+    var url = $('#platformcontent').attr('platformBasePath') + 'common/modify';
     var lbName = $('#lbname').text();
     var lbDesc = $('#lbdesc').text();
-    var lbUuid = $('#platformcontent').attr("lbUuid");
-    $('#LbModalContainer').load(url, {"modifytype": "lb", "modifyuuid": lbUuid,
-        "modifyname": lbName, "modifydesc": lbDesc}, function () {
-        $('#LbModalContainer').modal({
+    var lbUuid = $('#platformcontent').attr("lbUuid");    
+    $('#InstanceModalContainer').load(url, {"modifyType": "lb", "modifyUuid": lbUuid, "modifyName": lbName, "modifyDesc": lbDesc}, function () {
+        $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true
         });
@@ -29,18 +28,16 @@ $('.btn-refresh').on('click', function (event) {
 });
 
 $('#depend-list').on('click', '#firewallid', function (event) {
+    var firewallId = $(this).attr("uuid");
     event.preventDefault();
-    var uuid = $(this).attr('uuid');
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/FirewallAction',
-        data: 'action=detail&firewallId=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/firewalldetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/firewall/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getLbBasicList() {
@@ -115,9 +112,9 @@ function getForeList() {
     $('#fore_list').html("");
     var lbUuid = $('#platformcontent').attr("lbUuid");
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: 'action=getforelist&lbuuid=' + lbUuid,
+        type: 'post',
+        url: '/LBAction/ForeList',
+        data: {lbuuid:lbUuid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 0) {
@@ -195,9 +192,9 @@ $('#fe_apply').on('click', function (event) {
     if (lbstate) {
         var lbUuid = $('#platformcontent').attr("lbUuid");
         $.ajax({
-            type: 'get',
-            url: '/LBAction',
-            data: "action=applylb&lbuuid=" + lbUuid,
+            type: 'post',
+            url: '/LBAction/ApplyLB',
+            data: {lbuuid:lbUuid},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result == true) {
@@ -225,7 +222,7 @@ $('#fe_apply').on('click', function (event) {
 $('#fe_create').on('click', function (event) {
     event.preventDefault();
     var lbUuid = $('#platformcontent').attr("lbUuid");
-    var url = $("#platformcontent").attr("platformBasePath") + 'user/create/createforeend.jsp';
+    var url = $("#platformcontent").attr("platformBasePath") + '/foreend/create';
     $('#LbModalContainer').load(url, { "name": "", "protocol": "", "port": "", "policy": "", "foreuuid": "", "type": "new", "lbuuid": lbUuid}, function () {
         $('#LbModalContainer').modal({
             backdrop: false,
@@ -237,7 +234,7 @@ $('#fe_create').on('click', function (event) {
 $('#fore_list').on('click', '.be_create', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('feid');
-    var url = $("#platformcontent").attr("platformBasePath") + 'user/create/createbackend.jsp';
+    var url = $("#platformcontent").attr("platformBasePath") + 'backend/create';
     $('#LbModalContainer').load(url, {"foreuuid": uuid}, function () {
         $('#LbModalContainer').modal({
             backdrop: false,
@@ -254,7 +251,7 @@ $('#fore_list').on('click', '.fe_update', function (event) {
     var port = $(this).parent().parent().parent().attr('feport');
     var policy = $(this).parent().parent().parent().attr('fepolicy');
     var lbUuid = $('#platformcontent').attr("lbUuid");
-    var url = $("#platformcontent").attr("platformBasePath") + 'user/create/createforeend.jsp';
+    var url = $("#platformcontent").attr("platformBasePath") + '/foreend/create';
     $('#LbModalContainer').load(url, {"name": name, "protocol": protocol, "port": port, "policy": policy, "foreuuid": uuid, "type": "update", "lbuuid": lbUuid}, function () {
         $('#LbModalContainer').modal({
             backdrop: false,
@@ -274,9 +271,9 @@ $('#fore_list').on('click', '.be_forbid', function (event) {
         state = 0;
     }
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: "action=forbidback&state=" + state + "&backuuid=" + beuuid + "&lbuuid=" + lbUuid,
+        type: 'post',
+        url: '/LBAction/ForbidBack',
+        data: {state:state,backUuid:beuuid,lbUuid:lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -306,9 +303,9 @@ $('#fore_list').on('click', '.fe_forbid', function (event) {
         state = 0;
     }
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: "action=forbidfore&state=" + state + "&foreuuid=" + feuuid + '&lbuuid=' + lbUuid,
+        type: 'post',
+        url: '/LBAction/ForbidFore',
+        data: {state:state,foreUuid:feuuid,lbUuid:lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -348,9 +345,9 @@ $('#fore_list').on('click', '.be_delete', function (event) {
 function deleteFE(feuuid) {
     var lbUuid = $('#platformcontent').attr("lbUuid");
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: "action=deletefore&foreuuid=" + feuuid + "&lbUuid=" + lbUuid,
+        type: 'post',
+        url: '/LBAction/DeleteFore',
+        data: {foreUuid:feuuid,lbUuid:lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -364,9 +361,9 @@ function deleteFE(feuuid) {
 function deleteBE(beuuid) {
     var lbUuid = $('#platformcontent').attr("lbUuid");
     $.ajax({
-        type: 'get',
-        url: '/LBAction',
-        data: "action=deleteback&backuuid=" + beuuid + "&lbuuid=" + lbUuid,
+        type: 'post',
+        url: '/LBAction/DeleteBack',
+        data: {backUuid:beuuid,lbUuid:lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {

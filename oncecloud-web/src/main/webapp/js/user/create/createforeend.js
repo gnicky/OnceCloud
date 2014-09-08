@@ -74,11 +74,8 @@ $(document).ready(function () {
             + '<th>权重</th><th>监控</th><th>操作</th></tr></thead><tbody class="backbody"></tbody></table></div>';
         $.ajax({
             type: 'post',
-            url: '/LBAction',
-            data: 'action=createfore&name=' + name
-                + '&foreuuid=' + feuuid + '&lbuuid=' + lbuuid
-                + '&protocol=' + protocol + '&port=' + port
-                + '&policy=' + policy,
+            url: '/LBAction/CreateFore',
+            data: {name:name,foreuuid:foreuuid,lbuuid:lbuuid,protocol:protocol,port:port,policy:policy},
             dataType: 'text',
             success: function () {
                 var hasListener = $('#fore_list').find('.unit');
@@ -103,8 +100,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             async: false,
-            url: '/LBAction',
-            data: 'action=checkfore&port=' + port + '&lbuuid=' + lbuuid,
+            url: '/LBAction/CheckFore',
+            data: {port:port,lbuuid:lbuuid},
             dataType: 'text',
             success: function (response) {
                 if (response == "true") {
@@ -120,14 +117,11 @@ $(document).ready(function () {
     function updateListener(name, policy, foreuuid) {
         $.ajax({
             type: 'post',
-            url: '/LBAction',
-            data: 'action=updatefore&name=' + name
-                + '&policy=' + policy + '&foreuuid=' + foreuuid + '&lbuuid=' + lbuuid,
+            url: '/LBAction/UpdateFore',
+            data: {name:name,policy:policy,foreuuid:foreuuid,lbuuid:lbuuid},
             dataType: 'text',
-            success: function () {
+            complete: function () {
                 window.location = window.location.href;
-            },
-            error: function () {
             }
         });
     }

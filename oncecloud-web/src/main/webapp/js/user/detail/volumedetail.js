@@ -26,32 +26,33 @@ $('.btn-refresh').on('click', function (event) {
 
 $('#depend-list').on('click', '#depenid', function (event) {
     event.preventDefault();
-    var depenUuid = $(this).attr('depenUuid');
-    $.ajax({
-        type: 'get',
-        url: '/VMAction',
-        data: 'action=detail&instanceuuid=' + depenUuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
-        }
-    });
+    var uuid = $(this).attr('depenUuid');
+    var form = $("<form></form>");
+    form.attr("action", "/instance/detail");
+    form.attr('method', 'post');
+    var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display', 'none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#depend-list').on('click', '#snapshotid', function (event) {
     event.preventDefault();
     var resourceUuid = $(this).attr('rsuuid');
     var resourceName = $(this).attr('rsname');
-    var basePath = $("#platformcontent").attr("platformBasePath");
-    $.ajax({
-        type: 'get',
-        url: '/SnapshotAction',
-        data: 'action=detail&resourceUuid=' + resourceUuid + '&resourceType=volume&resourceName=' + resourceName,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = basePath + "user/detail/snapshotdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action", "/snapshot/detail");
+    form.attr('method', 'post');
+    var input = $('<input type="text" name="resourceUuid" value="' + resourceUuid + '" />');
+    form.append(input);
+    var input2 = $('<input type="text" name="resourceName" value="' + resourceName + '" />');
+    form.append(input2);
+    var input3 = $('<input type="text" name="resourceType" value="volume" />');
+    form.append(input3);
+    form.css('display', 'none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getVolumeBasicList() {

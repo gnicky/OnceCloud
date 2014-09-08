@@ -6,7 +6,7 @@
             var name = $('#lb_name').val();
             var capacity = $('input[name="lb_type"]:checked').val();
             $.ajax({
-                type: 'get',
+                type: 'post',
                 url: '/LBAction/Quota',
                 dataType: 'json',
                 success: function (array) {

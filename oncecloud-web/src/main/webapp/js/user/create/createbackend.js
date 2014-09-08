@@ -1,12 +1,11 @@
-$(document).ready(function () {
+
     loadVmList();
 
     function loadVmList() {
         $.ajax({
-            type: 'get',
+            type: 'post',
             async: false,
-            url: '/VMAction',
-            data: 'action=simplelist',
+            url: '/VMAction/SimpleList',
             dataType: 'json',
             success: function (array) {
                 var vmlistHtml = '';
@@ -37,8 +36,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             async: false,
-            url: '/LBAction',
-            data: 'action=checkback&port=' + port + '&beuuid=' + beuuid,
+            url: '/LBAction/CheckBack',
+            data: {port:port,beuuid:beuuid},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result == true) {
@@ -68,11 +67,10 @@ $(document).ready(function () {
                 var beuuid = uuid.v4();
                 $.ajax({
                     type: 'post',
-                    url: '/LBAction',
-                    data: 'action=createback&name=' + name + '&backuuid=' + beuuid + '&vmuuid=' + vm[0]
-                        + '&vmip=' + vm[1] + '&port=' + port + '&weight=' + weight + '&feuuid=' + feuuid + "&lbuuid=" + lbUuid,
+                    url: '/LBAction/CreateBack',
+                    data: {name:name,backUuid:beuuid,vmUuid: vm[0],vmIP:vm[1],port:port,weight:weight,feUuid:feuuid,lbUuid:lbUuid},
                     dataType: 'text',
-                    success: function () {
+                    complete: function () {
                         window.location = window.location.href;
                     },
                     error: function () {
@@ -135,4 +133,3 @@ $(document).ready(function () {
             }
         }
     });
-});

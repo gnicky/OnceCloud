@@ -45,7 +45,7 @@ public class EIPAction {
 	public String availableEIPs(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
-		JSONArray ja = this.getEipManager().eipGetAbleEips(userId);
+		JSONArray ja = this.getEipManager().getAvailableEIPs(userId);
 		return ja.toString();
 	}
 	
@@ -54,7 +54,7 @@ public class EIPAction {
 	public String availableVMs(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
 		int userId = user.getUserId();
-		JSONArray ja = this.getEipManager().eipGetAbleVMs(list.getPage(), list.getLimit(), list.getSearch(), list.getType(), userId);
+		JSONArray ja = this.getEipManager().getAvailableVMs(list.getPage(), list.getLimit(), list.getSearch(), list.getType(), userId);
 		return ja.toString();
 	}
 

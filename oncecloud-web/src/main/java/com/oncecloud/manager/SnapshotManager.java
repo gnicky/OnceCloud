@@ -515,7 +515,7 @@ public class SnapshotManager {
 		return jo;
 	}
 
-	public JSONObject deleteOneSnapshot(int userId, String snapshotId,
+	public JSONObject deleteSnapshot(int userId, String snapshotId,
 			String resourceUuid, String resourceType) {
 		JSONObject jo = new JSONObject();
 		Date startTime = new Date();
@@ -615,7 +615,7 @@ public class SnapshotManager {
 		return jo;
 	}
 
-	public JSONObject getOneResource(int userId, String resourceUuid,
+	public JSONObject getBasicList(int userId, String resourceUuid,
 			String resourceType) {
 		JSONObject jo = new JSONObject();
 		Object[] obj = null;
