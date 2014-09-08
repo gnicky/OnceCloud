@@ -432,7 +432,7 @@ public class VolumeManager {
 		return jo;
 	}
 
-	public JSONArray getAbledVolumeList(int userId) {
+	public JSONArray getAvailableVolumes(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Volume> volumeList = this.getVolumeDAO().getAbledVolumes(userId);
 		if (volumeList != null) {
@@ -448,7 +448,7 @@ public class VolumeManager {
 		return ja;
 	}
 
-	public JSONArray getVolumeListByVM(String vmUuid) {
+	public JSONArray getVolumesOfVM(String vmUuid) {
 		JSONArray ja = new JSONArray();
 		List<Volume> volumeList = this.getVolumeDAO().getVolListByVM(vmUuid);
 		if (volumeList != null) {

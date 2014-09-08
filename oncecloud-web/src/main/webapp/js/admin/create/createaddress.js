@@ -134,17 +134,13 @@ $(document).ready(function () {
     });
 
     function checkaddr(addr, num1, num2) {
-        if (addr == "")
-            return false;
-
+        var result = false;
         if ($.isNumeric(addr)) {
             if (addr >= num1 && addr <= num2) {
-                return true;
+                result = true;
             }
         }
-
-        return false;
-
+        return result;
     }
 
     function getIPList(page, limitnum, search, type) {
