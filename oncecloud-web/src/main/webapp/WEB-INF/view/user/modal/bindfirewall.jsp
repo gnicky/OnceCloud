@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <script src="${basePath}js/user/modal/bindfirewall.js"></script>
 <div class="modal-dialog" style="width:600px; margin-top:100px">
-	<div class="modal-content">
+	<div class="modal-content" id="firewall-modal" type="${type}">
 		<div class="modal-header">
 			<h4 class="modal-title" id="modaltitle">主机列表<a class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></a></h4>
 		</div>

@@ -70,8 +70,7 @@ $('#createfw').on('click', function (event) {
 
 $('#bind').on('click', function (event) {
     event.preventDefault();
-    $('#FirewallModalContainer').attr('type', 'vm');
-    $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
+    $('#FirewallModalContainer').load($(this).attr('url'), {'type': 'vm'}, function () {
         $('#FirewallModalContainer').modal({
             backdrop: false,
             show: true
@@ -81,8 +80,7 @@ $('#bind').on('click', function (event) {
 
 $('#bindlb').on('click', function (event) {
     event.preventDefault();
-    $('#FirewallModalContainer').attr('type', 'lb');
-    $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
+    $('#FirewallModalContainer').load($(this).attr('url'), {'type': 'lb'}, function () {
         $('#FirewallModalContainer').modal({
             backdrop: false,
             show: true
@@ -93,8 +91,7 @@ $('#bindlb').on('click', function (event) {
 
 $('#bindrt').on('click', function (event) {
     event.preventDefault();
-    $('#FirewallModalContainer').attr('type', 'rt');
-    $('#FirewallModalContainer').load($(this).attr('url'), '', function () {
+    $('#FirewallModalContainer').load($(this).attr('url'), {'type': 'rt'}, function () {
         $('#FirewallModalContainer').modal({
             backdrop: false,
             show: true

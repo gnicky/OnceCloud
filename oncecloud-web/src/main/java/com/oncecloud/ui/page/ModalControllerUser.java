@@ -92,7 +92,7 @@ public class ModalControllerUser {
 		return new ModelAndView("user/modal/bindvolume");
 	}
 	
-	@RequestMapping(value = "/firewall/bind", method = { RequestMethod.POST })
+	@RequestMapping(value = "/firewall/bind")
 	public ModelAndView bindVolume(HttpServletRequest request, @RequestParam String type) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("type", type);

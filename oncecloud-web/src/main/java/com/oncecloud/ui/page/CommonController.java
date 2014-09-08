@@ -141,7 +141,7 @@ public class CommonController {
 	
 	@RequestMapping(value = "/common/modify")
 	@ResponseBody
-	public ModelAndView commonmodify(HttpServletRequest request,CommonModifyModel commonModifyModel) {
+	public ModelAndView modify(HttpServletRequest request,CommonModifyModel commonModifyModel) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("modifyType", commonModifyModel.getModifyType());
 		model.put("modifyUuid", commonModifyModel.getModifyUuid());

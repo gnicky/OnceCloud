@@ -8,15 +8,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.main.NoVNC;
-import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
 
 /**
@@ -207,51 +204,6 @@ public class VMDAO {
 				criteria.add(Restrictions.eq("vmImportance", importance));
 			}
 			vmList = criteria.list();
-			session.getTransaction().commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return vmList;
-	}
-
-	/**
-	 * 获取一页用户主机列表
-	 * 
-	 * @param page
-	 * @param limit
-	 * @param search
-	 * @param userId
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public JSONArray getOnePageVMsOfUser(int page, int limit, String search,
-			int userId) {
-		JSONArray vmList = new JSONArray();
-		int count = countVMsOfUser(userId);
-		vmList.put(count);
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			int startPos = (page - 1) * limit;
-			String queryString = "select vmUuid,vmName from OCVM where vmUID = :userId "
-					+ "and vmName like :search "
-					+ "and vmStatus = 1 order by createDate desc";
-			Query query = session.createQuery(queryString);
-			query.setInteger("userId", userId);
-			query.setString("search", "%" + search + "%");
-			query.setFirstResult(startPos);
-			query.setMaxResults(limit);
-			List<Object[]> resultList = query.list();
-			for (Object[] item : resultList) {
-				JSONObject itemjo = new JSONObject();
-				itemjo.put("vmid", item[0]);
-				itemjo.put("vmname", Utilities.encodeText((String) item[1]));
-				vmList.put(itemjo);
-			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

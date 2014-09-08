@@ -69,13 +69,6 @@ public class VnetAction extends HttpServlet {
 				String uuid = request.getParameter("uuid");
 				String desc = request.getParameter("desc");
 				this.getVnetManager().vnetCreate(name, uuid, desc, userId);
-			} else if (action.equals("getablevms")) {
-				Integer page = Integer.parseInt(request.getParameter("page"));
-				Integer limit = Integer.parseInt(request.getParameter("limit"));
-				String search = request.getParameter("search");
-				JSONArray jo = this.getVmDAO().getOnePageVMsOfUser(page,
-						limit, search, userId);
-				out.print(jo.toString());
 			} else if (action.equals("getablerts")) {
 				JSONArray jo = this.getRouterDAO().getRoutersOfUser(userId);
 				out.print(jo.toString());

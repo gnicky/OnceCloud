@@ -607,7 +607,7 @@ public class RouterManager {
 		return ja;
 	}
 
-	public JSONArray getAbleRTs(int userId, int page, int limit, String search) {
+	public JSONArray getRoutersOfUser(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO().countRouters(userId, search);
 		ja.put(totalNum);

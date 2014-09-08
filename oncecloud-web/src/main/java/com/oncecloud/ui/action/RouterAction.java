@@ -125,5 +125,12 @@ public class RouterAction {
 		return jo.toString();
 	}
 	
-	
+	@RequestMapping(value = "/RoutersOfUser", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getRoutersOfUser(HttpServletRequest request, ListModel lm) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getRouterManager().getRoutersOfUser(user.getUserId(),
+				lm.getPage(), lm.getLimit(), lm.getSearch());
+		return ja.toString();
+	}
 }
