@@ -1,4 +1,5 @@
-package com.oncecloud.daemon;
+package com.oncecloud.daemon.core;
+
 
 public class ShutdownHandler extends Thread {
 	private DaemonServer daemonServer;
