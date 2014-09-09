@@ -26,7 +26,7 @@
 <%@ page import="com.oncecloud.alipay.config.*"%>
 <%@ page import="com.oncecloud.log.*"%>
 <%@ page import="com.oncecloud.dao.ChargeDAO"%>
-<%@ page import="com.oncecloud.hbm.User"%>
+<%@ page import="com.oncecloud.entity.User"%>
 <%@ page import="java.lang.Integer"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>

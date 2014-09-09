@@ -9,7 +9,7 @@ $(window).unload(function() {
 function connect() {
     if ('WebSocket' in window) {
         console.log('Websocket supported');
-        socket = new WebSocket('ws://localhost:8080/messagingService');
+        socket = new WebSocket('ws://58.211.191.37:8080/messagingService');
         console.log('Connection attempted');
 
         socket.onopen = function () {
