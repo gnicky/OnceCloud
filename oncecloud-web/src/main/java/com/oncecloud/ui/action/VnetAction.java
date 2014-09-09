@@ -55,6 +55,13 @@ public class VnetAction {
 		JSONArray ja = this.getVnetManager().getVnetsOfUser(userId);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/VMs", method = { RequestMethod.GET })
+	@ResponseBody
+	public String vms(HttpServletRequest request, @RequestParam String vnetUuid) {
+		JSONArray ja = this.getVnetManager().getVMs(vnetUuid);
+		return ja.toString();
+	}
 	
 	@RequestMapping(value = "/BindVM", method = { RequestMethod.POST })
 	@ResponseBody

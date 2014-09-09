@@ -11,6 +11,7 @@ import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
+import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.dao.VolumeDAO;
 
 @Component
@@ -23,6 +24,7 @@ public class ModifyManager {
 	private LBDAO lbDAO;
 	private RouterDAO routerDAO;
 	private AlarmDAO alarmDAO;
+	private VnetDAO vnetDAO;
 	
 	public VMDAO getVmDAO() {
 		return vmDAO;
@@ -96,6 +98,15 @@ public class ModifyManager {
 		this.alarmDAO = alarmDAO;
 	}
 
+	public VnetDAO getVnetDAO() {
+		return vnetDAO;
+	}
+
+	@Autowired
+	public void setVnetDAO(VnetDAO vnetDAO) {
+		this.vnetDAO = vnetDAO;
+	}
+
 	public JSONObject modifyBasicInfo(String modifyUuid, String modifyName, String modifyDesc,String modifyType) {
 		JSONObject jo = new JSONObject();
 		if (modifyType.equals("instance")) {
@@ -131,6 +142,9 @@ public class ModifyManager {
 		} else if (modifyType.equals("al")) {
 			this.getAlarmDAO().updateName(modifyUuid, modifyName,
 					modifyDesc);
+			jo.put("isSuccess", true);
+		} else if (modifyType.equals("vnet")) {
+			this.getVnetDAO().updateVnet(modifyUuid, modifyName, modifyDesc);
 			jo.put("isSuccess", true);
 		}
 		return jo;
