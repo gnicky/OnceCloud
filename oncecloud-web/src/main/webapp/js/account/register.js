@@ -4,7 +4,6 @@ $(document).ready(function () {
     $('#confirmRegister').on('click', function (event) {
         event.preventDefault();
         var valid = $("#register-form").valid();
-        codeValid();
         var errorLen = $('#register-form').find('.my-error').length;
         if (valid && errorLen == 0) {
             var username = $('#user_name').val();
@@ -27,7 +26,7 @@ $(document).ready(function () {
                                     label: "确定",
                                     className: "btn-primary",
                                     callback: function () {
-                                        window.location.href = $('#register-form').attr("base") + 'user/dashboard.jsp';
+                                        window.location.href = '/login';
                                     }
                                 }
                             }
@@ -68,7 +67,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 url: '/UserAction/QueryUser',
-                data: {username:userName},
+                data: {userName:userName},
                 dataType: 'json',
                 success: function (array) {
                     if (array[0].exist) {
@@ -80,21 +79,6 @@ $(document).ready(function () {
             });
         }
     });
-
-    $('#vercode').on('focusout', function (event) {
-        codeValid();
-    });
-
-    function codeValid() {
-        $('#vercode').parent().find('.error-message').remove();
-        var ver2 = $("#register-form").data('vercode').toLowerCase();
-        var ver1 = $('#vercode').val().toLowerCase();
-        if (ver1 == "") {
-            $('#vercode').after('<span class="help-inline error-message my-error">请输入验证码</span>');
-        } else if (ver1 != ver2) {
-            $('#vercode').after('<span class="help-inline error-message my-error">验证码错误</span>');
-        }
-    }
 
     $("#register-form").validate({
         rules: {

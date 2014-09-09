@@ -27,6 +27,9 @@
 						<value>/login</value> 
 						<value>/backdoor</value>  
 						<value>/captcha</value>
+						<value>/account/register</value>
+						<value>/UserAction/Register</value>
+						<value>/UserAction/QueryUser</value>
 						<value>/404</value>
 					</list> 
 				</property> 

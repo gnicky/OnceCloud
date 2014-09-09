@@ -155,24 +155,6 @@ $('#createvmAction').on('click', function (event) {
     }
 });
 
-$('.cpu').on('click', '.cpu-options', function (event) {
-    event.preventDefault();
-    $('div', $('.cpu')).removeClass('selected');
-    $(this).addClass('selected');
-    $('#selectedCore').html($('.cpu').find('.selected').attr("core") + "&nbsp;核");
-    priceDisplayUpdate();
-});
-
-$('.memory').on('click', '.memory-options', function (event) {
-    event.preventDefault();
-    if (!$(this).hasClass('disabled')) {
-        $('div', $('.memory')).removeClass('selected');
-        $(this).addClass('selected');
-        $('#selectedCap').html($('.memory').find('.selected').attr("capacity") + "&nbsp;G");
-        priceDisplayUpdate();
-    }
-});
-
 $('#instance_name').on('focusout', function () {
     $('#selectedName').html($('#instance_name').val());
 });
@@ -251,11 +233,32 @@ function updatePrice(cpuCore, memoryCapacity, vmCount) {
 
 $('.types').on('click', '.types-item', function (event) {
     event.preventDefault();
-    var allItems = $('.types').find('.types-item');
-    for (var i = 0; i < allItems.length; i++) {
-        $(allItems.get(i)).removeClass('selected');
-    }
+	var selindex = $(this).index();
+	var core = new Array(0,0,1,1,2,2);
+    var mem = new Array(1,2,2,3,5,6);
+    $('.types-item',$('.types')).removeClass('selected');
     $(this).addClass('selected');
+    $('.cpu-options').eq(core[selindex]).click();
+    $('.memory-options').eq(mem[selindex]).click();
+    $('#selectedType').html($(this).find(".type-name").text());
+});
+
+$('.cpu').on('click', '.cpu-options', function (event) {
+    event.preventDefault();
+    $('div', $('.cpu')).removeClass('selected');
+    $(this).addClass('selected');
+    $('#selectedCore').html($('.cpu').find('.selected').attr("core") + "&nbsp;核");
+    priceDisplayUpdate();
+});
+
+$('.memory').on('click', '.memory-options', function (event) {
+    event.preventDefault();
+    if (!$(this).hasClass('disabled')) {
+        $('div', $('.memory')).removeClass('selected');
+        $(this).addClass('selected');
+        $('#selectedCap').html($('.memory').find('.selected').attr("capacity") + "&nbsp;G");
+        priceDisplayUpdate();
+    }
 });
 
 $('#display-pwd').on('change', function (event) {

@@ -91,6 +91,11 @@ public class ModalControllerUser {
 	public ModelAndView bindVolume(HttpServletRequest request) {
 		return new ModelAndView("user/modal/bindvolume");
 	}
+
+	@RequestMapping(value = "/instance/bindnetwork", method = { RequestMethod.GET })
+	public ModelAndView bindnetwork(HttpServletRequest request) {
+		return new ModelAndView("user/modal/bindnetwork");
+	}
 	
 	@RequestMapping(value = "/firewall/bind")
 	public ModelAndView bindVolume(HttpServletRequest request, @RequestParam String type) {

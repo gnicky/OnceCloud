@@ -37,7 +37,7 @@ public class HashHelper {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			ret = this.getStringHelper().convertToHexString(
 					md.digest(ret.getBytes()));
-			return ret;
+			return ret.toUpperCase();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

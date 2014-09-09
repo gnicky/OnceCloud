@@ -22,6 +22,7 @@ import com.oncecloud.dao.UserDAO;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.User;
+import com.oncecloud.helper.HashHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
@@ -38,6 +39,17 @@ public class UserManager {
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
 	private MessagePush messagePush;
+
+	private HashHelper hashHelper;
+
+	private HashHelper getHashHelper() {
+		return hashHelper;
+	}
+
+	@Autowired
+	private void setHashHelper(HashHelper hashHelper) {
+		this.hashHelper = hashHelper;
+	}
 
 	private MessagePush getMessagePush() {
 		return messagePush;
@@ -87,7 +99,7 @@ public class UserManager {
 					result = 1;
 				} else {
 					String pass = user.getUserPass();
-					if (pass.equals(Utilities.MD5(userPass))) {
+					if (pass.equals(this.getHashHelper().md5Hash(userPass))) {
 						// Validated
 						result = 0;
 					} else {
@@ -96,7 +108,8 @@ public class UserManager {
 					}
 				}
 			}
-			logger.info("Check Login: User [" + userName + "] Result [" + result + "]");
+			logger.info("Check Login: User [" + userName + "] Result ["
+					+ result + "]");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

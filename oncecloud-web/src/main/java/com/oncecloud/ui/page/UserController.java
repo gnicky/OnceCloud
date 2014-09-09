@@ -174,4 +174,10 @@ public class UserController {
 	public ModelAndView voucher(HttpServletRequest request) {
 		return new ModelAndView("account/voucher");
 	}
+
+	@RequestMapping(value = "/account/register", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView register(HttpServletRequest request) {
+		return new ModelAndView("account/register");
+	}
 }
