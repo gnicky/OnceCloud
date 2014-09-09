@@ -8,13 +8,13 @@ $('#VnetModalContainer').on('hide', function (event) {
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
-    var url = $('#platformcontent').attr('platformBasePath') + 'common/modify.jsp';
+    var url = basePath + 'common/modify';
     var rtName = $('#rtname').text();
     var rtDesc = $('#rtdesc').text();
-    var rtUuid = $('#platformcontent').attr("rtUuid");
-    $('#RouterModalContainer').load(url, {"modifytype": "rt", "modifyuuid": rtUuid,
-        "modifyname": rtName, "modifydesc": rtDesc}, function () {
-        $('#RouterModalContainer').modal({
+    var rtUuid = $('#platformcontent').attr("vnetUuid");
+    $('#VnetModalContainer').load(url, {"modifyType": "vnet", "modifyUuid": rtUuid,
+        "modifyName": rtName, "modifyDesc": rtDesc}, function () {
+        $('#VnetModalContainer').modal({
             backdrop: false,
             show: true
         });
@@ -75,44 +75,41 @@ function getVnetBasicList() {
 $('#basic-list').on('click', '.basic-host', function (event) {
     event.preventDefault();
     var uuid = $(this).attr('uuid');
-    $.ajax({
-        type: 'get',
-        url: '/VMAction',
-        data: 'action=detail&instanceuuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/instance/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 $('#basic-list').on('click', '.basic-router', function (event) {
     event.preventDefault();
     var uuid = $(this).attr('uuid');
-    $.ajax({
-        type: 'get',
-        url: '/RouterAction',
-        data: 'action=detail&routerUuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/routerdetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/router/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="routerUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 
 $('#vxnets-t').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
-    $.ajax({
-        type: 'get',
-        url: '/VMAction',
-        data: 'action=detail&instanceuuid=' + uuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/instancedetail.jsp";
-        }
-    });
+    var form = $("<form></form>");
+    form.attr("action","/instance/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });
 
 function getVxnets() {
@@ -120,8 +117,8 @@ function getVxnets() {
     var vnetUuid = $('#platformcontent').attr("vnetUuid");
     $.ajax({
         type: 'get',
-        url: '/VnetAction',
-        data: "action=getVms&vnetUuid=" + vnetUuid,
+        url: '/VnetAction/VMs',
+        data: {vnetUuid:vnetUuid},
         dataType: 'json',
         success: function (array) {
             var table = $('<table></table>');
@@ -171,13 +168,12 @@ function getVxnets() {
 $('#router-a').on('click', function (event) {
     event.preventDefault();
     var routerUuid = $('#platformcontent').attr("routerUuid");
-    $.ajax({
-        type: 'get',
-        url: '/RouterAction',
-        data: 'action=detail&routerUuid=' + routerUuid,
-        dataType: 'text',
-        success: function (response) {
-            window.location.href = $('#platformcontent').attr('platformBasePath') + "user/detail/routerdetail.jsp";
-        }
-    });
+     var form = $("<form></form>");
+    form.attr("action","/router/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="routerUuid" value="' + routerUuid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
 });

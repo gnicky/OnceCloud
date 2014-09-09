@@ -219,7 +219,7 @@ function startRouter(uuid) {
         type: 'post',
         url: '/RouterAction/StartUp',
         data: {uuid:uuid},
-        dataType: 'json',
+        dataType: 'json'
     });
 }
 
@@ -234,7 +234,27 @@ function destroyRouter(uuid) {
         type: 'post',
         url: '/RouterAction/Destroy',
         data: {uuid:uuid},
-        dataType: 'json',
+        dataType : 'text',
+		success : function(obj) {
+			if (obj == "no") {
+				thisicon.removeClass("icon-stopped");
+			    thisicon.removeClass('icon-process');
+			    thisicon.addClass("icon-running");
+			    thistr.find('[name="stateword"]').text('活跃');
+				bootbox.dialog({
+                    message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;无法删除，依然有私有网络依赖于该路由</div>',
+                    title: "提示",
+                    buttons: {
+                        main: {
+                            label: "确定",
+                            className: "btn-primary",
+                            callback: function () {
+                            }
+                        }
+                    }
+                });
+			}
+		}
     });
 }
 
@@ -248,6 +268,6 @@ function shutdownRouter(uuid, force) {
         type: 'post',
         url: '/RouterAction/ShutDown',
         data: {uuid:uuid,force:force},
-        dataType: 'json',
+        dataType: 'text'
     });
 }

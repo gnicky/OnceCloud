@@ -871,4 +871,8 @@ public class RouterManager {
 	public void updateImportance(String uuid, int importance) {
 		this.getRouterDAO().updateImportance(uuid, importance);
 	}
+	
+	public JSONArray getRoutersOfUser(int userId) {
+		return this.getRouterDAO().getRoutersOfUser(userId);
+	}
 }
