@@ -7,9 +7,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HomeController {
+
 	@RequestMapping("/")
 	@ResponseBody
 	public ModelAndView index() {
-		return new ModelAndView("WEB-INF/views/index.jsp");
+		return new ModelAndView("index");
 	}
 }

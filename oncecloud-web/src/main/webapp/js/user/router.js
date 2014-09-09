@@ -91,7 +91,7 @@ function getRouterList(page, limit, search) {
                 var showid = "rt-" + uuid.substring(0, 8);
                 var ip = obj.ip;
                 var network;
-                if (ip == "null") {
+                if (ip == "") {
                     network = '<a>(基础网络)</a>';
                 } else {
                     network = '<a>(基础网络)&nbsp;/&nbsp;' + ip + '</a>';

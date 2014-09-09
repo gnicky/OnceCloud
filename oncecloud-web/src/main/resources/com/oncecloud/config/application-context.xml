@@ -31,6 +31,7 @@
 						<value>/UserAction/Register</value>
 						<value>/UserAction/QueryUser</value>
 						<value>/404</value>
+						<value>/alipay/NotifyUrl</value>
 					</list> 
 				</property> 
 			</bean> 

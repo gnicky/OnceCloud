@@ -87,7 +87,7 @@ function preCreateRouter(rtuuid, name, capacity, firewall) {
     }
     var stateStr = '<td><span class="icon-status icon-process" name="stateicon"></span><span name="stateword">创建中</span></td>';
     var thistr = '<tr rowid="' + rtuuid + '" rtname="' + name + '"><td class="rcheck"><input type="checkbox" name="rtrow"></td>'
-        + '<td><a class="id">' + showid + '</a></td><td>' + name + '</td>' + stateStr + '<td name="capacity">' + capStr + '</td><td name="sip"></td><td name="eip"></td>'
+        + '<td><a class="id">' + showid + '</a></td><td>' + name + '</td>' + stateStr + '<td name="capacity">' + capStr + '</td><td name="sip"><a>(基础网络)</a></td><td name="eip"></td>'
         + '<td class="time"><1分钟</td></tr>';
     $("#tablebody").prepend(thistr);
     createRouter(rtuuid, name, capacity, firewall);

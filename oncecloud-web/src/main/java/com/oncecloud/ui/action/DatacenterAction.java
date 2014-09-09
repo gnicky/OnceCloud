@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
+import com.oncecloud.manager.DashboardManager;
 import com.oncecloud.manager.DatacenterManager;
 import com.oncecloud.ui.model.ListModel;
 
@@ -18,6 +19,7 @@ import com.oncecloud.ui.model.ListModel;
 @Controller
 public class DatacenterAction {
 	private DatacenterManager datacenterManager;
+	private DashboardManager dashboardManager;
 
 	private DatacenterManager getDatacenterManager() {
 		return datacenterManager;
@@ -26,6 +28,17 @@ public class DatacenterAction {
 	@Autowired
 	private void setDatacenterManager(DatacenterManager datacenterManager) {
 		this.datacenterManager = datacenterManager;
+	}
+	
+	
+
+	public DashboardManager getDashboardManager() {
+		return dashboardManager;
+	}
+	
+	@Autowired
+	public void setDashboardManager(DashboardManager dashboardManager) {
+		this.dashboardManager = dashboardManager;
 	}
 
 	@RequestMapping(value = "/Overview", method = { RequestMethod.GET })
@@ -93,6 +106,13 @@ public class DatacenterAction {
 	public String rackList(HttpServletRequest request) {
 		String dcid = (String) request.getSession().getAttribute("dcid");
 		JSONArray ja = this.getDatacenterManager().getRackList(dcid);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/Switch", method = { RequestMethod.GET })
+	@ResponseBody
+	public String swicth(HttpServletRequest request,@RequestParam String uuid) {
+		JSONArray ja = this.getDashboardManager().getSwitch(uuid);
 		return ja.toString();
 	}
 }

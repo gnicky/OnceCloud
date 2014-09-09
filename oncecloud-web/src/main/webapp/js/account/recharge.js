@@ -6,7 +6,7 @@ $(document).ready(function () {
         event.preventDefault();
         var errorLen = $('#charge-form').find('.success-message').length;
         if (errorLen == 0) {
-            window.open("../../alipay/alipayapi.jsp?bill_number=" + $("#bill_number").val(), '_blank')
+            window.open("/alipay/SubmitAlipay?bill_number=" + $("#bill_number").val(), '_blank')
             $('#RechargeModalContainer').modal({
                 backdrop: false,
                 show: true

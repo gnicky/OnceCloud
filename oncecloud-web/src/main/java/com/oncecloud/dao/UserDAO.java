@@ -443,7 +443,7 @@ public class UserDAO {
 	 * @param bill
 	 * @return
 	 */
-	public boolean updateBalance(int userId, int bill) {
+	public boolean updateBalance(int userId, double bill) {
 		boolean result = false;
 		User user = this.getUser(userId);
 		if (user != null) {

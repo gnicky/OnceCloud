@@ -39,6 +39,14 @@ public class UserAction {
 				list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
+	
+
+	@RequestMapping(value = "/Companylist", method = { RequestMethod.GET })
+	@ResponseBody
+	public String companylist(HttpServletRequest request) {
+		JSONArray ja = this.getUserManager().doGetCompanyList();
+		return ja.toString();
+	}
 
 	@RequestMapping(value = "/Balance", method = { RequestMethod.GET })
 	@ResponseBody
@@ -130,6 +138,14 @@ public class UserAction {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/CompanyDetail", method = { RequestMethod.GET })
+	@ResponseBody
+	public String companyDetail(HttpServletRequest request) {
+		int companyuid = Integer.parseInt(request.getParameter("companyuid"));
+		JSONArray ja = this.getUserManager().doGetcompanyDetail(companyuid);
 		return ja.toString();
 	}
 

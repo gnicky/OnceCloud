@@ -4,6 +4,8 @@
  */
 package com.oncecloud.alipay.util.httpClient;
 
+import org.springframework.stereotype.Component;
+
 /* *
  *类名：HttpResultType
  *功能：表示Http返回的结果字符方式
