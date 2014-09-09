@@ -3,8 +3,10 @@ package com.oncecloud.common;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.springframework.stereotype.Component;
 
 // 发送短信API
+@Component
 public class SendMsgApi {
 	// 用户ID
 	private String uid = "beyondcent";

@@ -8,7 +8,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.stereotype.Component;
+
 // 发送邮件API
+@Component
 public class SendEmailApi {
 	private String smtpServer = "smtp.exmail.qq.com";
 	private String sendAddress = "notice@bncloud.com.cn";
