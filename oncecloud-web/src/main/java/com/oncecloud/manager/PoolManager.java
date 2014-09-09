@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,10 @@ import com.once.xenapi.Connection;
 import com.once.xenapi.VM;
 import com.oncecloud.dao.DatacenterDAO;
 import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.PoolDAO;
+import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.Datacenter;
 import com.oncecloud.entity.OCHost;
@@ -60,6 +61,8 @@ public class PoolManager {
 	private HostDAO hostDAO;
 	private DatacenterDAO datacenterDAO;
 	private VMDAO vmDAO;
+	private RouterDAO routerDAO;
+	private LBDAO lbDAO;
 	private DatacenterManager datacenterManager;
 
 	private PoolDAO getPoolDAO() {
@@ -105,6 +108,24 @@ public class PoolManager {
 	@Autowired
 	private void setVmDAO(VMDAO vmDAO) {
 		this.vmDAO = vmDAO;
+	}
+
+	public RouterDAO getRouterDAO() {
+		return routerDAO;
+	}
+
+	@Autowired
+	public void setRouterDAO(RouterDAO routerDAO) {
+		this.routerDAO = routerDAO;
+	}
+
+	public LBDAO getLbDAO() {
+		return lbDAO;
+	}
+
+	@Autowired
+	public void setLbDAO(LBDAO lbDAO) {
+		this.lbDAO = lbDAO;
 	}
 
 	private DatacenterManager getDatacenterManager() {
@@ -349,9 +370,21 @@ public class PoolManager {
 			for (VM thisVM : map.keySet()) {
 				VM.Record vmRecord = map.get(thisVM);
 				if (!vmRecord.isControlDomain && !vmRecord.isATemplate) {
-					srList.add(new SimpleRecord(vmRecord.uuid,
-							vmRecord.powerState.toString(), vmRecord.residentOn
-									.toWireString()));
+					String name = vmRecord.nameLabel;
+					if (name.contains("i-")) {
+						srList.add(new SimpleRecord(vmRecord.uuid,
+								vmRecord.powerState.toString(),
+								vmRecord.residentOn.toWireString(), "instance"));
+					} else if (name.contains("rt-")) {
+						srList.add(new SimpleRecord(vmRecord.uuid,
+								vmRecord.powerState.toString(),
+								vmRecord.residentOn.toWireString(), "router"));
+					} else if (name.contains("lb-")) {
+						srList.add(new SimpleRecord(vmRecord.uuid,
+								vmRecord.powerState.toString(),
+								vmRecord.residentOn.toWireString(),
+								"loadbalance"));
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -360,36 +393,42 @@ public class PoolManager {
 		}
 		if (srList != null) {
 			Session session = null;
-			Transaction tx = null;
 			try {
 				session = this.getSessionHelper().getMainSession();
-				tx = session.beginTransaction();
+				session.beginTransaction();
 				for (SimpleRecord sr : srList) {
 					String uuid = sr.getUuid();
 					String powerStatus = sr.powerStatus;
 					String hostUuid = sr.hostUuid;
 					int power = powerStatus.equals("Running") ? 1 : 0;
-					this.getVmDAO().updatePowerAndHostNoTransaction(uuid, power,
-							hostUuid);
+					String type = sr.getType();
+					if (type.equals("instance")) {
+						this.getVmDAO().updatePowerAndHostNoTransaction(uuid,
+								power, hostUuid);
+					} else if (type.equals("router")) {
+						this.getRouterDAO().updatePowerAndHostNoTransaction(
+								uuid, power, hostUuid);
+					} else if (type.equals("loadbalance")) {
+						this.getLbDAO().updatePowerAndHostNoTransaction(uuid,
+								power, hostUuid);
+					}
 				}
-				tx.commit();
+				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
 				e.printStackTrace();
-				if (tx != null) {
-					tx.rollback();
-				}
-			} finally {
-				if (session != null && session.isOpen()) {
-					session.close();
+				if (session != null) {
+					session.getTransaction().rollback();
 				}
 			}
 		}
 		// push message
 		if (result) {
-			this.getMessagePush().pushMessage(userId, "资源池状态已保持一致");
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("资源池状态已保持一致"));
 		} else {
-			this.getMessagePush().pushMessage(userId, "资源池状态未保持一致");
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("资源池状态未保持一致"));
 		}
 	}
 }
@@ -398,11 +437,14 @@ class SimpleRecord {
 	String uuid;
 	String powerStatus;
 	String hostUuid;
+	String type;
 
-	public SimpleRecord(String uuid, String powerStatus, String hostUuid) {
+	public SimpleRecord(String uuid, String powerStatus, String hostUuid,
+			String type) {
 		this.uuid = uuid;
 		this.powerStatus = powerStatus;
 		this.hostUuid = hostUuid;
+		this.type = type;
 	}
 
 	public String getUuid() {
@@ -429,9 +471,17 @@ class SimpleRecord {
 		this.hostUuid = hostUuid;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return "SimpleRecord [uuid=" + uuid + ", powerStatus=" + powerStatus
-				+ ", hostUuid=" + hostUuid + "]";
+				+ ", hostUuid=" + hostUuid + ", type=" + type + "]";
 	}
 }

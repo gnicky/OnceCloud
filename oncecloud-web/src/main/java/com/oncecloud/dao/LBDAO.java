@@ -609,4 +609,23 @@ public class LBDAO {
 			}
 		}
 	}
+
+	/**
+	 * 更新负载均衡电源状态和所在服务器
+	 * 
+	 * @param session
+	 * @param uuid
+	 * @param power
+	 * @param hostUuid
+	 */
+	public void updatePowerAndHostNoTransaction(String uuid, int power,
+			String hostUuid) {
+		Session session = this.getSessionHelper().getMainSession();
+		String queryString = "update LB set lbPower = :power, hostUuid = :hostUuid where lbUuid = :uuid";
+		Query query = session.createQuery(queryString);
+		query.setInteger("power", power);
+		query.setString("hostUuid", hostUuid);
+		query.setString("uuid", uuid);
+		query.executeUpdate();
+	}
 }

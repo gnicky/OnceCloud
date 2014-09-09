@@ -79,4 +79,11 @@ public class PoolAction {
 		JSONArray ja = this.getPoolManager().getAllPool();
 		return ja.toString();
 	}
+	
+	@RequestMapping(value = "/KeepAccordance", method = {RequestMethod.POST })
+	@ResponseBody
+	public void keepAccordance(HttpServletRequest request, @RequestParam String poolUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getPoolManager().keepAccordance(user.getUserId(), poolUuid);
+	}
 }
