@@ -19,6 +19,11 @@ public class CommonInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
+//		if(ex.getClass() == NoSuchRequestHandlingMethodException.class){  
+//            response.sendRedirect(request.getContextPath()+"/account/404.jsp");  
+//        }else{  
+//            response.sendRedirect(request.getContextPath()+"/account/500.jsp");  
+//        }
 	}
 
 	public void postHandle(HttpServletRequest request,
