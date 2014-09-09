@@ -1,23 +1,6 @@
 $(document).ready(function () {
     getSwitchList();
-
-    $('#tagdiv').on('click', '.id', function (event) {
-        event.preventDefault();
-        var hostid = $(this).attr('hostid');
-        $.ajax({
-            type: 'get',
-            url: '/HostAction',
-            data: 'action=detail&hostid=' + hostid,
-            dataType: 'text',
-            success: function (response) {
-                window.location.href = $('#platformcontent').attr('platformBasePath') + "admin/detail/hostdetail.jsp";
-            },
-            error: function () {
-
-            }
-        });
-    });
-
+    
     $('#tagdiv').on('mouseenter', 'a', function (event) {
         event.preventDefault();
         $(this).find(".prompt_b").show();
@@ -33,7 +16,7 @@ function getSwitchList() {
     $.ajax({
         type: 'get',
         url: '/DatacenterAction/Switch',
-        data: 'uuid='+$("#platformcontent").attr("uuid"),
+        data: {uuid:$("#platformcontent").attr("uuid")},
         dataType: 'json',
         success: function (array) {
             $("#tagdiv").html("");

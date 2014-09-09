@@ -109,7 +109,7 @@ public class DatacenterAction {
 		return ja.toString();
 	}
 	
-	@RequestMapping(value = "/Swicth", method = { RequestMethod.GET })
+	@RequestMapping(value = "/Switch", method = { RequestMethod.GET })
 	@ResponseBody
 	public String swicth(HttpServletRequest request,@RequestParam String uuid) {
 		JSONArray ja = this.getDashboardManager().getSwitch(uuid);
