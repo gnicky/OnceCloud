@@ -1,4 +1,4 @@
-package com.oncecloud.daemon;
+package com.oncecloud.daemon.core;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;

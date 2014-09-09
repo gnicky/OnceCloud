@@ -7,6 +7,9 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<context:component-scan base-package="com.oncecloud.daemon" />
 	<mvc:annotation-driven />
+	<mvc:resources mapping="/images/**" location="/WEB-INF/images/" />
+	<mvc:resources mapping="/scripts/**" location="/WEB-INF/scripts/" />
+	<mvc:resources mapping="/styles/**" location="/WEB-INF/styles/" />
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/" />
