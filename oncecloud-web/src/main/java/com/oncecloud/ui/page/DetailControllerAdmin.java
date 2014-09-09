@@ -93,4 +93,24 @@ public class DetailControllerAdmin {
 		}
 	}
 	
+	
+	@RequestMapping(value = "/switch/detail")
+	@ResponseBody
+	public ModelAndView switchDetail(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "交换机管理");
+		model.put("sideActive", 0);
+		String switchid = request.getParameter("switchid");
+		if (switchid != null) {
+			request.getSession().setAttribute("switchid", switchid);
+			return new ModelAndView("admin/detail/switchdetail", model);
+		} else {
+			if (request.getSession().getAttribute("switchid") != null) {
+				return new ModelAndView("admin/detail/switchdetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
 }

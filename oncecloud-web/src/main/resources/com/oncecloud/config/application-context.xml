@@ -28,6 +28,7 @@
 						<value>/backdoor</value>  
 						<value>/captcha</value>
 						<value>/404</value>
+						<value>/alipay/NotifyUrl</value>
 					</list> 
 				</property> 
 			</bean> 

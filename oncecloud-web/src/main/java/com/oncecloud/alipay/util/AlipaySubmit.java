@@ -50,6 +50,8 @@ public class AlipaySubmit {
 		if (AlipayConfig.sign_type.equals("MD5")) {
 			mysign = MD5.sign(prestr, AlipayConfig.key, AlipayConfig.input_charset);
 		}
+		System.out.print(prestr);
+		System.out.print(AlipayConfig.key);
 		return mysign;
 	}
 

@@ -25,16 +25,20 @@ $('#tagdiv').on('click', '.id', function(event) {
     form.submit();
 });
 
-/*
- * $('#tagdiv').on('click', '.switchid', function(event) {
- * event.preventDefault(); var switchid = $(this).attr('switchid'); $.ajax({
- * type : 'get', url : '/DashboardAction', data :
- * 'action=switchdetail&switchid=' + switchid, dataType : 'text', success :
- * function(response) { window.location.href = $('#platformcontent')
- * .attr('platformBasePath') + "admin/detail/switchdetail.jsp"; }, error :
- * function() {
- *  } }); });
- */
+
+$('#tagdiv').on('click', '.switchid', function(event) {
+	event.preventDefault();
+	var switchid = $(this).attr('switchid');
+	var form = $("<form></form>");
+    form.attr("action","/switch/detail");
+    form.attr('method','post');
+    var input = $('<input type="text" name="switchid" value="' + switchid + '" />');
+    form.append(input);
+    form.css('display','none');
+    form.appendTo($('body'));
+    form.submit();
+});
+
 
 $('#tagdiv').on('mouseenter', 'li', function(event) {
 			event.preventDefault();

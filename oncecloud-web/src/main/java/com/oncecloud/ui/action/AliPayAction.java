@@ -85,9 +85,9 @@ public class AliPayAction {
 		// 商品展示地址
 		String show_url = "http://www.bncloud.com.cn"; 
 		// 防钓鱼时间戳
-		String anti_phishing_key = "";
+		//String anti_phishing_key = "";
 		// 客户端的IP地址,非局域网的外网IP地址，如：221.0.0.1
-		String exter_invoke_ip = "";
+		//String exter_invoke_ip = "";
 		User user = (User) request.getSession().getAttribute("user");
 		double totalFee = Double.parseDouble(total_fee);
 		this.getChargeDAO().createChargeRecord(out_trade_no, totalFee, 0,
@@ -107,11 +107,11 @@ public class AliPayAction {
 		sParaTemp.put("total_fee", total_fee);
 		sParaTemp.put("body", body);
 		sParaTemp.put("show_url", show_url);
-		sParaTemp.put("anti_phishing_key", anti_phishing_key);
-		sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
+		//sParaTemp.put("anti_phishing_key", anti_phishing_key);
+		//sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
 
 		// 建立请求
-		return AlipaySubmit.buildRequest(sParaTemp, "get", "确认");
+		return AlipaySubmit.buildRequest(sParaTemp, "post", "确认");
 	}
 	
 	@RequestMapping(value = "/NotifyUrl", method = { RequestMethod.POST, RequestMethod.GET})

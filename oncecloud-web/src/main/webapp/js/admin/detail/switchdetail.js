@@ -31,9 +31,9 @@ $(document).ready(function () {
 
 function getSwitchList() {
     $.ajax({
-        type: 'post',
-        url: '/DashboardAction',
-        data: 'action=getSwitch',
+        type: 'get',
+        url: '/DatacenterAction/Switch',
+        data: 'uuid='+$("#platformcontent").attr("uuid"),
         dataType: 'json',
         success: function (array) {
             $("#tagdiv").html("");
