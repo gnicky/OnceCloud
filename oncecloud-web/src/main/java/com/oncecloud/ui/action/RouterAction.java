@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.RouterManager;
+import com.oncecloud.manager.VnetManager;
 import com.oncecloud.ui.model.AdminListModel;
 import com.oncecloud.ui.model.CreateRouterModel;
 import com.oncecloud.ui.model.ListModel;
@@ -21,14 +22,24 @@ import com.oncecloud.ui.model.ListModel;
 @Controller
 public class RouterAction {
 	private RouterManager routerManager;
+	private VnetManager vnetManager;
 
 	public RouterManager getRouterManager() {
 		return routerManager;
 	}
 
+	public VnetManager getVnetManager() {
+		return vnetManager;
+	}
+
 	@Autowired
-	public void setRouterManger(RouterManager rtManager) {
-		this.routerManager = rtManager;
+	public void setVnetManager(VnetManager vnetManager) {
+		this.vnetManager = vnetManager;
+	}
+
+	@Autowired
+	public void setRouterManager(RouterManager routerManager) {
+		this.routerManager = routerManager;
 	}
 
 	@RequestMapping(value = "/AdminList", method = { RequestMethod.GET })
@@ -86,10 +97,15 @@ public class RouterAction {
 
 	@RequestMapping(value = "/Destroy", method = { RequestMethod.POST })
 	@ResponseBody
-	public void destroy(HttpServletRequest request, @RequestParam String uuid) {
+	public String destroy(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getRouterManager().deleteRouter(uuid, user.getUserId(),
-				user.getUserAllocate());
+		if (!this.getVnetManager().isRouterHasVnets(uuid, user.getUserId())) {
+			this.getRouterManager().deleteRouter(uuid, user.getUserId(),
+					user.getUserAllocate());
+			return "ok";
+		} else {
+			return "no";
+		}
 	}
 
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
@@ -141,6 +157,14 @@ public class RouterAction {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONArray ja = this.getRouterManager().getRoutersOfUser(
 				user.getUserId(), lm.getPage(), lm.getLimit(), lm.getSearch());
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/TableRTs", method = { RequestMethod.GET })
+	@ResponseBody
+	public String tableRTs(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getRouterManager().getRoutersOfUser(user.getUserId());
 		return ja.toString();
 	}
 }
