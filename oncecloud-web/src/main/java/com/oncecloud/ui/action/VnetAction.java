@@ -82,9 +82,10 @@ public class VnetAction {
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public void delete(HttpServletRequest request, @RequestParam String uuid) {
+	public String delete(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getVnetManager().deleteVnet(user.getUserId(), uuid);
+		String result = this.getVnetManager().deleteVnet(user.getUserId(), uuid);
+		return result;
 	}
 
 	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
@@ -102,7 +103,7 @@ public class VnetAction {
 	public String checkNet(HttpServletRequest request, @RequestParam String routerid,
 			@RequestParam int net) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVnetManager().vnetChecknet(routerid, user.getUserId(), net);
+		JSONObject jo = this.getVnetManager().checkNet(user.getUserId(), routerid, net);
 		return jo.toString();
 	}
 
