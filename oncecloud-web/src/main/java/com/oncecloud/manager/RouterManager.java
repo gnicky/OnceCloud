@@ -207,7 +207,45 @@ public class RouterManager {
 		this.constant = constant;
 	}
 
-	public JSONObject createRouter(String uuid, int userId, String name,
+	public void createRouter(String uuid, int userId, String name,
+			int capacity, String fwuuid, String poolUuid) {
+		Date startTime = new Date();
+		JSONObject result = this.doCreateRouter(uuid, userId, name, capacity,
+				fwuuid, poolUuid);
+		// Begin to push message and write log
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.路由器.toString(),
+				"rt-" + uuid.substring(0, 8)));
+		infoArray.put(Utilities.createLogInfo("峰值带宽", capacity + "&nbsp;Mbps"));
+		if (result.getBoolean("isSuccess") == true) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().editRowIP(userId, uuid, "基础网络",
+					result.getString("ip"));
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			infoArray.put(Utilities.createLogInfo("原因",
+					result.getString("error")));
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private JSONObject doCreateRouter(String uuid, int userId, String name,
 			int capacity, String fwuuid, String poolUuid) {
 		Connection c = null;
 		String allocateHost = null;
@@ -258,8 +296,8 @@ public class RouterManager {
 				logger.info("Router [" + backendName + "] Pre Create Time ["
 						+ elapse + "]");
 				if (preCreate == true) {
-					Record rtrecord = this.getVmManager().createVMOnHost(c, uuid,
-							tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
+					Record rtrecord = this.getVmManager().createVMOnHost(c,
+							uuid, tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
 							allocateHost, imagePwd, backendName);
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
@@ -313,7 +351,37 @@ public class RouterManager {
 		return jo;
 	}
 
-	public boolean deleteRouter(int userId, String uuid, String poolUuid) {
+	public void deleteRouter(String uuid, int userId, String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doDeleteRouter(userId, uuid, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.路由器.toString(),
+				"rt-" + uuid.substring(0, 8)));
+		if (result == true) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.销毁.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.销毁.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doDeleteRouter(int userId, String uuid, String poolUuid) {
 		boolean result = false;
 		Connection c = null;
 		try {
@@ -349,7 +417,38 @@ public class RouterManager {
 		return result;
 	}
 
-	public boolean startRouter(String uuid, String poolUuid) {
+	public void startRouter(String uuid, int userId, String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doStartRouter(uuid, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.路由器.toString(),
+				"rt-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.启动.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.启动.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doStartRouter(String uuid, String poolUuid) {
 		boolean result = false;
 		String hostUuid = null;
 		String powerState = null;
@@ -395,7 +494,39 @@ public class RouterManager {
 		return result;
 	}
 
-	public boolean shutdownRouter(String uuid, String force, String poolUuid) {
+	public void shutdownRouter(String uuid, String force, int userId,
+			String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doShutdownRouter(uuid, force, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.路由器.toString(),
+				"rt-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.关闭.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.关闭.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doShutdownRouter(String uuid, String force, String poolUuid) {
 		boolean result = false;
 		String powerState = null;
 		String hostUuid = null;
@@ -607,7 +738,44 @@ public class RouterManager {
 		return ja;
 	}
 
-	public JSONArray getRoutersOfUser(int userId, int page, int limit, String search) {
+	public JSONArray getAdminRouterList(int page, int limit, String host,
+			int importance, String type) {
+		JSONArray ja = new JSONArray();
+		int totalNum = this.getRouterDAO()
+				.countRoutersOfAdmin(host, importance);
+		List<Router> rtList = this.getRouterDAO().getOnePageRoutersOfAdmin(
+				page, limit, host, importance);
+		ja.put(totalNum);
+		if (rtList != null) {
+			for (int i = 0; i < rtList.size(); i++) {
+				JSONObject jo = new JSONObject();
+				Router router = rtList.get(i);
+				jo.put("vmid", router.getRouterUuid());
+				jo.put("vmname", Utilities.encodeText(router.getRouterName()));
+				jo.put("state", router.getRouterPower());
+				jo.put("cpu", "1");
+				jo.put("memory", "1024");
+				String ip = router.getRouterIP();
+				if (ip == null) {
+					jo.put("ip", "null");
+				} else {
+					jo.put("ip", ip);
+				}
+				String timeUsed = Utilities.encodeText(Utilities
+						.dateToUsed(router.getCreateDate()));
+				jo.put("createdate", timeUsed);
+				jo.put("importance", router.getRouterImportance());
+				jo.put("userName",
+						Utilities.encodeText(this.getUserDAO()
+								.getUser(router.getRouterUID()).getUserName()));
+				ja.put(jo);
+			}
+		}
+		return ja;
+	}
+
+	public JSONArray getRoutersOfUser(int userId, int page, int limit,
+			String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getRouterDAO().countRouters(userId, search);
 		ja.put(totalNum);
@@ -622,166 +790,6 @@ public class RouterManager {
 				ja.put(jo);
 			}
 		}
-		return ja;
-	}
-
-	public void routerCreate(String name, String uuid, String fwuuid,
-			int capacity, int userId, String poolUuid) {
-		Date startTime = new Date();
-		JSONObject result = this.createRouter(uuid, userId, name, capacity,
-				fwuuid, poolUuid);
-		// Begin to push message and write log
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.路由器.toString(),
-				"rt-" + uuid.substring(0, 8)));
-		infoArray.put(Utilities.createLogInfo("峰值带宽", capacity + "&nbsp;Mbps"));
-		if (result.getBoolean("isSuccess") == true) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
-			this.getMessagePush().editRowIP(userId, uuid, "基础网络",
-					result.getString("ip"));
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			infoArray.put(Utilities.createLogInfo("原因",
-					result.getString("error")));
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().deleteRow(userId, uuid);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
-
-	public void routerAdminStartUp(String uuid, int userId) {
-		Router router = this.getRouterDAO().getRouter(uuid);
-		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
-				.getPoolUuid();
-		this.routerStartUp(uuid, userId, poolUuid);
-	}
-
-	public void routerStartUp(String uuid, int userId, String poolUuid) {
-		Date startTime = new Date();
-		boolean result = this.startRouter(uuid, poolUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.路由器.toString(),
-				"rt-" + uuid.substring(0, 8)));
-		if (result == true) {
-			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.启动.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.启动.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
-
-	public void routerAdminShutDown(String uuid, String force, int userId) {
-		Router router = this.getRouterDAO().getRouter(uuid);
-		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
-				.getPoolUuid();
-		this.routerShutDown(uuid, force, userId, poolUuid);
-	}
-
-	public void routerShutDown(String uuid, String force, int userId,
-			String poolUuid) {
-		Date startTime = new Date();
-		boolean result = this.shutdownRouter(uuid, force, poolUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.路由器.toString(),
-				"rt-" + uuid.substring(0, 8)));
-		if (result == true) {
-			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.关闭.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.关闭.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
-
-	public void routerDestory(String uuid, int userId, String poolUuid) {
-		Date startTime = new Date();
-		boolean result = this.deleteRouter(userId, uuid, poolUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.路由器.toString(),
-				"rt-" + uuid.substring(0, 8)));
-		if (result == true) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.销毁.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().deleteRow(userId, uuid);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.路由器.ordinal(),
-					LogConstant.logAction.销毁.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
-
-	public JSONArray routerQuota(int userId) {
-		JSONArray ja = new JSONArray();
-		int free = this.getQuotaDAO().getQuotaTotal(userId).getQuotaRoute()
-				- this.getQuotaDAO().getQuotaUsed(userId).getQuotaRoute();
-		JSONObject jo = new JSONObject();
-		jo.put("free", free);
-		if (free < 1) {
-			jo.put("result", false);
-		} else {
-			jo.put("result", true);
-		}
-		ja.put(jo);
 		return ja;
 	}
 
@@ -831,42 +839,35 @@ public class RouterManager {
 		return jo;
 	}
 
-	public JSONArray getAdminRouterList(int page, int limit, String host,
-			int importance, String type) {
+	public void routerAdminStartUp(String uuid, int userId) {
+		Router router = this.getRouterDAO().getRouter(uuid);
+		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
+				.getPoolUuid();
+		this.startRouter(uuid, userId, poolUuid);
+	}
+
+	public void routerAdminShutDown(String uuid, String force, int userId) {
+		Router router = this.getRouterDAO().getRouter(uuid);
+		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
+				.getPoolUuid();
+		this.shutdownRouter(uuid, force, userId, poolUuid);
+	}
+
+	public JSONArray routerQuota(int userId) {
 		JSONArray ja = new JSONArray();
-		int totalNum = this.getRouterDAO()
-				.countRoutersOfAdmin(host, importance);
-		List<Router> rtList = this.getRouterDAO().getOnePageRoutersOfAdmin(
-				page, limit, host, importance);
-		ja.put(totalNum);
-		if (rtList != null) {
-			for (int i = 0; i < rtList.size(); i++) {
-				JSONObject jo = new JSONObject();
-				Router router = rtList.get(i);
-				jo.put("vmid", router.getRouterUuid());
-				jo.put("vmname", Utilities.encodeText(router.getRouterName()));
-				jo.put("state", router.getRouterPower());
-				jo.put("cpu", "1");
-				jo.put("memory", "1024");
-				String ip = router.getRouterIP();
-				if (ip == null) {
-					jo.put("ip", "null");
-				} else {
-					jo.put("ip", ip);
-				}
-				String timeUsed = Utilities.encodeText(Utilities
-						.dateToUsed(router.getCreateDate()));
-				jo.put("createdate", timeUsed);
-				jo.put("importance", router.getRouterImportance());
-				jo.put("userName",
-						Utilities.encodeText(this.getUserDAO()
-								.getUser(router.getRouterUID()).getUserName()));
-				ja.put(jo);
-			}
+		int free = this.getQuotaDAO().getQuotaTotal(userId).getQuotaRoute()
+				- this.getQuotaDAO().getQuotaUsed(userId).getQuotaRoute();
+		JSONObject jo = new JSONObject();
+		jo.put("free", free);
+		if (free < 1) {
+			jo.put("result", false);
+		} else {
+			jo.put("result", true);
 		}
+		ja.put(jo);
 		return ja;
 	}
-	
+
 	public void updateImportance(String uuid, int importance) {
 		this.getRouterDAO().updateImportance(uuid, importance);
 	}

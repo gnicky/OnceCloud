@@ -69,7 +69,7 @@ public class VMManager {
 	private FirewallDAO firewallDAO;
 	private QuotaDAO quotaDAO;
 	private UserDAO userDAO;
-	
+
 	private MessagePush messagePush;
 
 	private EIPManager eipManager;
@@ -420,8 +420,7 @@ public class VMManager {
 
 	private void emptyAttachedVolume(Connection c, String uuid) {
 		try {
-			List<String> volumeList = this.getVolumeDAO().getVolumesOfVM(
-					uuid);
+			List<String> volumeList = this.getVolumeDAO().getVolumesOfVM(uuid);
 			for (String volume : volumeList) {
 				try {
 					VM.deleteDataVBD(c, uuid, volume);
@@ -435,9 +434,9 @@ public class VMManager {
 		}
 	}
 
-	public void doRestartVM(int userId, String uuid, String poolUuid) {
+	public void restartVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
-		boolean result = this.restartVM(uuid, poolUuid);
+		boolean result = this.doRestartVM(uuid, poolUuid);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
@@ -470,7 +469,7 @@ public class VMManager {
 		}
 	}
 
-	public boolean restartVM(String uuid, String poolUuid) {
+	private boolean doRestartVM(String uuid, String poolUuid) {
 		boolean result = false;
 		String hostUuid = null;
 		String powerState = null;
@@ -535,12 +534,19 @@ public class VMManager {
 		OCVM ocvm = this.getVmDAO().getVM(uuid);
 		String hostUuid = ocvm.getHostUuid();
 		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
-		this.doStartVM(userId, uuid, poolUuid);
+		this.startVM(userId, uuid, poolUuid);
 	}
 
-	public void doStartVM(int userId, String uuid, String poolUuid) {
+	public void doAdminShutDown(int userId, String uuid, String force) {
+		OCVM ocvm = this.getVmDAO().getVM(uuid);
+		String hostUuid = ocvm.getHostUuid();
+		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		this.shutdownVM(userId, uuid, force, poolUuid);
+	}
+
+	public void startVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
-		boolean result = this.startVM(uuid, poolUuid);
+		boolean result = this.doStartVM(uuid, poolUuid);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
@@ -571,7 +577,7 @@ public class VMManager {
 		}
 	}
 
-	public boolean startVM(String uuid, String poolUuid) {
+	private boolean doStartVM(String uuid, String poolUuid) {
 		boolean result = false;
 		String hostUuid = null;
 		String powerState = null;
@@ -629,17 +635,10 @@ public class VMManager {
 		return result;
 	}
 
-	public void doAdminShutDown(int userId, String uuid, String force) {
-		OCVM ocvm = this.getVmDAO().getVM(uuid);
-		String hostUuid = ocvm.getHostUuid();
-		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
-		this.doShutdownVM(userId, uuid, force, poolUuid);
-	}
-
-	public void doShutdownVM(int userId, String uuid, String force,
+	public void shutdownVM(int userId, String uuid, String force,
 			String poolUuid) {
 		Date startTime = new Date();
-		boolean result = this.shutdownVM(uuid, force, poolUuid);
+		boolean result = this.doShutdownVM(uuid, force, poolUuid);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
@@ -670,7 +669,7 @@ public class VMManager {
 		}
 	}
 
-	public boolean shutdownVM(String uuid, String force, String poolUuid) {
+	private boolean doShutdownVM(String uuid, String force, String poolUuid) {
 		boolean result = false;
 		String powerState = null;
 		String hostUuid = null;
@@ -712,7 +711,8 @@ public class VMManager {
 							VMManager.POWER_HALTED);
 				}
 			} else {
-				this.getVmDAO().updatePowerStatus(uuid, VMManager.POWER_RUNNING);
+				this.getVmDAO()
+						.updatePowerStatus(uuid, VMManager.POWER_RUNNING);
 			}
 		} finally {
 			if (result == true) {
@@ -722,12 +722,12 @@ public class VMManager {
 		return result;
 	}
 
-	public void doCreateVM(String vmUuid, String tplUuid, int userId,
+	public void createVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpuCore, double memorySize, String pwd,
 			String poolUuid) {
 		Date startTime = new Date();
 		int memoryCapacity = (int) (memorySize * 1024);
-		JSONObject jo = createVM(vmUuid, tplUuid, userId, vmName, cpuCore,
+		JSONObject jo = doCreateVM(vmUuid, tplUuid, userId, vmName, cpuCore,
 				memoryCapacity, pwd, poolUuid);
 		// write log and push message
 		Date endTime = new Date();
@@ -767,7 +767,7 @@ public class VMManager {
 		}
 	}
 
-	public JSONObject createVM(String vmUuid, String tplUuid, int userId,
+	private JSONObject doCreateVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpu, int memory, String pwd, String poolUuid) {
 		JSONObject jo = new JSONObject();
 		String ip = null;
@@ -907,8 +907,8 @@ public class VMManager {
 	public JSONArray getVMList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getVmDAO().countVMs(userId, search);
-		List<OCVM> VMList = this.getVmDAO().getOnePageVMs(userId, page,
-				limit, search);
+		List<OCVM> VMList = this.getVmDAO().getOnePageVMs(userId, page, limit,
+				search);
 		ja.put(totalNum);
 		if (VMList != null) {
 			for (int i = 0; i < VMList.size(); i++) {
@@ -987,7 +987,9 @@ public class VMManager {
 						.dateToUsed(ocvm.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", ocvm.getVmImportance());
-				jo.put("userName", Utilities.encodeText(this.getUserDAO().getUser(ocvm.getVmUID()).getUserName()));
+				jo.put("userName",
+						Utilities.encodeText(this.getUserDAO()
+								.getUser(ocvm.getVmUID()).getUserName()));
 				ja.put(jo);
 			}
 		}
@@ -998,8 +1000,8 @@ public class VMManager {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getVmDAO().countVMs(userId, search);
 		ja.put(totalNum);
-		List<OCVM> vmList = this.getVmDAO().getOnePageVMs(userId, page,
-				limit, search);
+		List<OCVM> vmList = this.getVmDAO().getOnePageVMs(userId, page, limit,
+				search);
 		if (vmList != null) {
 			for (int i = 0; i < vmList.size(); i++) {
 				JSONObject jo = new JSONObject();
@@ -1045,8 +1047,7 @@ public class VMManager {
 			jo.put("createDate", Utilities.formatTime(ocvm.getCreateDate()));
 			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(ocvm
 					.getCreateDate()));
-			List<String> volList = this.getVolumeDAO()
-					.getVolumesOfVM(vmUuid);
+			List<String> volList = this.getVolumeDAO().getVolumesOfVM(vmUuid);
 			if (volList == null || volList.size() == 0) {
 				jo.put("volList", "&nbsp;");
 			} else {
@@ -1145,7 +1146,7 @@ public class VMManager {
 		}
 		return result;
 	}
-	
+
 	public void updateImportance(String uuid, int importance) {
 		this.getVmDAO().updateVMImportance(uuid, importance);
 	}

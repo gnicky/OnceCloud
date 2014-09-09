@@ -87,7 +87,7 @@ public class LBAction {
 	@ResponseBody
 	public void shutDown(HttpServletRequest request,@RequestParam String uuid,@RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-     	this.getLbManager().lbShutdown(uuid, force, user.getUserId(),user.getUserAllocate());
+     	this.getLbManager().shutdownLB(uuid, force, user.getUserId(),user.getUserAllocate());
 	}
 	
 	
@@ -95,7 +95,7 @@ public class LBAction {
 	@ResponseBody
 	public void startUp(HttpServletRequest request,@RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getLbManager().lbShutup(uuid, user.getUserId(),user.getUserAllocate());
+		this.getLbManager().startLB(uuid, user.getUserId(),user.getUserAllocate());
 	}
 	
 	@RequestMapping(value = "/Destroy", method = { RequestMethod.POST })
@@ -117,7 +117,7 @@ public class LBAction {
 	@ResponseBody
 	public void create(HttpServletRequest request,@RequestParam String uuid,@RequestParam String name,@RequestParam int capacity) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getLbManager().lbCreate(name, uuid, capacity, user.getUserId(),user.getUserAllocate());
+		this.getLbManager().createLB(name, uuid, capacity, user.getUserId(),user.getUserAllocate());
 	}
 	
 	@RequestMapping(value = "/ForeList", method = { RequestMethod.POST })
