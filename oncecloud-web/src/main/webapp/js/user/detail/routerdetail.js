@@ -8,12 +8,12 @@ $('#RouterModalContainer').on('hide', function (event) {
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
-    var url = $("#platformcontent").attr('platformBasePath') + 'common/modify';
+    var url = basePath + 'common/modify';
     var rtName = $('#rtname').text();
     var rtDesc = $('#rtdesc').text();
-    var rtUuid = $('#platformcontent').attr("rtUuid");
-    $('#InstanceModalContainer').load(url, {"modifyType": "rt", "modifyUuid": rtUuid, "modifyName": rtName, "modifyDesc": rtDesc}, function () {
-        $('#InstanceModalContainer').modal({
+    var rtUuid = $('#platformcontent').attr("routerUuid");
+    $('#RouterModalContainer').load(url, {"modifyType": "rt", "modifyUuid": rtUuid, "modifyName": rtName, "modifyDesc": rtDesc}, function () {
+        $('#RouterModalContainer').modal({
             backdrop: false,
             show: true
         });
@@ -194,7 +194,6 @@ $('#vxnets-t').on('click', '.id', function (event) {
 function getVxnets() {
     $('#vxnets-t').html("");
     var routerUuid = $('#platformcontent').attr("routerUuid");
-    var basePath = $('#platformcontent').attr("platformBasePath");
     $.ajax({
         type: 'get',
         url: '/RouterAction/Vxnets',
@@ -205,7 +204,7 @@ function getVxnets() {
                 var _p = $('<p></p>');
                 _p.addClass("none");
                 _p.text("当前没有私有网络连接到此路由器，请点击");
-                var _a = $('<a href="' + basePath + 'user/vnet.jsp"></a>');
+                var _a = $('<a href="' + basePath + 'vnet"></a>');
                 _a.text("这里");
                 _p.append(_a);
                 _p.append("创建。");

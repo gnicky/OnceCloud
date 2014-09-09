@@ -398,8 +398,7 @@ public class RouterDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			Criteria criteria = session
-					.createCriteria(Router.class)
+			Criteria criteria = session.createCriteria(Router.class)
 					.add(Restrictions.eq("routerUID", uuid))
 					.add(Restrictions.ne("routerStatus", 0))
 					.add(Restrictions.isNull("alarmUuid"))
@@ -577,7 +576,6 @@ public class RouterDAO {
 		}
 		return result;
 	}
-
 
 	/**
 	 * 更新路由器电源状态
@@ -767,5 +765,24 @@ public class RouterDAO {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * 更新路由器电源状态和所在服务器
+	 * 
+	 * @param session
+	 * @param uuid
+	 * @param power
+	 * @param hostUuid
+	 */
+	public void updatePowerAndHostNoTransaction(String uuid, int power,
+			String hostUuid) {
+		Session session = this.getSessionHelper().getMainSession();
+		String queryString = "update Router set routerPower = :power, hostUuid = :hostUuid where routerUuid = :uuid";
+		Query query = session.createQuery(queryString);
+		query.setInteger("power", power);
+		query.setString("hostUuid", hostUuid);
+		query.setString("uuid", uuid);
+		query.executeUpdate();
 	}
 }

@@ -113,7 +113,7 @@ public class VMAction {
 	public void deleteVM(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().doDelete(user.getUserId(), uuid, poolUuid);
+		this.getVmManager().deleteVM(user.getUserId(), uuid, poolUuid);
 	}
 
 	@RequestMapping(value = "/ShutdownVM", method = { RequestMethod.GET })

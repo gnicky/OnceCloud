@@ -346,9 +346,9 @@ public class VMManager {
 		}
 	}
 
-	public void doDelete(int userId, String uuid, String poolUuid) {
+	public void deleteVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
-		boolean result = this.deleteVM(userId, uuid, poolUuid);
+		boolean result = this.doDeleteVM(userId, uuid, poolUuid);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
@@ -376,7 +376,7 @@ public class VMManager {
 		}
 	}
 
-	public boolean deleteVM(int userId, String uuid, String poolUuid) {
+	private boolean doDeleteVM(int userId, String uuid, String poolUuid) {
 		boolean result = false;
 		Connection c = null;
 		try {

@@ -1,5 +1,7 @@
 package com.oncecloud.alipay.config;
 
+import org.springframework.stereotype.Component;
+
 /* *
  *类名：AlipayConfig
  *功能：基础配置类
@@ -21,6 +23,7 @@ package com.oncecloud.alipay.config;
  *2、更换浏览器或电脑，重新登录查询。
  */
 
+@Component
 public class AlipayConfig {
 	
 	//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -37,11 +40,11 @@ public class AlipayConfig {
     
 	//必填，不能修改
 	//服务器异步通知页面路径
-    public static String notify_url = "http://www.bncloud.com.cn:8080/alipay/notify_url.jsp";
+    public static String notify_url = "http://www.bncloud.com.cn:8080/alipay/NotifyUrl";
 	//需http://格式的完整路径，不能加?id=123这类自定义参数
 
 	//页面跳转同步通知页面路径
-    public static String return_url = "http://www.bncloud.com.cn:8080/alipay/return_url.jsp";
+    public static String return_url = "http://www.bncloud.com.cn:8080/alipay/NotifyUrl";
 	//需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
 
 	//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

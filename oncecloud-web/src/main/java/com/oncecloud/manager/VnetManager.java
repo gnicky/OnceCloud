@@ -480,4 +480,9 @@ public class VnetManager {
 		}
 		return jo;
 	}
+	
+	public boolean isRouterHasVnets(String routerUuid, int userId) {
+		int count = this.getVnetDAO().getVnetsOfRouter(routerUuid, userId);
+		return count > 0;
+	}
 }

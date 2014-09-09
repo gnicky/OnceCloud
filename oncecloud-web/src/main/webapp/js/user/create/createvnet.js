@@ -8,8 +8,7 @@ $(document).ready(function () {
             var desc = $('#vn_desc').val();
             $.ajax({
                 type: 'get',
-                url: '/VnetAction',
-                data: 'action=quota',
+                url: '/VnetAction/Quota',
                 dataType: 'json',
                 success: function (array) {
                     var obj = array[0];
@@ -56,8 +55,8 @@ $(document).ready(function () {
     function createVnet(uuid, name, desc) {
         $.ajax({
             type: 'post',
-            url: '/VnetAction',
-            data: 'action=create&uuid=' + uuid + '&name=' + name + '&desc=' + desc,
+            url: '/VnetAction/Create',
+            data: {uuid:uuid, name:name, desc:desc},
             dataType: 'json',
             success: function (array) {
             },

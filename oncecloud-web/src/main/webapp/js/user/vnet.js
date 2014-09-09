@@ -159,7 +159,6 @@ function showbox(type) {
                         var uuid = $(this).parent().parent().attr("rowid");
                         if (type == 0) {
                             unlink(uuid);
-
                         } else if (type == 1) {
                             deleteVnet(uuid);
                         }

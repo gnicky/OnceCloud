@@ -7,7 +7,7 @@ function reloadList(page) {
     if (page == 1) {
         options = {
             currentPage: 1
-        }
+        };
         $('#pageDivider').bootstrapPaginator(options);
     }
 }
@@ -24,8 +24,6 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
     event.preventDefault();
     var boxes = document.getElementsByName("poolrow");
     var count = 0;
-    var bindcount = 0;
-    var unbindcount = 0;
     for (var i = 0; i < boxes.length; i++) {
         if (boxes[i].checked == true) {
             count++;
@@ -48,7 +46,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
 
 $('#create').on('click', function (event) {
     event.preventDefault();
-    $('#PoolModalContainer').attr('type', 'new')
+    $('#PoolModalContainer').attr('type', 'new');
     $('#PoolModalContainer').load($(this).attr('url'), '', function () {
         $('#PoolModalContainer').modal({
             backdrop: false,
@@ -59,7 +57,7 @@ $('#create').on('click', function (event) {
 
 $('#update').on('click', function (event) {
     event.preventDefault();
-    $('#PoolModalContainer').attr('type', 'edit')
+    $('#PoolModalContainer').attr('type', 'edit');
     $('#PoolModalContainer').load($(this).attr('url'), '', function () {
         $('#PoolModalContainer').modal({
             backdrop: false,
@@ -83,7 +81,7 @@ function getPoolList(page, limit, search) {
                 }
                 options = {
                     totalPages: totalp
-                }
+                };
                 $('#pageDivider').bootstrapPaginator(options);
                 pageDisplayUpdate(page, totalp);
                 var btable = document.getElementById("tablebody");
@@ -93,7 +91,6 @@ function getPoolList(page, limit, search) {
                     var poolname = decodeURI(obj.poolname);
                     var pooldesc = decodeURI(obj.pooldesc);
                     var poolid = obj.poolid;
-                    var poolmaster = obj.poolmaster;
                     var mastername = decodeURI(obj.mastername);
                     var createdate = obj.createdate;
                     var dcuuid = obj.dcuuid;
@@ -276,7 +273,7 @@ $('#consistency').on('click', function (event) {
         }
     }
     bootbox.dialog({
-        message: '<div class="alert alert-info" style="margin:10px"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;统一资源池的一致性&nbsp;'
+        message: '<div class="alert alert-info" style="margin:10px"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;校验资源池的一致性&nbsp;'
             + infoList + '?</div>',
         title: "提示",
         buttons: {
@@ -306,11 +303,10 @@ $('#consistency').on('click', function (event) {
 function consistencyPool(poolUuid) {
     $.ajax({
         type: 'post',
-        url: '/PoolAction/Consistency',
-        data: {poolUuid:poolUuid},
+        url: '/PoolAction/KeepAccordance',
+        data: {poolUuid: poolUuid},
         dataType: 'json',
         success: function (array) {
-
         }
     });
 }
