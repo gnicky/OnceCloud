@@ -74,7 +74,7 @@ public class HttpProtocolHandler {
 	/**
 	 * 私有的构造方法
 	 */
-	private HttpProtocolHandler() {
+	public HttpProtocolHandler() {
 		// 创建一个线程安全的HTTP连接池
 		connectionManager = new MultiThreadedHttpConnectionManager();
 		connectionManager.getParams().setDefaultMaxConnectionsPerHost(defaultMaxConnPerHost);

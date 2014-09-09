@@ -60,6 +60,11 @@ public class HttpRequest {
 	 */
 	private HttpResultType resultType = HttpResultType.BYTES;
 
+	public HttpRequest()
+	{
+		
+	}
+	
 	public HttpRequest(HttpResultType resultType) {
 		super();
 		this.resultType = resultType;
