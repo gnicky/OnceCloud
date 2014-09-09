@@ -74,7 +74,7 @@
 					<th>用户</th>
 					<th width="8%">CPU</th>
 					<th width="8%">内存</th>
-					<th width="15%">网络</th>
+					<th width="18%">网络</th>
 					<th>运行时间</th>
 				</tr>
 			</thead>
