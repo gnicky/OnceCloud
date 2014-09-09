@@ -449,9 +449,9 @@ public class FirewallManager {
 		return jo;
 	}
 
-	public JSONObject createRule(String ruleId,
-			String ruleName, int rulePriority, String ruleProtocol,
-			String ruleIp, String ruleFirewall, int ruleSport, int ruleEport) {
+	public JSONObject createRule(String ruleId, String ruleName,
+			int rulePriority, String ruleProtocol, String ruleIp,
+			String ruleFirewall, int ruleSport, int ruleEport) {
 		JSONObject jo = new JSONObject();
 		this.getFirewallDAO().insertRule(ruleId, ruleName, rulePriority,
 				ruleProtocol, ruleSport, ruleEport, 1, ruleIp, ruleFirewall);
@@ -520,6 +520,7 @@ public class FirewallManager {
 
 	public JSONObject deleteFirewall(int userId, String firewallId) {
 		JSONObject jo = new JSONObject();
+		Date startTime = new Date();
 		List<Object> rsList = this.getFirewallDAO().getRSListOfFirewall(
 				firewallId);
 		if (rsList != null && rsList.size() > 0) {
@@ -528,6 +529,30 @@ public class FirewallManager {
 			this.getFirewallDAO().deleteAllRuleOfFirewall(firewallId);
 			this.getFirewallDAO().deleteFirewall(userId, firewallId);
 			jo.put("result", true);
+		}
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.防火墙.toString(),
+				"fw-" + firewallId.substring(0, 8)));
+		if (jo.getBoolean("result") == true) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.防火墙.ordinal(),
+					LogConstant.logAction.删除.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.防火墙.ordinal(),
+					LogConstant.logAction.删除.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
 		}
 		return jo;
 	}
