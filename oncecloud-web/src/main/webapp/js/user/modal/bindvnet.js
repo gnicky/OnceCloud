@@ -60,8 +60,8 @@ $(document).ready(function () {
         $('#instancelist').html("");
         $.ajax({
             type: 'get',
-            url: '/VnetAction',
-            data: 'action=getablevms&page=' + page + '&limit=' + limit + '&search=' + search,
+            url: '/VMAction/VMList',
+            data: {page:page, limit:limit, search:search},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -118,8 +118,8 @@ $(document).ready(function () {
     function bindvn(vnId, vmuuidStr) {
         $.ajax({
             type: 'get',
-            url: '/VnetAction',
-            data: 'action=addvm&vnId=' + vnId + '&vmuuidStr=' + vmuuidStr,
+            url: '/VnetAction/AddVM',
+            data: {vnId:vnId, vmuuidStr:vmuuidStr},
             dataType: 'text',
             success: function (response) {
             },

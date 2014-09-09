@@ -41,6 +41,9 @@ $('#modifyinfomation').on('click', function (event) {
                     } else if ('al' == modifytype) {
                         $('#alName').text(modifyname);
                         $('#alDesc').html('<div>' + modifydesc + '</div>');
+                    } else if ('vnet' == modifytype) {
+                        $('#rtname').text(modifyname);
+                        $('#rtdesc').html('<div>' + modifydesc + '</div>');
                     }
                 }
             }
@@ -62,6 +65,8 @@ $('#modifyinfomation').on('click', function (event) {
             $("#DataBaseModalContainer").modal('hide');
         } else if ('al' == modifytype) {
             $('#RuleModalContainer').modal('hide');
+        } else if ('vnet' == modifytype) {
+            $('#VnetModalContainer').modal('hide');
         }
     }
 });

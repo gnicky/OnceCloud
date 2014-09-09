@@ -93,13 +93,6 @@ public class VnetAction extends HttpServlet {
 				JSONObject jo = this.getVnetManager().vnetLinkrouter(userId,
 						vnetuuid, routerid, net, gate, start, end, dhcpState);
 				out.print(jo);
-			} else if (action.equals("addvm")) {
-				String poolUuid = user.getUserAllocate();
-				String vnId = request.getParameter("vnId");
-				String vmuuidStr = request.getParameter("vmuuidStr");
-				JSONObject jo = this.getVnetManager().vnetAddvm(vnId,
-						vmuuidStr, userId, poolUuid);
-				out.print(jo.toString());
 			} else if (action.equals("getVms")) {
 				String vnUuid = request.getParameter("vnUuid");
 				JSONArray ja = this.getVnetManager().getVMs(vnUuid);

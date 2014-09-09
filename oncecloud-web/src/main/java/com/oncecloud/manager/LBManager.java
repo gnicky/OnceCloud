@@ -203,7 +203,42 @@ public class LBManager {
 		this.messagePush = messagePush;
 	}
 
-	public JSONObject createLB(String uuid, int userId, String name,
+	public void createLB(String name, String uuid, int capacity, int userId,
+			String poolUuid) {
+		Date startTime = new Date();
+		JSONObject result = this.doCreateLB(uuid, userId, name, capacity,
+				poolUuid);
+		// push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.负载均衡.toString(), name));
+		infoArray
+				.put(Utilities.createLogInfo("最大连接数", String.valueOf(capacity)));
+		if (result.has("isSuccess") && result.getBoolean("isSuccess") == true) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.负载均衡.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			infoArray.put(Utilities.createLogInfo("原因",result.has("error")?result.getString("error"):""));
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.负载均衡.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private JSONObject doCreateLB(String uuid, int userId, String name,
 			int capacity, String poolUuid) {
 		Connection c = null;
 		String allocateHost = null;
@@ -308,51 +343,38 @@ public class LBManager {
 		return jo;
 	}
 
-	public JSONArray getFEListByLB(String lbUuid) {
-		return this.getForeendDAO().getFEListByLB(lbUuid);
-	}
-	
-	public boolean checkFore(String lbUuid,int port) {
-		return this.getForeendDAO().checkRepeat(lbUuid,port);
-	}
-	
-	public boolean deleteLB(int userId, String uuid) {
-		boolean result = false;
-		Connection c = null;
-		try {
-			c = this.getConstant().getConnection(userId);
-			boolean preDeleteLB = this.getLbDAO().setLBPowerStatus(uuid,
-					LBManager.POWER_DESTROY);
-			if (preDeleteLB == true) {
-				VM thisLB = VM.getByUuid(c, uuid);
-				thisLB.hardShutdown(c);
-				thisLB.destroy(c, true);
-				LB lb = this.getLbDAO().getLB(uuid);
-				String ip = lb.getLbIP();
-				String mac = lb.getLbMac();
-				if (ip != null) {
-					this.getDhcpDAO().returnDHCP(mac);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				String publicip = this.getEipDAO().getEipIp(uuid);
-				if (publicip != null) {
-					this.getEipManager().unbindElasticIp(userId, uuid,
-							publicip, "lb");
-				}
-				this.getLbDAO().removeLB(userId, uuid);
-				result = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	public void startLB(String uuid, int userId, String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doStartLB(uuid, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.负载均衡.toString(),
+				"lb-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.负载均衡.ordinal(),
+					LogConstant.logAction.启动.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.负载均衡.ordinal(),
+					LogConstant.logAction.启动.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
 		}
-		return result;
 	}
 
-	public boolean startLB(String uuid, String poolUuid) {
+	private boolean doStartLB(String uuid, String poolUuid) {
 		boolean result = false;
 		String hostUuid = null;
 		String powerState = null;
@@ -398,7 +420,39 @@ public class LBManager {
 		return result;
 	}
 
-	public boolean shutdownLB(String uuid, String force, String poolUuid) {
+	public void shutdownLB(String uuid, String force, int userId,
+			String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doShutdownLB(uuid, force, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.负载均衡.toString(),
+				"lb-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.负载均衡.ordinal(),
+					LogConstant.logAction.关闭.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.负载均衡.ordinal(),
+					LogConstant.logAction.关闭.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doShutdownLB(String uuid, String force, String poolUuid) {
 		boolean result = false;
 		String powerState = null;
 		String hostUuid = null;
@@ -442,6 +496,50 @@ public class LBManager {
 			} else {
 				this.getLbDAO().setLBPowerStatus(uuid,
 						RouterManager.POWER_RUNNING);
+			}
+		}
+		return result;
+	}
+
+	public JSONArray getFEListByLB(String lbUuid) {
+		return this.getForeendDAO().getFEListByLB(lbUuid);
+	}
+	
+	public boolean checkFore(String lbUuid,int port) {
+		return this.getForeendDAO().checkRepeat(lbUuid,port);
+	}
+	
+	public boolean deleteLB(int userId, String uuid) {
+		boolean result = false;
+		Connection c = null;
+		try {
+			c = this.getConstant().getConnection(userId);
+			boolean preDeleteLB = this.getLbDAO().setLBPowerStatus(uuid,
+					LBManager.POWER_DESTROY);
+			if (preDeleteLB == true) {
+				VM thisLB = VM.getByUuid(c, uuid);
+				thisLB.hardShutdown(c);
+				thisLB.destroy(c, true);
+				LB lb = this.getLbDAO().getLB(uuid);
+				String ip = lb.getLbIP();
+				String mac = lb.getLbMac();
+				if (ip != null) {
+					this.getDhcpDAO().returnDHCP(mac);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				String publicip = this.getEipDAO().getEipIp(uuid);
+				if (publicip != null) {
+					this.getEipManager().unbindElasticIp(userId, uuid,
+							publicip, "lb");
+				}
+				this.getLbDAO().removeLB(userId, uuid);
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return result;
@@ -542,41 +640,6 @@ public class LBManager {
 			}
 		}
 		return ja;
-	}
-
-	public void lbCreate(String name, String uuid, int capacity, int userId,
-			String poolUuid) {
-		Date startTime = new Date();
-		JSONObject result = this.createLB(uuid, userId, name, capacity,
-				poolUuid);
-		// push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.负载均衡.toString(), name));
-		infoArray
-				.put(Utilities.createLogInfo("最大连接数", String.valueOf(capacity)));
-		if (result.has("isSuccess") && result.getBoolean("isSuccess") == true) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.负载均衡.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			infoArray.put(Utilities.createLogInfo("原因",result.has("error")?result.getString("error"):""));
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.负载均衡.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().deleteRow(userId, uuid);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
 	}
 
 	public void lbCreateFore(String name, String foreuuid, String lbuuid,
@@ -752,77 +815,14 @@ public class LBManager {
 		LB lb = this.getLbDAO().getLB(uuid);
 		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid())
 				.getPoolUuid();
-		this.lbShutup(uuid, userId, poolUuid);
-	}
-
-	public void lbShutup(String uuid, int userId, String poolUuid) {
-		Date startTime = new Date();
-		boolean result = this.startLB(uuid, poolUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.负载均衡.toString(),
-				"lb-" + uuid.substring(0, 8)));
-		if (result == true) {
-			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.负载均衡.ordinal(),
-					LogConstant.logAction.启动.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.负载均衡.ordinal(),
-					LogConstant.logAction.启动.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
+		this.startLB(uuid, userId, poolUuid);
 	}
 
 	public void lbAdminShutDown(String uuid, String force, int userId) {
 		LB lb = this.getLbDAO().getLB(uuid);
 		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid())
 				.getPoolUuid();
-		this.lbShutdown(uuid, force, userId, poolUuid);
-	}
-
-	public void lbShutdown(String uuid, String force, int userId,
-			String poolUuid) {
-		Date startTime = new Date();
-		boolean result = this.shutdownLB(uuid, force, poolUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.负载均衡.toString(),
-				"lb-" + uuid.substring(0, 8)));
-		if (result == true) {
-			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.负载均衡.ordinal(),
-					LogConstant.logAction.关闭.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			this.getMessagePush().editRowStatus(userId, uuid, "running", "活跃");
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.负载均衡.ordinal(),
-					LogConstant.logAction.关闭.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
+		this.shutdownLB(uuid, force, userId, poolUuid);
 	}
 
 	public void lbDelete(String uuid, int userId, String poolUuid) {

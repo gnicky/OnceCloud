@@ -75,41 +75,50 @@ public class RouterAction {
 		JSONObject jo = this.getRouterManager().getRouterDetail(uuid);
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/StartUp", method = { RequestMethod.POST })
 	@ResponseBody
-	public void startUp(HttpServletRequest request,@RequestParam String uuid) {
+	public void startUp(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getRouterManager().routerStartUp(uuid, user.getUserId(), user.getUserAllocate());
+		this.getRouterManager().startRouter(uuid, user.getUserId(),
+				user.getUserAllocate());
 	}
-	
+
 	@RequestMapping(value = "/Destroy", method = { RequestMethod.POST })
 	@ResponseBody
-	public void destroy(HttpServletRequest request,@RequestParam String uuid) {
+	public void destroy(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getRouterManager().routerDestory(uuid, user.getUserId(), user.getUserAllocate());
+		this.getRouterManager().deleteRouter(uuid, user.getUserId(),
+				user.getUserAllocate());
 	}
-	
+
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
 	@ResponseBody
-	public void create(HttpServletRequest request,CreateRouterModel createRouterModel) {
+	public void create(HttpServletRequest request,
+			CreateRouterModel createRouterModel) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getRouterManager().createRouter(createRouterModel.getUuid(), user.getUserId(), createRouterModel.getName(), createRouterModel.getCapacity(), createRouterModel.getFwUuid(),  user.getUserAllocate());
+		this.getRouterManager().createRouter(createRouterModel.getUuid(),
+				user.getUserId(), createRouterModel.getName(),
+				createRouterModel.getCapacity(), createRouterModel.getFwUuid(),
+				user.getUserAllocate());
 	}
 
 	@RequestMapping(value = "/UpdateStar", method = { RequestMethod.POST })
 	@ResponseBody
-	public void updateStar(HttpServletRequest request,@RequestParam String uuid, @RequestParam int num) {
+	public void updateStar(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam int num) {
 		this.getRouterManager().updateImportance(uuid, num);
 	}
-	
+
 	@RequestMapping(value = "/ShutDown", method = { RequestMethod.POST })
 	@ResponseBody
-	public void shutDown(HttpServletRequest request,@RequestParam String uuid,@RequestParam String force) {
+	public void shutDown(HttpServletRequest request, @RequestParam String uuid,
+			@RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
-     	this.getRouterManager().routerShutDown(uuid, force,user.getUserId(), user.getUserAllocate());
+		this.getRouterManager().shutdownRouter(uuid, force, user.getUserId(),
+				user.getUserAllocate());
 	}
-	
+
 	@RequestMapping(value = "/Quota", method = { RequestMethod.POST })
 	@ResponseBody
 	public String quota(HttpServletRequest request) {
@@ -117,20 +126,21 @@ public class RouterAction {
 		JSONArray ja = this.getRouterManager().routerQuota(user.getUserId());
 		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/Vxnets", method = { RequestMethod.GET })
 	@ResponseBody
-	public String getVxnets(HttpServletRequest request,@RequestParam String routerUuid) {
+	public String getVxnets(HttpServletRequest request,
+			@RequestParam String routerUuid) {
 		JSONArray jo = this.getRouterManager().getVxnets(routerUuid);
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/RoutersOfUser", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getRoutersOfUser(HttpServletRequest request, ListModel lm) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getRouterManager().getRoutersOfUser(user.getUserId(),
-				lm.getPage(), lm.getLimit(), lm.getSearch());
+		JSONArray ja = this.getRouterManager().getRoutersOfUser(
+				user.getUserId(), lm.getPage(), lm.getLimit(), lm.getSearch());
 		return ja.toString();
 	}
 }

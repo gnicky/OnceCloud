@@ -55,6 +55,13 @@ public class VnetAction {
 		JSONArray ja = this.getVnetManager().getVnetsOfUser(userId);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/VMs", method = { RequestMethod.GET })
+	@ResponseBody
+	public String vms(HttpServletRequest request, @RequestParam String vnetUuid) {
+		JSONArray ja = this.getVnetManager().getVMs(vnetUuid);
+		return ja.toString();
+	}
 	
 	@RequestMapping(value = "/BindVM", method = { RequestMethod.POST })
 	@ResponseBody
@@ -76,5 +83,13 @@ public class VnetAction {
 	public void delete(HttpServletRequest request,@RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVnetManager().deleteVnet(user.getUserId(), uuid);
+	}
+
+	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public void addVM(HttpServletRequest request,@RequestParam String vnId, @RequestParam String vmuuidStr) {
+		User user = (User) request.getSession().getAttribute("user");
+		String poolUuid = user.getUserAllocate();
+		this.getVnetManager().addVmToVnet(user.getUserId(), vmuuidStr, vnId, poolUuid);
 	}
 }
