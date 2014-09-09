@@ -77,4 +77,12 @@ public class VnetAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVnetManager().deleteVnet(user.getUserId(), uuid);
 	}
+
+	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public void addVM(HttpServletRequest request,@RequestParam String vnId, @RequestParam String vmuuidStr) {
+		User user = (User) request.getSession().getAttribute("user");
+		String poolUuid = user.getUserAllocate();
+		this.getVnetManager().addVmToVnet(user.getUserId(), vmuuidStr, vnId, poolUuid);
+	}
 }
