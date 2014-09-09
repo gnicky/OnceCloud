@@ -1,5 +1,7 @@
 package com.oncecloud.ui.action;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,20 +37,20 @@ public class NotificationAction {
 		this.sendMsgApi = sendMsgApi;
 	}
 
-	@RequestMapping(value = "/SendMsg", method = { RequestMethod.POST })
+	@RequestMapping(value = "/SendMsg", method = {RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
-	public String sendMsg(HttpServletRequest request) {
-		String telphone = request.getParameter("telphone");
-		String content = request.getParameter("content");
+	public String sendMsg(HttpServletRequest request) throws UnsupportedEncodingException {
+		String telphone =new String(request.getParameter("telphone").getBytes("ISO-8859-1"), "UTF-8");
+		String content = new String(request.getParameter("content").getBytes("ISO-8859-1"), "UTF-8");
 		return this.getSendMsgApi().SenMessageGBK(telphone, content);
 	}
 	
-	@RequestMapping(value = "/SendEmail", method = { RequestMethod.POST })
+	@RequestMapping(value = "/SendEmail", method = {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
-	public String sendEmail(HttpServletRequest request) {
-		String subject = request.getParameter("subject");
-		String content = request.getParameter("content");
-		String toAddress = request.getParameter("toaddress");
+	public String sendEmail(HttpServletRequest request) throws UnsupportedEncodingException {
+		String subject = new String(request.getParameter("subject").getBytes("ISO-8859-1"), "UTF-8");
+		String content = new String(request.getParameter("content").getBytes("ISO-8859-1"), "UTF-8");
+		String toAddress = new String(request.getParameter("toaddress").getBytes("ISO-8859-1"), "UTF-8");
 		this.getSendEmailApi().sendEmail(subject, content, toAddress);
 		return "Ok";
 	}

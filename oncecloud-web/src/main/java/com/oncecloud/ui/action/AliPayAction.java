@@ -71,7 +71,7 @@ public class AliPayAction {
 		this.sendMsgApi = sendMsgApi;
 	}
 
-	@RequestMapping(value = "/SubmitAlipay", method = { RequestMethod.POST })
+	@RequestMapping(value = "/SubmitAlipay", method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public String submitAlipay(HttpServletRequest request) throws UnsupportedEncodingException {
 		// 商户订单号
@@ -114,7 +114,7 @@ public class AliPayAction {
 		return AlipaySubmit.buildRequest(sParaTemp, "get", "确认");
 	}
 	
-	@RequestMapping(value = "/NotifyUrl", method = { RequestMethod.POST })
+	@RequestMapping(value = "/NotifyUrl", method = { RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
 	public String notifyUrl(HttpServletRequest request) throws UnsupportedEncodingException{
 		Map<String,String> params = new HashMap<String,String>();
