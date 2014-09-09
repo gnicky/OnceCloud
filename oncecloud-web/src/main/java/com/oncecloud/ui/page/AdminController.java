@@ -115,4 +115,19 @@ public class AdminController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
+	
+	@RequestMapping(value = "/CompanyMap", method = {RequestMethod.GET})
+	@ResponseBody
+	public ModelAndView companyMap(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("sideActive", 0);
+		model.put("title", "用户分布展示");
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.getUserLevel() == 0) {
+		    return new ModelAndView("admin/companymap",model);
+		}
+		else {
+			return new ModelAndView(new RedirectView("/dashboard"));
+		}
+	}
 }
