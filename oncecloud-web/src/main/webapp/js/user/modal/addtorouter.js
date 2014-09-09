@@ -10,8 +10,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             async: false,
-            url: '/VnetAction',
-            data: 'action=getablerts',
+            url: '/RouterAction/TableRTs',
             dataType: 'json',
             success: function (array) {
                 var vmlistHtml = '';
@@ -31,8 +30,6 @@ $(document).ready(function () {
                     }
                     $('#vn_router').html(vmlistHtml);
                 }
-            },
-            error: function () {
             }
         });
     }
@@ -51,10 +48,16 @@ $(document).ready(function () {
             if (checkRepeat(vn_router, vn_net)) {
                 $.ajax({
                     type: 'post',
-                    url: '/VnetAction',
-                    data: 'action=linkrouter&vnetid=' + vnetid + '&routerid=' + vn_router
-                        + '&net=' + vn_net + '&gate=' + vn_gate + '&start=' + vn_start + '&end=' + vn_end
-                        + '&dhcpState=' + dhcp_status,
+                    url: '/VnetAction/LinkRouter',
+                    data : {
+						vnetuuid : vnetid,
+						routerid : vn_router,
+						net : vn_net,
+						gate : vn_gate,
+						start : vn_start,
+						end : vn_end,
+						dhcpState : dhcp_status
+					},
                     dataType: 'json',
                     success: function (obj) {
                         if (obj.result) {
@@ -95,8 +98,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             async: false,
-            url: '/VnetAction',
-            data: 'action=checknet&routerid=' + routerid + '&net=' + net,
+            url: '/VnetAction/CheckNet',
+            data: {routerid:routerid, net:net},
             dataType: 'json',
             success: function (response) {
                 result = response.isSuccess;

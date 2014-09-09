@@ -8,9 +8,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.methods.multipart.FilePartSource;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
+import org.springframework.stereotype.Component;
 
 import com.oncecloud.alipay.config.AlipayConfig;
 
@@ -25,6 +27,7 @@ import com.oncecloud.alipay.config.AlipayConfig;
  *该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
  */
 
+@Component
 public class AlipayCore {
 	/**
 	 * 除去数组中的空值和签名参数

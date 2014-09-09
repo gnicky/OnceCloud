@@ -1,5 +1,7 @@
 package com.oncecloud.alipay.config;
 
+import org.springframework.stereotype.Component;
+
 /* *
  *类名：AlipayConfig
  *功能：基础配置类
@@ -21,6 +23,7 @@ package com.oncecloud.alipay.config;
  *2、更换浏览器或电脑，重新登录查询。
  */
 
+@Component
 public class AlipayConfig {
 	
 	//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓

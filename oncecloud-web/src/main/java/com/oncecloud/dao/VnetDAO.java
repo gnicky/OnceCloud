@@ -214,6 +214,27 @@ public class VnetDAO {
 		return vxnetsList;
 	}
 
+	public int getVnetsOfRouter(String routerUuid, int userId) {
+		Session session = null;
+		int count = -1;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from Vnet where vnetRouter = :routerid and vnetUID = :vnetUID";
+			Query query = session.createQuery(queryString);
+			query.setString("routerid", routerUuid);
+			query.setInteger("vnetUID", userId);
+			count = Integer.parseInt(query.uniqueResult().toString());
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return count;
+	}
+
 	/**
 	 * 获取用户私有网络总数
 	 * 
@@ -290,7 +311,6 @@ public class VnetDAO {
 					null, 1, null, new Date());
 			vnet.setVnetID(getFreeVnetID());
 			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
 			session.beginTransaction();
 			session.save(vnet);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,

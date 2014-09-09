@@ -1,9 +1,7 @@
 package com.oncecloud.daemon;
 
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class DaemonServer {
 	private Server server;
@@ -29,17 +27,24 @@ public class DaemonServer {
 		this.setPort(port);
 	}
 
+	private String getWebXmlLocation() {
+		return Thread.currentThread().getContextClassLoader()
+				.getResource("META-INF/webapp/WEB-INF/web.xml").toString();
+	}
+
+	private String getResourceBase() {
+		return Thread.currentThread().getContextClassLoader()
+				.getResource("META-INF/webapp/").toString();
+	}
+
 	public boolean start() {
 		try {
 			this.setServer(new Server(this.getPort()));
-			ServletContextHandler servletContextHandler = new ServletContextHandler();
-			ServletHolder servletHolder = servletContextHandler.addServlet(
-					DispatcherServlet.class, "/");
-			servletHolder
-					.setInitParameter("contextConfigLocation",
-							"classpath*:/com/oncecloud/daemon/config/application-context.xml");
-			servletHolder.setInitOrder(1);
-			this.getServer().setHandler(servletContextHandler);
+			WebAppContext webAppContext = new WebAppContext();
+			webAppContext.setContextPath("/");
+			webAppContext.setDescriptor(this.getWebXmlLocation());
+			webAppContext.setResourceBase(this.getResourceBase());
+			this.getServer().setHandler(webAppContext);
 			this.getServer().start();
 			return true;
 		} catch (Exception e) {

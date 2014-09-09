@@ -11,7 +11,7 @@ $('#modify').on('click', function (event) {
     var url = basePath + 'common/modify';
     var rtName = $('#rtname').text();
     var rtDesc = $('#rtdesc').text();
-    var rtUuid = $('#platformcontent').attr("rtUuid");
+    var rtUuid = $('#platformcontent').attr("vnetUuid");
     $('#VnetModalContainer').load(url, {"modifyType": "vnet", "modifyUuid": rtUuid,
         "modifyName": rtName, "modifyDesc": rtDesc}, function () {
         $('#VnetModalContainer').modal({
@@ -171,7 +171,7 @@ $('#router-a').on('click', function (event) {
      var form = $("<form></form>");
     form.attr("action","/router/detail");
     form.attr('method','post');
-    var input = $('<input type="text" name="routerUuid" value="' + uuid + '" />');
+    var input = $('<input type="text" name="routerUuid" value="' + routerUuid + '" />');
     form.append(input);
     form.css('display','none');
     form.appendTo($('body'));
