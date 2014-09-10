@@ -359,7 +359,7 @@ public class VMDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "select vmUuid, vmName, vmIP from OCVM where vmUID = :userId"
-					+ "and vmStatus = 1 order by createDate desc";
+					+ " and vmStatus = 1 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			vmList = query.list();

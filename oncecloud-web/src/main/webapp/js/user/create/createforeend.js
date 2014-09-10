@@ -76,7 +76,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/LBAction/CreateFore',
-            data: {name: name, foreuuid: foreuuid, lbuuid: lbuuid, protocol: protocol, port: port, policy: policy},
+            data: {name: name, foreUuid: feuuid, lbUuid: lbuuid, protoCol: protocol, port: port, policy: policy},
             dataType: 'text',
             success: function () {
                 var hasListener = $('#fore_list').find('.unit');

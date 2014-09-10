@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -89,7 +90,8 @@ public class ForeendDAO {
 			int count = 1;
 			Criteria criteria = session.createCriteria(Foreend.class)
 					.add(Restrictions.eq("lbUuid", lbUuid))
-					.add(Restrictions.eq("forePort", forePort));
+					.add(Restrictions.eq("forePort", forePort))
+					.setProjection(Projections.rowCount());
 			count = ((Number) criteria.uniqueResult()).intValue();
 			session.getTransaction().commit();
 			if (0 == count) {

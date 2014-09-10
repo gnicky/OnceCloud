@@ -97,14 +97,14 @@ public class CreateControllerUser {
 		model.put("foreuuid", foreuuid);
 		model.put("type", type);
 		model.put("lbuuid", lbuuid);
-		return new ModelAndView("user/create/createforeend");
+		return new ModelAndView("user/create/createforeend", model);
 	}
 	
 	@RequestMapping(value = "/backend/create", method = { RequestMethod.POST })
 	public ModelAndView createbackend(HttpServletRequest request,@RequestParam String foreuuid) {
 		Map<String, String> model = new HashMap<String, String>();
 		model.put("foreUuid", foreuuid);
-		return new ModelAndView("user/create/createbackend");
+		return new ModelAndView("user/create/createbackend", model);
 	}
 
 	@RequestMapping(value = "/vnet/create", method = { RequestMethod.GET })
