@@ -90,22 +90,20 @@ $(document).ready(function () {
         rules: {
             dc_name: {
                 required: true,
-                minlength: 3
+                maxlength: 20
             },
             dc_desc: {
                 required: true,
-                minlength: 3,
                 maxlength: 80
             }
         },
         messages: {
             dc_name: {
                 required: "<span class='help'>数据中心名称不能为空</span>",
-                minlength: "<span class='help'>数据中心名称不能少于3个字符</span>"
+                maxlength: "<span class='help'>数据中心名称不能多于20个字符</span>"
             },
             dc_desc: {
                 required: "<span class='help'>数据中心描述不能为空</span>",
-                minlength: "<span class='help'>数据中心描述不能少于3个字符</span>",
                 maxlength: "<span class='help'>数据中心描述不能超过80个字符</span>"
             }
         }

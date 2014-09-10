@@ -47,13 +47,13 @@ $("#createfw-form").validate({
     rules: {
         firewall_name: {
             required: true,
-            maxlength: 16
+            maxlength: 20
         }
     },
     messages: {
         firewall_name: {
-            required: "<span class='unit'>防火墙名不能为空</span>",
-            maxlength: "<span class='unit'>不能超过16个字符</span>"
+            required: "<span class='unit'>名称不能为空</span>",
+            maxlength: "<span class='unit'>名称不能超过20个字符</span>"
         }
     }
 });

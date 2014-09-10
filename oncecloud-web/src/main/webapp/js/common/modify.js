@@ -75,8 +75,7 @@ $("#modify-form").validate({
     rules: {
         name: {
             required: true,
-            minlength: 3,
-            maxlength: 80
+            maxlength: 20
         },
         desc: {
             maxlength: 80
