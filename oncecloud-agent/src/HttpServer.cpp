@@ -3,30 +3,38 @@
 #include "mongoose.h"
 #include "HttpServer.h"
 
-HttpServer::HttpServer()
+#define POLL_INTERVAL 1000
+
+HttpServer::HttpServer(unsigned short listeningPort)
 {
+	this->SetExiting(false);
+	std::string listeningPortString=boost::lexical_cast<std::string>(listeningPort);
 	this->SetMongooseServer(mg_create_server(NULL,this->MongooseEventHandler));
+	mg_set_option(this->GetMongooseServer(),"listening_port",listeningPortString.c_str());
 }
 
 HttpServer::~HttpServer()
 {
+	while(this->IsExiting())
+	{
 
+	}
+	mg_server * server=this->GetMongooseServer();
+	mg_destroy_server(&server);
 }
 
-void HttpServer::Start(unsigned short listeningPort)
+void HttpServer::Start()
 {
-	std::string listeningPortString=boost::lexical_cast<std::string>(listeningPort);
-	mg_set_option(this->GetMongooseServer(),"listening_port",listeningPortString.c_str());
 	while(!this->IsExiting())
 	{
-		mg_poll_server(this->GetMongooseServer(),1000);
+		mg_poll_server(this->GetMongooseServer(),POLL_INTERVAL);
 	}
+	this->SetExiting(false);
 }
 
 void HttpServer::Stop()
 {
-	mg_server * server=this->GetMongooseServer();
-	mg_destroy_server(&server);
+	this->SetExiting(true);
 }
 
 mg_server * HttpServer::GetMongooseServer()

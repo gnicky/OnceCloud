@@ -41,7 +41,7 @@ everything: $(AGENT)
 output/HttpServer.o: src/HttpServer.cpp src/include/HttpServer.h lib/include/mongoose.h
 	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
 
-output/Main.o: src/Main.cpp
+output/Main.o: src/Main.cpp src/include/HttpServer.h
 	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
 
 # Library

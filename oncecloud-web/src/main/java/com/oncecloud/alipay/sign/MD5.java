@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.stereotype.Component;
 
 /**
  * 功能：支付宝MD5签名处理核心文件，不需要修改 版本：3.3 修改日期：2012-08-17 说明：
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
  * 该代码仅供学习和研究支付宝接口使用，只是提供一个
  * */
 
-@Component
 public class MD5 {
 	/**
 	 * 签名字符串

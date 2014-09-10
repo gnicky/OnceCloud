@@ -6,9 +6,9 @@
 class HttpServer
 {
 public:
-	HttpServer();
+	HttpServer(unsigned short listeningPort);
 	virtual ~HttpServer();
-	void Start(unsigned short listeningPort);
+	void Start();
 	void Stop();
 
 protected:
