@@ -11,9 +11,9 @@ $('#cloneImageAction').on('click', function (event) {
                     var vmuuid = $(boxes[i]).parent().parent().attr("rowid");
                     $.ajax({
                         type: 'post',
-                        url: '/ImageAction/clone',
+                        url: '/ImageAction/Clone',
                         data: {imageName: imgaeName, imageDesc: imageDesc, vmUuid: vmuuid},
-                        dataType: 'json',
+                        dataType: 'json'
                     });
                 }
             }
@@ -21,9 +21,9 @@ $('#cloneImageAction').on('click', function (event) {
             var rsid = $("#modal-dialog").attr("rsid");
             $.ajax({
                 type: 'post',
-                url: '/ImageAction/clone',
+                url: '/ImageAction/Clone',
                 data: {imageName: imgaeName, imageDesc: imageDesc, vmUuid: rsid},
-                dataType: 'json',
+                dataType: 'json'
             });
         }
         $('#InstanceModalContainer').modal('hide');
