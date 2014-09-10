@@ -129,8 +129,7 @@ $("#create-form").validate({
     rules: {
         rt_name: {
             required: true,
-            minlength: 3,
-            maxlength: 80
+            maxlength: 20
         },
         rt_type: {
             required: true,
@@ -139,8 +138,7 @@ $("#create-form").validate({
     messages: {
         rt_name: {
             required: "<span class='help'>名称不能为空</span>",
-            minlength: "<span class='help'>名称不能少于3个字符</span>",
-            maxlength: "<span class='help'>名称不能多于80个字符</span>"
+            maxlength: "<span class='help'>名称不能多于20个字符</span>"
         },
         rt_type: {
             required: "<span class='help'>请选择一种类型</span>",

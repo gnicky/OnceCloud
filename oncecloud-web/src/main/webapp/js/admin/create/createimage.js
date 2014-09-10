@@ -65,17 +65,15 @@ $(document).ready(function () {
             },
             image_name: {
                 required: true,
-                minlength: 3,
-                maxlength: 80
+                maxlength: 20
             },
             image_desc: {
                 required: true,
-                minlength: 3,
                 maxlength: 80
             },
             image_pwd: {
                 required: true,
-                maxlength: 80
+                maxlength: 40
             }
         },
         messages: {
@@ -86,17 +84,15 @@ $(document).ready(function () {
             },
             image_name: {
                 required: "<span class='help'>映像名称不能为空</span>",
-                minlength: "<span class='help'>映像名称不能少于3个字符</span>",
-                maxlength: "<span class='help'>映像名称不能超过80个字符</span>"
+                maxlength: "<span class='help'>映像名称不能超过20个字符</span>"
             },
             image_desc: {
                 required: "<span class='help'>映像描述不能为空</span>",
-                minlength: "<span class='help'>映像描述不能少于3个字符</span>",
                 maxlength: "<span class='help'>映像描述不能超过80个字符</span>"
             },
             image_pwd: {
                 required: "<span class='help'>映像密码不能为空</span>",
-                maxlength: "<span class='help'>映像密码不能超过80个字符</span>"
+                maxlength: "<span class='help'>映像密码不能超过40个字符</span>"
             }
         }
     });

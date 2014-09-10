@@ -41,24 +41,20 @@ $("#create-form").validate({
     rules: {
         image_name: {
             required: true,
-            minlength: 3,
-            maxlength: 80
+            maxlength: 20
         },
         image_desc: {
             required: true,
-            minlength: 3,
             maxlength: 80
         }
     },
     messages: {
         image_name: {
             required: "<span class='help'>映像名称不能为空</span>",
-            minlength: "<span class='help'>映像名称不能少于3个字符</span>",
-            maxlength: "<span class='help'>映像名称不能多于80个字符</span>"
+            maxlength: "<span class='help'>映像名称不能多于20个字符</span>"
         },
         image_desc: {
             required: "<span class='help'>映像备注不能为空</span>",
-            minlength: "<span class='help'>映像备注不能少于3个字符</span>",
             maxlength: "<span class='help'>映像备注不能多于80个字符</span>"
         }
     }

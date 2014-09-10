@@ -40,16 +40,15 @@ $("#create-form").validate({
     rules: {
         db_name: {
             required: true,
-            minlength: 3,
-            maxlength: 80
+            maxlength: 20
         },
         db_user: {
             required: true,
-            minlength: 3,
-            maxlength: 80
+            maxlength: 20
         },
         db_pwd: {
-            required: true
+            required: true,
+            maxlength: 20
         },
         db_port: {
             required: true,
@@ -60,16 +59,15 @@ $("#create-form").validate({
     messages: {
         db_name: {
             required: "<span class='help'>名称不能为空</span>",
-            minlength: "<span class='help'>名称不能少于3个字符</span>",
-            maxlength: "<span class='help'>名称不能多于80个字符</span>"
+            maxlength: "<span class='help'>名称不能多于20个字符</span>"
         },
         db_user: {
             required: "<span class='help'>用户名不能为空</span>",
-            minlength: "<span class='help'>用户名不能少于3个字符</span>",
-            maxlength: "<span class='help'>用户名不能多于80个字符</span>"
+            maxlength: "<span class='help'>用户名不能多于20个字符</span>"
         },
         db_pwd: {
-            required: "<span class='help'>密码不能为空</span>"
+            required: "<span class='help'>密码不能为空</span>",
+            maxlength: "<span class='help'>密码不能多于20个字符</span>"
         },
         db_port: {
             required: "<span class='unit'>起始端口不能为空</span>",

@@ -177,7 +177,8 @@ $(document).ready(function () {
         rules: {
             user_pwd: {
                 required: true,
-                minlength: 5
+                minlength: 5,
+                maxlength: 20
             },
             user_email: {
                 required: true
@@ -192,7 +193,8 @@ $(document).ready(function () {
         messages: {
             user_pwd: {
                 required: "<span class='help'>密码不能为空</span>",
-                minlength: "<span class='help'>密码不能少于5个字符</span>"
+                minlength: "<span class='help'>密码不能超过20个字符</span>",
+                maxlength: "<span class='help'>密码不能超过20个字符</span>"
             },
             user_email: {
                 required: "<span class='help'>邮箱不能为空</span>"

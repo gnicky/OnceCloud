@@ -157,8 +157,8 @@ $('#createvmAction').on('click', function (event) {
 
 $('#instance_name').on('focusout', function () {
 	var name = $('#instance_name').val();
-	if (name.length > 16) {
-		name = name.substring(0, 16) + "...";
+	if (name.length > 20) {
+		name = name.substring(0, 20) + "...";
 	}
     $('#selectedName').html(name);
 });
@@ -172,7 +172,7 @@ $('#basicinfo-form').validate({
     rules: {
         instance_name: {
             required: true,
-            maxlength: 16
+            maxlength: 20
         },
         count: {
             required: true,
@@ -181,11 +181,11 @@ $('#basicinfo-form').validate({
     },
     messages: {
         instance_name: {
-            required: "<span class='unit'>主机名不能为空</span>",
-            maxlength: "<span class='unit'>不能超过16个字符</span>"
+            required: "<span class='unit'>主机名称不能为空</span>",
+            maxlength: "<span class='unit'>主机名称不能超过20个字符</span>"
         },
         count: {
-            required: "<span class='unit'>个数不能为空</span>",
+            required: "<span class='unit'>主机个数不能为空</span>",
             digits: "<span class='unit'>请输入合法整数</span>"
         }
     }
