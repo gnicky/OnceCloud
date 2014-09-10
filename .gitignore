@@ -2,6 +2,8 @@
 .classpath
 .project
 .settings
+*.o
 target/
 oncecloud-web/BeyondCloud.log
 oncecloud-web/BeyondCloud.log.*
+oncecloud-agent/output
