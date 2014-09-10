@@ -172,7 +172,8 @@ $('#basicinfo-form').validate({
     rules: {
         instance_name: {
             required: true,
-            maxlength: 20
+            maxlength: 20,
+            legal: true
         },
         count: {
             required: true,
@@ -182,7 +183,8 @@ $('#basicinfo-form').validate({
     messages: {
         instance_name: {
             required: "<span class='unit'>主机名称不能为空</span>",
-            maxlength: "<span class='unit'>主机名称不能超过20个字符</span>"
+            maxlength: "<span class='unit'>主机名称不能超过20个字符</span>",
+            legal: "<span class='unit'>主机名称包含非法字符</span>"
         },
         count: {
             required: "<span class='unit'>主机个数不能为空</span>",

@@ -37,8 +37,6 @@ $(document).ready(function () {
                             }
                         }
                         $('#IPModalContainer').modal('hide');
-                    },
-                    error: function () {
                     }
                 });
             } else {
@@ -60,8 +58,6 @@ $(document).ready(function () {
                             }
                         }
                         $('#IPModalContainer').modal('hide');
-                    },
-                    error: function () {
                     }
                 });
             }
@@ -194,9 +190,6 @@ $(document).ready(function () {
                         }
                         btable.innerHTML = tableStr;
                     }
-                },
-                error: function () {
-
                 }
             });
         } else if (type == "publicip") {
@@ -258,9 +251,6 @@ $(document).ready(function () {
                         }
                         btable.innerHTML = tableStr;
                     }
-                },
-                error: function () {
-
                 }
             });
         }

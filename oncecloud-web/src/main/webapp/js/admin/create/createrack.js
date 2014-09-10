@@ -87,8 +87,6 @@ $(document).ready(function () {
                                 + '<td><a class="id">' + showid + '</a></td><td>' + rackname + '</td><td>' + dcname + '</td><td class="time">' + createdate + '</td></tr>';
                             $("#tablebody").prepend(mytr);
                         }
-                    },
-                    error: function () {
                     }
                 });
             } else if ('edit' == type) {
@@ -116,21 +114,25 @@ $(document).ready(function () {
         rules: {
             rack_name: {
                 required: true,
-                maxlength: 20
+                maxlength: 20,
+                legal: true
             },
             rack_desc: {
                 required: true,
-                maxlength: 80
+                maxlength: 80,
+                legal: true
             }
         },
         messages: {
             rack_name: {
                 required: "<span class='help'>机架名称不能为空</span>",
-                maxlength: "<span class='help'>机架名称不能超过20个字符</span>"
+                maxlength: "<span class='help'>机架名称不能超过20个字符</span>",
+                legal: "<span class='help'>机架名称包含非法字符</span>"
             },
             rack_desc: {
                 required: "<span class='help'>机架描述不能为空</span>",
-                maxlength: "<span class='help'>机架描述不能超过80个字符</span>"
+                maxlength: "<span class='help'>机架描述不能超过80个字符</span>",
+                legal: "<span class='help'>机架描述包含非法字符</span>"
             }
         }
     });

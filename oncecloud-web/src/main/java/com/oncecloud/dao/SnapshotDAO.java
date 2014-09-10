@@ -49,10 +49,12 @@ public class SnapshotDAO {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			String queryString = "from Snapshot where snapshotId = :snapshotId";
 			Query query = session.createQuery(queryString);
 			query.setString("snapshotId", snapshotId);
 			ss = (Snapshot) query.uniqueResult();
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();

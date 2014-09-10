@@ -30,21 +30,25 @@ $("#apply-form").validate({
     rules: {
         qa_title: {
             required: true,
-            maxlength: 20
+            maxlength: 20,
+            legal: true
         },
         qa_content: {
             required: true,
-            maxlength: 100
+            maxlength: 100,
+            legal: true
         }
     },
     messages: {
         qa_title: {
             required: "<span class='help'>表单标题不能为空</span>",
-            maxlength: "<span class='help'>不能超过20个字符</span>"
+            maxlength: "<span class='help'>不能超过20个字符</span>",
+            legal: "<span class='help'>主机名称包含非法字符</span>"
         },
         qa_content: {
             required: "<span class='help'>表单描述不能为空</span>",
-            maxlength: "<span class='help'>不能超过100个字符</span>"
+            maxlength: "<span class='help'>表单描述不能超过100个字符</span>",
+            legal: "<span class='help'>表单描述名称包含非法字符</span>"
         }
     }
 });

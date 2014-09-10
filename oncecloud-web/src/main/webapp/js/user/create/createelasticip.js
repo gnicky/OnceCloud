@@ -83,7 +83,8 @@ $("#apply-form").validate({
     rules: {
         eip_name: {
             required: true,
-            maxlength: 20
+            maxlength: 20,
+            legal: true
         },
         count: {
             required: true,
@@ -93,7 +94,8 @@ $("#apply-form").validate({
     messages: {
         eip_name: {
             required: "<span class='unit'>名称不能为空</span>",
-            maxlength: "<span class='unit'>名称不能超过20个字符</span>"
+            maxlength: "<span class='unit'>名称不能超过20个字符</span>",
+            legal: "<span class='unit'>名称包含非法字符</span>"
         },
         count: {
             required: "<span class='unit'>数量不能为空</span>",

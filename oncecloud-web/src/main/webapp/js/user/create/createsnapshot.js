@@ -62,13 +62,15 @@ $("#backup-form").validate({
     rules: {
         snapshot_name: {
             required: true,
-            maxlength: 16
+            maxlength: 20,
+            legal: true
         }
     },
     messages: {
         snapshot_name: {
-            required: "<span class='unit'>快照名不能为空</span>",
-            maxlength: "<span class='unit'>不能超过16个字符</span>"
+            required: "<span class='unit'>名称不能为空</span>",
+            maxlength: "<span class='unit'>名称不能超过20个字符</span>",
+            legal: "<span class='unit'>名称包含非法字符</span>"
         }
     }
 });

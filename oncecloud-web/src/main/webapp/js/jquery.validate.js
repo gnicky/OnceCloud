@@ -292,6 +292,7 @@ $.extend($.validator, {
 		digits: "Please enter only digits.",
 		creditcard: "Please enter a valid credit card number.",
 		equalTo: "Please enter the same value again.",
+		legal: "Please enter a legal text",
 		maxlength: $.validator.format("Please enter no more than {0} characters."),
 		minlength: $.validator.format("Please enter at least {0} characters."),
 		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
@@ -1056,6 +1057,12 @@ $.extend($.validator, {
 		number: function( value, element ) {
 			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value);
 		},
+
+        // http://docs.jquery.com/Plugins/Validation/Methods/legal
+        legal: function(value, element) {
+            var errorChar = /^[^`~!$%^&#*()+=|\\\][\]\{\}:;'\,<>?]*$/;
+            return this.optional(element) || errorChar.test(value);
+        },
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/digits
 		digits: function( value, element ) {

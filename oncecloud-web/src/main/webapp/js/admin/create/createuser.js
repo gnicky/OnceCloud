@@ -73,9 +73,6 @@ $(document).ready(function () {
                             $("#tablebody").prepend(mytr);
                         }
                         $('#UserModalContainer').modal('hide');
-                    },
-                    error: function () {
-
                     }
                 });
             } else if ('edit' == type) {
@@ -103,9 +100,6 @@ $(document).ready(function () {
                         $('#usercom').text(userCom);
                         $('#leveltd').html(levelstr);
                         $('#UserModalContainer').modal('hide');
-                    },
-                    error: function () {
-
                     }
                 });
             }
@@ -165,9 +159,6 @@ $(document).ready(function () {
                             return true;
                         }
                     }
-                },
-                error: function () {
-
                 }
             });
         }
@@ -178,7 +169,8 @@ $(document).ready(function () {
             user_pwd: {
                 required: true,
                 minlength: 5,
-                maxlength: 20
+                maxlength: 20,
+                legal: true
             },
             user_email: {
                 required: true
@@ -194,7 +186,8 @@ $(document).ready(function () {
             user_pwd: {
                 required: "<span class='help'>密码不能为空</span>",
                 minlength: "<span class='help'>密码不能超过20个字符</span>",
-                maxlength: "<span class='help'>密码不能超过20个字符</span>"
+                maxlength: "<span class='help'>密码不能超过20个字符</span>",
+                legal: "<span class='help'>密码包含非法字符</span>"
             },
             user_email: {
                 required: "<span class='help'>邮箱不能为空</span>"

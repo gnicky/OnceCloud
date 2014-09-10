@@ -144,9 +144,6 @@ $(document).ready(function () {
                         thistr.children('td').eq(2).html(srName);
                         thistr.children('td').eq(6).html(rackname);
 
-                    },
-                    error: function () {
-
                     }
 
                 });
@@ -219,9 +216,6 @@ $(document).ready(function () {
                             return true;
                         }
                     }
-                },
-                error: function () {
-
                 }
             });
         }
@@ -231,11 +225,13 @@ $(document).ready(function () {
         rules: {
             sr_name: {
                 required: true,
-                maxlength: 20
+                maxlength: 20,
+                legal: true
             },
             sr_desc: {
                 required: true,
-                maxlength: 80
+                maxlength: 80,
+                legal: true
             },
             sr_address: {
                 ip: true,
@@ -250,11 +246,13 @@ $(document).ready(function () {
         messages: {
             sr_name: {
                 required: "<span class='help'>存储名称不能为空</span>",
-                maxlength: "<span class='help'>存储名称不能超过20个字符</span>"
+                maxlength: "<span class='help'>存储名称不能超过20个字符</span>",
+                legal: "<span class='help'>存储名称包含非法字符</span>"
             },
             sr_desc: {
                 required: "<span class='help'>存储描述不能为空</span>",
-                maxlength: "<span class='help'>存储描述不能超过80个字符</span>"
+                maxlength: "<span class='help'>存储描述不能超过80个字符</span>",
+                legal: "<span class='help'>存储描述包含非法字符</span>"
             },
             sr_address: {
                 ip: "<span class='help'>存储地址格式不正确</span>",

@@ -59,8 +59,6 @@ $(document).ready(function () {
             data: {uuid:uuid, name:name, desc:desc},
             dataType: 'json',
             success: function (array) {
-            },
-            error: function () {
             }
         });
     }
@@ -70,21 +68,25 @@ $(document).ready(function () {
         rules: {
             vn_name: {
                 required: true,
-                maxlength: 20
+                maxlength: 20,
+                legal: true
             },
             vn_desc: {
                 required: true,
-                maxlength: 80
+                maxlength: 80,
+                legal: true
             }
         },
         messages: {
             vn_name: {
                 required: "<span class='help'>名称不能为空</span>",
-                maxlength: "<span class='help'>名称不能多于20个字符</span>"
+                maxlength: "<span class='help'>名称不能多于20个字符</span>",
+                legal: "<span class='help'>名称包含非法字符</span>"
             },
             vn_desc: {
                 required: "<span class='help'>描述不能为空</span>",
-                maxlength: "<span class='help'>描述不能多于80个字符</span>"
+                maxlength: "<span class='help'>描述不能多于80个字符</span>",
+                legal: "<span class='help'>描述包含非法字符</span>"
             }
         }
     });

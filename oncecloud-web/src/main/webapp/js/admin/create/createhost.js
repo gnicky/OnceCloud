@@ -186,9 +186,6 @@ $(document).ready(function () {
                             return true;
                         }
                     }
-                },
-                error: function () {
-
                 }
             });
         }
@@ -199,14 +196,17 @@ $(document).ready(function () {
         rules: {
             server_name: {
                 required: true,
-                maxlength: 20
+                maxlength: 20,
+                legal: true
             },
             server_desc: {
                 required: true,
-                maxlength: 80
+                maxlength: 80,
+                legal: true
             },
             server_pwd: {
-                required: true
+                required: true,
+                legal: true
             },
             server_addr: {
                 required: true,
@@ -218,14 +218,17 @@ $(document).ready(function () {
         messages: {
             server_name: {
                 required: "<span class='help'>服务器名称不能为空</span>",
-                maxlength: "<span class='help'>服务器名称不能多于20个字符</span>"
+                maxlength: "<span class='help'>服务器名称不能超过20个字符</span>",
+                legal: "<span class='help'>服务器名称包含非法字符</span>"
             },
             server_desc: {
                 required: "<span class='help'>服务器描述不能为空</span>",
-                maxlength: "<span class='help'>服务器描述不能多于80个字符</span>"
+                maxlength: "<span class='help'>服务器描述不能超过80个字符</span>",
+                legal: "<span class='help'>服务器描述包含非法字符</span>"
             },
             server_pwd: {
-                required: "<span class='help'>密码不能为空</span>"
+                required: "<span class='help'>密码不能为空</span>",
+                legal: "<span class='help'>密码包含非法字符</span>"
             },
             server_addr: {
                 required: "<span class='help'>服务器地址不能为空</span>",

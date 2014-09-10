@@ -96,7 +96,7 @@ function getSnapshotDetailList() {
             var height = 16 + 32 * array.length;
             var svgStr = '<svg width="40" height="' + height + '"><g transform="translate(20,16)">';
             var listStr = '<div class="snapshot-list" id="snapshot-list">';
-            listStr = listStr + '<a class="new-snapshot" id="backup" url="../create/createsnapshot.jsp"><span class="tip">新建备份</span></a>';
+            listStr = listStr + '<a class="new-snapshot" id="backup" url="/snapshot/create?rsid=null&rstype=null&rsname=null"><span class="tip">新建备份</span></a>';
             for (var i = 0; i < array.length; i++) {
                 var obj = array[i];
                 var snapshotId = obj.snapshotId;
@@ -129,9 +129,9 @@ function rollbackSnapshot(id) {
     var rsuuid = $("#platformcontent").attr("resourceUuid");
     var rstype = $("#platformcontent").attr("resourceType");
     $.ajax({
-        type: 'get',
-        url: '/SnapshotAction',
-        data: 'action=rollback&id=' + id + '&rsuuid=' + rsuuid + '&rstype=' + rstype,
+        type: 'post',
+        url: '/SnapshotAction/Rollback',
+        data: {snapshotId: id, resourceUuid: rsuuid, resourceType: rstype},
         dataType: 'json',
         success: function (obj) {
             if (obj.exist == true) {

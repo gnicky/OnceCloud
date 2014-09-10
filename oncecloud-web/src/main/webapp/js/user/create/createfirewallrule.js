@@ -74,7 +74,8 @@ $("#createrule-form").validate({
     rules: {
         rule_name: {
             required: true,
-            maxlength: 20
+            maxlength: 20,
+            legal: true
         },
         rule_priority: {
             required: true,
@@ -98,7 +99,8 @@ $("#createrule-form").validate({
     messages: {
         rule_name: {
             required: "<span class='unit'>名称不能为空</span>",
-            maxlength: "<span class='unit'>名称不能超过20个字符</span>"
+            maxlength: "<span class='unit'>名称不能超过20个字符</span>",
+            legal: "<span class='unit'>名称包含非法字符</span>"
         },
         rule_priority: {
             required: "<span class='unit'>优先级不能为空</span>",

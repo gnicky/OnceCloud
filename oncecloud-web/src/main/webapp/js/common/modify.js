@@ -75,20 +75,23 @@ $("#modify-form").validate({
     rules: {
         name: {
             required: true,
-            maxlength: 20
+            maxlength: 20,
+            legal: true
         },
         desc: {
-            maxlength: 80
+            maxlength: 80,
+            legal: true
         }
     },
     messages: {
         name: {
             required: "<span class='unit'>名称不能为空</span>",
-            minlength: "<span class='unit'>名称不能少于3个字符</span>",
-            maxlength: "<span class='unit'>名称不能多于80个字符</span>"
+            maxlength: "<span class='unit'>名称不能多于20个字符</span>",
+            legal: "<span class='unit'>名称包含非法字符</span>"
         },
         desc: {
-            maxlength: "<span class='unit'>描述不能多于80个字符</span>"
+            maxlength: "<span class='unit'>描述不能多于80个字符</span>",
+            legal: "<span class='help'>描述包含非法字符</span>"
         }
     }
 });

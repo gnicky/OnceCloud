@@ -120,21 +120,25 @@ $(document).ready(function () {
         rules: {
             pool_name: {
                 required: true,
-                maxlength: 20
+                maxlength: 20,
+                legal: true
             },
             pool_desc: {
                 required: true,
-                maxlength: 80
+                maxlength: 80,
+                legal: true
             }
         },
         messages: {
             pool_name: {
                 required: "<span class='help'>资源池名称不能为空</span>",
-                maxlength: "<span class='help'>资源池名称不能超过20个字符</span>"
+                maxlength: "<span class='help'>资源池名称不能超过20个字符</span>",
+                legal: "<span class='help'>资源池名称包含非法字符</span>"
             },
             pool_desc: {
                 required: "<span class='help'>资源池描述不能为空</span>",
-                maxlength: "<span class='help'>资源池描述不能超过80个字符</span>"
+                maxlength: "<span class='help'>资源池描述不能超过80个字符</span>",
+                legal: "<span class='help'>资源池描述包含非法字符</span>"
             }
         }
     });
