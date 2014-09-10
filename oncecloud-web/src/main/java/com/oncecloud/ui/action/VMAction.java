@@ -137,11 +137,11 @@ public class VMAction {
 				user.getUserAllocate());
 	}
 
-	@RequestMapping(value = "/SimpleList", method = { RequestMethod.POST })
+	@RequestMapping(value = "/BasicNetworkList", method = { RequestMethod.POST })
 	@ResponseBody
-	public String simpleList(HttpServletRequest request) {
+	public String basicNetworkList(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getVmManager().getSimpleVMList(user.getUserId());
+		JSONArray ja = this.getVmManager().getBasicNetworkList(user.getUserId());
 		return ja.toString();
 	}
 
