@@ -13,6 +13,7 @@ $(document).ready(function () {
         event.preventDefault();
         var valid = $('#editForeend-form').valid();
         var type = $("#editForeend").attr('type');
+        console.log(type);
         if (valid) {
             if (type == "new") {
                 var name = $('#fe_name').val();
