@@ -1,7 +1,6 @@
 package com.oncecloud.alipay.util.httpClient;
 
 import org.apache.commons.httpclient.NameValuePair;
-import org.springframework.stereotype.Component;
 
 /* *
  *类名：HttpRequest
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
  *以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
  *该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
  */
-@Component
+
 public class HttpRequest {
 	/** HTTP GET method */
 	public static final String METHOD_GET = "GET";
@@ -60,11 +59,6 @@ public class HttpRequest {
 	 */
 	private HttpResultType resultType = HttpResultType.BYTES;
 
-	public HttpRequest()
-	{
-		
-	}
-	
 	public HttpRequest(HttpResultType resultType) {
 		super();
 		this.resultType = resultType;
