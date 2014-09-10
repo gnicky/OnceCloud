@@ -50,8 +50,6 @@ public class AlipaySubmit {
 		if (AlipayConfig.sign_type.equals("MD5")) {
 			mysign = MD5.sign(prestr, AlipayConfig.key, AlipayConfig.input_charset);
 		}
-		System.out.print(prestr);
-		System.out.print(AlipayConfig.key);
 		return mysign;
 	}
 
@@ -100,6 +98,7 @@ public class AlipaySubmit {
 		// submit按钮控件请不要含有name属性
 		sbHtml.append("<input type=\"submit\" value=\"" + strButtonName + "\" style=\"display:none;\"></form>");
 		sbHtml.append("<script>document.forms['alipaysubmit'].submit();</script>");
+		System.out.print(sbHtml.toString());
 		return sbHtml.toString();
 	}
 

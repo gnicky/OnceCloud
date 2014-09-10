@@ -32,6 +32,9 @@ $('#tplpage').bootstrapPaginator(options);
 getImageList(1, 8, "", "system");
 
 $('.li-disable').unbind();
+$('ol').removeClass("clickable");
+$('.hidden-phone').css("cursor", "default");
+$('.hidden-phone').attr("href","javascript:void(0)");
 
 function getImageList(page, limit, search, type) {
     $('#imagelist').html("");

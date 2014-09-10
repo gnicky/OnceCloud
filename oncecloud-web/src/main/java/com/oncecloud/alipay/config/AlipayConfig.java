@@ -1,6 +1,5 @@
 package com.oncecloud.alipay.config;
 
-import org.springframework.stereotype.Component;
 
 /* *
  *类名：AlipayConfig
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
  *2、更换浏览器或电脑，重新登录查询。
  */
 
-@Component
 public class AlipayConfig {
 	
 	//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -37,6 +35,7 @@ public class AlipayConfig {
 
     //支付类型
     public static String payment_type = "1";
+	    
     
 	//必填，不能修改
 	//服务器异步通知页面路径

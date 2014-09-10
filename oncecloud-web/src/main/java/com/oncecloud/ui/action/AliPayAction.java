@@ -1,5 +1,6 @@
 package com.oncecloud.ui.action;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,15 +75,15 @@ public class AliPayAction {
 
 	@RequestMapping(value = "/SubmitAlipay", method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
-	public String submitAlipay(HttpServletRequest request) throws UnsupportedEncodingException {
+	public String submitAlipay(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		// 商户订单号
 		String out_trade_no = UUID.randomUUID().toString(); 
 		// 订单名称
-		String subject = "充值";
+		String subject = "Recharge";
 		// 付款金额
 		String total_fee = new String(request.getParameter("bill_number").getBytes("ISO-8859-1"), "UTF-8");
 		// 订单描述
-		String body = "自助充值";
+		String body = "Recharge";
 		// 商品展示地址
 		String show_url = "http://www.bncloud.com.cn"; 
 		// 防钓鱼时间戳
@@ -111,7 +113,9 @@ public class AliPayAction {
 		//sParaTemp.put("exter_invoke_ip", exter_invoke_ip);
 
 		// 建立请求
-		return AlipaySubmit.buildRequest(sParaTemp, "post", "确认");
+	    String sHtmlText = AlipaySubmit.buildRequest(sParaTemp, "get", "确认");
+	   // response.getWriter().println(sHtmlText);
+	    return sHtmlText;
 	}
 	
 	@RequestMapping(value = "/NotifyUrl", method = { RequestMethod.POST, RequestMethod.GET})
