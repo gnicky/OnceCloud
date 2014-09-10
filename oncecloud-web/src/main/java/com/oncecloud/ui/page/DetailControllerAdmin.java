@@ -113,4 +113,23 @@ public class DetailControllerAdmin {
 		}
 	}
 	
+	@RequestMapping(value = "/companymap/detail")
+	@ResponseBody
+	public ModelAndView companymapDetail(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("title", "用户资源详情");
+		model.put("sideActive", 0);
+		String cid = request.getParameter("cid");
+		if (cid != null) {
+			request.getSession().setAttribute("cid", cid);
+			return new ModelAndView("admin/detail/companymapdetail", model);
+		} else {
+			if (request.getSession().getAttribute("cid") != null) {
+				return new ModelAndView("admin/detail/companymapdetail", model);
+			} else {
+				return new ModelAndView(new RedirectView("/dashboard"));
+			}
+		}
+	}
+	
 }
