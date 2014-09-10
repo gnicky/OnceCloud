@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 
@@ -196,4 +198,11 @@ public class Utilities {
 		}
 		return result;
 	}
+	
+	public static boolean hasForbiddenChar(String str) {
+		Pattern pattern = Pattern.compile("[`~!$%^&#*()+|\\\\\\]\\[\\]\\{\\}:;'\\,<>?]+");
+		Matcher m = pattern.matcher(str);
+		return m.find();
+	}
+
 }
