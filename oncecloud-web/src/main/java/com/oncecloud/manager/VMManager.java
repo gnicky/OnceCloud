@@ -828,6 +828,7 @@ public class VMManager {
 					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
 							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
 							vmBackendName, false);
+					Thread.sleep(8000);
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
 							createEndDate);
@@ -1015,9 +1016,9 @@ public class VMManager {
 		return ja;
 	}
 
-	public JSONArray getSimpleVMList(int userId) {
+	public JSONArray getBasicNetworkList(int userId) {
 		JSONArray ja = new JSONArray();
-		List<Object[]> vmList = this.getVmDAO().getSimpleVMList(userId);
+		List<Object[]> vmList = this.getVmDAO().getBasicNetworkList(userId);
 		if (vmList != null) {
 			for (Object[] item : vmList) {
 				JSONObject itemjo = new JSONObject();
