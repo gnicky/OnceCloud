@@ -53,7 +53,7 @@ $(document).ready(function () {
     });
 
     function createListener(name, lbuuid, protocol, port, policy) {
-        var basicPath = $("#platformcontent").attr("platformBasePath");
+        var basicPath = basePath;
         var feuuid = uuid.v4();
         var way = '轮询';
         if (1 == policy) {

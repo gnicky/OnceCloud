@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content detail" id="platformcontent" lbUuid="${lbUuid}" platformBasePath="${basePath}">
+<div class="content detail" id="platformcontent" lbUuid="${lbUuid}">
 	<div class="intro">
 		<h1>负载均衡&nbsp;Load&nbsp;Balances</h1>
 		<p class="lead">

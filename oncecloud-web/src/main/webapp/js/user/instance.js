@@ -256,7 +256,7 @@ function getVMList(page, limit, search) {
                 var backupdate = obj.backupdate + "";
                 var backupStr = decodeURIComponent(backupdate);
                 if (backupdate == "") {
-                    var basePath = $('#platformcontent').attr('platformBasePath');
+                    var basePath = basePath;
                     backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'instance/createsnapshot?rsid=' + vmuuid + '&rstype=instance&rsname=' + vmName + '"></a>';
                 }
                 if (publicip != "") {
