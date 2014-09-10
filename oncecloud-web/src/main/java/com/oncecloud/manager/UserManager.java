@@ -19,9 +19,12 @@ import org.springframework.stereotype.Component;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
+import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.User;
+import com.oncecloud.helper.HashHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
@@ -38,6 +41,17 @@ public class UserManager {
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
 	private MessagePush messagePush;
+
+	private HashHelper hashHelper;
+
+	private HashHelper getHashHelper() {
+		return hashHelper;
+	}
+
+	@Autowired
+	private void setHashHelper(HashHelper hashHelper) {
+		this.hashHelper = hashHelper;
+	}
 
 	private MessagePush getMessagePush() {
 		return messagePush;
@@ -87,7 +101,7 @@ public class UserManager {
 					result = 1;
 				} else {
 					String pass = user.getUserPass();
-					if (pass.equals(Utilities.MD5(userPass))) {
+					if (pass.equals(this.getHashHelper().md5Hash(userPass))) {
 						// Validated
 						result = 0;
 					} else {
@@ -96,7 +110,8 @@ public class UserManager {
 					}
 				}
 			}
-			logger.info("Check Login: User [" + userName + "] Result [" + result + "]");
+			logger.info("Check Login: User [" + userName + "] Result ["
+					+ result + "]");
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -465,5 +480,40 @@ public class UserManager {
 				response.sendRedirect(basePath + "account/backdoor.jsp");
 			}
 		}
+	}
+	
+	public static JSONArray doGetcompanyDetail(int companyuid) {
+		JSONArray jsonarray =new JSONArray();
+		JSONObject jsonobject =new JSONObject();
+//		// 获取vm列表，硬盘列表，共网Ip列表（包括带宽），然后还有 vm数量变化的信息
+//		List<OCVM> vmlist =VMDAO.getOnePageVms(1, 100, "", companyuid);
+//		JSONArray jsonarrayvm =new JSONArray();
+//		for(OCVM ocvmobj : vmlist)
+//		{
+//			jsonarrayvm.put(ocvmobj.toJsonString());
+//		}
+//		jsonobject.put("vmlist", jsonarrayvm);
+//		
+//		List<Volume> volumelist =VolumeDAO.getOnePageVolumeList(1, 100, "", companyuid);///查询该用户的所有Volume
+//		JSONArray jsonarrayvolume =new JSONArray();
+//		for(Volume volumeobj : volumelist)
+//		{
+//			jsonarrayvolume.put(volumeobj.toJsonString());
+//		}
+//		jsonobject.put("volumelist", jsonarrayvolume);
+//		
+//		List<EIP> eiplist = EIPDAO.getOnePageEipList(1, 100, "", companyuid);///查询该用户的所有EIP
+//		JSONArray jsonarrayeip =new JSONArray();
+//		for(EIP eipobj : eiplist)
+//		{
+//			jsonarrayeip.put(eipobj.toJsonString());
+//		}
+//		jsonobject.put("eiplist", jsonarrayeip);
+//		
+//		jsonarray.put(jsonobject);
+		
+		
+		
+		return null;
 	}
 }

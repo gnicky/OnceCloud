@@ -17,7 +17,7 @@
 						class="glyphicon glyphicon-dashboard"></span></a> <a
 						href="javascript:void(0)"><span
 						class="glyphicon glyphicon-briefcase"></span></a> <a target="_blank"
-						href="${basePath}map/CompanyMap.jsp" title="用户地图展示"><span
+						href="${basePath}CompanyMap" title="用户地图展示"><span
 						class="glyphicon glyphicon-book"></span></a> <a
 						href="${basePath}logout" title="退出登录"><span
 						class="glyphicon glyphicon-off"></span></a>

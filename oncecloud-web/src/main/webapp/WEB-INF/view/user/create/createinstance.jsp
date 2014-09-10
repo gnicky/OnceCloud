@@ -47,7 +47,7 @@
 							<div class="wizard-inner">
 								<h5>推荐类型</h5>
 								<div class="types">
-									<div class="types-item">
+									<div class="types-item selected">
 										<div class="inner">
 											<a><span class="glyphicon glyphicon-ok"></span></a>
 										</div>
@@ -101,10 +101,10 @@
 								</div>
 								<h6>内存</h6>
 								<div class="memory options">
-									<div class="types-options memory-options selected" capacity="0.5">
+									<div class="types-options memory-options" capacity="0.5">
 										512MB
 									</div>
-									<div class="types-options memory-options" capacity="1">
+									<div class="types-options memory-options selected" capacity="1">
 										1G
 									</div>
 									<div class="types-options memory-options" capacity="2">
@@ -221,7 +221,7 @@
 								</tr>
 								<tr>
 									<td>内存</td>
-									<td id="selectedCap">512&nbsp;M</td>
+									<td id="selectedCap">1&nbsp;G</td>
 								</tr>
 								<tr>
 									<td>名称</td>

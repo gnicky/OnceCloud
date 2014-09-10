@@ -282,7 +282,7 @@ function startVM(uuid) {
         type: 'get',
         url: '/VMAction/StartVM',
         data: {uuid:uuid},
-        dataType: 'json',
+        dataType: 'json'
     });
 }
 
@@ -296,7 +296,7 @@ function restartVM(uuid) {
         type: 'get',
         url: '/VMAction/RestartVM',
         data:{uuid:uuid},
-        dataType: 'json',
+        dataType: 'json'
     });
 }
 
@@ -311,7 +311,7 @@ function destroyVM(uuid) {
         type: 'get',
         url: '/VMAction/DeleteVM',
         data:{uuid:uuid},
-        dataType: 'json',
+        dataType: 'json'
     });
 }
 
@@ -325,7 +325,7 @@ function shutdownVM(uuid, force) {
         type: 'get',
         url: '/VMAction/ShutdownVM',
         data: {uuid:uuid,force:force},
-        dataType: 'json',
+        dataType: 'json'
     });
 }
 

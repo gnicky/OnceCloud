@@ -1,7 +1,9 @@
-package com.oncecloud.daemon.event;
+package com.oncecloud.daemon.listener;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+
+import com.oncecloud.daemon.event.ServiceDownEvent;
 
 @Component
 public class ServiceDownListener implements
@@ -9,7 +11,7 @@ public class ServiceDownListener implements
 
 	@Override
 	public void onApplicationEvent(ServiceDownEvent event) {
-		System.out.println(event.getSource());
+		System.out.println("Service down: " + event.getSource());
 	}
 
 }

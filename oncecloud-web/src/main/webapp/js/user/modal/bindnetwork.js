@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $("#VnetModalContainer").on("hidden", function () {
+    $("#InstanceModalContainer").on("hidden", function () {
         $(this).removeData("modal");
         $(this).children().remove();
     });
@@ -58,8 +58,8 @@ $(document).ready(function () {
         $('#vlanlist').html("");
         $.ajax({
             type: 'get',
-            url: '/VnetAction',
-            data: 'action=getlist&page=' + page + '&limit=' + limit + '&search=' + search,
+            url: '/VnetAction/VnetList',
+            data: {page:page, limit:limit, search:search},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -118,10 +118,11 @@ $(document).ready(function () {
     function bindvn(vnId, vmuuidStr) {
         $.ajax({
             type: 'get',
-            url: '/VnetAction',
-            data: 'action=addvm&vnId=' + vnId + '&vmuuidStr=' + vmuuidStr,
+            url: '/VnetAction/AddVM',
+            data: {vnId:vnId, vmuuidStr:vmuuidStr},
             dataType: 'text',
             success: function (response) {
+            	reloadList(1);
             },
             error: function () {
             }

@@ -36,7 +36,7 @@
 					<input type="submit" class='btn btn-primary' value="登录">
 				</div>
 				<p style="margin-top: 10px">
-					<a>忘记密码</a> <a href="${basePath}register">快速注册</a>
+					<a>忘记密码</a> <a href="${basePath}account/register">快速注册</a>
 				</p>
 			</form>
 		</div>

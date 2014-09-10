@@ -81,6 +81,7 @@ public class AccountController {
 				+ ":" + request.getServerPort() + path + "/";
 		Map<String, String> model = new HashMap<String, String>();
 		model.put("basePath", basePath);
+		request.getSession().setAttribute("basePath", basePath);
 		return new ModelAndView("account/login", model);
 	}
 
