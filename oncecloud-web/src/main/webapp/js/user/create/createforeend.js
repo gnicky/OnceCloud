@@ -13,6 +13,7 @@ $(document).ready(function () {
         event.preventDefault();
         var valid = $('#editForeend-form').valid();
         var type = $("#editForeend").attr('type');
+        console.log(type);
         if (valid) {
             if (type == "new") {
                 var name = $('#fe_name').val();
@@ -53,7 +54,7 @@ $(document).ready(function () {
     });
 
     function createListener(name, lbuuid, protocol, port, policy) {
-        var basicPath = $("#platformcontent").attr("platformBasePath");
+        var basicPath = basePath;
         var feuuid = uuid.v4();
         var way = '轮询';
         if (1 == policy) {

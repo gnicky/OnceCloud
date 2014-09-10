@@ -9,7 +9,7 @@ $('#LbModalContainer').on('hide', function (event) {
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
-    var url = $('#platformcontent').attr('platformBasePath') + 'common/modify';
+    var url = basePath + 'common/modify';
     var lbName = $('#lbname').text();
     var lbDesc = $('#lbdesc').text();
     var lbUuid = $('#platformcontent').attr("lbUuid");
@@ -244,7 +244,7 @@ $('#fe_apply').on('click', function (event) {
 $('#fe_create').on('click', function (event) {
     event.preventDefault();
     var lbUuid = $('#platformcontent').attr("lbUuid");
-    var url = $("#platformcontent").attr("platformBasePath") + '/foreend/create';
+    var url = basePath + 'foreend/create';
     $('#LbModalContainer').load(url, { "name": "", "protocol": "", "port": "", "policy": "", "foreuuid": "", "type": "new", "lbuuid": lbUuid}, function () {
         $('#LbModalContainer').modal({
             backdrop: false,
@@ -256,7 +256,7 @@ $('#fe_create').on('click', function (event) {
 $('#fore_list').on('click', '.be_create', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('feid');
-    var url = $("#platformcontent").attr("platformBasePath") + 'backend/create';
+    var url = basePath + 'backend/create';
     $('#LbModalContainer').load(url, {"foreuuid": uuid}, function () {
         $('#LbModalContainer').modal({
             backdrop: false,
@@ -273,7 +273,7 @@ $('#fore_list').on('click', '.fe_update', function (event) {
     var port = $(this).parent().parent().parent().attr('feport');
     var policy = $(this).parent().parent().parent().attr('fepolicy');
     var lbUuid = $('#platformcontent').attr("lbUuid");
-    var url = $("#platformcontent").attr("platformBasePath") + '/foreend/create';
+    var url = basePath + 'foreend/create';
     $('#LbModalContainer').load(url, {"name": name, "protocol": protocol, "port": port, "policy": policy, "foreuuid": uuid, "type": "update", "lbuuid": lbUuid}, function () {
         $('#LbModalContainer').modal({
             backdrop: false,

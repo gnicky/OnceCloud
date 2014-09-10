@@ -107,7 +107,7 @@ $("#createvolumeAction").on('click', function (event) {
 
 function createVolume(volumeuuid, volumeName, volumeSize) {
     var showid = "vol-" + volumeuuid.substring(0, 8);
-    var basePath = $('#platformcontent').attr('platformBasePath');
+    var basePath = basePath;
     var backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'user/create/createsnapshot.jsp?rsid=' + volumeuuid + '&rstype=instance&rsname=' + volumeName + '"></a>';
     var showstr = "<a class='id'>" + showid + '</a>';
     $("#tablebody").prepend('<tr rowid="' + volumeuuid + '"><td class="rcheck"><input type="checkbox" name="volumerow"></td><td>'

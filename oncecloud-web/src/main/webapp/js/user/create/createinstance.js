@@ -212,7 +212,7 @@ function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginP
     }
     var showuuid = "i-" + vmuuid.substring(0, 8);
     var showstr = "<a class='id'>" + showuuid + '</a>';
-    var basePath = $('#platformcontent').attr('platformBasePath');
+    var basePath = basePath;
     var backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'user/create/createsnapshot.jsp?rsid=' + vmuuid + '&rstype=instance&rsname=' + vmName + '"></a>';
     $("#tablebody").prepend('<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
         + vmName + '</td><td><span class="icon-status icon-process" name="stateicon"></span><span name="stateword">创建中</span></td><td name="cpuCore">'

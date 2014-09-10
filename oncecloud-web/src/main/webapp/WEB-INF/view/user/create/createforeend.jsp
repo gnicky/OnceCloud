@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<script src="${basePath}js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="${basePath}js/jquery.validate.js"></script>
-<script src="${basePath}js/uuid.js"></script>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script src="${basePath}js/user/create/createforeend.js"></script>
 <div class="modal-dialog" style="margin-top:100px; width:550px height:400px">
 	<div class="modal-content" id="editForeend" type="${type}" lbuuid="${lbuuid}" foreuuid="${foreuuid}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -27,14 +25,17 @@
 						<div class="controls" style="margin-left:180px">
 							<div class="select-con">
 								<select class="dropdown-select" id="fe_protocol" name="fe_protocol">
-								#if(${feprotocol}=="TCP")
-									<option value="HTTP">HTTP</option>
-									<option value="TCP" selected>TCP</option>
-								#else
-									<option value="HTTP" selected>HTTP</option>
-									<option value="TCP">TCP</option>
-								#end
-									</select>
+								<c:choose>
+									<c:when test="${feprotocol=='TCP'}">
+										<option value="HTTP">HTTP</option>
+										<option value="TCP" selected>TCP</option>
+									</c:when>
+									<c:otherwise>
+										<option value="HTTP" selected>HTTP</option>
+										<option value="TCP">TCP</option>
+									</c:otherwise>
+								</c:choose>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -53,13 +54,16 @@
 						<div class="controls" style="margin-left:180px">
 							<div class="select-con">
 								<select class="dropdown-select" id="fe_policy" name="fe_policy">
-									#if(${fepolicy}=="1")
+								<c:choose>
+									<c:when test="${fepolicy==1}">
 										<option value="0">轮询</option>
 										<option value="1" selected>最小响应时间</option>
-									#else
-									    <option value="0" selected>轮询</option>
+									</c:when>
+									<c:otherwise>
+										 <option value="0" selected>轮询</option>
 										<option value="1">最小响应时间</option>
-									#end
+									</c:otherwise>
+								</c:choose>
 								</select>
 							</div>
 						</div>
