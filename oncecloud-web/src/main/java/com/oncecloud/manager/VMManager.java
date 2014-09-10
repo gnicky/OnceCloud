@@ -214,7 +214,7 @@ public class VMManager {
 	public Record createVMOnHost(Connection c, String vmUuid, String tplUuid,
 			String loginName, String loginPwd, long cpuCore,
 			long memoryCapacity, String mac, String ip, String OS,
-			String hostUuid, String imagePwd, String vmName) {
+			String hostUuid, String imagePwd, String vmName, boolean ping) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cpuNumber", cpuCore);
 		map.put("memoryValue", memoryCapacity);
@@ -226,14 +226,14 @@ public class VMManager {
 		map.put("origin_passwd", imagePwd);
 		Host host = Types.toHost(hostUuid);
 		Record vmrecord = VM
-				.createOnFromTemplate(c, host, tplUuid, vmName, map);
+				.createOnFromTemplate(c, host, tplUuid, vmName, map, ping);
 		return vmrecord;
 	}
 
 	public Record createVMFromVDI(Connection c, String vmUuid, String vdiUuid,
 			String tplUuid, String loginName, String loginPwd, long cpuCore,
 			long memoryCapacity, String mac, String ip, String OS,
-			String hostUuid, String imagePwd, String vmName) {
+			String hostUuid, String imagePwd, String vmName, boolean ping) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cpuNumber", cpuCore);
 		map.put("memoryValue", memoryCapacity);
@@ -245,7 +245,7 @@ public class VMManager {
 		map.put("passwd", loginPwd);
 		map.put("origin_passwd", imagePwd);
 		Host host = Types.toHost(hostUuid);
-		Record vmrecord = VM.createWithVDI(c, host, tplUuid, vmName, map);
+		Record vmrecord = VM.createWithVDI(c, host, tplUuid, vmName, map, ping);
 		return vmrecord;
 	}
 
@@ -827,7 +827,7 @@ public class VMManager {
 							+ "] IP [" + ip + "] OS [" + OS + "]");
 					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
 							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
-							vmBackendName);
+							vmBackendName, false);
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
 							createEndDate);

@@ -298,7 +298,7 @@ public class RouterManager {
 				if (preCreate == true) {
 					Record rtrecord = this.getVmManager().createVMOnHost(c,
 							uuid, tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
-							allocateHost, imagePwd, backendName);
+							allocateHost, imagePwd, backendName, true);
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
 							createEndDate);

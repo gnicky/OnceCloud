@@ -5598,7 +5598,7 @@ public class VM extends XenAPIObject {
 	 */
 	
 	public static VM.Record createOnFromTemplate(Connection c,
-			Host host, String templateUuid, String newName, Map<String, Object> conf) {
+			Host host, String templateUuid, String newName, Map<String, Object> conf, Boolean ping) {
 		try {
 			VM tempVM = VM.getByUuid(c, templateUuid);
 			String method_call = "VM.create_on_from_template";
@@ -5606,7 +5606,8 @@ public class VM extends XenAPIObject {
 			Object[] method_params = { Marshalling.toXMLRPC(session),
 					Marshalling.toXMLRPC(host),
 					Marshalling.toXMLRPC(templateUuid),
-					Marshalling.toXMLRPC(newName), Marshalling.toXMLRPC(conf), };
+					Marshalling.toXMLRPC(newName), Marshalling.toXMLRPC(conf), 
+					Marshalling.toXMLRPC(ping)};
 			Map response = c.dispatch(method_call, method_params);
 
 			Object result = response.get("Value");
@@ -5713,7 +5714,7 @@ public class VM extends XenAPIObject {
 	 */
 	
 	public static VM.Record createWithVDI(Connection c,
-			Host host, String templateUuid, String newName, Map<String, Object> conf) {
+			Host host, String templateUuid, String newName, Map<String, Object> conf, Boolean ping) {
 		try {
 			VM tempVM = VM.getByUuid(c, templateUuid);
 			String method_call = "VM.create_with_VDI";
@@ -5721,7 +5722,8 @@ public class VM extends XenAPIObject {
 			Object[] method_params = { Marshalling.toXMLRPC(session),
 					Marshalling.toXMLRPC(host),
 					Marshalling.toXMLRPC(templateUuid),
-					Marshalling.toXMLRPC(newName), Marshalling.toXMLRPC(conf), };
+					Marshalling.toXMLRPC(newName), Marshalling.toXMLRPC(conf), 
+					Marshalling.toXMLRPC(ping)};
 			Map response = c.dispatch(method_call, method_params);
 
 			Object result = response.get("Value");

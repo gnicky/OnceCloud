@@ -65,8 +65,6 @@ $(document).ready(function () {
                             var thistr = $("#tablebody").find('[rowid="' + vnetid + '"]');
                             thistr.children('td').eq(3).html(routerhtml);
                         }
-                    },
-                    error: function () {
                     }
                 });
                 $('#VnetModalContainer').modal('hide');
@@ -101,11 +99,8 @@ $(document).ready(function () {
             url: '/VnetAction/CheckNet',
             data: {routerid:routerid, net:net},
             dataType: 'json',
-            success: function (response) {
-                result = response.isSuccess;
-            },
-            error: function () {
-
+            success: function (obj) {
+                result = obj.result;
             }
         });
         return result;
@@ -177,13 +172,6 @@ $(document).ready(function () {
             }
         }
         return false;
-    }
-
-    function pageDisplayUpdate(current, total) {
-        var c = document.getElementById("currentPS");
-        var t = document.getElementById("totalPS");
-        c.innerHTML = current + "";
-        t.innerHTML = total + "";
     }
 
     $("#create-form").validate({
