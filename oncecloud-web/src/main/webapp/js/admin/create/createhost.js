@@ -199,11 +199,10 @@ $(document).ready(function () {
         rules: {
             server_name: {
                 required: true,
-                minlength: 3
+                maxlength: 20
             },
             server_desc: {
                 required: true,
-                minlength: 3,
                 maxlength: 80
             },
             server_pwd: {
@@ -219,12 +218,11 @@ $(document).ready(function () {
         messages: {
             server_name: {
                 required: "<span class='help'>服务器名称不能为空</span>",
-                minlength: "<span class='help'>服务器名称不能少于3个字符</span>"
+                maxlength: "<span class='help'>服务器名称不能多于20个字符</span>"
             },
             server_desc: {
                 required: "<span class='help'>服务器描述不能为空</span>",
-                minlength: "<span class='help'>服务器描述不能少于3个字符</span>",
-                maxlength: "<span class='help'>服务器描述不能超过80个字符</span>"
+                maxlength: "<span class='help'>服务器描述不能多于80个字符</span>"
             },
             server_pwd: {
                 required: "<span class='help'>密码不能为空</span>"

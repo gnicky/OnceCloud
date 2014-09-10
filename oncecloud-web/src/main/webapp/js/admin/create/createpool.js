@@ -120,22 +120,20 @@ $(document).ready(function () {
         rules: {
             pool_name: {
                 required: true,
-                minlength: 3
+                maxlength: 20
             },
             pool_desc: {
                 required: true,
-                minlength: 3,
                 maxlength: 80
             }
         },
         messages: {
             pool_name: {
                 required: "<span class='help'>资源池名称不能为空</span>",
-                minlength: "<span class='help'>资源池名称不能少于3个字符</span>"
+                maxlength: "<span class='help'>资源池名称不能超过20个字符</span>"
             },
             pool_desc: {
                 required: "<span class='help'>资源池描述不能为空</span>",
-                minlength: "<span class='help'>资源池描述不能少于3个字符</span>",
                 maxlength: "<span class='help'>资源池描述不能超过80个字符</span>"
             }
         }

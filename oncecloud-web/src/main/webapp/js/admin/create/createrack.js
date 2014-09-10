@@ -116,22 +116,20 @@ $(document).ready(function () {
         rules: {
             rack_name: {
                 required: true,
-                minlength: 3
+                maxlength: 20
             },
             rack_desc: {
                 required: true,
-                minlength: 3,
                 maxlength: 80
             }
         },
         messages: {
             rack_name: {
                 required: "<span class='help'>机架名称不能为空</span>",
-                minlength: "<span class='help'>机架名称不能少于3个字符</span>"
+                maxlength: "<span class='help'>机架名称不能超过20个字符</span>"
             },
             rack_desc: {
                 required: "<span class='help'>机架描述不能为空</span>",
-                minlength: "<span class='help'>机架描述不能少于3个字符</span>",
                 maxlength: "<span class='help'>机架描述不能超过80个字符</span>"
             }
         }

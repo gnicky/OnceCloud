@@ -231,11 +231,10 @@ $(document).ready(function () {
         rules: {
             sr_name: {
                 required: true,
-                minlength: 3
+                maxlength: 20
             },
             sr_desc: {
                 required: true,
-                minlength: 3,
                 maxlength: 80
             },
             sr_address: {
@@ -251,11 +250,10 @@ $(document).ready(function () {
         messages: {
             sr_name: {
                 required: "<span class='help'>存储名称不能为空</span>",
-                minlength: "<span class='help'>存储名称不能少于3个字符</span>"
+                maxlength: "<span class='help'>存储名称不能超过20个字符</span>"
             },
             sr_desc: {
                 required: "<span class='help'>存储描述不能为空</span>",
-                minlength: "<span class='help'>存储描述不能少于3个字符</span>",
                 maxlength: "<span class='help'>存储描述不能超过80个字符</span>"
             },
             sr_address: {

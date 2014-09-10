@@ -30,21 +30,21 @@ $("#apply-form").validate({
     rules: {
         qa_title: {
             required: true,
-            maxlength: 16
+            maxlength: 20
         },
         qa_content: {
             required: true,
-            minlength: 5
+            maxlength: 100
         }
     },
     messages: {
         qa_title: {
             required: "<span class='help'>表单标题不能为空</span>",
-            maxlength: "<span class='help'>不能超过16个字符</span>"
+            maxlength: "<span class='help'>不能超过20个字符</span>"
         },
         qa_content: {
             required: "<span class='help'>表单描述不能为空</span>",
-            minlength: "<span class='help'>请输入至少5个字符</span>"
+            maxlength: "<span class='help'>不能超过100个字符</span>"
         }
     }
 });

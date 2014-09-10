@@ -37,7 +37,7 @@ $("#createinfo-form").validate({
     rules: {
         volume_name: {
             required: true,
-            maxlength: 16
+            maxlength: 20
         },
         count: {
             required: true,
@@ -46,8 +46,8 @@ $("#createinfo-form").validate({
     },
     messages: {
         volume_name: {
-            required: "<span class='unit'>硬盘名不能为空</span>",
-            maxlength: "<span class='unit'>不能超过16个字符</span>"
+            required: "<span class='unit'>名称不能为空</span>",
+            maxlength: "<span class='unit'>名称不能超过20个字符</span>"
         },
         count: {
             required: "<span class='unit'>数量不能为空</span>",
