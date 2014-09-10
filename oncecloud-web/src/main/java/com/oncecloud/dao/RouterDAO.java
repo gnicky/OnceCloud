@@ -667,14 +667,12 @@ public class RouterDAO {
 		boolean result = false;
 		Session session = null;
 		try {
+			Router router = this.getRouter(routeruuid);
+			router.setRouterName(routerName);
+			router.setRouterDesc(routerDesc);
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "update Router set routerName= :routerName, routerDesc = :routerDesc where routerUuid ＝ :routerUuid";
-			Query query = session.createQuery(queryString);
-			query.setString("routerName", routerName);
-			query.setString("routerUuid", routeruuid);
-			query.setString("routerDesc", routerDesc);
-			query.executeUpdate();
+			session.update(router);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
