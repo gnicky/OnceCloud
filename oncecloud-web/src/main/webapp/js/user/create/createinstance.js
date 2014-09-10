@@ -238,8 +238,12 @@ $('.types').on('click', '.types-item', function (event) {
     var mem = new Array(1,2,2,3,5,6);
     $('.types-item',$('.types')).removeClass('selected');
     $(this).addClass('selected');
-    $('.cpu-options').eq(core[selindex]).click();
-    $('.memory-options').eq(mem[selindex]).click();
+    $('div', $('.cpu')).removeClass('selected');
+    $('.cpu-options').eq(core[selindex]).addClass('selected');
+    $('#selectedCore').html($('.cpu').find('.selected').attr("core") + "&nbsp;核");
+    $('div', $('.memory')).removeClass('selected');
+    $('.memory-options').eq(mem[selindex]).addClass('selected');
+    $('#selectedCap').html($('.memory').find('.selected').attr("capacity") + "&nbsp;G");
     $('#selectedType').html($(this).find(".type-name").text());
 });
 
@@ -248,6 +252,8 @@ $('.cpu').on('click', '.cpu-options', function (event) {
     $('div', $('.cpu')).removeClass('selected');
     $(this).addClass('selected');
     $('#selectedCore').html($('.cpu').find('.selected').attr("core") + "&nbsp;核");
+    $('.types-item',$('.types')).removeClass('selected');
+    $('#selectedType').html("定制");
     priceDisplayUpdate();
 });
 
@@ -257,6 +263,8 @@ $('.memory').on('click', '.memory-options', function (event) {
         $('div', $('.memory')).removeClass('selected');
         $(this).addClass('selected');
         $('#selectedCap').html($('.memory').find('.selected').attr("capacity") + "&nbsp;G");
+        $('.types-item',$('.types')).removeClass('selected');
+   		$('#selectedType').html("定制");
         priceDisplayUpdate();
     }
 });
