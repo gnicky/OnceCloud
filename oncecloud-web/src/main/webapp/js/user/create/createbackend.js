@@ -4,7 +4,7 @@ function loadVmList() {
     $.ajax({
         type: 'post',
         async: false,
-        url: '/VMAction/SimpleList',
+        url: '/VMAction/BasicNetworkList',
         dataType: 'json',
         success: function (array) {
             var vmlistHtml = '';
