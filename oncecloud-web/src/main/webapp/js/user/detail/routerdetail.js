@@ -48,8 +48,8 @@ function getRouterBasicList() {
         data: {uuid: routerUuid},
         dataType: 'json',
         success: function (obj) {
-            var rtName = decodeURI(obj.routerName);
-            var rtDesc = decodeURI(obj.routerDesc);
+            var rtName = decodeURIComponent(obj.routerName);
+            var rtDesc = decodeURIComponent(obj.routerDesc);
             var rtIp = obj.routerIp;
             var rtMac = obj.routerMac;
             var rtStatus = obj.routerStatus;
@@ -61,7 +61,7 @@ function getRouterBasicList() {
             var rtPower = obj.routerPower;
             var rtFirewall = obj.routerFirewall;
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
+            var useDate = decodeURIComponent(obj.useDate);
             var stateStr = '';
             var showstr = '';
             var showuuid = "rt-" + routerUuid.substring(0, 8);
@@ -274,7 +274,7 @@ function getVxnets() {
                             }
                             var tbody = $('<tbody></tbody>');
                             tbody.html('<tr rowid="' + jsonocvm.hostid + '"><td><a class="id">i-' + jsonocvm.hostid.substring(0, 8) + '</a></td><td>'
-                                + decodeURI(jsonocvm.hostname) + '</td><td>' + stateStr + '</td><td>' + hosip
+                                + decodeURIComponent(jsonocvm.hostname) + '</td><td>' + stateStr + '</td><td>' + hosip
                                 + '</td><td></td><td><a href="#">修改</a></td>');
                             table.append(tbody);
                         });

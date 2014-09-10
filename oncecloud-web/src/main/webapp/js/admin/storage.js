@@ -97,8 +97,8 @@ function getStorageList(page, limit, search) {
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var srid = obj.srid;
-                    var srname = decodeURI(obj.srname);
-                    var srDesc = decodeURI(obj.srDesc);
+                    var srname = decodeURIComponent(obj.srname);
+                    var srDesc = decodeURIComponent(obj.srDesc);
                     var srAddress = obj.srAddress;
                     var createDate = obj.createDate;
                     var srType = obj.srType;
@@ -106,7 +106,7 @@ function getStorageList(page, limit, search) {
                     var showid = "sr-" + srid.substring(0, 8);
                     var srsize = obj.srsize;
                     var rackid = obj.rackid;
-                    var rackname = decodeURI(obj.rackname);
+                    var rackname = decodeURIComponent(obj.rackname);
                     var thistr = '<tr srid="' + srid + '" srname="' + srname + '" srtype="'
                         + srType + '" srdesc="' + srDesc + '" rackid="' + rackid
                         + '" ><td class="rcheck"><input type="checkbox" name="srrow" srsize='

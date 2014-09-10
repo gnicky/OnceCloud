@@ -12,7 +12,7 @@ $(document).ready(function () {
                 if (array.length >= 1) {
                     $("#rack_location").html("");
                     $.each(array, function (index, item) {
-                        $("#rack_location").append("<option value='" + item.rackid + "'>" + decodeURI(item.rackname) + "</option>");
+                        $("#rack_location").append("<option value='" + item.rackid + "'>" + decodeURIComponent(item.rackname) + "</option>");
                     })
                 }
                 else {
@@ -96,27 +96,27 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/StorageAction/Add',
-                    data : {
-						srname : srName,
-						srAddress : srAddress,
-						srDesc : srDesc,
-						srType : srType,
-						srDir : srdir,
-						rackId : rackid,
-						rackName : rackname
-					},
+                    data: {
+                        srname: srName,
+                        srAddress: srAddress,
+                        srDesc: srDesc,
+                        srType: srType,
+                        srDir: srdir,
+                        rackId: rackid,
+                        rackName: rackname
+                    },
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
                             var obj = array[0];
                             var srid = obj.srid;
-                            var srname = decodeURI(obj.srname);
+                            var srname = decodeURIComponent(obj.srname);
                             var srAddress = obj.srAddress;
                             var createDate = obj.createDate;
                             var srType = obj.srType;
                             var srDir = obj.srDir;
                             var rackid = obj.rackid;
-                            var rackname = decodeURI(obj.rackname);
+                            var rackname = decodeURIComponent(obj.rackname);
                             var showid = "sr-" + srid.substring(0, 8);
                             var mytr = '<tr srid="' + srid + '" srname="' + srname + '" srtype="' + srType + '" srdedc="' + srDesc + '" rackid="' + rackid + '"><td class="rcheck"><input type="checkbox" name="srrow" srsize=0></td>'
                                 + '<td><a>' + showid + '</a></td><td>' + srname + '</td><td>' + srAddress + '</td><td>' + srDir + '</td><td><a>' + srType.toUpperCase() + '</a></td><td>' + rackname + '</td><td class="time">' + createDate + '</td></tr>';
@@ -133,7 +133,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/StorageAction/Update',
-                    data: {srid:srid, srName:srName, srDesc:srDesc, rackid:rackid},
+                    data: {srid: srid, srName: srName, srDesc: srDesc, rackid: rackid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[srid="' + srid + '"]');
@@ -204,7 +204,7 @@ $(document).ready(function () {
                 type: 'get',
                 async: true,
                 url: '/StorageAction/QueryAddress',
-                data: {address:ip},
+                data: {address: ip},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {

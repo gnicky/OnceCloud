@@ -769,8 +769,8 @@ function getInstanceBasicList() {
         data: {uuid: instanceUuid},
         dataType: 'json',
         success: function (obj) {
-            var instanceName = decodeURI(obj.instanceName);
-            var instanceDesc = decodeURI(obj.instanceDesc);
+            var instanceName = decodeURIComponent(obj.instanceName);
+            var instanceDesc = decodeURIComponent(obj.instanceDesc);
             var instanceState = obj.instanceState;
             var stateStr = '';
             var showstr = '';
@@ -789,7 +789,7 @@ function getInstanceBasicList() {
             backfunction();    //add by cyh
 
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
+            var useDate = decodeURIComponent(obj.useDate);
             var instanceCPU = obj.instanceCPU;
             var instanceMemory = obj.instanceMemory;
             if (instanceMemory < 1024) {
@@ -836,7 +836,7 @@ function getInstanceBasicList() {
                     network = '<a id="vnetip" vnetip="' + obj.vlanUuid + '" routerUuid="' + obj.routerUuid + '">(' + vlan + ')&nbsp;/&nbsp;' + instanceIP + '</a>';
                 }
             }
-            var backDate = decodeURI(obj.backupdate);
+            var backDate = decodeURIComponent(obj.backupdate);
             var bkId = "&nbsp;";
             if (backDate != "") {
                 bkId = '<a class="id" id="snapshotid" rsuuid="' + instanceUuid + '" rsname="' + instanceName + '">bk-' + instanceUuid.substring(0, 8) + '</a>';
@@ -881,7 +881,7 @@ function getInstanceBasicList() {
                     data: {uuid: obj.instancevlan},
                     dataType: 'json',
                     success: function (obj) {
-                        $("#vxnetName").text(decodeURI(obj.vnetName));
+                        $("#vxnetName").text(decodeURIComponent(obj.vnetName));
                         if (obj.vnetRouter != null && obj.vnetRouter != "&nbsp;" && obj.vnetRouter != "null") {
                             $("#vnrouterUuid").val(obj.vnetRouter);
                             $("#btnshowrouter").hide();
@@ -893,8 +893,8 @@ function getInstanceBasicList() {
                                 dataType: 'json',
                                 success: function (obj) {
                                     $("#componentRouterDiv").find(".private-ip").text(obj.routerIp);
-                                    $("#componentRouterDiv").find(".router-id").text(decodeURI(obj.routerName));
-                                    $("#componentRouterSgDiv").find(".sg-name").text(decodeURI(obj.routerFirewallName));
+                                    $("#componentRouterDiv").find(".router-id").text(decodeURIComponent(obj.routerName));
+                                    $("#componentRouterSgDiv").find(".sg-name").text(decodeURIComponent(obj.routerFirewallName));
 
                                     if (obj.eip != "") {
                                         $("#routerunbingpublic .component-id").text(obj.eip);
@@ -926,7 +926,7 @@ function getInstanceBasicList() {
                     $("#unbindpublic").show();
                 }
 
-                $("#firewallId").text(decodeURI(obj.instanceFirewallName));
+                $("#firewallId").text(decodeURIComponent(obj.instanceFirewallName));
             }
 
             ///显示硬盘

@@ -39,26 +39,26 @@ $(document).ready(function () {
             var userLevel = document.getElementById("user_level").value;
             console.log(type);
             if ('new' == type) {
-            	console.log("aaa");
+                console.log("aaa");
                 $.ajax({
                     type: 'post',
                     url: '/UserAction/Create',
-                    data : {
-						userName : userName,
-						userPassword : userPwd,
-						userEmail : userEmail,
-						userTelephone : userTel,
-						userCompany : userCom,
-						userLevel : userLevel
-					},
+                    data: {
+                        userName: userName,
+                        userPassword: userPwd,
+                        userEmail: userEmail,
+                        userTelephone: userTel,
+                        userCompany: userCom,
+                        userLevel: userLevel
+                    },
                     dataType: 'json',
                     success: function (array) {
-                    	console.log(array);
+                        console.log(array);
                         if (array.length == 1) {
                             var obj = array[0];
-                            var username = decodeURI(obj.username);
+                            var username = decodeURIComponent(obj.username);
                             var userid = obj.userid;
-                            var usercom = decodeURI(obj.usercom);
+                            var usercom = decodeURIComponent(obj.usercom);
                             var userdate = obj.userdate;
                             var userlevel = obj.userlevel;
                             var usermail = obj.usermail;
@@ -81,13 +81,13 @@ $(document).ready(function () {
                     type: 'post',
                     url: '/UserAction/Update',
                     data: {
-						userName : userName,
-						changeId : userId,
-						userEmail : userEmail,
-						userTelephone : userTel,
-						userCompany : userCom,
-						userLevel : userLevel
-					},
+                        userName: userName,
+                        changeId: userId,
+                        userEmail: userEmail,
+                        userTelephone: userTel,
+                        userCompany: userCom,
+                        userLevel: userLevel
+                    },
                     dataType: 'text',
                     success: function () {
                         var levelstr = "<a><span id='userlevel' level='1' class='glyphicon glyphicon-user' style='margin-right:7px'></span>平台用户</a>";
@@ -147,7 +147,7 @@ $(document).ready(function () {
                 type: 'get',
                 async: false,
                 url: '/UserAction/QueryUser',
-                data: {userName:userName},
+                data: {userName: userName},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {

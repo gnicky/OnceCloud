@@ -11,11 +11,11 @@ function getQuestionDetail() {
         success: function (array) {
             if (array.length == 1) {
                 var obj = array[0];
-                var qaTitle = decodeURI(obj.qaTitle);
+                var qaTitle = decodeURIComponent(obj.qaTitle);
                 var qaTime = obj.qaTime;
                 var title = qaTitle + '<br/><small class="time">' + qaTime + '</small>';
                 $('#qa-title').html(title);
-                $('#qa-content').html(decodeURI(obj.qaContent));
+                $('#qa-content').html(decodeURIComponent(obj.qaContent));
                 var qaStatus = obj.qaStatus;
                 if (qaStatus == 1) {
                     var appendStr = '<div class="once-pane" id="reply-area"><fieldset>'
@@ -55,7 +55,7 @@ $('#platformcontent').on('click', '#area-submit', function (event) {
                     imgStr = "../../img/user/user.png";
                 }
                 if (qaId > 0) {
-                    var qaContent = decodeURI(obj.qaContent);
+                    var qaContent = decodeURIComponent(obj.qaContent);
                     var qaTime = obj.qaTime;
                     var innerStr = '<div class="attachments"></div><div class="reply-item">'
                         + '<div class="owner"><a class="avatar" href="#" style="background-image: url(' + imgStr + ')"></a></div>'
@@ -85,7 +85,7 @@ function getReplyList() {
             for (var i = 0; i < array.length; i++) {
                 var obj = array[i];
                 var qaUser = obj.qaUser;
-                var qaContent = decodeURI(obj.qaContent);
+                var qaContent = decodeURIComponent(obj.qaContent);
                 var qaStatus = obj.qaStatus;
                 var qaTime = obj.qaTime;
                 if (qaStatus == 2) {

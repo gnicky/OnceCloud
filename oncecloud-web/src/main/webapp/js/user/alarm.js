@@ -100,11 +100,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/alarm/detail");
-    form.attr('method','post');
+    form.attr("action", "/alarm/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="alarmUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -131,7 +131,7 @@ function getAlarmList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var alarmUuid = obj.alarmUuid;
-                var alarmName = decodeURI(obj.alarmName);
+                var alarmName = decodeURIComponent(obj.alarmName);
                 var alarmStatus = obj.alarmStatus;
                 var stateStr = "";
                 var showuuid = "al-" + alarmUuid.substring(0, 8);
@@ -147,7 +147,7 @@ function getAlarmList(page, limit, search) {
                 var _modifyStr = new Array("否", "是");
                 var alarmModify = obj.alarmModify;
                 var modifyStr = _modifyStr[alarmModify];
-                var alarmDate = decodeURI(obj.alarmDate);
+                var alarmDate = decodeURIComponent(obj.alarmDate);
                 alarmDate = alarmDate.substring(0, alarmDate.length - 2);
                 alarmDate = alarmDate.replace(/%3A/g, ":");
                 var thistr = '<tr rowid="' + alarmUuid + '"><td class="rcheck"><input type="checkbox" name="alrow"></td><td name="console">' + showstr + '</td><td name="alarmName">'
@@ -165,7 +165,7 @@ function destroyAlarm(uuid) {
     $.ajax({
         type: 'get',
         url: '/AlarmAction/Destory',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json',
         success: function (result) {
             if (result.obj) {

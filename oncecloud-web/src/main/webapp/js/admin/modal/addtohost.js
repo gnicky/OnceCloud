@@ -72,7 +72,7 @@ function getServerList(page, limitnum, search, sruuid, srname) {
                     for (var i = 1; i < array.length; i++) {
                         var obj = array[i];
                         var hostid = obj.hostid;
-                        var hostName = decodeURI(obj.hostname);
+                        var hostName = decodeURIComponent(obj.hostname);
                         var showuuid = "i-" + hostid.substring(0, 8);
                         if (i == 1) {
                             tableStr = tableStr + '<div class="image-item selected" hostid="'

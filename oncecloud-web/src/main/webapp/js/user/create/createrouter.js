@@ -9,21 +9,19 @@ function loadFWList() {
         url: '/FirewallAction/AvailableFirewalls',
         dataType: 'json',
         success: function (response) {
-        	if(response.length>0)
-    		{
-        		 var deitem = response[0];
-                 $('#rt_firewall').html('<option value="' + deitem.firewallId + '">' + decodeURI(deitem.firewallName) + '</option>');
-                 var detype = $('input:radio').eq(0).val();
-                 setTypeInfo(detype);
-                 for (var i = 1; i < response.length; i++) {
-                     $('#rt_firewall').append('<option value="' + response[i].firewallId + '">fw-' + response[i].firewallId.substring(0, 8) + '&nbsp;(' + response[i].firewallName + ')</option>');
-                 }
-    		}
-        	else
-    		{
-    		   $('#rt_firewall').html('<option>没有可选择的防火墙</option>');
-               $('#createRouterAction').attr('disabled', true);
-    		}
+            if (response.length > 0) {
+                var deitem = response[0];
+                $('#rt_firewall').html('<option value="' + deitem.firewallId + '">' + decodeURIComponent(deitem.firewallName) + '</option>');
+                var detype = $('input:radio').eq(0).val();
+                setTypeInfo(detype);
+                for (var i = 1; i < response.length; i++) {
+                    $('#rt_firewall').append('<option value="' + response[i].firewallId + '">fw-' + response[i].firewallId.substring(0, 8) + '&nbsp;(' + response[i].firewallName + ')</option>');
+                }
+            }
+            else {
+                $('#rt_firewall').html('<option>没有可选择的防火墙</option>');
+                $('#createRouterAction').attr('disabled', true);
+            }
         },
         error: function () {
             $('#rt_firewall').html('<option>没有可选择的防火墙</option>');
@@ -97,7 +95,7 @@ function createRouter(rtuuid, name, capacity, firewall) {
     $.ajax({
         type: 'post',
         url: '/RouterAction/Create',
-        data: {uuid:rtuuid,name:name,capacity:capacity,fwUuid:firewall},
+        data: {uuid: rtuuid, name: name, capacity: capacity, fwUuid: firewall},
         dataType: 'json',
     });
 }

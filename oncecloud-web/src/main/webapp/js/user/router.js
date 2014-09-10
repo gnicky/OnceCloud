@@ -86,7 +86,7 @@ function getRouterList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var uuid = obj.uuid;
-                var name = decodeURI(obj.name);
+                var name = decodeURIComponent(obj.name);
                 var power = obj.power;
                 var showid = "rt-" + uuid.substring(0, 8);
                 var ip = obj.ip;
@@ -113,7 +113,7 @@ function getRouterList(page, limit, search) {
                     + '</span><span name="stateword">' + nameStr[power] + '</span></td>';
                 var thistr = '<tr rowid="' + uuid + '" rtname="' + name + '"><td class="rcheck"><input type="checkbox" name="rtrow"></td><td><a class="id">' + showid + '</a></td>'
                     + '<td>' + name + '</td>' + stateStr + '<td name="capacity">' + capStr + '</td><td name="sip">' + network + '</td><td name="eip">' + publicip + '</td>'
-                    + '<td class="time">' + decodeURI(obj.createdate) + '</td></tr>';
+                    + '<td class="time">' + decodeURIComponent(obj.createdate) + '</td></tr>';
                 tableStr += thistr;
             }
             $('#tablebody').html(tableStr);
@@ -122,14 +122,14 @@ function getRouterList(page, limit, search) {
 }
 
 $('#tablebody').on('click', '.id', function (event) {
-	event.preventDefault();
+    event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/router/detail");
-    form.attr('method','post');
+    form.attr("action", "/router/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="routerUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -218,7 +218,7 @@ function startRouter(uuid) {
     $.ajax({
         type: 'post',
         url: '/RouterAction/StartUp',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json'
     });
 }
@@ -233,15 +233,15 @@ function destroyRouter(uuid) {
     $.ajax({
         type: 'post',
         url: '/RouterAction/Destroy',
-        data: {uuid:uuid},
-        dataType : 'text',
-		success : function(obj) {
-			if (obj == "no") {
-				thisicon.removeClass("icon-stopped");
-			    thisicon.removeClass('icon-process');
-			    thisicon.addClass("icon-running");
-			    thistr.find('[name="stateword"]').text('活跃');
-				bootbox.dialog({
+        data: {uuid: uuid},
+        dataType: 'text',
+        success: function (obj) {
+            if (obj == "no") {
+                thisicon.removeClass("icon-stopped");
+                thisicon.removeClass('icon-process');
+                thisicon.addClass("icon-running");
+                thistr.find('[name="stateword"]').text('活跃');
+                bootbox.dialog({
                     message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;无法删除，依然有私有网络依赖于该路由器</div>',
                     title: "提示",
                     buttons: {
@@ -253,8 +253,8 @@ function destroyRouter(uuid) {
                         }
                     }
                 });
-			}
-		}
+            }
+        }
     });
 }
 
@@ -267,7 +267,7 @@ function shutdownRouter(uuid, force) {
     $.ajax({
         type: 'post',
         url: '/RouterAction/ShutDown',
-        data: {uuid:uuid,force:force},
+        data: {uuid: uuid, force: force},
         dataType: 'text'
     });
 }

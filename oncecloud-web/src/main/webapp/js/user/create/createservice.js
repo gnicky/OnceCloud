@@ -17,7 +17,7 @@ $('#applyserviceAction').on('click', function (event) {
                     var qaStatusStr = '<td state="create"><span class="icon-status icon-using" name="stateicon"></span><span name="stateword">新建</span></td>';
                     var qaCloseStr = '<td class="close-td"><a href="javascript:void(0)" class="qa-close">关闭</a></td>';
                     $("#tablebody").prepend('<tr qaId="' + qaId + '"><td><a class="view-detail" href="javascript:void(0)">' + title + '</a></td>'
-                        + '<td>' + decodeURI(qaSummary) + '</td><td>0</td>' + qaStatusStr
+                        + '<td>' + decodeURIComponent(qaSummary) + '</td><td>0</td>' + qaStatusStr
                         + '<td class="time">' + qaTime + '</td>' + qaCloseStr + '</tr>');
                 }
                 $('#ServiceModalContainer').modal('hide');

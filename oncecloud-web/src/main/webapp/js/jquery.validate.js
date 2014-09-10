@@ -1060,7 +1060,7 @@ $.extend($.validator, {
 
         // http://docs.jquery.com/Plugins/Validation/Methods/legal
         legal: function(value, element) {
-            var errorChar = /^[^`~!$%^&#*()+=|\\\][\]\{\}:;'\,<>?]*$/;
+            var errorChar = /^[^`~!$%^&#*()+=|\\\][\]\{\}:;'\<>?]*$/;
             return this.optional(element) || errorChar.test(value);
         },
 

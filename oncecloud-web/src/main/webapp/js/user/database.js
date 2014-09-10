@@ -113,7 +113,7 @@ function getDatabaseList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var dbid = obj.dbid;
-                var dbname = decodeURI(obj.dbname);
+                var dbname = decodeURIComponent(obj.dbname);
                 var dbstate = obj.dbstate;
                 var dbtype = obj.dbtype;
                 var dbip = obj.dbip;
@@ -129,7 +129,7 @@ function getDatabaseList(page, limit, search) {
                 }
                 var dbport = obj.dbport;
                 var dbthroughout = obj.dbthroughout;
-                var createdate = decodeURI(obj.createdate);
+                var createdate = decodeURIComponent(obj.createdate);
                 var iconStr = new Array("stopped", "running", "process", "process", "process", "process");
                 var nameStr = new Array("已关机", "活跃", "创建中", "销毁中", "启动中", "关机中");
                 var stateStr = '<td><span class="icon-status icon-' + iconStr[dbstate] + '" name="stateicon">'

@@ -12,7 +12,7 @@ $('#modify').on('click', function (event) {
     var url = $('#platformcontent').attr('platformBasePath') + 'common/modify';
     var lbName = $('#lbname').text();
     var lbDesc = $('#lbdesc').text();
-    var lbUuid = $('#platformcontent').attr("lbUuid");    
+    var lbUuid = $('#platformcontent').attr("lbUuid");
     $('#InstanceModalContainer').load(url, {"modifyType": "lb", "modifyUuid": lbUuid, "modifyName": lbName, "modifyDesc": lbDesc}, function () {
         $('#InstanceModalContainer').modal({
             backdrop: false,
@@ -31,11 +31,11 @@ $('#depend-list').on('click', '#firewallid', function (event) {
     var firewallId = $(this).attr("uuid");
     event.preventDefault();
     var form = $("<form></form>");
-    form.attr("action","/firewall/detail");
-    form.attr('method','post');
+    form.attr("action", "/firewall/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -50,8 +50,8 @@ function getLbBasicList() {
         dataType: 'text',
         success: function (response) {
             var obj = jQuery.parseJSON(response);
-            var lbName = decodeURI(obj.lbName);
-            var lbDesc = decodeURI(obj.lbDesc);
+            var lbName = decodeURIComponent(obj.lbName);
+            var lbDesc = decodeURIComponent(obj.lbDesc);
             var lbIp = obj.lbIp;
             var lbMac = obj.lbMac;
             var lbStatus = obj.lbStatus;
@@ -63,7 +63,7 @@ function getLbBasicList() {
             var lbPower = obj.lbPower;
             var lbFirewall = obj.lbFirewall;
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
+            var useDate = decodeURIComponent(obj.useDate);
             var stateStr = '';
             var showstr = '';
             var showuuid = "lb-" + lbUuid.substring(0, 8);
@@ -136,7 +136,7 @@ function getForeList() {
     $.ajax({
         type: 'post',
         url: '/LBAction/ForeList',
-        data: {lbuuid:lbUuid},
+        data: {lbuuid: lbUuid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 0) {
@@ -146,7 +146,7 @@ function getForeList() {
                 for (var i = 0; i < array.length; i++) {
                     var feobj = array[i];
                     var foreUuid = feobj.foreUuid;
-                    var foreName = decodeURI(feobj.foreName);
+                    var foreName = decodeURIComponent(feobj.foreName);
                     var foreProtocol = feobj.foreProtocol;
                     var forePort = feobj.forePort;
                     var forePolicy = feobj.forePolicy;
@@ -178,7 +178,7 @@ function getForeList() {
                     for (var j = 0; j < beArray.length; j++) {
                         var beobj = beArray[j];
                         var backUuid = beobj.backUuid;
-                        var backName = decodeURI(beobj.backName);
+                        var backName = decodeURIComponent(beobj.backName);
                         var vmUuid = beobj.vmUuid;
                         var vmPort = beobj.vmPort;
                         var backWeight = beobj.backWeight;
@@ -216,7 +216,7 @@ $('#fe_apply').on('click', function (event) {
         $.ajax({
             type: 'post',
             url: '/LBAction/ApplyLB',
-            data: {lbuuid:lbUuid},
+            data: {lbuuid: lbUuid},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result == true) {
@@ -295,7 +295,7 @@ $('#fore_list').on('click', '.be_forbid', function (event) {
     $.ajax({
         type: 'post',
         url: '/LBAction/ForbidBack',
-        data: {state:state,backUuid:beuuid,lbUuid:lbUuid},
+        data: {state: state, backUuid: beuuid, lbUuid: lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -327,7 +327,7 @@ $('#fore_list').on('click', '.fe_forbid', function (event) {
     $.ajax({
         type: 'post',
         url: '/LBAction/ForbidFore',
-        data: {state:state,foreUuid:feuuid,lbUuid:lbUuid},
+        data: {state: state, foreUuid: feuuid, lbUuid: lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -369,7 +369,7 @@ function deleteFE(feuuid) {
     $.ajax({
         type: 'post',
         url: '/LBAction/DeleteFore',
-        data: {foreUuid:feuuid,lbUuid:lbUuid},
+        data: {foreUuid: feuuid, lbUuid: lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
@@ -385,7 +385,7 @@ function deleteBE(beuuid) {
     $.ajax({
         type: 'post',
         url: '/LBAction/DeleteBack',
-        data: {backUuid:beuuid,lbUuid:lbUuid},
+        data: {backUuid: beuuid, lbUuid: lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {

@@ -5,7 +5,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/VoucherAction/Apply',
-            data: {voucher:voucher},
+            data: {voucher: voucher},
             dataType: 'json',
             success: function (obj) {
                 if (obj.result) {

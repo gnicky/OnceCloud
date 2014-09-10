@@ -84,10 +84,10 @@ function getDCList(page, limit, search) {
                 var tableStr = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
-                    var dcname = decodeURI(obj.dcname);
-                    var dcdesc = decodeURI(obj.dcdesc);
+                    var dcname = decodeURIComponent(obj.dcname);
+                    var dcdesc = decodeURIComponent(obj.dcdesc);
                     var dcid = obj.dcid;
-                    var dclocation = decodeURI(obj.dclocation);
+                    var dclocation = decodeURIComponent(obj.dclocation);
                     var createdate = obj.createdate;
                     var showid = "dc-" + dcid.substring(0, 8);
                     var totalcpu = obj.totalcpu;
@@ -115,11 +115,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var dcid = $(this).parent().parent().attr('dcid');
     var form = $("<form></form>");
-    form.attr("action","/datacenter/detail");
-    form.attr('method','post');
+    form.attr("action", "/datacenter/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="dcid" value="' + dcid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -165,7 +165,7 @@ function deleteDC(dcid, dcname) {
     $.ajax({
         type: 'post',
         url: '/DatacenterAction/Delete',
-        data: {dcid:dcid, dcname:dcname},
+        data: {dcid: dcid, dcname: dcname},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {

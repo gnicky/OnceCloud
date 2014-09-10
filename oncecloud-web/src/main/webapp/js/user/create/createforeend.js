@@ -75,7 +75,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/LBAction/CreateFore',
-            data: {name:name,foreuuid:foreuuid,lbuuid:lbuuid,protocol:protocol,port:port,policy:policy},
+            data: {name: name, foreuuid: foreuuid, lbuuid: lbuuid, protocol: protocol, port: port, policy: policy},
             dataType: 'text',
             success: function () {
                 var hasListener = $('#fore_list').find('.unit');
@@ -101,7 +101,7 @@ $(document).ready(function () {
             type: 'post',
             async: false,
             url: '/LBAction/CheckFore',
-            data: {port:port,lbuuid:lbuuid},
+            data: {port: port, lbuuid: lbuuid},
             dataType: 'text',
             success: function (response) {
                 if (response == "true") {
@@ -118,7 +118,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/LBAction/UpdateFore',
-            data: {name:name,policy:policy,foreuuid:foreuuid,lbuuid:lbuuid},
+            data: {name: name, policy: policy, foreuuid: foreuuid, lbuuid: lbuuid},
             dataType: 'text',
             complete: function () {
                 window.location = window.location.href;

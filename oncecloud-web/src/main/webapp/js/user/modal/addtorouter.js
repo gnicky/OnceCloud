@@ -26,7 +26,7 @@ $(document).ready(function () {
                     $('#linkRouter').removeClass('btn-forbidden');
                     for (var i = 0; i < array.length; i++) {
                         vmlistHtml = vmlistHtml + '<option value="' + array[i].uuid + '">rt-'
-                            + array[i].uuid.substring(0, 8) + '&nbsp;(' + decodeURI(array[i].rtname) + ')</option>';
+                            + array[i].uuid.substring(0, 8) + '&nbsp;(' + decodeURIComponent(array[i].rtname) + ')</option>';
                     }
                     $('#vn_router').html(vmlistHtml);
                 }
@@ -49,15 +49,15 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/VnetAction/LinkRouter',
-                    data : {
-						vnetuuid : vnetid,
-						routerid : vn_router,
-						net : vn_net,
-						gate : vn_gate,
-						start : vn_start,
-						end : vn_end,
-						dhcpState : dhcp_status
-					},
+                    data: {
+                        vnetuuid: vnetid,
+                        routerid: vn_router,
+                        net: vn_net,
+                        gate: vn_gate,
+                        start: vn_start,
+                        end: vn_end,
+                        dhcpState: dhcp_status
+                    },
                     dataType: 'json',
                     success: function (obj) {
                         if (obj.result) {
@@ -97,7 +97,7 @@ $(document).ready(function () {
             type: 'post',
             async: false,
             url: '/VnetAction/CheckNet',
-            data: {routerid:routerid, net:net},
+            data: {routerid: routerid, net: net},
             dataType: 'json',
             success: function (obj) {
                 result = obj.result;

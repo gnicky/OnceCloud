@@ -64,7 +64,7 @@ function getVolumeBasicList() {
         data: {uuid: volumeUuid},
         dataType: 'json',
         success: function (obj) {
-            var volumeName = decodeURI(obj.volumeName);
+            var volumeName = decodeURIComponent(obj.volumeName);
             var volumeStatus = obj.volumeStatus;
             var stateStr = '';
             var showstr = '';
@@ -88,15 +88,15 @@ function getVolumeBasicList() {
             var backupDate = obj.backupDate;
             var backup = '&nbsp;';
             if ('&nbsp;' != backupDate) {
-                backupDate = decodeURI(backupDate);
+                backupDate = decodeURIComponent(backupDate);
                 backup = '<a class="id" id="snapshotid" rsuuid="' + volumeUuid + '" rsname="' + volumeName + '">bk-' + volumeUuid.substring(0, 8) + '</a>';
             }
             if ('&nbsp;' != volumeDependency) {
                 volumeDependency = '<a class="id" id="depenid" depenUuid="' + volumeDependency + '">i-' + volumeDependency.substring(0, 8) + '</a>';
             }
-            var volumeDescription = decodeURI(obj.volumeDescription);
+            var volumeDescription = decodeURIComponent(obj.volumeDescription);
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
+            var useDate = decodeURIComponent(obj.useDate);
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="volumename">'
                 + volumeName + '</dd><dt>描述</dt><dd id="volumedesc">'

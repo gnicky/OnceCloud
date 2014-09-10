@@ -66,14 +66,14 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/HostAction/AddToPool',
-            data: {uuidjsonstr:ustr, hasmaster:hmaster, pooluuid:poolUuid},
+            data: {uuidjsonstr: ustr, hasmaster: hmaster, pooluuid: poolUuid},
             dataType: 'json',
             success: function (array) {
                 for (var i = 0; i < array.length; i++) {
                     var obj = array[i];
                     var huid = obj.huid;
                     var puid = obj.puid;
-                    var pname = decodeURI(obj.pname);
+                    var pname = decodeURIComponent(obj.pname);
                     var thistr = $("#tablebody").find('[hostid="' + huid + '"]');
                     var pooltd = thistr.find('[state]');
                     pooltd.attr('state', 'load');
@@ -97,7 +97,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/HostAction/TablePool',
-            data: {uuidjsonstr:uuidJsonStr},
+            data: {uuidjsonstr: uuidJsonStr},
             dataType: 'json',
             success: function (array) {
                 var choosepoollist = document.getElementById("choosepool");
@@ -106,7 +106,7 @@ $(document).ready(function () {
                 for (var i = 0; i < array.length; i++) {
                     var obj = array[i];
                     var poolUuid = obj.pooluuid;
-                    var poolName = decodeURI(obj.poolname);
+                    var poolName = decodeURIComponent(obj.poolname);
                     var hasMaster = obj.hasmaster;
                     inserthml = inserthml + '<option value="' + poolUuid + '" hasmaster=' + hasMaster + '>' + poolName + '</option>';
                 }

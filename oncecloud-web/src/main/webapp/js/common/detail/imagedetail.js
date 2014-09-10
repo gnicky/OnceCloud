@@ -29,13 +29,13 @@ $('#basic-list').on('click', '#owner', function (event) {
     var userid = $(this).attr('ownerid');
     var username = $(this).attr('username');
     var form = $("<form></form>");
-    form.attr("action","/user/detail");
-    form.attr('method','post');
+    form.attr("action", "/user/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="userid" value="' + userid + '" />');
     var input1 = $('<input type="text" name="username" value="' + username + '" />');
     form.append(input);
     form.append(input1);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -49,14 +49,14 @@ function getImageBasicList() {
         data: {uuid: imageUuid},
         dataType: 'json',
         success: function (obj) {
-            var imageName = decodeURI(obj.imageName);
-            var imageDesc = decodeURI(obj.imageDesc);
+            var imageName = decodeURIComponent(obj.imageName);
+            var imageDesc = decodeURIComponent(obj.imageDesc);
             var imageUID = obj.imageUID;
             var imageDisk = obj.imageDisk.toFixed(2) + '&nbsp;GB';
             var poolUuid = obj.poolUuid;
-            var hostPlat = decodeURI(obj.imagePlatform);
+            var hostPlat = decodeURIComponent(obj.imagePlatform);
             var imageStatus = obj.imageStatus;
-            var owner = decodeURI(obj.imageUser);
+            var owner = decodeURIComponent(obj.imageUser);
             var stateStr = '';
             var userLevel = $('#platformcontent').attr("userLevel");
             var showuuid = "img-" + imageUuid.substring(0, 8);
@@ -71,10 +71,10 @@ function getImageBasicList() {
             }
             if (owner != null && userLevel == 0 && imageUID != 1) {
                 sight = sight + '</dd><dt>所属用户</dt><dd><a id="owner" ownerid="'
-                    + imageUID + '" username="'+ owner +'">' + owner + '</a>'
+                    + imageUID + '" username="' + owner + '">' + owner + '</a>'
             }
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
+            var useDate = decodeURIComponent(obj.useDate);
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="imagename">'
                 + imageName + '</dd><dt>描述</dt><dd id="imagedesc">'

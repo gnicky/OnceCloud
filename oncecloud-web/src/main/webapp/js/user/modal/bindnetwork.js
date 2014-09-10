@@ -59,7 +59,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/VnetAction/VnetList',
-            data: {page:page, limit:limit, search:search},
+            data: {page: page, limit: limit, search: search},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -80,7 +80,7 @@ $(document).ready(function () {
                         var obj = array[i];
                         var uuid = obj.uuid;
                         var vnid = "vn-" + obj.uuid.substring(0, 8);
-                        var name = decodeURI(obj.name);
+                        var name = decodeURIComponent(obj.name);
                         var routerid = "rt-" + obj.routerid.substring(0, 8);
                         tableStr = tableStr + '<div name="image-item" class="image-item" uuid="'
                             + uuid + '"><div class="image-left">'
@@ -119,10 +119,10 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/VnetAction/AddVM',
-            data: {vnId:vnId, vmuuidStr:vmuuidStr},
+            data: {vnId: vnId, vmuuidStr: vmuuidStr},
             dataType: 'text',
             success: function (response) {
-            	reloadList(1);
+                reloadList(1);
             },
             error: function () {
             }

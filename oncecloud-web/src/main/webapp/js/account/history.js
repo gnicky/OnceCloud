@@ -1,5 +1,5 @@
 reloadList();
-	
+
 function reloadList() {
     var limit = $("#limit").val();
     getHistoryList(1, limit);
@@ -14,7 +14,7 @@ function getHistoryList(page, limit) {
     $.ajax({
         type: 'get',
         url: '/ChargeAction/ChargeList',
-        data: {page:page, limit:limit},
+        data: {page: page, limit: limit},
         dataType: 'json',
         success: function (array) {
             var totalnum = array[0];

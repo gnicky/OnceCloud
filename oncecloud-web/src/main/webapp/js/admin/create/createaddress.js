@@ -28,7 +28,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/AddressAction/AddDHCP',
-                    data: {prefix:prefix, start:start_addr_d, end:end_addr_d},
+                    data: {prefix: prefix, start: start_addr_d, end: end_addr_d},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -43,13 +43,13 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/AddressAction/AddEIP',
-                    data : {
-								prefix : prefix,
-								start : start_addr_d,
-								end : end_addr_d,
-								eiptype : eiptype,
-								eipif : eipif
-							},
+                    data: {
+                        prefix: prefix,
+                        start: start_addr_d,
+                        end: end_addr_d,
+                        eiptype: eiptype,
+                        eipif: eipif
+                    },
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
@@ -144,7 +144,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 url: '/AddressAction/DHCPList',
-                data: {page:page, limit:limitnum, search:search},
+                data: {page: page, limit: limitnum, search: search},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length >= 1) {
@@ -196,7 +196,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 url: '/AddressAction/EIPList',
-                data: {page:page, limit:limitnum, search:search},
+                data: {page: page, limit: limitnum, search: search},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length >= 1) {
@@ -233,10 +233,10 @@ $(document).ready(function () {
                                 }
                             }
                             var eipBandwidth = obj.eipBandwidth;
-                            var eipDescription = decodeURI(obj.eipDescription);
-                            var eipType = decodeURI(obj.eipType);
+                            var eipDescription = decodeURIComponent(obj.eipDescription);
+                            var eipType = decodeURIComponent(obj.eipType);
                             var eipIf = obj.eif;
-                            var euername = decodeURI(obj.euername);
+                            var euername = decodeURIComponent(obj.euername);
                             if (!eipBandwidth) {
                                 eipBandwidth = "";
                             }

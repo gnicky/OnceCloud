@@ -56,7 +56,7 @@ function getQuestionList(page, limit, search) {
                         statusSpan = '<span class="consumed"><span class="icon-status icon-close"></span>已关闭</span>';
                     }
                     var thisitem = '<div class="act-item">' + serviceIcon
-                        + '<span>' + decodeURI(qaTitle) + '</span>'
+                        + '<span>' + decodeURIComponent(qaTitle) + '</span>'
                         + '<span class="created"><span class="glyphicon glyphicon-time icon-right"></span>' + qaTime + '</span>'
                         + statusSpan + '</div>';
                     allitem += thisitem;
@@ -85,8 +85,8 @@ function getLogList(status, start) {
                 for (var i = 0; i < jsonArray.length; i++) {
                     var jsonObj = jsonArray[i];
                     var logObject = jsonObj.logObject;
-                    var logObjectStr = decodeURI(jsonObj.logObjectStr);
-                    var logActionStr = decodeURI(jsonObj.logActionStr);
+                    var logObjectStr = decodeURIComponent(jsonObj.logObjectStr);
+                    var logActionStr = decodeURIComponent(jsonObj.logActionStr);
                     var logStatus = jsonObj.logStatus;
                     var logTime = jsonObj.logTime;
                     var logElapse = jsonObj.logElapse;

@@ -19,7 +19,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'post',
                 url: '/AlarmAction/ModifyTouch',
-                data : {alarmTouch:alarmTouch, alarmUuid:alarmUuid, alarmIsalarm:alarmIsalarm},
+                data: {alarmTouch: alarmTouch, alarmUuid: alarmUuid, alarmIsalarm: alarmIsalarm},
                 dataType: 'text',
                 success: function () {
                     if (alarmIsalarm == "0") {

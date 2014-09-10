@@ -65,7 +65,7 @@ function getFeeList(page, limit, search, type) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var feeExpense = obj.feeExpense.toFixed(2);
-                var feeName = decodeURI(obj.feeName);
+                var feeName = decodeURIComponent(obj.feeName);
                 var resourceId = obj.resourceId;
                 var resourceStr = "";
                 if (type == "instance") {

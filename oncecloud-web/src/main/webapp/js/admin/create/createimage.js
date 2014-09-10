@@ -14,25 +14,25 @@ $(document).ready(function () {
             $.ajax({
                 type: 'post',
                 url: '/ImageAction/Create',
-                data : {
-					imageUUId : imageUUId,
-					imageName : imageName,
-					imageServer : imageServer,
-					imageOs : imageOs,
-					imageDesc : imageDesc,
-					imagePwd : imagePwd
-				},
+                data: {
+                    imageUUId: imageUUId,
+                    imageName: imageName,
+                    imageServer: imageServer,
+                    imageOs: imageOs,
+                    imageDesc: imageDesc,
+                    imagePwd: imagePwd
+                },
                 dataType: 'json',
                 success: function (array) {
                     if (array.length = 1) {
                         var obj = array[0];
                         var imageSize = obj.imagesize;
-                        var imageplatform = decodeURI(obj.imageplatform);
+                        var imageplatform = decodeURIComponent(obj.imageplatform);
                         var imagestr = obj.imagestr;
                         var createDate = obj.createDate;
                         var imagehost = obj.imagehost;
                         var showid = "img-" + imageUUId.substring(0, 8);
-                        var hostname = decodeURI(obj.hostname);
+                        var hostname = decodeURIComponent(obj.hostname);
                         var typeStr = "公有";
                         var type = $('.once-tab').find('.active').attr("type");
                         var stateStr = '<td><span class="icon-status icon-running" name="stateicon">'
@@ -111,7 +111,7 @@ $(document).ready(function () {
             success: function (array) {
                 if (array.length > 0) {
                     $(array).each(function (index, item) {
-                        $("#image_server").append("<option value='" + item.poolid + "'>" + decodeURI(item.poolname) + "</option>");
+                        $("#image_server").append("<option value='" + item.poolid + "'>" + decodeURIComponent(item.poolname) + "</option>");
                     });
                 }
             },

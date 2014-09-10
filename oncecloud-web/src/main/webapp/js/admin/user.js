@@ -38,7 +38,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
 
 $('#create').on('click', function (event) {
     event.preventDefault();
-    $('#UserModalContainer').attr("type","new");
+    $('#UserModalContainer').attr("type", "new");
     $('#UserModalContainer').load($(this).attr('url'), '', function () {
         $('#UserModalContainer').modal({
             backdrop: false,
@@ -69,9 +69,9 @@ function getUserList(page, limit, search) {
                 var tableStr = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
-                    var username = decodeURI(obj.username);
+                    var username = decodeURIComponent(obj.username);
                     var userid = obj.userid;
-                    var usercom = decodeURI(obj.usercom);
+                    var usercom = decodeURIComponent(obj.usercom);
                     var userdate = obj.userdate;
                     var userlevel = obj.userlevel;
                     var usermail = obj.usermail;
@@ -183,7 +183,7 @@ $('#tablebody').on('click', '.deny', function (event) {
                     $.ajax({
                         type: 'post',
                         url: '/VoucherAction/Deny',
-                        data: {userid:userid},
+                        data: {userid: userid},
                         dataType: 'json',
                         success: function (obj) {
                             if (obj.result) {
@@ -225,13 +225,13 @@ $('#tablebody').on('click', '.username', function (event) {
     var userid = $(this).parent().parent().attr('userid');
     var username = $(this).parent().parent().attr('username');
     var form = $("<form></form>");
-    form.attr("action","/user/detail");
-    form.attr('method','post');
+    form.attr("action", "/user/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="userid" value="' + userid + '" />');
     var input1 = $('<input type="text" name="username" value="' + username + '" />');
     form.append(input);
     form.append(input1);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });

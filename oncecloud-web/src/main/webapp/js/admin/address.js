@@ -152,10 +152,10 @@ function getAddressList(page, limit, search, type) {
                             }
                         }
                         var eipBandwidth = obj.eipBandwidth;
-                        var eipDescription = decodeURI(obj.eipDescription);
-                        var eipType = decodeURI(obj.eipType);
+                        var eipDescription = decodeURIComponent(obj.eipDescription);
+                        var eipType = decodeURIComponent(obj.eipType);
                         var eipIf = obj.eif;
-                        var euername = decodeURI(obj.euername);
+                        var euername = decodeURIComponent(obj.euername);
                         if (!eipBandwidth) {
                             eipBandwidth = "";
                         }

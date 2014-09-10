@@ -59,7 +59,7 @@ function getSnapshotList(page, limit, search) {
                 var obj = array[i];
                 var resourceUuid = obj.resourceUuid;
                 var resourceType = obj.resourceType;
-                var resourceName = decodeURI(obj.resourceName);
+                var resourceName = decodeURIComponent(obj.resourceName);
                 var snapshotCount = obj.snapshotCount;
                 var snapshotSize = obj.snapshotSize.toFixed(2);
                 var backupDate = obj.backupDate;
@@ -74,7 +74,7 @@ function getSnapshotList(page, limit, search) {
                     + '" rsname="' + resourceName + '"><td class="rcheck"><input type="checkbox" name="snapshotrow"></td><td><a class="viewDetail" href="javascript:void(0)">' + showuuid + '</a></td><td>'
                     + resourceName + '</td><td state="on"><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">可用</span></td><td>' + showname + '</td><td name="size">' + snapshotSize
                     + '</td><td name="node">' + snapshotCount
-                    + '</td><td name="backupdate" class="time">' + decodeURI(backupDate)
+                    + '</td><td name="backupdate" class="time">' + decodeURIComponent(backupDate)
                     + '</td></tr>';
                 tableStr += thistr;
             }

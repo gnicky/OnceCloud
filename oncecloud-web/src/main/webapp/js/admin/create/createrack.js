@@ -12,7 +12,7 @@ $(document).ready(function () {
                 if (array.length >= 1) {
                     $("#rack_location").html("");
                     $.each(array, function (index, item) {
-                        $("#rack_location").append("<option value='" + item.dcid + "'>" + decodeURI(item.dcname) + "</option>");
+                        $("#rack_location").append("<option value='" + item.dcid + "'>" + decodeURIComponent(item.dcname) + "</option>");
                     });
                 }
                 else {
@@ -71,15 +71,15 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/RackAction/Create',
-                    data: {rackname:rackName, rackdesc:rackDesc, dcid:dcid},
+                    data: {rackname: rackName, rackdesc: rackDesc, dcid: dcid},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
                             var obj = array[0];
-                            var rackname = decodeURI(obj.rackname);
-                            var rackdesc = decodeURI(obj.rackdesc);
+                            var rackname = decodeURIComponent(obj.rackname);
+                            var rackdesc = decodeURIComponent(obj.rackdesc);
                             var rackid = obj.rackid;
-                            var dcname = decodeURI(obj.dcname);
+                            var dcname = decodeURIComponent(obj.dcname);
                             var createdate = obj.createdate;
                             var dcid = obj.dcid;
                             var showid = "rack-" + rackid.substring(0, 8);
@@ -94,7 +94,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/RackAction/Update',
-                    data: {rackid:rackid, rackname:rackName, rackdesc:rackDesc, dcid:dcid},
+                    data: {rackid: rackid, rackname: rackName, rackdesc: rackDesc, dcid: dcid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[rowid="' + rackid + '"]');

@@ -154,11 +154,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/instance/detail");
-    form.attr('method','post');
+    form.attr("action", "/instance/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -217,7 +217,7 @@ function getVMList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var vmuuid = obj.vmid;
-                var vmName = decodeURI(obj.vmname);
+                var vmName = decodeURIComponent(obj.vmname);
                 var state = obj.state;
                 var showuuid = "i-" + vmuuid.substring(0, 8);
                 var showstr = "<a class='id'>" + showuuid + '</a>';
@@ -254,7 +254,7 @@ function getVMList(page, limit, search) {
                 }
                 var publicip = obj.publicip;
                 var backupdate = obj.backupdate + "";
-                var backupStr = decodeURI(backupdate);
+                var backupStr = decodeURIComponent(backupdate);
                 if (backupdate == "") {
                     var basePath = $('#platformcontent').attr('platformBasePath');
                     backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'instance/createsnapshot?rsid=' + vmuuid + '&rstype=instance&rsname=' + vmName + '"></a>';
@@ -265,7 +265,7 @@ function getVMList(page, limit, search) {
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
                     + vmName + '</td>' + stateStr + '<td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
-                    + memory + '</td><td name="sip">' + network + '</td><td name="pip">' + publicip + '</td><td name="backuptime" class="time">' + backupStr + '</td><td name="createtime" class="time">' + decodeURI(obj.createdate) + '</td></tr>';
+                    + memory + '</td><td name="sip">' + network + '</td><td name="pip">' + publicip + '</td><td name="backuptime" class="time">' + backupStr + '</td><td name="createtime" class="time">' + decodeURIComponent(obj.createdate) + '</td></tr>';
                 tableStr += thistr;
             }
             $('#tablebody').html(tableStr);
@@ -281,7 +281,7 @@ function startVM(uuid) {
     $.ajax({
         type: 'get',
         url: '/VMAction/StartVM',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json'
     });
 }
@@ -295,7 +295,7 @@ function restartVM(uuid) {
     $.ajax({
         type: 'get',
         url: '/VMAction/RestartVM',
-        data:{uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json'
     });
 }
@@ -310,7 +310,7 @@ function destroyVM(uuid) {
     $.ajax({
         type: 'get',
         url: '/VMAction/DeleteVM',
-        data:{uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json'
     });
 }
@@ -324,7 +324,7 @@ function shutdownVM(uuid, force) {
     $.ajax({
         type: 'get',
         url: '/VMAction/ShutdownVM',
-        data: {uuid:uuid,force:force},
+        data: {uuid: uuid, force: force},
         dataType: 'json'
     });
 }

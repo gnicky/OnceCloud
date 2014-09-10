@@ -61,7 +61,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/VMAction/VMList',
-            data: {page:page, limit:limit, search:search},
+            data: {page: page, limit: limit, search: search},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -79,7 +79,7 @@ $(document).ready(function () {
                     for (var i = 1; i < array.length; i++) {
                         var obj = array[i];
                         var vmuuid = obj.vmid;
-                        var vmName = decodeURI(obj.vmname);
+                        var vmName = decodeURIComponent(obj.vmname);
                         var showuuid = "i-" + vmuuid.substring(0, 8);
                         tableStr = tableStr + '<div name="image-item" class="image-item" vmuuid="'
                             + vmuuid + '"><div class="image-left">'
@@ -119,7 +119,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/VnetAction/AddVM',
-            data: {vnId:vnId, vmuuidStr:vmuuidStr},
+            data: {vnId: vnId, vmuuidStr: vmuuidStr},
             dataType: 'text',
             success: function (response) {
             },

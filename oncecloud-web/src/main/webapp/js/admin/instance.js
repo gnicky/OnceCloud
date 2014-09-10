@@ -209,8 +209,8 @@ function loadList(action, page, limit, str) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var vmuuid = obj.vmid;
-                var vmName = decodeURI(obj.vmname);
-                var userName = decodeURI(obj.userName);
+                var vmName = decodeURIComponent(obj.vmname);
+                var userName = decodeURIComponent(obj.userName);
                 var state = obj.state;
                 var showuuid = str + vmuuid.substring(0, 8);
                 var showstr = "<a class='id'>" + showuuid + '</a>';
@@ -246,19 +246,19 @@ function loadList(action, page, limit, str) {
                 var importanceTem = obj.importance;
                 starArray += '<div id="star"><ul>';
                 for (var j = 0; j < 5; j++) {
-                	if (importanceTem > 0) {
-	                    starArray += '<li><a href="javascript:;"><span class="glyphicon glyphicon-star"></span></a></li>';
-	                    importanceTem--;
-                	} else {
-                		starArray += '<li><a href="javascript:;"><span class="glyphicon glyphicon-star-empty"></span></a></li>';
-                	}
+                    if (importanceTem > 0) {
+                        starArray += '<li><a href="javascript:;"><span class="glyphicon glyphicon-star"></span></a></li>';
+                        importanceTem--;
+                    } else {
+                        starArray += '<li><a href="javascript:;"><span class="glyphicon glyphicon-star-empty"></span></a></li>';
+                    }
 
                 }
                 starArray += '</ul></div>';
                 var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
-                    + vmName + '</td>' + stateStr + '<td id="vmimportance" star="'+obj.importance+'">' + starArray + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
+                    + vmName + '</td>' + stateStr + '<td id="vmimportance" star="' + obj.importance + '">' + starArray + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
-                    + memory + '</td><td name="sip">' + network + '</td><td name="createtime" class="time">' + decodeURI(obj.createdate) + '</td></tr>';
+                    + memory + '</td><td name="sip">' + network + '</td><td name="createtime" class="time">' + decodeURIComponent(obj.createdate) + '</td></tr>';
                 tableStr += thistr;
             }
             $('#tablebody').html(tableStr);
@@ -345,56 +345,56 @@ function initPage() {
     });
 }
 
-$(function(){
+$(function () {
 
-	$(document).on('mouseover','#star li',function(){
-		var iScore = ($(this).index() + 1);
-		for (i = 0; i < 5; i++) {
-			if (i < iScore) {
-                $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star-empty");
-				$(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star");
-			} else {
-				$(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star");
-                $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star-empty");
-			}
-		}
-	});
-
-	$(document).on('mouseout','#star li',function(){
-		var iScore = $(this).parents("#vmimportance").attr("star");
-		for (i = 0; i < 5; i++) {
-			if (i < iScore) {
+    $(document).on('mouseover', '#star li', function () {
+        var iScore = ($(this).index() + 1);
+        for (i = 0; i < 5; i++) {
+            if (i < iScore) {
                 $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star-empty");
                 $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star");
             } else {
                 $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star");
                 $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star-empty");
             }
-		}
-	});
+        }
+    });
 
-	$(document).on('click','#star li',function(){
-		$(this).parents("#vmimportance").attr("star",$(this).index() + 1);
-		var uuid = $(this).parents("tr").attr("rowid");
-		if(type == 'instance') {
-			updateStar('/VMAction', $(this).index() + 1, uuid);
-		} else if (type == 'router') {
-			updateStar('/RouterAction', $(this).index() + 1, uuid);
-		} else if (type == "loadbalance") {
-			updateStar('/LBAction', $(this).index() + 1, uuid);
-		}
-	});
-	
-	function updateStar(action, num, uuid) {
-		$.ajax({
-				type: 'post',
-				url: action + '/UpdateStar',
-				data: {uuid:uuid, num:num},
-				dataType: 'text',
-				complete: function() {
-				
-				}
-			});
-	}
+    $(document).on('mouseout', '#star li', function () {
+        var iScore = $(this).parents("#vmimportance").attr("star");
+        for (i = 0; i < 5; i++) {
+            if (i < iScore) {
+                $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star-empty");
+                $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star");
+            } else {
+                $(this).parent("ul").find("li").eq(i).find("span").removeClass("glyphicon-star");
+                $(this).parent("ul").find("li").eq(i).find("span").addClass("glyphicon-star-empty");
+            }
+        }
+    });
+
+    $(document).on('click', '#star li', function () {
+        $(this).parents("#vmimportance").attr("star", $(this).index() + 1);
+        var uuid = $(this).parents("tr").attr("rowid");
+        if (type == 'instance') {
+            updateStar('/VMAction', $(this).index() + 1, uuid);
+        } else if (type == 'router') {
+            updateStar('/RouterAction', $(this).index() + 1, uuid);
+        } else if (type == "loadbalance") {
+            updateStar('/LBAction', $(this).index() + 1, uuid);
+        }
+    });
+
+    function updateStar(action, num, uuid) {
+        $.ajax({
+            type: 'post',
+            url: action + '/UpdateStar',
+            data: {uuid: uuid, num: num},
+            dataType: 'text',
+            complete: function () {
+
+            }
+        });
+    }
 });
 

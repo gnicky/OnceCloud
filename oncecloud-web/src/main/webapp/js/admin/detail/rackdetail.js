@@ -47,7 +47,7 @@ $(document).ready(function () {
                 $.each(rack.hostlist, function (index, host) {
                     var hostobj = eval('(' + host.hostobj + ')');
                     var id = hostobj.hostUuid;
-                    $("#right").append('<div class="node2"   id="' + id + '" >' + decodeURI(hostobj.hostName) + '</div>');
+                    $("#right").append('<div class="node2"   id="' + id + '" >' + decodeURIComponent(hostobj.hostName) + '</div>');
                     $("#" + id).css("left", host.hostX).css("top", host.hostY);
                     /* jsPlumb.addEndpoint(id, { anchors: "TopCenter" }, hollowCircle);
                      jsPlumb.addEndpoint(id, { anchors: "RightMiddle" }, hollowCircle);
@@ -60,7 +60,7 @@ $(document).ready(function () {
                 $.each(rack.storagelist, function (index, storage) {
                     var srobj = eval('(' + storage.srobj + ')');
                     var id = srobj.srUuid;
-                    $("#right").append('<div class="node2"   id="' + id + '" >' + decodeURI(srobj.srName) + '</div>');
+                    $("#right").append('<div class="node2"   id="' + id + '" >' + decodeURIComponent(srobj.srName) + '</div>');
                     $("#" + id).css("left", storage.srX).css("top", storage.srY);
                     /* jsPlumb.addEndpoint(id, { anchors: "TopCenter" }, hollowCircle);
                      jsPlumb.addEndpoint(id, { anchors: "RightMiddle" }, hollowCircle);
@@ -73,7 +73,7 @@ $(document).ready(function () {
                 $.each(rack.switchlist, function (index, switchobj) {
                     var switchobject = eval('(' + switchobj.SwitchObj + ')');
                     var id = switchobject.swUuid;
-                    $("#right").append('<div class="node2"   id="' + id + '" >' + decodeURI(switchobject.swName) + '</div>');
+                    $("#right").append('<div class="node2"   id="' + id + '" >' + decodeURIComponent(switchobject.swName) + '</div>');
                     $("#" + id).css("left", switchobj.SwitchX).css("top", switchobj.SwitchY);
                     /*  jsPlumb.addEndpoint(id, { anchors: "TopCenter" }, hollowCircle);
                      jsPlumb.addEndpoint(id, { anchors: "RightMiddle" }, hollowCircle);

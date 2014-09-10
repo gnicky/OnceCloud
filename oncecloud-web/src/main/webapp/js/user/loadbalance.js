@@ -86,7 +86,7 @@ function getLBList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var uuid = obj.uuid;
-                var name = decodeURI(obj.name);
+                var name = decodeURIComponent(obj.name);
                 var power = obj.power;
                 var showid = "lb-" + uuid.substring(0, 8);
                 var iconStr = new Array("stopped", "running", "process", "process", "process", "process");
@@ -99,7 +99,7 @@ function getLBList(page, limit, search) {
                 }
                 var thistr = '<tr rowid="' + uuid + '" lbname="' + name + '"><td class="rcheck"><input type="checkbox" name="lbrow"></td><td><a class="id">' + showid + '</a></td>'
                     + '<td>' + name + '</td>' + stateStr + '<td name="eip">' + publicip + '</td><td name="capacity">' + obj.capacity + '</td>'
-                    + '<td class="time">' + decodeURI(obj.createdate) + '</td></tr>';
+                    + '<td class="time">' + decodeURIComponent(obj.createdate) + '</td></tr>';
                 tableStr += thistr;
             }
             $('#tablebody').html(tableStr);
@@ -112,11 +112,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/loadbalance/detail");
-    form.attr('method','post');
+    form.attr("action", "/loadbalance/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="lbUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -205,7 +205,7 @@ function startLB(uuid) {
     $.ajax({
         type: 'post',
         url: '/LBAction/Start',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json',
     });
 }
@@ -220,7 +220,7 @@ function destroyLB(uuid) {
     $.ajax({
         type: 'post',
         url: '/LBAction/Destroy',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'json',
     });
 }
@@ -234,7 +234,7 @@ function shutdownLB(uuid, force) {
     $.ajax({
         type: 'post',
         url: '/LBAction/ShutDown',
-        data: {uuid:uuid,force:force},
+        data: {uuid: uuid, force: force},
         dataType: 'json',
     });
 }

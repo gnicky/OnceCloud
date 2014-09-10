@@ -24,9 +24,9 @@ function getBasicUser() {
         data: {userid: userid},
         dataType: 'json',
         success: function (obj) {
-            var username = decodeURI(obj.username);
+            var username = decodeURIComponent(obj.username);
             var userid = obj.userid;
-            var usercom = decodeURI(obj.usercom);
+            var usercom = decodeURIComponent(obj.usercom);
             var userdate = obj.userdate;
             var userlevel = obj.userlevel;
             var usermail = obj.usermail;

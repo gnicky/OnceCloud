@@ -17,26 +17,26 @@ $(document).ready(function () {
 
     getHostBasicList();
 
-/*    $('#modify').on('click', function (event) {
-        event.preventDefault();
-        var url = $("#platformcontent").attr(
-            'platformBasePath')
-            + 'common/modify.jsp';
-        var instanceUuid = $("#platformcontent").attr(
-            "instanceUuid");
-        var instanceName = $("#instancename").text();
-        $('#InstanceModalContainer').load(url, {
-            "modifytype": "instance",
-            "modifyuuid": instanceUuid,
-            "modifyname": instanceName
-        }, function () {
-            $('#InstanceModalContainer').modal({
-                backdrop: false,
-                show: true
-            });
-        });
-    });
-*/
+    /*    $('#modify').on('click', function (event) {
+     event.preventDefault();
+     var url = $("#platformcontent").attr(
+     'platformBasePath')
+     + 'common/modify.jsp';
+     var instanceUuid = $("#platformcontent").attr(
+     "instanceUuid");
+     var instanceName = $("#instancename").text();
+     $('#InstanceModalContainer').load(url, {
+     "modifytype": "instance",
+     "modifyuuid": instanceUuid,
+     "modifyname": instanceName
+     }, function () {
+     $('#InstanceModalContainer').modal({
+     backdrop: false,
+     show: true
+     });
+     });
+     });
+     */
 
     function thirtymin() {
         resetChart();
@@ -186,12 +186,12 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/HostAction/OneHost',
-            data: {hostUuid:hostUuid},
+            data: {hostUuid: hostUuid},
             dataType: 'json',
             success: function (response) {
                 if (response.length > 0) {
                     var obj = response[0];
-                    var hostName = decodeURI(obj.hostName);
+                    var hostName = decodeURIComponent(obj.hostName);
                     var hostUuid = obj.hostUuid;
                     var stateStr = '';
                     var showstr = '';
@@ -199,17 +199,17 @@ $(document).ready(function () {
                     showstr = "<a class='id'>" + showuuid + '</a>';
 
                     var createDate = obj.createDate;
-                    var useDate = decodeURI(obj.useDate);
+                    var useDate = decodeURIComponent(obj.useDate);
                     var hostUuid = obj.hostUuid;
                     var hostCPU = obj.hostCPU;
                     var hostMemory = obj.hostMemory + "&nbsp;MB";
 
 
                     var hostIP = obj.hostIP;
-                    var hostDesc = decodeURI(obj.hostDesc);
+                    var hostDesc = decodeURIComponent(obj.hostDesc);
 
-                    var hostkernel = decodeURI(obj.hostkernel);
-                    var hostXen = decodeURI(obj.hostXen);
+                    var hostkernel = decodeURIComponent(obj.hostkernel);
+                    var hostXen = decodeURIComponent(obj.hostXen);
 
                     var network;
                     if (hostIP == null || hostIP == "") {
@@ -220,7 +220,7 @@ $(document).ready(function () {
                     }
 
                     var poolId = obj.poolId;
-                    var poolName = decodeURI(obj.poolName);
+                    var poolName = decodeURIComponent(obj.poolName);
                     var poolstr = "&nbsp;";
                     if (poolId != "") {
                         poolstr = "<a class='poolclass' poolid='" + poolId + "'>" + poolName + "</a>";
@@ -229,7 +229,7 @@ $(document).ready(function () {
                     var srstr = "&nbsp;";
                     for (var i = 1; i < response.length; i++) {
                         var itemobj = response[i];
-                        srstr += "<a class='srclass' srid='" + itemobj.srId + "'>" + decodeURI(itemobj.srName) + "</a><br/>"
+                        srstr += "<a class='srclass' srid='" + itemobj.srId + "'>" + decodeURIComponent(itemobj.srName) + "</a><br/>"
                     }
 
                     basiclist.innerHTML = '<dt>ID</dt><dd>'
@@ -490,7 +490,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/PerformanceAction/CPU',
-            data: {uuid:uuid, type:type},
+            data: {uuid: uuid, type: type},
             dataType: 'text',
             success: function (response) {
                 var obj = jQuery.parseJSON(response);
@@ -525,7 +525,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/PerformanceAction/Memory',
-            data: {uuid:uuid,type:type},
+            data: {uuid: uuid, type: type},
             dataType: 'text',
             success: function (response) {
                 var array = jQuery.parseJSON(response);
@@ -565,7 +565,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/PerformanceAction/PIF',
-            data: {uuid:uuid,type:type},
+            data: {uuid: uuid, type: type},
             dataType: 'text',
             success: function (response) {
                 var obj = jQuery.parseJSON(response);

@@ -103,7 +103,7 @@ function getRouterList(page, limit, search) {
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var vmuuid = obj.vmid;
-                    var vmName = decodeURI(obj.vmname);
+                    var vmName = decodeURIComponent(obj.vmname);
                     var showuuid = "i-" + vmuuid.substring(0, 8);
                     tableStr = tableStr + '<div name="image-item" class="image-item" vmuuid="'
                         + vmuuid + '"><div class="image-left">'
@@ -140,7 +140,7 @@ function getLoadBalanceList(page, limit, search) {
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var vmuuid = obj.vmid;
-                    var vmName = decodeURI(obj.vmname);
+                    var vmName = decodeURIComponent(obj.vmname);
                     var showuuid = "i-" + vmuuid.substring(0, 8);
                     tableStr = tableStr + '<div name="image-item" class="image-item" vmuuid="'
                         + vmuuid + '"><div class="image-left">'
@@ -177,7 +177,7 @@ function getInstanceList(page, limit, search) {
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var vmuuid = obj.vmid;
-                    var vmName = decodeURI(obj.vmname);
+                    var vmName = decodeURIComponent(obj.vmname);
                     var showuuid = "i-" + vmuuid.substring(0, 8);
                     tableStr = tableStr + '<div name="image-item" class="image-item" vmuuid="'
                         + vmuuid + '"><div class="image-left">'

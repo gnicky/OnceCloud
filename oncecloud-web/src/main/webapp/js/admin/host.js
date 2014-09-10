@@ -100,11 +100,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var hostid = $(this).parent().parent().attr('hostid');
     var form = $("<form></form>");
-    form.attr("action","/host/detail");
-    form.attr('method','post');
+    form.attr("action", "/host/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="hostid" value="' + hostid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -248,8 +248,8 @@ function getHostList(page, limit, search) {
                 var tableStr = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
-                    var hostname = decodeURI(obj.hostname);
-                    var hostdesc = decodeURI(obj.hostdesc);
+                    var hostname = decodeURIComponent(obj.hostname);
+                    var hostdesc = decodeURIComponent(obj.hostdesc);
                     var hostid = obj.hostid;
                     var hostip = obj.hostip;
                     var createdate = obj.createdate;
@@ -257,7 +257,7 @@ function getHostList(page, limit, search) {
                     var hostcpu = obj.hostcpu;
                     var hostmem = obj.hostmem;
                     var rackUuid = obj.rackUuid;
-                    var rackName = decodeURI(obj.rackName);
+                    var rackName = decodeURIComponent(obj.rackName);
                     var showid = "host-" + hostid.substring(0, 8);
                     var srsize = obj.srsize;
                     var poolid = obj.poolid;
@@ -266,7 +266,7 @@ function getHostList(page, limit, search) {
                     if (poolid == "") {
                         state = "unload";
                     }
-                    var poolname = decodeURI(obj.poolname);
+                    var poolname = decodeURIComponent(obj.poolname);
                     var mytr = '<tr hostid="'
                         + hostid
                         + '" hostname="'

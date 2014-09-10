@@ -56,7 +56,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/VnetAction/Create',
-            data: {uuid:uuid, name:name, desc:desc},
+            data: {uuid: uuid, name: name, desc: desc},
             dataType: 'json',
             success: function (array) {
             }

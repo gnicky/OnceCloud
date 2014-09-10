@@ -125,7 +125,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'post',
                 url: '/AlarmAction/ModifyRule',
-                data: {ruletype:ruletype, rulethreshold:rulethreshold, ruleperiod:ruleperiod, ruleId:ruleId},
+                data: {ruletype: ruletype, rulethreshold: rulethreshold, ruleperiod: ruleperiod, ruleId: ruleId},
                 dataType: 'text',
                 success: function () {
                     $('input[name="rulerow"]:checked').each(function () {

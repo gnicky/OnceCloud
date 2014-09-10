@@ -93,7 +93,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/Resource',
-            data: {page:page, limit:limit, search:search, alarmUuid:alarmUuid},
+            data: {page: page, limit: limit, search: search, alarmUuid: alarmUuid},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -111,7 +111,7 @@ $(document).ready(function () {
                     for (var i = 1; i < array.length; i++) {
                         var obj = array[i];
                         var vmuuid = obj.resourceUuid;
-                        var vmName = decodeURI(obj.resourceName);
+                        var vmName = decodeURIComponent(obj.resourceName);
                         tableStr = tableStr + '<div name="image-item" class="image-item" vmname="' + vmName + '" vmuuid="'
                             + vmuuid + '"><div class="image-left">'
                             + vmName + '</div>ID:&nbsp;&nbsp;' + obj.resourceUuidshow + '</div>';
@@ -150,7 +150,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/AddResource',
-            data: {alarmUuid:alarmUuid, rsuuidStr:rsuuidStr},
+            data: {alarmUuid: alarmUuid, rsuuidStr: rsuuidStr},
             dataType: 'text',
             success: function (response) {
                 bootbox.dialog({

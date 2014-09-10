@@ -92,7 +92,7 @@ function getVnetList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var uuid = obj.uuid;
-                var name = decodeURI(obj.name);
+                var name = decodeURIComponent(obj.name);
                 var routerid = obj.routerid;
                 var _routerid = routerid;
                 var showid = "vn-" + uuid.substring(0, 8);
@@ -103,7 +103,7 @@ function getVnetList(page, limit, search) {
                 }
                 var thistr = '<tr rowid="' + uuid + '" vnname="' + name + '" routerrid="' + _routerid + '"><td class="rcheck"><input type="checkbox" name="vnrow"></td><td><a class="id">' + showid + '</a></td>'
                     + '<td>' + name + '</td><td>' + routerid + '</td>' + '<td class="time">'
-                    + decodeURI(obj.createdate) + '</td></tr>';
+                    + decodeURIComponent(obj.createdate) + '</td></tr>';
                 tableStr += thistr;
             }
             $('#tablebody').html(tableStr);
@@ -112,14 +112,14 @@ function getVnetList(page, limit, search) {
 }
 
 $('#tablebody').on('click', '.id', function (event) {
-	event.preventDefault();
+    event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/vnet/detail");
-    form.attr('method','post');
+    form.attr("action", "/vnet/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="vnetUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -208,7 +208,7 @@ function unlink(uuid) {
     $.ajax({
         type: 'post',
         url: '/VnetAction/Unlink',
-        data: {vnetId:uuid},
+        data: {vnetId: uuid},
         dataType: 'text',
         complete: function () {
             var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
@@ -221,7 +221,7 @@ function deleteVnet(uuid) {
     $.ajax({
         type: 'post',
         url: '/VnetAction/Delete',
-        data: {uuid:uuid},
+        data: {uuid: uuid},
         dataType: 'text',
         success: function (result) {
             if (result == "Using") {

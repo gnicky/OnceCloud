@@ -83,7 +83,7 @@ $(document).ready(function () {
 
     $('#basic-resource').on('click', function (event) {
         event.preventDefault();
-        var url = basePath+ 'user/modal/bindalarm';
+        var url = basePath + 'user/modal/bindalarm';
         var alarmUuid = $('#platformcontent').attr("alarmUuid");
         $('#ResourceModalContainer').load(url, {"uuid": alarmUuid}, function () {
             $('#ResourceModalContainer').modal({
@@ -141,7 +141,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/Destory',
-            data: {uuid:uuid},
+            data: {uuid: uuid},
             dataType: 'json',
             success: function (result) {
                 if (result) {
@@ -237,11 +237,11 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/GetAlarm',
-            data: {alarmUuid:alarmUuid},
+            data: {alarmUuid: alarmUuid},
             dataType: 'json',
             success: function (obj) {
                 var showid = "al-" + alarmUuid.substring(0, 8);
-                var alarmName = decodeURI(obj.alarmName);
+                var alarmName = decodeURIComponent(obj.alarmName);
                 var alarmStatus = obj.alarmStatus;
                 var stateStr = "";
                 var iconStr = new Array("stopped", "running");
@@ -253,7 +253,7 @@ $(document).ready(function () {
                 alaType = alarmType;
                 var typeStr = _typeStr[alarmType];
                 var alarmPeriod = obj.alarmPeriod;
-                var alarmDate = decodeURI(obj.alarmDate);
+                var alarmDate = decodeURIComponent(obj.alarmDate);
                 alarmDate = alarmDate.substring(0, alarmDate.length - 2);
                 alarmDate = alarmDate.replace(/%3A/g, ":");
                 var rsTable = '';
@@ -264,7 +264,7 @@ $(document).ready(function () {
                 if (rsTable == '') {
                     rsTable = '<span class="none">尚无资源</span>';
                 }
-                var alarmDesc = decodeURI(obj.alarmDesc);
+                var alarmDesc = decodeURIComponent(obj.alarmDesc);
                 alarmDesc = alarmDesc.replace(/%2F/g, "/");
                 var alarmTouch = obj.alarmTouch;
                 var alarmIsalarm = obj.alarmIsalarm;
@@ -309,7 +309,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/Remove',
-            data: {rsUuid:rsUuid, rsType:rsType},
+            data: {rsUuid: rsUuid, rsType: rsType},
             dataType: 'text',
             success: function (obj) {
                 othis.parent().remove();
@@ -345,7 +345,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/RuleList',
-            data: {alarmUuid:alarmUuid, page:page, limit:limit},
+            data: {alarmUuid: alarmUuid, page: page, limit: limit},
             dataType: 'json',
             success: function (array) {
                 var totalnum = array[0];
@@ -516,7 +516,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/AlarmAction/DeleteRule',
-            data: {ruleId:ruleId},
+            data: {ruleId: ruleId},
             dataType: 'text',
             complete: function () {
                 $(thistr).remove();

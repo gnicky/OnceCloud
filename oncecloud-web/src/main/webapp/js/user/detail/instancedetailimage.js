@@ -218,7 +218,7 @@ function bindvolumesshow() {
 			                  <a class="btn-delete" href="#" data-id="' + item.volumeId + '">\
 			                  <span class="glyphicon glyphicon-remove"></span></a>\
 			                  <span class="size">' + item.volumeSize + ' G</span>\
-			                  <a class="volume-name"  data-permalink="">' + decodeURI(item.volumeName) + '</a>');
+			                  <a class="volume-name"  data-permalink="">' + decodeURIComponent(item.volumeName) + '</a>');
                 });
             }
             $("#instance-volumeDiv").append(' <div class="col-md-' + j + ' component-instance-volume none">\
@@ -242,9 +242,9 @@ function bindvolumes() {
             if (array.length > 0) {
                 $.each(array, function (index, item) {
                     if (index == 0) {
-                        tablelist = tablelist + '<div class="image-item selected" volumeId="' + item.volumeId + '" volumeName="' + decodeURI(item.volumeName) + '"><div class="image-left">' + "fw-" + item.volumeId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURI(item.volumeName) + '</div>';
+                        tablelist = tablelist + '<div class="image-item selected" volumeId="' + item.volumeId + '" volumeName="' + decodeURIComponent(item.volumeName) + '"><div class="image-left">' + "fw-" + item.volumeId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURIComponent(item.volumeName) + '</div>';
                     } else {
-                        tablelist = tablelist + '<div class="image-item" volumeId="' + item.volumeId + '" volumeName="' + decodeURI(item.volumeName) + '"><div class="image-left">' + "fw-" + item.volumeId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURI(item.volumeName) + '</div>';
+                        tablelist = tablelist + '<div class="image-item" volumeId="' + item.volumeId + '" volumeName="' + decodeURIComponent(item.volumeName) + '"><div class="image-left">' + "fw-" + item.volumeId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURIComponent(item.volumeName) + '</div>';
                     }
                 });
             }
@@ -311,9 +311,9 @@ function changeNet() {
                 //tablelist ='<div class="image-item selected" vnetuuid="-1"><div class="image-left">基础网络</div>&nbsp;&nbsp;vxnet-0</div>';
                 $.each(array, function (index, item) {
                     if (index == 0) {
-                        tablelist = tablelist + '<div class="image-item selected" vnetuuid="' + item.vnetuuid + '"><div class="image-left">' + decodeURI(item.vnetname) + '</div>&nbsp;&nbsp;' + "vn-" + item.vnetuuid.substring(0, 8) + '</div>';
+                        tablelist = tablelist + '<div class="image-item selected" vnetuuid="' + item.vnetuuid + '"><div class="image-left">' + decodeURIComponent(item.vnetname) + '</div>&nbsp;&nbsp;' + "vn-" + item.vnetuuid.substring(0, 8) + '</div>';
                     } else {
-                        tablelist = tablelist + '<div class="image-item" vnetuuid="' + item.vnetuuid + '" ><div class="image-left">' + decodeURI(item.vnetname) + '</div>&nbsp;&nbsp;' + "vn-" + item.vnetuuid.substring(0, 8) + '</div>';
+                        tablelist = tablelist + '<div class="image-item" vnetuuid="' + item.vnetuuid + '" ><div class="image-left">' + decodeURIComponent(item.vnetname) + '</div>&nbsp;&nbsp;' + "vn-" + item.vnetuuid.substring(0, 8) + '</div>';
                     }
                 });
             }
@@ -427,9 +427,9 @@ function bindpublicip(bdtype) {
             if (array.length > 0) {
                 $.each(array, function (index, item) {
                     if (index == 0) {
-                        tablelist = tablelist + '<div class="image-item selected" eid="' + item.eipUuid + '" eip="' + item.eipIp + '"><div class="image-left">' + decodeURI(item.eipName) + '</div>IP:&nbsp;&nbsp;' + item.eipIp + '</div>';
+                        tablelist = tablelist + '<div class="image-item selected" eid="' + item.eipUuid + '" eip="' + item.eipIp + '"><div class="image-left">' + decodeURIComponent(item.eipName) + '</div>IP:&nbsp;&nbsp;' + item.eipIp + '</div>';
                     } else {
-                        tablelist = tablelist + '<div class="image-item" eid="' + item.eipUuid + '" eip="' + item.eipIp + '"><div class="image-left">' + decodeURI(item.eipName) + '</div>IP:&nbsp;&nbsp;' + item.eipIp + '</div>';
+                        tablelist = tablelist + '<div class="image-item" eid="' + item.eipUuid + '" eip="' + item.eipIp + '"><div class="image-left">' + decodeURIComponent(item.eipName) + '</div>IP:&nbsp;&nbsp;' + item.eipIp + '</div>';
                     }
                 });
             }
@@ -599,9 +599,9 @@ function bingfirewall(bdtype) {
             if (array.length > 0) {
                 $.each(array, function (index, item) {
                     if (index == 0) {
-                        tablelist = tablelist + '<div class="image-item selected" firewallId="' + item.firewallId + '" firewallName="' + decodeURI(item.firewallName) + '"><div class="image-left">' + "fw-" + item.firewallId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURI(item.firewallName) + '</div>';
+                        tablelist = tablelist + '<div class="image-item selected" firewallId="' + item.firewallId + '" firewallName="' + decodeURIComponent(item.firewallName) + '"><div class="image-left">' + "fw-" + item.firewallId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURIComponent(item.firewallName) + '</div>';
                     } else {
-                        tablelist = tablelist + '<div class="image-item" firewallId="' + item.firewallId + '" firewallName="' + decodeURI(item.firewallName) + '"><div class="image-left">' + "fw-" + item.firewallId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURI(item.firewallName) + '</div>';
+                        tablelist = tablelist + '<div class="image-item" firewallId="' + item.firewallId + '" firewallName="' + decodeURIComponent(item.firewallName) + '"><div class="image-left">' + "fw-" + item.firewallId.substring(0, 8) + '</div>&nbsp;&nbsp;' + decodeURIComponent(item.firewallName) + '</div>';
                     }
                 });
             }

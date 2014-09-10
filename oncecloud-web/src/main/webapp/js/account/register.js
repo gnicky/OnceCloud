@@ -14,7 +14,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 url: '/UserAction/Register',
-                data: {username:username, userpwd:pwd, useremail:email, usertel:telephone},
+                data: {username: username, userpwd: pwd, useremail: email, usertel: telephone},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {
@@ -67,7 +67,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'get',
                 url: '/UserAction/QueryUser',
-                data: {userName:userName},
+                data: {userName: userName},
                 dataType: 'json',
                 success: function (array) {
                     if (array[0].exist) {

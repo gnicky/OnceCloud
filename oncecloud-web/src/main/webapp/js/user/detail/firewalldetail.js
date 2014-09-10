@@ -65,7 +65,7 @@ function getFirewallBasicList() {
         data: {firewallId: firewallId},
         dataType: 'json',
         success: function (obj) {
-            var firewallName = decodeURI(obj.firewallName);
+            var firewallName = decodeURIComponent(obj.firewallName);
             var ruleSize = obj.ruleSize;
             var createDate = obj.createDate;
             var showid = "fw-" + firewallId.substring(0, 8);
@@ -103,7 +103,7 @@ function getRuleList(page, limit, search, firewallId) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var ruleId = obj.ruleId;
-                var ruleName = decodeURI(obj.ruleName);
+                var ruleName = decodeURIComponent(obj.ruleName);
                 var rulePriority = obj.rulePriority;
                 var ruleProtocol = obj.ruleProtocol;
                 var ruleSport = obj.ruleSport;

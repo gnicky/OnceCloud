@@ -1,53 +1,53 @@
-$('.once-tab').on('click', '.tab-filter', function(event) {
-			event.preventDefault();
-			$('li', $('.once-tab')).removeClass('active');
-			$(this).addClass('active');
-			var type = $('.once-tab').find('.active').attr("type");
-			if (type == "pooltab") {
-				getPoolList();
-			} else if (type == "racktab") {
-				getrackList();
-			}
-		});
+$('.once-tab').on('click', '.tab-filter', function (event) {
+    event.preventDefault();
+    $('li', $('.once-tab')).removeClass('active');
+    $(this).addClass('active');
+    var type = $('.once-tab').find('.active').attr("type");
+    if (type == "pooltab") {
+        getPoolList();
+    } else if (type == "racktab") {
+        getrackList();
+    }
+});
 
 getPoolList();
 
-$('#tagdiv').on('click', '.id', function(event) {
-	event.preventDefault();
-	var hostid = $(this).attr('hostid');
-	var form = $("<form></form>");
-    form.attr("action","/host/detail");
-    form.attr('method','post');
+$('#tagdiv').on('click', '.id', function (event) {
+    event.preventDefault();
+    var hostid = $(this).attr('hostid');
+    var form = $("<form></form>");
+    form.attr("action", "/host/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="hostid" value="' + hostid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
 
 
-$('#tagdiv').on('click', '.switchid', function(event) {
-	event.preventDefault();
-	var switchid = $(this).attr('switchid');
-	var form = $("<form></form>");
-    form.attr("action","/switch/detail");
-    form.attr('method','post');
+$('#tagdiv').on('click', '.switchid', function (event) {
+    event.preventDefault();
+    var switchid = $(this).attr('switchid');
+    var form = $("<form></form>");
+    form.attr("action", "/switch/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="switchid" value="' + switchid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
 
 
-$('#tagdiv').on('mouseenter', 'li', function(event) {
-			event.preventDefault();
-			$(this).find(".t_tips").show();
-		});
-$('#tagdiv').on('mouseleave', 'li', function(event) {
-			event.preventDefault();
-			$(this).find(".t_tips").hide();
-		});
+$('#tagdiv').on('mouseenter', 'li', function (event) {
+    event.preventDefault();
+    $(this).find(".t_tips").show();
+});
+$('#tagdiv').on('mouseleave', 'li', function (event) {
+    event.preventDefault();
+    $(this).find(".t_tips").hide();
+});
 
 
 function getrackList() {
@@ -65,7 +65,7 @@ function getrackList() {
                 $.each(item.switchlist, function (key, sw) {
                     var switchobj = eval('(' + sw + ')');
                     srhtml += '<li class="equipment switchid" switchid=' + switchobj.swUuid + '><a href="#">\
-			                <div class="name">' + decodeURI(switchobj.swName) + '</div>\
+			                <div class="name">' + decodeURIComponent(switchobj.swName) + '</div>\
 			               <div class="clear_both"></div>\
 						      </a>\
 						    </li>'
@@ -80,7 +80,7 @@ function getrackList() {
 				          <div class="clear_both"></div>\
 				          <div class="t_tips">\
 				          	   <span class="n_content">\
-				               	<p>服务器：' + decodeURI(host.hostName) + '</p>\
+				               	<p>服务器：' + decodeURIComponent(host.hostName) + '</p>\
 				                <p>内存：' + Math.round(host.hostMem / 1024) + 'GB</p>\
 				                <p>CPU：' + host.hostCpu + '</p>\
 				                <p>虚拟机：' + vmcount + '个</p>\
@@ -92,19 +92,19 @@ function getrackList() {
                 });
 
                 /*
-				 * $.each(item.storagelist,function(key,sr){ var storage =
-				 * eval('('+ sr +')'); srhtml+='<li class="two" srid='+ storage.srUuid +'>\
-				 * <div class="name">' + decodeURI(storage.srName) +'</div>\
-				 * <div class="clear_both"></div>\ <div class="t_tips">\ <span
-				 * class="n_content">\ <p>存储集群:'+decodeURI(storage.srName)+'</p>\
-				 * <p>管理节点:'+storage.srAddress+'</p>\ <p>挂载目录：'+storage.srdir+'</p>\
-				 * <p>文件系统：'+storage.srtype.toUpperCase()+'</p>\ </span>\ <b
-				 * class="arrow"></b>\ </div>\ </li>' });
-				 */
+                 * $.each(item.storagelist,function(key,sr){ var storage =
+                 * eval('('+ sr +')'); srhtml+='<li class="two" srid='+ storage.srUuid +'>\
+                 * <div class="name">' + decodeURIComponent(storage.srName) +'</div>\
+                 * <div class="clear_both"></div>\ <div class="t_tips">\ <span
+                 * class="n_content">\ <p>存储集群:'+decodeURIComponent(storage.srName)+'</p>\
+                 * <p>管理节点:'+storage.srAddress+'</p>\ <p>挂载目录：'+storage.srdir+'</p>\
+                 * <p>文件系统：'+storage.srtype.toUpperCase()+'</p>\ </span>\ <b
+                 * class="arrow"></b>\ </div>\ </li>' });
+                 */
 
 
                 $("#tagdiv").append('<div class="serviceto">\
-						<h2>' + decodeURI(rack.rackName) + '</h2>\
+						<h2>' + decodeURIComponent(rack.rackName) + '</h2>\
 						<div class="list">\
 						    <ul>' + srhtml + '</ul>\
 						    </div>\
@@ -138,11 +138,11 @@ function getPoolList() {
                     var storage = eval('(' + sr + ')');
                     if (sruuid.indexOf() < 0) {
                         sruuid += storage.srUuid + ',';
-                        srname += decodeURI(storage.srName) + ' ';
+                        srname += decodeURIComponent(storage.srName) + ' ';
 
                         srhtml += '<div class="area" id=' + storage.srUuid + '>\
 						<h4>\
-							<a>存储集群:' + decodeURI(storage.srName) + '</a>\
+							<a>存储集群:' + decodeURIComponent(storage.srName) + '</a>\
 						</h4>\
 						<div class="inner">\
 							<div class="resource">\
@@ -154,7 +154,7 @@ function getPoolList() {
 										<div class="row">\
 											<div class="col-md-4 imgae">\
 												<span class="glyphicon glyphicon-hdd cool-cyan"></span>\
-												<h5>' + decodeURI(storage.srName) + '</h5>\
+												<h5>' + decodeURIComponent(storage.srName) + '</h5>\
 											</div>\
 											<div class="col-md-8 attrcontent">\
 												<h5>挂载目录：' + storage.srdir + '</h5>\
@@ -182,7 +182,7 @@ function getPoolList() {
 					<div class="row">\
 						<div class="col-md-4 imgae">\
 							<span class="glyphicon glyphicon-tasks cool-purple"></span>\
-							<h5>服务器：' + decodeURI(host.hostName) + '</h5>\
+							<h5>服务器：' + decodeURIComponent(host.hostName) + '</h5>\
 						</div>\
 						<div class="col-md-4 attrcontent">\
 							<h5>内存：' + Math.round(host.hostMem / 1024) + 'GB</h5>\
@@ -197,7 +197,7 @@ function getPoolList() {
 				</div>';
                 });
 
-                $("#tagdiv").append('<div class="area" id=' + pool.poolUuid + '><h4><a>资源池:' + decodeURI(pool.poolName) + '</a></h4>\
+                $("#tagdiv").append('<div class="area" id=' + pool.poolUuid + '><h4><a>资源池:' + decodeURIComponent(pool.poolName) + '</a></h4>\
 						<div class="inner">\
 						<div class="resource">\
 							<div class="poolclass" >\

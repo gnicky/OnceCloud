@@ -120,7 +120,7 @@ public class QADAO {
 			Query query = session
 					.createQuery("select user.userName, qa.qaContent, qa.qaStatus, "
 							+ "qa.qaTime from QA qa, User user where qa.qaUID = user.userId "
-							+ "and qa.qaTid = :qaTid order by qaId");
+							+ "and qa.qaTid = :qaTid order by qa.qaId");
 			query.setInteger("qaTid", qaTid);
 			qaList = query.list();
 			session.getTransaction().commit();

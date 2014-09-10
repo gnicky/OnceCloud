@@ -39,15 +39,15 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/DatacenterAction/Create',
-                    data: {dcname:dcName, dclocation:dcLocation, dcdesc:dcDesc},
+                    data: {dcname: dcName, dclocation: dcLocation, dcdesc: dcDesc},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
                             var obj = array[0];
-                            var dcname = decodeURI(obj.dcname);
-                            var dcdesc = decodeURI(obj.dcdesc);
+                            var dcname = decodeURIComponent(obj.dcname);
+                            var dcdesc = decodeURIComponent(obj.dcdesc);
                             var dcid = obj.dcid;
-                            var dclocation = decodeURI(obj.dclocation);
+                            var dclocation = decodeURIComponent(obj.dclocation);
                             var createdate = obj.createdate;
                             var showid = "dc-" + dcid.substring(0, 8);
                             var mytr = '<tr dcid="' + dcid + '" dcname="' + dcname + '" dclocation="' + dclocation + '" dcdesc="' + dcdesc + '"><td class="rcheck"><input type="checkbox" name="dcrow"></td>'
@@ -62,7 +62,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/DatacenterAction/Update',
-                    data: {dcuuid:dcid, dcname:dcName, dclocation:dcLocation, dcdesc:dcDesc},
+                    data: {dcuuid: dcid, dcname: dcName, dclocation: dcLocation, dcdesc: dcDesc},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[dcid="' + dcid + '"]');

@@ -100,7 +100,7 @@ function getSnapshotDetailList() {
             for (var i = 0; i < array.length; i++) {
                 var obj = array[i];
                 var snapshotId = obj.snapshotId;
-                var snapshotName = decodeURI(obj.snapshotName);
+                var snapshotName = decodeURIComponent(obj.snapshotName);
                 var snapshotSize = obj.snapshotSize;
                 var backupDate = obj.backupDate;
                 var showid = "ss-" + snapshotId.substring(0, 8);
@@ -220,7 +220,7 @@ function getSnapshotBasicList() {
         data: {resourceUuid: resourceUuid, resourceType: resourceType},
         dataType: 'json',
         success: function (obj) {
-            var resourceName = decodeURI(obj.resourceName);
+            var resourceName = decodeURIComponent(obj.resourceName);
             var snapshotCount = obj.snapshotCount;
             var snapshotSize = obj.snapshotSize;
             var backupDate = obj.backupDate;
@@ -237,7 +237,7 @@ function getSnapshotBasicList() {
             $('#basic-list').html('<dt>备份链&nbsp;ID</dt><dd><a href="javascript:void(0)">'
                 + showid + '</a></dd><dt>状态</dt><dd><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">可用</span></dd>'
                 + '<dt>总量</dt><dd>' + snapshotSize.toFixed(2) + '&nbsp;GB</dd><dt>备份点</dt><dd>'
-                + snapshotCount + '&nbsp;个</dd><dt>距上次备份时间</dt><dd class="time">' + decodeURI(backupDate) + '</dd>');
+                + snapshotCount + '&nbsp;个</dd><dt>距上次备份时间</dt><dd class="time">' + decodeURIComponent(backupDate) + '</dd>');
             $('#depend-list').html('<dt>应用资源</dt><dd resourceUuid="' + resourceUuid + '">'
                 + resourceId + '</dd><dt>资源名称</dt><dd>'
                 + resourceName + '</dd><dt>资源类型</dt><dd>' + showname + '</dd>');

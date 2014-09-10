@@ -34,7 +34,7 @@ getImageList(1, 8, "", "system");
 $('.li-disable').unbind();
 $('ol').removeClass("clickable");
 $('.hidden-phone').css("cursor", "default");
-$('.hidden-phone').attr("href","javascript:void(0)");
+$('.hidden-phone').attr("href", "javascript:void(0)");
 
 function getImageList(page, limit, search, type) {
     $('#imagelist').html("");
@@ -59,9 +59,9 @@ function getImageList(page, limit, search, type) {
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var imageid = obj.imageid;
-                    var imagename = decodeURI(obj.imagename);
+                    var imagename = decodeURIComponent(obj.imagename);
                     var imagestatus = obj.imagestatus;
-                    var imageplatform = decodeURI(obj.imageplatform);
+                    var imageplatform = decodeURIComponent(obj.imageplatform);
                     if (imagestatus == 1) {
                         if (i == 1) {
                             tableStr = tableStr + '<div class="image-item selected" imageid="' + imageid + '" platform="' + imageplatform + '">' + imagename + '</div>';
@@ -159,10 +159,10 @@ $('#createvmAction').on('click', function (event) {
 });
 
 $('#instance_name').on('focusout', function () {
-	var name = $('#instance_name').val();
-	if (name.length > 20) {
-		name = name.substring(0, 20) + "...";
-	}
+    var name = $('#instance_name').val();
+    if (name.length > 20) {
+        name = name.substring(0, 20) + "...";
+    }
     $('#selectedName').html(name);
 });
 
@@ -242,10 +242,10 @@ function updatePrice(cpuCore, memoryCapacity, vmCount) {
 
 $('.types').on('click', '.types-item', function (event) {
     event.preventDefault();
-	var selindex = $(this).index();
-	var core = new Array(0,0,1,1,2,2);
-    var mem = new Array(1,2,2,3,5,6);
-    $('.types-item',$('.types')).removeClass('selected');
+    var selindex = $(this).index();
+    var core = new Array(0, 0, 1, 1, 2, 2);
+    var mem = new Array(1, 2, 2, 3, 5, 6);
+    $('.types-item', $('.types')).removeClass('selected');
     $(this).addClass('selected');
     $('div', $('.cpu')).removeClass('selected');
     $('.cpu-options').eq(core[selindex]).addClass('selected');
@@ -261,7 +261,7 @@ $('.cpu').on('click', '.cpu-options', function (event) {
     $('div', $('.cpu')).removeClass('selected');
     $(this).addClass('selected');
     $('#selectedCore').html($('.cpu').find('.selected').attr("core") + "&nbsp;核");
-    $('.types-item',$('.types')).removeClass('selected');
+    $('.types-item', $('.types')).removeClass('selected');
     $('#selectedType').html("定制");
     priceDisplayUpdate();
 });
@@ -272,8 +272,8 @@ $('.memory').on('click', '.memory-options', function (event) {
         $('div', $('.memory')).removeClass('selected');
         $(this).addClass('selected');
         $('#selectedCap').html($('.memory').find('.selected').attr("capacity") + "&nbsp;G");
-        $('.types-item',$('.types')).removeClass('selected');
-   		$('#selectedType').html("定制");
+        $('.types-item', $('.types')).removeClass('selected');
+        $('#selectedType').html("定制");
         priceDisplayUpdate();
     }
 });

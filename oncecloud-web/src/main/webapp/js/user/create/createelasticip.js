@@ -119,7 +119,7 @@ function applyEip(eipName, eipSize) {
                 $("#tablebody").prepend('<tr eip="' + eipIp + '" eipId="' + eipId + '"><td class="rcheck"><input type="checkbox" name="eiprow"></td><td><a class="id">' + eipId + '</a></td><td name="eipname">'
                     + eipName + '</td><td>'
                     + eipIp + '</td><td><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">可用</span></td><td vmuuid=""></td><td name="bandwidth">'
-                    + eipSize + '</td><td>电信</td><td name="createdate" class="time">' + decodeURI(createDate) + '前</td></tr>');
+                    + eipSize + '</td><td>电信</td><td name="createdate" class="time">' + decodeURIComponent(createDate) + '前</td></tr>');
             }
         }
     });

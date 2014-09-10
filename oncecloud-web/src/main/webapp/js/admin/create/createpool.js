@@ -12,7 +12,7 @@ $(document).ready(function () {
                 if (array.length >= 1) {
                     $("#dcselect").html("");
                     $.each(array, function (index, item) {
-                        $("#dcselect").append("<option value='" + item.dcid + "'>" + decodeURI(item.dcname) + "</option>");
+                        $("#dcselect").append("<option value='" + item.dcid + "'>" + decodeURIComponent(item.dcname) + "</option>");
                     });
                 }
                 else {
@@ -70,18 +70,18 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/PoolAction/Create',
-                    data: {poolname:poolName, pooldesc:poolDesc, dcuuid:dcuuid, dcname:dcname},
+                    data: {poolname: poolName, pooldesc: poolDesc, dcuuid: dcuuid, dcname: dcname},
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
                             var obj = array[0];
-                            var poolname = decodeURI(obj.poolname);
-                            var pooldesc = decodeURI(obj.pooldesc);
+                            var poolname = decodeURIComponent(obj.poolname);
+                            var pooldesc = decodeURIComponent(obj.pooldesc);
                             var poolid = obj.poolid;
                             var poolmaster = obj.poolmaster;
                             var createdate = obj.createdate;
                             var dcuuid = obj.dcuuid;
-                            var dcname = decodeURI(obj.dcname);
+                            var dcname = decodeURIComponent(obj.dcname);
                             var showid = "pool-" + poolid.substring(0, 8);
                             var mytr = '<tr poolid="' + poolid + '" poolname="' + poolname + '" pooldesc="' + pooldesc + '" dcid="' + dcuuid + '"><td class="rcheck"><input type="checkbox" name="poolrow"></td>'
                                 + '<td><a class="id">' + showid + '</a></td><td>' + poolname + '</td><td>' + poolmaster + '</td><td class="pod" state="loaded"><a>' + dcname + '</a></td><td>0</td><td>0</td><td class="time">' + createdate + '</td></tr>';
@@ -98,7 +98,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/PoolAction/Update',
-                    data: {pooluuid:poolid, poolname:poolName, pooldesc:poolDesc,dcuuid:dcuuid},
+                    data: {pooluuid: poolid, poolname: poolName, pooldesc: poolDesc, dcuuid: dcuuid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[poolid="' + poolid + '"]');

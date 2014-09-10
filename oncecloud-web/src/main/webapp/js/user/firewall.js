@@ -183,7 +183,7 @@ function getFirewallList(page, limit, search) {
                 var obj = array[i];
                 var firewallId = obj.firewallId;
                 var showid = firewallId.substring(0, 8);
-                var firewallName = decodeURI(obj.firewallName);
+                var firewallName = decodeURIComponent(obj.firewallName);
                 var ruleSize = obj.ruleSize;
                 var createDate = obj.createDate;
                 var def = obj.def;
@@ -205,11 +205,11 @@ $('#tablebody').on('click', '.firewallid', function (event) {
     event.preventDefault();
     var firewallId = $(this).parent().attr('firewallid');
     var form = $("<form></form>");
-    form.attr("action","/firewall/detail");
-    form.attr('method','post');
+    form.attr("action", "/firewall/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="firewallId" value="' + firewallId + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });

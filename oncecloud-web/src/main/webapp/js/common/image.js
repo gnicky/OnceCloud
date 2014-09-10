@@ -75,10 +75,10 @@ function getImageList(page, limit, search, type) {
                 var tableStr = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
-                    var imageName = decodeURI(obj.imagename);
+                    var imageName = decodeURIComponent(obj.imagename);
                     var imageUId = obj.imageid;
                     var imageSize = obj.imagesize;
-                    var imageplatform = decodeURI(obj.imageplatform);
+                    var imageplatform = decodeURIComponent(obj.imageplatform);
                     var createDate = obj.createDate;
                     var showid = "img-" + imageUId.substring(0, 8);
                     var type = $('.once-tab').find('.active').attr("type");
@@ -113,13 +113,13 @@ $('#tablebody').on('click', '.id', function (event) {
     var imageuuid = $(this).parent().parent().attr('imageUId');
     var imagetype = $(this).parent().parent().attr('imageType');
     var form = $("<form></form>");
-    form.attr("action","/image/detail");
-    form.attr('method','post');
+    form.attr("action", "/image/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="imageUuid" value="' + imageuuid + '" />');
     var input1 = $('<input type="text" name="imageType" value="' + imagetype + '" />');
     form.append(input);
     form.append(input1);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });

@@ -9,7 +9,7 @@ $(document).ready(function () {
             $.ajax({
                 type: 'post',
                 url: '/AlarmAction/ModifyPeriod',
-                data: {period:period, alarmUuid:alarmUuid},
+                data: {period: period, alarmUuid: alarmUuid},
                 dataType: 'json',
                 success: function (obj) {
                     if (obj.isSuccess) {

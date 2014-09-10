@@ -42,10 +42,10 @@ function getVnetBasicList() {
         dataType: 'json',
         success: function (obj) {
             var showstr = '<a class="id">vn-' + vnetUuid.substring(0, 8) + '</a>';
-            var vnName = decodeURI(obj.vnetName);
-            var vnDesc = decodeURI(obj.vnetDesc);
+            var vnName = decodeURIComponent(obj.vnetName);
+            var vnDesc = decodeURIComponent(obj.vnetDesc);
             var createDate = obj.createDate;
-            var useDate = decodeURI(obj.useDate);
+            var useDate = decodeURIComponent(obj.useDate);
             var router = obj.vnetRouter;
             var hostList = obj.vmList;
             var hostStr = "";
@@ -76,11 +76,11 @@ $('#basic-list').on('click', '.basic-host', function (event) {
     event.preventDefault();
     var uuid = $(this).attr('uuid');
     var form = $("<form></form>");
-    form.attr("action","/instance/detail");
-    form.attr('method','post');
+    form.attr("action", "/instance/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -89,11 +89,11 @@ $('#basic-list').on('click', '.basic-router', function (event) {
     event.preventDefault();
     var uuid = $(this).attr('uuid');
     var form = $("<form></form>");
-    form.attr("action","/router/detail");
-    form.attr('method','post');
+    form.attr("action", "/router/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="routerUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -103,11 +103,11 @@ $('#vxnets-t').on('click', '.id', function (event) {
     event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/instance/detail");
-    form.attr('method','post');
+    form.attr("action", "/instance/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="instanceUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
@@ -118,7 +118,7 @@ function getVxnets() {
     $.ajax({
         type: 'get',
         url: '/VnetAction/VMs',
-        data: {vnetUuid:vnetUuid},
+        data: {vnetUuid: vnetUuid},
         dataType: 'json',
         success: function (array) {
             var table = $('<table></table>');
@@ -155,7 +155,7 @@ function getVxnets() {
                         hosip = '<span class="none">分配中...</span>';
                     }
                     tbody += '<tr rowid="' + jsonocvm.hostid + '"><td><a class="id">i-' + jsonocvm.hostid.substring(0, 8) + '</a></td><td>'
-                        + decodeURI(jsonocvm.hostname) + '</td><td>' + stateStr + '</td><td>' + hosip
+                        + decodeURIComponent(jsonocvm.hostname) + '</td><td>' + stateStr + '</td><td>' + hosip
                         + '</td></tr>';
                 }
                 table.append('<tbody>' + tbody + '</tbody>');
@@ -168,12 +168,12 @@ function getVxnets() {
 $('#router-a').on('click', function (event) {
     event.preventDefault();
     var routerUuid = $('#platformcontent').attr("routerUuid");
-     var form = $("<form></form>");
-    form.attr("action","/router/detail");
-    form.attr('method','post');
+    var form = $("<form></form>");
+    form.attr("action", "/router/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="routerUuid" value="' + routerUuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });

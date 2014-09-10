@@ -84,10 +84,10 @@ function getRackList(page, limit, search) {
                 var tableStr = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
-                    var rackname = decodeURI(obj.rackname);
+                    var rackname = decodeURIComponent(obj.rackname);
                     var rackid = obj.rackid;
-                    var rackdesc = decodeURI(obj.rackdesc);
-                    var racklocation = decodeURI(obj.dcname);
+                    var rackdesc = decodeURIComponent(obj.rackdesc);
+                    var racklocation = decodeURIComponent(obj.dcname);
                     var createdate = obj.createdate;
                     var dcid = obj.dcid;
 
@@ -106,11 +106,11 @@ $('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var rackid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/rack/detail");
-    form.attr('method','post');
+    form.attr("action", "/rack/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="rackid" value="' + rackid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });

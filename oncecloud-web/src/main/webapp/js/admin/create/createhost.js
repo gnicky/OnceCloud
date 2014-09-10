@@ -11,7 +11,7 @@ $(document).ready(function () {
                 if (array.length >= 1) {
                     $("#rack_location").html("");
                     $.each(array, function (index, item) {
-                        $("#rack_location").append("<option value='" + item.rackid + "'>" + decodeURI(item.rackname) + "</option>");
+                        $("#rack_location").append("<option value='" + item.rackid + "'>" + decodeURIComponent(item.rackname) + "</option>");
                     });
                 }
                 else {
@@ -79,26 +79,26 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/HostAction/Create',
-                    data : {
-						hostname : serverName,
-						hostpwd : serverPwd,
-						hostdesc : serverDesc,
-						hostip : serverIp,
-						rackUuid : rackUuid,
-						rackName : rackName
-					},
+                    data: {
+                        hostname: serverName,
+                        hostpwd: serverPwd,
+                        hostdesc: serverDesc,
+                        hostip: serverIp,
+                        rackUuid: rackUuid,
+                        rackName: rackName
+                    },
                     dataType: 'json',
                     success: function (array) {
                         if (array.length == 1) {
                             var obj = array[0];
-                            var hostname = decodeURI(obj.hostname);
+                            var hostname = decodeURIComponent(obj.hostname);
                             var hostid = obj.hostid;
                             var hostip = obj.hostip;
                             var createdate = obj.createdate;
                             var hostcpu = obj.hostcpu;
                             var hostmem = obj.hostmem;
                             var rackUuid = obj.rackUuid;
-                            var rackName = decodeURI(obj.rackName);
+                            var rackName = decodeURIComponent(obj.rackName);
                             var showid = "host-" + hostid.substring(0, 8);
                             var srsize = obj.srsize;
                             var mytr = '<tr hostid="' + hostid + '" hostname="' + hostname + '" hostip="' + hostip + '" hostdesc="' + hostdesc + '" rackid="' + rackUuid + '"><td class="rcheck"><input type="checkbox" name="hostrow"></td>'
@@ -138,7 +138,7 @@ $(document).ready(function () {
                 $.ajax({
                     type: 'post',
                     url: '/HostAction/Update',
-                    data: {hostid:hostid, hostname:serverName, hostdesc:serverDesc,rackUuid:rackUuid},
+                    data: {hostid: hostid, hostname: serverName, hostdesc: serverDesc, rackUuid: rackUuid},
                     dataType: 'text',
                     success: function () {
                         var thistr = $("#tablebody").find('[hostid="' + hostid + '"]');
@@ -174,7 +174,7 @@ $(document).ready(function () {
                 type: 'get',
                 async: true,
                 url: '/HostAction/QueryAddress',
-                data: {address:ip},
+                data: {address: ip},
                 dataType: 'json',
                 success: function (array) {
                     if (array.length == 1) {

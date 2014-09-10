@@ -105,13 +105,13 @@ $(document).ready(function () {
             $.ajax({
                 type: 'post',
                 url: '/AlarmAction/CreateRule',
-                data : {
-					ruletype : ruletype,
-					rulethreshold : rulethreshold,
-					ruleperiod : ruleperiod,
-					ruleId : ruleId,
-					alarmUuid : alarmUuid
-				},
+                data: {
+                    ruletype: ruletype,
+                    rulethreshold: rulethreshold,
+                    ruleperiod: ruleperiod,
+                    ruleId: ruleId,
+                    alarmUuid: alarmUuid
+                },
                 dataType: 'text',
                 success: function () {
                     $("#tablebody").append('<tr ruleid="' + ruleId + '"><td class="rcheck"><input type="checkbox" name="rulerow"></td><td name="rulename" id="rulename">'

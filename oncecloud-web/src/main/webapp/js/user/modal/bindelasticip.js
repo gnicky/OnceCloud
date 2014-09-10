@@ -66,7 +66,7 @@ function getInstanceList(page, limit, search) {
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
                     var vmuuid = obj.vmid;
-                    var vmName = decodeURI(obj.vmname);
+                    var vmName = decodeURIComponent(obj.vmname);
                     var showuuid = "i-" + vmuuid.substring(0, 8);
                     if (i == 1) {
                         tableStr = tableStr + '<div class="image-item selected" vmuuid="'
@@ -105,13 +105,13 @@ function bindeip(vmuuid, eipIp) {
                 vmtd.attr('vmuuid', obj.rsUuid);
                 vmtd.attr('type', bindtype);
                 if ('vm' == bindtype) {
-                    vmtd.html('<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + decodeURI(obj.rsName) + '</a>');
+                    vmtd.html('<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + decodeURIComponent(obj.rsName) + '</a>');
                 } else if ('lb' == bindtype) {
-                    vmtd.html('<a><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;' + decodeURI(obj.rsName) + '</a>');
+                    vmtd.html('<a><span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;' + decodeURIComponent(obj.rsName) + '</a>');
                 } else if ('rt' == bindtype) {
-                    vmtd.html('<a><span class="glyphicon glyphicon-fullscreen"></span>&nbsp;&nbsp;' + decodeURI(obj.rsName) + '</a>');
+                    vmtd.html('<a><span class="glyphicon glyphicon-fullscreen"></span>&nbsp;&nbsp;' + decodeURIComponent(obj.rsName) + '</a>');
                 } else if ('db' == bindtype) {
-                    vmtd.html('<a><span class="glyphicon glyphicon-inbox"></span>&nbsp;&nbsp;' + decodeURI(obj.rsName) + '</a>');
+                    vmtd.html('<a><span class="glyphicon glyphicon-inbox"></span>&nbsp;&nbsp;' + decodeURIComponent(obj.rsName) + '</a>');
                 }
             } else {
                 thistr.find('[name="stateicon"]').removeClass('icon-process');

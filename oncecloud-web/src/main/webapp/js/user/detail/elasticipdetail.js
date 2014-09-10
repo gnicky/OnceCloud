@@ -72,12 +72,12 @@ function getEipBasicList() {
         data: {eip: eip},
         dataType: 'json',
         success: function (obj) {
-            var eipName = decodeURI(obj.eipName);
+            var eipName = decodeURIComponent(obj.eipName);
             var eipUuid = obj.eipUuid;
             var eipIp = obj.eipIp;
             var eipDepen = obj.eipDependency;
             var dependType = obj.dependType;
-            var eipDescription = decodeURI(obj.eipDescription);
+            var eipDescription = decodeURIComponent(obj.eipDescription);
             var eipBandwidth = obj.eipBandwidth;
             var usedStr = '';
             var showuuid = "eip-" + eipUuid.substring(0, 8);

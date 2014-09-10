@@ -44,8 +44,8 @@ function getQuestionList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var qaId = obj.qaId;
-                var qaTitle = decodeURI(obj.qaTitle);
-                var qaSummary = decodeURI(obj.qaSummary);
+                var qaTitle = decodeURIComponent(obj.qaTitle);
+                var qaSummary = decodeURIComponent(obj.qaSummary);
                 var qaStatus = obj.qaStatus;
                 var qaReply = obj.qaReply;
                 var qaTime = obj.qaTime;
@@ -65,16 +65,16 @@ function getQuestionList(page, limit, search) {
                 if (level > 0) {
                     tableStr = tableStr + '<tr qaId="' + qaId
                         + '"><td><a class="view-detail">'
-                        + decodeURI(qaTitle) + '</a></td>' + '<td>'
-                        + decodeURI(qaSummary) + '</td><td>' + qaReply
+                        + decodeURIComponent(qaTitle) + '</a></td>' + '<td>'
+                        + decodeURIComponent(qaSummary) + '</td><td>' + qaReply
                         + '</td>' + qaStatusStr + '<td class="time">'
                         + qaTime + '</td>' + qaCloseStr + '</tr>';
                 } else {
                     var qaUser = obj.qaUserName;
                     tableStr = tableStr + '<tr qaId="' + qaId
                         + '"><td><a class="view-detail">'
-                        + decodeURI(qaTitle) + '</a></td>' + '<td>'
-                        + qaUser + '</td><td>' + decodeURI(qaSummary)
+                        + decodeURIComponent(qaTitle) + '</a></td>' + '<td>'
+                        + qaUser + '</td><td>' + decodeURIComponent(qaSummary)
                         + '</td><td>' + qaReply + '</td>' + qaStatusStr
                         + '<td class="time">' + qaTime + '</td>'
                         + qaCloseStr + '</tr>';

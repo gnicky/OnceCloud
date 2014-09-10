@@ -20,7 +20,7 @@ $(document).ready(function () {
                         $.ajax({
                             type: 'get',
                             url: '/HostAction/UnbindSR',
-                            data: {hostuuid:hostUuid, sruuid:srUuid},
+                            data: {hostuuid: hostUuid, sruuid: srUuid},
                             dataType: 'text',
                             success: function (obj) {
                                 var thistr = $("#tablebody").find('[hostid="' + hostUuid + '"]');
@@ -54,7 +54,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'get',
             url: '/HostAction/SRofhost',
-            data: {hostUuid:hostUuid},
+            data: {hostUuid: hostUuid},
             dataType: 'json',
             success: function (array) {
                 if (array.length == 0) {

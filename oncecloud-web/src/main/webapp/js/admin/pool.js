@@ -88,10 +88,10 @@ function getPoolList(page, limit, search) {
                 var tableStr = "";
                 for (var i = 1; i < array.length; i++) {
                     var obj = array[i];
-                    var poolname = decodeURI(obj.poolname);
-                    var pooldesc = decodeURI(obj.pooldesc);
+                    var poolname = decodeURIComponent(obj.poolname);
+                    var pooldesc = decodeURIComponent(obj.pooldesc);
                     var poolid = obj.poolid;
-                    var mastername = decodeURI(obj.mastername);
+                    var mastername = decodeURIComponent(obj.mastername);
                     var createdate = obj.createdate;
                     var dcuuid = obj.dcuuid;
                     var dcname = obj.dcname;
@@ -99,7 +99,7 @@ function getPoolList(page, limit, search) {
                         statestr = '<td class="pod" state="unload"></td>';
                     } else {
                         statestr = '<td class="pod" state="loaded"><a>'
-                            + decodeURI(dcname) + '</a></td>';
+                            + decodeURIComponent(dcname) + '</a></td>';
                     }
                     var totalcpu = obj.totalcpu;
                     var totalmem = Math.round(obj.totalmem / 1024);
@@ -178,7 +178,7 @@ function deletePool(poolid, poolname) {
     $.ajax({
         type: 'post',
         url: '/PoolAction/Delete',
-        data: {poolid:poolid, poolname:poolname},
+        data: {poolid: poolid, poolname: poolname},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {
@@ -199,7 +199,7 @@ function unbind2rack(poolid) {
     $.ajax({
         type: 'get',
         url: '/PoolAction/UnBind',
-        data: {poolid:poolid},
+        data: {poolid: poolid},
         dataType: 'json',
         success: function (array) {
             if (array.length == 1) {

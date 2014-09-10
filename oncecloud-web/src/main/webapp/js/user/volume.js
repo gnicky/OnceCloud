@@ -184,9 +184,9 @@ function getVolumeList(page, limit, search) {
             for (var i = 1; i < array.length; i++) {
                 var obj = array[i];
                 var volumeid = obj.volumeid;
-                var volumename = decodeURI(obj.volumename);
+                var volumename = decodeURIComponent(obj.volumename);
                 var volumedepen = obj.volumedepen;
-                var depenname = decodeURI(obj.depenname);
+                var depenname = decodeURIComponent(obj.depenname);
                 var volState = obj.volState;
                 var usedStr = "";
                 if (volState == 2) {
@@ -205,7 +205,7 @@ function getVolumeList(page, limit, search) {
                 var volumesize = obj.volumesize.toFixed(2);
                 var createdate = obj.createdate;
                 var backupdate = obj.backupdate;
-                var backupStr = decodeURI(backupdate);
+                var backupStr = decodeURIComponent(backupdate);
                 if (backupdate == "") {
                     var basePath = $('#platformcontent').attr('platformBasePath');
                     backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'user/create/createsnapshot.jsp?rsid=' + volumeid + '&rstype=volume&rsname=' + volumename + '"></a>';
@@ -219,7 +219,7 @@ function getVolumeList(page, limit, search) {
                     + showstr + '</td><td name="volumename">' + volumename + '</td>'
                     + usedStr + '<td vmuuid="' + volumedepen + '">' + depenname + '</td><td name="size">'
                     + volumesize + '</th><td name="backuptime" class="time">' + backupStr + '</td><td name="createtime" class="time">'
-                    + decodeURI(createdate) + '</td></tr>';
+                    + decodeURIComponent(createdate) + '</td></tr>';
             }
             $('#tablebody').html(tableStr);
         }
@@ -228,14 +228,14 @@ function getVolumeList(page, limit, search) {
 }
 
 $('#tablebody').on('click', '.id', function (event) {
-	event.preventDefault();
+    event.preventDefault();
     var uuid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
-    form.attr("action","/volume/detail");
-    form.attr('method','post');
+    form.attr("action", "/volume/detail");
+    form.attr('method', 'post');
     var input = $('<input type="text" name="volumeUuid" value="' + uuid + '" />');
     form.append(input);
-    form.css('display','none');
+    form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
 });
