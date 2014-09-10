@@ -183,8 +183,15 @@ public class VnetManager {
 		return result;
 	}
 
-	public boolean checkNet(int userId, String routerid, Integer net) {
-		return 0 == this.getVnetDAO().countAbleNet(userId, routerid, net);
+	public JSONObject checkNet(int userId, String routerid, Integer net) {
+		JSONObject jo = new JSONObject();
+		int count = this.getVnetDAO().countAbleNet(userId, routerid, net);
+		if (count > 0) {
+			jo.put("result", false);
+		} else {
+			jo.put("result", true);
+		}
+		return jo;
 	}
 
 	public JSONArray getVMs(String vnUuid) {
@@ -253,7 +260,7 @@ public class VnetManager {
 		Success, Using, Failed
 	}
 
-	public DeleteVnetResult deleteVnet(int userId, String vnetUuid) {
+	public String deleteVnet(int userId, String vnetUuid) {
 		Date startTime = new Date();
 		DeleteVnetResult result = DeleteVnetResult.Failed;
 		int using = this.getVmDAO().countVMsOfVnet(vnetUuid);
@@ -290,7 +297,7 @@ public class VnetManager {
 						Utilities.stickyToError(log.toString()));
 			}
 		}
-		return result;
+		return result.toString();
 	}
 
 	/**
@@ -402,16 +409,6 @@ public class VnetManager {
 			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(vnet
 					.getCreateDate()));
 			jo.put("useDate", timeUsed);
-		}
-		return jo;
-	}
-
-	public JSONObject vnetChecknet(String routerid, Integer net, int userId) {
-		JSONObject jo = new JSONObject();
-		if (this.checkNet(userId, routerid, net)) {
-			jo.put("isSuccess", true);
-		} else {
-			jo.put("isSuccess", false);
 		}
 		return jo;
 	}

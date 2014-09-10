@@ -156,7 +156,11 @@ $('#createvmAction').on('click', function (event) {
 });
 
 $('#instance_name').on('focusout', function () {
-    $('#selectedName').html($('#instance_name').val());
+	var name = $('#instance_name').val();
+	if (name.length > 16) {
+		name = name.substring(0, 16) + "...";
+	}
+    $('#selectedName').html(name);
 });
 
 $('#count').on('focusout', function () {

@@ -162,7 +162,7 @@ public class DatabaseManager {
 					String backendName = "db-" + dbUuid.substring(0, 8);
 					Record lbrecord = this.getVmManager().createVMOnHost(c,
 							dbUuid, tplUuid, "root", "onceas", 1, 1024, mac,
-							ip, os, allocateHost, imagePwd, backendName);
+							ip, os, allocateHost, imagePwd, backendName, true);
 					if (lbrecord != null) {
 						String hostuuid = lbrecord.residentOn.toWireString();
 						if (hostuuid.equals(allocateHost)) {

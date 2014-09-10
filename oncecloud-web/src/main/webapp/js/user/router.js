@@ -242,7 +242,7 @@ function destroyRouter(uuid) {
 			    thisicon.addClass("icon-running");
 			    thistr.find('[name="stateword"]').text('活跃');
 				bootbox.dialog({
-                    message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;无法删除，依然有私有网络依赖于该路由</div>',
+                    message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;无法删除，依然有私有网络依赖于该路由器</div>',
                     title: "提示",
                     buttons: {
                         main: {
