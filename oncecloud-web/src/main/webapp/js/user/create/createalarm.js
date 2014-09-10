@@ -21,6 +21,9 @@ $('.first-next').on('click', function(event) {
 		});
 
 $('.li-disable').unbind();
+$('ol').removeClass("clickable");
+$('.hidden-phone').css("cursor", "default");
+$('.hidden-phone').attr("href","javascript:void(0)");
 
 $('.second-next').on('click', function(event) {
 			event.preventDefault();
