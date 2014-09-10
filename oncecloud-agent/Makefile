@@ -24,7 +24,7 @@ QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDC
 endif
 
 AGENT=output/agent
-COMPONENT=output/Main.o
+COMPONENT=output/Main.o output/HttpServer.o
 LIB=output/mongoose.o
 
 all: prepare everything
@@ -37,13 +37,17 @@ clean:
 
 everything: $(AGENT)
 
+# Component
+output/HttpServer.o: src/HttpServer.cpp src/include/HttpServer.h lib/include/mongoose.h
+	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
+
+output/Main.o: src/Main.cpp
+	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
+
 # Library
 output/mongoose.o: lib/mongoose.c lib/include/mongoose.h
 	$(AGENT_CC) $(CFLAGS) -o $@ $<
 
 # Main
-output/Main.o: src/Main.cpp
-	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
-
 $(AGENT): $(COMPONENT) $(LIB)
 	$(AGENT_LD) $(LDFLAGS) $(LIBFLAGS) -o $@ $^
