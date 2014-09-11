@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.DashboardManager;
 import com.oncecloud.manager.DatacenterManager;
+import com.oncecloud.manager.UserManager;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/DatacenterAction")
@@ -20,6 +21,16 @@ import com.oncecloud.ui.model.ListModel;
 public class DatacenterAction {
 	private DatacenterManager datacenterManager;
 	private DashboardManager dashboardManager;
+	private UserManager userManager;
+	
+	public UserManager getUserManager() {
+		return userManager;
+	}
+
+	@Autowired
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
 
 	private DatacenterManager getDatacenterManager() {
 		return datacenterManager;
@@ -113,6 +124,13 @@ public class DatacenterAction {
 	@ResponseBody
 	public String swicth(HttpServletRequest request,@RequestParam String uuid) {
 		JSONArray ja = this.getDashboardManager().getSwitch(uuid);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/CompanyDetail", method = { RequestMethod.GET })
+	@ResponseBody
+	public String companyDetail(HttpServletRequest request,@RequestParam int cid) {
+		JSONArray ja = this.getUserManager().doGetcompanyDetail(cid);
 		return ja.toString();
 	}
 }

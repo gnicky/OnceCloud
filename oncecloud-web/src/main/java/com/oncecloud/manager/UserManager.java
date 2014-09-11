@@ -16,12 +16,18 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
+import com.oncecloud.dao.VMDAO;
+import com.oncecloud.dao.VolumeDAO;
+import com.oncecloud.entity.EIP;
 import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.User;
+import com.oncecloud.entity.Volume;
 import com.oncecloud.helper.HashHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
@@ -39,8 +45,40 @@ public class UserManager {
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
 	private MessagePush messagePush;
-
+    private VMDAO vmDAO;
+    private VolumeDAO volumeDAO;
+    private EIPDAO eipDAO;
+    
 	private HashHelper hashHelper;
+
+	
+	
+	public VolumeDAO getVolumeDAO() {
+		return volumeDAO;
+	}
+
+	@Autowired
+	public void setVolumeDAO(VolumeDAO volumeDAO) {
+		this.volumeDAO = volumeDAO;
+	}
+
+	public EIPDAO getEipDAO() {
+		return eipDAO;
+	}
+	
+	@Autowired
+	public void setEipDAO(EIPDAO eipDAO) {
+		this.eipDAO = eipDAO;
+	}
+
+	public VMDAO getVmDAO() {
+		return vmDAO;
+	}
+
+	@Autowired
+	public void setVmDAO(VMDAO vmDAO) {
+		this.vmDAO = vmDAO;
+	}
 
 	private HashHelper getHashHelper() {
 		return hashHelper;
@@ -480,38 +518,36 @@ public class UserManager {
 		}
 	}
 	
-	public static JSONArray doGetcompanyDetail(int companyuid) {
+	public JSONArray doGetcompanyDetail(int companyuid) {
 		JSONArray jsonarray =new JSONArray();
 		JSONObject jsonobject =new JSONObject();
-//		// 获取vm列表，硬盘列表，共网Ip列表（包括带宽），然后还有 vm数量变化的信息
-//		List<OCVM> vmlist =VMDAO.getOnePageVms(1, 100, "", companyuid);
-//		JSONArray jsonarrayvm =new JSONArray();
-//		for(OCVM ocvmobj : vmlist)
-//		{
-//			jsonarrayvm.put(ocvmobj.toJsonString());
-//		}
-//		jsonobject.put("vmlist", jsonarrayvm);
-//		
-//		List<Volume> volumelist =VolumeDAO.getOnePageVolumeList(1, 100, "", companyuid);///查询该用户的所有Volume
-//		JSONArray jsonarrayvolume =new JSONArray();
-//		for(Volume volumeobj : volumelist)
-//		{
-//			jsonarrayvolume.put(volumeobj.toJsonString());
-//		}
-//		jsonobject.put("volumelist", jsonarrayvolume);
-//		
-//		List<EIP> eiplist = EIPDAO.getOnePageEipList(1, 100, "", companyuid);///查询该用户的所有EIP
-//		JSONArray jsonarrayeip =new JSONArray();
-//		for(EIP eipobj : eiplist)
-//		{
-//			jsonarrayeip.put(eipobj.toJsonString());
-//		}
-//		jsonobject.put("eiplist", jsonarrayeip);
-//		
-//		jsonarray.put(jsonobject);
+		// 获取vm列表，硬盘列表，共网Ip列表（包括带宽），然后还有 vm数量变化的信息
+		List<OCVM> vmlist =this.getVmDAO().getOnePageVMs(companyuid,1, 100, "");
+		JSONArray jsonarrayvm =new JSONArray();
+		for(OCVM ocvmobj : vmlist)
+		{
+			jsonarrayvm.put(ocvmobj.toJsonString());
+		}
+		jsonobject.put("vmlist", jsonarrayvm);
 		
+		List<Volume> volumelist =this.getVolumeDAO().getOnePageVolumes(companyuid, 1, 100, ""); ///查询该用户的所有Volume
+		JSONArray jsonarrayvolume =new JSONArray();
+		for(Volume volumeobj : volumelist)
+		{
+			jsonarrayvolume.put(volumeobj.toJsonString());
+		}
+		jsonobject.put("volumelist", jsonarrayvolume);
 		
+		List<EIP> eiplist = this.getEipDAO().getOnePageEipList(companyuid,1, 100, ""); ///查询该用户的所有EIP
+		JSONArray jsonarrayeip =new JSONArray();
+		for(EIP eipobj : eiplist)
+		{
+			jsonarrayeip.put(eipobj.toJsonString());
+		}
+		jsonobject.put("eiplist", jsonarrayeip);
 		
-		return null;
+		jsonarray.put(jsonobject);
+		
+		return jsonarray;
 	}
 }

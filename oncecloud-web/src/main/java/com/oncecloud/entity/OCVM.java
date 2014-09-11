@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.oncecloud.main.Utilities;
+
 @Entity
 @Table(name = "oc_vm")
 public class OCVM {
@@ -254,5 +256,12 @@ public class OCVM {
 				+ ", vmFirewall=" + vmFirewall + ", tplUuid=" + tplUuid
 				+ "alarmUuid=" + alarmUuid + "]";
 
+	}
+	
+	public String toJsonString() {
+		return "{'vmUuid':'" + vmUuid + "', 'vmPWD':'" + vmPWD + "', 'vmUID':'" + vmUID + "', 'vmName':'" + Utilities.encodeText(vmName) + "', 'vmDesc':'"
+				+ Utilities.encodeText(vmDesc) + "', 'vmPlatform':'" + vmPlatform + "', 'vmIP':'" + vmIP + "', 'vmVlan':'" + vmVlan + "', 'vmMac':'" + vmMac
+				+ "', 'vmMem':'" + vmMem + "', 'vmCpu':'" + vmCpu + "', 'vmDisk':'" + vmDisk + "', 'vmPower':'" + vmPower
+				+ "', 'vmStatus':'" + vmStatus + "', 'hostUuid':'" + hostUuid + "', 'createDate':'" + Utilities.formatTime(createDate) + "'}";
 	}
 }
