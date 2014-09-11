@@ -101,8 +101,8 @@ function getFeeList(page, limit, search, type) {
 $("#tablebody").on('click', ".viewdetail", function (event) {
     event.preventDefault();
     var url = $("#platformcontent").attr('basePath') + 'expense/view';
-    var type = $(this).parent().attr('type');
-    var resourceId = $(this).parent().attr('resourceId');
+    var type = $(this).parents('tr').attr('type');
+    var resourceId = $(this).parents('tr').attr('resourceId');
     $('#SummaryModalContainer').load(url, {"type": type, "resourceUuid": resourceId}, function () {
         $('#SummaryModalContainer').modal({
             backdrop: false,

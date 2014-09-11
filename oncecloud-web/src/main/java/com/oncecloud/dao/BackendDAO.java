@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -130,13 +131,11 @@ public class BackendDAO {
 	public boolean deleteBackendByFrontend(Session session, String foreUuid) {
 		boolean result = false;
 		try {
-			Criteria criteria = session.createCriteria(Backend.class).add(
-					Restrictions.eq("foreUuid", foreUuid));
-			Backend backend = (Backend) criteria.uniqueResult();
-			if (backend != null) {
-				session.delete(backend);
-				result = true;
-			}
+			String queryString = "delete from Backend where foreUuid = :foreUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("foreUuid", foreUuid);
+			query.executeUpdate();
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

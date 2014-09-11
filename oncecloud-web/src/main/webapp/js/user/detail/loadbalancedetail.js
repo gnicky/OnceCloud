@@ -385,7 +385,7 @@ function deleteBE(beuuid) {
     $.ajax({
         type: 'post',
         url: '/LBAction/DeleteBack',
-        data: {backUuid: beuuid, lbUuid: lbUuid},
+        data: {foreUuid: beuuid, lbUuid: lbUuid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {

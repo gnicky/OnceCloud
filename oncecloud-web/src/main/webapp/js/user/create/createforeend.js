@@ -13,7 +13,6 @@ $(document).ready(function () {
         event.preventDefault();
         var valid = $('#editForeend-form').valid();
         var type = $("#editForeend").attr('type');
-        console.log(type);
         if (valid) {
             if (type == "new") {
                 var name = $('#fe_name').val();
@@ -119,7 +118,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'post',
             url: '/LBAction/UpdateFore',
-            data: {name: name, policy: policy, foreuuid: foreuuid, lbuuid: lbuuid},
+            data: {name: name, policy: policy, foreUuid: foreuuid, lbUuid: lbuuid},
             dataType: 'text',
             complete: function () {
                 window.location = window.location.href;

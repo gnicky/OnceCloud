@@ -7,7 +7,7 @@
 		</p>
 	</div>
 	<ol class="breadcrumb oc-crumb">
-		<li><a href="${basePath}common/service"><span class="glyphicon glyphicon-question-sign cool-cyan"></span><span class="ctext">SERVICES</span></a></li>
+		<li><a href="${basePath}service"><span class="glyphicon glyphicon-question-sign cool-cyan"></span><span class="ctext">SERVICES</span></a></li>
 		<li class="active"><a href="${basePath}service/detail">qa-${qaId}</a></li>
 	</ol>
 	<div class="once-pane">
