@@ -8,10 +8,9 @@
 <body class="cloud-body">
     <%@ include file="../../share/sidebar.jsp" %>
 	<%@ include file="../../share/js.jsp" %> 
+	<script src="${basePath}js/highcharts.js"></script>
 	<script src="${basePath}js/admin/detail/companymapdetail.js"></script>
 	<div class="content" id="platformcontent" platformUserId="${cid}" platformBasePath="${basePath}">
-	
-	
 	<div class="row" style="margin:0; border-bottom: 1px solid #f3f3f3">
 	    <div class="col-md-12">	
 		<div class="detail-item">
@@ -28,8 +27,6 @@
 							<th>状态</th>
 							<th>CPU</th>
 							<th>内存</th>
-							<th>网络</th>
-							<th>公网IP</th>
 							<th>创建时间</th>
 						</tr>
 					</thead>
@@ -77,6 +74,7 @@
 							<th>地址</th>
 							<th>状态</th>
 							<th>带宽 (Mbps)</th>
+							<th>IP分组</th>
 							<th>创建时间</th>
 						</tr>
 					</thead>
@@ -85,6 +83,16 @@
 				</table>
 			</div>
 		</div>
+		
+		<div  class="detail-item">
+			 <div class="title">
+				<h3>虚拟机资源图表&nbsp;
+				</h3>	
+			 </div>
+				<div id="chart-area-1">
+					<div id="vmpic"></div>
+				</div>
+			</div>
 		</div>
   </div>
 	</div>
