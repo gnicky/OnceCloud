@@ -225,14 +225,23 @@ function getSnapshotBasicList() {
             var snapshotSize = obj.snapshotSize;
             var backupDate = obj.backupDate;
             var showid = "bk-" + resourceUuid.substring(0, 8);
+            var backStatus = obj.backStatus;
             var showname;
             var resourceId = '';
             if (resourceType == "instance") {
                 showname = '<span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;主机';
-                resourceId = '<a class="id" id="rsuuid" type="' + resourceType + '" uuid="' + resourceUuid + '">i-' + resourceUuid.substring(0, 8) + '</a>';
+                if (backStatus == 0) {
+                	resourceId = 'i-' + resourceUuid.substring(0, 8) + '<span style="color:red">(已销毁)</span>';
+                } else {
+	                resourceId = '<a class="id" id="rsuuid" type="' + resourceType + '" uuid="' + resourceUuid + '">i-' + resourceUuid.substring(0, 8) + '</a>';
+                }
             } else {
                 showname = '<span class="glyphicon glyphicon-inbox"></span>&nbsp;&nbsp;硬盘';
-                resourceId = '<a class="id" id="rsuuid" type="' + resourceType + '" uuid="' + resourceUuid + '">vol-' + resourceUuid.substring(0, 8) + '</a>';
+                if (backStatus == 0) {
+                	resourceId = 'vol-' + resourceUuid.substring(0, 8) + '<span style="color:red">(已销毁)</span>';
+                } else {
+	                resourceId = '<a class="id" id="rsuuid" type="' + resourceType + '" uuid="' + resourceUuid + '">vol-' + resourceUuid.substring(0, 8) + '</a>';
+                }
             }
             $('#basic-list').html('<dt>备份链&nbsp;ID</dt><dd><a href="javascript:void(0)">'
                 + showid + '</a></dd><dt>状态</dt><dd><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">可用</span></dd>'

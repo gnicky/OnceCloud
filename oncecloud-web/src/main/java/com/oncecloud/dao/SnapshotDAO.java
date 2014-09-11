@@ -75,7 +75,7 @@ public class SnapshotDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
+			String queryString = "select ss.snapshotVm, ov.vmName, count(*), sum(ss.snapshotSize), max(ss.backupDate), ov.vmStatus "
 					+ "from Snapshot ss, OCVM ov "
 					+ "where ss.snapshotVm = ov.vmUuid "
 					+ "group by ss.snapshotVm, ov.vmName "
@@ -104,7 +104,7 @@ public class SnapshotDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate) "
+			String queryString = "select ss.snapshotVolume, ol.volumeName, count(*), sum(ss.snapshotSize), max(ss.backupDate), ol.volumeStatus "
 					+ "from Snapshot ss, Volume ol "
 					+ "where ss.snapshotVolume=ol.volumeUuid "
 					+ "group by ss.snapshotVolume, ol.volumeName "

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="content detail" id="platformcontent" vnetUuid="${vnetUuid}" routerUuid="${routerUuid}">
+<div class="content detail" id="platformcontent" vnetUuid="${vnetUuid}" routerUuid="">
 	<div class="intro">
 		<h1>网络&nbsp;Networks</h1>
 		<p class="lead">
@@ -42,13 +42,11 @@
 					</a>
 				</h3>
 			</div>
-			<c:if test="${!empty routerUuid}">
 				<div class="col-div">
-					<p class="alert alert-info">
+					<p class="alert alert-info" id="routerSetter">
 						提示：更多&nbsp;DHCP&nbsp;服务设置，请前往所属&nbsp;<a class="" id="router-a">路由器功能</a>&nbsp;页面进行操作。
 					</p>
 				</div>
-			</c:if>
 			<div class="vxnets" id="vxnets-t"></div>
 		</div>
 	</div>

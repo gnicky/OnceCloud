@@ -632,6 +632,7 @@ public class SnapshotManager {
 		String timeUsed = Utilities.encodeText(Utilities
 				.dateToUsed((Date) obj[4]));
 		jo.put("backupDate", timeUsed);
+		jo.put("backStatus", ((Integer) obj[5]).intValue());
 		return jo;
 	}
 

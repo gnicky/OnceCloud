@@ -58,7 +58,10 @@ function getVnetBasicList() {
                 hostStr = "&nbsp;";
             }
             if (router != "&nbsp;") {
+                $('#platformcontent').attr("routerUuid", router);
                 router = '<a class="id basic-router" uuid="' + router + '">(' + obj.vnetRouterName + ')</a>';
+            } else {
+            	$('#routerSetter').hide();
             }
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="rtname">'
@@ -168,12 +171,13 @@ function getVxnets() {
 $('#router-a').on('click', function (event) {
     event.preventDefault();
     var routerUuid = $('#platformcontent').attr("routerUuid");
-    var form = $("<form></form>");
-    form.attr("action", "/router/detail");
-    form.attr('method', 'post');
-    var input = $('<input type="text" name="routerUuid" value="' + routerUuid + '" />');
-    form.append(input);
-    form.css('display', 'none');
-    form.appendTo($('body'));
-    form.submit();
+	var form = $("<form></form>");
+	form.attr("action", "/router/detail");
+	form.attr('method', 'post');
+	var input = $('<input type="text" name="routerUuid" value="' + routerUuid
+			+ '" />');
+	form.append(input);
+	form.css('display', 'none');
+	form.appendTo($('body'));
+	form.submit();
 });
