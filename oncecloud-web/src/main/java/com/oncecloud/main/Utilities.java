@@ -190,6 +190,10 @@ public class Utilities {
 	}
 	
 	public static String encodeText(String name) {
+		if(name=="")
+		{
+			return "";
+		}
 		String result = "";
 		try {
 			result = URLEncoder.encode(name, "utf-8").replace("+", "%20");

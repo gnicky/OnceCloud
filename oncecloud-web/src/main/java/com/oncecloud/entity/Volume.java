@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.oncecloud.main.Utilities;
+
 /**
  * @author yly hehai
  * @version 2014/08/23
@@ -126,5 +128,11 @@ public class Volume {
 				+ volumeSize + ", volumeDependency=" + volumeDependency
 				+ ", volumeDescription=" + volumeDescription + ", createDate="
 				+ createDate + ", backupDate=" + backupDate + "]";
+	}
+	
+	public String toJsonString() {
+		return "{'volumeUuid':'" + volumeUuid + "', 'volumeName':'" + Utilities.encodeText(volumeName) + "', 'volumeUID':'" + volumeUID
+				+ "', 'volumeSize':'" + volumeSize + "', 'volumeDependency':'" + volumeDependency + "', 'volumeDescription':'"
+				+ Utilities.encodeText(volumeDescription) + "', 'createDate':'" + Utilities.formatTime(createDate) + "'}";
 	}
 }

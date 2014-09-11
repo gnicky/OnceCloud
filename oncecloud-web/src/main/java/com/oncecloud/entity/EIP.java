@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.oncecloud.main.Utilities;
+
 @Entity
 @Table(name = "oc_eip")
 public class EIP {
@@ -163,5 +165,12 @@ public class EIP {
 		this.createDate = createDate;
 		this.eipDescription = eipDescription;
 		this.eipType = eipType;
+	}
+	
+	public String toJsonString() {
+		return "{'eipIp':'" + eipIp + "', 'eipUuid':'" + eipUuid + "', 'eipName':'" + Utilities.encodeText(eipName) + "', 'eipUID':'" + eipUID
+				+ "', 'eipDependency':'" + Utilities.encodeText(eipDependency) + "', 'depenType':'" + depenType + "', 'eipBandwidth':'" + eipBandwidth
+				+ "', 'eipInterface':'" + eipInterface + "', 'createDate':'" + Utilities.formatTime(createDate) + "', 'eipDescription':'"
+				+ Utilities.encodeText(eipDescription) + "', 'eipType':'" + eipType + "'}";
 	}
 }

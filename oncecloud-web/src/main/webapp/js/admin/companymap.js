@@ -29,7 +29,7 @@ function ShowCompany() {
             if (response.length > 0) {
                 $.each(response, function (index, item) {
                     var point = new BMap.Point(sw.lng + lngSpan * (Math.random() * 0.7), ne.lat - latSpan * (Math.random() * 0.7));
-                    var content = "<div class='map_info'><span><a target='_blank' href='/companymap/detail?cid=" + item.userid + "'>" + item.usedVM + "</a> 台虚拟机</span><span><a target='_blank' href='CompanyMapDetail.jsp?cid=" + item.userid + "'>" + item.usedDiskS + "</a> G存储空间</span><span><a target='_blank' href='CompanyMapDetail.jsp?cid=" + item.userid + "'>" + item.usedIP + "</a>  公网IP</span><span><a target='_blank' href='CompanyMapDetail.jsp?cid=" + item.userid + "'>" + item.usedBandwidth + "</a> M带宽</span></div>";
+                    var content = "<div class='map_info'><span><a target='_blank' href='/companymap/detail?cid=" + item.userid + "'>" + item.usedVM + "</a> 台虚拟机</span><span><a target='_blank' href='/companymap/detail?cid=" + item.userid + "'>" + item.usedDiskS + "</a> G存储空间</span><span><a target='_blank' href='/companymap/detail?cid=" + item.userid + "'>" + item.usedIP + "</a>  公网IP</span><span><a target='_blank' href='/companymap/detail?cid=" + item.userid + "'>" + item.usedBandwidth + "</a> M带宽</span></div>";
                     addMarker(point, decodeURIComponent(item.usercom), content);
                 });
             }
