@@ -225,8 +225,8 @@ public class VMManager {
 		map.put("passwd", loginPwd);
 		map.put("origin_passwd", imagePwd);
 		Host host = Types.toHost(hostUuid);
-		Record vmrecord = VM
-				.createOnFromTemplate(c, host, tplUuid, vmName, map, ping);
+		Record vmrecord = VM.createOnFromTemplate(c, host, tplUuid, vmName,
+				map, ping);
 		return vmrecord;
 	}
 
@@ -1150,5 +1150,22 @@ public class VMManager {
 
 	public void updateImportance(String uuid, int importance) {
 		this.getVmDAO().updateVMImportance(uuid, importance);
+	}
+
+	public void assginIpAddress(Connection c, String url, String subnet,
+			String vnUuid) {
+		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
+		if (vmList != null) {
+			try {
+				for (OCVM vm : vmList) {
+					String mac = vm.getVmMac();
+					String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
+					vm.setVmIP(vnetIp);
+					this.getVmDAO().updateVM(vm);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

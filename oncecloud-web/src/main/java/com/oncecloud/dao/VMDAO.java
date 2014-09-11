@@ -644,6 +644,26 @@ public class VMDAO {
 	/**
 	 * 更新主机
 	 * 
+	 * @param vm
+	 */
+	public void updateVM(OCVM vm) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.update(vm);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
+	/**
+	 * 更新主机
+	 * 
 	 * @param userId
 	 * @param vmUuid
 	 * @param vmPWD

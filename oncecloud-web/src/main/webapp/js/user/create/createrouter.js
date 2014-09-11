@@ -15,7 +15,7 @@ function loadFWList() {
                 var detype = $('input:radio').eq(0).val();
                 setTypeInfo(detype);
                 for (var i = 1; i < response.length; i++) {
-                    $('#rt_firewall').append('<option value="' + response[i].firewallId + '">fw-' + response[i].firewallId.substring(0, 8) + '&nbsp;(' + response[i].firewallName + ')</option>');
+                    $('#rt_firewall').append('<option value="' + response[i].firewallId + '">fw-' + response[i].firewallId.substring(0, 8) + '&nbsp;(' + decodeURIComponent(response[i].firewallName) + ')</option>');
                 }
             }
             else {
@@ -68,8 +68,6 @@ $('#createRouterAction').on('click', function (event) {
                     preCreateRouter(rtuuid, name, capacity, firewall);
                 }
                 $('#RouterModalContainer').modal('hide');
-            },
-            error: function () {
             }
         });
     }
@@ -97,6 +95,8 @@ function createRouter(rtuuid, name, capacity, firewall) {
         url: '/RouterAction/Create',
         data: {uuid: rtuuid, name: name, capacity: capacity, fwUuid: firewall},
         dataType: 'json',
+        success: function (obj) {
+        }
     });
 }
 
@@ -131,7 +131,7 @@ $("#create-form").validate({
             legal: true
         },
         rt_type: {
-            required: true,
+            required: true
         }
     },
     messages: {
@@ -141,7 +141,7 @@ $("#create-form").validate({
             legal: "<span class='help'>主机名称包含非法字符</span>"
         },
         rt_type: {
-            required: "<span class='help'>请选择一种类型</span>",
+            required: "<span class='help'>请选择一种类型</span>"
         }
     }
 });

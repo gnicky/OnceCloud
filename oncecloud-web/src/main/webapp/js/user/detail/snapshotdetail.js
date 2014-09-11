@@ -231,14 +231,14 @@ function getSnapshotBasicList() {
             if (resourceType == "instance") {
                 showname = '<span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;主机';
                 if (backStatus == 0) {
-                	resourceId = 'i-' + resourceUuid.substring(0, 8) + '<span style="color:red">(已销毁)</span>';
+                	resourceId = 'i-' + resourceUuid.substring(0, 8) + '<span style="color:#b94a48">&nbsp;(已销毁)</span>';
                 } else {
 	                resourceId = '<a class="id" id="rsuuid" type="' + resourceType + '" uuid="' + resourceUuid + '">i-' + resourceUuid.substring(0, 8) + '</a>';
                 }
             } else {
                 showname = '<span class="glyphicon glyphicon-inbox"></span>&nbsp;&nbsp;硬盘';
                 if (backStatus == 0) {
-                	resourceId = 'vol-' + resourceUuid.substring(0, 8) + '<span style="color:red">(已销毁)</span>';
+                	resourceId = 'vol-' + resourceUuid.substring(0, 8) + '<span style="color:#b94a48">&nbsp;(已销毁)</span>';
                 } else {
 	                resourceId = '<a class="id" id="rsuuid" type="' + resourceType + '" uuid="' + resourceUuid + '">vol-' + resourceUuid.substring(0, 8) + '</a>';
                 }

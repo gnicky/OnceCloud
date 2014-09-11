@@ -612,6 +612,7 @@ public class RouterManager {
 								+ rangeStart + "] RangeEnd [" + rangeEnd + "]");
 						addSubnetResult = RouterManager.addSubnet(c, url,
 								subnet, netmask, gateway, rangeStart, rangeEnd);
+						this.getVmManager().assginIpAddress(c, url, subnet, vnUuid);
 						logger.info("Configure Subnet Result: "
 								+ addSubnetResult);
 					}
