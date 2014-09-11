@@ -14,14 +14,14 @@
 		<div class="detail-item">
 			<div class="title">
 				<h3>基本属性
-					<div class="btn-group">
+					<!-- <div class="btn-group">
 						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
-						<!-- 	<li><a id="modify"><span class="glyphicon glyphicon-pencil"></span>修改</a></li> -->
+							<li><a id="modify"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 						</ul>
-					</div>
+					</div> -->
 				</h3>
 			</div>
 			<dl id="basic-list" class="my-horizontal"></dl>
@@ -29,13 +29,13 @@
 		<div class="detail-item">
 			<div class="title">
 				<h3>关联资源
-					<div class="btn-group">
+					<!-- <div class="btn-group">
 						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
 						</ul>
-					</div>
+					</div> -->
 				</h3>
 			</div>
 			<dl id="depend-list" class="my-horizontal"></dl>
