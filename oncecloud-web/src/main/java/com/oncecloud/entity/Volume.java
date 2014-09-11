@@ -133,6 +133,6 @@ public class Volume {
 	public String toJsonString() {
 		return "{'volumeUuid':'" + volumeUuid + "', 'volumeName':'" + Utilities.encodeText(volumeName) + "', 'volumeUID':'" + volumeUID
 				+ "', 'volumeSize':'" + volumeSize + "', 'volumeDependency':'" + volumeDependency + "', 'volumeDescription':'"
-				+ Utilities.encodeText(volumeDescription) + "', 'createDate':'" + Utilities.formatTime(createDate) + "'}";
+				+ Utilities.encodeText(volumeDescription) + "', 'volumeStatus':'" + volumeStatus + "', 'createDate':'" + Utilities.formatTime(createDate) + "'}";
 	}
 }

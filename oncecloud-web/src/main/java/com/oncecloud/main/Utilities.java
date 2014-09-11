@@ -190,7 +190,7 @@ public class Utilities {
 	}
 	
 	public static String encodeText(String name) {
-		if(name=="")
+		if(name==null || name=="" || name.length()==0)
 		{
 			return "";
 		}
