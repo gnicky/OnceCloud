@@ -13,8 +13,8 @@ $('#modify').on('click', function (event) {
     var lbName = $('#lbname').text();
     var lbDesc = $('#lbdesc').text();
     var lbUuid = $('#platformcontent').attr("lbUuid");
-    $('#InstanceModalContainer').load(url, {"modifyType": "lb", "modifyUuid": lbUuid, "modifyName": lbName, "modifyDesc": lbDesc}, function () {
-        $('#InstanceModalContainer').modal({
+    $('#LbModalContainer').load(url, {"modifyType": "lb", "modifyUuid": lbUuid, "modifyName": lbName, "modifyDesc": lbDesc}, function () {
+        $('#LbModalContainer').modal({
             backdrop: false,
             show: true
         });

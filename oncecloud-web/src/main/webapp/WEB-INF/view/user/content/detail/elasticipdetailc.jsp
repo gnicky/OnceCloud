@@ -40,14 +40,14 @@
 				<h3>
 					关联资源&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span
 						class="glyphicon glyphicon-refresh"></span></a>
-					<div class="btn-group">
+					<!-- <div class="btn-group">
 						<button class="btn btn-default dropdown-toggle"
 							data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
 						</ul>
-					</div>
+					</div> -->
 				</h3>
 			</div>
 			<dl id="depend-list" class="my-horizontal"></dl>
