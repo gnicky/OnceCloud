@@ -14,13 +14,13 @@
 		<div class="detail-item">
 			<div class="title">
 				<h3>基本属性&nbsp;<a href="javascript:void(0)" class="btn-refresh"><span class="glyphicon glyphicon-refresh"></span></a>
-					<div class="btn-group">
+					<!-- <div class="btn-group">
 						<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 							<span class="glyphicon glyphicon-tasks"></span>
 						</button>
 						<ul class="dropdown-menu">
 						</ul>
-					</div>
+					</div> -->
 				</h3>
 			</div>
 			<dl id="basic-list" class="my-horizontal"></dl>
