@@ -16,6 +16,7 @@ import com.oncecloud.daemon.monitor.ServiceMonitor;
 public class ApplicationContextEventListener implements
 		ApplicationListener<ApplicationContextEvent> {
 
+	// Application Context
 	private ApplicationContext applicationContext;
 
 	private ApplicationContext getApplicationContext() {
