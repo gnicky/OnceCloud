@@ -72,7 +72,7 @@
 					<li <c:if test="${sideActive==32}">class="active"</c:if>>
 						<a href="${basePath}assetsquta">
 							<span class="glyphicon glyphicon-gbp cool-orange"></span>
-							<span class="name">资源配额</span><span class="title">Quota</span>
+							<span class="name">用户资费</span><span class="title">Quota</span>
 						</a>
 						<div class="cool-border"></div>
 					</li>

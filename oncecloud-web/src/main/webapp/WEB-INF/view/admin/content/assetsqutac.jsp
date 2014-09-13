@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <div class="content" id="platformcontent">
 	<div class="intro">
-		<h1>资源配额&nbsp;Quota</h1>
+		<h1>用户资费&nbsp;Quota</h1>
 		<p class="lead" style="margin-top:10px">
-			<em>资源配额&nbsp;(Quota)</em>
+			<em>用户资费&nbsp;(Quota)</em>
 		</p>
 	</div>
     <div class="once-pane">
-    	<div class="once-toolbar">
+    	<div class="once-toolbar" style="display:none">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
 			<input class="search" id="search" value="" style="display:none">
 			<div class="toolbar-right" style="display:none">
