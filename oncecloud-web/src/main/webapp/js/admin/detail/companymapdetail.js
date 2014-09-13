@@ -47,9 +47,7 @@ function showlit(){
 							}
 							
 							var thistr = '<tr rowid="'
-									+ vmuuid
-									+ '"><td name="console">'
-									+ showstr + '</td><td name="vmname">' + vmName
+									+ '"><td name="vmname">' + vmName
 									+ '</td>' + stateStr + '<td name="cpuCore">'
 									+ cpu + '</td><td name="memoryCapacity">'
 									+ memory + '</td><td name="createtime" class="time">'
@@ -87,8 +85,7 @@ function showlit(){
 				               
 				                var showid = "vol-" + volumeid.substring(0, 8);
 				                var showstr = "<a class='id'>" + showid + '</a>';
-				                tableStr = tableStr + '<tr rowid="' + volumeid + '"><td>'
-				                    + showstr + '</td><td name="volumename">' + volumename + '</td>'
+				                tableStr = tableStr + '<tr rowid="' + volumeid + '"><td name="volumename">' + volumename + '</td>'
 				                    + usedStr + '</td><td name="size">'
 				                    + volumesize + '</td><td name="createtime" class="time">'
 				                    + decodeURIComponent(createdate) + '</td></tr>';
@@ -111,7 +108,7 @@ function showlit(){
 				                }
 				                var eipBandwidth = obj.eipBandwidth;
 				                var createDate = obj.createDate;
-				                var thistr = '<tr eip="' + eipIp + '" eipId="' + eipId + '"><td><a class="id">eip-' + eipId.substring(0, 8) + '</a></td><td name="eipname">'
+				                var thistr = '<tr eip="' + eipIp + '" eipId="' + eipId + '"><td name="eipname">'
 				                    + eipName + '</td><td>'
 				                    + eipIp + '</td>'  + usedStr + '</td><td name="bandwidth">'
 				                    + eipBandwidth + '</td><td>电信</td><td name="createdate" class="time">' + decodeURIComponent(createDate) + '</td></tr>';
@@ -120,7 +117,7 @@ function showlit(){
 				            $('#tablebodyeip').html(tableStr);
 				            
 				            ////vm作图
-				            drawVmLine('sixhours');
+				           // drawVmLine('sixhours');
 				            
 					}
 				}
@@ -128,75 +125,46 @@ function showlit(){
 }
 
 var vmChart;
-function drawVmLine(types) {
-    var instanceUuid = $("#platformcontent").attr("instanceUuid");
-    Highcharts.setOptions({
-        global: {
-            useUTC: false
-        }
-    });
-    vmChart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'vmpic',
-            type: 'spline',
-            animation: Highcharts.svg, // don't animate in old IE
-            height: 300,
-            events: {
-                load: function () {
-                }
-            }
-        },
+$(function () {
+    $('#vmpic').highcharts({
         title: {
-            text: ''
+            text: '虚拟机数目变化',
+            x: -20 //center
         },
+       /* subtitle: {
+            text: 'Source: WorldClimate.com',
+            x: -20
+        },*/
         xAxis: {
-            type: 'datetime'
+            categories: ['201401', '201402', '201403', '201404', '201405', '201406','201407', '201408', '201409']
         },
         yAxis: {
             title: {
-                text: ''
+                text: '虚拟机数量 (台)'
             },
-            min: 0,
-            labels: {
-                formatter: function () {
-                    return this.value ;
-                }
-            }
-        },
-        plotOptions: {
-            spline: {
-                lineWidth: 2.0,
-                fillOpacity: 0.1,
-                marker: {
-                    enabled: false,
-                    states: {
-                        hover: {
-                            enabled: true,
-                            radius: 2
-                        }
-                    }
-                },
-                shadow: false
-            }
+            allowDecimals:false,
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
         },
         tooltip: {
-            formatter: function () {
-                return '<b>CPU ' + this.series.name + '</b><br>' +
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br>' +
-                    Highcharts.numberFormat(this.y, 0) ;
-            }
+            valueSuffix: '台'
         },
-        legend: {
-            enabled: false
-        },
-        exporting: {
-            enabled: false
-        },
-        series: []
+       /* legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },*/
+        series: [{
+            name: '数量',
+            data: [7, 5, 10, 9, 3, 6,13, 13,5]
+        }]
     });
-
-    updateVMData("c030c1a4-ef25-4514-a1d9-af7834f7ffe2", types);
-}
+});
+	
 
 function updateVMData(uuid, type) {
     $.ajax({

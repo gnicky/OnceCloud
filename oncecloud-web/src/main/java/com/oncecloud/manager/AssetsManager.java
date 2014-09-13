@@ -60,7 +60,7 @@ public class AssetsManager {
 	    return this.getAssetsDAO().getAssets(cid);
 	}
 	
-	///用户配额列表
+	///用户配额列表  查询算法有问题，先这样，赶时间
 	public List<UserQuotaModel> getQuotaList(int cid,int page, int limit,String search) {
 	   List<UserQuotaModel> models =new ArrayList<UserQuotaModel>();
 	   List<User> listuser = this.getUserDAO().getOnePageUserList(page, limit, search);
@@ -75,11 +75,16 @@ public class AssetsManager {
 	   return models;
 	}
 	
-	///用户配额列表
+	///用户配额列表   查询算法有问题，先这样，赶时间
 	public List<UserMoneyModel> getAssetsMonthList(int cid,int page, int limit,String search) {
 	   List<UserMoneyModel> models =new ArrayList<UserMoneyModel>();
 	   List<Assets> assetslist = this.getAssetsDAO().getAssets(cid);
 	   List<User> listuser = this.getUserDAO().getOnePageUserList(page, limit, search);
+	   List<User> listuserAll = this.getUserDAO().getOnePageUserList(1, 1000, "");
+	   for(User user : listuserAll)
+	   {
+	      
+	   }
 	
 	   for(User user : listuser)
 	   {
