@@ -60,7 +60,18 @@ api.assets = {
 		var method = "get";
 		var data = {};
 		return this._excut(url, method, data);	
+	},
+	findQutaPage:function(data){
+		var url = "/QuotaList";
+		var method = "get";
+		return this._excut(url, method, data);	
+	},
+	findCostPage:function(data){
+		var url = "/AssetsMonthList";
+		var method = "get";
+		return this._excut(url, method, data);	
 	}
+	
 };
 
 
@@ -110,7 +121,105 @@ views.Assets.prototype = {
 	}
 };
 
+views.AssetsQuta = function(options){
+	
+	this.ele = $('');
+	
+	this.class_content = "";
+	this.class_title = "";
+	
+	this.init(options);
+	
+};
+views.AssetsQuta.prototype = {
+	init:function(options){
+		for(var x in options){
+			this[x] = options[x];
+		}
+		
+		var $title = this.ele.find(this.class_title);
+		$title.html(this.creatTitle());
+	},
+	load:function(){
+		var _this = this;
+		var fu = api.assets.findList();
+		fu.events.success.attach(function(datas){
+			_this.creatItems(datas);
+		});
+	},
+	creatTitle:function(){
+		var h = '\
+		<tr>\
+			<th width="4%"></th>\
+			<th width="20%">MAC</th>\
+			<th width="20%">IP</th>\
+			<th width="12%">状态</th>\
+			<th width="16%">应用资源</th>\
+			<th width="12%">所属用户</th>\
+			<th width="16%">创建时间</th>\
+		</tr>';
+		return h;
+	},
+	creatItems:function(datas){
+		
+		var $con = this.ele;
+		$con.empty();
+		
+		var x =0;
+		for(;x<datas.length;x++){
+			var data = datas[x];
+			$con.append(this.creatItem(data));
+		}
+		
+	},
+	creatItem:function(data){
+		var h ='\
+			<div class="pool_floor">\
+            	<div class="pool_pic">\
+        			<img src="'+basePath+'img/admin/assets/'+data.assersIcon+'.png" />\
+        		</div>\
+        		<div class="pool_inf">\
+        			<p class="no">'+data.assetsName+' <em>'+data.assetsNum+'</em></p>\
+        			<p class="price">折后单月价格 <em> ￥'+data.assetsPermonth+'/月</em></p>\
+    			</div>\
+			</div>';
+		return h;
+	}
+};
+views.AssetsCost = function(){
+	
+};
+views.AssetsCost.prototype = {
+	init:function(options){
+		for(var x in options){
+			this[x] = options[x];
+		}
+	},
+	load:function(){
+		
+	},
+	creatItems:function(datas){
+		
+	},
+	creatItem:function(data){
+		
+	}
+};
+
 $(document).ready(function(){
-	var assets = new views.Assets({ele:$("#address_pool")});
-	assets.load();
+	
+	$(".views-assets").each(function(){
+		var view = new views.Assets({ele:$(this)});
+		view.load();
+	});
+	
+	$(".views-assetsQuta").each(function(){
+		var view = new views.AssetsQuta({ele:$(this)});
+		view.load();
+	});
+	
+	$(".views-assetsCost").each(function(){
+		var view = new views.AssetsCost({ele:$(this)});
+		view.load();
+	});
 });

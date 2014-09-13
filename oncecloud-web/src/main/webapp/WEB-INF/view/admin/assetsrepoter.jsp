@@ -6,8 +6,9 @@
 </head>
 <body class="cloud-body">
 	<%@ include file="../share/sidebar.jsp" %>
-	<%@ include file="content/assetsqutac.jsp" %>
+	<%@ include file="content/assetsreportc.jsp" %>
 	<%@ include file="../share/js.jsp" %>
-	<div>reporter</div>
+	<script src="${basePath}js/highcharts.js"></script>
+	<script src="${basePath}js/admin/assetsreport.js"></script>
 </body>
 </html>

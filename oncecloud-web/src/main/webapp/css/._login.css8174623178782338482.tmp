@@ -15,39 +15,42 @@ html, body {
 }
 .home {
 	position: relative;
-	top: 40%;
+	top: 50%;
 	margin: -250px auto 0 auto;
 }
 .home .logo {
 	background-image: url(../img/gq_name.png);
 	background-repeat: no-repeat;
 	background-position: center center;
-	height: 152px;
+	height: 79px;
 }
 .home .login-box {
-    background: none repeat scroll 0 0 #fff !important;height: 350px !important;margin: 40px auto 0 !important;opacity: 0.8 !important;padding: 20px !important;width: 420px !important;
+	background: none repeat scroll 0 0 #fff;
+    border: 3px solid #e2e2e2;
+    margin: 0 auto;
+    padding: 20px 0 40px;
+    width: 600px;
 }
 .login-box .login-form {
-	width: 330px;
+	width: 274px;
 	margin: 0 auto;
 }
 .login-form .login-input {
-	width: 330px;
+	width: 274px;
 	margin: 0;
-	padding: 0px 15px;
+	padding: 10px 15px;
 	font-size: 16px;
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 	background: #fff;
 	-webkit-appearance: none;
-	line-height: 42px;
-	height: 42px;
+	line-height: 16px;
 	color: #555;
 	vertical-align: middle;
 	border-radius: 0;
 	display: inline-block;
 }
 .login-form .btn-primary {
-	width: 330px;
+	width: 274px;
 	margin: 0;
 	padding: 10px 15px;
 	font-size: 16px;
