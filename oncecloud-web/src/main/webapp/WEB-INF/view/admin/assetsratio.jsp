@@ -41,7 +41,7 @@
 </head>
 <body class="cloud-body">
 	<%@ include file="../share/sidebar.jsp" %>
-	<%@ include file="content/assetsqutac.jsp" %>
+	<%@ include file="content/assetsratioc.jsp" %>
 	<%@ include file="../share/js.jsp" %>
 	
 </body>
