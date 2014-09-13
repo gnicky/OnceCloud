@@ -6,5 +6,32 @@
 			<em>硬件网络资源台账&nbsp;(Assets)</em>
 		</p>
 	</div>
-	 <div id="address_pool"></div>
+ 	<div id="address_pool"></div>
+ 	<ul class="hard_list">
+		<li class="red">
+    	<p>windows7  Liences</p>
+	    	<p>$4545</p>
+	    </li>
+	    <li class="green">
+	    	<p>windows7  Liences</p>
+	    	<p>$4545</p>
+	    </li>
+	    <li class="blue">
+	    	<p>windows7  Liences</p>
+	    	<p>$4545</p>
+	    </li>
+	    <li class="gray">
+	    	<p>windows7  Liences</p>
+	    	<p>$4545</p>
+	    </li>
+	    <li class="blue">
+	    	<p>windows7  Liences</p>
+	    	<p>$4545</p>
+	    </li>
+	    <li class="red">
+	    	<p>windows7  Liences</p>
+	    	<p>$4545</p>
+	    </li>
+	</ul>
+	 
 </div>
