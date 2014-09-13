@@ -7,12 +7,10 @@
 		</p>
 	</div>
  	<div class="once-pane">
- 		<div class="toolbar-right">
- 			<button id="full" class="btn"> 最大化 </button>
- 			<button id="new" class="btn"> 新窗口打开 </button>
- 		</div>
+ 		<button id="full" class="btn"> 最大化 </button>
+		<button id="new" class="btn"> 新窗口打开 </button>
  	</div>
 	<div id="companyMap">
-		<iframe src="${basePath}CompanyMap"></iframe>
+		<iframe id="map-iframe" src="${basePath}CompanyMap"></iframe>
 	</div>
 </div>

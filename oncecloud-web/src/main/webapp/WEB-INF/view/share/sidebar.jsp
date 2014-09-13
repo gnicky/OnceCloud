@@ -81,6 +81,7 @@
 					</li>
 				</ul>
 				
+				
 				<ul class="nav nav-list" style="margin-top: 25px">
 					<li <c:if test="${sideActive==1}">class="active"</c:if>><a
 						href="${basePath}instance"><span
