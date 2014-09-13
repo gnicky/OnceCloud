@@ -114,7 +114,7 @@ views.Assets.prototype = {
         		</div>\
         		<div class="pool_inf">\
         			<p class="no">'+data.assetsName+' <em>'+data.assetsNum+'</em></p>\
-        			<p class="price">折后单月价格 <em> ￥'+data.assetsPermonth+'/月</em></p>\
+        			<p class="price">'+data. +'<em> ￥'+data.assetsPermonth+'/月</em></p>\
     			</div>\
 			</div>';
 		return h;

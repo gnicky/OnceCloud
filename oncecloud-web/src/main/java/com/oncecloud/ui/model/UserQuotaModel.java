@@ -9,6 +9,7 @@ public class UserQuotaModel {
     private double netMoney;
     private double diskMoney;
     private double allMoney;
+    private User user;
     
 	public double getCpuMoney() {
 		return cpuMoney;
@@ -39,6 +40,12 @@ public class UserQuotaModel {
 	}
 	public void setAllMoney(double allMoney) {
 		this.allMoney = allMoney;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
     
  
