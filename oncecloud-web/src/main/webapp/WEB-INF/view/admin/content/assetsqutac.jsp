@@ -9,8 +9,8 @@
     <div class="once-pane">
     	<div class="once-toolbar">
 			<button class="btn btn-default btn-refresh"><span class="glyphicon glyphicon-refresh" style="margin-right:0"></span></button>
-			<input class="search" id="search" value="">
-			<div class="toolbar-right">
+			<input class="search" id="search" value="" style="display:none">
+			<div class="toolbar-right" style="display:none">
 				<table>
 					<tr>
 						<td>每页&nbsp;</td>

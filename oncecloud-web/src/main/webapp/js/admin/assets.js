@@ -136,7 +136,7 @@ views.AssetsQuta = function(options){
 	this.ele = $('');
 	
 	this.pageNumber = 1;
-	this.pageSize = 10;
+	this.pageSize = 100;
 	this.totalPages = 0;
 	this.searchValue = "";
 	
@@ -204,11 +204,11 @@ views.AssetsQuta.prototype = {
 		var h = '\
 			<tr>\
 				<td>'+user.userName+'</td>\
-				<td>'+quota.userName+'</td>\
-				<td>'+quota.userName+'</td>\
-				<td>'+quota.userName+'</td>\
-				<td>'+quota.userName+'</td>\
-				<td>'+quota.userName+'</td>\
+				<td class="price">￥'+data.cpuMoney+'</td>\
+				<td class="price">￥'+data.memMoney+'</td>\
+				<td class="price">￥'+data.netMoney+'</td>\
+				<td class="price">￥'+data.diskMoney+'</td>\
+				<td class="price">￥'+data.allMoney+'</td>\
 			</tr>';
 		return h;
 	}
