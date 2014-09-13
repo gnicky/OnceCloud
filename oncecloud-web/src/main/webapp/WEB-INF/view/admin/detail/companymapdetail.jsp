@@ -22,7 +22,7 @@
 				<table class="table table-bordered once-table">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<!-- <th>ID</th> -->
 							<th>名称</th>
 							<th>状态</th>
 							<th>CPU</th>
@@ -46,7 +46,7 @@
 				<table class="table table-bordered once-table">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<!-- <th>ID</th> -->
 							<th>名称</th>
 							<th>状态</th>
 							<th>容量 (GB)</th>
@@ -69,7 +69,7 @@
 				<table class="table table-bordered once-table">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<!-- <th>ID</th> -->
 							<th>名称</th>
 							<th>地址</th>
 							<th>状态</th>

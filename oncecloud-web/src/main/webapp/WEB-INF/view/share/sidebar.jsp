@@ -44,6 +44,21 @@
 		<c:choose>
 			<c:when test="${user.userLevel==0}">
 				<ul class="nav nav-list">
+				    <li <c:if test="${sideActive==5}">class="active"</c:if>>
+						<a href="${basePath}assets">
+							<span class="glyphicon glyphicon-cloud cool-orange"></span>
+							<span class="name">资源台账</span><span class="title">Assets</span>
+						</a>
+						<div class="cool-border"></div>
+					</li>
+					<%-- <li <c:if test="${sideActive==32}">class="active"</c:if>>
+						<a href="${basePath}assetsQuta">
+							<span class="glyphicon glyphicon-cloud cool-orange"></span>
+							<span class="name">资源配额</span><span class="title">Assets</span>
+						</a>
+						<div class="cool-border"></div>
+					</li> --%>
+				
 					<li <c:if test="${sideActive==1}">class="active"</c:if>><a
 						href="${basePath}instance"><span
 							class="glyphicon glyphicon-cloud cool-orange"></span><span
