@@ -5,27 +5,54 @@
 	<%@ include file="../share/head.jsp" %>
 	<style type="text/css">
 		#companyMap{
-			bottom: 5px;
-		    left: 5px;
-		    position: absolute;
-		    right: 5px;
-		    top: 150px;
+			position: absolute;
+			top:100px;
+			left:5px;
+			right:5px;
+			bottom:5px;
 		}
-		#companyMap #map-iframe{
+		#map-iframe{
 			border: 0px;
 			width: 100%;
 			height: 100%;
 		}
-		#companyMap.full #map-iframe{
+		
+		.big{
+			display: block;
+		    font-size: 14px;
+		    padding: 3px;
+		    position: absolute;
+		    right: 20px;
+		    top: 20px;
+		}
+		
+		.small,.full .big,.full .leader{
+			display: none;
+		}
+		.full h1{
+			background: none repeat scroll 0 0 #000;
+		    font-size: 14px;
+		    height: 30px;
+		    left: 0;
+		    line-height: 30px;
+		    margin: 0;
+		    position: fixed;
+		    width: 100%;
+		}
+		.full .small{
+			display: block;
+		    font-size: 14px;
+		    padding: 4px;
+		    position: absolute;
+		    right: 20px;
+		    top: 3px;
+		}
+		.full #map-iframe{
 			position: fixed;
-			top:0px;
+			top:30px;
 			left:0px;
 			bottom: 0xp;
 			z-index: 999;
-		}
-		.once-pane button{
-			float: right;
-			margin-left:20px;
 		}
 	</style>
 </head>
