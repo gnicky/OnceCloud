@@ -87,7 +87,22 @@ public class AdminController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-
+	
+	@RequestMapping(value = "/assets", method = {RequestMethod.GET})
+	@ResponseBody
+	public ModelAndView assets(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("sideActive", 5);
+		model.put("title", "硬件网络资源台账");
+		User user = (User) request.getSession().getAttribute("user");
+		if (user.getUserLevel() == 0) {
+		    return new ModelAndView("admin/assets",model);
+		}
+		else {
+			return new ModelAndView(new RedirectView("/dashboard"));
+		}
+	}
+	
 	@RequestMapping(value = "/datacenter", method = {RequestMethod.GET})
 	@ResponseBody
 	public ModelAndView datacenter(HttpServletRequest request) {
