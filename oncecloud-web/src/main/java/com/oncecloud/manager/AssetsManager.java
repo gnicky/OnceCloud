@@ -68,6 +68,7 @@ public class AssetsManager {
 	   {
 		   UserQuotaModel usermodel=new UserQuotaModel();
 		   Quota quota = this.getQuotaDAO().getQuotaTotal(user.getUserId());
+		   usermodel.setUser(user);
 		   usermodel.setCpuMoney(1000);
 		   usermodel.setDiskMoney(1033);
 		   usermodel.setMemMoney(1200);
