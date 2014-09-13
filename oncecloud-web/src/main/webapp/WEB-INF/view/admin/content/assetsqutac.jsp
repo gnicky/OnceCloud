@@ -26,7 +26,7 @@
 				</table>
 			</div>
 		</div>
-        <table class="table table-bordered once-table">
+        <table class="table table-bordered once-table views-assetsQuota">
 			<thead id="tablethead">
 				
 			</thead>
