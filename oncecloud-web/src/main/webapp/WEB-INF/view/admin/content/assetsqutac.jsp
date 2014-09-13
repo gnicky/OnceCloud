@@ -6,5 +6,5 @@
 			<em>硬件网络资源台账&nbsp;(Assets)</em>
 		</p>
 	</div>
-	<div id="address_pool" class="views-assets"></div>
+	 <div id="address_pool"></div>
 </div>
