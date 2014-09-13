@@ -60,16 +60,6 @@ api.assets = {
 		var method = "get";
 		var data = {};
 		return this._excut(url, method, data);	
-	},
-	findQutaPage:function(data){
-		var url = "/QuotaList";
-		var method = "get";
-		return this._excut(url, method, data);	
-	},
-	findMonthPage:function(data){
-		var url = "/AssetsMonthList";
-		var method = "get";
-		return this._excut(url, method, data);
 	}
 };
 
@@ -120,28 +110,7 @@ views.Assets.prototype = {
 	}
 };
 
-views.AssetsQuta = function(options){
-	
-};
-
-views.AssetsCost = function(options){
-	
-};
-
 $(document).ready(function(){
-	
-	$(".views-assets").each(function(){
-		var assets = new views.Assets({ele:$(this)});
-		assets.load();
-	});
-	
-	$("views-assetsQuta").each(function(){
-		var assets = new views.AssetsQuta({ele:$(this)});
-		assets.load();
-	});
-	
-	$("views-assetsCost").each(function(){
-		var assets = new views.AssetsCost({ele:$(this)});
-		assets.load();
-	});
+	var assets = new views.Assets({ele:$("#address_pool")});
+	assets.load();
 });

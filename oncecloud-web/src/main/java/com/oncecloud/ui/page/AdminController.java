@@ -92,71 +92,11 @@ public class AdminController {
 	@ResponseBody
 	public ModelAndView assets(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("sideActive", 31);
+		model.put("sideActive", 5);
 		model.put("title", "硬件网络资源台账");
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.getUserLevel() == 0) {
 		    return new ModelAndView("admin/assets",model);
-		}
-		else {
-			return new ModelAndView(new RedirectView("/dashboard"));
-		}
-	}
-	
-	@RequestMapping(value = "/assetsquta", method = {RequestMethod.GET})
-	@ResponseBody
-	public ModelAndView assetsquta(HttpServletRequest request) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("sideActive", 32);
-		model.put("title", "资源配额");
-		User user = (User) request.getSession().getAttribute("user");
-		if (user.getUserLevel() == 0) {
-		    return new ModelAndView("admin/assetsquta",model);
-		}
-		else {
-			return new ModelAndView(new RedirectView("/dashboard"));
-		}
-	}
-	
-	@RequestMapping(value = "/assetsratio", method = {RequestMethod.GET})
-	@ResponseBody
-	public ModelAndView assetsratio(HttpServletRequest request) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("sideActive", 34);
-		model.put("title", "资源占用率");
-		User user = (User) request.getSession().getAttribute("user");
-		if (user.getUserLevel() == 0) {
-		    return new ModelAndView("admin/assetsratio",model);
-		}
-		else {
-			return new ModelAndView(new RedirectView("/dashboard"));
-		}
-	}
-	
-	@RequestMapping(value = "/assetsrepoter", method = {RequestMethod.GET})
-	@ResponseBody
-	public ModelAndView repoter(HttpServletRequest request) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("sideActive", 35);
-		model.put("title", "资源报表");
-		User user = (User) request.getSession().getAttribute("user");
-		if (user.getUserLevel() == 0) {
-		    return new ModelAndView("admin/assetsrepoter",model);
-		}
-		else {
-			return new ModelAndView(new RedirectView("/dashboard"));
-		}
-	}
-	
-	@RequestMapping(value = "/assetsmap", method = {RequestMethod.GET})
-	@ResponseBody
-	public ModelAndView userMap(HttpServletRequest request) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put("sideActive", 33);
-		model.put("title", "用户地图");
-		User user = (User) request.getSession().getAttribute("user");
-		if (user.getUserLevel() == 0) {
-		    return new ModelAndView("admin/assetsmap",model);
 		}
 		else {
 			return new ModelAndView(new RedirectView("/dashboard"));
