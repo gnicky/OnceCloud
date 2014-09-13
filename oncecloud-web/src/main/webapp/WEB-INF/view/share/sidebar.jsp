@@ -46,35 +46,42 @@
 				<ul class="nav nav-list">
 					<li <c:if test="${sideActive==31}">class="active"</c:if>>
 						<a href="${basePath}assets">
-							<span class="glyphicon glyphicon-cloud cool-orange"></span>
-							<span class="name">资源台账</span><span class="title">Assets</span>
+							<span class="glyphicon glyphicon-folder-open cool-green"></span>
+							<span class="name">投入资源台账</span><span class="title">Assets</span>
 						</a>
 						<div class="cool-border"></div>
 					</li>
-					<li <c:if test="${sideActive==32}">class="active"</c:if>>
-						<a href="${basePath}assetsquta">
-							<span class="glyphicon glyphicon-cloud cool-orange"></span>
-							<span class="name">资源配额</span><span class="title">Assets</span>
+					
+					<li <c:if test="${sideActive==34}">class="active"</c:if>>
+						<a href="${basePath}assetsratio">
+							<span class="glyphicon glyphicon-bullhorn cool-blue"></span>
+							<span class="name">服务资源台账</span><span class="title">ServerAssets</span>
 						</a>
 						<div class="cool-border"></div>
 					</li>
+					
 					<li <c:if test="${sideActive==33}">class="active"</c:if>>
 						<a href="${basePath}assetsmap">
-							<span class="glyphicon glyphicon-cloud cool-orange"></span>
+							<span class="glyphicon glyphicon-map-marker cool-cyan"></span>
 							<span class="name">用户地图</span><span class="title">CompanyMap</span>
 						</a>
 						<div class="cool-border"></div>
 					</li>
-					<li <c:if test="${sideActive==34}">class="active"</c:if>>
-						<a href="${basePath}assetsratio">
-							<span class="glyphicon glyphicon-cloud cool-orange"></span>
-							<span class="name">占用比例</span><span class="title">AssetsRatio</span>
+					
+				
+					<li <c:if test="${sideActive==32}">class="active"</c:if>>
+						<a href="${basePath}assetsquta">
+							<span class="glyphicon glyphicon-gbp cool-orange"></span>
+							<span class="name">资源配额</span><span class="title">Assets</span>
 						</a>
 						<div class="cool-border"></div>
 					</li>
+					
+						
+					
 					<li <c:if test="${sideActive==35}">class="active"</c:if>>
 						<a href="${basePath}assetsrepoter">
-							<span class="glyphicon glyphicon-cloud cool-orange"></span>
+							<span class="glyphicon glyphicon-usd cool-purple"></span>
 							<span class="name">资源报表</span><span class="title">AssetsRepoter</span>
 						</a>
 						<div class="cool-border"></div>
