@@ -43,9 +43,9 @@ public class AssetsAction {
 		return this.getAssetsManager().getQuotaList(0, listModel.getPage(), listModel.getLimit(),listModel.getSearch());
 	}
 	
-	@RequestMapping(value = "/AssetsMonthList")
+	/*@RequestMapping(value = "/AssetsMonthList")
 	@ResponseBody
 	public List<UserMoneyModel> assetsMonthList(HttpServletRequest request,ListModel listModel) {
 		return this.getAssetsManager().getAssetsMonthList(0, listModel.getPage(), listModel.getLimit(),listModel.getSearch());
-	}
+	}*/
 }

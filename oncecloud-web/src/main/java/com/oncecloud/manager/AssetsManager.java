@@ -68,13 +68,16 @@ public class AssetsManager {
 	   {
 		   UserQuotaModel usermodel=new UserQuotaModel();
 		   Quota quota = this.getQuotaDAO().getQuotaTotal(user.getUserId());
-		   usermodel.setUser(user);
-		   usermodel.setQuota(quota);
+		   usermodel.setCpuMoney(1000);
+		   usermodel.setDiskMoney(1033);
+		   usermodel.setMemMoney(1200);
+		   usermodel.setNetMoney(3200);
 		   models.add(usermodel);
 	   }
 	   return models;
 	}
 	
+	/*
 	///用户配额列表   查询算法有问题，先这样，赶时间
 	public List<UserMoneyModel> getAssetsMonthList(int cid,int page, int limit,String search) {
 	   List<UserMoneyModel> models =new ArrayList<UserMoneyModel>();
@@ -99,6 +102,6 @@ public class AssetsManager {
 		   models.add(usermodel);
 	   }
 	   return models;
-	}
+	}*/
 	
 }

@@ -23,6 +23,8 @@ public class Assets {
 	private double assetsPrice;
 	private double assetsPermonth;
 	private String assersIcon;
+	private String assersUnit;
+	private String assersShow;
 	
 	public Assets() {
 	}
@@ -89,6 +91,24 @@ public class Assets {
 
 	public void setAssersIcon(String assersIcon) {
 		this.assersIcon = assersIcon;
+	}
+
+	@Column(name = "assers_unit")
+	public String getAssersUnit() {
+		return assersUnit;
+	}
+
+	public void setAssersUnit(String assersUnit) {
+		this.assersUnit = assersUnit;
+	}
+
+	@Column(name = "assers_show")
+	public String getAssersShow() {
+		return assersShow;
+	}
+
+	public void setAssersShow(String assersShow) {
+		this.assersShow = assersShow;
 	}
 
 
