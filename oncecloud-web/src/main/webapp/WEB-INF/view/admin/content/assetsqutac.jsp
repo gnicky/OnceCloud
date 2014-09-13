@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <div class="content" id="platformcontent">
 	<div class="intro">
-		<h1>地址池&nbsp;Address Pool</h1>
+		<h1>资源配额&nbsp;Quota</h1>
 		<p class="lead" style="margin-top:10px">
-			<em>地址池&nbsp;(Address Pool)</em>维护云平台中的DHCP映射列表以及公网IP资源池，使得云平台中的虚拟机可以接入内部局域网和绑定公网IP。
+			<em>资源配额&nbsp;(Quota)</em>
 		</p>
 	</div>
     <div class="once-pane">
