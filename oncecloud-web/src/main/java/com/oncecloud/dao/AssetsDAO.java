@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.oncecloud.entity.Alarm;
 import com.oncecloud.entity.Assets;
 import com.oncecloud.entity.Firewall;
+import com.oncecloud.entity.Quota;
 import com.oncecloud.entity.Volume;
 import com.oncecloud.entity.VolumeStatus;
 import com.oncecloud.helper.SessionHelper;
@@ -39,7 +40,7 @@ public class AssetsDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from Assets  order by id desc";
+			String queryString = "from Assets  order by id asc";
 			Query query = session.createQuery(queryString);
 			assetsList = query.list();
 			session.getTransaction().commit();
@@ -51,4 +52,6 @@ public class AssetsDAO {
 		}
 		return assetsList;
 	}
+
+	
 }

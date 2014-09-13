@@ -546,6 +546,11 @@ public class UserManager {
 		}
 		jsonobject.put("eiplist", jsonarrayeip);
 		
+	//	Date datanow = new Date();
+	//	this.getVmDAO().countVMsInOneMonth(companyuid,);
+		
+		
+		
 		jsonarray.put(jsonobject);
 		
 		return jsonarray;

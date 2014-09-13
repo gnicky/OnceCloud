@@ -11,11 +11,23 @@
       
       <style type="text/css">
 	.map_info{margin:10px 0;}
-	.map_info span{ color:#666; padding:5px;}
+	.map_info span{ color:#666; padding:7px 5px;display:inline-block;width:110px}
 	.map_info span:hover{ background:#eee;}
-	.map_info a{ color:#f60; cursor:pointer}
+	.map_info a{ color:#dd0000; cursor:pointer;font-weight:bold;text-decoration:none;}
 	.map_info a:hover{ text-decoration:underline;}
-	.map_info span{ color:#666; padding:5px; display:block;}
+	
+	.BMapLib_SearchInfoWindow .BMapLib_bubble_title{
+	    line-hieght:31px !important; 
+	    background-color:#333 !important;
+	    color:#fff !important;
+	    font-weight:bold !important;
+	    overflow:hidden !important;
+	    height:31px !important;
+	}
+	
+	.BMapLib_SearchInfoWindow .BMapLib_bubble_tools div{
+	   background-color:#333 !important;
+	}
 </style>
       
     </style>

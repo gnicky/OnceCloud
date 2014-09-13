@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.Assets;
+import com.oncecloud.entity.Quota;
 import com.oncecloud.manager.AssetsManager;
+import com.oncecloud.ui.model.ListModel;
+import com.oncecloud.ui.model.UserMoneyModel;
+import com.oncecloud.ui.model.UserQuotaModel;
 
 @RequestMapping("/AssetsAction")
 @Controller
@@ -29,7 +33,19 @@ public class AssetsAction {
 
 	@RequestMapping(value = "/AssetsList")
 	@ResponseBody
-	public List<Assets> createFirewall(HttpServletRequest request) {
+	public List<Assets> assetsList(HttpServletRequest request) {
 		return this.getAssetsManager().getAssets(0);
+	}
+	
+	@RequestMapping(value = "/QuotaList")
+	@ResponseBody
+	public List<UserQuotaModel> quotaList(HttpServletRequest request,ListModel listModel) {
+		return this.getAssetsManager().getQuotaList(0, listModel.getPage(), listModel.getLimit(),listModel.getSearch());
+	}
+	
+	@RequestMapping(value = "/AssetsMonthList")
+	@ResponseBody
+	public List<UserMoneyModel> assetsMonthList(HttpServletRequest request,ListModel listModel) {
+		return this.getAssetsManager().getAssetsMonthList(0, listModel.getPage(), listModel.getLimit(),listModel.getSearch());
 	}
 }

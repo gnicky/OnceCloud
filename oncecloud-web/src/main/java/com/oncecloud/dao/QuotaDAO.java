@@ -1,11 +1,18 @@
 package com.oncecloud.dao;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.oncecloud.entity.ChargeRecord;
 import com.oncecloud.entity.Quota;
+import com.oncecloud.entity.User;
 import com.oncecloud.helper.SessionHelper;
 
 @Component
@@ -154,4 +161,5 @@ public class QuotaDAO {
 		}
 		return result;
 	}
+	
 }
