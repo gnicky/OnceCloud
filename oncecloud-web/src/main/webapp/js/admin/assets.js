@@ -113,8 +113,8 @@ views.Assets.prototype = {
         			<img src="'+basePath+'img/admin/assets/'+data.assersIcon+'.png" />\
         		</div>\
         		<div class="pool_inf">\
-        			<p class="no">'+data.assetsName+' <em>'+data.assetsNum+'</em></p>\
-        			<p class="price">'+data. +'<em> ￥'+data.assetsPermonth+'/月</em></p>\
+        			<p class="no">'+data.assetsName+' <em>'+data.assetsNum+' '+data.assersUnit+'</em></p>\
+        			<p class="price">'+data.assersShow +'<em> ￥'+data.assetsPermonth+'/月</em></p>\
     			</div>\
 			</div>';
 		return h;
