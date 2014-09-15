@@ -3,7 +3,12 @@
 	<div class="intro">
 		<h1>投入资源台账&nbsp;Assets</h1>
 		<p class="lead" style="margin-top:10px">
-			<em>投入资源台账&nbsp;(Assets)</em>
+			<em>
+				投入资源台账&nbsp;(Assets)
+			</em>
+			<div class="hrr-btn">
+    			<a href="${basePath}assetsratio">服务资源台账</a> 
+ 			</div>
 		</p>
 	</div>
 	<div >

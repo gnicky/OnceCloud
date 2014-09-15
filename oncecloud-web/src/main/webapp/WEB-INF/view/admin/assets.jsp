@@ -34,6 +34,11 @@
 	.hard_list li.gray{ background:#ccc; color:#fff;}
 	.hard_list li p{ font-family:Arial;}
 	.pool_title { float:left;width:100%;height:42px; line-height:42px; background:#eee; border-bottom:1px solid #ddd; color:#333; padding:0 20px; font-size:14px;}
+	
+	.hrr-btn {float: right;margin-right: 20px;margin-top: -30px;}
+	.hrr-btn a { text-decoration:none; padding:10px 30px; background:#cea100; color:#fff; font-size:14px; font-weight:bold; }
+	.hrr-btn a:hover { background:#D9A800;}
+	
 	</style>
 </head>
 <body class="cloud-body">
