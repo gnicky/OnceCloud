@@ -7,9 +7,13 @@
 		</p>
 	</div>
 	<h3 class="re_title">计算资源台账</h3>
+	<div class="count l-count">
+    	<span>根据成本核算平均总共可提供虚拟机数量为：<em>5000</em>台</span> 
+    	
+    </div>
     <ul class="box_resouce">
     	<li>
-        	<h4>CPU 200核</h4>
+        	<h4>CPU 2000核</h4>
             <div class="scontent">
             	<strong>60%</strong>
                 <div class="progress-bar"> <span style="width:60%;"></span></div>
@@ -25,7 +29,7 @@
             <p>使用率：<em>30%</em></p>
         </li>
         <li class="orange">
-        	<h4>内存 100G</h4>
+        	<h4>内存 1000G</h4>
             <div class="scontent">
             	<strong>50%</strong>
                 <div class="progress-bar"> <span style="width:50%;"></span></div>
@@ -44,8 +48,8 @@
     <div class="clear_both"></div>
     
     <div class="count">
-    	<span>可提供虚拟机约：<em>50</em>台</span> 
-    	<span>已使用：<em>32</em>台</span> 
-    	<span>使用率：<em>64%</em></span>
+    	<span>可提供虚拟机约：<em>5000</em>台</span> 
+    	<span>已使用：<em><a href="/instance">320</a></em>台</span> 
+    	<span>使用率：<em>6.4%</em></span>
     </div>
 </div>

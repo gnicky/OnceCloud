@@ -40,7 +40,7 @@ public class AssetsAction {
 	@RequestMapping(value = "/QuotaList")
 	@ResponseBody
 	public List<UserQuotaModel> quotaList(HttpServletRequest request,ListModel listModel) {
-		return this.getAssetsManager().getQuotaList(0, listModel.getPage(), listModel.getLimit(),listModel.getSearch());
+		return this.getAssetsManager().getQuotaList(0, listModel.getPage(), listModel.getLimit(),"苏州");
 	}
 	
 	/*@RequestMapping(value = "/AssetsMonthList")

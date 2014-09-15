@@ -363,7 +363,7 @@ public class UserManager {
 	public JSONArray doGetCompanyList() {
 		JSONArray ja = new JSONArray();
 		String searchStr = "";
-		List<User> userList = this.getUserDAO().getCompanyUserList(searchStr);
+		List<User> userList = this.getUserDAO().getCompanyUserList("苏州");
 		for (User myuser : userList) {
 			JSONObject obj = new JSONObject();
 			obj.put("username", Utilities.encodeText(myuser.getUserName()));

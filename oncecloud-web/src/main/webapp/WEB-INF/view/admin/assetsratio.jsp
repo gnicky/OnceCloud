@@ -35,8 +35,13 @@
 	
 	.count{ margin-top:30px; font-family:"微软雅黑"; text-align:right; margin-right:120px;}
 	.count span{ display:inline-block; margin-left:10px;}
-	.count span em{ font-size:20px;  color:#f60; font-style:normal;}
+	.count span em{ font-size:30px;  color:#f60; font-style:normal;}
 	.clear_both{ clear:both; font-size:0; height:0; overflow:hidden;}
+	.l-count {
+    text-align: left;
+    margin-left: 40px;
+    margin-bottom:10px;
+}
 </style>
 </head>
 <body class="cloud-body">

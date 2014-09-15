@@ -21,30 +21,27 @@
 		<div class="pool_title">软件资源</div>
 	 	<ul class="hard_list">
 			<li class="blue">
-	    	<p>windows7  Liences</p>
-		    	<p>$4545</p>
+	    	<p>Windows 操作系统版权费用</p>
+		    	<p>￥1000 * 100 个</p>
 		    </li>
 		    <li>
-		    	<p>windows7  Liences</p>
-		    	<p>$4545</p>
+		    	<p>数据库 版权费用</p>
+		    	<p>￥50000 * 20 个</p>
 		    </li>
 		    <li class="blue">
-		    	<p>windows7  Liences</p>
-		    	<p>$4545</p>
+		    	<p>虚拟机软件版权费用</p>
+		    	<p>￥20000 * 200核</p>
 		    </li>
-		    <li>
-		    	<p>windows7  Liences</p>
-		    	<p>$4545</p>
-		    </li>
-		    <li class="blue">
-		    	<p>windows7  Liences</p>
-		    	<p>$4545</p>
-		    </li>
-		    <li>
-		    	<p>windows7  Liences</p>
-		    	<p>$4545</p>
-		    </li>
+		   
 		</ul>
+		<div style=" clear:both; font-size:0; height:0; overflow:hidden;"></div>
+		
+		<div class="hard_count">
+			<span>硬件总投入：<strong>￥745,000</strong></span> 
+		    <span>软件总投入：<strong>￥120,000</strong></span>
+		    <span class="tips">合计：<strong>￥865,000</strong></span>
+        </div>
+		
 	</div>
 	
  	

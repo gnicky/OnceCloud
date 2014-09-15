@@ -13,9 +13,10 @@
 	 <div class="col-md-4">
 	  <select id="userId">
 		   <option>苏州文化博览中心有限公司</option>
-		   <option>苏州工业园区清源华衍水务有限公司</option>
-		   <option>苏州工业园区邻里中心发展有限公司</option>
+		   <option>苏州国际博览中心有限公司</option>
+		   <option>苏州圆融发展集团有限公司</option>
 		   <option>苏州国科数据中心有限公司</option>
+		   <option>苏州纳米科技发展有限公司</option>
 	   </select></div>
 	 </div>
 	 <br/>
