@@ -95,9 +95,8 @@ function load2server(hostuuid, sruuid) {
         url: '/StorageAction/LoadToServer',
         data: {sruuid: sruuid, hostuuid: hostuuid},
         dataType: 'json',
-        success: function (array) {
-            var obj = array[0];
-            var isSuccess = obj.isSuccess;
+        success: function () {
+            
         }
     });
 }
