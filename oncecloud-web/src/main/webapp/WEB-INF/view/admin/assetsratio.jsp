@@ -40,7 +40,7 @@
 	.l-count {
     text-align: left;
     margin-left: 40px;
-    margin-bottom:10px;
+    margin-bottom:20px;
 }
 </style>
 </head>
