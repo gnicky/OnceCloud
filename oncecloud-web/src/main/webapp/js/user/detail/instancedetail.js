@@ -940,4 +940,8 @@ function getInstanceBasicList() {
     });
 }
 
-
+$("#remove-net").on('click', function (event) {
+    event.preventDefault();
+	console.log($("#remove-net"));
+	
+});
