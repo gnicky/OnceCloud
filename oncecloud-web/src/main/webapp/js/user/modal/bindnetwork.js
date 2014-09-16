@@ -122,7 +122,22 @@ $(document).ready(function () {
             data: {vnId: vnId, vmuuidStr: vmuuidStr},
             dataType: 'text',
             success: function (response) {
-                reloadList(1);
+            	if(response.isSuccess)
+                	reloadList(1);
+                else {
+					bootbox.dialog({
+						message : '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;每台主机只能绑定一个网络，请先解除网络</div>',
+						title : "提示",
+						buttons : {
+							main : {
+								label : "确定",
+								className : "btn-primary",
+								callback : function() {
+								}
+							}
+						}
+					});
+				}
             },
             error: function () {
             }

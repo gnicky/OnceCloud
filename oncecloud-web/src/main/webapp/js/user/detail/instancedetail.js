@@ -825,7 +825,7 @@ function getInstanceBasicList() {
             var network;
             if (instanceIP == "null") {
                 if (vlan == "null") {
-                    network = '<a>(基础网络)</a>';
+                    network = '无网络服务';
                 } else {
                     network = '<a id="vnetip" vnetip="' + obj.vlanUuid + '" routerUuid="' + obj.routerUuid + '">(' + vlan + ')</a>';
                 }
@@ -836,6 +836,7 @@ function getInstanceBasicList() {
                     network = '<a id="vnetip" vnetip="' + obj.vlanUuid + '" routerUuid="' + obj.routerUuid + '">(' + vlan + ')&nbsp;/&nbsp;' + instanceIP + '</a>';
                 }
             }
+            network += '<a id="remove-net"><span class="glyphicon glyphicon-remove delete-net"></span></a></div>';
             var backDate = decodeURIComponent(obj.backupdate);
             var bkId = "&nbsp;";
             if (backDate != "") {
