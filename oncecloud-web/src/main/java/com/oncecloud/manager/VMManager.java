@@ -34,6 +34,7 @@ import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
+import com.oncecloud.entity.User;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
@@ -1167,5 +1168,10 @@ public class VMManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void unbindNet(String uuid, User user) {
+		this.getVmDAO().unbindNet(uuid);
+		this.setVlan(uuid, 1, user.getUserAllocate());
 	}
 }

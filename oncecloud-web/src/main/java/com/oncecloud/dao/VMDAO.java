@@ -936,7 +936,26 @@ public class VMDAO {
 		}
 		return result;
 	}
-
+	
+	public void unbindNet(String uuid) {
+		OCVM vm = this.getVM(uuid);
+		if (vm != null) {
+			Session session = null;
+			try {
+				vm.setVmVlan(null);
+				vm.setVmIP(null);
+				session = this.getSessionHelper().getMainSession();
+				session.beginTransaction();
+				session.update(vm);
+				session.getTransaction().commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (session != null) {
+					session.getTransaction().rollback();
+				}
+			}
+		}
+	}
 	/**
 	 * 更新主机所在服务器
 	 * 
