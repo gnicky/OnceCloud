@@ -667,8 +667,8 @@ public class HostManager {
 				OCHost masterHost = this.getHostDAO().getHost(masterUuid);
 				OCHost targetHost = this.getHostDAO().getHost(hostUuid);
 				if (masterHost != null & targetHost != null) {
-					SRManager sm = new SRManager();
-					boolean checkResult = sm
+//					SRManager sm = new SRManager();
+					boolean checkResult = this.getSrManager()
 							.checkSREquals(masterUuid, hostUuid);
 					if (checkResult == true) {
 						Connection conn = new Connection("http://"

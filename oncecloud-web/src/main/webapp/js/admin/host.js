@@ -46,13 +46,13 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
     });
     if (count == 1) {
         $('#update').removeClass('btn-forbidden');
-        if (count == bindcount) {
-            $("#remove4pool").removeClass('btn-forbidden');
-        } else if (count == unbindcount) {
-            $("#add2pool").removeClass('btn-forbidden');
-            $("#delete").removeClass('btn-forbidden');
-        }
     }
+    if (count == bindcount) {
+		$("#remove4pool").removeClass('btn-forbidden');
+	} else if (count == unbindcount) {
+		$("#add2pool").removeClass('btn-forbidden');
+		$("#delete").removeClass('btn-forbidden');
+	}
 });
 
 $('#create').on('click', function (event) {
