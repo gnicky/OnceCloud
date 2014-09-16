@@ -964,3 +964,6 @@ dt.log-dt {
 .filter-once-tab>li>a:hover {
 	border-color: #eee !important;
 }
+.delete-net {
+	float: right;
+}

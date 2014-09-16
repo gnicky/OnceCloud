@@ -130,6 +130,10 @@ public class VnetManager {
 			for (int i = 0; i < jArray.length(); i++) {
 				String vmUuid = jArray.getString(i);
 				OCVM vm = this.getVmDAO().getVM(vmUuid);
+				if (vm.getVmVlan() != null || vm.getVmIP() != null) {
+					result = false;
+					break;
+				}
 				if (vm != null) {
 					JSONArray infoArray = new JSONArray();
 					if (!vnetId.equals("-1")) {
@@ -441,7 +445,7 @@ public class VnetManager {
 		}
 	}
 
-	public JSONObject vnetAddvm(String vnId, String vmuuidStr, int userId,
+	public JSONObject vnetAddvm(int userId, String vmuuidStr, String vnId,
 			String poolUuid) {
 		JSONObject jo = new JSONObject();
 		if (this.addVmToVnet(userId, vmuuidStr, vnId, poolUuid)) {

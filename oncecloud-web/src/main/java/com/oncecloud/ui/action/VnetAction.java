@@ -90,12 +90,13 @@ public class VnetAction {
 
 	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
 	@ResponseBody
-	public void addVM(HttpServletRequest request, @RequestParam String vnId,
+	public String addVM(HttpServletRequest request, @RequestParam String vnId,
 			@RequestParam String vmuuidStr) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVnetManager().addVmToVnet(user.getUserId(), vmuuidStr, vnId,
+		JSONObject jo = this.getVnetManager().vnetAddvm(user.getUserId(), vmuuidStr, vnId,
 				poolUuid);
+		return jo.toString();
 	}
 
 	@RequestMapping(value = "/CheckNet", method = { RequestMethod.POST })
