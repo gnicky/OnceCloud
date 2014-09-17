@@ -44,7 +44,7 @@
 					<th>状态</th>
 					<th>应用主机</th>
 					<th>容量&nbsp;(GB)</th>
-					<th>距上次备份时间</th>
+					<th>上次备份时间</th>
 					<th>运行时间</th>
 				</tr>
 			</thead>

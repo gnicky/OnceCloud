@@ -1169,9 +1169,16 @@ public class VMManager {
 			}
 		}
 	}
-	
+
 	public void unbindNet(String uuid, User user) {
 		this.getVmDAO().unbindNet(uuid);
-		this.setVlan(uuid, 1, user.getUserAllocate());
+		boolean result = this.setVlan(uuid, 1, user.getUserAllocate());
+		if (result) {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToSuccess("主机解绑网络成功"));
+		} else {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToError("主机解绑网络失败"));
+		}
 	}
 }

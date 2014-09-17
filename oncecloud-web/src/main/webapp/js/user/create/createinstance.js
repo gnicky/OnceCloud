@@ -217,7 +217,7 @@ function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginP
     $("#tablebody").prepend('<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
         + vmName + '</td><td><span class="icon-status icon-process" name="stateicon"></span><span name="stateword">创建中</span></td><td name="cpuCore">'
         + cpuCore + '</td><td name="memoryCapacity">'
-        + memoryStr + '</td><td name="sip"><a>(基础网络)</a></td><td name="pip"></td><td name="backuptime">' + backupStr + '</td><td name="createtime" class="time"><1分钟</td></tr>');
+        + memoryStr + '</td><td name="sip"><a></a></td><td name="pip"></td><td name="backuptime">' + backupStr + '</td><td name="createtime" class="time"><1分钟</td></tr>');
     createVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd);
 }
 
