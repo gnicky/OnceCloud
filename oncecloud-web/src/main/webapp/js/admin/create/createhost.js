@@ -102,8 +102,9 @@ $(document).ready(function () {
                             var rackName = decodeURIComponent(obj.rackName);
                             var showid = "host-" + hostid.substring(0, 8);
                             var srsize = obj.srsize;
-                            var mytr = '<tr hostid="' + hostid + '" hostname="' + hostname + '" hostip="' + hostip + '" hostdesc="' + hostdesc + '" rackid="' + rackUuid + '"><td class="rcheck"><input type="checkbox" name="hostrow"></td>'
-                                + '<td><a class="id">' + showid + '</a></td><td>' + hostname + '</td><td>' + hostip + '</td><td>' + hostcpu + '&nbsp;核</td>'
+                            var mytr = '<tr hostid="' + hostid + '" ' + 'hostname="' + hostname + '" hostip="' + hostip + '" hostdesc="' + hostdesc + '" rackid="' + rackUuid + '"><td class="rcheck"><input type="checkbox" name="hostrow"></td>'
+                                + '<td><a class="id">' +
+                                showid + '</a></td><td>' + hostname + '</td><td>' + hostip + '</td><td>' + hostcpu + '&nbsp;核</td>'
                                 + '<td>' + hostmem + '&nbsp;MB</td><td state="unload"></td><td><a>' + rackName + '</a></td><td><a class="srdetail" size=' + srsize + '><span class="glyphicon glyphicon-hdd"></span>&nbsp;&nbsp;' + srsize + '</a></td><td class="time">' + createdate + '</td></tr>';
                             $("#tablebody").prepend(mytr);
                             $('#ServerModalContainer').modal('hide');

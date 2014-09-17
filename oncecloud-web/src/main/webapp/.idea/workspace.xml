@@ -36,10 +36,10 @@
       <file leaf-file-name="createhost.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/admin/create/createhost.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1764706" vertical-offset="1245" max-vertical-offset="3570">
-              <caret line="90" column="47" selection-start-line="90" selection-start-column="47" selection-end-line="90" selection-end-column="47" />
+            <state vertical-scroll-proportion="0.75630254" vertical-offset="1755" max-vertical-offset="3585">
+              <caret line="147" column="84" selection-start-line="147" selection-start-column="84" selection-end-line="147" selection-end-column="84" />
               <folding>
-                <marker date="1410941394000" expanded="false" signature="5654:5680" placeholder="..." />
+                <marker date="1410941507000" expanded="false" signature="5691:5717" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -824,10 +824,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/admin/create/createhost.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1764706" vertical-offset="1245" max-vertical-offset="3570">
-          <caret line="90" column="47" selection-start-line="90" selection-start-column="47" selection-end-line="90" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.75630254" vertical-offset="1755" max-vertical-offset="3585">
+          <caret line="147" column="84" selection-start-line="147" selection-start-column="84" selection-end-line="147" selection-end-column="84" />
           <folding>
-            <marker date="1410941394000" expanded="false" signature="5654:5680" placeholder="..." />
+            <marker date="1410941507000" expanded="false" signature="5691:5717" placeholder="..." />
           </folding>
         </state>
       </provider>
