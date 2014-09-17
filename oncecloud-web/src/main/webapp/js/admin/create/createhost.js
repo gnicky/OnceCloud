@@ -96,6 +96,7 @@ $(document).ready(function () {
                             var hostip = obj.hostip;
                             var createdate = obj.createdate;
                             var hostcpu = obj.hostcpu;
+                            var hostdesc = obj.hostdesc;
                             var hostmem = obj.hostmem;
                             var rackUuid = obj.rackUuid;
                             var rackName = decodeURIComponent(obj.rackName);
@@ -128,9 +129,6 @@ $(document).ready(function () {
                                 }
                             });
                         }
-                    },
-                    error: function () {
-
                     }
                 });
             } else if ('edit' == type) {
@@ -145,15 +143,9 @@ $(document).ready(function () {
                         thistr.attr('hostname', serverName);
                         thistr.attr('hostdesc', serverDesc);
                         thistr.attr('rackid', rackUuid);
-
                         thistr.children('td').eq(2).html(serverName);
                         thistr.children('td').eq(7).html('<a>' + rackName + '</a>');
-
-                    },
-                    error: function () {
-
                     }
-
                 });
                 removeAllCheck();
                 $('#ServerModalContainer').modal('hide');
