@@ -1035,7 +1035,7 @@ $("#depend-list").on('click', '#remove-net', function(event) {
 	var showMessage = '';
 	var showTitle = '';
 	showMessage = '<div class="alert alert-info" style="margin:10px">'
-			+ '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要解绑网络&nbsp;?解绑后将无法联网</div>';
+			+ '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;解绑网络后将无法联网，确定&nbsp;?</div>';
 	showTitle = '提示';
 
 	bootbox.dialog({
@@ -1047,8 +1047,6 @@ $("#depend-list").on('click', '#remove-net', function(event) {
 						label : "确定",
 						className : "btn-primary",
 						callback : function() {
-							$("#netw").html("&nbsp;");
-							$("#eipw").html("&nbsp;");
 							var instanceUuid = $("#platformcontent").attr("instanceUuid");
 							$.ajax({
 										type : 'post',
@@ -1058,6 +1056,8 @@ $("#depend-list").on('click', '#remove-net', function(event) {
 										},
 										dataType : 'text',
 										success : function() {
+											$("#netw").html("&nbsp;");
+											$("#eipw").html("&nbsp;");
 										}
 									});
 						}

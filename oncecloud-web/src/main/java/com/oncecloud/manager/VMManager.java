@@ -1169,9 +1169,31 @@ public class VMManager {
 			}
 		}
 	}
-	
+
 	public void unbindNet(String uuid, User user) {
-		this.getVmDAO().unbindNet(uuid);
-		this.setVlan(uuid, 1, user.getUserAllocate());
+		OCVM vm = this.getVmDAO().getVM(uuid);
+		String vlan = vm.getVmVlan();
+		boolean result = false;
+		if (vlan == null) {
+			String eip = this.getEipDAO().getEipIp(uuid);
+			if (eip != null) {
+				JSONObject jo = this.eipManager.unbindElasticIp(user.getUserId(), uuid, eip, "vm");
+				if (jo.getBoolean("result")) {
+					result = this.setVlan(uuid, 1, user.getUserAllocate());
+				} else {
+					result = false;
+				}
+			}
+		} else {
+			result = this.setVlan(uuid, 1, user.getUserAllocate());
+		}
+		if (result) {
+			this.getVmDAO().unbindNet(uuid);
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToSuccess("主机解绑网络成功"));
+		} else {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToError("主机解绑网络失败"));
+		}
 	}
 }

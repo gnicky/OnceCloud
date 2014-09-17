@@ -241,7 +241,7 @@ function getVMList(page, limit, search) {
                 var network;
                 if (ip == "null") {
                     if (vlan == "null") {
-                        network = '<a>(基础网络)</a>';
+                        network = '<a></a>';
                     } else {
                         network = '<a>(' + vlan + ')</a>';
                     }

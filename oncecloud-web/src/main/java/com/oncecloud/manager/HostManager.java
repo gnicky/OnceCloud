@@ -381,7 +381,7 @@ public class HostManager {
 		return qaArray;
 	}
 
-	public JSONArray deleteAction(String hostId, String hostName, int userid) {
+	public JSONArray deleteHost(String hostId, String hostName, int userid) {
 		Date startTime = new Date();
 		JSONArray qaArray = new JSONArray();
 		boolean result = this.getHostDAO().deleteHost(hostId);
