@@ -4,14 +4,14 @@
 	<session-factory>
 		<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="hibernate.c3p0.max_size">30</property>
-        <property name="hibernate.c3p0.min_size">6</property>
-        <property name="hibernate.c3p0.timeout">120</property>
-        <property name="hibernate.c3p0.max_statements">100</property>
-        <property name="hibernate.c3p0.idle_test_period">120</property>
-        <property name="hibernate.c3p0.acquire_increment">2</property>
-        <property name="hibernate.c3p0.validate">true</property>
-        <property name="c3p0.maxIdleTime">1800</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+		<property name="hibernate.c3p0.min_size">6</property>
+		<property name="hibernate.c3p0.timeout">120</property>
+		<property name="hibernate.c3p0.max_statements">100</property>
+		<property name="hibernate.c3p0.idle_test_period">120</property>
+		<property name="hibernate.c3p0.acquire_increment">2</property>
+		<property name="hibernate.c3p0.validate">true</property>
+		<property name="c3p0.maxIdleTime">1800</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver </property>
 		<property name="hibernate.connection.url"> jdbc:mysql://133.133.135.9:3306/bcperformance</property>
 		<property name="hibernate.connection.username">root</property>
@@ -23,6 +23,7 @@
 		<property name="hibernate.cache.use_query_cache">false</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>
 		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.hbm2ddl.auto">update</property> 
 
 		<mapping resource="com/oncecloud/config/performance/cpu.hbm.xml" />
 		<mapping resource="com/oncecloud/config/performance/mem.hbm.xml" />
