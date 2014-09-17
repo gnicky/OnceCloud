@@ -1047,8 +1047,6 @@ $("#depend-list").on('click', '#remove-net', function(event) {
 						label : "确定",
 						className : "btn-primary",
 						callback : function() {
-							$("#netw").html("&nbsp;");
-							$("#eipw").html("&nbsp;");
 							var instanceUuid = $("#platformcontent").attr("instanceUuid");
 							$.ajax({
 										type : 'post',
@@ -1058,6 +1056,8 @@ $("#depend-list").on('click', '#remove-net', function(event) {
 										},
 										dataType : 'text',
 										success : function() {
+											$("#netw").html("&nbsp;");
+											$("#eipw").html("&nbsp;");
 										}
 									});
 						}

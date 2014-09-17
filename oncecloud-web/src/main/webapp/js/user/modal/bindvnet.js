@@ -52,7 +52,7 @@ $(document).ready(function () {
                     return true;
             }
         }
-    }
+    };
     $('#bindPS').bootstrapPaginator(options);
     getInstanceList(1, 5, "");
 
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 }
                 options = {
                     totalPages: totalp
-                }
+                };
                 $('#bindPS').bootstrapPaginator(options);
                 pageDisplayUpdate(page, totalp);
                 var tableStr = "";
@@ -89,8 +89,6 @@ $(document).ready(function () {
                     $('#alert').html('没有可选择的主机');
                 }
                 $('#instancelist').html(tableStr);
-            },
-            error: function () {
             }
         });
     }
@@ -121,8 +119,8 @@ $(document).ready(function () {
             url: '/VnetAction/AddVM',
             data: {vnId: vnId, vmuuidStr: vmuuidStr},
             dataType: 'text',
-            success: function (response) {
-            	if(response.isSuccess)
+            success: function (obj) {
+            	if (obj.isSuccess)
                 	reloadList(1);
                 else {
 					bootbox.dialog({
