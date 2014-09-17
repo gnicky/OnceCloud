@@ -118,7 +118,7 @@ $(document).ready(function () {
             type: 'get',
             url: '/VnetAction/AddVM',
             data: {vnId: vnId, vmuuidStr: vmuuidStr},
-            dataType: 'text',
+            dataType: 'json',
             success: function (obj) {
             	if (obj.isSuccess)
                 	reloadList(1);
@@ -136,8 +136,6 @@ $(document).ready(function () {
 						}
 					});
 				}
-            },
-            error: function () {
             }
         });
     }
