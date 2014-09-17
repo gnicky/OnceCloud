@@ -1,10 +1,10 @@
-# OnceCloud Agent Makefile
+# OnceCloud Gateway Makefile
 
 CXX=g++
 LD=g++
 
-AGENT_CXX=$(QUIET_CXX)$(CXX)
-AGENT_LD=$(QUIET_LD)$(LD)
+GATEWAY_CXX=$(QUIET_CXX)$(CXX)
+GATEWAY_LD=$(QUIET_LD)$(LD)
 
 CXXFLAGS=-g -Wall -Werror -c -Iinclude/
 LDFLAGS=-g -Wall -Werror
@@ -21,22 +21,22 @@ QUIET_CXX = @printf '    %b %b\n' $(CXXCOLOR)COMPILE$(ENDCOLOR) $(SRCCOLOR)$@$(E
 QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
 endif
 
-AGENT=agent
+GATEWAY=gateway
 COMPONENT=Main.o 
 
 all: everything
 clean:
-	@rm -rf $(AGENT)
+	@rm -rf $(GATEWAY)
 	@rm -rf *.o
 
 .PHONY: all clean
 
-everything: $(AGENT)
+everything: $(GATEWAY)
 
 # Component
 Main.o: Main.cxx
-	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+	$(GATEWAY_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main
-$(AGENT): $(COMPONENT)
-	$(AGENT_LD) $(LDFLAGS) -o $@ $^
+$(GATEWAY): $(COMPONENT)
+	$(GATEWAY_LD) $(LDFLAGS) -o $@ $^
