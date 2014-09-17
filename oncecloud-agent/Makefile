@@ -9,6 +9,8 @@ AGENT_LD=$(QUIET_LD)$(LD)
 CXXFLAGS=-g -Wall -Werror -c -Iinclude/
 LDFLAGS=-g -Wall -Werror
 
+BOOSTFLAGS=-lboost_filesystem -pthread
+
 CXXCOLOR="\033[34m"
 LINKCOLOR="\033[34;1m"
 SRCCOLOR="\033[33m"
@@ -39,4 +41,4 @@ Main.o: Main.cxx
 
 # Main
 $(AGENT): $(COMPONENT)
-	$(AGENT_LD) $(LDFLAGS) -o $@ $^
+	$(AGENT_LD) $(LDFLAGS) $(BOOSTFLAGS) -o $@ $^
