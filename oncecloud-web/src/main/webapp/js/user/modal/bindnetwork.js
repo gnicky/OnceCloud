@@ -69,7 +69,7 @@ $(document).ready(function () {
                 }
                 options = {
                     totalPages: totalp
-                }
+                };
                 $('#bindPS').bootstrapPaginator(options);
                 pageDisplayUpdate(page, totalp);
                 var tableStr = "";
@@ -88,8 +88,6 @@ $(document).ready(function () {
                     }
                 }
                 $('#vlanlist').html(tableStr);
-            },
-            error: function () {
             }
         });
     }
@@ -120,9 +118,9 @@ $(document).ready(function () {
             type: 'get',
             url: '/VnetAction/AddVM',
             data: {vnId: vnId, vmuuidStr: vmuuidStr},
-            dataType: 'text',
-            success: function (response) {
-            	if(response.isSuccess)
+            dataType: 'json',
+            success: function (obj) {
+            	if (obj.isSuccess)
                 	reloadList(1);
                 else {
 					bootbox.dialog({
@@ -138,8 +136,6 @@ $(document).ready(function () {
 						}
 					});
 				}
-            },
-            error: function () {
             }
         });
     }

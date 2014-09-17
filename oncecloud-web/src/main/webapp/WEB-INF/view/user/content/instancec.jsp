@@ -43,14 +43,14 @@
 				<tr>
 					<th width="4%"><!-- checkbox --></th>
 					<th width="12%">ID</th>
-					<th width="12%">名称</th>
+					<th width="10%">名称</th>
 					<th width="10%">状态</th>
-					<th width="8%">CPU</th>
-					<th width="8%">内存</th>
-					<th width="15%">网络</th>
-					<th width="15%">公网IP</th>
-					<th>距上次备份时间</th>
-					<th>运行时间</th>
+					<th width="6%">CPU</th>
+					<th width="6%">内存</th>
+					<th width="18%">网络</th>
+					<th width="14%">公网IP</th>
+					<th width="10%">上次备份时间</th>
+					<th width="10%">运行时间</th>
 				</tr>
 			</thead>
 			<tbody id="tablebody">

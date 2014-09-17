@@ -52,7 +52,7 @@ $(document).ready(function () {
                     return true;
             }
         }
-    }
+    };
     $('#bindPS').bootstrapPaginator(options);
     getInstanceList(1, 5, "");
 
@@ -71,7 +71,7 @@ $(document).ready(function () {
                 }
                 options = {
                     totalPages: totalp
-                }
+                };
                 $('#bindPS').bootstrapPaginator(options);
                 pageDisplayUpdate(page, totalp);
                 var tableStr = "";
@@ -89,8 +89,6 @@ $(document).ready(function () {
                     $('#alert').html('没有可选择的主机');
                 }
                 $('#instancelist').html(tableStr);
-            },
-            error: function () {
             }
         });
     }
@@ -120,10 +118,24 @@ $(document).ready(function () {
             type: 'get',
             url: '/VnetAction/AddVM',
             data: {vnId: vnId, vmuuidStr: vmuuidStr},
-            dataType: 'text',
-            success: function (response) {
-            },
-            error: function () {
+            dataType: 'json',
+            success: function (obj) {
+            	if (obj.isSuccess)
+                	reloadList(1);
+                else {
+					bootbox.dialog({
+						message : '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;每台主机只能绑定一个网络，请先解除网络</div>',
+						title : "提示",
+						buttons : {
+							main : {
+								label : "确定",
+								className : "btn-primary",
+								callback : function() {
+								}
+							}
+						}
+					});
+				}
             }
         });
     }

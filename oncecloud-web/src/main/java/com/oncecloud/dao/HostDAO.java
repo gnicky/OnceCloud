@@ -397,12 +397,11 @@ public class HostDAO {
 			try {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
-				host.setHostStatus(0);
 				Query query = session
-						.createQuery("delete from HostSR where hostUuid = '"
-								+ hostId + "'");
-				session.update(host);
+						.createQuery("delete from HostSR where hostUuid = :hostId");
+				query.setString("hostId", hostId);
 				query.executeUpdate();
+				session.delete(host);
 				this.getOverViewDAO().updateOverViewfieldNoTransaction(
 						"viewServer", false);
 				session.getTransaction().commit();

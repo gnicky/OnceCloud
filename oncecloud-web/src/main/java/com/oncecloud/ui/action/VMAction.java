@@ -137,6 +137,13 @@ public class VMAction {
 				user.getUserAllocate());
 	}
 
+	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
+	@ResponseBody
+	public void unbindNet(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVmManager().unbindNet(uuid, user);
+	}
+
 	@RequestMapping(value = "/BasicNetworkList", method = { RequestMethod.POST })
 	@ResponseBody
 	public String basicNetworkList(HttpServletRequest request) {
