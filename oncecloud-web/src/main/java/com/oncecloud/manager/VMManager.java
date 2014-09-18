@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -15,8 +16,10 @@ import org.springframework.stereotype.Component;
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
 import com.once.xenapi.Types;
+import com.once.xenapi.VDI;
 import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
+import com.once.xenapi.VMUtil;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FeeDAO;
@@ -1195,5 +1198,28 @@ public class VMManager {
 			this.getMessagePush().pushMessage(user.getUserId(),
 					Utilities.stickyToError("主机解绑网络失败"));
 		}
+	}
+	
+	public JSONArray getISOList(String poolUuid) {
+		JSONArray ja = new JSONArray();
+		Connection conn = this.getConstant().getConnectionFromPool(poolUuid);
+		Set<VDI> vdis = VMUtil.getISOs(conn);
+		for (VDI vdi : vdis) {
+			try {
+				String nameLabel = vdi.getNameLabel(conn);
+				if (nameLabel.contains(".iso")) {
+					String location = vdi.getLocation(conn);
+					String uuid = vdi.getUuid(conn);
+					JSONObject jo = new JSONObject();
+					jo.put("name", nameLabel);
+					jo.put("location", location);
+					jo.put("uuid", uuid);
+					ja.put(jo);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return ja;
 	}
 }
