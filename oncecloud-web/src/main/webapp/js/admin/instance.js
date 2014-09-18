@@ -61,7 +61,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
 
 $("#creatVMISO").on("click", function (event) {
 	event.preventDefault();
-    $('#InstanceModalContainer').load('instanceiso/create', '', function () {
+    $('#InstanceModalContainer').load('/instanceiso/create', '', function () {
         $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true
