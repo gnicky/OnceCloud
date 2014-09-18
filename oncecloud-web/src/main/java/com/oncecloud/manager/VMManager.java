@@ -1,6 +1,5 @@
 package com.oncecloud.manager;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import com.once.xenapi.VDI;
 import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
 import com.once.xenapi.VMUtil;
-import com.once.xenapi.VMUtil.DiskInfo;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FeeDAO;
@@ -1228,19 +1226,16 @@ public class VMManager {
 		return ja;
 	}
 
-	public void createVMByISO(String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
+	public void createVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
 		Connection conn = null;
 		try {
 			conn = this.getConstant().getConnectionFromPool(poolUuid);
-			Host host = Types.toHost(this.getAllocateHost(poolUuid, memory));
+			String hostUuid = this.getAllocateHost(poolUuid, memory);
 			// Get Disk
-			List<DiskInfo> diskList = new ArrayList<DiskInfo>();
 			SR sr = SR.getByUuid(conn, srUuid);
-			DiskInfo di = new DiskInfo(volumeSize, sr, sr.getType(conn));
-			diskList.add(di);
+			String type = sr.getType(conn);
 			// Create VM By ISO
-			VM vm = VMUtil.create(name, cpu, memory, conn, host, true, isoUuid, diskList);
-			vm.startOn(conn, host, false, true);
+			VM.createVMFromISO(vmUuid, name, cpu, memory, conn, hostUuid, isoUuid, volumeSize, srUuid, type);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
