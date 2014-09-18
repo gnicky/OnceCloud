@@ -1,5 +1,6 @@
 package com.oncecloud.manager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,11 +16,13 @@ import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
+import com.once.xenapi.SR;
 import com.once.xenapi.Types;
 import com.once.xenapi.VDI;
 import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
 import com.once.xenapi.VMUtil;
+import com.once.xenapi.VMUtil.DiskInfo;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FeeDAO;
@@ -1180,7 +1183,8 @@ public class VMManager {
 		if (vlan == null) {
 			String eip = this.getEipDAO().getEipIp(uuid);
 			if (eip != null) {
-				JSONObject jo = this.eipManager.unbindElasticIp(user.getUserId(), uuid, eip, "vm");
+				JSONObject jo = this.eipManager.unbindElasticIp(
+						user.getUserId(), uuid, eip, "vm");
 				if (jo.getBoolean("result")) {
 					result = this.setVlan(uuid, 1, user.getUserAllocate());
 				} else {
@@ -1199,13 +1203,14 @@ public class VMManager {
 					Utilities.stickyToError("主机解绑网络失败"));
 		}
 	}
-	
+
 	public JSONArray getISOList(String poolUuid) {
 		JSONArray ja = new JSONArray();
-		Connection conn = this.getConstant().getConnectionFromPool(poolUuid);
-		Set<VDI> vdis = VMUtil.getISOs(conn);
-		for (VDI vdi : vdis) {
-			try {
+		Connection conn = null;
+		try {
+			conn = this.getConstant().getConnectionFromPool(poolUuid);
+			Set<VDI> vdis = VMUtil.getISOs(conn);
+			for (VDI vdi : vdis) {
 				String nameLabel = vdi.getNameLabel(conn);
 				if (nameLabel.contains(".iso")) {
 					String location = vdi.getLocation(conn);
@@ -1216,10 +1221,28 @@ public class VMManager {
 					jo.put("uuid", uuid);
 					ja.put(jo);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return ja;
+	}
+
+	public void createVMByISO(String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
+		Connection conn = null;
+		try {
+			conn = this.getConstant().getConnectionFromPool(poolUuid);
+			Host host = Types.toHost(this.getAllocateHost(poolUuid, memory));
+			// Get Disk
+			List<DiskInfo> diskList = new ArrayList<DiskInfo>();
+			SR sr = SR.getByUuid(conn, srUuid);
+			DiskInfo di = new DiskInfo(volumeSize, sr, sr.getType(conn));
+			diskList.add(di);
+			// Create VM By ISO
+			VM vm = VMUtil.create(name, cpu, memory, conn, host, true, isoUuid, diskList);
+			vm.startOn(conn, host, false, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

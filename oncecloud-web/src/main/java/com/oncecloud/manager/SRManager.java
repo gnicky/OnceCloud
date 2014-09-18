@@ -2,6 +2,7 @@ package com.oncecloud.manager;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
+import com.once.xenapi.SR;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.HostSRDAO;
 import com.oncecloud.dao.LogDAO;
@@ -21,6 +23,7 @@ import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.Storage;
 import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
 
@@ -36,6 +39,7 @@ public class SRManager {
 	private LogDAO logDAO;
 	private RackDAO rackDAO;
 	private MessagePush messagePush;
+	private Constant constant;
 
 	private MessagePush getMessagePush() {
 		return messagePush;
@@ -89,6 +93,15 @@ public class SRManager {
 	@Autowired
 	private void setRackDAO(RackDAO rackDAO) {
 		this.rackDAO = rackDAO;
+	}
+
+	public Constant getConstant() {
+		return constant;
+	}
+
+	@Autowired
+	public void setConstant(Constant constant) {
+		this.constant = constant;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -322,5 +335,28 @@ public class SRManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError("存储更新失败"));
 		}
+	}
+	
+	public JSONArray getRealSRList(String poolUuid) {
+		JSONArray ja = new JSONArray();
+		Connection conn = null;
+		try {
+			conn = this.getConstant().getConnectionFromPool(poolUuid);
+			Map<SR, SR.Record> srList = SR.getAllRecords(conn);
+			for (SR sr : srList.keySet()) {
+				SR.Record record = srList.get(sr);		
+				String srType = record.type;
+				if (true) {
+					JSONObject jo = new JSONObject();
+					jo.put("type", srType);
+					jo.put("uuid", record.uuid);
+					jo.put("name", record.nameLabel);
+					ja.put(jo);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ja;
 	}
 }
