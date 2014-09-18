@@ -397,10 +397,7 @@ public class HostDAO {
 			try {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
-				Query query = session
-						.createQuery("delete from HostSR where hostUuid = :hostId");
-				query.setString("hostId", hostId);
-				query.executeUpdate();
+				this.deleteHostSR(hostId);
 				session.delete(host);
 				this.getOverViewDAO().updateOverViewfieldNoTransaction(
 						"viewServer", false);
@@ -414,6 +411,22 @@ public class HostDAO {
 			}
 		}
 		return result;
+	}
+	
+	public void deleteHostSR(String hostId) {
+		Session session = null;
+		try {
+			session = getSessionHelper().getMainSession();
+			Query query = session
+				.createQuery("delete from HostSR where hostUuid = :hostId");
+			query.setString("hostId", hostId);
+			query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
 	}
 
 	public boolean eject(OCHost host, String poolUuid, String masterUuid) {
