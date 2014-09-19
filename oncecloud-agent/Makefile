@@ -24,7 +24,8 @@ QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDC
 endif
 
 AGENT=agent
-COMPONENT=Main.o Request.o SetPasswordRequest.o
+COMPONENT=Main.o Request.o Response.o Handler.o \
+	SetPasswordRequest.o SetPasswordHandler.o
 
 all: everything
 clean:
@@ -39,12 +40,22 @@ everything: $(AGENT)
 Main.o: Main.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-Request.o: Request.cxx Request.h
+Request.o: Request.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-SetPasswordRequest.o: SetPasswordRequest.cxx SetPasswordRequest.h Request.h
+Response.o: Response.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Handler.o: Handler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordRequest.o: SetPasswordRequest.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordHandler.o: SetPasswordHandler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main
 $(AGENT): $(COMPONENT)
 	$(AGENT_LD) $(LDFLAGS) $(BOOSTFLAGS) -o $@ $^
+

@@ -1,13 +1,18 @@
 #include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include "Request.h"
 
 using namespace std;
 using namespace boost::property_tree;
 
-Request::Request(ptree & rawRequest)
-	:rawRequest(rawRequest)
+Request::Request(string rawRequest)
 {
-	this->SetRequestType(this->GetRawRequest().get<string>("requestType"));
+	ptree json;
+	stringstream stream(rawRequest);
+	read_json<ptree>(stream,json);
+	this->SetRawRequest(rawRequest);
+	this->SetJson(json);
+	this->SetRequestType(this->GetJson().get<string>("requestType"));
 }
 
 Request::~Request()
@@ -15,17 +20,17 @@ Request::~Request()
 
 }
 
-ptree & Request::GetRawRequest()
+string & Request::GetRawRequest()
 {
 	return this->rawRequest;
 }
 
-void Request::SetRawRequest(ptree & rawRequest)
+void Request::SetRawRequest(string rawRequest)
 {
 	this->rawRequest=rawRequest;
 }
 
-string Request::GetRequestType()
+string & Request::GetRequestType()
 {
 	return this->requestType;
 }
@@ -33,5 +38,15 @@ string Request::GetRequestType()
 void Request::SetRequestType(string requestType)
 {
 	this->requestType=requestType;
+}
+
+ptree & Request::GetJson()
+{
+	return this->json;
+}
+
+void Request::SetJson(ptree json)
+{
+	this->json=json;
 }
 

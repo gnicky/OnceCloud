@@ -8,17 +8,21 @@ using namespace boost::property_tree;
 class Request
 {
 public:
-	Request(ptree & rawRequest);
+	Request(string rawRequest);
 	virtual ~Request();
-	string GetRequestType();
+
+	string & GetRawRequest();
+	string & GetRequestType();
+	ptree & GetJson();
 
 protected:
-	ptree & GetRawRequest();
+	void SetRawRequest(string rawRequest);
+	void SetRequestType(string requestType);
+	void SetJson(ptree json);
 
 private:
-	ptree & rawRequest;
+	string rawRequest;
 	string requestType;
-	void SetRawRequest(ptree & rawRequest);
-	void SetRequestType(string requestType);
+	ptree json;
 };
 

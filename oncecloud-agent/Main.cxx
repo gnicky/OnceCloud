@@ -1,25 +1,47 @@
 #include <iostream>
 #include <string.h>
+
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
+#include "Handler.h"
+#include "SetPasswordHandler.h"
 #include "Request.h"
 #include "SetPasswordRequest.h"
+#include "Response.h"
 
 #define BUFFER_SIZE 1048576
 
 char RequestBuffer[BUFFER_SIZE];
 
-Request * ParseRequest(boost::property_tree::ptree & rawRequest)
+Request * ParseRequest(char * rawRequest)
 {
-	std::string requestType=rawRequest.get<std::string>("requestType");
+	std::stringstream stream(rawRequest);
+	boost::property_tree::ptree request;
+	boost::property_tree::read_json<boost::property_tree::ptree>(stream,request);
+	std::string requestType=request.get<std::string>("requestType");
 	if(requestType=="setPassword")
 	{
 		return new SetPasswordRequest(rawRequest);
 	}
-	return new Request(rawRequest);
+	return NULL;
+}
+
+Response * HandleRequest(Request * request)
+{
+	Handler * handler=NULL;
+	Response * response=NULL;
+	if(dynamic_cast<SetPasswordRequest *>(request)!=NULL)
+	{
+		handler=new SetPasswordHandler();
+	}
+	if(handler!=NULL)
+	{
+		response=handler->Handle(request);
+	}
+	delete handler;
+	return response;
 }
 
 int main(int argc, char * argv [])
@@ -31,32 +53,31 @@ int main(int argc, char * argv [])
         serialPort.set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
         serialPort.set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
         serialPort.set_option(boost::asio::serial_port::character_size(8));
+	delete ((int *)NULL);
 	while(true)
 	{
 		int requestLength;
-		boost::property_tree::ptree rawRequest;
 		boost::asio::read(serialPort,boost::asio::buffer(&requestLength,sizeof(int)));	
 		boost::asio::read(serialPort,boost::asio::buffer(RequestBuffer,requestLength),boost::asio::transfer_all());
-		std::stringstream requestStream(RequestBuffer);
-		boost::property_tree::read_json<boost::property_tree::ptree>(requestStream,rawRequest);
 
-		Request * request=ParseRequest(rawRequest);
+		Request * request=ParseRequest(RequestBuffer);
+		Response * response=HandleRequest(request);
 		if(dynamic_cast<SetPasswordRequest *>(request)!=NULL)
 		{
 			std::cout<<"Set Password Request"<<std::endl;
 			SetPasswordRequest * setPasswordRequest=dynamic_cast<SetPasswordRequest *>(request);
 			std::cout<<"User Name: "<<setPasswordRequest->GetUserName()<<std::endl;
 			std::cout<<"Password: "<<setPasswordRequest->GetPassword()<<std::endl;
-			response.put("responseType","setPassword");	
 		}
 		else
 		{
 			std::cout<<"Unknown request: "<<request->GetRequestType()<<std::endl;
 		}
 
-		boost::property_tree::ptree response;
+		cout<<(void *)(response)<<endl;
+		boost::property_tree::ptree responseJson;
 		std::stringstream responseStream;
-		boost::property_tree::write_json<boost::property_tree::ptree>(responseStream,response);
+		boost::property_tree::write_json<boost::property_tree::ptree>(responseStream,responseJson);
 		int responseLength=responseStream.str().size()+1;
 		boost::asio::write(serialPort,boost::asio::buffer(&responseLength,sizeof(int)));
 		boost::asio::write(serialPort,boost::asio::buffer(responseStream.str().c_str(),responseLength));
