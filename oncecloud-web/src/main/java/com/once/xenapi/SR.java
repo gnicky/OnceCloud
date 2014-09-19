@@ -45,6 +45,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.xmlrpc.XmlRpcException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * A storage repository
@@ -2026,5 +2028,24 @@ public class SR extends XenAPIObject {
 		Object result = response.get("Value");
 		return Types.toSetOfSR(result);
 	}
+	
+	//获取ISO列表
+		//ISOList  [ { isoid:xxxx, isoname:xxxx } , {....} ]
+		public static JSONArray getISOs(Connection connection, String uuid)throws BadServerResponse,
+		XenAPIException, XmlRpcException {
+			JSONArray ja = new JSONArray();
+			SR sr = SR.getByUuid(connection, uuid);
+			for(VDI vdi : sr.getVDIs(connection)){
+				VDI.Record record = vdi.getRecord(connection);
+				String isoUuid = record.uuid;
+				String isoName = record.nameLabel;
+				JSONObject jo = new JSONObject();
+				jo.put("isoid", isoUuid);
+				jo.put("isoname", isoName);
+				ja.put(jo);
+			}
+		return ja;	
+			
+		}
 	
 }

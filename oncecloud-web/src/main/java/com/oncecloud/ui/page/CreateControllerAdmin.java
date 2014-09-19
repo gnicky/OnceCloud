@@ -49,5 +49,10 @@ public class CreateControllerAdmin {
 	public ModelAndView createImage(HttpServletRequest request) {
 		return new ModelAndView("admin/create/createimage");
 	}
+
+	@RequestMapping(value = "/instanceiso/create", method = { RequestMethod.GET })
+	public ModelAndView createInstanceWithISO(HttpServletRequest request) {
+		return new ModelAndView("admin/create/createinstancewithiso");
+	}
 	
 }
