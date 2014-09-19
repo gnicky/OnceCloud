@@ -5,9 +5,22 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
+#include "Request.h"
+#include "SetPasswordRequest.h"
+
 #define BUFFER_SIZE 1048576
 
-char Buffer[BUFFER_SIZE];
+char RequestBuffer[BUFFER_SIZE];
+
+Request * ParseRequest(boost::property_tree::ptree & rawRequest)
+{
+	std::string requestType=rawRequest.get<std::string>("requestType");
+	if(requestType=="setPassword")
+	{
+		return new SetPasswordRequest(rawRequest);
+	}
+	return new Request(rawRequest);
+}
 
 int main(int argc, char * argv [])
 {
@@ -21,13 +34,34 @@ int main(int argc, char * argv [])
 	while(true)
 	{
 		int requestLength;
+		boost::property_tree::ptree rawRequest;
 		boost::asio::read(serialPort,boost::asio::buffer(&requestLength,sizeof(int)));	
-		boost::asio::read(serialPort,boost::asio::buffer(Buffer,requestLength),boost::asio::transfer_all());
-		std::stringstream stream;
-		stream<<Buffer;
-		boost::property_tree::ptree content;
-		boost::property_tree::read_json<boost::property_tree::ptree>(stream,content);
-		std::cout<<content.get<std::string>("requestType")<<std::endl;
+		boost::asio::read(serialPort,boost::asio::buffer(RequestBuffer,requestLength),boost::asio::transfer_all());
+		std::stringstream requestStream(RequestBuffer);
+		boost::property_tree::read_json<boost::property_tree::ptree>(requestStream,rawRequest);
+
+		Request * request=ParseRequest(rawRequest);
+		if(dynamic_cast<SetPasswordRequest *>(request)!=NULL)
+		{
+			std::cout<<"Set Password Request"<<std::endl;
+			SetPasswordRequest * setPasswordRequest=dynamic_cast<SetPasswordRequest *>(request);
+			std::cout<<"User Name: "<<setPasswordRequest->GetUserName()<<std::endl;
+			std::cout<<"Password: "<<setPasswordRequest->GetPassword()<<std::endl;
+			response.put("responseType","setPassword");	
+		}
+		else
+		{
+			std::cout<<"Unknown request: "<<request->GetRequestType()<<std::endl;
+		}
+
+		boost::property_tree::ptree response;
+		std::stringstream responseStream;
+		boost::property_tree::write_json<boost::property_tree::ptree>(responseStream,response);
+		int responseLength=responseStream.str().size()+1;
+		boost::asio::write(serialPort,boost::asio::buffer(&responseLength,sizeof(int)));
+		boost::asio::write(serialPort,boost::asio::buffer(responseStream.str().c_str(),responseLength));
+		
+		delete request;
 		ioService.run();
 	}
 	return 0;

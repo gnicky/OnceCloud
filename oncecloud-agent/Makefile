@@ -6,7 +6,7 @@ LD=g++
 AGENT_CXX=$(QUIET_CXX)$(CXX)
 AGENT_LD=$(QUIET_LD)$(LD)
 
-CXXFLAGS=-g -Wall -Werror -c -Iinclude/
+CXXFLAGS=-g -Wall -Werror -c
 LDFLAGS=-g -Wall -Werror
 
 BOOSTFLAGS=-lboost_filesystem -pthread
@@ -24,7 +24,7 @@ QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDC
 endif
 
 AGENT=agent
-COMPONENT=Main.o 
+COMPONENT=Main.o Request.o SetPasswordRequest.o
 
 all: everything
 clean:
@@ -37,6 +37,12 @@ everything: $(AGENT)
 
 # Component
 Main.o: Main.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Request.o: Request.cxx Request.h
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordRequest.o: SetPasswordRequest.cxx SetPasswordRequest.h Request.h
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main
