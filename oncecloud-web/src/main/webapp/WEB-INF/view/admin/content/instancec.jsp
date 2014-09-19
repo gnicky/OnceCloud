@@ -24,7 +24,7 @@
 					<span class="caret" style="margin-left:15px"></span>
 				</button>
 				<ul class="dropdown-menu" id="select-server">
-					<li><a id="hostall"><span class="glyphicon glyphicon-tasks"></span>全部</a></li>
+					<li><a id="hostall">全部</a></li>
 				</ul>
 			</div>
 			<div class="btn-group">
