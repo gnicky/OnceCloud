@@ -160,4 +160,20 @@ public class VMAction {
 				lm.getPage(), lm.getLimit(), lm.getSearch());
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/ISOList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String isoList(HttpServletRequest request, @RequestParam String poolUuid) {
+		JSONArray ja = this.getVmManager().getISOList(poolUuid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/ISOCreate", method = { RequestMethod.POST })
+	@ResponseBody
+	public void createWithISO(HttpServletRequest request, @RequestParam String pooluuid
+			, @RequestParam int cpu, @RequestParam int memory, @RequestParam String vmName
+			, @RequestParam String isouuid, @RequestParam String vmUuid, @RequestParam String diskuuid
+			, @RequestParam int volum) {
+		this.getVmManager().createVMByISO(vmUuid, isouuid, diskuuid, vmName, cpu, memory, volum, pooluuid);
+	}
 }

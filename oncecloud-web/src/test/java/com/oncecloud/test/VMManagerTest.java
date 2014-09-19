@@ -45,7 +45,7 @@ public class VMManagerTest {
 	@Test
 	public void testSRList() {
 		JSONArray ja = this.getSrManager().getRealSRList("ee35fa2e-0916-4f85-95ed-2f665df1d479");
-		System.out.println(ja);
+//		System.out.println(ja);
 	}
 	
 	@Test

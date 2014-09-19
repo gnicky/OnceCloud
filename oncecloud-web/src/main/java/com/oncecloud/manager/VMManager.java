@@ -727,51 +727,6 @@ public class VMManager {
 		return result;
 	}
 
-	public void createVM(String vmUuid, String tplUuid, int userId,
-			String vmName, int cpuCore, double memorySize, String pwd,
-			String poolUuid) {
-		Date startTime = new Date();
-		int memoryCapacity = (int) (memorySize * 1024);
-		JSONObject jo = doCreateVM(vmUuid, tplUuid, userId, vmName, cpuCore,
-				memoryCapacity, pwd, poolUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.主机.toString(),
-				"i-" + vmUuid.substring(0, 8)));
-		infoArray.put(Utilities.createLogInfo("配置", cpuCore + " 核， "
-				+ memorySize + " GB"));
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.映像.toString(),
-				"image-" + tplUuid.substring(0, 8)));
-		if (jo.getBoolean("isSuccess") == true) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.主机.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().editRowStatus(userId, vmUuid, "running",
-					"正常运行");
-			this.getMessagePush().editRowIP(userId, vmUuid, "基础网络",
-					jo.getString("ip"));
-			this.getMessagePush().editRowConsole(userId, vmUuid, "add");
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			infoArray.put(Utilities.createLogInfo("原因", jo.getString("error")));
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.主机.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().deleteRow(userId, vmUuid);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
-
 	private JSONObject doCreateVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpu, int memory, String pwd, String poolUuid) {
 		JSONObject jo = new JSONObject();
@@ -1211,11 +1166,11 @@ public class VMManager {
 			for (VDI vdi : vdis) {
 				String nameLabel = vdi.getNameLabel(conn);
 				if (nameLabel.contains(".iso")) {
-					String location = vdi.getLocation(conn);
+//					String location = vdi.getLocation(conn);
 					String uuid = vdi.getUuid(conn);
 					JSONObject jo = new JSONObject();
 					jo.put("name", nameLabel);
-					jo.put("location", location);
+//					jo.put("location", location);
 					jo.put("uuid", uuid);
 					ja.put(jo);
 				}
@@ -1226,18 +1181,102 @@ public class VMManager {
 		return ja;
 	}
 
+	public void createVM(String vmUuid, String tplUuid, int userId,
+			String vmName, int cpuCore, double memorySize, String pwd,
+			String poolUuid) {
+		Date startTime = new Date();
+		int memoryCapacity = (int) (memorySize * 1024);
+		JSONObject jo = doCreateVM(vmUuid, tplUuid, userId, vmName, cpuCore,
+				memoryCapacity, pwd, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.主机.toString(),
+				"i-" + vmUuid.substring(0, 8)));
+		infoArray.put(Utilities.createLogInfo("配置", cpuCore + " 核， "
+				+ memorySize + " GB"));
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.映像.toString(),
+				"image-" + tplUuid.substring(0, 8)));
+		if (jo.getBoolean("isSuccess") == true) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().editRowStatus(userId, vmUuid, "running",
+					"正常运行");
+			this.getMessagePush().editRowIP(userId, vmUuid, "基础网络",
+					jo.getString("ip"));
+			this.getMessagePush().editRowConsole(userId, vmUuid, "add");
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			infoArray.put(Utilities.createLogInfo("原因", jo.getString("error")));
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().deleteRow(userId, vmUuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
 	public void createVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
+		int memoryCapacity = (int) (memory * 1024);
+		Date startTime = new Date();
+		boolean result = doCreateVMByISO(vmUuid, isoUuid, srUuid, name, cpu, memoryCapacity, volumeSize, poolUuid);
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.主机.toString(),
+				"i-" + vmUuid.substring(0, 8)));
+		infoArray.put(Utilities.createLogInfo("配置", cpu + " 核， "
+				+ memory + " GB"));
+		if (result) {
+			OCLog log = this.getLogDAO().insertLog(1,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().editRowStatus(1, vmUuid, "running",
+					"正常运行");
+			this.getMessagePush().editRowConsole(1, vmUuid, "add");
+			this.getMessagePush().pushMessage(1,
+					Utilities.stickyToSuccess(log.toString()));
+		}
+	}
+	
+	private boolean doCreateVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
 		Connection conn = null;
+		boolean result = false;
+		boolean preCreate = false;
 		try {
-			conn = this.getConstant().getConnectionFromPool(poolUuid);
-			String hostUuid = this.getAllocateHost(poolUuid, memory);
-			// Get Disk
-			SR sr = SR.getByUuid(conn, srUuid);
-			String type = sr.getType(conn);
-			// Create VM By ISO
-			VM.createVMFromISO(vmUuid, name, cpu, memory, conn, hostUuid, isoUuid, volumeSize, srUuid, type);
+			preCreate = this.getVmDAO().preCreateVM(vmUuid, null,
+					1, name, null, null, memory,
+					cpu, VMManager.POWER_CREATE, 1, new Date());
+			if (preCreate) {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				String hostUuid = this.getAllocateHost(poolUuid, memory);
+				// Get Disk
+				SR sr = SR.getByUuid(conn, srUuid);
+				String type = sr.getType(conn);
+				// Create VM By ISO
+				VM.createVMFromISO(vmUuid, name, cpu, memory, conn, hostUuid, isoUuid, volumeSize, srUuid, type);
+				result = this.getVmDAO().updateVM(1, vmUuid, null,
+						VMManager.POWER_RUNNING, hostUuid, null);
+			}
 		} catch (Exception e) {
+			if (preCreate) {
+				this.getVmDAO().removeVM(1, vmUuid);
+			}
 			e.printStackTrace();
 		}
+		return result;
 	}
 }
