@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <%@ include file="../share/head.jsp"%>
-<link rel="stylesheet" href="${basePath}css/alarms.css" />
+<link rel="stylesheet" href="${basePath}css/alarm.css" />
 </head>
 <body class="cloud-body">
 	<%@ include file="../share/sidebar.jsp"%>

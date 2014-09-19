@@ -172,7 +172,8 @@ public class AliPayAction {
 					}
 				}
 			}
-			return "success";	//请不要修改或删除
+			return "success";
+			//请不要修改或删除
 		}else{//验证失败
 			return "fail";
 		}
