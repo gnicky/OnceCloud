@@ -351,6 +351,13 @@ public class VMManager {
 		}
 	}
 
+	public void adminDeleteVM(int userId, String uuid) {
+		OCVM ocvm = this.getVmDAO().getVM(uuid);
+		String hostUuid = ocvm.getHostUuid();
+		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		this.deleteVM(userId, uuid, poolUuid);
+	}
+	
 	public void deleteVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.doDeleteVM(userId, uuid, poolUuid);
@@ -948,9 +955,11 @@ public class VMManager {
 						.dateToUsed(ocvm.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", ocvm.getVmImportance());
+				User user = this.getUserDAO()
+						.getUser(ocvm.getVmUID());
 				jo.put("userName",
-						Utilities.encodeText(this.getUserDAO()
-								.getUser(ocvm.getVmUID()).getUserName()));
+						Utilities.encodeText(user.getUserName()));
+				jo.put("level", user.getUserLevel());
 				ja.put(jo);
 			}
 		}
@@ -1256,6 +1265,7 @@ public class VMManager {
 		Connection conn = null;
 		boolean result = false;
 		boolean preCreate = false;
+		boolean dbRollback = true;
 		try {
 			preCreate = this.getVmDAO().preCreateVM(vmUuid, null,
 					1, name, null, null, memory,
@@ -1267,15 +1277,23 @@ public class VMManager {
 				SR sr = SR.getByUuid(conn, srUuid);
 				String type = sr.getType(conn);
 				// Create VM By ISO
-				VM.createVMFromISO(vmUuid, name, cpu, memory, conn, hostUuid, isoUuid, volumeSize, srUuid, type);
-				result = this.getVmDAO().updateVM(1, vmUuid, null,
-						VMManager.POWER_RUNNING, hostUuid, null);
+				VM.Record record = VM.createVMFromISO(vmUuid, name, cpu, memory, conn, hostUuid, isoUuid, volumeSize, srUuid, type);
+				if (record != null) {
+					result = this.getVmDAO().updateVM(1, vmUuid, null,
+							VMManager.POWER_RUNNING, hostUuid, null);
+					String hostAddress = getHostAddress(hostUuid);
+					int port = getVNCPort(vmUuid, poolUuid);
+					NoVNC.createToken(vmUuid.substring(0, 8),
+							hostAddress, port);
+					dbRollback = false;
+				}
 			}
 		} catch (Exception e) {
-			if (preCreate) {
+			e.printStackTrace();
+		} finally {
+			if (dbRollback) {
 				this.getVmDAO().removeVM(1, vmUuid);
 			}
-			e.printStackTrace();
 		}
 		return result;
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,6 +204,7 @@ public class VMDAO {
 			if (importance != 6) {
 				criteria.add(Restrictions.eq("vmImportance", importance));
 			}
+			criteria.addOrder(Order.desc("createDate"));
 			vmList = criteria.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -679,8 +681,11 @@ public class VMDAO {
 		if (vm != null) {
 			Session session = null;
 			try {
-				String firewallId = this.getFirewallDAO()
-						.getDefaultFirewall(userId).getFirewallId();
+				String firewallId = null;
+				if (userId != 1) {
+					firewallId = this.getFirewallDAO()
+							.getDefaultFirewall(userId).getFirewallId();
+				}
 				vm.setVmPWD(vmPWD);
 				vm.setVmPower(vmPower);
 				vm.setHostUuid(hostUuid);

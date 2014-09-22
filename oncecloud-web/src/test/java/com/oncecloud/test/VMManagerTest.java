@@ -51,7 +51,7 @@ public class VMManagerTest {
 	@Test
 	public void createTest() {
 		String vmUuid = "3620ffa7-94c8-54b4-475c-7b95742d41f7";
-		String isoUuid = "2620ffa7-94c8-54b4-475c-7b95742d41f7";
+		String isoUuid = "0ed7f8eb-0fc6-fe9b-1a96-bd51c1b95c9e";
 		String srUuid = "a41a7317-5f25-4a8a-a63a-ee572e654dab";
 		String poolUuid = "ee35fa2e-0916-4f85-95ed-2f665df1d479";
 		this.getVmManager().createVMByISO(vmUuid, isoUuid, srUuid, "i-" + vmUuid.substring(0, 8), 1, 1024, 10, poolUuid);

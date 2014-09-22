@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
-<div class="content" id="platformcontent">
+<div class="content" id="platformcontent"  novnc="${vncServer}">
 	<div class="intro">
 		<h1>主机&nbsp;Instances</h1>
 		<p class="lead">
@@ -16,6 +16,7 @@
 				<ul class="dropdown-menu">
 					<li><a class="btn-forbidden" id="startup"><span class="glyphicon glyphicon-play"></span>启动</a></li>
 					<li><a class="btn-forbidden" id="shutdown"><span class="glyphicon glyphicon-stop"></span>关机</a></li>
+					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 					<li><a id="creatVMISO"><span class="glyphicon glyphicon-record"></span>新建</a></li>
 				</ul>
 			</div>

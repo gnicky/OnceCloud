@@ -68,6 +68,15 @@ public class VMAction {
 		this.getVmManager().doAdminShutDown(userId, uuid, force);
 	}
 
+	@RequestMapping(value = "/AdminDeleteVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public void vmAdminDelete(HttpServletRequest request,
+			@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVmManager().adminDeleteVM(userId, uuid);
+	}
+
 	@RequestMapping(value = "/VMDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vmDetail(HttpServletRequest request, @RequestParam String uuid) {
