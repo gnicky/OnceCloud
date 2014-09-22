@@ -5,11 +5,13 @@
 using namespace std;
 using namespace boost::property_tree;
 
-SetPasswordRequest::SetPasswordRequest(string rawRequest)
+SetPasswordRequest::SetPasswordRequest(string & rawRequest)
 	: Request(rawRequest)
 {
-	this->SetUserName(this->GetJson().get<string>("userName"));
-	this->SetPassword(this->GetJson().get<string>("password"));
+	string userName=this->GetJson().get<string>("userName");
+	string password=this->GetJson().get<string>("password");
+	this->SetUserName(userName);
+	this->SetPassword(password);
 }
 
 SetPasswordRequest::~SetPasswordRequest()
@@ -17,22 +19,22 @@ SetPasswordRequest::~SetPasswordRequest()
 
 }
 
-string SetPasswordRequest::GetUserName()
+string & SetPasswordRequest::GetUserName()
 {
 	return this->userName;
 }
 
-void SetPasswordRequest::SetUserName(string userName)
+void SetPasswordRequest::SetUserName(string & userName)
 {
 	this->userName=userName;
 }
 
-string SetPasswordRequest::GetPassword()
+string & SetPasswordRequest::GetPassword()
 {
 	return this->password;
 }
 
-void SetPasswordRequest::SetPassword(string password)
+void SetPasswordRequest::SetPassword(string & password)
 {
 	this->password=password;
 }

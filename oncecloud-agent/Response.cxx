@@ -20,7 +20,7 @@ string & Response::GetRawResponse()
 	return this->rawResponse;
 }
 
-void Response::SetRawResponse(string rawResponse)
+void Response::SetRawResponse(string & rawResponse)
 {
 	this->rawResponse=rawResponse;
 }
@@ -30,7 +30,7 @@ string & Response::GetResponseType()
 	return this->responseType;
 }
 
-void Response::SetResponseType(string responseType)
+void Response::SetResponseType(string & responseType)
 {
 	this->responseType=responseType;
 }
@@ -40,8 +40,17 @@ ptree & Response::GetJson()
 	return this->json;
 }
 
-void Response::SetJson(ptree json)
+void Response::SetJson(ptree & json)
 {
 	this->json=json;
+}
+
+void Response::BuildRawResponse()
+{
+	this->BuildJson();
+	stringstream stream;
+	write_json(stream,this->GetJson());
+	string rawResponse=stream.str();
+	this->SetRawResponse(rawResponse);
 }
 
