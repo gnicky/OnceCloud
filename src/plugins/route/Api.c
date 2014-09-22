@@ -34,15 +34,15 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * interface=request->GetHeader(request,"x-bws-interface");
+	const char * mac=request->GetHeader(request,"x-bws-mac");
 	const char * address=request->GetHeader(request,"x-bws-ip-address");
 	const char * netmask=request->GetHeader(request,"x-bws-netmask");
 
-	if(interface==NULL || address==NULL || netmask==NULL)
+	if(mac==NULL || address==NULL || netmask==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify Interface, IP Address, and Netmask.\n</Error>\n";
+			"<Error>\n\tPlease specify MAC, IP Address, and Netmask.\n</Error>\n";
 
 		response->StatusCode=400;
 		response->SetHeader(response,"Content-Type","application/xml");
@@ -50,7 +50,7 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 		return TRUE;
 	}
 
-	AddRoute(interface,address,netmask);
+	AddRoute(mac,address,netmask);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
@@ -60,15 +60,15 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * interface=request->GetHeader(request,"x-bws-interface");
+	const char * mac=request->GetHeader(request,"x-bws-mac");
 	const char * address=request->GetHeader(request,"x-bws-ip-address");
 	const char * netmask=request->GetHeader(request,"x-bws-netmask");
 
-	if(interface==NULL || address==NULL || netmask==NULL)
+	if(mac==NULL || address==NULL || netmask==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify Interface, IP Address, and Netmask.\n</Error>\n";
+			"<Error>\n\tPlease specify MAC, IP Address, and Netmask.\n</Error>\n";
 
 		response->StatusCode=400;
 		response->SetHeader(response,"Content-Type","application/xml");
@@ -76,7 +76,7 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 		return TRUE;
 	}
 
-	AddRoute(interface,address,netmask);
+	AddRoute(mac,address,netmask);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
@@ -86,13 +86,13 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * interface=request->GetHeader(request,"x-bws-interface");
+	const char * mac=request->GetHeader(request,"x-bws-mac");
 
-	if(interface==NULL)
+	if(mac==NULL)
 	{
 		char ErrorMessage[]=
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify Interface.\n</Error>\n";
+			"<Error>\n\tPlease specify MAC.\n</Error>\n";
 
 		response->StatusCode=400;
 		response->SetHeader(response,"Content-Type","application/xml");
@@ -100,10 +100,11 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 		return TRUE;
 	}
 
-	RemoveRoute(interface);
+	RemoveRoute(mac);
 
 	response->StatusCode=200;
 	response->SetContent(response,"");
 
 	return TRUE;
 }
+
