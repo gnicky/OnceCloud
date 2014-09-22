@@ -10,15 +10,15 @@ class SetPasswordRequest
 	: public Request
 {
 public:
-	SetPasswordRequest(string rawRequest);
+	SetPasswordRequest(string & rawRequest);
 	~SetPasswordRequest();
 
-	string GetUserName();
-	string GetPassword();
+	string & GetUserName();
+	string & GetPassword();
 
 protected:
-	void SetUserName(string userName);
-	void SetPassword(string password);	
+	void SetUserName(string & userName);
+	void SetPassword(string & password);	
 
 private:
 	string userName;

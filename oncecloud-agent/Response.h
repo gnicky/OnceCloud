@@ -16,9 +16,11 @@ public:
 	ptree & GetJson();
 
 protected:
-	void SetRawResponse(string rawResponse);
-	void SetResponseType(string responseType);
-	void SetJson(ptree json);
+	void SetRawResponse(string & rawResponse);
+	void SetResponseType(string & responseType);
+	void SetJson(ptree & json);
+	void BuildRawResponse();
+	virtual void BuildJson()=0;
 
 private:
 	string rawResponse;
