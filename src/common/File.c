@@ -112,7 +112,7 @@ int ReadFile(const char * fileName, char * fileContent)
 	int actualReadCount;
 	FILE * file=NULL;
 
-	file=fopen(fileName,"r");
+	file=fopen(fileName,"rb");
 	if(file==NULL)
 	{
 		WriteLog(LOG_ERR,"ReadFile: Cannot open file %s (%s)",fileName,strerror(errno));	
