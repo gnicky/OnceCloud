@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <link rel="stylesheet" href="${basePath}css/bwizard.css" />
 <script src="${basePath}js/bwizard.js"></script>
-<script src="${basePath}js/user/create/createinstance.js"></script>
-<div class="modal-dialog" style="width: 723px">
+<script src="${basePath}js/admin/create/createinstancewithiso.js"></script>
+<div class="modal-dialog" style="width: 1000px">
 	<div class="modal-content">
 		<div class="modal-header">
 			<h4 class="modal-title">
@@ -12,88 +12,66 @@
 		</div>
 		<div class="modal-body">
 			<div class="row" style="margin: 0; background-color: #cfeaf8">
-				<div class="col-md-12" style="padding: 0px">
+				<div class="col-md-9" style="width:60%; padding:0px">
 					<div id="wizard" class="wizard">
 						<ol>
 							<li class="li-disable">基本信息</li>
 							<li class="li-disable">安装文件</li>
 							<li class="li-disable">CPU和内存</li>
 							<li class="li-disable">硬盘设置</li>
-							<li class="li-disable">摘要概览</li>
 						</ol>
 						<div>
 							<div class="wizard-inner">
-								<div class="item">
-									<div class="control-label">主机名称</div>
-									<div class="controls">
-										<input type="text" id="instance_name" name="instance_name"
-											value="">
+								<form id="basicinfo-form">
+									<div class="item">
+										<div class="control-label">主机名称</div>
+										<div class="controls">
+											<input type="text" id="instance_name" name="instance_name"
+												value="">
+										</div>
 									</div>
-								</div>
-								<div class="once-toolbar" style="margin: 0 0 10px 0">
-									<div class="provider">选择资源池</div>
-									<div class="toolbar-right">
-										<table>
-											<tr>
-												<td>页数&nbsp;<a id="currentPtpl"></a>&nbsp;/&nbsp;<a
-													id="totalPtpl"></a></td>
-												<td style="padding-left: 10px">
-													<div class="pagination-small">
-														<ul class="pagination" id="tplpage"
-															style="display: inline"></ul>
-													</div>
-												</td>
-											</tr>
-										</table>
+								</form>
+								<div class="hty-div">
+									<div class="hty-label">
+										<div class="provider">选择资源池</div>
 									</div>
+									<div class="poollist" id="poollist"></div>
 								</div>
-								<div class="poollist" id="poollist"></div>
 							</div>
 							<div class="wizard-action">
-								<button class="btn btn-default btn-next" type="button">下一步</button>
+								<button class="btn btn-default btn-first-next" type="button">下一步</button>
 							</div>
 						</div>
 						<div>
 							<div class="wizard-inner">
-								<div class="once-toolbar" style="margin: 0 0 10px 0">
-									<div class="provider">选择镜像文件</div>
-									<div class="toolbar-right">
-										<table>
-											<tr>
-												<td>页数&nbsp;<a id="currentPtpl"></a>&nbsp;/&nbsp;<a
-													id="totalPtpl"></a></td>
-												<td style="padding-left: 10px">
-													<div class="pagination-small">
-														<ul class="pagination" id="tplpage"
-															style="display: inline"></ul>
-													</div>
-												</td>
-											</tr>
-										</table>
+								<div class="hty-div">
+									<div class="hty-label">
+										<div class="provider">选择镜像文件</div>
+										<div style="padding-left:120px"><img src="img/loading.gif" id="loadinggif" class="hty-loadpic"></div>
+										<div class="hty-select-con" id="select-iso">
+											<select name="isoselect" class="hty-dropdown" id="isoselect">
+											</select>
+										</div>
 									</div>
 								</div>
-								<div class="iamgelist" id="iamgelist"></div>
 							</div>
 							<div class="wizard-action">
 								<button class="btn btn-default btn-back" type="button">上一步</button>
-								<button class="btn btn-default btn-next" type="button">下一步</button>
+								<button class="btn btn-default btn-second-next" type="button">下一步</button>
 							</div>
 						</div>
-						<div>
-							<div class="wizard-inner">
+					<div>
+							<div class="wizard-inner" style="margin-left:100px">
 								<h6>CPU</h6>
 								<div class="cpu options">
 									<div class="types-options cpu-options selected" core="1">
 										1核</div>
 									<div class="types-options cpu-options " core="2">2核</div>
 									<div class="types-options cpu-options " core="4">4核</div>
-									<div class="types-options cpu-options " core="8">8核</div>
 								</div>
-								<h6>内存</h6>
+								<h6  style="margin-top:50px">内存</h6>
 								<div class="memory options">
-									<div class="types-options memory-options" capacity="0.5">
-										512MB</div>
-									<div class="types-options memory-options selected" capacity="1">
+									<div class="types-options memory-options selected" style="line-height: 32px;" capacity="1">
 										1G</div>
 									<div class="types-options memory-options" capacity="2">
 										2G</div>
@@ -105,12 +83,6 @@
 										8G</div>
 									<div class="types-options memory-options" capacity="12">
 										12G</div>
-									<div class="types-options memory-options disabled"
-										capacity="16">16G</div>
-									<div class="types-options memory-options disabled"
-										capacity="24">24G</div>
-									<div class="types-options memory-options disabled"
-										capacity="32">32G</div>
 								</div>
 							</div>
 							<div class="wizard-action">
@@ -120,78 +92,68 @@
 						</div>
 						<div>
 							<div class="wizard-inner">
-								<div class="once-toolbar" style="margin: 0 0 10px 0">
-									<div class="provider">选择硬盘</div>
-									<div class="toolbar-right">
-										<table>
-											<tr>
-												<td>页数&nbsp;<a id="currentPtpl"></a>&nbsp;/&nbsp;<a
-													id="totalPtpl"></a></td>
-												<td style="padding-left: 10px">
-													<div class="pagination-small">
-														<ul class="pagination" id="tplpage"
-															style="display: inline"></ul>
-													</div>
-												</td>
-											</tr>
-										</table>
+								<div class="hty-div">
+									<div class="hty-label">
+										<div class="provider">选择硬盘</div>
 									</div>
-								</div>
-								<div class="volumelist" id="volumelist"></div>
-								<div class="item">
-									<div class="control-label">容量</div>
-									<div class="controls size">
-										<div id="slider" style="width: 320px; display: inline-block"></div>
+									<div style="padding-left:120px"><img src="img/loading.gif" id="loadinggifdisk" class="hty-loadpic"></div>
+									<div class="volumelist" id="volumelist"></div>
+									<div class="hty-label">
+											<div class="provider">容量</div>
+									</div>
+									<div class="controls size" style="margin-left:10px">
+										<div id="slider" style="width: 319px; display: inline-block"></div>
 										<input id="size" type="text" class="mini" value="10"
 											style="margin-left: 10px"> <span class="help inline">GB</span>
-										<span class="help">10GB - 500GB</span>
+										<br />
+										<span class="help" style="margin-left:-10px">10GB</span>
+										<span class="help" style="margin-left:235px">200GB</span>
 									</div>
 								</div>
 							</div>
 							<div class="wizard-action">
 								<button class="btn btn-default btn-back" type="button">上一步</button>
-								<button class="btn btn-default btn-next" type="button">下一步</button>
+								<button id="createvmAction" class="btn btn-primary btn-create"
+									type="button">创建</button>
 							</div>
 						</div>
-						<div>
-							<form id="basicinfo-form">
-								<div class="wizard-inner">
-									<div class="item">
-										<div class="control-label">主机名称</div>
-										<div class="controls"></div>
-									</div>
-									<div class="item">
-										<div class="control-label">安装源</div>
-										<div class="controls"></div>
-									</div>
-									<div class="item keypair">
-										<div class="control-label">资源池</div>
-										<div class="controls"></div>
-									</div>
-									<div class="item passwd" style="">
-										<div class="control-label">CPU</div>
-										<div class="controls"></div>
-									</div>
-									<div class="item passwd" style="">
-										<div class="control-label">内存</div>
-										<div class="controls"></div>
-									</div>
-									<div class="item passwd" style="">
-										<div class="control-label">硬盘</div>
-										<div class="controls"></div>
-									</div>
-									<div class="item passwd" style="">
-										<div class="control-label">存储大小</div>
-										<div class="controls"></div>
-									</div>
-								</div>
-								<div class="wizard-action">
-									<button class="btn btn-default btn-back" type="button">上一步</button>
-									<button id="createvmAction" class="btn btn-primary btn-create"
-										type="button">创建</button>
-								</div>
-							</form>
-						</div>
+					</div>
+				</div>
+				<div class="col-md-3" style="width:35%">
+					<div class="illustrate">
+						<h4>配置详情</h4>
+						<table class="table table-bordered once-table" style="width:350px">
+							<tbody>
+								<tr>
+									<td>主机名称</td>
+									<td id="htyinstance"></td>
+								</tr>
+								<tr>
+									<td>资源池</td>
+									<td id="htypool" pooluuid=""></td>
+								</tr>
+								<tr>
+									<td>镜像文件</td>
+									<td id="htyiso" isouuid=""></td>
+								</tr>
+								<tr>
+									<td>CPU</td>
+									<td id="htycore" cpu="1">1&nbsp;核</td>
+								</tr>
+								<tr>
+									<td>内存</td>
+									<td id="htycap" cap="1">1&nbsp;G</td>
+								</tr>
+								<tr>
+									<td>挂载存储</td>
+									<td id="htystorage" diskuuid=""></td>
+								</tr>
+								<tr>
+									<td>硬盘大小</td>
+									<td id="htyvolum" volum="10">10G</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>

@@ -6,10 +6,11 @@ LD=g++
 AGENT_CXX=$(QUIET_CXX)$(CXX)
 AGENT_LD=$(QUIET_LD)$(LD)
 
-CXXFLAGS=-g -Wall -Werror -c -Iinclude/
+CXXFLAGS=-g -Wall -Werror -c
 LDFLAGS=-g -Wall -Werror
 
 BOOSTFLAGS=-lboost_filesystem -pthread
+LIBFLAGS=-lcrypt
 
 CXXCOLOR="\033[34m"
 LINKCOLOR="\033[34;1m"
@@ -24,7 +25,8 @@ QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDC
 endif
 
 AGENT=agent
-COMPONENT=Main.o 
+COMPONENT=Main.o Request.o Response.o Handler.o \
+	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o
 
 all: everything
 clean:
@@ -39,6 +41,25 @@ everything: $(AGENT)
 Main.o: Main.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
+Request.o: Request.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Response.o: Response.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Handler.o: Handler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordRequest.o: SetPasswordRequest.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordResponse.o: SetPasswordResponse.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordHandler.o: SetPasswordHandler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
 # Main
 $(AGENT): $(COMPONENT)
-	$(AGENT_LD) $(LDFLAGS) $(BOOSTFLAGS) -o $@ $^
+	$(AGENT_LD) $(LDFLAGS) $(BOOSTFLAGS) $(LIBFLAGS) -o $@ $^
+

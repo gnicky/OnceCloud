@@ -598,7 +598,7 @@ public class RouterManager {
 				JSONObject delJo = new JSONObject();
 				delJo.put("subnet", subnet);
 				delJo.put("netmask", netmask);
-				Host.delSubnet(c, url, delJo);
+				Host.delSubnet(c, url, delJo.toString());
 			}
 			this.getVnetDAO().unlinkRouter(vnetUuid);
 			this.getVmManager().unAssginIpAddress(c, vnetUuid);

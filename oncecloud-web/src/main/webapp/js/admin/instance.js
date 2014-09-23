@@ -26,7 +26,6 @@ function removeAllCheck() {
 function allDisable() {
     $("#startup").addClass('btn-forbidden');
     $("#shutdown").addClass('btn-forbidden');
-    $("#restart").addClass('btn-forbidden');
     $("#destroy").addClass('btn-forbidden');
 }
 
@@ -37,7 +36,9 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
     var process = 0;
     var stopped = 0;
     var total = 0;
+    var level = 0;
     $('input[name="vmrow"]:checked').each(function () {
+    	level += $(this).attr("level");
         var stateicon = $(this).parent().parent().find('[name="stateicon"]');
         if (stateicon.hasClass('icon-running')) {
             running++;
@@ -49,7 +50,9 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         total++;
     });
     if (total != 0 && process == 0) {
-        $("#destroy").removeClass('btn-forbidden');
+    	if (type == "instance" && level == 0) {
+	        $("#destroy").removeClass('btn-forbidden');
+    	}
         if (running > 0 && stopped == 0) {
             $("#shutdown").removeClass('btn-forbidden');
             $("#restart").removeClass('btn-forbidden');
@@ -140,7 +143,7 @@ function getInfoList() {
 
 function showbox(type) {
     var infoList = getInfoList();
-    var infoArray = new Array("启动主机", "关闭主机");
+    var infoArray = new Array("启动主机", "关闭主机", "销毁主机");
     var showMessage = '';
     var showTitle = '';
     if (type == 1) {
@@ -171,7 +174,9 @@ function showbox(type) {
                         } else if (type == 1) {
                             var force = $('#force')[0].checked;
                             shutdownVM(uuid, force);
-                        }
+                        } else if (type == 2) {
+                            destroyVM(uuid);
+                        } 
                     });
                     removeAllCheck();
                 }
@@ -195,6 +200,11 @@ $('#startup').on('click', function (event) {
 $('#shutdown').on('click', function (event) {
     event.preventDefault();
     showbox(1);
+});
+
+$('#destroy').on('click', function (event) {
+    event.preventDefault();
+    showbox(2);
 });
 
 function loadList(action, page, limit, str) {
@@ -224,6 +234,9 @@ function loadList(action, page, limit, str) {
                 var state = obj.state;
                 var showuuid = str + vmuuid.substring(0, 8);
                 var showstr = "<a class='id'>" + showuuid + '</a>';
+                if (obj.level == 0) {
+                	showstr = showstr + '<a class="console" data-uuid=' + vmuuid + '><img src="../img/user/console.png"></a>';
+                }
                 var iconStr = new Array("stopped", "running", "process", "process", "process", "process", "process");
                 var nameStr = new Array("已关机", "正常运行", "创建中", "销毁中", "启动中", "关机中", "重启中");
                 var stateStr = '<td><span class="icon-status icon-' + iconStr[state] + '" name="stateicon">'
@@ -265,7 +278,7 @@ function loadList(action, page, limit, str) {
 
                 }
                 starArray += '</ul></div>';
-                var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow"></td><td name="console">' + showstr + '</td><td name="vmname">'
+                var thistr = '<tr rowid="' + vmuuid + '"><td class="rcheck"><input type="checkbox" name="vmrow" level="'+obj.level+'"></td><td name="console">' + showstr + '</td><td name="vmname">'
                     + vmName + '</td>' + stateStr + '<td id="vmimportance" star="' + obj.importance + '">' + starArray + '</td><td name="userName">' + userName + '</td><td name="cpuCore">'
                     + cpu + '</td><td name="memoryCapacity">'
                     + memory + '</td><td name="sip">' + network + '</td><td name="createtime" class="time">' + decodeURIComponent(obj.createdate) + '</td></tr>';
@@ -408,3 +421,27 @@ $(function () {
     }
 });
 
+$('#tablebody').on('click', '.console', function (event) {
+    event.preventDefault();
+    var uuid = $(this).data("uuid");
+    var vnc = $('#platformcontent').attr("novnc");
+    var token = uuid.substring(0, 8);
+    var url = vnc + "console.html?id=" + token;
+    window.open(url, "novnc", 'height=600, width=810, top=0, left=0');
+});
+
+function destroyVM(uuid) {
+    var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
+    var thisicon = thistr.find('[name="stateicon"]');
+    thisicon.removeClass("icon-stopped");
+    thisicon.removeClass("icon-running");
+    thisicon.addClass('icon-process');
+    thistr.find('[name="stateword"]').text('销毁中');
+    console.log(uuid);
+    $.ajax({
+        type: 'get',
+        url: '/VMAction/AdminDeleteVM',
+        data: {uuid: uuid},
+        dataType: 'json'
+    });
+}

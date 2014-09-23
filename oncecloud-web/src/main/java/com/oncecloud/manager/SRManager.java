@@ -346,11 +346,13 @@ public class SRManager {
 			for (SR sr : srList.keySet()) {
 				SR.Record record = srList.get(sr);		
 				String srType = record.type;
-				if (true) {
+				if (srType.equals("mfs") || srType.equals("ocfs2") || srType.equals("gpfs")) { 
 					JSONObject jo = new JSONObject();
 					jo.put("type", srType);
 					jo.put("uuid", record.uuid);
 					jo.put("name", record.nameLabel);
+					jo.put("size", record.physicalSize);
+					System.out.println(record.physicalSize);
 					ja.put(jo);
 				}
 			}
