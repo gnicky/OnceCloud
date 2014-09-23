@@ -288,7 +288,7 @@ public class ImageDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			image = new Image(imageUuid, imageName, imagePwd, imageUID, 20,
-					imagePlatform, 1, imageServer, imageDesc, new Date());
+					imagePlatform, 1, imageServer, imageDesc, new Date(), null);
 			image.setPreAllocate(0);
 			session.saveOrUpdate(image);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(imageUID,
