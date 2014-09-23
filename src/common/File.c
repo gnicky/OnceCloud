@@ -165,7 +165,7 @@ int WriteFile(const char * fileName, const char * fileContent)
 	int expectedWriteCount;
 	int actualWriteCount;
 
-	file=fopen(fileName,"w");
+	file=fopen(fileName,"wb");
 	if(file==NULL)
 	{
 		WriteLog(LOG_ERR,"WriteFile: Cannot open file %s (%s)",fileName,strerror(errno));
