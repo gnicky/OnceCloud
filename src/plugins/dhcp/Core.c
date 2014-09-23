@@ -3,6 +3,7 @@
 
 #include "DhcpConfiguration.h"
 #include "Type.h"
+#include "Logger.h"
 
 int FindHost(struct DhcpConfiguration * configuration, const char * hardwareAddress)
 {
@@ -11,9 +12,11 @@ int FindHost(struct DhcpConfiguration * configuration, const char * hardwareAddr
 	{
 		if(strcmp(configuration->HostConfiguration[position].HardwareAddress,hardwareAddress)==0)
 		{
+			WriteLog(LOG_NOTICE,"DHCP.FindHost: mac=%s, position=%d",hardwareAddress,position);
 			return position;
 		}
 	}
+	WriteLog(LOG_NOTICE,"DHCP.FindHost: mac=%s, not found",hardwareAddress);
 	return -1;
 }
 
@@ -38,9 +41,11 @@ int FindSubnet(struct DhcpConfiguration * configuration, const char * subnetAddr
 		if(strcmp(configuration->SubnetConfiguration[position].SubnetAddress,subnetAddress)==0
 			&& strcmp(configuration->SubnetConfiguration[position].Netmask,netmask)==0)
 		{
+			WriteLog(LOG_NOTICE,"DHCP.FindSubnet: subnet=%s, mac=%s, position=%d",subnetAddress,netmask,position);
 			return position;
 		}
 	}
+	WriteLog(LOG_NOTICE,"DHCP.FindSubnet: subnet=%s, mac=%s, not found",subnetAddress,netmask,position);
 	return -1;
 }
 
@@ -63,10 +68,12 @@ int AddOrUpdateSubnet(struct DhcpConfiguration * configuration, const char * sub
 	int position=FindSubnet(configuration,subnetAddress,netmask);
 	if(position==-1)
 	{
+		WriteLog(LOG_NOTICE,"DHCP.AddOrUpdateSubnet: Add new subnet");
 		position=configuration->SubnetConfigurationCount;
 		configuration->SubnetConfigurationCount++;
 	}
 
+	WriteLog(LOG_NOTICE,"DHCP.AddOrUpdateSubnet: Updating existing subnet");
 	strcpy(configuration->SubnetConfiguration[position].SubnetAddress,subnetAddress);
 	strcpy(configuration->SubnetConfiguration[position].Netmask,netmask);
 	strcpy(configuration->SubnetConfiguration[position].Routers,routers);
@@ -87,6 +94,7 @@ int RemoveSubnet(struct DhcpConfiguration * configuration, const char * subnetAd
 
 	if(position!=-1)
 	{
+		WriteLog(LOG_NOTICE,"DHCP.RemoveSubnet: Removing subnet");
 		for(i=position+1;i<configuration->SubnetConfigurationCount;i++)
 		{
 			strcpy(configuration->SubnetConfiguration[i-1].SubnetAddress,configuration->SubnetConfiguration[i].SubnetAddress);
@@ -102,6 +110,7 @@ int RemoveSubnet(struct DhcpConfiguration * configuration, const char * subnetAd
 		configuration->SubnetConfigurationCount--;
 	}
 
+	WriteLog(LOG_NOTICE,"DHCP.RemoveSubnet: Cannot find subnet.");
 	return TRUE;
 }
 
