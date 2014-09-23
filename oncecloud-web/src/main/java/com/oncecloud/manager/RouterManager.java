@@ -574,24 +574,59 @@ public class RouterManager {
 		}
 		return result;
 	}
-
-	public JSONObject linkVnetToRouter(int userId, String vnUuid,
-			String rtUuid, int net, int gate, int start, int end, int dhcpState) {
+	
+	public JSONObject doUnlinkRouter(String vnetUuid, int userId) {
 		JSONObject result = new JSONObject();
 		result.put("result", false);
 		try {
-			logger.info("Link to Router: Router [rt-" + rtUuid.substring(0, 8)
-					+ "] Vnet [vn-" + vnUuid.substring(0, 8) + "]");
+			logger.info("Unlink to Router: Vnet [vn-" + vnetUuid.substring(0, 8) + "]");
 			Connection c = this.getConstant().getConnection(userId);
-			VM vm = VM.getByUuid(c, rtUuid);
+			Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
+			String vifUuid = vnet.getVifUuid();
+			String vifMac = vnet.getVifMac();
+			String routerUuid = vnet.getVnetRouter();
+			Router router = this.getRouterDAO().getAliveRouter(routerUuid);
+			VM routerVm = VM.getByUuid(c, routerUuid);
+			routerVm.destroyVIF(c, Types.toVIF(vifUuid));
+			logger.info("Delete VIF: UUID [vif-" + vifUuid.substring(0, 8) + "]");
+			String url = router.getRouterIP() + ":9090";
+			boolean delEthResult = Host.routeDelEth(c, url, vifMac);
+			logger.info("Delete Ethernet: Mac [" + vifMac + "] Result [" + delEthResult + "]");
+			if (vnet.getDhcpStatus() == 1) {
+				String subnet = "192.168." + vnet.getVnetNet() + ".0";
+				String netmask = "255.255.255.0";
+				JSONObject delJo = new JSONObject();
+				delJo.put("subnet", subnet);
+				delJo.put("netmask", netmask);
+				Host.delSubnet(c, url, delJo);
+			}
+			this.getVnetDAO().unlinkRouter(vnetUuid);
+			this.getVmManager().unAssginIpAddress(c, vnetUuid);
+			result.put("result", true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public JSONObject doLinkRouter(int userId, String vnetUuid,
+			String routerUuid, int net, int gate, int start, int end, int dhcpState) {
+		JSONObject result = new JSONObject();
+		result.put("result", false);
+		try {
+			logger.info("Link to Router: Router [rt-" + routerUuid.substring(0, 8)
+					+ "] Vnet [vn-" + vnetUuid.substring(0, 8) + "]");
+			Connection c = this.getConstant().getConnection(userId);
+			VM vm = VM.getByUuid(c, routerUuid);
 			String mac = Utilities.randomMac();
 			VIF vif = VIF.createBindToPhysicalNetwork(c, vm, "ovs0", mac);
-			Vnet vnet = this.getVnetDAO().getVnet(vnUuid);
+			String vifUuid = vif.getUuid(c);
+			Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
 			vm.setTag(c, vif, String.valueOf(vnet.getVnetID()));
 			String eth = vm.getVIFRecord(c, vif).device;
 			logger.info("Create VIF: Mac [" + mac + "] Ethernet [" + eth + "]");
 			if (!eth.equals("")) {
-				String routerIp = this.getRouterDAO().getRouter(rtUuid)
+				String routerIp = this.getRouterDAO().getRouter(routerUuid)
 						.getRouterIP();
 				String url = routerIp + ":9090";
 				String subnet = "192.168." + net + ".0";
@@ -599,7 +634,7 @@ public class RouterManager {
 				String gateway = "192.168." + net + "." + gate;
 				logger.info("Configure Ethernet: URL [" + url + "] Gateway ["
 						+ gateway + "] Netmask [" + netmask + "]");
-				boolean addEthResult = Host.routeAddEth(c, url, eth, gateway,
+				boolean addEthResult = Host.routeAddEth(c, url, mac, gateway,
 						netmask);
 				logger.info("Configure Ethernet Result: " + addEthResult);
 				if (addEthResult) {
@@ -612,13 +647,13 @@ public class RouterManager {
 								+ rangeStart + "] RangeEnd [" + rangeEnd + "]");
 						addSubnetResult = RouterManager.addSubnet(c, url,
 								subnet, netmask, gateway, rangeStart, rangeEnd);
-						this.getVmManager().assginIpAddress(c, url, subnet, vnUuid);
+						this.getVmManager().assginIpAddress(c, url, subnet, vnetUuid);
 						logger.info("Configure Subnet Result: "
 								+ addSubnetResult);
 					}
 					if (addSubnetResult) {
-						this.getVnetDAO().linkToRouter(vnUuid, rtUuid, net,
-								gate, start, end, dhcpState, mac);
+						this.getVnetDAO().linkToRouter(vnetUuid, routerUuid, net,
+								gate, start, end, dhcpState, vifUuid, mac);
 						result.put("result", true);
 					}
 				}

@@ -403,7 +403,7 @@ public class VnetDAO {
 	 */
 	public boolean linkToRouter(String vnetuuid, String routerUuid,
 			Integer net, Integer gate, Integer start, Integer end,
-			Integer dhcpStatus, String mac) {
+			Integer dhcpStatus, String vifUuid, String vifMac) {
 		boolean result = false;
 		Session session = null;
 		try {
@@ -411,7 +411,7 @@ public class VnetDAO {
 			session.beginTransaction();
 			String queryString = "update Vnet set vnetNet = :net, vnetGate = :gate, "
 					+ "vnetStart = :start, vnetEnd = :end, dhcpStatus = :status, "
-					+ "vnetRouter = :routerid, routerMac = :routermac where vnetUuid = :uuid";
+					+ "vnetRouter = :routerid, vifUuid = :vifuuid, vifMac = :vifMac where vnetUuid = :uuid";
 			Query query = session.createQuery(queryString);
 			query.setInteger("net", net);
 			query.setInteger("gate", gate);
@@ -420,7 +420,8 @@ public class VnetDAO {
 			query.setInteger("status", dhcpStatus);
 			query.setString("uuid", vnetuuid);
 			query.setString("routerid", routerUuid);
-			query.setString("routermac", mac);
+			query.setString("vifuuid", vifUuid);
+			query.setString("vifMac", vifMac);
 			query.executeUpdate();
 			session.getTransaction().commit();
 			result = true;
@@ -439,14 +440,14 @@ public class VnetDAO {
 	 * @param vnetuuid
 	 * @return
 	 */
-	public boolean unLinkToRouter(String vnetuuid) {
+	public boolean unlinkRouter(String vnetuuid) {
 		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "update Vnet set vnetNet = null, vnetGate = null, "
-					+ "vnetStart = null, vnetEnd = null, dhcpStatus = 0, vnetRouter = null "
+					+ "vnetStart = null, vnetEnd = null, dhcpStatus = 0, vnetRouter = null, vifUuid = null, vifMac = null "
 					+ "where vnetUuid = :uuid";
 			Query query = session.createQuery(queryString);
 			query.setString("uuid", vnetuuid);

@@ -33,19 +33,10 @@
 
 package com.once.xenapi;
 
-import com.once.xenapi.Types.BadServerResponse;
-import com.once.xenapi.Types.VersionException;
-import com.once.xenapi.Types.XenAPIException;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
-
-import org.apache.xmlrpc.XmlRpcException;
 
 /**
  * Data sources for logging in RRDs

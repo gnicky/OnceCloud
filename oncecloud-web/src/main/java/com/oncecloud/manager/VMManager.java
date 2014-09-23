@@ -1173,25 +1173,43 @@ public class VMManager {
 			}
 		}
 	}
+	
+	public void unAssginIpAddress(Connection c, String vnUuid) {
+		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
+		if (vmList != null) {
+			try {
+				for (OCVM vm : vmList) {
+					vm.setVmIP(null);
+					this.getVmDAO().updateVM(vm);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-	public void unbindNet(String uuid, User user) {
+	public JSONObject unbindNet(String uuid, User user) {
+		JSONObject jo = new JSONObject();
 		OCVM vm = this.getVmDAO().getVM(uuid);
 		String vlan = vm.getVmVlan();
 		boolean result = false;
 		if (vlan == null) {
 			String eip = this.getEipDAO().getEipIp(uuid);
 			if (eip != null) {
-				JSONObject jo = this.eipManager.unbindElasticIp(
+				JSONObject unbind = this.eipManager.unbindElasticIp(
 						user.getUserId(), uuid, eip, "vm");
-				if (jo.getBoolean("result")) {
+				if (unbind.getBoolean("result")) {
 					result = this.setVlan(uuid, 1, user.getUserAllocate());
 				} else {
 					result = false;
 				}
+			} else {
+				result = this.setVlan(uuid, 1, user.getUserAllocate());
 			}
 		} else {
 			result = this.setVlan(uuid, 1, user.getUserAllocate());
 		}
+		jo.put("result", result);
 		if (result) {
 			this.getVmDAO().unbindNet(uuid);
 			this.getMessagePush().pushMessage(user.getUserId(),
@@ -1200,6 +1218,7 @@ public class VMManager {
 			this.getMessagePush().pushMessage(user.getUserId(),
 					Utilities.stickyToError("主机解绑网络失败"));
 		}
+		return jo;
 	}
 
 	public JSONArray getISOList(String poolUuid) {

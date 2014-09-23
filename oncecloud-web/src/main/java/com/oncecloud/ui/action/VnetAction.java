@@ -73,11 +73,12 @@ public class VnetAction {
 				user.getUserAllocate());
 	}
 
-	@RequestMapping(value = "/Unlink", method = { RequestMethod.POST })
+	@RequestMapping(value = "/UnlinkRouter", method = { RequestMethod.POST })
 	@ResponseBody
-	public void unlink(HttpServletRequest request, @RequestParam String vnetId) {
+	public String unlinkRouter(HttpServletRequest request, @RequestParam String vnetId) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getVnetManager().unlink(vnetId, user.getUserId());
+		JSONObject jo = this.getVnetManager().unlinkRouter(vnetId, user.getUserId());
+		return jo.toString();
 	}
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
@@ -122,7 +123,7 @@ public class VnetAction {
 			@RequestParam String routerid, @RequestParam int net, @RequestParam int gate 
 			, @RequestParam int start, @RequestParam int end, @RequestParam int dhcpState) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVnetManager().vnetLinkrouter(user.getUserId(), vnetuuid, routerid, net, gate, start, end, dhcpState);
+		JSONObject jo = this.getVnetManager().linkRouter(user.getUserId(), vnetuuid, routerid, net, gate, start, end, dhcpState);
 		return jo.toString();
 	}
 

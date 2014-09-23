@@ -5758,5 +5758,40 @@ public class VM extends XenAPIObject {
 		}
 		
 	}
+	
+	/* 
+	 * 虚拟机增加串口，使用条件：虚拟机关闭，否则无法生效
+	 */
+	public boolean setSerial(Connection c) {
+		try{
+			String method_call = "VM.set_platform_serial";
+			String session = c.getSessionReference();
+			Object[] method_params = { Marshalling.toXMLRPC(session),
+					Marshalling.toXMLRPC(this.ref) };
+			Map response = c.dispatch(method_call, method_params);
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/* 
+	 * 获得虚拟串口通信
+	 */
+	public String getSerial(Connection c) {
+		try{
+			String method_call = "VM.get_platform_serial";
+			String session = c.getSessionReference();
+			Object[] method_params = { Marshalling.toXMLRPC(session),
+					Marshalling.toXMLRPC(this.ref) };
+			Map response = c.dispatch(method_call, method_params);
+			Object result = response.get("Value");
+			return Types.toString(result);
+		}catch(Exception e){
+			e.printStackTrace();
+			return "";
+		}
+	}
 
 }

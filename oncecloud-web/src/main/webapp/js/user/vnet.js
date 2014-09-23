@@ -207,12 +207,14 @@ $('#link').on('click', function (event) {
 function unlink(uuid) {
     $.ajax({
         type: 'post',
-        url: '/VnetAction/Unlink',
+        url: '/VnetAction/UnlinkRouter',
         data: {vnetId: uuid},
-        dataType: 'text',
-        complete: function () {
-            var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
-            thistr.children('td').eq(3).html('');
+        dataType: 'json',
+        success: function (obj) {
+            if (obj.result) {
+                var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
+                thistr.children('td').eq(3).html('');
+            }
         }
     });
 }

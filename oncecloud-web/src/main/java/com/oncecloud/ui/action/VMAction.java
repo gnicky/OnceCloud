@@ -139,9 +139,10 @@ public class VMAction {
 
 	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
 	@ResponseBody
-	public void unbindNet(HttpServletRequest request, @RequestParam String uuid) {
+	public String unbindNet(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getVmManager().unbindNet(uuid, user);
+		JSONObject jo = this.getVmManager().unbindNet(uuid, user);
+		return jo.toString();
 	}
 
 	@RequestMapping(value = "/BasicNetworkList", method = { RequestMethod.POST })
