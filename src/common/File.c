@@ -123,7 +123,7 @@ int ReadFile(const char * fileName, char * fileContent)
 	actualReadCount=fread(fileContent,sizeof(char),expectedReadCount,file);
 	if(actualReadCount!=expectedReadCount)
 	{
-		WriteLog(LOG_ERR,"ReadFile: Expected and actual read bytes don't match");	
+		WriteLog(LOG_ERR,"ReadFile: Expected and actual read bytes don't match: %s",fileName);	
 		return FALSE;
 	}
 
@@ -176,7 +176,7 @@ int WriteFile(const char * fileName, const char * fileContent)
 	actualWriteCount=fwrite(fileContent,sizeof(char),expectedWriteCount,file);
 	if(actualWriteCount!=expectedWriteCount)
 	{
-		WriteLog(LOG_ERR,"WriteFile: Expected and actual write bytes don't match");	
+		WriteLog(LOG_ERR,"WriteFile: Expected and actual write bytes don't match: %s",fileName);
 		return FALSE;
 	}
 

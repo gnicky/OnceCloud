@@ -46,7 +46,7 @@ void AddRoute(const char * mac, const char * address, const char * netmask)
 		Execute(temp);
 	}
 
-	sprintf(temp,"DEVICE=\"%s\"\n",interface);
+	sprintf(temp,"HWADDR=\"%s\"\n",mac);
 	strcat(fileContent,temp);
 	sprintf(temp,"BOOTPROTO=\"static\"\n");
 	strcat(fileContent,temp);
