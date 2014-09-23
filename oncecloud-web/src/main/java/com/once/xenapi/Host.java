@@ -3452,4 +3452,17 @@ public class Host extends XenAPIObject {
 		return Types.toString(result);
 	}	
 	
+	public static VM migrateTemplate(Connection c, VM vm, String dest_master_ip)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.migrate_template";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(vm),
+				Marshalling.toXMLRPC(dest_master_ip)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toVM(result);
+	}	
+	
 }
