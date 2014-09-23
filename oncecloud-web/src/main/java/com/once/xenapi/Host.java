@@ -3207,13 +3207,12 @@ public class Host extends XenAPIObject {
 	 * @param mac, mac of vif, form is "00163e1ce336" without ":" or "-"
 	 * 
 	 */
-	public static Boolean unbindIpMac(Connection c, String intra_ip, String mac)
+	public static Boolean unbindIpMac(Connection c, String json_obj)
 			throws BadServerResponse, XenAPIException, XmlRpcException {
 		String method_call = "host.unbind_ip_mac";
 		String session = c.getSessionReference();
 		Object[] method_params = { Marshalling.toXMLRPC(session), 
-				Marshalling.toXMLRPC(intra_ip),
-				Marshalling.toXMLRPC(mac)};
+				Marshalling.toXMLRPC(json_obj)};
 		Map response = c.dispatch(method_call, method_params);
 		Object result = response.get("Value");
 		return Types.toBoolean(result);
@@ -3418,14 +3417,13 @@ public class Host extends XenAPIObject {
 	 * @param netmask, netmask of subnet.
 	 * 
 	 */
-	public static Boolean delSubnet(Connection c, String ip, String subnet, String netmask)
+	public static Boolean delSubnet(Connection c, String ip, String json_obj)
 			throws BadServerResponse, XenAPIException, XmlRpcException {
 		String method_call = "host.del_subnet";
 		String session = c.getSessionReference();
 		Object[] method_params = { Marshalling.toXMLRPC(session),
 				Marshalling.toXMLRPC(ip),
-				Marshalling.toXMLRPC(subnet),
-				Marshalling.toXMLRPC(netmask)
+				Marshalling.toXMLRPC(json_obj)
 				};
 		Map response = c.dispatch(method_call, method_params);
 		Object result = response.get("Value");
@@ -3453,7 +3451,8 @@ public class Host extends XenAPIObject {
 		return Types.toString(result);
 	}	
 	
-	public static VM migrateTemplate(Connection c, VM vm,String new_uuid, String dest_master_ip)
+
+	public static VM migrateTemplate(Connection c, VM vm, String new_uuid, String dest_master_ip)
 			throws BadServerResponse, XenAPIException, XmlRpcException {
 		String method_call = "host.migrate_template";
 		String session = c.getSessionReference();

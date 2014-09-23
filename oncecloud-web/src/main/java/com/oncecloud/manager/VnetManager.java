@@ -316,8 +316,8 @@ public class VnetManager {
 	public JSONArray getVnetList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getVnetDAO().countVnets(userId, search);
-		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnets(userId,
-				page, limit, search);
+		List<Vnet> vnetList = this.getVnetDAO().getOnePageVnets(userId, page,
+				limit, search);
 		ja.put(total);
 		if (vnetList != null) {
 			for (Vnet vnet : vnetList) {
@@ -341,6 +341,7 @@ public class VnetManager {
 	public void vnetCreate(String name, String uuid, String desc, int userId) {
 		Date startTime = new Date();
 		boolean result = this.getVnetDAO().createVnet(uuid, userId, name, desc);
+		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
 		JSONArray infoArray = new JSONArray();
@@ -417,32 +418,71 @@ public class VnetManager {
 		return jo;
 	}
 
-	public JSONObject vnetLinkrouter(int userId, String vnetuuid,
-			String routerid, Integer net, Integer gate, Integer start,
-			Integer end, Integer dhcpState) {
-		JSONObject jo = this.getRouterManager().linkVnetToRouter(userId,
-				vnetuuid, routerid, net, gate, start, end, dhcpState);
-		// push message
+	public JSONObject linkRouter(int userId, String vnetUuid, String routerId,
+			Integer net, Integer gate, Integer start, Integer end,
+			Integer dhcpState) {
+		Date startTime = new Date();
+		JSONObject jo = this.getRouterManager().doLinkRouter(userId, vnetUuid,
+				routerId, net, gate, start, end, dhcpState);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.私有网络.toString(),
+				"vn-" + vnetUuid.substring(0, 8)));
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.路由器.toString(),
+				"rt-" + routerId.substring(0, 8)));
 		if (jo.getBoolean("result")) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.连接.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess("连接路由器成功"));
+					Utilities.stickyToSuccess(log.toAString()));
 		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.连接.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError("连接路由器失败"));
+					Utilities.stickyToError(log.toAString()));
 		}
 		return jo;
 	}
 
-	public void unlink(String vnetuuid, int userId) {
-		boolean result = this.getVnetDAO().unLinkToRouter(vnetuuid);
+	public JSONObject unlinkRouter(String vnetUuid, int userId) {
+		Date startTime = new Date();
+		JSONObject jo = this.getRouterManager().doUnlinkRouter(vnetUuid, userId);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.私有网络.toString(),
+				"vn-" + vnetUuid.substring(0, 8)));
 		// push message
-		if (result) {
+		if (jo.getBoolean("result")) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.离开.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess("离开路由器成功"));
+					Utilities.stickyToSuccess(log.toString()));
 		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.路由器.ordinal(),
+					LogConstant.logAction.离开.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError("离开路由器失败"));
+					Utilities.stickyToError(log.toString()));
 		}
+		return jo;
 	}
 
 	public JSONObject vnetAddvm(int userId, String vmuuidStr, String vnId,
@@ -481,7 +521,7 @@ public class VnetManager {
 		}
 		return jo;
 	}
-	
+
 	public boolean isRouterHasVnets(String routerUuid, int userId) {
 		int count = this.getVnetDAO().getVnetsOfRouter(routerUuid, userId);
 		return count > 0;
