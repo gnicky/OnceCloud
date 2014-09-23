@@ -23,15 +23,33 @@ function removeAllCheck() {
 
 function allDisable() {
     $("#delete").addClass('btn-forbidden').attr('disabled', true);
+    $("#share-image").addClass('btn-forbidden').attr('disabled', true);
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
     event.preventDefault();
     allDisable();
     var count = 0;
-    $('input[name="imagerow"]:checked').each(function () {
+    var flag = false;
+    var noref = true;
+    var pooluuid;
+    $('input[name="imagerow"]:checked').each(function (index) {
         count++;
+        if ($(this).attr("imageRef") != 0) {
+        	noref = false;
+        }
+        if (index == 0) {
+	        pooluuid = $(this).attr("pooluuid");
+	        flag = true;
+        } else {
+        	if ($(this).attr("pooluuid") != pooluuid) {
+        		flag = false;
+        	}
+        }
     });
+    if (noref && flag) {
+    	$("#share-image").removeClass('btn-forbidden').attr('disabled', false);
+    }
     if (count > 0) {
         $("#delete").removeClass('btn-forbidden').attr('disabled', false);
     }
@@ -46,6 +64,16 @@ $('.once-tab').on('click', '.tab-filter', function (event) {
 $('#create').on('click', function (event) {
     event.preventDefault();
     $('#ImageModalContainer').load($(this).attr('url'), '', function () {
+        $('#ImageModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
+$('#share-image').on('click', function (event) {
+    event.preventDefault();
+    $('#ImageModalContainer').load('image/share', '', function () {
         $('#ImageModalContainer').modal({
             backdrop: false,
             show: true
@@ -93,13 +121,23 @@ function getImageList(page, limit, search, type) {
                             typeStr = "私有";
                         }
                     }
+                    var poolName = obj.poolname; 
                     var stateStr = '<td><span class="icon-status icon-running" name="stateicon">'
                         + '</span><span name="stateword">可用</span></td>';
+                    var ref = obj.reference;
+                    if (ref == null) {
+                    	ref = 0;
+                    }
                     var mytr = '<tr imageUId="' + imageUId + '" imageName="' + imageName
-                        + '" imageType="' + type + '"><td class=“rcheck"><input type="checkbox" name="imagerow"></td>'
+                        + '" imageType="' + type + '"><td class="rcheck"><input type="checkbox" name="imagerow" imageRef="'+ ref +'" pooluuid="'+obj.pooluuid+'"></td>'
                         + '<td><a class="id">' + showid + '</a></td><td><a>' + imageName
                         + '</a></td><td>' + imageSize + '</td><td>' + imageplatform + '</td>' + stateStr
-                        + '<td>' + typeStr + '</td><td class="time">' + createDate + '</td></tr>';
+                        + '<td>' + typeStr + '</td><td class="time">' + createDate + '</td>';
+                    var level = $('input[name="hidden-area"]').attr("level");
+                    if (level == 0) {
+                    	mytr += '<td>'+poolName+'</td>';
+                    }
+                    mytr += '</tr>';
                     tableStr = tableStr + mytr;
                 }
                 $('#tablebody').html(tableStr);

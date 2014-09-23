@@ -150,4 +150,10 @@ public class CommonController {
 		model.put("modifyDesc", desc.equals("&nbsp;") ? "" : desc);
 		return new ModelAndView("common/modify", model);
 	}
+
+	@RequestMapping(value = "/image/share")
+	@ResponseBody
+	public ModelAndView shareImage(HttpServletRequest request) {
+		return new ModelAndView("common/modal/imageshare");
+	}
 }

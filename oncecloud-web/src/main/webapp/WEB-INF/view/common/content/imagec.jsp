@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<input name="hidden-area" type="hidden" value="${user.userId}">
+<input name="hidden-area" type="hidden" value="${user.userId}" level="${user.userLevel}">
 <div class="content" id="platformcontent">
 	<div class="intro">
 		<h1>映像&nbsp;Images</h1>
@@ -45,6 +45,8 @@
 					<ul class="dropdown-menu">
 						<li><a class="btn-forbidden" id="delete" disabled><span
 								class="glyphicon glyphicon-trash"></span>删除</a></li>
+						<li><a class="btn-forbidden" id="share-image" disabled><span
+								class="glyphicon glyphicon-share"></span>共享镜像</a></li>
 					</ul>
 				</div>
 			</c:if>
@@ -71,11 +73,14 @@
 				    <th width="4%"></th>
 					<th width="14%">ID</th>
 					<th width="14%">名称</th>
-					<th width="14%">容量&nbsp;(GB)</th>
-					<th width="14%">平台</th>
+					<th width="8%">容量&nbsp;(GB)</th>
+					<th width="12%">平台</th>
 					<th width="14%">状态</th>
 					<th width="12%" id="image-area">可见范围</th>
 				    <th width="14%">创建时间</th>
+				    <c:if test="${user.userLevel==0}">
+				    <th>所属资源池</th>
+				    </c:if>
 				</tr>
 			</thead>
 			<tbody id="tablebody">
