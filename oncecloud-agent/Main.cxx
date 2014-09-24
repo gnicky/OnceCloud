@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string.h>
+#include <sys/file.h>
 
 #include <boost/asio.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -40,8 +41,16 @@ Handler * CreateHandler(Request * request)
 
 int main(int argc, char * argv [])
 {
+	const char * serialPortPath="/dev/ttyS1";
+	int serialPortDescriptor=open(serialPortPath,O_RDWR);
+	if(flock(serialPortDescriptor,LOCK_EX|LOCK_NB)<0)
+	{
+		cout<<"Cannot lock /dev/ttyS1"<<endl;
+		return 1;
+	}
+
 	boost::asio::io_service ioService;
-	boost::asio::serial_port serialPort(ioService,"/dev/ttyS1");
+	boost::asio::serial_port serialPort(ioService,serialPortPath);
 	serialPort.set_option(boost::asio::serial_port::baud_rate(19200));
         serialPort.set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
         serialPort.set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
@@ -67,6 +76,9 @@ int main(int argc, char * argv [])
 		delete request;
 		delete response;
 	}
+
+	flock(serialPortDescriptor,LOCK_UN);
+
 	return 0;
 }
 
