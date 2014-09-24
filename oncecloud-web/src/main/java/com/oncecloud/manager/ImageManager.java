@@ -302,6 +302,12 @@ public class ImageManager {
 			User imageUser = this.getUserDAO().getUser(imageUID);
 			jo.put("imageuser", imageUser.getUserName());
 			jo.put("createDate", Utilities.formatTime(image.getCreateDate()));
+			String pooluuid = image.getPoolUuid();
+			OCPool pool = this.getPoolDAO().getPool(pooluuid);
+			jo.put("poolname", pool.getPoolName());
+			jo.put("pooluuid", pooluuid);
+			jo.put("reference", image.getReferenceUuid());
+			
 			ja.put(jo);
 		}
 		// write log and push message
@@ -429,11 +435,26 @@ public class ImageManager {
 			try {
 				Date startTime = new Date();
 				String uuid = UUID.randomUUID().toString();
-				Host.migrateTemplate(conn, Types.toVM(imageString),uuid , despoolUuid);
+				Host.migrateTemplate(conn, Types.toVM(imageString), uuid, despoolUuid);
 				boolean result = this.getImageDAO().shareImage(uuid, imageString, despoolUuid);
 				// write log and push message
 				Date endTime = new Date();
 				int elapse = Utilities.timeElapse(startTime, endTime);
+				
+				Image image = this.getImageDAO().getImage(imageString);
+				JSONObject jo = new JSONObject();
+				jo.put("imagename", Utilities.encodeText(image.getImageName()));
+				jo.put("imageid", uuid);
+				jo.put("imagesize", image.getImageDisk());
+				jo.put("imageplatform", Utilities.encodeText(Constant.Platform
+						.values()[image.getImagePlatform()].toString()));
+				jo.put("createDate", Utilities.formatTime(image.getCreateDate()));
+				OCPool pool = this.getPoolDAO().getPool(despoolUuid);
+				jo.put("pooluuid", despoolUuid);
+				jo.put("poolname", pool.getPoolName());
+				jo.put("reference", imageString);
+				ja.put(jo);
+				
 				JSONArray infoArray = new JSONArray();
 				infoArray.put(Utilities.createLogInfo(
 						LogConstant.logObject.映像.toString(), uuid));

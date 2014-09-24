@@ -43,7 +43,6 @@ import java.util.Set;
 
 //import oncecenter.network.OVS;
 
-
 import org.apache.xmlrpc.XmlRpcException;
 
 import com.once.xenapi.Types.BadServerResponse;
@@ -3451,7 +3450,6 @@ public class Host extends XenAPIObject {
 		return Types.toString(result);
 	}	
 	
-
 	public static VM migrateTemplate(Connection c, VM vm, String new_uuid, String dest_master_ip)
 			throws BadServerResponse, XenAPIException, XmlRpcException {
 		String method_call = "host.migrate_template";
