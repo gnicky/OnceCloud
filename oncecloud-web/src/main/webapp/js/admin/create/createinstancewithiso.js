@@ -53,7 +53,7 @@ function getPoolList() {
             var tableStr = "";
             $.each (array, function (index, obj){
 				var pooluuid = obj.poolid;
-				var poolname = obj.poolname;
+				var poolname = obj.decodeURIComponent(poolname);
 				if (index == 0) {
 					tableStr = tableStr + '<div class="pool-item selected" pooluuid="' + pooluuid + '">' + poolname + '</div>';
 					$("#htypool").html(poolname);
