@@ -381,7 +381,7 @@ public class HostManager {
 		return qaArray;
 	}
 
-	public JSONArray deleteAction(String hostId, String hostName, int userid) {
+	public JSONArray deleteHost(String hostId, String hostName, int userid) {
 		Date startTime = new Date();
 		JSONArray qaArray = new JSONArray();
 		boolean result = this.getHostDAO().deleteHost(hostId);
@@ -667,7 +667,6 @@ public class HostManager {
 				OCHost masterHost = this.getHostDAO().getHost(masterUuid);
 				OCHost targetHost = this.getHostDAO().getHost(hostUuid);
 				if (masterHost != null & targetHost != null) {
-//					SRManager sm = new SRManager();
 					boolean checkResult = this.getSrManager()
 							.checkSREquals(masterUuid, hostUuid);
 					if (checkResult == true) {

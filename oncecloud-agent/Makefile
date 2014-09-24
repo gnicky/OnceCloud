@@ -1,17 +1,18 @@
 # OnceCloud Agent Makefile
 
-CC=g++
+CXX=g++
 LD=g++
 
-AGENT_CC=$(QUIET_CC)$(CC)
+AGENT_CXX=$(QUIET_CXX)$(CXX)
 AGENT_LD=$(QUIET_LD)$(LD)
 
-CFLAGS=-g -Wall -Werror -c -Isrc/include/ -Ilib/include/
-CXXFLAGS=-g -Wall -Werror -c -Isrc/include/ -Ilib/include/
+CXXFLAGS=-g -Wall -Werror -c
 LDFLAGS=-g -Wall -Werror
-LIBFLAGS=-lcrypt -pthread
 
-CCCOLOR="\033[34m"
+BOOSTFLAGS=-lboost_filesystem -pthread
+LIBFLAGS=-lcrypt
+
+CXXCOLOR="\033[34m"
 LINKCOLOR="\033[34;1m"
 SRCCOLOR="\033[33m"
 BINCOLOR="\033[37;1m"
@@ -19,35 +20,46 @@ MAKECOLOR="\033[32;1m"
 ENDCOLOR="\033[0m"
 
 ifndef V
-QUIET_CC = @printf '    %b %b\n' $(CCCOLOR)COMPILE$(ENDCOLOR) $(SRCCOLOR)$@$(ENDCOLOR) 1>&2;
+QUIET_CXX = @printf '    %b %b\n' $(CXXCOLOR)COMPILE$(ENDCOLOR) $(SRCCOLOR)$@$(ENDCOLOR) 1>&2;
 QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
 endif
 
-AGENT=output/agent
-COMPONENT=output/Main.o output/HttpServer.o
-LIB=output/mongoose.o
+AGENT=agent
+COMPONENT=Main.o Request.o Response.o Handler.o \
+	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o
 
-all: prepare everything
-prepare:
-	@mkdir -p output
+all: everything
 clean:
-	@rm -rf output
+	@rm -rf $(AGENT)
+	@rm -rf *.o
 
 .PHONY: all clean
 
 everything: $(AGENT)
 
 # Component
-output/HttpServer.o: src/HttpServer.cpp src/include/HttpServer.h lib/include/mongoose.h
-	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
+Main.o: Main.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-output/Main.o: src/Main.cpp src/include/HttpServer.h
-	$(AGENT_CC) $(CXXFLAGS) -o $@ $<
+Request.o: Request.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-# Library
-output/mongoose.o: lib/mongoose.c lib/include/mongoose.h
-	$(AGENT_CC) $(CFLAGS) -o $@ $<
+Response.o: Response.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Handler.o: Handler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordRequest.o: SetPasswordRequest.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordResponse.o: SetPasswordResponse.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetPasswordHandler.o: SetPasswordHandler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main
-$(AGENT): $(COMPONENT) $(LIB)
-	$(AGENT_LD) $(LDFLAGS) $(LIBFLAGS) -o $@ $^
+$(AGENT): $(COMPONENT)
+	$(AGENT_LD) $(LDFLAGS) $(BOOSTFLAGS) $(LIBFLAGS) -o $@ $^
+

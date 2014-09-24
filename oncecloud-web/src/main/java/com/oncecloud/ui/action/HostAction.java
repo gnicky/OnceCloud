@@ -58,7 +58,7 @@ public class HostAction {
 			@RequestParam("hostid") String hostId,
 			@RequestParam("hostname") String hostName) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getHostManager().deleteAction(hostId, hostName,
+		JSONArray ja = this.getHostManager().deleteHost(hostId, hostName,
 				user.getUserId());
 		return ja.toString();
 	}

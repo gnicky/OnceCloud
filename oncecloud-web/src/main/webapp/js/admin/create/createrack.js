@@ -84,7 +84,7 @@ $(document).ready(function () {
                             var dcid = obj.dcid;
                             var showid = "rack-" + rackid.substring(0, 8);
                             var mytr = '<tr rowid="' + rackid + '" rackname="' + rackname + '" rackdesc="' + rackdesc + '" dcid="' + dcid + '"><td class="rcheck"><input type="checkbox" name="rackrow"></td>'
-                                + '<td><a class="id">' + showid + '</a></td><td>' + rackname + '</td><td>' + dcname + '</td><td class="time">' + createdate + '</td></tr>';
+                                + '<td><a class="id">' + showid + '</a></td><td>' + rackname + '</td><td><a>' + dcname + '</a></td><td class="time">' + createdate + '</td></tr>';
                             $("#tablebody").prepend(mytr);
                         }
                     }

@@ -17,10 +17,11 @@ public class VMUtil {
 	public static String srpath = "/var/run/sr_mount";
 	public static String localsr = "/home/local_sr";
 	//����Ӧ�����û�ѡ��Ŷԡ���
-	public static String networkConfig = "ovs0";
+	public static String networkConfig = "" +
+			"ovs0";
 	
 	//����һ̨�����������������ʹ���
-	public static VM create(String vmName,long vcpu,long memory
+	public VM create(String vmName,long vcpu,long memory
 			,Connection connection,Host host
 			,boolean isShare,String selectedMediaUuid
 			,List<DiskInfo> diskList){
@@ -38,28 +39,13 @@ public class VMUtil {
 			}
 			return null;
 		}
+		
+		
+		
 		return newVm;
 	}
 	
-	//������������������
-	public static VM createVmVIF(String vmName,long vcpu,long memory
-			,Connection connection,Host host){
-		VM newVm = createVm(vmName,vcpu,memory,connection,host);
-		if(newVm!=null){
-			if(!createVIF(newVm,connection,1500,host,networkConfig)){
-				try {
-					newVm.destroy(connection, true);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return null;
-			}
-		}else{
-			return null;
-		}
-		return newVm;
-	}
+
 	
 	//���������console�������ڣ�
 		public static VM createVm(String vmName,long vcpu,long memory
@@ -111,6 +97,150 @@ public class VMUtil {
 			return newVm;
 		}
 	
+		//create vm with uuid
+		public static VM.Record createWithUuid(String vmUuid, String vmName,long vcpu,long memory
+				,Connection connection,Host host
+				,boolean isShare,String selectedMediaUuid
+				,List<DiskInfo> diskList){
+		
+			VM newVm = createVmVIFWithUuid(vmUuid, vmName,vcpu,memory,connection,host);
+			if(newVm==null)
+				return null;
+			if(!createVDIs(vmName,newVm,connection,host
+					,isShare,selectedMediaUuid,diskList)){
+				//����������
+				try {
+					newVm.destroy(connection, true);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+			
+			try
+			{
+				if(newVm != null)
+					newVm.startOn(connection, host, false, true);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				try{
+					newVm.destroy(connection, true);
+				}catch(Exception e1){
+					e1.printStackTrace();
+				}
+				return null;
+			}
+			VM.Record record = null;
+			try
+			{
+				record = newVm.getRecord(connection);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				try{
+					newVm.destroy(connection, true);
+				}catch(Exception e1){
+					e1.printStackTrace();
+				}
+				return null;
+			}
+			return record;
+		}
+		
+		//������������������
+		public static VM createVmVIF(String vmName,long vcpu,long memory
+				,Connection connection,Host host){
+			VM newVm = createVm(vmName,vcpu,memory,connection,host);
+			if(newVm!=null){
+				if(!createVIF(newVm,connection,1500,host,networkConfig)){
+					try {
+						newVm.destroy(connection, true);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				}
+			}else{
+				return null;
+			}
+			return newVm;
+		}
+		
+		public static VM createVmVIFWithUuid(String vmUuid, String vmName,long vcpu,long memory
+				,Connection connection,Host host){
+			VM newVm = createVmWithUuid(vmUuid, vmName,vcpu,memory,connection,host);
+			if(newVm!=null){
+				if(!createVIF(newVm,connection,1500,host,networkConfig)){
+					try {
+						newVm.destroy(connection, true);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				}
+			}else{
+				return null;
+			}
+			return newVm;
+		}
+		//���������console�������ڣ�
+				public static VM createVmWithUuid(String vmUuid, String vmName,long vcpu,long memory
+						,Connection connection,Host host){
+					VM newVm;
+					try{
+						VM.Record record = new VM.Record();
+						record.uuid = vmUuid;
+						record.VCPUsParams = new HashMap<String, String> ();
+						record.nameLabel = vmName;
+						record.HVMBootPolicy = "hvm";
+						record.VCPUsMax = (long) vcpu;
+						record.VCPUsAtStartup = (long) vcpu;
+						record.memoryStaticMax = (long) memory * 1024 * 1024;
+						record.memoryDynamicMax = (long) memory * 1024 * 1024;
+						record.memoryDynamicMin = (long) 512 * 1024 * 1024;
+						record.memoryStaticMin = (long) 0;
+						record.actionsAfterCrash = Types.toOnCrashBehaviour("restart");
+						record.actionsAfterReboot = Types.toOnNormalExit("restart");
+						record.actionsAfterShutdown = Types.toOnNormalExit("destroy");
+						record.platform = new HashMap<String, String>();
+						record.platform.put("pae", "1");
+						record.platform.put("boot", "cd");
+						record.platform.put("localtime", "0");
+						record.platform.put("acpi", "1");
+						record.platform.put("usbdevice", "tablet");
+						record.platform.put("serial", "pty");
+						record.platform.put("usb", "1");
+						record.platform.put("parallel", "none");
+						record.platform.put("apic", "1");
+						record.platform.put("xen_platform_pci", "1");
+						
+						newVm = VM.createOn(connection, record, host);
+						
+						Console.Record consoleRec = new Console.Record();
+						consoleRec.protocol = Types.toConsoleProtocol("rfb");
+						consoleRec.VM = newVm;
+						consoleRec.otherConfig = new HashMap<String, String>();
+						consoleRec.otherConfig.put("vnc", "1");
+						consoleRec.otherConfig.put("sdl", "0");
+						consoleRec.otherConfig.put("vncunused", "1");
+						consoleRec.otherConfig.put("vnclisten", "0.0.0.0");
+
+						Console.createOn(connection, consoleRec, host);
+
+					}catch(Exception e){
+						e.printStackTrace();
+						return null;
+					}
+					return newVm;
+				}
+		
+		
 	//Ϊ�����ָ��������
 	public static boolean createVIF(VM newVm,Connection connection,long MTU,Host host,String network){
 		
@@ -195,14 +325,17 @@ public class VMUtil {
 			vdiRec1.nameLabel = vmName;
 			vdiRec1.SR = sr;
 			String sr_type = srType;
-			if (sr_type.equals(Types.SrType.ZFS))
+			if (sr_type.equals(TypeUtil.nfsZfsType))
 				vdiRec1.location = "file:"+srpath+"/"+vdiRec1.SR.getUuid(connection)+"/"+vdiRec1.uuid+"/disk.vhd";
-			else if (sr_type.equals(Types.SrType.GPFS))
+			else if (sr_type.equals(TypeUtil.gpfsDiskType))
 				vdiRec1.location = "file:"+vdiRec1.SR.getLocation(connection)+"/"+vdiRec1.uuid+"/disk.vhd";
-			else if (sr_type.equals(Types.SrType.LOCAL))
+			else if (sr_type.equals(TypeUtil.localSrType))
 				vdiRec1.location = "file:"+localsr+"/"+vdiRec1.uuid+".vhd";
+			else if (sr_type.equals(TypeUtil.mfsDiskType)||sr_type.equals(TypeUtil.ocfs2DiskType))
+				vdiRec1.location = "tap:aio:"+vdiRec1.SR.getLocation(connection)+"/"+vdiRec1.uuid+"/disk.vhd";
 			else
 				vdiRec1.location = "file:"+srpath+"/"+vdiRec1.SR.getUuid(connection)+"/"+vdiRec1.uuid+".vhd";
+			
 			vdi1 = VDI.createOn(connection, vdiRec1, host);
 			
 			VBD.Record vbdRec = new VBD.Record();

@@ -20,7 +20,8 @@ public class Vnet {
 	private Integer vnetID;
 	private String vnetName;
 	private String vnetDesc;
-	private String routerMac;
+	private String vifUuid;
+	private String vifMac;
 	/**
 	 * 私有网络地址,掩码24
 	 */
@@ -179,23 +180,32 @@ public class Vnet {
 		this.vnetID = vnetID;
 	}
 
-	@Column(name = "router_mac")
-	public String getRouterMac() {
-		return routerMac;
+	@Column(name = "vif_uuid")
+	public String getVifUuid() {
+		return vifUuid;
 	}
 
-	public void setRouterMac(String routerMac) {
-		this.routerMac = routerMac;
+	public void setVifUuid(String vifUuid) {
+		this.vifUuid = vifUuid;
+	}
+	
+	@Column(name = "vif_mac")
+	public String getVifMac() {
+		return vifMac;
+	}
+
+	public void setVifMac(String vifMac) {
+		this.vifMac = vifMac;
 	}
 
 	@Override
 	public String toString() {
 		return "Vnet [vnetUuid=" + vnetUuid + ", vnetUID=" + vnetUID
 				+ ", vnetID=" + vnetID + ", vnetName=" + vnetName
-				+ ", vnetDesc=" + vnetDesc + ", routerMac=" + routerMac
-				+ ", vnetNet=" + vnetNet + ", vnetGate=" + vnetGate
-				+ ", vnetStart=" + vnetStart + ", vnetEnd=" + vnetEnd
-				+ ", dhcpStatus=" + dhcpStatus + ", vnetRouter=" + vnetRouter
-				+ ", createDate=" + createDate + "]";
+				+ ", vnetDesc=" + vnetDesc + ", vifUuid=" + vifUuid
+				+ ", vifMac=" + vifMac + ", vnetNet=" + vnetNet + ", vnetGate="
+				+ vnetGate + ", vnetStart=" + vnetStart + ", vnetEnd="
+				+ vnetEnd + ", dhcpStatus=" + dhcpStatus + ", vnetRouter="
+				+ vnetRouter + ", createDate=" + createDate + "]";
 	}
 }

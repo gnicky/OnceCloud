@@ -96,13 +96,15 @@ $(document).ready(function () {
                             var hostip = obj.hostip;
                             var createdate = obj.createdate;
                             var hostcpu = obj.hostcpu;
+                            var hostdesc = obj.hostdesc;
                             var hostmem = obj.hostmem;
                             var rackUuid = obj.rackUuid;
                             var rackName = decodeURIComponent(obj.rackName);
                             var showid = "host-" + hostid.substring(0, 8);
                             var srsize = obj.srsize;
-                            var mytr = '<tr hostid="' + hostid + '" hostname="' + hostname + '" hostip="' + hostip + '" hostdesc="' + hostdesc + '" rackid="' + rackUuid + '"><td class="rcheck"><input type="checkbox" name="hostrow"></td>'
-                                + '<td><a class="id">' + showid + '</a></td><td>' + hostname + '</td><td>' + hostip + '</td><td>' + hostcpu + '&nbsp;核</td>'
+                            var mytr = '<tr hostid="' + hostid + '" ' + 'hostname="' + hostname + '" hostip="' + hostip + '" hostdesc="' + hostdesc + '" rackid="' + rackUuid + '"><td class="rcheck"><input type="checkbox" name="hostrow"></td>'
+                                + '<td><a class="id">' +
+                                showid + '</a></td><td>' + hostname + '</td><td>' + hostip + '</td><td>' + hostcpu + '&nbsp;核</td>'
                                 + '<td>' + hostmem + '&nbsp;MB</td><td state="unload"></td><td><a>' + rackName + '</a></td><td><a class="srdetail" size=' + srsize + '><span class="glyphicon glyphicon-hdd"></span>&nbsp;&nbsp;' + srsize + '</a></td><td class="time">' + createdate + '</td></tr>';
                             $("#tablebody").prepend(mytr);
                             $('#ServerModalContainer').modal('hide');
@@ -128,9 +130,6 @@ $(document).ready(function () {
                                 }
                             });
                         }
-                    },
-                    error: function () {
-
                     }
                 });
             } else if ('edit' == type) {
@@ -145,15 +144,9 @@ $(document).ready(function () {
                         thistr.attr('hostname', serverName);
                         thistr.attr('hostdesc', serverDesc);
                         thistr.attr('rackid', rackUuid);
-
                         thistr.children('td').eq(2).html(serverName);
                         thistr.children('td').eq(7).html('<a>' + rackName + '</a>');
-
-                    },
-                    error: function () {
-
                     }
-
                 });
                 removeAllCheck();
                 $('#ServerModalContainer').modal('hide');

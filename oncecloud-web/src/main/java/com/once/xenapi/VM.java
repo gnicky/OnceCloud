@@ -35,6 +35,7 @@ package com.once.xenapi;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -45,6 +46,7 @@ import org.apache.xmlrpc.XmlRpcException;
 
 import com.once.xenapi.Types.BadServerResponse;
 import com.once.xenapi.Types.XenAPIException;
+import com.once.xenapi.VMUtil.DiskInfo;
 
 
 
@@ -5731,6 +5733,64 @@ public class VM extends XenAPIObject {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	/*从ISO创建虚拟机， isoUuid为iso对应的vdi的uuid，
+	 * storage为存储的容量 单位为G,如10G 则传入参数为10
+	 * memory为内存大小，单位为MB,4G 则传入参数为4096 
+	 * vcpu为cpu个数
+	 */
+	
+	public static VM.Record createVMFromISO(String vmUuid, String vmName,long vcpu,long memory
+			,Connection connection, String hostUuid, String isoUuid, long storage, String diskUuid, String srType){
+		try {
+			Host host = Types.toHost(hostUuid);
+			SR sr = Types.toSR(diskUuid);
+			DiskInfo diskInfo = new DiskInfo(storage, sr, srType);
+			ArrayList<DiskInfo> diskList = new ArrayList<DiskInfo>();
+			diskList.add(diskInfo);
+			VM.Record newVM = VMUtil.createWithUuid(vmUuid, vmName, vcpu, memory, connection, host, true,
+					isoUuid, diskList);
+			return newVM;
+		} catch (Exception e) {
+			return null;
+		}
+		
+	}
+	
+	/* 
+	 * 虚拟机增加串口，使用条件：虚拟机关闭，否则无法生效
+	 */
+	public boolean setSerial(Connection c) {
+		try{
+			String method_call = "VM.set_platform_serial";
+			String session = c.getSessionReference();
+			Object[] method_params = { Marshalling.toXMLRPC(session),
+					Marshalling.toXMLRPC(this.ref) };
+			Map response = c.dispatch(method_call, method_params);
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/* 
+	 * 获得虚拟串口通信
+	 */
+	public String getSerial(Connection c) {
+		try{
+			String method_call = "VM.get_platform_serial";
+			String session = c.getSessionReference();
+			Object[] method_params = { Marshalling.toXMLRPC(session),
+					Marshalling.toXMLRPC(this.ref) };
+			Map response = c.dispatch(method_call, method_params);
+			Object result = response.get("Value");
+			return Types.toString(result);
+		}catch(Exception e){
+			e.printStackTrace();
+			return "";
 		}
 	}
 

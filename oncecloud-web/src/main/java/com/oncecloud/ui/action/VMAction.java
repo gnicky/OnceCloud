@@ -68,6 +68,15 @@ public class VMAction {
 		this.getVmManager().doAdminShutDown(userId, uuid, force);
 	}
 
+	@RequestMapping(value = "/AdminDeleteVM", method = { RequestMethod.GET })
+	@ResponseBody
+	public void vmAdminDelete(HttpServletRequest request,
+			@RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		int userId = user.getUserId();
+		this.getVmManager().adminDeleteVM(userId, uuid);
+	}
+
 	@RequestMapping(value = "/VMDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vmDetail(HttpServletRequest request, @RequestParam String uuid) {
@@ -137,6 +146,14 @@ public class VMAction {
 				user.getUserAllocate());
 	}
 
+	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
+	@ResponseBody
+	public String unbindNet(HttpServletRequest request, @RequestParam String uuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getVmManager().unbindNet(uuid, user);
+		return jo.toString();
+	}
+
 	@RequestMapping(value = "/BasicNetworkList", method = { RequestMethod.POST })
 	@ResponseBody
 	public String basicNetworkList(HttpServletRequest request) {
@@ -152,5 +169,21 @@ public class VMAction {
 		JSONArray ja = this.getVmManager().getVMsOfUser(user.getUserId(),
 				lm.getPage(), lm.getLimit(), lm.getSearch());
 		return ja.toString();
+	}
+
+	@RequestMapping(value = "/ISOList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String isoList(HttpServletRequest request, @RequestParam String poolUuid) {
+		JSONArray ja = this.getVmManager().getISOList(poolUuid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/ISOCreate", method = { RequestMethod.POST })
+	@ResponseBody
+	public void createWithISO(HttpServletRequest request, @RequestParam String pooluuid
+			, @RequestParam int cpu, @RequestParam int memory, @RequestParam String vmName
+			, @RequestParam String isouuid, @RequestParam String vmUuid, @RequestParam String diskuuid
+			, @RequestParam int volum) {
+		this.getVmManager().createVMByISO(vmUuid, isouuid, diskuuid, vmName, cpu, memory, volum, pooluuid);
 	}
 }

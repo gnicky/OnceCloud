@@ -189,6 +189,26 @@ public class PoolDAO {
 		return pooList;
 	}
 
+	public OCPool getPoolByMaster(String poolMaster) {
+		OCPool pool = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from OCPool where poolMaster = :poolMaster and poolStatus = 1";
+			Query query = session.createQuery(queryString);
+			query.setString("poolMaster", poolMaster);
+			pool = (OCPool) query.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return pool;
+	}
+
 	/**
 	 * 获取资源池总数
 	 * 

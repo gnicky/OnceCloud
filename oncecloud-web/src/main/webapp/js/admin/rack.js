@@ -87,13 +87,13 @@ function getRackList(page, limit, search) {
                     var rackname = decodeURIComponent(obj.rackname);
                     var rackid = obj.rackid;
                     var rackdesc = decodeURIComponent(obj.rackdesc);
-                    var racklocation = decodeURIComponent(obj.dcname);
+                    var dcname = decodeURIComponent(obj.dcname);
                     var createdate = obj.createdate;
                     var dcid = obj.dcid;
 
                     var showid = "rack-" + rackid.substring(0, 8);
                     var thistr = '<tr rowid="' + rackid + '" rackname="' + rackname + '" rackdesc="' + rackdesc + '" dcid="' + dcid + '"><td class="rcheck"><input type="checkbox" name="rackrow"></td>'
-                        + '<td><a class="id">' + showid + '</a></td><td>' + rackname + '</td><td>' + racklocation + '</td><td class="time">' + createdate + '</td></tr>';
+                        + '<td><a class="id">' + showid + '</a></td><td>' + rackname + '</td><td><a>' + dcname + '</a></td><td class="time">' + createdate + '</td></tr>';
                     tableStr += thistr;
                 }
                 $('#tablebody').html(tableStr);
