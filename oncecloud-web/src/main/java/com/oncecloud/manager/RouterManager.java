@@ -35,6 +35,7 @@ import com.oncecloud.entity.Router;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
+import com.oncecloud.main.NoVNC;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
 
@@ -490,8 +491,30 @@ public class RouterManager {
 				this.getRouterDAO().updatePowerStatus(uuid,
 						RouterManager.POWER_HALTED);
 			}
+		} finally {
+			if (result = true) {
+				List<Vnet> vnetList = this.getVnetDAO().getVnetsOfRouter(uuid);
+				if (vnetList != null && vnetList.size() > 0) {
+					for (Vnet vnet : vnetList) {
+						bindVlan(uuid, vnet.getVifUuid(), vnet.getVnetID(), poolUuid);
+						logger.debug("Update Router Vlan: MAC [" + vnet.getVifMac()
+								+ "] Vlan [" + vnet.getVnetID() + "]");
+					}
+				}
+			}
 		}
 		return result;
+	}
+	
+	private void bindVlan(String routerUuid, String vifUuid, int vnetId, String poolUuid) {
+		try {
+			Connection c = this.getConstant().getConnectionFromPool(
+					poolUuid);
+			VM router = VM.getByUuid(c, routerUuid);
+			router.setTag(c, Types.toVIF(vifUuid), String.valueOf(vnetId));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void shutdownRouter(String uuid, String force, int userId,
