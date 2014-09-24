@@ -214,7 +214,14 @@ public class VnetDAO {
 		return vxnetsList;
 	}
 
-	public int getVnetsOfRouter(String routerUuid, int userId) {
+	/**
+	 * 获取路由器私有网络数目
+	 * 
+	 * @param routerUuid
+	 * @param userId
+	 * @return
+	 */
+	public int countVnetsOfRouter(String routerUuid, int userId) {
 		Session session = null;
 		int count = -1;
 		try {

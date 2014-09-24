@@ -357,7 +357,7 @@ public class VMManager {
 		String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
 		this.deleteVM(userId, uuid, poolUuid);
 	}
-	
+
 	public void deleteVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.doDeleteVM(userId, uuid, poolUuid);
@@ -955,10 +955,8 @@ public class VMManager {
 						.dateToUsed(ocvm.getCreateDate()));
 				jo.put("createdate", timeUsed);
 				jo.put("importance", ocvm.getVmImportance());
-				User user = this.getUserDAO()
-						.getUser(ocvm.getVmUID());
-				jo.put("userName",
-						Utilities.encodeText(user.getUserName()));
+				User user = this.getUserDAO().getUser(ocvm.getVmUID());
+				jo.put("userName", Utilities.encodeText(user.getUserName()));
 				jo.put("level", user.getUserLevel());
 				ja.put(jo);
 			}
@@ -1137,7 +1135,21 @@ public class VMManager {
 			}
 		}
 	}
-	
+
+	public void assginIpAddressToVM(Connection c, String url, String subnet,
+			OCVM vm) {
+		if (vm != null) {
+			try {
+				String mac = vm.getVmMac();
+				String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
+				vm.setVmIP(vnetIp);
+				this.getVmDAO().updateVM(vm);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void unAssginIpAddress(Connection c, String vnUuid) {
 		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
 		if (vmList != null) {
@@ -1194,11 +1206,11 @@ public class VMManager {
 			for (VDI vdi : vdis) {
 				String nameLabel = vdi.getNameLabel(conn);
 				if (nameLabel.contains(".iso")) {
-//					String location = vdi.getLocation(conn);
+					// String location = vdi.getLocation(conn);
 					String uuid = vdi.getUuid(conn);
 					JSONObject jo = new JSONObject();
 					jo.put("name", nameLabel);
-//					jo.put("location", location);
+					// jo.put("location", location);
 					jo.put("uuid", uuid);
 					ja.put(jo);
 				}
@@ -1254,41 +1266,44 @@ public class VMManager {
 		}
 	}
 
-	public void createVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
+	public void createVMByISO(String vmUuid, String isoUuid, String srUuid,
+			String name, int cpu, int memory, int volumeSize, String poolUuid) {
 		int memoryCapacity = (int) (memory * 1024);
 		Date startTime = new Date();
-		boolean result = doCreateVMByISO(vmUuid, isoUuid, srUuid, name, cpu, memoryCapacity, volumeSize, poolUuid);
+		boolean result = doCreateVMByISO(vmUuid, isoUuid, srUuid, name, cpu,
+				memoryCapacity, volumeSize, poolUuid);
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
 		JSONArray infoArray = new JSONArray();
 		infoArray.put(Utilities.createLogInfo(
 				LogConstant.logObject.主机.toString(),
 				"i-" + vmUuid.substring(0, 8)));
-		infoArray.put(Utilities.createLogInfo("配置", cpu + " 核， "
-				+ memory + " GB"));
+		infoArray.put(Utilities.createLogInfo("配置", cpu + " 核， " + memory
+				+ " GB"));
 		if (result) {
 			OCLog log = this.getLogDAO().insertLog(1,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			this.getMessagePush().editRowStatus(1, vmUuid, "running",
-					"正常运行");
+			this.getMessagePush().editRowStatus(1, vmUuid, "running", "正常运行");
 			this.getMessagePush().editRowConsole(1, vmUuid, "add");
 			this.getMessagePush().pushMessage(1,
 					Utilities.stickyToSuccess(log.toString()));
 		}
 	}
-	
-	private boolean doCreateVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid) {
+
+	private boolean doCreateVMByISO(String vmUuid, String isoUuid,
+			String srUuid, String name, int cpu, int memory, int volumeSize,
+			String poolUuid) {
 		Connection conn = null;
 		boolean result = false;
 		boolean preCreate = false;
 		boolean dbRollback = true;
 		try {
-			preCreate = this.getVmDAO().preCreateVM(vmUuid, null,
-					1, name, null, null, memory,
-					cpu, VMManager.POWER_CREATE, 1, new Date());
+			preCreate = this.getVmDAO().preCreateVM(vmUuid, null, 1, name,
+					null, null, memory, cpu, VMManager.POWER_CREATE, 1,
+					new Date());
 			if (preCreate) {
 				conn = this.getConstant().getConnectionFromPool(poolUuid);
 				String hostUuid = this.getAllocateHost(poolUuid, memory);
@@ -1296,14 +1311,15 @@ public class VMManager {
 				SR sr = SR.getByUuid(conn, srUuid);
 				String type = sr.getType(conn);
 				// Create VM By ISO
-				VM.Record record = VM.createVMFromISO(vmUuid, name, cpu, memory, conn, hostUuid, isoUuid, volumeSize, srUuid, type);
+				VM.Record record = VM.createVMFromISO(vmUuid, name, cpu,
+						memory, conn, hostUuid, isoUuid, volumeSize, srUuid,
+						type);
 				if (record != null) {
 					result = this.getVmDAO().updateVM(1, vmUuid, null,
 							VMManager.POWER_RUNNING, hostUuid, null);
 					String hostAddress = getHostAddress(hostUuid);
 					int port = getVNCPort(vmUuid, poolUuid);
-					NoVNC.createToken(vmUuid.substring(0, 8),
-							hostAddress, port);
+					NoVNC.createToken(vmUuid.substring(0, 8), hostAddress, port);
 					dbRollback = false;
 				}
 			}

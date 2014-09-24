@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.once.xenapi.Connection;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
@@ -18,6 +19,7 @@ import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
 
@@ -36,6 +38,7 @@ public class VnetManager {
 	private VMManager vmManager;
 	private RouterManager routerManager;
 	private MessagePush messagePush;
+	private Constant constant;
 
 	private MessagePush getMessagePush() {
 		return messagePush;
@@ -117,11 +120,111 @@ public class VnetManager {
 	private void setRouterManager(RouterManager routerManager) {
 		this.routerManager = routerManager;
 	}
+	
+	private Constant getConstant() {
+		return constant;
+	}
+
+	@Autowired
+	private void setConstant(Constant constant) {
+		this.constant = constant;
+	}
+
+	public enum DeleteVnetResult {
+		Success, Using, Failed
+	}
+
+	public JSONObject checkNet(int userId, String routerid, Integer net) {
+		JSONObject jo = new JSONObject();
+		int count = this.getVnetDAO().countAbleNet(userId, routerid, net);
+		if (count > 0) {
+			jo.put("result", false);
+		} else {
+			jo.put("result", true);
+		}
+		return jo;
+	}
+
+	public JSONArray getVMs(String vnUuid) {
+		JSONArray ja = new JSONArray();
+		List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(vnUuid);
+		if (ocvmList != null) {
+			for (OCVM ocvm : ocvmList) {
+				JSONObject jovm = new JSONObject();
+				jovm.put("hostid", ocvm.getVmUuid());
+				jovm.put("hostname", Utilities.encodeText(ocvm.getVmName()));
+				jovm.put("hoststatus", ocvm.getVmPower());
+				jovm.put("hostip",
+						null == ocvm.getVmIP() ? "null" : ocvm.getVmIP());
+				ja.put(jovm);
+			}
+		}
+		return ja;
+	}
+
+	public boolean bindVnetToVM(int userId, String vmuuid, String vnId,
+			String poolUuid) {
+		boolean result = false;
+		Date startTime = new Date();
+		try {
+			String vmUuid = vmuuid;
+			OCVM vm = this.getVmDAO().getVM(vmUuid);
+			if (vm != null) {
+				JSONArray infoArray = new JSONArray();
+				infoArray.put(Utilities.createLogInfo(
+						LogConstant.logObject.私有网络.toString(),
+						"vn-" + vnId.substring(0, 8)));
+				infoArray.put(Utilities.createLogInfo(
+						LogConstant.logObject.主机.toString(),
+						"i-" + vmUuid.substring(0, 8)));
+				Vnet vnet = this.getVnetDAO().getVnet(vnId);
+				this.getVmManager().setVlan(vmUuid,
+						vnet.getVnetID(), poolUuid);
+				vm.setVmVlan(vnId);
+				this.getVmDAO().updateVM(vm);
+				if (vnet.getVnetRouter() != null) {
+					String routerIp = this.getRouterDAO().getRouter(vnet.getVnetRouter())
+							.getRouterIP();
+					String url = routerIp + ":9090";
+					if (vnet.getDhcpStatus() == 1) {
+						String subnet = "192.168." + vnet.getVnetNet() + ".0";
+						Connection c = this.getConstant().getConnectionFromPool(poolUuid);
+						this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
+					}
+				}
+				result = true;
+				// write log and push message
+				Date endTime = new Date();
+				int elapse = Utilities.timeElapse(startTime, endTime);
+				if (result) {
+					OCLog log = this.getLogDAO().insertLog(userId,
+							LogConstant.logObject.私有网络.ordinal(),
+							LogConstant.logAction.加入.ordinal(),
+							LogConstant.logStatus.成功.ordinal(),
+							infoArray.toString(), startTime, elapse);
+					this.getMessagePush().pushMessage(userId,
+							Utilities.stickyToSuccess(log.toAString()));
+				} else {
+					OCLog log = this.getLogDAO().insertLog(userId,
+							LogConstant.logObject.私有网络.ordinal(),
+							LogConstant.logAction.加入.ordinal(),
+							LogConstant.logStatus.失败.ordinal(),
+							infoArray.toString(), startTime, elapse);
+					this.getMessagePush().pushMessage(userId,
+							Utilities.stickyToError(log.toAString()));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = false;
+		}
+		return result;
+	}
 
 	/**
 	 * 添加主机到私有网络
 	 */
-	public boolean addVmToVnet(int userId, String vmArray, String vnetId,
+	public boolean bindVnetToVMs(int userId, String vmArray, String vnetId,
 			String poolUuid) {
 		boolean result = false;
 		Date startTime = new Date();
@@ -154,10 +257,23 @@ public class VnetManager {
 						result = this.getVmDAO().returnToBasicNetwork(vmUuid,
 								ip);
 					} else {
+						Vnet vnet = this.getVnetDAO().getVnet(vnetId);
 						this.getVmManager().setVlan(vmUuid,
-								this.getVnetDAO().getVnet(vnetId).getVnetID(),
+								vnet.getVnetID(),
 								poolUuid);
-						result = this.getVmDAO().updateVMVlan(vmUuid, vnetId);
+						vm.setVmVlan(vnetId);
+						this.getVmDAO().updateVM(vm);
+						if (vnet.getVnetRouter() != null) {
+							String routerIp = this.getRouterDAO().getRouter(vnet.getVnetRouter())
+									.getRouterIP();
+							String url = routerIp + ":9090";
+							if (vnet.getDhcpStatus() == 1) {
+								String subnet = "192.168." + vnet.getVnetNet() + ".0";
+								Connection c = this.getConstant().getConnectionFromPool(poolUuid);
+								this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
+							}
+						}
+						result = true;
 					}
 					Date endTime = new Date();
 					int elapse = Utilities.timeElapse(startTime, endTime);
@@ -185,83 +301,6 @@ public class VnetManager {
 			result = false;
 		}
 		return result;
-	}
-
-	public JSONObject checkNet(int userId, String routerid, Integer net) {
-		JSONObject jo = new JSONObject();
-		int count = this.getVnetDAO().countAbleNet(userId, routerid, net);
-		if (count > 0) {
-			jo.put("result", false);
-		} else {
-			jo.put("result", true);
-		}
-		return jo;
-	}
-
-	public JSONArray getVMs(String vnUuid) {
-		JSONArray ja = new JSONArray();
-		List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(vnUuid);
-		if (ocvmList != null) {
-			for (OCVM ocvm : ocvmList) {
-				JSONObject jovm = new JSONObject();
-				jovm.put("hostid", ocvm.getVmUuid());
-				jovm.put("hostname", Utilities.encodeText(ocvm.getVmName()));
-				jovm.put("hoststatus", ocvm.getVmPower());
-				jovm.put("hostip",
-						null == ocvm.getVmIP() ? "null" : ocvm.getVmIP());
-				ja.put(jovm);
-			}
-		}
-		return ja;
-	}
-
-	public boolean addOneVmToVnet(int userId, String vmuuid, String vnId,
-			String poolUuid) {
-		boolean result = false;
-		Date startTime = new Date();
-		try {
-			String vmUuid = vmuuid;
-			OCVM vm = this.getVmDAO().getVM(vmUuid);
-			if (vm != null) {
-				JSONArray infoArray = new JSONArray();
-				infoArray.put(Utilities.createLogInfo(
-						LogConstant.logObject.私有网络.toString(),
-						"vn-" + vnId.substring(0, 8)));
-				infoArray.put(Utilities.createLogInfo(
-						LogConstant.logObject.主机.toString(),
-						"i-" + vmUuid.substring(0, 8)));
-				this.getVmManager().setVlan(vmUuid,
-						this.getVnetDAO().getVnet(vnId).getVnetID(), poolUuid);
-				result = this.getVmDAO().updateVMVlan(vmUuid, vnId);
-				Date endTime = new Date();
-				int elapse = Utilities.timeElapse(startTime, endTime);
-				if (result) {
-					OCLog log = this.getLogDAO().insertLog(userId,
-							LogConstant.logObject.私有网络.ordinal(),
-							LogConstant.logAction.加入.ordinal(),
-							LogConstant.logStatus.成功.ordinal(),
-							infoArray.toString(), startTime, elapse);
-					this.getMessagePush().pushMessage(userId,
-							Utilities.stickyToSuccess(log.toAString()));
-				} else {
-					OCLog log = this.getLogDAO().insertLog(userId,
-							LogConstant.logObject.私有网络.ordinal(),
-							LogConstant.logAction.加入.ordinal(),
-							LogConstant.logStatus.失败.ordinal(),
-							infoArray.toString(), startTime, elapse);
-					this.getMessagePush().pushMessage(userId,
-							Utilities.stickyToError(log.toAString()));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = false;
-		}
-		return result;
-	}
-
-	public enum DeleteVnetResult {
-		Success, Using, Failed
 	}
 
 	public String deleteVnet(int userId, String vnetUuid) {
@@ -488,7 +527,7 @@ public class VnetManager {
 	public JSONObject vnetAddvm(int userId, String vmuuidStr, String vnId,
 			String poolUuid) {
 		JSONObject jo = new JSONObject();
-		if (this.addVmToVnet(userId, vmuuidStr, vnId, poolUuid)) {
+		if (this.bindVnetToVMs(userId, vmuuidStr, vnId, poolUuid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);
@@ -514,7 +553,7 @@ public class VnetManager {
 	public JSONObject bindVM(String vnId, String vmuuid, int userId,
 			String poolUuid) {
 		JSONObject jo = new JSONObject();
-		if (this.addOneVmToVnet(userId, vmuuid, vnId, poolUuid)) {
+		if (this.bindVnetToVM(userId, vmuuid, vnId, poolUuid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);
@@ -523,7 +562,7 @@ public class VnetManager {
 	}
 
 	public boolean isRouterHasVnets(String routerUuid, int userId) {
-		int count = this.getVnetDAO().getVnetsOfRouter(routerUuid, userId);
+		int count = this.getVnetDAO().countVnetsOfRouter(routerUuid, userId);
 		return count > 0;
 	}
 }
