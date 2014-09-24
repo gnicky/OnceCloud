@@ -38,8 +38,7 @@ $('.btn-second-next').on('click', function (event) {
 $('.btn-first-next').on('click', function (event) {
     event.preventDefault();
     if ($('#basicinfo-form').valid()) {
-    	if($("#select-iso option").length == 0)
-    		getISOList();
+    	getISOList();
 	    $("#wizard").bwizard("next");
     }
 });

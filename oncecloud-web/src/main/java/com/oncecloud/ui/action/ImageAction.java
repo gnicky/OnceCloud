@@ -46,7 +46,7 @@ public class ImageAction {
 
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
-	public String imageList(HttpServletRequest request,
+	public String delete(HttpServletRequest request,
 			@RequestParam String imageId, @RequestParam String imageName) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jo = this.getImageManager().deleteImage(user.getUserId(),
@@ -78,5 +78,21 @@ public class ImageAction {
 	public String basicList(HttpServletRequest request, @RequestParam String uuid) {
 		JSONObject jo = this.getImageManager().getBasciList(uuid);
 		return jo.toString();
+	}
+
+	@RequestMapping(value = "/ShareImageList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String shareImageList(HttpServletRequest request, @RequestParam String pooluuid, @RequestParam String images) {
+		String[] imageArray = images.split(","); 
+		JSONArray ja = this.getImageManager().getShareImageList(pooluuid, imageArray);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/ImageShare", method = { RequestMethod.POST })
+	@ResponseBody
+	public String imageShare(HttpServletRequest request, @RequestParam String sorpooluuid, @RequestParam String images ,@RequestParam String despooluuid) {
+		String[] imageArray = images.split(","); 
+		JSONArray ja = this.getImageManager().shareImages(sorpooluuid, despooluuid, imageArray);
+		return ja.toString();
 	}
 }

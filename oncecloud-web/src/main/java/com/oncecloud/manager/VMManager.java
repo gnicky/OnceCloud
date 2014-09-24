@@ -1266,12 +1266,12 @@ public class VMManager {
 		}
 	}
 
-	public void createVMByISO(String vmUuid, String isoUuid, String srUuid,
-			String name, int cpu, int memory, int volumeSize, String poolUuid) {
+	public void createVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid, int userId) {
 		int memoryCapacity = (int) (memory * 1024);
 		Date startTime = new Date();
 		boolean result = doCreateVMByISO(vmUuid, isoUuid, srUuid, name, cpu,
 				memoryCapacity, volumeSize, poolUuid);
+		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
 		JSONArray infoArray = new JSONArray();
@@ -1281,15 +1281,25 @@ public class VMManager {
 		infoArray.put(Utilities.createLogInfo("配置", cpu + " 核， " + memory
 				+ " GB"));
 		if (result) {
-			OCLog log = this.getLogDAO().insertLog(1,
+			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.主机.ordinal(),
 					LogConstant.logAction.创建.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
-			this.getMessagePush().editRowStatus(1, vmUuid, "running", "正常运行");
-			this.getMessagePush().editRowConsole(1, vmUuid, "add");
-			this.getMessagePush().pushMessage(1,
+			this.getMessagePush().editRowStatus(userId, vmUuid, "running",
+					"正常运行");
+			this.getMessagePush().editRowConsole(userId, vmUuid, "add");
+			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.创建.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().deleteRow(userId, vmUuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
 		}
 	}
 

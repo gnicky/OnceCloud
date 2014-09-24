@@ -743,6 +743,7 @@ public class RouterManager {
 				jo.put("vn_dhcp_start", vnet.getVnetStart());
 				jo.put("vn_dhcp_end", vnet.getVnetEnd());
 				jo.put("vn_name", vnet.getVnetName());
+				jo.put("vn_uuid", vnet.getVnetUuid());
 				ja.put(jo);
 			}
 		}

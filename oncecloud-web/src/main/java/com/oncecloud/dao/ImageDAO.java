@@ -288,7 +288,7 @@ public class ImageDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			image = new Image(imageUuid, imageName, imagePwd, imageUID, 20,
-					imagePlatform, 1, imageServer, imageDesc, new Date());
+					imagePlatform, 1, imageServer, imageDesc, new Date(), null);
 			image.setPreAllocate(0);
 			session.saveOrUpdate(image);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(imageUID,
@@ -329,6 +329,49 @@ public class ImageDAO {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
+		}
+		return result;
+	}
+	
+	public boolean isShared(String poolUuid, String referenceUuid) {
+		boolean result = false;
+		Session session = null;
+		Integer count = 0;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "select count(*) from Image where poolUuid=:poolUuid and referenceUuid=:referenceUuid and imageStatus = 1";
+			Query query = session.createQuery(queryString);
+			query.setString("poolUuid", poolUuid);
+			query.setString("referenceUuid", referenceUuid);
+			count = ((Number)query.uniqueResult()).intValue();
+			result = count > 0? false:true;
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+	
+	public boolean shareImage(String imageUuid, String referenceUuid, String poolUuid) {
+		boolean result = false;
+		Session session = null;
+		try {
+			Image oldImage = this.getImage(referenceUuid);
+			Image image = new Image(imageUuid, oldImage.getImageName(), oldImage.getImagePwd(), 
+					oldImage.getImageUID(), oldImage.getImageDisk(), oldImage.getImagePlatform(), 
+					oldImage.getImageStatus(), poolUuid, oldImage.getImageDesc(), oldImage.getCreateDate(),
+					referenceUuid);
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.save(image);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}

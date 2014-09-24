@@ -25,14 +25,15 @@ public class Image {
 	private String imageDesc;
 	private Date createDate;
 	private Integer preAllocate;
-
+	private String referenceUuid;
+	
 	public Image() {
 	}
 
 	public Image(String imageUuid, String imageName, String imagePwd,
 			Integer imageUID, Integer imageDisk, Integer imagePlatform,
 			Integer imageStatus, String poolUuid, String imageDesc,
-			Date createDate) {
+			Date createDate, String referenceUuid) {
 		super();
 		this.imageUuid = imageUuid;
 		this.imageName = imageName;
@@ -44,6 +45,7 @@ public class Image {
 		this.poolUuid = poolUuid;
 		this.imageDesc = imageDesc;
 		this.createDate = createDate;
+		this.referenceUuid = referenceUuid;
 	}
 
 	@Column(name = "image_pwd")
@@ -144,6 +146,15 @@ public class Image {
 
 	public void setPreAllocate(Integer preAllocate) {
 		this.preAllocate = preAllocate;
+	}
+
+	@Column(name = "reference_uuid")
+	public String getReferenceUuid() {
+		return referenceUuid;
+	}
+
+	public void setReferenceUuid(String referenceUuid) {
+		this.referenceUuid = referenceUuid;
 	}
 
 	@Override

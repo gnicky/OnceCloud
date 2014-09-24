@@ -184,6 +184,7 @@ public class VMAction {
 			, @RequestParam int cpu, @RequestParam int memory, @RequestParam String vmName
 			, @RequestParam String isouuid, @RequestParam String vmUuid, @RequestParam String diskuuid
 			, @RequestParam int volum) {
-		this.getVmManager().createVMByISO(vmUuid, isouuid, diskuuid, vmName, cpu, memory, volum, pooluuid);
+		User user = (User) request.getSession().getAttribute("user");
+		this.getVmManager().createVMByISO(vmUuid, isouuid, diskuuid, vmName, cpu, memory, volum, pooluuid, user.getUserId());
 	}
 }

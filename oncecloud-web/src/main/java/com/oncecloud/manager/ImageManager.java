@@ -1,26 +1,37 @@
 package com.oncecloud.manager;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
+import com.once.xenapi.Host;
+import com.once.xenapi.Types;
+import com.once.xenapi.Types.BadServerResponse;
+import com.once.xenapi.Types.XenAPIException;
 import com.once.xenapi.VM;
 import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.HostSRDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCPool;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.User;
 import com.oncecloud.log.LogConstant;
@@ -54,6 +65,8 @@ public class ImageManager {
 	private VMDAO vmDAO;
 	private HostDAO hostDAO;
 	private Constant constant;
+	private PoolDAO poolDAO;
+	private HostSRDAO hostSRDAO;
 
 	private HostManager getHostManager() {
 		return hostManager;
@@ -118,6 +131,24 @@ public class ImageManager {
 		this.constant = constant;
 	}
 
+	public PoolDAO getPoolDAO() {
+		return poolDAO;
+	}
+
+	@Autowired
+	public void setPoolDAO(PoolDAO poolDAO) {
+		this.poolDAO = poolDAO;
+	}
+
+	public HostSRDAO getHostSRDAO() {
+		return hostSRDAO;
+	}
+
+	@Autowired
+	public void setHostSRDAO(HostSRDAO hostSRDAO) {
+		this.hostSRDAO = hostSRDAO;
+	}
+
 	@SuppressWarnings("deprecation")
 	public boolean imageExist(String imageUuid, String poolUuid) {
 		boolean result = false;
@@ -164,6 +195,10 @@ public class ImageManager {
 				jo.put("imageuser", imageUser.getUserName());
 				jo.put("createDate",
 						Utilities.formatTime(image.getCreateDate()));
+				OCPool pool = this.getPoolDAO().getPool(image.getPoolUuid());
+				jo.put("pooluuid", pool.getPoolUuid());
+				jo.put("poolname", pool.getPoolName());
+				jo.put("reference", image.getReferenceUuid());
 				ja.put(jo);
 			}
 		}
@@ -267,6 +302,12 @@ public class ImageManager {
 			User imageUser = this.getUserDAO().getUser(imageUID);
 			jo.put("imageuser", imageUser.getUserName());
 			jo.put("createDate", Utilities.formatTime(image.getCreateDate()));
+			String pooluuid = image.getPoolUuid();
+			OCPool pool = this.getPoolDAO().getPool(pooluuid);
+			jo.put("poolname", pool.getPoolName());
+			jo.put("pooluuid", pooluuid);
+			jo.put("reference", image.getReferenceUuid());
+			
 			ja.put(jo);
 		}
 		// write log and push message
@@ -347,5 +388,100 @@ public class ImageManager {
 			jo.put("useDate", timeUsed);
 		}
 		return jo;
+	}
+	
+	public JSONArray getShareImageList(String poolUuid, String[] imageUuids) {
+		JSONArray ja = new JSONArray();
+		OCPool pool = this.getPoolDAO().getPool(poolUuid);
+		String master = pool.getPoolMaster();
+		Set<String> srListSet = new HashSet<String>();
+		srListSet = this.getHostSRDAO().getSRList(master);
+		if (srListSet.size() > 0) {
+			Set<String> hostListSet = new HashSet<String>();
+			Iterator iterator = srListSet.iterator();
+			hostListSet = this.getHostSRDAO().getHostList(iterator.next().toString());
+			hostListSet.remove(master);
+			if (hostListSet.size() > 0){
+				while (iterator.hasNext()) {
+					Set<String> hSet = new HashSet<String>();
+					hSet = this.getHostSRDAO().getHostList(iterator.next().toString());
+					hostListSet.retainAll(hSet);
+				}
+			}
+			if (hostListSet.size() > 0) {
+				boolean result = true;
+				for (String hostString : hostListSet) {
+					OCPool pl = this.getPoolDAO().getPoolByMaster(hostString);
+					for (String uuid : imageUuids) {
+						result &= this.getImageDAO().isShared( pl.getPoolUuid(), uuid); 
+					}
+					if (pl != null && result) {
+						JSONObject jo = new JSONObject();
+						jo.put("pooluuid", pl.getPoolUuid());
+						jo.put("poolname", pl.getPoolName());
+						ja.put(jo);
+					}
+				}
+			}
+		}
+		return ja;
+	}
+	
+	public JSONArray shareImages(String sorpoolUuid, String despoolUuid, String[] imageUuids) {
+		JSONArray ja = new JSONArray();
+		Connection conn = null;
+		conn = this.getConstant().getConnectionFromPool(sorpoolUuid);
+		for (String imageString : imageUuids) {
+			try {
+				Date startTime = new Date();
+				String uuid = UUID.randomUUID().toString();
+				OCPool pool = this.getPoolDAO().getPool(despoolUuid);
+				String masterString = pool.getPoolMaster();
+				OCHost host = this.getHostDAO().getHost(masterString);
+				String des_ip = host.getHostIP();
+				Host.migrateTemplate(conn, Types.toVM(imageString), uuid, des_ip);
+				boolean result = this.getImageDAO().shareImage(uuid, imageString, despoolUuid);
+				// write log and push message
+				Date endTime = new Date();
+				int elapse = Utilities.timeElapse(startTime, endTime);
+				
+				Image image = this.getImageDAO().getImage(imageString);
+				JSONObject jo = new JSONObject();
+				jo.put("imagename", Utilities.encodeText(image.getImageName()));
+				jo.put("imageid", uuid);
+				jo.put("imagesize", image.getImageDisk());
+				jo.put("imageplatform", Utilities.encodeText(Constant.Platform
+						.values()[image.getImagePlatform()].toString()));
+				jo.put("createDate", Utilities.formatTime(image.getCreateDate()));
+				jo.put("pooluuid", despoolUuid);
+				jo.put("poolname", pool.getPoolName());
+				jo.put("reference", imageString);
+				ja.put(jo);
+				
+				JSONArray infoArray = new JSONArray();
+				infoArray.put(Utilities.createLogInfo(
+						LogConstant.logObject.映像.toString(), uuid));
+				if (result) {
+					OCLog log = this.getLogDAO().insertLog(1,
+							LogConstant.logObject.映像.ordinal(),
+							LogConstant.logAction.创建.ordinal(),
+							LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+							startTime, elapse);
+					this.getMessagePush().pushMessage(1,
+							Utilities.stickyToSuccess(log.toString()));
+				} else {
+					OCLog log = this.getLogDAO().insertLog(1,
+							LogConstant.logObject.映像.ordinal(),
+							LogConstant.logAction.创建.ordinal(),
+							LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+							startTime, elapse);
+					this.getMessagePush().pushMessage(1,
+							Utilities.stickyToError(log.toString()));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return ja;
 	}
 }

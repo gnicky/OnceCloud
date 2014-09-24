@@ -37,8 +37,13 @@ $(document).ready(function () {
                         var type = $('.once-tab').find('.active').attr("type");
                         var stateStr = '<td><span class="icon-status icon-running" name="stateicon">'
                             + '</span><span name="stateword">可用</span></td>';
+                        var poolName = obj.poolname;
+                        var ref = obj.reference;
+                        if (ref == null) {
+                        	ref = 0;
+                        }
                         var mytr = '<tr imageUId="' + imageUUId + '" imageName="' + imageName + '" imageType="'
-                            + type + '"><td class=“rcheck"><input type="checkbox" name="imagerow"></td>'
+                            + type + '"><td class=“rcheck"><input type="checkbox" name="imagerow" imageRef="'+ ref +'" pooluuid="'+obj.pooluuid+'"></td>'
                             + '<td><a class="id">' + showid + '</a></td><td><a>' + imageName + '</a></td><td>' + imageSize + '</td><td>' + imageplatform + '</td>'
                             + stateStr + '<td>' + typeStr + '</td><td class="time">' + createDate + '</td></tr>';
                         $("#tablebody").prepend(mytr);
