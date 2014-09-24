@@ -462,4 +462,24 @@ public class VnetDAO {
 		}
 		return result;
 	}
+
+	public List<Vnet> getAvailableVnet(Integer userId) {
+		List<Vnet> vnetList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "from Vnet where vnetUID = :userId and vnetRouter = null order by createDate desc";
+			Query query = session.createQuery(queryString);
+			query.setInteger("userId", userId);
+			vnetList = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return vnetList;
+	}
 }

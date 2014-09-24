@@ -114,6 +114,11 @@ public class ModalControllerUser {
 		return new ModelAndView("user/modal/addtorouter");
 	}
 	
+	@RequestMapping(value = "/vnet/bindtorouter", method = { RequestMethod.GET })
+	public ModelAndView bindtorouter(HttpServletRequest request) {
+		return new ModelAndView("user/modal/bindrouter");
+	}
+	
 	@RequestMapping(value = "/expense/view", method = { RequestMethod.POST })
 	public ModelAndView viewExpense(HttpServletRequest request, @RequestParam String type, @RequestParam String resourceUuid) {
 		Map<String, Object> model = new HashMap<String, Object>();
