@@ -340,7 +340,7 @@ public class ImageDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "select count(*) from Image where poolUuid=:poolUuid and referenceUuid=:referenceUuid";
+			String queryString = "select count(*) from Image where poolUuid=:poolUuid and referenceUuid=:referenceUuid and imageStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setString("poolUuid", poolUuid);
 			query.setString("referenceUuid", referenceUuid);

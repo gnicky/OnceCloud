@@ -435,7 +435,11 @@ public class ImageManager {
 			try {
 				Date startTime = new Date();
 				String uuid = UUID.randomUUID().toString();
-				Host.migrateTemplate(conn, Types.toVM(imageString), uuid, despoolUuid);
+				OCPool pool = this.getPoolDAO().getPool(despoolUuid);
+				String masterString = pool.getPoolMaster();
+				OCHost host = this.getHostDAO().getHost(masterString);
+				String des_ip = host.getHostIP();
+				Host.migrateTemplate(conn, Types.toVM(imageString), uuid, des_ip);
 				boolean result = this.getImageDAO().shareImage(uuid, imageString, despoolUuid);
 				// write log and push message
 				Date endTime = new Date();
@@ -449,7 +453,6 @@ public class ImageManager {
 				jo.put("imageplatform", Utilities.encodeText(Constant.Platform
 						.values()[image.getImagePlatform()].toString()));
 				jo.put("createDate", Utilities.formatTime(image.getCreateDate()));
-				OCPool pool = this.getPoolDAO().getPool(despoolUuid);
 				jo.put("pooluuid", despoolUuid);
 				jo.put("poolname", pool.getPoolName());
 				jo.put("reference", imageString);

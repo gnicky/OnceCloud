@@ -35,7 +35,7 @@ $("#poolshareimage").on("click", function(event) {
 		type: "post",
 	 	url: "/ImageAction/ImageShare",
 	 	data: {sorpooluuid:sorpooluuid,despooluuid:despooluuid,images:images},
-	 	dataType: "text",
+	 	dataType: "json",
 	 	success: function(response) {
 	 		var tableStr = "";
 	 		$.each(response, function(index, obj) {
@@ -58,9 +58,7 @@ $("#poolshareimage").on("click", function(event) {
 						+ imageUId
 						+ '" imageName="'
 						+ imageName
-						+ '" imageType="'
-						+ type
-						+ '"><td class="rcheck"><input type="checkbox" name="imagerow" imageRef="'
+						+ '" imageType="system"><td class="rcheck"><input type="checkbox" name="imagerow" imageRef="'
 						+ ref + '" pooluuid="' + obj.pooluuid + '"></td>'
 						+ '<td><a class="id">' + showid + '</a></td><td><a>'
 						+ imageName + '</a></td><td>' + imageSize + '</td><td>'
