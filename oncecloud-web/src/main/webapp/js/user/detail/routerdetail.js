@@ -60,6 +60,7 @@ function getRouterBasicList() {
             var rtCapacity = obj.routerCapacity;
             var rtPower = obj.routerPower;
             var rtFirewall = obj.routerFirewall;
+            var rtFirewallName = decodeURIComponent(obj.routerFirewallName);
             var createDate = obj.createDate;
             var useDate = decodeURIComponent(obj.useDate);
             var stateStr = '';
@@ -108,6 +109,35 @@ function getRouterBasicList() {
                 + network + '</dd><dt>公网IP</dt><dd>'
                 + rtEip + '</dd><dt>防火墙</dt><dd>'
                 + rtFirewall + '</dd>');
+            
+            
+            if(rtPower==0)
+        	{
+        	  $("#startup").removeClass("btn-forbidden");
+        	  $("#shutdown").addClass("btn-forbidden");
+        	  
+        	} else if (rtPower == 1) {
+        	  $("#startup").addClass("btn-forbidden");
+           	  $("#shutdown").removeClass("btn-forbidden");
+        	}
+            
+            /// 现实ip，防火墙，等各种信息
+            var rtEip = obj.eip;
+            var rtEipUuid = obj.eipUuid;
+            if (rtEip == "") {
+        	   $("#routerip .component-id").text("");
+               $("#routerip").hide();
+               $("#routernoip").show();
+            } else {
+        	   $("#routerip .component-id").text(rtEip);
+               $("#routernoip").hide();
+               $("#routerip").show();
+            }
+            
+            $("#firewalldiv").find(".sg-name").text(rtFirewallName);
+            
+            $("#routeDiv").find(".private-ip").text(rtIp == "null"?"":rtIp);
+            $("#routeDiv").find(".router-id").text(showuuid);
         }
     });
 }
@@ -200,6 +230,9 @@ function getVxnets() {
         data: {routerUuid: routerUuid},
         dataType: 'json',
         success: function (array) {
+        	   ///cyh可视化 绑定私有网络
+        	 $(".tree").html("");
+        	
             if (array.length == 0) {
                 var _p = $('<p></p>');
                 _p.addClass("none");
@@ -209,8 +242,18 @@ function getVxnets() {
                 _p.append(_a);
                 _p.append("创建。");
                 $('#vxnets-t').append(_p);
+                
+                ///cyh可视化 绑定私有网络 
+                $(".tree").append('<div class="component-router-vxnet none" style="height: 125px;">\
+						<a id="addvnet" class="btn" href="#" style="top: 38.5px;"><span \
+						class="icon icon-vxnet" id="iconid"></span><span class="text">连接路由器</span></a>\
+				</div>');
+                $("#vnetslist").height(125*1);
+                
             } else {
+            	var i=0;
                 $.each(array, function (index, json) {
+                	i++;
                     var divone = $('<div></div>');
                     divone.addClass("static-title");
                     divone.html("私有网络:&nbsp;");
@@ -249,10 +292,33 @@ function getVxnets() {
                         pvm.text("当前私有网络中没有主机。");
                         $('#vxnets-t').append(table);
                         $('#vxnets-t').append(pvm);
+                        
+                        
+                      ///cyh可视化 绑定私有网络
+                        $(".tree").append(' <div class="component-router-vxnet" style="height: 125px;">\
+        						<a class="btn-delete btn-delete-vxnet" vnetid="'+json.vn_uuid +'" href="#"\
+        							style="top: 50.5px;"><span class="glyphicon glyphicon-remove"></span></a><a\
+        							class="ip-network" href="#"\
+        							data-permalink="" style="top: 72.5px;">192.168.'+ json.vn_net +'.0/24 /\
+        							192.168.'+json.vn_net +'.'+ json.vn_gate+'</a><a class="vxnet-name"\
+        							href="#" data-permalink="">'+json.vn_name +'</a>\
+        						<div class="graph-component component-vxnet-instances"\
+        							style="height: 125px; width: 104px;">\
+        							<div class="component-vxnet-instance none"\
+        								style="height: 125px;">\
+        								<a class="btn" href="#"\
+        									style="margin-top: 29.5px; margin-bottom: 29.5px;"><span\
+        									class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>\
+        							</div>\
+        						</div>\
+        					</div>');
+                       
+                        
                     } else {
                         var thead = $('<thead></thead>');
                         thead.html('<tr><th>主机 ID</th><th>名称</th><th>状态</th><th>IP 地址</th><th>DHCP 选项</th><th>操作</th></tr>');
                         table.append(thead);
+                       var vmlist="";
                         $.each(json.ocvm, function (index, jsonocvm) {
                             var stateStr = '';
                             if (jsonocvm.hoststatus == 0) {
@@ -277,10 +343,59 @@ function getVxnets() {
                                 + decodeURIComponent(jsonocvm.hostname) + '</td><td>' + stateStr + '</td><td>' + hosip
                                 + '</td><td></td><td><a href="#">修改</a></td>');
                             table.append(tbody);
+                            
+                            var endip = jsonocvm.hostip;
+                            if(endip=="null")
+                        	{
+                            	endip="";
+                        	}
+                            else{
+                            	endip = endip.substr(endip.length-1,1);
+                            }
+                            	
+                            vmlist=vmlist +'<div class="component-vxnet-instance"\
+									style="margin-top: 32.5px; margin-bottom: 32.5px;">\
+									<a class="btn-delete btn-delete-instance" intanceuuid="'+jsonocvm.hostid +'" href="#"><span\
+										class="glyphicon glyphicon-remove"></span></a><span class="private-ip">'+endip+'</span><a\
+										class="instance-name"\
+										href="#"\
+										data-permalink="">'+ decodeURIComponent(jsonocvm.hostname) +'</a>\
+								</div>';
                         });
+                        
+                        ///cyh可视化 绑定私有网络
+                        $(".tree").append(' <div class="component-router-vxnet" style="height: 125px;">\
+        						<a class="btn-delete btn-delete-vxnet" vnetid="'+json.vn_uuid +'" href="#"\
+        							style="top: 50.5px;"><span class="glyphicon glyphicon-remove"></span></a><a\
+        							class="ip-network" href="#"\
+        							data-permalink="" style="top: 72.5px;">192.168.'+ json.vn_net +'.0/24 /\
+        							192.168.'+json.vn_net +'.'+ json.vn_gate+'</a><a class="vxnet-name"\
+        							href="#" data-permalink="">'+json.vn_name +'</a>\
+        						<div class="graph-component component-vxnet-instances"\
+        							style="height: 125px; width: 104px;">'
+        							+ vmlist +
+        							'<div class="component-vxnet-instance none"\
+        								style="height: 125px;">\
+        								<a class="btn addinstance" href="#"\
+        									style="margin-top: 29.5px; margin-bottom: 29.5px;"><span\
+        									class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>\
+        							</div>\
+        						</div>\
+        					</div>');
+                        
                         $('#vxnets-t').append(table);
                     }
+                    
+                 
+                  
                 });
+                
+                ///cyh可视化 绑定私有网络 
+                $(".tree").append('<div class="component-router-vxnet none" style="height: 125px;">\
+						<a id="addvnet" class="btn" href="#" style="top: 38.5px;"><span \
+						class="icon icon-vxnet" id="iconid"></span><span class="text">连接路由器</span></a>\
+				</div>');
+                $("#vnetslist").height(125*(i+1));
             }
         }
     });

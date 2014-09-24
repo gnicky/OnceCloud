@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <div class="content detail" id="platformcontent"
-	routerUuid="${routerUuid}">
+	routerUuid="${routerUuid}" showid="{showId}" basepath="${basePath}">
 	<div class="intro">
 		<h1>网络&nbsp;Networks</h1>
 		<p class="lead">
@@ -137,73 +137,79 @@
 		<div class="graph graph-router">
 			<div class="graph-wrapper">
 				<h2 class="graph-title">
-					Router: ${showId} 结构示意图<a class="btn btn-monitor"><span
+					Router: ${showId} 结构示意图<!-- <a class="btn btn-monitor"><span
 						class="icon icon-chart"></span>&nbsp;流量监控</a><a
 						class="btn btn-applied" href="#"><span
-						class="icon icon-router"></span><span class="text">应用修改</span></a>
+						class="icon icon-router"></span><span class="text">应用修改</span></a> -->
 				</h2>
 				<div class="col-md-2 actions">
 					<div class="graph-actions">
-						<a class="btn btn-forbidden" href="#"><span
-							class="icon icon-power-on"></span><span class="text">启动</span></a><a
-							class="btn" href="#"><span class="icon icon-power-off"></span><span
-							class="text">关闭</span></a><a class="btn" href="#"><span
-							class="icon icon-modify"></span><span class="text">修改</span></a><a
-							class="btn btn-danger" href="#"><span
-							class="icon icon-delete"></span><span class="text">删除</span></a><a
-							class="btn btn-forbidden" href="#"><span
-							class="icon icon-recover"></span><span class="text">恢复</span></a>
+						    <a id="startup" class="btn btn-forbidden" href="#"><span
+							class="glyphicon glyphicon-play"></span>
+							<span class="text">启动</span></a>
+							<a id="shutdown" class="btn" href="#"><span class="glyphicon glyphicon-stop"></span>
+							<span class="text">关闭</span></a>
+							<a id="destroy" class="btn btn-danger" href="#">
+							 <span class="glyphicon glyphicon-trash"></span>
+							<span class="text">销毁</span></a>
 					</div>
 				</div>
 				<div class="col-md-10 components">
-					<div class="graph-component component-router-network"
+					<div class="graph-component component-router-network" id="componentsId"
 						style="height: 250px;">
 						<div class="graph-component component-router-cloud"></div>
-						<a class="btn" href="#"><span class="icon icon-eip"></span><span
+						<div class="graph-component component-router-eip" id="routerip" style="display:none">
+						   <a class="btn-delete" id="deleteIp" href="#">
+						      <span class="glyphicon glyphicon-remove"></span>
+						   </a>
+						   <span class="glyphicon glyphicon-globe"></span>
+						   <a class="component-id" href="#" data-permalink="">117.121.26.40</a>
+						</div>
+						
+						<a id="routernoip"  class="btn" href="#"><span class="glyphicon glyphicon-globe"></span><span
 							class="text">绑定公网IP</span></a>
 						<div class="graph-component component-router-vxnet0"></div>
 					</div>
-					<div class="graph-component component-router-sg">
-						<a class="sg-name" href="/pek1/security_groups/sg-q57emag9/"
-							data-permalink="">缺省防火墙</a><a class="btn" href="#"><span
-							class="icon icon-security_groups"></span><span class="text">修改防火墙</span></a>
+					<div class="graph-component component-router-sg" id="firewalldiv">
+						<a class="sg-name" href="#"
+							data-permalink="">缺省防火墙</a><a id="changefirewall" class="btn" href="#"><span
+							class="glyphicon glyphicon-pencil"></span><span class="text">修改防火墙</span></a>
 					</div>
-					<div class="graph-component component-router">
+					<div class="graph-component component-router" id="routeDiv">
 						<span class="private-ip">10.50.23.137</span><a class="router-id"
-							href="/pek1/networks/routers/rtr-9v87p09x/view/graph/"
 							data-permalink="">rtr-9v87p09x</a>
 					</div>
-					<div class="graph-component component-router-vxnets"
+					<div id="vnetslist" class="graph-component component-router-vxnets"
 						style="height: 250px;">
 						<div class="tree">
 							<div class="component-router-vxnet" style="height: 125px;">
 								<a class="btn-delete btn-delete-vxnet" href="#"
-									style="top: 50.5px;"><span class="icon icon-close"></span></a><a
-									class="ip-network" href="/pek1/networks/vxnets/vxnet-ihaaek2/"
+									style="top: 50.5px;"><span class="glyphicon glyphicon-remove"></span></a><a
+									class="ip-network" href="#"
 									data-permalink="" style="top: 72.5px;">192.168.1.0/24 /
 									192.168.1.1</a><a class="vxnet-name"
-									href="/pek1/networks/vxnets/vxnet-ihaaek2/" data-permalink="">vnet</a>
+									href="#" data-permalink="">vnet</a>
 								<div class="graph-component component-vxnet-instances"
 									style="height: 125px; width: 104px;">
 									<div class="component-vxnet-instance"
 										style="margin-top: 32.5px; margin-bottom: 32.5px;">
 										<a class="btn-delete" href="#"><span
-											class="icon icon-close"></span></a><span class="private-ip">.2</span><a
+											class="glyphicon glyphicon-remove"></span></a><span class="private-ip">.2</span><a
 											class="instance-name"
-											href="/pek1/instances/i-29cs09wm/view/graph"
+											href="#"
 											data-permalink="">vmtest</a>
 									</div>
 									<div class="component-vxnet-instance none"
 										style="height: 125px;">
 										<a class="btn" href="#"
 											style="margin-top: 29.5px; margin-bottom: 29.5px;"><span
-											class="icon icon-instances"></span><span class="text">添加主机</span></a>
+											class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>
 									</div>
 								</div>
 							</div>
 							<div class="component-router-vxnet none" style="height: 125px;">
-								<a class="btn" href="#" style="top: 38.5px;"><span
-									class="icon icon-vxnet"></span><span class="text">连接路由器</span></a>
+								<a id="addvnet" class="btn" href="#" style="top: 38.5px;"><span
+									class="icon icon-vxnet" id="iconid"></span><span class="text">连接路由器</span></a>
 							</div>
 						</div>
 					</div>

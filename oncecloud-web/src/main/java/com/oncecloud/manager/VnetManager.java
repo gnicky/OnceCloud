@@ -482,4 +482,19 @@ public class VnetManager {
 		int count = this.getVnetDAO().getVnetsOfRouter(routerUuid, userId);
 		return count > 0;
 	}
+
+	public JSONArray getAvailableVnet(Integer userId) {
+		JSONArray ja = new JSONArray();
+		
+		List<Vnet> vnetList = this.getVnetDAO().getAvailableVnet(userId);
+		if (vnetList != null) {
+			for (Vnet vnet : vnetList) {
+				JSONObject jo = new JSONObject();
+				jo.put("uuid",  vnet.getVnetUuid());
+				jo.put("name", Utilities.encodeText(vnet.getVnetName()));
+				ja.put(jo);
+			}
+		}
+		return ja;
+	}
 }

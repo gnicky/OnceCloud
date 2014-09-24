@@ -132,4 +132,12 @@ public class VnetAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVnetManager().vnetCreate(name, uuid, desc, user.getUserId());
 	}
+	
+	@RequestMapping(value = "/AvailableVnet", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getAvailableVnet(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getVnetManager().getAvailableVnet(user.getUserId());
+		return ja.toString();
+	}
 }
