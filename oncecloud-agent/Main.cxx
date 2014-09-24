@@ -6,11 +6,13 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-#include "Handler.h"
-#include "SetPasswordHandler.h"
 #include "Request.h"
-#include "SetPasswordRequest.h"
 #include "Response.h"
+#include "Handler.h"
+#include "SetPasswordRequest.h"
+#include "SetPasswordHandler.h"
+#include "SetAddressRequest.h"
+#include "SetAddressHandler.h"
 
 #define BUFFER_SIZE 1048576
 
@@ -27,6 +29,10 @@ Request * ParseRequest(char * rawRequest)
 	{
 		return new SetPasswordRequest(requestString);
 	}
+	if(requestType=="setAddress")
+	{
+		return new SetAddressRequest(requestString);
+	}
 	return NULL;
 }
 
@@ -35,6 +41,10 @@ Handler * CreateHandler(Request * request)
 	if(dynamic_cast<SetPasswordRequest *>(request)!=NULL)
 	{
 		return new SetPasswordHandler();
+	}
+	if(dynamic_cast<SetAddressRequest *>(request)!=NULL)
+	{
+		return new SetAddressHandler();
 	}
 	return NULL;
 }

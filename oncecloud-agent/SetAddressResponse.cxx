@@ -1,35 +1,35 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "Response.h"
-#include "SetPasswordResponse.h"
+#include "SetAddressResponse.h"
 
 using namespace std;
 using namespace boost::property_tree;
 
-SetPasswordResponse::SetPasswordResponse(bool result)
+SetAddressResponse::SetAddressResponse(bool result)
 {
-	string responseType="setPassword";
+	string responseType="setAddress";
 	this->SetResponseType(responseType);
 	this->SetResult(result);
 	this->BuildRawResponse();
 }
 
-SetPasswordResponse::~SetPasswordResponse()
+SetAddressResponse::~SetAddressResponse()
 {
 
 }
 
-bool SetPasswordResponse::GetResult()
+bool SetAddressResponse::GetResult()
 {
 	return this->result;
 }
 
-void SetPasswordResponse::SetResult(bool result)
+void SetAddressResponse::SetResult(bool result)
 {
 	this->result=result;
 }
 
-void SetPasswordResponse::BuildJson()
+void SetAddressResponse::BuildJson()
 {
 	ptree json;
 	this->SetJson(json);

@@ -12,8 +12,8 @@ LDFLAGS=-g -Wall -Werror
 BOOSTFLAGS=-lboost_filesystem -pthread
 LIBFLAGS=-lcrypt
 
-CXXCOLOR="\033[34m"
-LINKCOLOR="\033[34;1m"
+CXXCOLOR="\033[35m"
+LINKCOLOR="\033[35;1m"
 SRCCOLOR="\033[33m"
 BINCOLOR="\033[37;1m"
 MAKECOLOR="\033[32;1m"
@@ -26,7 +26,8 @@ endif
 
 AGENT=agent
 COMPONENT=Main.o Request.o Response.o Handler.o \
-	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o
+	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o \
+	SetAddressRequest.o SetAddressResponse.o SetAddressHandler.o
 
 all: everything
 clean:
@@ -57,6 +58,15 @@ SetPasswordResponse.o: SetPasswordResponse.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 SetPasswordHandler.o: SetPasswordHandler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetAddressRequest.o: SetAddressRequest.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetAddressResponse.o: SetAddressResponse.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+SetAddressHandler.o: SetAddressHandler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main
