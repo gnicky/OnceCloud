@@ -7,6 +7,7 @@
 #include "FirewallRule.h"
 #include "Core.h"
 #include "FirewallConfiguration.h"
+#include "Logger.h"
 
 int DoAddRule(const char * rule);
 int DoRemoveRule(const char * rule);
@@ -252,8 +253,9 @@ int DoAddRule(const char * rule)
 	}
 
 	strcat(newConfiguration,ruleEnd);
-
 	SaveConfiguration(newConfiguration);
+
+	WriteLog(LOG_NOTICE,"Firewall.DoAddRule: Rule added: \"%s\"",rule);
 
 	free(newConfiguration);
 	free(originalConfiguration);
@@ -336,6 +338,8 @@ int DoRemoveRule(const char * rule)
 	strcat(newConfiguration,ruleEnd);
 
 	SaveConfiguration(newConfiguration);
+
+	WriteLog(LOG_NOTICE,"Firewall.DoRemoveRule: Rule removed: \"%s\"",rule);
 
 	free(newConfiguration);
 	free(originalConfiguration);
