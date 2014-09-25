@@ -119,6 +119,13 @@ public class ModalControllerUser {
 		return new ModelAndView("user/modal/bindrouter");
 	}
 	
+	@RequestMapping(value = "/vnet/bindvmimage", method = { RequestMethod.POST })
+	public ModelAndView bindvmimage(HttpServletRequest request, @RequestParam String vnetid) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("vnetid", vnetid);
+		return new ModelAndView("user/modal/bindvmimage",model);
+	}
+	
 	@RequestMapping(value = "/expense/view", method = { RequestMethod.POST })
 	public ModelAndView viewExpense(HttpServletRequest request, @RequestParam String type, @RequestParam String resourceUuid) {
 		Map<String, Object> model = new HashMap<String, Object>();

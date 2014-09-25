@@ -306,7 +306,7 @@ function getVxnets() {
         							style="height: 125px; width: 104px;">\
         							<div class="component-vxnet-instance none"\
         								style="height: 125px;">\
-        								<a class="btn" href="#"\
+        								<a class="btn add-instance-btn" vnetid="'+json.vn_uuid +'" href="#"\
         									style="margin-top: 29.5px; margin-bottom: 29.5px;"><span\
         									class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>\
         							</div>\
@@ -376,7 +376,7 @@ function getVxnets() {
         							+ vmlist +
         							'<div class="component-vxnet-instance none"\
         								style="height: 125px;">\
-        								<a class="btn addinstance" href="#"\
+        								<a class="btn add-instance-btn" vnetid="'+json.vn_uuid +'" href="#"\
         									style="margin-top: 29.5px; margin-bottom: 29.5px;"><span\
         									class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>\
         							</div>\

@@ -12,8 +12,8 @@ LDFLAGS=-g -Wall -Werror
 BOOSTFLAGS=-lboost_filesystem -pthread
 LIBFLAGS=-lcrypt
 
-CXXCOLOR="\033[34m"
-LINKCOLOR="\033[34;1m"
+CXXCOLOR="\033[35m"
+LINKCOLOR="\033[35;1m"
 SRCCOLOR="\033[33m"
 BINCOLOR="\033[37;1m"
 MAKECOLOR="\033[32;1m"
@@ -25,8 +25,11 @@ QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDC
 endif
 
 AGENT=agent
-COMPONENT=Main.o Request.o Response.o Handler.o \
-	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o
+COMPONENT=Main.o \
+	Process.o \
+	Request.o Response.o Handler.o \
+	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o \
+	ConfigureInterfaceRequest.o ConfigureInterfaceResponse.o ConfigureInterfaceHandler.o
 
 all: everything
 clean:
@@ -39,6 +42,9 @@ everything: $(AGENT)
 
 # Component
 Main.o: Main.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Process.o: Process.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 Request.o: Request.cxx
@@ -57,6 +63,15 @@ SetPasswordResponse.o: SetPasswordResponse.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 SetPasswordHandler.o: SetPasswordHandler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+ConfigureInterfaceRequest.o: ConfigureInterfaceRequest.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+ConfigureInterfaceResponse.o: ConfigureInterfaceResponse.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+ConfigureInterfaceHandler.o: ConfigureInterfaceHandler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main

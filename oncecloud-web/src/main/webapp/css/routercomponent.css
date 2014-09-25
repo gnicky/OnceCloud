@@ -844,3 +844,44 @@ position: absolute;
 left: -16px;
 top: 10px;
 }
+
+
+.graph-router .component-vxnet-instance.none .btn:hover .text {
+display: block;
+background: #333;
+padding: 8px;
+width: 100px;
+text-align: center;
+color: #fff;
+position: absolute;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+top: -38px;
+left: -43px;
+}
+
+
+.graph-router .component-vxnet-instance.none .btn .glyphicon {
+color: #777;
+font-size: 20px;
+line-height: 30px;
+text-align: center;
+vertical-align: middle;
+}
+
+
+.graph-router .component-vxnet-instance.none .btn:hover .text::before {
+content: '';
+border-width: 8px;
+border-style: solid;
+border-color: #2a2d2e transparent transparent;
+font-size: 0;
+line-height: 0;
+height: 0;
+position: absolute;
+left: 50%;
+top: 32px;
+margin-left: -8px;
+}
+
