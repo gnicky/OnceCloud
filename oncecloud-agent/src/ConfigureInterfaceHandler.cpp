@@ -1,15 +1,13 @@
 #include <iostream>
 #include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string.hpp>
 
 #include "Process.h"
+#include "String.h"
 #include "ConfigureInterfaceHandler.h"
 #include "ConfigureInterfaceRequest.h"
 #include "ConfigureInterfaceResponse.h"
 
 using namespace std;
-using namespace boost;
 
 ConfigureInterfaceHandler::ConfigureInterfaceHandler()
 {
@@ -29,14 +27,14 @@ Request * ConfigureInterfaceHandler::ParseRequest(string request)
 Response * ConfigureInterfaceHandler::Handle(Request * request)
 {
 	ConfigureInterfaceRequest * configureInterfaceRequest=dynamic_cast<ConfigureInterfaceRequest *>(request);
-	string name=replace_all_copy(configureInterfaceRequest->GetMac(),":","");
-	string configureFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
-	boost::filesystem::path configureFile(configureFileName);
-	if(boost::filesystem::is_regular_file(configureFile))
+	string name=configureInterfaceRequest->GetMac();
+	ReplaceString(name,":","");
+	string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
+	if(access(configFileName.c_str(),F_OK)==0)
 	{
 		Execute(("ifdown "+name).c_str());
 	}
-	ofstream configureFileStream(configureFile.file_string().c_str());
+	ofstream configureFileStream(configFileName.c_str());
 	configureFileStream<<"NAME=\""<<name<<"\""<<endl;
 	configureFileStream<<"HWADDR=\""<<configureInterfaceRequest->GetMac()<<"\""<<endl;
 	configureFileStream<<"IPADDR=\""<<configureInterfaceRequest->GetIPAddress()<<"\""<<endl;

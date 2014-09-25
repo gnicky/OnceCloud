@@ -1,15 +1,14 @@
 #include <iostream>
 #include <fstream>
-#include <boost/filesystem.hpp>
-#include <boost/algorithm/string.hpp>
+#include <stdlib.h>
 
 #include "Process.h"
+#include "String.h"
 #include "RemoveInterfaceHandler.h"
 #include "RemoveInterfaceRequest.h"
 #include "RemoveInterfaceResponse.h"
 
 using namespace std;
-using namespace boost;
 
 RemoveInterfaceHandler::RemoveInterfaceHandler()
 {
@@ -29,13 +28,13 @@ Request * RemoveInterfaceHandler::ParseRequest(string request)
 Response * RemoveInterfaceHandler::Handle(Request * request)
 {
 	RemoveInterfaceRequest * removeInterfaceRequest=dynamic_cast<RemoveInterfaceRequest *>(request);
-	string name=replace_all_copy(removeInterfaceRequest->GetMac(),":","");
-	string configureFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
-	boost::filesystem::path configureFile(configureFileName);
-	if(boost::filesystem::is_regular_file(configureFile))
+	string name=removeInterfaceRequest->GetMac();
+	ReplaceString(name,":","");
+	string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
+	if(access(configFileName.c_str(),F_OK)==0)
 	{
 		Execute(("ifdown "+name).c_str());
-		boost::filesystem::remove(configureFile);
+		remove(configFileName.c_str());
 	}
 	return new RemoveInterfaceResponse(true);
 }
