@@ -10,10 +10,9 @@
 #include "Request.h"
 #include "Response.h"
 #include "IHandler.h"
-#include "SetPasswordRequest.h"
 #include "SetPasswordHandler.h"
-#include "ConfigureInterfaceRequest.h"
 #include "ConfigureInterfaceHandler.h"
+#include "RemoveInterfaceHandler.h"
 
 #define BUFFER_SIZE 1048576
 
@@ -42,12 +41,14 @@ void InitializeHandlers()
 {
 	Handlers["setPassword"]=new SetPasswordHandler();
 	Handlers["configureInterface"]=new ConfigureInterfaceHandler();
+	Handlers["removeInterface"]=new RemoveInterfaceHandler();
 }
 
 void CleanupHandlers()
 {
 	delete Handlers["setPassword"];
 	delete Handlers["configureInterface"];
+	delete Handlers["removeInterface"];
 }
 
 int main(int argc, char * argv [])

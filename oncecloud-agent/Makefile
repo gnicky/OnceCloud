@@ -29,7 +29,8 @@ COMPONENT=Main.o \
 	Process.o \
 	Request.o Response.o \
 	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o \
-	ConfigureInterfaceRequest.o ConfigureInterfaceResponse.o ConfigureInterfaceHandler.o
+	ConfigureInterfaceRequest.o ConfigureInterfaceResponse.o ConfigureInterfaceHandler.o \
+	RemoveInterfaceRequest.o RemoveInterfaceResponse.o RemoveInterfaceHandler.o
 
 all: everything
 clean:
@@ -69,6 +70,15 @@ ConfigureInterfaceResponse.o: ConfigureInterfaceResponse.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 ConfigureInterfaceHandler.o: ConfigureInterfaceHandler.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+RemoveInterfaceRequest.o: RemoveInterfaceRequest.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+RemoveInterfaceResponse.o: RemoveInterfaceResponse.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+RemoveInterfaceHandler.o: RemoveInterfaceHandler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main
