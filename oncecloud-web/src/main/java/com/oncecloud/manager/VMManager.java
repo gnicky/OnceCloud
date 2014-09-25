@@ -1321,7 +1321,7 @@ public class VMManager {
 				SR sr = SR.getByUuid(conn, srUuid);
 				String type = sr.getType(conn);
 				// Create VM By ISO
-				VM.Record record = VM.createVMFromISO(vmUuid, name, cpu,
+				VM.Record record = VM.createVMFromISO(vmUuid, "i-" + vmUuid.substring(0, 8), cpu,
 						memory, conn, hostUuid, isoUuid, volumeSize, srUuid,
 						type);
 				if (record != null) {

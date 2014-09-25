@@ -67,11 +67,11 @@ function init() {
     	 $(this).find(".text").hide();
     });
     
-    $(".components").on("mouseenter","#addinstance",function(){
+   /* $(".components").on("mouseenter",".add-instance-btn",function(){
    	 $(this).find(".text").show();
    }).on("mouseleave","#addinstance",function(){
    	 $(this).find(".text").hide();
-   });
+   });*/
     
     $(".components").on("click", "#addvnet", function () {
         addvnet();
@@ -84,11 +84,25 @@ function init() {
     $(".components").on("click", ".btn-delete-instance", function () {
     	unlinkinstance($(this).attr("intanceuuid"));
     });
+    
+    $(".components").on("click", ".add-instance-btn", function () {
+    	addinstance($(this).attr("vnetid"));
+    });
 }
 
 function addvnet()
 {
     $('#RouterModalContainer').load($("#platformcontent").attr('basepath')+'vnet/bindtorouter', '', function () {
+        $('#RouterModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+}
+
+function addinstance(vnetid)
+{
+    $('#RouterModalContainer').load($("#platformcontent").attr('basepath')+'vnet/bindvmimage',  {vnetid: vnetid}, function () {
         $('#RouterModalContainer').modal({
             backdrop: false,
             show: true
@@ -117,7 +131,7 @@ function unlink(uuid) {
 	                callback: function () {
 	                	 $.ajax({
 	                            type: 'post',
-	                            url: '/VnetAction/Unlink',
+	                            url: '/VnetAction/UnlinkRouter',
 	                            data: {vnetId: uuid},
 	                            dataType: 'text',
 	                            complete: function () {
@@ -138,13 +152,12 @@ function unlink(uuid) {
 }
 
 function unlinkinstance(uuid) {
-	
-    var infoList = $("#platformcontent").attr("showid");
+
     var showMessage = '';
     var showTitle = '';
    
-    showMessage = '<div class="alert alert-info" style="margin:10px 10px 0">离开路由器后,该网络内将无法访问外部网络.是否继续</div>';
-    showTitle = "离开路由器" + '&nbsp;' + infoList + '?';
+    showMessage = '<div class="alert alert-info" style="margin:10px 10px 0">解绑网络后将无法联网，确定 ?</div>';
+    showTitle = "提示" + '&nbsp;';
     
     bootbox.dialog({
         className: "oc-bootbox",
@@ -155,15 +168,17 @@ function unlinkinstance(uuid) {
                 label: "确定",
                 className: "btn-primary",
                 callback: function () {
-                	 $.ajax({
-                            type: 'post',
-                            url: '/VnetAction/Unlink',
-                            data: {vnetId: uuid},
-                            dataType: 'text',
-                            complete: function () {
+                    $.ajax({
+                        type: 'post',
+                        url: '/VMAction/UnbindNet',
+                        data: {uuid: uuid},
+                        dataType: 'json',
+                        success: function (obj) {
+                            if (obj.result) {
                             	getVxnets();
                             }
-                        });
+                        }
+                    });
                 }
             },
             cancel: {
