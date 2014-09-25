@@ -4,11 +4,11 @@
 #include "Request.h"
 #include "Response.h"
 
-class SetAddressHandler:
+class ConfigureInterfaceHandler:
 	public Handler
 {
 public:
-	SetAddressHandler();
-	~SetAddressHandler();
+	ConfigureInterfaceHandler();
+	~ConfigureInterfaceHandler();
 	Response * Handle(Request * request);
 };

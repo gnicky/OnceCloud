@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 #include <string.h>
 #include <sys/file.h>
 
@@ -11,12 +12,20 @@
 #include "Handler.h"
 #include "SetPasswordRequest.h"
 #include "SetPasswordHandler.h"
-#include "SetAddressRequest.h"
-#include "SetAddressHandler.h"
+#include "ConfigureInterfaceRequest.h"
+#include "ConfigureInterfaceHandler.h"
 
 #define BUFFER_SIZE 1048576
 
 char RequestBuffer[BUFFER_SIZE];
+map<string,Handler *> Handlers;
+
+void InitializeHandlers()
+{
+	Handlers["setPassword"]=new SetPasswordHandler();
+	Handlers["configureInterface"]=new ConfigureInterfaceHandler();
+}
+
 
 Request * ParseRequest(char * rawRequest)
 {
@@ -29,9 +38,9 @@ Request * ParseRequest(char * rawRequest)
 	{
 		return new SetPasswordRequest(requestString);
 	}
-	if(requestType=="setAddress")
+	if(requestType=="configureInterface")
 	{
-		return new SetAddressRequest(requestString);
+		return new ConfigureInterfaceRequest(requestString);
 	}
 	return NULL;
 }
@@ -42,9 +51,9 @@ Handler * CreateHandler(Request * request)
 	{
 		return new SetPasswordHandler();
 	}
-	if(dynamic_cast<SetAddressRequest *>(request)!=NULL)
+	if(dynamic_cast<ConfigureInterfaceRequest *>(request)!=NULL)
 	{
-		return new SetAddressHandler();
+		return new ConfigureInterfaceHandler();
 	}
 	return NULL;
 }

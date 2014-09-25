@@ -1,35 +1,35 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include "Response.h"
-#include "SetAddressResponse.h"
+#include "ConfigureInterfaceResponse.h"
 
 using namespace std;
 using namespace boost::property_tree;
 
-SetAddressResponse::SetAddressResponse(bool result)
+ConfigureInterfaceResponse::ConfigureInterfaceResponse(bool result)
 {
-	string responseType="setAddress";
+	string responseType="configureInterface";
 	this->SetResponseType(responseType);
 	this->SetResult(result);
 	this->BuildRawResponse();
 }
 
-SetAddressResponse::~SetAddressResponse()
+ConfigureInterfaceResponse::~ConfigureInterfaceResponse()
 {
 
 }
 
-bool SetAddressResponse::GetResult()
+bool ConfigureInterfaceResponse::GetResult()
 {
 	return this->result;
 }
 
-void SetAddressResponse::SetResult(bool result)
+void ConfigureInterfaceResponse::SetResult(bool result)
 {
 	this->result=result;
 }
 
-void SetAddressResponse::BuildJson()
+void ConfigureInterfaceResponse::BuildJson()
 {
 	ptree json;
 	this->SetJson(json);

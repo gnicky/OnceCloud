@@ -2,12 +2,12 @@
 
 #include "Response.h"
 
-class SetAddressResponse
+class ConfigureInterfaceResponse
 	: public Response
 {
 public:
-	SetAddressResponse(bool result);
-	~SetAddressResponse();
+	ConfigureInterfaceResponse(bool result);
+	~ConfigureInterfaceResponse();
 	bool GetResult();
 
 protected:

@@ -25,9 +25,11 @@ QUIET_LD = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDC
 endif
 
 AGENT=agent
-COMPONENT=Main.o Request.o Response.o Handler.o \
+COMPONENT=Main.o \
+	Process.o \
+	Request.o Response.o Handler.o \
 	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o \
-	SetAddressRequest.o SetAddressResponse.o SetAddressHandler.o
+	ConfigureInterfaceRequest.o ConfigureInterfaceResponse.o ConfigureInterfaceHandler.o
 
 all: everything
 clean:
@@ -40,6 +42,9 @@ everything: $(AGENT)
 
 # Component
 Main.o: Main.cxx
+	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
+
+Process.o: Process.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 Request.o: Request.cxx
@@ -60,13 +65,13 @@ SetPasswordResponse.o: SetPasswordResponse.cxx
 SetPasswordHandler.o: SetPasswordHandler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-SetAddressRequest.o: SetAddressRequest.cxx
+ConfigureInterfaceRequest.o: ConfigureInterfaceRequest.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-SetAddressResponse.o: SetAddressResponse.cxx
+ConfigureInterfaceResponse.o: ConfigureInterfaceResponse.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
-SetAddressHandler.o: SetAddressHandler.cxx
+ConfigureInterfaceHandler.o: ConfigureInterfaceHandler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 # Main

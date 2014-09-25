@@ -6,14 +6,13 @@
 using namespace std;
 using namespace boost::property_tree;
 
-class SetAddressRequest
+class ConfigureInterfaceRequest
 	: public Request
 {
 public:
-	SetAddressRequest(string & rawRequest);
-	~SetAddressRequest();
+	ConfigureInterfaceRequest(string & rawRequest);
+	~ConfigureInterfaceRequest();
 
-	string & GetName();
 	string & GetMac();
 	string & GetIPAddress();
 	string & GetNetmask();
@@ -21,7 +20,6 @@ public:
 	string & GetDns();
 
 protected:
-	void SetName(string & name);
 	void SetMac(string & mac);
 	void SetIPAddress(string & ipAddress);
 	void SetNetmask(string & netmask);
@@ -29,7 +27,6 @@ protected:
 	void SetDns(string & dns);
 
 private:
-	string name;
 	string mac;
 	string ipAddress;
 	string netmask;
