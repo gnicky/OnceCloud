@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Handler.h"
+#include "IHandler.h"
 #include "Request.h"
 #include "Response.h"
 
 class SetPasswordHandler :
-	public Handler
+	public IHandler
 {
 public:
 	SetPasswordHandler();
 	~SetPasswordHandler();
+	Request * ParseRequest(string & request);	
 	Response * Handle(Request * request);
 
 private:

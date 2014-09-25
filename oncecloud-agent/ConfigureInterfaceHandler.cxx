@@ -21,6 +21,11 @@ ConfigureInterfaceHandler::~ConfigureInterfaceHandler()
 
 }
 
+Request * ConfigureInterfaceHandler::ParseRequest(string & request)
+{
+	return new ConfigureInterfaceRequest(request);
+}
+
 Response * ConfigureInterfaceHandler::Handle(Request * request)
 {
 	ConfigureInterfaceRequest * configureInterfaceRequest=dynamic_cast<ConfigureInterfaceRequest *>(request);

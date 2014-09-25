@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Handler.h"
+#include "IHandler.h"
 #include "Request.h"
 #include "Response.h"
 
 class ConfigureInterfaceHandler:
-	public Handler
+	public IHandler
 {
 public:
 	ConfigureInterfaceHandler();
 	~ConfigureInterfaceHandler();
+	Request * ParseRequest(string & request);
 	Response * Handle(Request * request);
 };

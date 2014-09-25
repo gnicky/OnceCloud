@@ -27,7 +27,7 @@ endif
 AGENT=agent
 COMPONENT=Main.o \
 	Process.o \
-	Request.o Response.o Handler.o \
+	Request.o Response.o \
 	SetPasswordRequest.o SetPasswordResponse.o SetPasswordHandler.o \
 	ConfigureInterfaceRequest.o ConfigureInterfaceResponse.o ConfigureInterfaceHandler.o
 
@@ -51,9 +51,6 @@ Request.o: Request.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 Response.o: Response.cxx
-	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
-
-Handler.o: Handler.cxx
 	$(AGENT_CXX) $(CXXFLAGS) -o $@ $<
 
 SetPasswordRequest.o: SetPasswordRequest.cxx

@@ -25,6 +25,11 @@ SetPasswordHandler::~SetPasswordHandler()
 
 }
 
+Request * SetPasswordHandler::ParseRequest(string & request)
+{
+	return new SetPasswordRequest(request);
+}
+
 Response * SetPasswordHandler::Handle(Request * request)
 {
 	SetPasswordRequest * setPasswordRequest=dynamic_cast<SetPasswordRequest *>(request);
