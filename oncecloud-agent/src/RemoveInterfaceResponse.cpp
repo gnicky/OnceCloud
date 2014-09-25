@@ -1,10 +1,8 @@
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include "json/json.h"
 #include "Response.h"
 #include "RemoveInterfaceResponse.h"
 
 using namespace std;
-using namespace boost::property_tree;
 
 RemoveInterfaceResponse::RemoveInterfaceResponse(bool result)
 {
@@ -31,9 +29,9 @@ void RemoveInterfaceResponse::SetResult(bool result)
 
 void RemoveInterfaceResponse::BuildJson()
 {
-	ptree json;
-	this->SetJson(json);
-	this->GetJson().put("responseType",this->GetResponseType());
-	this->GetJson().put("result",this->GetResult());
+	Json::Value value;
+	this->SetJson(value);
+	this->GetJson()["responseType"]=this->GetResponseType();
+	this->GetJson()["result"]=this->GetResult();
 }
 

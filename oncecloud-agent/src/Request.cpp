@@ -1,19 +1,16 @@
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include "json/json.h"
 #include "Request.h"
 
 using namespace std;
-using namespace boost::property_tree;
 
-Request::Request(string & rawRequest)
+Request::Request(string rawRequest)
 {
-	ptree json;
-	stringstream stream(rawRequest);
-	read_json<ptree>(stream,json);
-	string requestType=json.get<string>("requestType");
+	Json::Reader reader;
+	Json::Value value;
+	reader.parse(rawRequest,value);
 	this->SetRawRequest(rawRequest);
-	this->SetJson(json);
-	this->SetRequestType(requestType);
+	this->SetJson(value);
+	this->SetRequestType(value["requestType"].asString());
 }
 
 Request::~Request()
@@ -26,7 +23,7 @@ string & Request::GetRawRequest()
 	return this->rawRequest;
 }
 
-void Request::SetRawRequest(string & rawRequest)
+void Request::SetRawRequest(string rawRequest)
 {
 	this->rawRequest=rawRequest;
 }
@@ -36,17 +33,17 @@ string & Request::GetRequestType()
 	return this->requestType;
 }
 
-void Request::SetRequestType(string & requestType)
+void Request::SetRequestType(string requestType)
 {
 	this->requestType=requestType;
 }
 
-ptree & Request::GetJson()
+Json::Value & Request::GetJson()
 {
 	return this->json;
 }
 
-void Request::SetJson(ptree & json)
+void Request::SetJson(Json::Value json)
 {
 	this->json=json;
 }

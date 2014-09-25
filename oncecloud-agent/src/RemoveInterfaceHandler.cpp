@@ -21,7 +21,7 @@ RemoveInterfaceHandler::~RemoveInterfaceHandler()
 
 }
 
-Request * RemoveInterfaceHandler::ParseRequest(string & request)
+Request * RemoveInterfaceHandler::ParseRequest(string request)
 {
 	return new RemoveInterfaceRequest(request);
 }

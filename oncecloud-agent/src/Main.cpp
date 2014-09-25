@@ -1,11 +1,9 @@
 #include <iostream>
 #include <map>
 #include <sys/file.h>
+#include <termios.h>
 
-#include <boost/asio.hpp>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-
+#include "json/json.h"
 #include "Request.h"
 #include "Response.h"
 #include "IHandler.h"
@@ -85,20 +83,22 @@ int main(int argc, char * argv [])
 
 	while(IsRunning)
 	{
+		Request * request=NULL;
+		Response * response=NULL;
 		try
 		{
 			int requestLength;
 			DoRead(serialPortDescriptor,&requestLength,sizeof(int));
 			DoRead(serialPortDescriptor,RequestBuffer,requestLength);
 
-			std::stringstream stream(RequestBuffer);
-			boost::property_tree::ptree rawRequest;
-			boost::property_tree::read_json<boost::property_tree::ptree>(stream,rawRequest);
-			std::string requestType=rawRequest.get<std::string>("requestType");
+			Json::Reader reader;
+			Json::Value value;
+			reader.parse(RequestBuffer,value);
+			std::string requestType=value["requestType"].asString();
 			std::string requestString=string(RequestBuffer);
 
-			auto_ptr<Request> request(Handlers[requestType]->ParseRequest(requestString));
-			auto_ptr<Response> response(Handlers[requestType]->Handle(request.get()));
+			request=Handlers[requestType]->ParseRequest(requestString);
+			response=Handlers[requestType]->Handle(request);
 
 			int responseLength=response->GetRawResponse().size()+1;
 			write(serialPortDescriptor,&responseLength,sizeof(int));
@@ -107,6 +107,15 @@ int main(int argc, char * argv [])
 		catch(std::exception & ex)
 		{
 			std::cout<<"Exception: "<<ex.what()<<std::endl;
+		}
+
+		if(request!=NULL)
+		{
+			delete request;
+		}
+		if(response!=NULL)
+		{
+			delete response;
 		}
 	}
 

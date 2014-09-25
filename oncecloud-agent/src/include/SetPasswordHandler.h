@@ -10,7 +10,7 @@ class SetPasswordHandler :
 public:
 	SetPasswordHandler();
 	~SetPasswordHandler();
-	Request * ParseRequest(string & request);	
+	Request * ParseRequest(string request);	
 	Response * Handle(Request * request);
 
 private:

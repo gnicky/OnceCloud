@@ -21,7 +21,7 @@ ConfigureInterfaceHandler::~ConfigureInterfaceHandler()
 
 }
 
-Request * ConfigureInterfaceHandler::ParseRequest(string & request)
+Request * ConfigureInterfaceHandler::ParseRequest(string request)
 {
 	return new ConfigureInterfaceRequest(request);
 }

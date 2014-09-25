@@ -1,15 +1,14 @@
-#include <boost/property_tree/ptree.hpp>
+#include "json/json.h"
 #include "Request.h"
 #include "RemoveInterfaceRequest.h"
 
 using namespace std;
-using namespace boost::property_tree;
 
-RemoveInterfaceRequest::RemoveInterfaceRequest(string & rawRequest)
+RemoveInterfaceRequest::RemoveInterfaceRequest(string rawRequest)
 	: Request(rawRequest)
 {
-	string mac=this->GetJson().get<string>("mac");
-	this->SetMac(mac);
+	Json::Value & value=this->GetJson();
+	this->SetMac(value["mac"].asString());
 }
 
 RemoveInterfaceRequest::~RemoveInterfaceRequest()
@@ -22,7 +21,7 @@ string & RemoveInterfaceRequest::GetMac()
 	return this->mac;
 }
 
-void RemoveInterfaceRequest::SetMac(string & mac)
+void RemoveInterfaceRequest::SetMac(string mac)
 {
 	this->mac=mac;
 }

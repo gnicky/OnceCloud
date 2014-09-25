@@ -9,8 +9,7 @@ AGENT_LD=$(QUIET_LD)$(LD)
 CPPFLAGS=-g -Wall -Werror -Ilib/include/ -Isrc/include/ -c
 LDFLAGS=-g -Wall -Werror
 
-BOOSTFLAGS=-lboost_filesystem -pthread
-LIBFLAGS=-lcrypt
+LIBFLAGS=-lcrypt -lboost_filesystem
 
 CPPCOLOR="\033[35m"
 LINKCOLOR="\033[35;1m"
@@ -48,7 +47,7 @@ everything: $(AGENT)
 
 # Agent
 $(AGENT): $(COMPONENT) $(LIB)
-	$(AGENT_LD) $(LDFLAGS) $(BOOSTFLAGS) $(LIBFLAGS) -o $@ $^
+	$(AGENT_LD) $(LDFLAGS) $(LIBFLAGS) -o $@ $^
 
 # Library
 output/jsoncpp.o: lib/jsoncpp.cpp

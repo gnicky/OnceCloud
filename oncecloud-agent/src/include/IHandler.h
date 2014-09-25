@@ -6,6 +6,6 @@
 class IHandler
 {
 public:
-	virtual Request * ParseRequest(string & request)=0;
+	virtual Request * ParseRequest(string request)=0;
 	virtual Response * Handle(Request * request)=0;
 };

@@ -10,6 +10,6 @@ class RemoveInterfaceHandler:
 public:
 	RemoveInterfaceHandler();
 	~RemoveInterfaceHandler();
-	Request * ParseRequest(string & request);
+	Request * ParseRequest(string request);
 	Response * Handle(Request * request);
 };

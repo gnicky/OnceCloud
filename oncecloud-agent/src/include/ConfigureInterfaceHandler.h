@@ -10,6 +10,6 @@ class ConfigureInterfaceHandler:
 public:
 	ConfigureInterfaceHandler();
 	~ConfigureInterfaceHandler();
-	Request * ParseRequest(string & request);
+	Request * ParseRequest(string request);
 	Response * Handle(Request * request);
 };

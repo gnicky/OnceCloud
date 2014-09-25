@@ -1,28 +1,27 @@
 #pragma once
 
-#include <boost/property_tree/ptree.hpp>
+#include "json/json.h"
 
 using namespace std;
-using namespace boost::property_tree;
 
 class Request
 {
 public:
-	Request(string & rawRequest);
+	Request(string rawRequest);
 	virtual ~Request();
 
 	string & GetRawRequest();
 	string & GetRequestType();
-	ptree & GetJson();
+	Json::Value & GetJson();
 
 protected:
-	void SetRawRequest(string & rawRequest);
-	void SetRequestType(string & requestType);
-	void SetJson(ptree & json);
+	void SetRawRequest(string rawRequest);
+	void SetRequestType(string requestType);
+	void SetJson(Json::Value json);
 
 private:
 	string rawRequest;
 	string requestType;
-	ptree json;
+	Json::Value json;
 };
 

@@ -1,9 +1,8 @@
 #pragma once
 
-#include <boost/property_tree/ptree.hpp>
+#include "json/json.h"
 
 using namespace std;
-using namespace boost::property_tree;
 
 class Response
 {
@@ -13,18 +12,18 @@ public:
 
 	string & GetRawResponse();
 	string & GetResponseType();
-	ptree & GetJson();
+	Json::Value & GetJson();
 
 protected:
-	void SetRawResponse(string & rawResponse);
-	void SetResponseType(string & responseType);
-	void SetJson(ptree & json);
+	void SetRawResponse(string rawResponse);
+	void SetResponseType(string responseType);
+	void SetJson(Json::Value json);
 	void BuildRawResponse();
 	virtual void BuildJson()=0;
 
 private:
 	string rawResponse;
 	string responseType;
-	ptree json;
+	Json::Value json;
 };
 

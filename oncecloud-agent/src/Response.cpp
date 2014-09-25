@@ -1,9 +1,7 @@
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include "json/json.h"
 #include "Response.h"
 
 using namespace std;
-using namespace boost::property_tree;
 
 Response::Response()
 {
@@ -20,7 +18,7 @@ string & Response::GetRawResponse()
 	return this->rawResponse;
 }
 
-void Response::SetRawResponse(string & rawResponse)
+void Response::SetRawResponse(string rawResponse)
 {
 	this->rawResponse=rawResponse;
 }
@@ -30,17 +28,17 @@ string & Response::GetResponseType()
 	return this->responseType;
 }
 
-void Response::SetResponseType(string & responseType)
+void Response::SetResponseType(string responseType)
 {
 	this->responseType=responseType;
 }
 
-ptree & Response::GetJson()
+Json::Value & Response::GetJson()
 {
 	return this->json;
 }
 
-void Response::SetJson(ptree & json)
+void Response::SetJson(Json::Value json)
 {
 	this->json=json;
 }
@@ -48,9 +46,6 @@ void Response::SetJson(ptree & json)
 void Response::BuildRawResponse()
 {
 	this->BuildJson();
-	stringstream stream;
-	write_json(stream,this->GetJson());
-	string rawResponse=stream.str();
-	this->SetRawResponse(rawResponse);
+	this->SetRawResponse(this->GetJson().toStyledString());
 }
 

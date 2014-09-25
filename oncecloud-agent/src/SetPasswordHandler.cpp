@@ -25,7 +25,7 @@ SetPasswordHandler::~SetPasswordHandler()
 
 }
 
-Request * SetPasswordHandler::ParseRequest(string & request)
+Request * SetPasswordHandler::ParseRequest(string request)
 {
 	return new SetPasswordRequest(request);
 }
