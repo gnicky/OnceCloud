@@ -1,7 +1,6 @@
 #include <iostream>
 #include <map>
 #include <sys/file.h>
-#include <signal.h>
 
 #include <boost/asio.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -20,23 +19,6 @@ char RequestBuffer[BUFFER_SIZE];
 map<string, IHandler *> Handlers;
 bool IsRunning;
 
-void OnInterrupt(int signal)
-{
-	std::cout<<"Interrupt."<<std::endl;
-	IsRunning=false;
-}
-
-void OnTerminate(int signal)
-{
-	std::cout<<"Terminate."<<std::endl;
-	IsRunning=false;
-}
-
-void OnHangup(int signal)
-{
-	std::cout<<"Hangup."<<std::endl;
-}
-
 void InitializeHandlers()
 {
 	Handlers["setPassword"]=new SetPasswordHandler();
@@ -51,43 +33,63 @@ void CleanupHandlers()
 	delete Handlers["removeInterface"];
 }
 
+void DoRead(int fileDescriptor, void * buffer, int count)
+{
+	int readBytes=0;
+	int remainingBytes=count;
+	while(remainingBytes>0)
+	{
+		int count=read(fileDescriptor,((char *)buffer)+readBytes,remainingBytes);
+		readBytes+=count;
+		remainingBytes-=count;
+	}
+}
+
 int main(int argc, char * argv [])
 {
-	signal(SIGINT,OnInterrupt);
-	signal(SIGTERM,OnTerminate);
-	signal(SIGHUP,OnHangup);
-
 	const char * serialPortPath="/dev/ttyS1";
-	int serialPortDescriptor=open(serialPortPath,O_RDWR);
-	if(flock(serialPortDescriptor,LOCK_EX|LOCK_NB)<0)
+	int serialPortDescriptor=open(serialPortPath,O_RDWR|O_NOCTTY);
+
+	if(serialPortDescriptor==-1)
 	{
-		cout<<"Cannot lock /dev/ttyS1"<<endl;
+		cout<<"Cannot open "<<serialPortPath<<endl;
 		return 1;
 	}
 
-	boost::asio::io_service ioService;
-	boost::asio::serial_port serialPort(ioService,serialPortPath);
-	serialPort.set_option(boost::asio::serial_port::baud_rate(19200));
-        serialPort.set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
-        serialPort.set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
-        serialPort.set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
-        serialPort.set_option(boost::asio::serial_port::character_size(8));
+	if(flock(serialPortDescriptor,LOCK_EX|LOCK_NB)<0)
+	{
+		cout<<"Cannot lock "<<serialPortPath<<endl;
+		return 1;
+	}
+
+	termios serialPortOption;
+	tcgetattr(serialPortDescriptor,&serialPortOption);
+	// Raw Mode
+	serialPortOption.c_lflag&=~(ICANON|ECHO|ECHOE|ISIG);
+	serialPortOption.c_oflag&=~OPOST;
+	// Character Size
+	serialPortOption.c_cflag&=~CSIZE;
+	serialPortOption.c_cflag|=CS8;
+	// Parity
+	serialPortOption.c_cflag&=~PARENB;
+	serialPortOption.c_iflag&=~INPCK;
+	// Stop Bits
+	serialPortOption.c_cflag&=~CSTOPB;
+	// Baud Rate
+	cfsetispeed(&serialPortOption,B38400);
+	cfsetospeed(&serialPortOption,B38400);
+	tcsetattr(serialPortDescriptor,TCSANOW,&serialPortOption);
 
 	InitializeHandlers();
 	IsRunning=true;
 
 	while(IsRunning)
 	{
-		IHandler * handler=NULL;
-		Request * request=NULL;
-		Response * response=NULL;
-
 		try
 		{
 			int requestLength;
-			boost::asio::read(serialPort,boost::asio::buffer(&requestLength,sizeof(int)));	
-			boost::asio::read(serialPort,boost::asio::buffer(RequestBuffer,requestLength),boost::asio::transfer_all());
-			ioService.run();
+			DoRead(serialPortDescriptor,&requestLength,sizeof(int));
+			DoRead(serialPortDescriptor,RequestBuffer,requestLength);
 
 			std::stringstream stream(RequestBuffer);
 			boost::property_tree::ptree rawRequest;
@@ -95,29 +97,16 @@ int main(int argc, char * argv [])
 			std::string requestType=rawRequest.get<std::string>("requestType");
 			std::string requestString=string(RequestBuffer);
 
-			handler=Handlers[requestType];
-			request=handler->ParseRequest(requestString);
-			response=handler->Handle(request);
+			auto_ptr<Request> request(Handlers[requestType]->ParseRequest(requestString));
+			auto_ptr<Response> response(Handlers[requestType]->Handle(request.get()));
 
 			int responseLength=response->GetRawResponse().size()+1;
-			boost::asio::write(serialPort,boost::asio::buffer(&responseLength,sizeof(int)));
-			boost::asio::write(serialPort,boost::asio::buffer(response->GetRawResponse().c_str(),responseLength));
-			ioService.run();
-		
-			delete request;
-			delete response;
+			write(serialPortDescriptor,&responseLength,sizeof(int));
+			write(serialPortDescriptor,response->GetRawResponse().c_str(),responseLength);
 		}
 		catch(std::exception & ex)
 		{
 			std::cout<<"Exception: "<<ex.what()<<std::endl;
-			if(request==NULL)
-			{
-				delete request;
-			}
-			if(response==NULL)
-			{
-				delete response;
-			}
 		}
 	}
 
