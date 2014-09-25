@@ -9,7 +9,7 @@ AGENT_LD=$(QUIET_LD)$(LD)
 CPPFLAGS=-g -Wall -Werror -Ilib/include/ -Isrc/include/ -c
 LDFLAGS=-g -Wall -Werror
 
-LIBFLAGS=-lcrypt -lboost_filesystem
+LIBFLAGS=-lcrypt
 
 CPPCOLOR="\033[35m"
 LINKCOLOR="\033[35;1m"
