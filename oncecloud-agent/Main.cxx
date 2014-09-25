@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
-#include <string.h>
 #include <sys/file.h>
+#include <signal.h>
 
 #include <boost/asio.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -21,6 +21,23 @@ char RequestBuffer[BUFFER_SIZE];
 map<string, IHandler *> Handlers;
 bool IsRunning;
 
+void OnInterrupt(int signal)
+{
+	std::cout<<"Interrupt."<<std::endl;
+	IsRunning=false;
+}
+
+void OnTerminate(int signal)
+{
+	std::cout<<"Terminate."<<std::endl;
+	IsRunning=false;
+}
+
+void OnHangup(int signal)
+{
+	std::cout<<"Hangup."<<std::endl;
+}
+
 void InitializeHandlers()
 {
 	Handlers["setPassword"]=new SetPasswordHandler();
@@ -35,6 +52,10 @@ void CleanupHandlers()
 
 int main(int argc, char * argv [])
 {
+	signal(SIGINT,OnInterrupt);
+	signal(SIGTERM,OnTerminate);
+	signal(SIGHUP,OnHangup);
+
 	const char * serialPortPath="/dev/ttyS1";
 	int serialPortDescriptor=open(serialPortPath,O_RDWR);
 	if(flock(serialPortDescriptor,LOCK_EX|LOCK_NB)<0)
@@ -53,31 +74,52 @@ int main(int argc, char * argv [])
 
 	InitializeHandlers();
 	IsRunning=true;
+
 	while(IsRunning)
 	{
-		int requestLength;
-		boost::asio::read(serialPort,boost::asio::buffer(&requestLength,sizeof(int)));	
-		boost::asio::read(serialPort,boost::asio::buffer(RequestBuffer,requestLength),boost::asio::transfer_all());
-		ioService.run();
+		IHandler * handler=NULL;
+		Request * request=NULL;
+		Response * response=NULL;
 
-		std::stringstream stream(RequestBuffer);
-		boost::property_tree::ptree rawRequest;
-		boost::property_tree::read_json<boost::property_tree::ptree>(stream,rawRequest);
-		std::string requestType=rawRequest.get<std::string>("requestType");
-		std::string requestString=string(RequestBuffer);
+		try
+		{
+			int requestLength;
+			boost::asio::read(serialPort,boost::asio::buffer(&requestLength,sizeof(int)));	
+			boost::asio::read(serialPort,boost::asio::buffer(RequestBuffer,requestLength),boost::asio::transfer_all());
+			ioService.run();
 
-		IHandler * handler=Handlers[requestType];
-		Request * request=handler->ParseRequest(requestString);
-		Response * response=handler->Handle(request);
+			std::stringstream stream(RequestBuffer);
+			boost::property_tree::ptree rawRequest;
+			boost::property_tree::read_json<boost::property_tree::ptree>(stream,rawRequest);
+			std::string requestType=rawRequest.get<std::string>("requestType");
+			std::string requestString=string(RequestBuffer);
 
-		int responseLength=response->GetRawResponse().size()+1;
-		boost::asio::write(serialPort,boost::asio::buffer(&responseLength,sizeof(int)));
-		boost::asio::write(serialPort,boost::asio::buffer(response->GetRawResponse().c_str(),responseLength));
-		ioService.run();
+			handler=Handlers[requestType];
+			request=handler->ParseRequest(requestString);
+			response=handler->Handle(request);
+
+			int responseLength=response->GetRawResponse().size()+1;
+			boost::asio::write(serialPort,boost::asio::buffer(&responseLength,sizeof(int)));
+			boost::asio::write(serialPort,boost::asio::buffer(response->GetRawResponse().c_str(),responseLength));
+			ioService.run();
 		
-		delete request;
-		delete response;
+			delete request;
+			delete response;
+		}
+		catch(std::exception & ex)
+		{
+			std::cout<<"Exception: "<<ex.what()<<std::endl;
+			if(request==NULL)
+			{
+				delete request;
+			}
+			if(response==NULL)
+			{
+				delete response;
+			}
+		}
 	}
+
 	CleanupHandlers();
 
 	flock(serialPortDescriptor,LOCK_UN);
