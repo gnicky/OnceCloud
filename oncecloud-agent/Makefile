@@ -26,7 +26,7 @@ endif
 AGENT=output/agent
 LIB=output/jsoncpp.o
 COMPONENT=output/Main.o \
-	output/Process.o output/String.o \
+	output/Process.o output/String.o output/Logger.o \
 	output/Request.o output/Response.o \
 	output/SetPasswordRequest.o output/SetPasswordResponse.o output/SetPasswordHandler.o \
 	output/ConfigureInterfaceRequest.o output/ConfigureInterfaceResponse.o output/ConfigureInterfaceHandler.o \
@@ -61,6 +61,9 @@ output/Process.o: src/Process.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/String.o: src/String.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/Logger.o: src/Logger.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/Request.o: src/Request.cpp

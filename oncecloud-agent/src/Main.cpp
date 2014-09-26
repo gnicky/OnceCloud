@@ -2,8 +2,10 @@
 #include <map>
 #include <sys/file.h>
 #include <termios.h>
+#include <signal.h>
 
 #include "json/json.h"
+#include "Logger.h"
 #include "Request.h"
 #include "Response.h"
 #include "IHandler.h"
@@ -16,6 +18,23 @@
 char RequestBuffer[BUFFER_SIZE];
 map<string, IHandler *> Handlers;
 bool IsRunning;
+
+void OnInterrupt(int signal)
+{
+	WriteLog(LOG_INFO,string("Asked to interrupt. Exiting."));
+	IsRunning=false;
+}
+
+void OnTerminate(int signal)
+{
+	WriteLog(LOG_INFO,string("Asked to terminate. Exiting."));
+	IsRunning=false;
+}
+
+void OnHangup(int signal)
+{
+	WriteLog(LOG_INFO,string("Asked to hang up. Ignored."));
+}
 
 void InitializeHandlers()
 {
@@ -35,7 +54,7 @@ void DoRead(int fileDescriptor, void * buffer, int count)
 {
 	int readBytes=0;
 	int remainingBytes=count;
-	while(remainingBytes>0)
+	while(remainingBytes>0 && IsRunning)
 	{
 		int count=read(fileDescriptor,((char *)buffer)+readBytes,remainingBytes);
 		readBytes+=count;
@@ -74,8 +93,14 @@ void SetSerialPort(int serialPortDescriptor)
 
 int main(int argc, char * argv [])
 {
-	const char * serialPortPath="/dev/ttyS1";
-	int serialPortDescriptor=open(serialPortPath,O_RDWR|O_NOCTTY);
+	signal(SIGINT,OnInterrupt);
+	signal(SIGTERM,OnTerminate);
+	signal(SIGHUP,OnHangup);
+	
+	WriteLog(LOG_INFO,"BeyondCloud Agent started.");
+
+	string serialPortPath="/dev/ttyS1";
+	int serialPortDescriptor=open(serialPortPath.c_str(),O_RDWR|O_NOCTTY);
 
 	if(serialPortDescriptor==-1)
 	{
@@ -91,9 +116,12 @@ int main(int argc, char * argv [])
 
 	SetSerialPort(serialPortDescriptor);
 
+	WriteLog(LOG_INFO,"Initialize handlers.");
 	InitializeHandlers();
 	IsRunning=true;
 
+	string info="Starting to listen on ";
+	WriteLog(LOG_INFO,"Starting to listen on "+serialPortPath);
 	while(IsRunning)
 	{
 		Request * request=NULL;
@@ -104,11 +132,17 @@ int main(int argc, char * argv [])
 			DoRead(serialPortDescriptor,&requestLength,sizeof(int));
 			DoRead(serialPortDescriptor,RequestBuffer,requestLength);
 
+			if(!IsRunning)
+			{
+				break;
+			}
+
 			Json::Reader reader;
 			Json::Value value;
 			reader.parse(RequestBuffer,value);
 			std::string requestType=value["requestType"].asString();
 			std::string requestString=string(RequestBuffer);
+			WriteLog(LOG_INFO,"Get Request: Type = "+requestType);
 
 			request=Handlers[requestType]->ParseRequest(requestString);
 			response=Handlers[requestType]->Handle(request);
@@ -116,6 +150,7 @@ int main(int argc, char * argv [])
 			int responseLength=response->GetRawResponse().size()+1;
 			write(serialPortDescriptor,&responseLength,sizeof(int));
 			write(serialPortDescriptor,response->GetRawResponse().c_str(),responseLength);
+			WriteLog(LOG_INFO,"Send Response: Type = "+requestType);
 		}
 		catch(std::exception & ex)
 		{
@@ -132,11 +167,13 @@ int main(int argc, char * argv [])
 		}
 	}
 
+	WriteLog(LOG_INFO,"Cleanup handlers.");
 	CleanupHandlers();
 
 	flock(serialPortDescriptor,LOCK_UN);
 	close(serialPortDescriptor);
 
+	WriteLog(LOG_INFO,"BeyondCloud Agent stopped.");
 	return 0;
 }
 
