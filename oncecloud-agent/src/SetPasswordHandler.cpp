@@ -6,14 +6,13 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <boost/algorithm/string.hpp>
 
 #include "SetPasswordHandler.h"
 #include "SetPasswordRequest.h"
 #include "SetPasswordResponse.h"
+#include "String.h"
 
 using namespace std;
-using namespace boost;
 
 SetPasswordHandler::SetPasswordHandler()
 {
@@ -45,7 +44,6 @@ bool SetPasswordHandler::DoSetPassword(string & userName, string & password)
 
 	string inputLine;
 	vector<string> list;
-	vector<string> item;
 	size_t i=0;
 	size_t j=0;
 	int status=0;
@@ -70,7 +68,8 @@ bool SetPasswordHandler::DoSetPassword(string & userName, string & password)
 	ofstream writeShadowFile("/etc/shadow");
 	for(i=0;i<list.size();i++)
 	{
-		split(item,list[i],is_any_of(":"));
+		vector<string> item;
+		SplitString(item,list[i],":");
 		if(item[0]==userName)
 		{
 			writeShadowFile<<item[0]<<":"<<encryptedPassword<<":";

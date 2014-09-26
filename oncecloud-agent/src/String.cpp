@@ -14,3 +14,20 @@ string & ReplaceString(string & source, const string & keyword, const string & r
 	}
 	return source;
 }
+
+void SplitString(vector<string> & destination, const string & source, const string & delimiter)
+{
+	string temp;
+	string::size_type position1;
+	string::size_type position2;
+	position2=source.find(delimiter);
+	position1=0;
+	while(position2!=string::npos)
+	{
+		destination.push_back(source.substr(position1,position2-position1));
+		position1=position2+1;
+		position2=source.find(delimiter,position1);
+	}
+	destination.push_back(source.substr(position1));
+}
+

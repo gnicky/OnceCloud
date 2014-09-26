@@ -43,6 +43,35 @@ void DoRead(int fileDescriptor, void * buffer, int count)
 	}
 }
 
+void SetSerialPort(int serialPortDescriptor)
+{
+	termios serialPortOption;
+	tcgetattr(serialPortDescriptor,&serialPortOption);
+
+	// Raw Mode
+	serialPortOption.c_lflag&=~ICANON;
+	serialPortOption.c_lflag&=~ECHO;
+	serialPortOption.c_lflag&=~ECHOE;
+	serialPortOption.c_lflag&=~ISIG;
+	serialPortOption.c_oflag&=~OPOST;
+	// Character Size
+	serialPortOption.c_cflag&=~CSIZE;
+	serialPortOption.c_cflag|=CS8;
+	// Parity
+	serialPortOption.c_cflag&=~PARENB;
+	serialPortOption.c_iflag&=~INPCK;
+	// Stop Bits
+	serialPortOption.c_cflag&=~CSTOPB;
+	// Timeout and Minimum bytes
+	serialPortOption.c_cc[VTIME]=0;
+	serialPortOption.c_cc[VMIN]=0;
+	// Baud Rate
+	cfsetispeed(&serialPortOption,B38400);
+	cfsetospeed(&serialPortOption,B38400);
+	
+	tcsetattr(serialPortDescriptor,TCSANOW,&serialPortOption);
+}
+
 int main(int argc, char * argv [])
 {
 	const char * serialPortPath="/dev/ttyS1";
@@ -60,23 +89,7 @@ int main(int argc, char * argv [])
 		return 1;
 	}
 
-	termios serialPortOption;
-	tcgetattr(serialPortDescriptor,&serialPortOption);
-	// Raw Mode
-	serialPortOption.c_lflag&=~(ICANON|ECHO|ECHOE|ISIG);
-	serialPortOption.c_oflag&=~OPOST;
-	// Character Size
-	serialPortOption.c_cflag&=~CSIZE;
-	serialPortOption.c_cflag|=CS8;
-	// Parity
-	serialPortOption.c_cflag&=~PARENB;
-	serialPortOption.c_iflag&=~INPCK;
-	// Stop Bits
-	serialPortOption.c_cflag&=~CSTOPB;
-	// Baud Rate
-	cfsetispeed(&serialPortOption,B38400);
-	cfsetospeed(&serialPortOption,B38400);
-	tcsetattr(serialPortDescriptor,TCSANOW,&serialPortOption);
+	SetSerialPort(serialPortDescriptor);
 
 	InitializeHandlers();
 	IsRunning=true;
