@@ -15,46 +15,47 @@
 
 #define BUFFER_SIZE 1048576
 
-char RequestBuffer[BUFFER_SIZE];
-map<string, IHandler *> Handlers;
-bool IsRunning;
+char requestBuffer[BUFFER_SIZE];
+map<string, IHandler *> handlers;
+bool isRunning;
+Logger logger(LogLevel::Debug);
 
 void OnInterrupt(int signal)
 {
-	WriteLog(LOG_INFO,string("Asked to interrupt. Exiting."));
-	IsRunning=false;
+	logger.Write(LogLevel::Information,"Asked to interrupt. Exiting.");
+	isRunning=false;
 }
 
 void OnTerminate(int signal)
 {
-	WriteLog(LOG_INFO,string("Asked to terminate. Exiting."));
-	IsRunning=false;
+	logger.Write(LogLevel::Information,"Asked to terminate. Exiting.");
+	isRunning=false;
 }
 
 void OnHangup(int signal)
 {
-	WriteLog(LOG_INFO,string("Asked to hang up. Ignored."));
+	logger.Write(LogLevel::Information,"Asked to hang up. Ignored.");
 }
 
 void InitializeHandlers()
 {
-	Handlers["setPassword"]=new SetPasswordHandler();
-	Handlers["configureInterface"]=new ConfigureInterfaceHandler();
-	Handlers["removeInterface"]=new RemoveInterfaceHandler();
+	handlers["setPassword"]=new SetPasswordHandler();
+	handlers["configureInterface"]=new ConfigureInterfaceHandler();
+	handlers["removeInterface"]=new RemoveInterfaceHandler();
 }
 
 void CleanupHandlers()
 {
-	delete Handlers["setPassword"];
-	delete Handlers["configureInterface"];
-	delete Handlers["removeInterface"];
+	delete handlers["setPassword"];
+	delete handlers["configureInterface"];
+	delete handlers["removeInterface"];
 }
 
 void DoRead(int fileDescriptor, void * buffer, int count)
 {
 	int readBytes=0;
 	int remainingBytes=count;
-	while(remainingBytes>0 && IsRunning)
+	while(remainingBytes>0 && isRunning)
 	{
 		int count=read(fileDescriptor,((char *)buffer)+readBytes,remainingBytes);
 		readBytes+=count;
@@ -97,7 +98,7 @@ int main(int argc, char * argv [])
 	signal(SIGTERM,OnTerminate);
 	signal(SIGHUP,OnHangup);
 	
-	WriteLog(LOG_INFO,"BeyondCloud Agent started.");
+	logger.Write(LogLevel::Information,"BeyondCloud Agent started.");
 
 	string serialPortPath="/dev/ttyS1";
 	int serialPortDescriptor=open(serialPortPath.c_str(),O_RDWR|O_NOCTTY);
@@ -116,13 +117,13 @@ int main(int argc, char * argv [])
 
 	SetSerialPort(serialPortDescriptor);
 
-	WriteLog(LOG_INFO,"Initialize handlers.");
+	logger.Write(LogLevel::Information,"Initialize handlers.");
 	InitializeHandlers();
-	IsRunning=true;
+	isRunning=true;
 
 	string info="Starting to listen on ";
-	WriteLog(LOG_INFO,"Starting to listen on "+serialPortPath);
-	while(IsRunning)
+	logger.Write(LogLevel::Information,"Starting to listen on "+serialPortPath);
+	while(isRunning)
 	{
 		Request * request=NULL;
 		Response * response=NULL;
@@ -130,27 +131,27 @@ int main(int argc, char * argv [])
 		{
 			int requestLength;
 			DoRead(serialPortDescriptor,&requestLength,sizeof(int));
-			DoRead(serialPortDescriptor,RequestBuffer,requestLength);
+			DoRead(serialPortDescriptor,requestBuffer,requestLength);
 
-			if(!IsRunning)
+			if(!isRunning)
 			{
 				break;
 			}
 
 			Json::Reader reader;
 			Json::Value value;
-			reader.parse(RequestBuffer,value);
+			reader.parse(requestBuffer,value);
 			std::string requestType=value["requestType"].asString();
-			std::string requestString=string(RequestBuffer);
-			WriteLog(LOG_INFO,"Get Request: Type = "+requestType);
+			std::string requestString=string(requestBuffer);
+			logger.Write(LogLevel::Information,"Get Request: Type = "+requestType);
 
-			request=Handlers[requestType]->ParseRequest(requestString);
-			response=Handlers[requestType]->Handle(request);
+			request=handlers[requestType]->ParseRequest(requestString);
+			response=handlers[requestType]->Handle(request);
 
 			int responseLength=response->GetRawResponse().size()+1;
 			write(serialPortDescriptor,&responseLength,sizeof(int));
 			write(serialPortDescriptor,response->GetRawResponse().c_str(),responseLength);
-			WriteLog(LOG_INFO,"Send Response: Type = "+requestType);
+			logger.Write(LogLevel::Information,"Send Response: Type = "+requestType);
 		}
 		catch(std::exception & ex)
 		{
@@ -167,13 +168,13 @@ int main(int argc, char * argv [])
 		}
 	}
 
-	WriteLog(LOG_INFO,"Cleanup handlers.");
+	logger.Write(LogLevel::Information,"Cleanup handlers.");
 	CleanupHandlers();
 
 	flock(serialPortDescriptor,LOCK_UN);
 	close(serialPortDescriptor);
 
-	WriteLog(LOG_INFO,"BeyondCloud Agent stopped.");
+	logger.Write(LogLevel::Information,"BeyondCloud Agent stopped.");
 	return 0;
 }
 

@@ -1,15 +1,22 @@
 #pragma once
 
-#define	LOG_EMERG 0
-#define	LOG_ALERT 1
-#define	LOG_CRIT 2
-#define	LOG_ERR 3
-#define	LOG_WARNING 4
-#define	LOG_NOTICE 5
-#define	LOG_INFO 6
-#define	LOG_DEBUG 7
-
 #include <string>
-using namespace std;
+#include "LogLevel.h"
 
-void WriteLog(int priority, const string & message);
+class Logger
+{
+public:
+	Logger(const LogLevel & maxLevel);
+	~Logger();
+
+	const LogLevel & GetMaxLevel() const;
+
+	void Write(const LogLevel & level, const std::string & message);
+
+protected:
+	void SetMaxLevel(const LogLevel & maxLevel);
+
+private:
+	LogLevel maxLevel;	
+};
+
