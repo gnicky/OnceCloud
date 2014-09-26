@@ -35,7 +35,6 @@ import com.oncecloud.entity.Router;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
-import com.oncecloud.main.NoVNC;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
 
@@ -496,20 +495,22 @@ public class RouterManager {
 				List<Vnet> vnetList = this.getVnetDAO().getVnetsOfRouter(uuid);
 				if (vnetList != null && vnetList.size() > 0) {
 					for (Vnet vnet : vnetList) {
-						bindVlan(uuid, vnet.getVifUuid(), vnet.getVnetID(), poolUuid);
-						logger.debug("Update Router Vlan: MAC [" + vnet.getVifMac()
-								+ "] Vlan [" + vnet.getVnetID() + "]");
+						bindVlan(uuid, vnet.getVifUuid(), vnet.getVnetID(),
+								poolUuid);
+						logger.debug("Update Router Vlan: MAC ["
+								+ vnet.getVifMac() + "] Vlan ["
+								+ vnet.getVnetID() + "]");
 					}
 				}
 			}
 		}
 		return result;
 	}
-	
-	private void bindVlan(String routerUuid, String vifUuid, int vnetId, String poolUuid) {
+
+	private void bindVlan(String routerUuid, String vifUuid, int vnetId,
+			String poolUuid) {
 		try {
-			Connection c = this.getConstant().getConnectionFromPool(
-					poolUuid);
+			Connection c = this.getConstant().getConnectionFromPool(poolUuid);
 			VM router = VM.getByUuid(c, routerUuid);
 			router.setTag(c, Types.toVIF(vifUuid), String.valueOf(vnetId));
 		} catch (Exception e) {
@@ -597,12 +598,13 @@ public class RouterManager {
 		}
 		return result;
 	}
-	
+
 	public JSONObject doUnlinkRouter(String vnetUuid, int userId) {
 		JSONObject result = new JSONObject();
 		result.put("result", false);
 		try {
-			logger.info("Unlink to Router: Vnet [vn-" + vnetUuid.substring(0, 8) + "]");
+			logger.info("Unlink to Router: Vnet [vn-"
+					+ vnetUuid.substring(0, 8) + "]");
 			Connection c = this.getConstant().getConnection(userId);
 			Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
 			String vifUuid = vnet.getVifUuid();
@@ -611,10 +613,12 @@ public class RouterManager {
 			Router router = this.getRouterDAO().getAliveRouter(routerUuid);
 			VM routerVm = VM.getByUuid(c, routerUuid);
 			routerVm.destroyVIF(c, Types.toVIF(vifUuid));
-			logger.info("Delete VIF: UUID [vif-" + vifUuid.substring(0, 8) + "]");
+			logger.info("Delete VIF: UUID [vif-" + vifUuid.substring(0, 8)
+					+ "]");
 			String url = router.getRouterIP() + ":9090";
 			boolean delEthResult = Host.routeDelEth(c, url, vifMac);
-			logger.info("Delete Ethernet: Mac [" + vifMac + "] Result [" + delEthResult + "]");
+			logger.info("Delete Ethernet: Mac [" + vifMac + "] Result ["
+					+ delEthResult + "]");
 			if (vnet.getDhcpStatus() == 1) {
 				String subnet = "192.168." + vnet.getVnetNet() + ".0";
 				String netmask = "255.255.255.0";
@@ -633,12 +637,14 @@ public class RouterManager {
 	}
 
 	public JSONObject doLinkRouter(int userId, String vnetUuid,
-			String routerUuid, int net, int gate, int start, int end, int dhcpState) {
+			String routerUuid, int net, int gate, int start, int end,
+			int dhcpState) {
 		JSONObject result = new JSONObject();
 		result.put("result", false);
 		try {
-			logger.info("Link to Router: Router [rt-" + routerUuid.substring(0, 8)
-					+ "] Vnet [vn-" + vnetUuid.substring(0, 8) + "]");
+			logger.info("Link to Router: Router [rt-"
+					+ routerUuid.substring(0, 8) + "] Vnet [vn-"
+					+ vnetUuid.substring(0, 8) + "]");
 			Connection c = this.getConstant().getConnection(userId);
 			VM vm = VM.getByUuid(c, routerUuid);
 			String mac = Utilities.randomMac();
@@ -670,13 +676,14 @@ public class RouterManager {
 								+ rangeStart + "] RangeEnd [" + rangeEnd + "]");
 						addSubnetResult = RouterManager.addSubnet(c, url,
 								subnet, netmask, gateway, rangeStart, rangeEnd);
-						this.getVmManager().assginIpAddress(c, url, subnet, vnetUuid);
+						this.getVmManager().assginIpAddress(c, url, subnet,
+								vnetUuid);
 						logger.info("Configure Subnet Result: "
 								+ addSubnetResult);
 					}
 					if (addSubnetResult) {
-						this.getVnetDAO().linkToRouter(vnetUuid, routerUuid, net,
-								gate, start, end, dhcpState, vifUuid, mac);
+						this.getVnetDAO().linkToRouter(vnetUuid, routerUuid,
+								net, gate, start, end, dhcpState, vifUuid, mac);
 						result.put("result", true);
 					}
 				}
@@ -931,8 +938,54 @@ public class RouterManager {
 	public void updateImportance(String uuid, int importance) {
 		this.getRouterDAO().updateImportance(uuid, importance);
 	}
-	
+
 	public JSONArray getRoutersOfUser(int userId) {
 		return this.getRouterDAO().getRoutersOfUser(userId);
+	}
+
+	public JSONObject addPortForwarding(int userId, String allocate,
+			String protocol, String srcIP, String srcPort, String destIP,
+			String destPort) {
+		JSONObject jo = new JSONObject();
+		Connection c = this.getConstant().getConnectionFromPool(allocate);
+		boolean result = false;
+		try {
+			Host.addPortForwarding(c, srcIP, protocol, destIP, destPort, srcIP,
+					srcPort);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		jo.put("result", result);
+		if (result) {
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("端口转发添加成功"));
+		} else {
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("端口转发添加失败"));
+		}
+		return jo;
+	}
+
+	public JSONObject delPortForwarding(int userId, String allocate,
+			String protocol, String srcIP, String srcPort, String destIP,
+			String destPort) {
+		JSONObject jo = new JSONObject();
+		Connection c = this.getConstant().getConnectionFromPool(allocate);
+		boolean result = false;
+		try {
+			result = Host.delPortForwarding(c, srcIP, protocol, destIP,
+					destPort, srcIP, srcPort);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		jo.put("result", result);
+		if (result) {
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("端口转发删除成功"));
+		} else {
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess("端口转发删除失败"));
+		}
+		return jo;
 	}
 }

@@ -3464,4 +3464,38 @@ public class Host extends XenAPIObject {
 		return Types.toVM(result);
 	}	
 	
+	public static Boolean addPortForwarding(Connection c, String ip, String protocol, String internal_ip, String internal_port, String external_ip, String external_port)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.add_port_forwarding";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip),
+				Marshalling.toXMLRPC(protocol),
+				Marshalling.toXMLRPC(internal_ip),
+				Marshalling.toXMLRPC(internal_port),
+				Marshalling.toXMLRPC(external_ip),
+				Marshalling.toXMLRPC(external_port)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}	
+	
+	public static Boolean delPortForwarding(Connection c, String ip, String protocol, String internal_ip, String internal_port, String external_ip, String external_port)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.del_port_forwarding";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip),
+				Marshalling.toXMLRPC(protocol),
+				Marshalling.toXMLRPC(internal_ip),
+				Marshalling.toXMLRPC(internal_port),
+				Marshalling.toXMLRPC(external_ip),
+				Marshalling.toXMLRPC(external_port)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}	
+	
 }
