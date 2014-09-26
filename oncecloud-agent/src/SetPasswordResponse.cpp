@@ -2,8 +2,6 @@
 #include "Response.h"
 #include "SetPasswordResponse.h"
 
-using namespace std;
-
 SetPasswordResponse::SetPasswordResponse(bool result)
 {
 	this->SetResponseType("setPassword");
@@ -16,7 +14,7 @@ SetPasswordResponse::~SetPasswordResponse()
 
 }
 
-bool SetPasswordResponse::GetResult()
+bool SetPasswordResponse::GetResult() const
 {
 	return this->result;
 }

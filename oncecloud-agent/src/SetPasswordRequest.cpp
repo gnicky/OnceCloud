@@ -1,15 +1,13 @@
+#include <string>
 #include "json/json.h"
 #include "Request.h"
 #include "SetPasswordRequest.h"
 
-using namespace std;
-
-SetPasswordRequest::SetPasswordRequest(string rawRequest)
+SetPasswordRequest::SetPasswordRequest(const std::string & rawRequest)
 	: Request(rawRequest)
 {
-	Json::Value & value=this->GetJson();
-	this->SetUserName(value["userName"].asString());
-	this->SetPassword(value["password"].asString());
+	this->SetUserName(this->GetJson().get("userName","").asString());
+	this->SetPassword(this->GetJson().get("password","").asString());
 }
 
 SetPasswordRequest::~SetPasswordRequest()
@@ -17,22 +15,22 @@ SetPasswordRequest::~SetPasswordRequest()
 
 }
 
-string & SetPasswordRequest::GetUserName()
+const std::string & SetPasswordRequest::GetUserName() const
 {
 	return this->userName;
 }
 
-void SetPasswordRequest::SetUserName(string userName)
+void SetPasswordRequest::SetUserName(const std::string & userName)
 {
 	this->userName=userName;
 }
 
-string & SetPasswordRequest::GetPassword()
+const std::string & SetPasswordRequest::GetPassword() const
 {
 	return this->password;
 }
 
-void SetPasswordRequest::SetPassword(string password)
+void SetPasswordRequest::SetPassword(const std::string & password)
 {
 	this->password=password;
 }

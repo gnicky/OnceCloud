@@ -8,7 +8,7 @@ class SetPasswordResponse
 public:
 	SetPasswordResponse(bool result);
 	~SetPasswordResponse();
-	bool GetResult();
+	bool GetResult() const;
 
 protected:
 	void SetResult(bool result);

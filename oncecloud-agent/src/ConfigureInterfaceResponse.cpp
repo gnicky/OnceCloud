@@ -1,13 +1,12 @@
+#include <string>
+
 #include "json/json.h"
 #include "Response.h"
 #include "ConfigureInterfaceResponse.h"
 
-using namespace std;
-
 ConfigureInterfaceResponse::ConfigureInterfaceResponse(bool result)
 {
-	string responseType="configureInterface";
-	this->SetResponseType(responseType);
+	this->SetResponseType("configureInterface");
 	this->SetResult(result);
 	this->BuildRawResponse();
 }
@@ -17,7 +16,7 @@ ConfigureInterfaceResponse::~ConfigureInterfaceResponse()
 
 }
 
-bool ConfigureInterfaceResponse::GetResult()
+bool ConfigureInterfaceResponse::GetResult() const
 {
 	return this->result;
 }

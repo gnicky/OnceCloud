@@ -2,33 +2,33 @@
 
 #include "Request.h"
 
-using namespace std;
+#include <string>
 
 class ConfigureInterfaceRequest
 	: public Request
 {
 public:
-	ConfigureInterfaceRequest(string rawRequest);
+	ConfigureInterfaceRequest(const std::string & rawRequest);
 	~ConfigureInterfaceRequest();
 
-	string & GetMac();
-	string & GetIPAddress();
-	string & GetNetmask();
-	string & GetGateway();
-	string & GetDns();
+	const std::string & GetMac() const;
+	const std::string & GetIPAddress() const;
+	const std::string & GetNetmask() const;
+	const std::string & GetGateway() const;
+	const std::string & GetDns() const;
 
 protected:
-	void SetMac(string mac);
-	void SetIPAddress(string ipAddress);
-	void SetNetmask(string netmask);
-	void SetGateway(string gateway);
-	void SetDns(string dns);
+	void SetMac(const std::string & mac);
+	void SetIPAddress(const std::string & ipAddress);
+	void SetNetmask(const std::string & netmask);
+	void SetGateway(const std::string & gateway);
+	void SetDns(const std::string & dns);
 
 private:
-	string mac;
-	string ipAddress;
-	string netmask;
-	string gateway;
-	string dns;
+	std::string mac;
+	std::string ipAddress;
+	std::string netmask;
+	std::string gateway;
+	std::string dns;
 };
 

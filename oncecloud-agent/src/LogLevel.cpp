@@ -37,11 +37,11 @@ void LogLevel::SetLevel(const std::string & level)
 	this->level=level;
 }
 
-const LogLevel LogLevel::Emergency(0,"EMERGENCY");
+const LogLevel LogLevel::Emergency(0,"EMERG");
 const LogLevel LogLevel::Alert(1,"ALERT");
-const LogLevel LogLevel::Critical(2,"CRITICAL");
+const LogLevel LogLevel::Critical(2,"CRIT");
 const LogLevel LogLevel::Error(3,"ERROR");
-const LogLevel LogLevel::Warning(4,"WARNING");
+const LogLevel LogLevel::Warning(4,"WARN");
 const LogLevel LogLevel::Notice(5,"NOTICE");
-const LogLevel LogLevel::Information(6,"INFORMATION");
+const LogLevel LogLevel::Information(6,"INFO");
 const LogLevel LogLevel::Debug(7,"DEBUG");

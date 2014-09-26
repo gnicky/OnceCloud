@@ -1,14 +1,12 @@
+#include <string>
 #include "json/json.h"
 #include "Request.h"
 #include "RemoveInterfaceRequest.h"
 
-using namespace std;
-
-RemoveInterfaceRequest::RemoveInterfaceRequest(string rawRequest)
+RemoveInterfaceRequest::RemoveInterfaceRequest(const std::string & rawRequest)
 	: Request(rawRequest)
 {
-	Json::Value & value=this->GetJson();
-	this->SetMac(value["mac"].asString());
+	this->SetMac(this->GetJson().get("mac","").asString());
 }
 
 RemoveInterfaceRequest::~RemoveInterfaceRequest()
@@ -16,12 +14,12 @@ RemoveInterfaceRequest::~RemoveInterfaceRequest()
 
 }
 
-string & RemoveInterfaceRequest::GetMac()
+const std::string & RemoveInterfaceRequest::GetMac() const
 {
 	return this->mac;
 }
 
-void RemoveInterfaceRequest::SetMac(string mac)
+void RemoveInterfaceRequest::SetMac(const std::string & mac)
 {
 	this->mac=mac;
 }

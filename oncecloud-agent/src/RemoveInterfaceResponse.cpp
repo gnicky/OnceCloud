@@ -2,12 +2,9 @@
 #include "Response.h"
 #include "RemoveInterfaceResponse.h"
 
-using namespace std;
-
 RemoveInterfaceResponse::RemoveInterfaceResponse(bool result)
 {
-	string responseType="removeInterface";
-	this->SetResponseType(responseType);
+	this->SetResponseType("removeInterface");
 	this->SetResult(result);
 	this->BuildRawResponse();
 }
@@ -17,7 +14,7 @@ RemoveInterfaceResponse::~RemoveInterfaceResponse()
 
 }
 
-bool RemoveInterfaceResponse::GetResult()
+bool RemoveInterfaceResponse::GetResult() const
 {
 	return this->result;
 }

@@ -20,9 +20,11 @@ public:
 	static const LogLevel Notice;
 	static const LogLevel Information;
 	static const LogLevel Debug;
+
 protected:
 	void SetPriority(int priority);
 	void SetLevel(const std::string & level);
+
 private:
 	int priority;
 	std::string level;
