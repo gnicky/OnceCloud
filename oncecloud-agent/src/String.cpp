@@ -2,7 +2,17 @@
 #include <vector>
 #include "String.h"
 
-void ReplaceString(std::string & source, const std::string & keyword, const std::string & replaceWith)
+String::String()
+{
+
+}
+
+String::~String()
+{
+
+}
+
+void String::Replace(std::string & source, const std::string & keyword, const std::string & replaceWith)
 {
 	std::string::size_type position=0;
 	std::string::size_type keywordSize=keyword.size();
@@ -14,7 +24,7 @@ void ReplaceString(std::string & source, const std::string & keyword, const std:
 	}
 }
 
-void SplitString(std::vector<std::string> & destination, const std::string & source, const std::string & delimiter)
+void String::Split(std::vector<std::string> & destination, const std::string & source, const std::string & delimiter)
 {
 	std::string temp;
 	std::string::size_type position1;

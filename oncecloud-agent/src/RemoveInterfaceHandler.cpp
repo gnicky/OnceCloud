@@ -27,7 +27,7 @@ Response * RemoveInterfaceHandler::Handle(Request * request)
 {
 	RemoveInterfaceRequest * removeInterfaceRequest=dynamic_cast<RemoveInterfaceRequest *>(request);
 	std::string name=removeInterfaceRequest->GetMac();
-	ReplaceString(name,":","");
+	String::Replace(name,":","");
 	std::string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
 	if(access(configFileName.c_str(),F_OK)==0)
 	{

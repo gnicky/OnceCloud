@@ -68,7 +68,7 @@ bool SetPasswordHandler::DoSetPassword(const std::string & userName, const std::
 	for(i=0;i<list.size();i++)
 	{
 		std::vector<std::string> item;
-		SplitString(item,list[i],":");
+		String::Split(item,list[i],":");
 		if(item[0]==userName)
 		{
 			writeShadowFile<<item[0]<<":"<<encryptedPassword<<":";

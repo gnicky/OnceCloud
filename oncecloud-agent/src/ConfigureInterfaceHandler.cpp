@@ -27,7 +27,7 @@ Response * ConfigureInterfaceHandler::Handle(Request * request)
 {
 	ConfigureInterfaceRequest * configureInterfaceRequest=dynamic_cast<ConfigureInterfaceRequest *>(request);
 	std::string name=configureInterfaceRequest->GetMac();
-	ReplaceString(name,":","");
+	String::Replace(name,":","");
 	std::string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
 	if(access(configFileName.c_str(),F_OK)==0)
 	{
