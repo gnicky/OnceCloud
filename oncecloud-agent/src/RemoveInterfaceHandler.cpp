@@ -31,7 +31,7 @@ Response * RemoveInterfaceHandler::Handle(Request * request)
 	std::string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
 	if(access(configFileName.c_str(),F_OK)==0)
 	{
-		Execute(("ifdown "+name).c_str());
+		Process::Execute("ifdown "+name);
 		remove(configFileName.c_str());
 	}
 	return new RemoveInterfaceResponse(true);

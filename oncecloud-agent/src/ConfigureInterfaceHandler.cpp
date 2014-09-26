@@ -31,7 +31,7 @@ Response * ConfigureInterfaceHandler::Handle(Request * request)
 	std::string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
 	if(access(configFileName.c_str(),F_OK)==0)
 	{
-		Execute(("ifdown "+name).c_str());
+		Process::Execute("ifdown "+name);
 	}
 	std::ofstream configureFileStream(configFileName.c_str());
 	configureFileStream<<"NAME=\""<<name<<"\""<<std::endl;
@@ -48,7 +48,7 @@ Response * ConfigureInterfaceHandler::Handle(Request * request)
 	}
 	configureFileStream<<"ONBOOT=\"yes\""<<std::endl;
 	configureFileStream.close();
-	Execute(("ifup "+name).c_str());
+	Process::Execute("ifup "+name);
 	return new ConfigureInterfaceResponse(true);
 }
 
