@@ -104,6 +104,36 @@
 								<p class="alert alert-info">
 									添加端口转发规则，允许来自&nbsp;Internet&nbsp;或者&nbsp;基础网络&nbsp;(vxnet-0)&nbsp;对您的私有网络内部服务的访问。
 								</p>
+								<div class="hty-pane">
+									<div class="once-toolbar">
+										<button class="btn btn-default rule-refresh">
+											<span class="glyphicon glyphicon-refresh"
+												style="margin-right:0"></span>
+										</button>
+										<button id="fe_create" class="btn btn-default">+&nbsp;添加</button>
+										<button id="deleterule" class="btn btn-default btn-disable"
+											disabled style="color: #b8b8b8">
+											<span class="glyphicon glyphicon-trash"></span>删除
+										</button>
+									</div>
+									<table class="table table-bordered once-table">
+										<thead>
+											<tr>
+												<th>
+													<!--checkbox-->
+												</th>
+												<th>名称</th>
+												<th>协议</th>
+												<th>源端口</th>
+												<th>内网 IP</th>
+												<th>内网端口</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody id="tablebody">
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 						<div id="tunnel" class="pane-filter" style="display: none;">

@@ -967,3 +967,7 @@ dt.log-dt {
 .delete-net {
 	float: right;
 }
+.hty-pane {
+	background: white;
+	padding: 20px;
+}
