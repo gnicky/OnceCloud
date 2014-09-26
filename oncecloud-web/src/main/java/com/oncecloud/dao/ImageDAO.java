@@ -87,9 +87,7 @@ public class ImageDAO {
 		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
 		if (poolUuid != null) {
 			Session session = null;
-
 			try {
-
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				Query query = session

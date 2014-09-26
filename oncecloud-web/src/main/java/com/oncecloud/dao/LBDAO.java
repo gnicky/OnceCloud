@@ -154,7 +154,7 @@ public class LBDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from LB where lbUuid = :lbUuid and lbStatus = 0";
+			String queryString = "from LB where lbUuid = :lbUuid and lbStatus != 0";
 			Query query = session.createQuery(queryString);
 			query.setString("lbUuid", lbUuid);
 			lb = (LB) query.list().get(0);

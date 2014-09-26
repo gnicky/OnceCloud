@@ -6,5 +6,4 @@
 target/
 oncecloud-web/BeyondCloud.log
 oncecloud-web/BeyondCloud.log.*
-oncecloud-agent/agent
-oncecloud-gateway/gateway
+oncecloud-agent/output

@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Component;
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
 import com.once.xenapi.Types;
-import com.once.xenapi.Types.BadServerResponse;
-import com.once.xenapi.Types.XenAPIException;
 import com.once.xenapi.VM;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.HostSRDAO;
@@ -390,6 +387,7 @@ public class ImageManager {
 		return jo;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public JSONArray getShareImageList(String poolUuid, String[] imageUuids) {
 		JSONArray ja = new JSONArray();
 		OCPool pool = this.getPoolDAO().getPool(poolUuid);
