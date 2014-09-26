@@ -2,24 +2,22 @@
 
 #include "Request.h"
 
-using namespace std;
-
 class SetPasswordRequest
 	: public Request
 {
 public:
-	SetPasswordRequest(string rawRequest);
+	SetPasswordRequest(const std::string & rawRequest);
 	~SetPasswordRequest();
 
-	string & GetUserName();
-	string & GetPassword();
+	const std::string & GetUserName() const;
+	const std::string & GetPassword() const;
 
 protected:
-	void SetUserName(string userName);
-	void SetPassword(string password);	
+	void SetUserName(const std::string & userName);
+	void SetPassword(const std::string & password);	
 
 private:
-	string userName;
-	string password;
+	std::string userName;
+	std::string password;
 };
 

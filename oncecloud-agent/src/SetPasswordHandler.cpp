@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
@@ -12,8 +13,6 @@
 #include "SetPasswordResponse.h"
 #include "String.h"
 
-using namespace std;
-
 SetPasswordHandler::SetPasswordHandler()
 {
 
@@ -24,7 +23,7 @@ SetPasswordHandler::~SetPasswordHandler()
 
 }
 
-Request * SetPasswordHandler::ParseRequest(string request)
+Request * SetPasswordHandler::ParseRequest(const std::string & request)
 {
 	return new SetPasswordRequest(request);
 }
@@ -36,19 +35,19 @@ Response * SetPasswordHandler::Handle(Request * request)
 	return new SetPasswordResponse(result);
 }
 
-bool SetPasswordHandler::DoSetPassword(string & userName, string & password)
+bool SetPasswordHandler::DoSetPassword(const std::string & userName, const std::string & password)
 {
 	char salt[30];
 	this->GenerateSalt(salt);
 	char * encryptedPassword=crypt(password.c_str(),salt);
 
-	string inputLine;
-	vector<string> list;
+	std::string inputLine;
+	std::vector<std::string> list;
 	size_t i=0;
 	size_t j=0;
 	int status=0;
 
-	ifstream readShadowFile("/etc/shadow");
+	std::ifstream readShadowFile("/etc/shadow");
 	if(readShadowFile==NULL)
 	{
 		return false;
@@ -65,11 +64,11 @@ bool SetPasswordHandler::DoSetPassword(string & userName, string & password)
 		return false;
 	}
 
-	ofstream writeShadowFile("/etc/shadow");
+	std::ofstream writeShadowFile("/etc/shadow");
 	for(i=0;i<list.size();i++)
 	{
-		vector<string> item;
-		SplitString(item,list[i],":");
+		std::vector<std::string> item;
+		String::Split(item,list[i],":");
 		if(item[0]==userName)
 		{
 			writeShadowFile<<item[0]<<":"<<encryptedPassword<<":";

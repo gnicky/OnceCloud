@@ -8,7 +8,7 @@ class RemoveInterfaceResponse
 public:
 	RemoveInterfaceResponse(bool result);
 	~RemoveInterfaceResponse();
-	bool GetResult();
+	bool GetResult() const;
 
 protected:
 	void SetResult(bool result);

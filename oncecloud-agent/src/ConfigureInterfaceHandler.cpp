@@ -1,13 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include "Process.h"
 #include "String.h"
 #include "ConfigureInterfaceHandler.h"
 #include "ConfigureInterfaceRequest.h"
 #include "ConfigureInterfaceResponse.h"
-
-using namespace std;
 
 ConfigureInterfaceHandler::ConfigureInterfaceHandler()
 {
@@ -19,7 +18,7 @@ ConfigureInterfaceHandler::~ConfigureInterfaceHandler()
 
 }
 
-Request * ConfigureInterfaceHandler::ParseRequest(string request)
+Request * ConfigureInterfaceHandler::ParseRequest(const std::string & request)
 {
 	return new ConfigureInterfaceRequest(request);
 }
@@ -27,29 +26,29 @@ Request * ConfigureInterfaceHandler::ParseRequest(string request)
 Response * ConfigureInterfaceHandler::Handle(Request * request)
 {
 	ConfigureInterfaceRequest * configureInterfaceRequest=dynamic_cast<ConfigureInterfaceRequest *>(request);
-	string name=configureInterfaceRequest->GetMac();
-	ReplaceString(name,":","");
-	string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
+	std::string name=configureInterfaceRequest->GetMac();
+	String::Replace(name,":","");
+	std::string configFileName="/etc/sysconfig/network-scripts/ifcfg-"+name;
 	if(access(configFileName.c_str(),F_OK)==0)
 	{
-		Execute(("ifdown "+name).c_str());
+		Process::Execute("ifdown "+name);
 	}
-	ofstream configureFileStream(configFileName.c_str());
-	configureFileStream<<"NAME=\""<<name<<"\""<<endl;
-	configureFileStream<<"HWADDR=\""<<configureInterfaceRequest->GetMac()<<"\""<<endl;
-	configureFileStream<<"IPADDR=\""<<configureInterfaceRequest->GetIPAddress()<<"\""<<endl;
-	configureFileStream<<"NETMASK=\""<<configureInterfaceRequest->GetNetmask()<<"\""<<endl;
+	std::ofstream configureFileStream(configFileName.c_str());
+	configureFileStream<<"NAME=\""<<name<<"\""<<std::endl;
+	configureFileStream<<"HWADDR=\""<<configureInterfaceRequest->GetMac()<<"\""<<std::endl;
+	configureFileStream<<"IPADDR=\""<<configureInterfaceRequest->GetIPAddress()<<"\""<<std::endl;
+	configureFileStream<<"NETMASK=\""<<configureInterfaceRequest->GetNetmask()<<"\""<<std::endl;
 	if(configureInterfaceRequest->GetGateway()!="")
 	{
-		configureFileStream<<"GATEWAY=\""<<configureInterfaceRequest->GetGateway()<<"\""<<endl;
+		configureFileStream<<"GATEWAY=\""<<configureInterfaceRequest->GetGateway()<<"\""<<std::endl;
 	}
 	if(configureInterfaceRequest->GetDns()!="")
 	{
-		configureFileStream<<"DNS1=\""<<configureInterfaceRequest->GetDns()<<"\""<<endl;
+		configureFileStream<<"DNS1=\""<<configureInterfaceRequest->GetDns()<<"\""<<std::endl;
 	}
-	configureFileStream<<"ONBOOT=\"yes\""<<endl;
+	configureFileStream<<"ONBOOT=\"yes\""<<std::endl;
 	configureFileStream.close();
-	Execute(("ifup "+name).c_str());
+	Process::Execute("ifup "+name);
 	return new ConfigureInterfaceResponse(true);
 }
 

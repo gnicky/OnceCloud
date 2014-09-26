@@ -3,7 +3,13 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+class String
+{
+public:
+	static void Replace(std::string & source, const std::string & keyword, const std::string & replaceWith);
+	static void Split(std::vector<std::string> & destination, const std::string & source, const std::string & delimiter);
 
-string & ReplaceString(string & source, const string & keyword, const string & replaceWith);
-void SplitString(vector<string> & destination, const string & source, const string & delimiter);
+private:
+	String();
+	~String();
+};

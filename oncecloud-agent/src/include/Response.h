@@ -1,8 +1,7 @@
 #pragma once
 
+#include <string>
 #include "json/json.h"
-
-using namespace std;
 
 class Response
 {
@@ -10,20 +9,20 @@ public:
 	Response();
 	virtual ~Response();
 
-	string & GetRawResponse();
-	string & GetResponseType();
-	Json::Value & GetJson();
+	const std::string & GetRawResponse() const;
+	const std::string & GetResponseType() const;
 
 protected:
-	void SetRawResponse(string rawResponse);
-	void SetResponseType(string responseType);
-	void SetJson(Json::Value json);
+	Json::Value & GetJson();
+	void SetJson(const Json::Value & json);
+	void SetRawResponse(const std::string & rawResponse);
+	void SetResponseType(const std::string & responseType);
 	void BuildRawResponse();
 	virtual void BuildJson()=0;
 
 private:
-	string rawResponse;
-	string responseType;
+	std::string rawResponse;
+	std::string responseType;
 	Json::Value json;
 };
 

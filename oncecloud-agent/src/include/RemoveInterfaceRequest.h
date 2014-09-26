@@ -2,21 +2,19 @@
 
 #include "Request.h"
 
-using namespace std;
-
 class RemoveInterfaceRequest
 	: public Request
 {
 public:
-	RemoveInterfaceRequest(string rawRequest);
+	RemoveInterfaceRequest(const std::string & rawRequest);
 	~RemoveInterfaceRequest();
 
-	string & GetMac();
+	const std::string & GetMac() const;
 
 protected:
-	void SetMac(string mac);
+	void SetMac(const std::string & mac);
 
 private:
-	string mac;
+	std::string mac;
 };
 

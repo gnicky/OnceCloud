@@ -1,16 +1,15 @@
+#include <string>
 #include "json/json.h"
 #include "Request.h"
 
-using namespace std;
-
-Request::Request(string rawRequest)
+Request::Request(const std::string & rawRequest)
 {
 	Json::Reader reader;
 	Json::Value value;
 	reader.parse(rawRequest,value);
 	this->SetRawRequest(rawRequest);
 	this->SetJson(value);
-	this->SetRequestType(value["requestType"].asString());
+	this->SetRequestType(value.get("requestType","").asString());
 }
 
 Request::~Request()
@@ -18,22 +17,22 @@ Request::~Request()
 
 }
 
-string & Request::GetRawRequest()
+const std::string & Request::GetRawRequest() const
 {
 	return this->rawRequest;
 }
 
-void Request::SetRawRequest(string rawRequest)
+void Request::SetRawRequest(const std::string & rawRequest)
 {
 	this->rawRequest=rawRequest;
 }
 
-string & Request::GetRequestType()
+const std::string & Request::GetRequestType() const
 {
 	return this->requestType;
 }
 
-void Request::SetRequestType(string requestType)
+void Request::SetRequestType(const std::string & requestType)
 {
 	this->requestType=requestType;
 }
@@ -43,7 +42,7 @@ Json::Value & Request::GetJson()
 	return this->json;
 }
 
-void Request::SetJson(Json::Value json)
+void Request::SetJson(const Json::Value & json)
 {
 	this->json=json;
 }

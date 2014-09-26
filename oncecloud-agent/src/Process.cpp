@@ -5,10 +5,23 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <string>
+
+#include "Process.h"
 
 #define BUFFER_SIZE 1048576
 
-int CloseAllSockets()
+Process::Process()
+{
+
+}
+
+Process::~Process()
+{
+
+}
+
+bool Process::CloseAllFiles()
 {
 	DIR * directory=NULL;
 	struct dirent * entry=NULL;
@@ -33,10 +46,7 @@ int CloseAllSockets()
 		sscanf(entry->d_name,"%d",&fd);
 		if(fstat(fd,&status)==0)
 		{
-			if(S_ISSOCK(status.st_mode))
-			{
-				toClose[i++]=fd;
-			}
+			toClose[i++]=fd;
 		}
 	}
 	closedir(directory);
@@ -50,7 +60,7 @@ int CloseAllSockets()
 	return true;
 }
 
-int Execute(const char * commandLine)
+bool Process::Execute(const std::string & commandLine)
 {
 	pid_t processId;
 	processId=fork();
@@ -61,8 +71,8 @@ int Execute(const char * commandLine)
 
 	if(processId==0)
 	{
-		CloseAllSockets();
-		int status=system(commandLine);
+		Process::CloseAllFiles();
+		int status=system(commandLine.c_str());
 		exit(status);
 	}
 
@@ -76,43 +86,43 @@ int Execute(const char * commandLine)
 	return true;
 }
 
-bool SetProcessInput(char * buffer, const char * commandLine)
+bool Process::SetInputAndExecute(const std::string & input, const std::string & commandLine)
 {
 	FILE * write=NULL;
 
-	write=popen(commandLine,"w");
+	write=popen(commandLine.c_str(),"w");
 	if(write==NULL)
 	{
 		return false;
 	}
 
-	int length=strlen(buffer);
-	fwrite(buffer,sizeof(char),length,write);
+	fwrite(input.c_str(),sizeof(char),input.size(),write);
 
 	pclose(write);
 	return true;
 }
 
-bool GetProcessOutput(char * buffer, const char * commandLine)
+std::string ExecuteAndGetOutput(const std::string & commandLine)
 {
-	buffer[0]='\0';
 	FILE * read=NULL;
 	char readBuffer[BUFFER_SIZE+1];
 	int bytesRead=0;
+	std::string temp="";
 
-	read=popen(commandLine,"r");
+	read=popen(commandLine.c_str(),"r");
 	if(read==NULL)
 	{
-		return false;
+		return "";
 	}
 
 	bytesRead=fread(readBuffer,sizeof(char),BUFFER_SIZE,read);
 	while(bytesRead>0)
 	{
 		readBuffer[bytesRead]='\0';
-		strcat(buffer,readBuffer);
+		temp+=readBuffer;
 		bytesRead=fread(readBuffer,sizeof(char),BUFFER_SIZE,read);
 	}
 	pclose(read);
-	return true;
+	return temp;
 }
+

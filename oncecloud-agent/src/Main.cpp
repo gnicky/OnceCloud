@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <map>
 #include <sys/file.h>
 #include <termios.h>
@@ -16,7 +17,7 @@
 #define BUFFER_SIZE 1048576
 
 char requestBuffer[BUFFER_SIZE];
-map<string, IHandler *> handlers;
+std::map<std::string, IHandler *> handlers;
 bool isRunning;
 Logger logger(LogLevel::Debug);
 
@@ -100,18 +101,18 @@ int main(int argc, char * argv [])
 	
 	logger.Write(LogLevel::Information,"BeyondCloud Agent started.");
 
-	string serialPortPath="/dev/ttyS1";
+	std::string serialPortPath="/dev/ttyS1";
 	int serialPortDescriptor=open(serialPortPath.c_str(),O_RDWR|O_NOCTTY);
 
 	if(serialPortDescriptor==-1)
 	{
-		cout<<"Cannot open "<<serialPortPath<<endl;
+		logger.Write(LogLevel::Error,"Cannot open "+serialPortPath+".");
 		return 1;
 	}
 
 	if(flock(serialPortDescriptor,LOCK_EX|LOCK_NB)<0)
 	{
-		cout<<"Cannot lock "<<serialPortPath<<endl;
+		logger.Write(LogLevel::Error,"Cannot lock "+serialPortPath+".");
 		return 1;
 	}
 
@@ -121,7 +122,7 @@ int main(int argc, char * argv [])
 	InitializeHandlers();
 	isRunning=true;
 
-	string info="Starting to listen on ";
+	std::string info="Starting to listen on ";
 	logger.Write(LogLevel::Information,"Starting to listen on "+serialPortPath);
 	while(isRunning)
 	{
@@ -142,7 +143,7 @@ int main(int argc, char * argv [])
 			Json::Value value;
 			reader.parse(requestBuffer,value);
 			std::string requestType=value["requestType"].asString();
-			std::string requestString=string(requestBuffer);
+			std::string requestString=std::string(requestBuffer);
 			logger.Write(LogLevel::Information,"Get Request: Type = "+requestType);
 
 			request=handlers[requestType]->ParseRequest(requestString);

@@ -1,27 +1,26 @@
 #pragma once
 
+#include <string>
 #include "json/json.h"
-
-using namespace std;
 
 class Request
 {
 public:
-	Request(string rawRequest);
+	Request(const std::string & rawRequest);
 	virtual ~Request();
 
-	string & GetRawRequest();
-	string & GetRequestType();
-	Json::Value & GetJson();
+	const std::string & GetRawRequest() const;
+	const std::string & GetRequestType() const;
 
 protected:
-	void SetRawRequest(string rawRequest);
-	void SetRequestType(string requestType);
-	void SetJson(Json::Value json);
+	Json::Value & GetJson();
+	void SetJson(const Json::Value & json);
+	void SetRawRequest(const std::string & rawRequest);
+	void SetRequestType(const std::string & requestType);
 
 private:
-	string rawRequest;
-	string requestType;
+	std::string rawRequest;
+	std::string requestType;
 	Json::Value json;
 };
 

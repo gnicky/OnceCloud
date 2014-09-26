@@ -8,7 +8,7 @@ class ConfigureInterfaceResponse
 public:
 	ConfigureInterfaceResponse(bool result);
 	~ConfigureInterfaceResponse();
-	bool GetResult();
+	bool GetResult() const;
 
 protected:
 	void SetResult(bool result);

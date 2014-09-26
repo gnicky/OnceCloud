@@ -1,28 +1,37 @@
+#include <string>
+#include <vector>
 #include "String.h"
 
-using namespace std;
-
-string & ReplaceString(string & source, const string & keyword, const string & replaceWith)
+String::String()
 {
-	string::size_type position=0;
-	string::size_type keywordSize=keyword.size();
-	string::size_type replaceSize=replaceWith.size();
-	while((position=source.find(keyword,position))!=string::npos)
+
+}
+
+String::~String()
+{
+
+}
+
+void String::Replace(std::string & source, const std::string & keyword, const std::string & replaceWith)
+{
+	std::string::size_type position=0;
+	std::string::size_type keywordSize=keyword.size();
+	std::string::size_type replaceSize=replaceWith.size();
+	while((position=source.find(keyword,position))!=std::string::npos)
 	{
 		source.replace(position,keywordSize,replaceWith);
 		position+=replaceSize;
 	}
-	return source;
 }
 
-void SplitString(vector<string> & destination, const string & source, const string & delimiter)
+void String::Split(std::vector<std::string> & destination, const std::string & source, const std::string & delimiter)
 {
-	string temp;
-	string::size_type position1;
-	string::size_type position2;
+	std::string temp;
+	std::string::size_type position1;
+	std::string::size_type position2;
 	position2=source.find(delimiter);
 	position1=0;
-	while(position2!=string::npos)
+	while(position2!=std::string::npos)
 	{
 		destination.push_back(source.substr(position1,position2-position1));
 		position1=position2+1;
