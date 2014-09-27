@@ -1,102 +1,177 @@
 #include <stdio.h>
 #include <memory.h>
+#include <stdlib.h>
 
 #include "Process.h"
+#include "Logger.h"
+#include "File.h"
 
-void AddLimitClass(const char * interface, const char * classId, const char * speed)
+void LoadConfiguration(char * buffer)
 {
-	char commandLine[1000];
-	sprintf(commandLine,"tc class add dev %s "
-		"parent 1:1 classid 1:%s "
-		"cbq bandwidth %sbit rate %sbit "
-		"maxburst 20 allot 1514 prio 2 avpkt 1024 split 1:0 bounded"
-		,interface,classId,speed,speed);
-	Execute(commandLine);
-
-	sprintf(commandLine,"tc filter add dev %s "
-		"parent 1:0 protocol ip "
-		"prio 100 route to %s flowid 1:%s"
-		,interface,classId,classId);
-	Execute(commandLine);
+	GetProcessOutput(buffer,"iptables-save");
 }
 
-void AddLimitFilter(const char * interface, const char * flowId)
+void SaveConfiguration(char * buffer)
 {
-	char commandLine[1000];
-	sprintf(commandLine,"tc filter add dev %s "
-		"parent 1:0 protocol ip "
-		"prio 100 route to %s flowid 1:%s"
-		,interface,flowId,flowId);
-	Execute(commandLine);
+	SetProcessInput(buffer,"iptables-restore");
+	WriteFile("/etc/sysconfig/iptables",buffer);
+	GetProcessOutput(buffer,"iptables-save");
+	WriteFile("/etc/sysconfig/iptables",buffer);
 }
 
-void AddLimitIP(const char * interface, const char * gateway, const char * ip, const char * flowId)
+int DoAddRule(const char * rule)
 {
-	char commandLine[1000];
-	sprintf(commandLine,"ip route add %s dev %s via %s realm %s",ip,interface,gateway,flowId);
-	Execute(commandLine);
+	char savedChar;
+	char * originalConfiguration=malloc(1048576);
+	char * newConfiguration=malloc(1048576);
+	newConfiguration[0]='\0';
+
+	LoadConfiguration(originalConfiguration);
+
+	char * filterStart=strstr(originalConfiguration,"*filter");
+
+	savedChar=*filterStart;
+	*filterStart='\0';
+	strcat(newConfiguration,originalConfiguration);
+	*filterStart=savedChar;
+
+	char * ruleStart=strstr(filterStart,":OUTPUT");
+	ruleStart=strstr(ruleStart,"\n");
+	ruleStart=ruleStart+strlen("\n");
+
+	savedChar=*ruleStart;
+	*ruleStart='\0';
+	strcat(newConfiguration,filterStart);
+	*ruleStart=savedChar;
+
+	// Start of the filter chain
+	
+	char * ruleEnd=strstr(ruleStart,"COMMIT");
+	savedChar=*ruleEnd;
+	*ruleEnd='\0';
+	strcat(newConfiguration,ruleStart);
+
+	// Check existance here
+	
+	int exist=0;
+	char * rulePosition=strstr(ruleStart,rule);
+	if(rulePosition!=NULL)
+	{
+		exist=1;
+	}
+
+	*ruleEnd=savedChar;
+
+	// End of the filter chain
+
+	if(!exist)
+	{
+		strcat(newConfiguration,rule);
+		strcat(newConfiguration,"\n");
+	}
+
+	strcat(newConfiguration,ruleEnd);
+	SaveConfiguration(newConfiguration);
+
+	WriteLog(LOG_NOTICE,"Limit.DoAddRule: Rule added: \"%s\"",rule);
+
+	free(newConfiguration);
+	free(originalConfiguration);
+	return 0;
 }
 
-void RemoveLimitClass(const char * interface, const char * classId)
+int DoRemoveRule(const char * rule)
 {
-	char commandLine[1000];
-	sprintf(commandLine,"tc filter del dev %s parent 1:0 protocol ip prio 100 route to %s",interface,classId);
-	Execute(commandLine);
+	char savedChar;
+	char * originalConfiguration=malloc(1048576);
+	char * newConfiguration=malloc(1048576);
+	newConfiguration[0]='\0';
 
-	sprintf(commandLine,"tc class del dev %s parent 1:1 classid 1:%s",interface,classId);
-	Execute(commandLine);
+	LoadConfiguration(originalConfiguration);
+	char * filterStart=strstr(originalConfiguration,"*filter");
+
+	if(filterStart==NULL)
+	{
+		free(newConfiguration);
+		free(originalConfiguration);
+		return 0;
+	}
+
+	savedChar=*filterStart;
+	*filterStart='\0';
+	strcat(newConfiguration,originalConfiguration);
+	*filterStart=savedChar;
+
+	char * ruleStart=strstr(filterStart,":OUTPUT");
+	ruleStart=strstr(ruleStart,"\n");
+	savedChar=*ruleStart;
+	*ruleStart='\0';
+	strcat(newConfiguration,filterStart);
+	*ruleStart=savedChar;
+
+	// From the start of the rule
+
+	strcat(newConfiguration,"\n");
+	char * position=ruleStart+1;
+
+	while(strstr(position,"COMMIT")!=NULL && strstr(position,"COMMIT")!=position)
+	{
+		char * end=strstr(position,"\n");
+		*end='\0';
+		char temp[1000];
+		strcpy(temp,position);
+		*end='\n';
+		if(strstr(temp,rule)!=NULL)
+		{
+			position=strstr(position,"\n");
+			position=position+strlen("\n");
+		}
+		else
+		{
+			char * lineEnd=strstr(position,"\n");
+			*lineEnd='\0';
+			strcat(newConfiguration,position);
+			strcat(newConfiguration,"\n");
+			*lineEnd='\n';
+			position=lineEnd;
+			position=position+strlen("\n");
+		}
+	}
+
+	char * ruleEnd=position;
+	strcat(newConfiguration,ruleEnd);
+
+	SaveConfiguration(newConfiguration);
+
+	WriteLog(LOG_NOTICE,"Limit.DoRemoveRule: Rule removed: \"%s\"",rule);
+
+	free(newConfiguration);
+	free(originalConfiguration);
+	return 0;
 }
 
-void RemoveLimitFilter(const char * interface, const char * flowId)
+void AddLimit(const char * ip, const char * speed)
 {
-	char commandLine[1000];
-	sprintf(commandLine,"tc filter del dev %s parent 1:0 protocol ip prio 100 route to %s",interface,flowId);
-	Execute(commandLine);
+	char temp[1000];
+	sprintf(temp,"-A FORWARD -s %s/32 -m limit --limit %s/sec -j RULE",ip,speed);
+	DoAddRule(temp);
+	sprintf(temp,"-A FORWARD -d %s/32 -m limit --limit %s/sec -j RULE",ip,speed);
+	DoAddRule(temp);
+	sprintf(temp,"-A FORWARD -s %s/32 -j DROP",ip);
+	DoAddRule(temp);
+	sprintf(temp,"-A FORWARD -d %s/32 -j DROP",ip);
+	DoAddRule(temp);
 }
 
-void RemoveLimitIP(const char * interface, const char * gateway, const char * ip)
+void RemoveLimit(const char * ip)
 {
-	char commandLine[1000];
-	sprintf(commandLine,"ip route del %s dev %s via %s",ip,interface,gateway);
-	Execute(commandLine);
-}
-
-void LimitEthernet(const char * interface)
-{
-	char commandLine[1000];
-	sprintf(commandLine,"tc qdisc add dev %s root handle 1:0 cbq bandwidth 1000Mbit avpkt 1024",interface);
-	Execute(commandLine);
-
-	sprintf(commandLine,"tc class add dev %s parent 1:0 classid 1:1 cbq bandwidth 1000Mbit rate 1000Mbit maxburst 20 allot 1514 prio 8 avpkt 1024",interface);
-	Execute(commandLine);
-
-	sprintf(commandLine,"tc filter add dev %s parent 1:0 protocol ip prio 100 route",interface);
-	Execute(commandLine);
-}
-
-void ShowLimitConfiguration(char * buffer, const char * interface)
-{
-	char commandLine[1000];
-	char outputBuffer[1000];
-
-	buffer[0]='\0';
-	strcat(buffer,"======qdisc========\n");
-	sprintf(commandLine,"tc qdisc ls dev %s",interface);
-	GetProcessOutput(outputBuffer,commandLine);
-	strcat(buffer,outputBuffer);
-
-	strcat(buffer,"======class========\n");
-	sprintf(commandLine,"tc class ls dev %s",interface);
-	GetProcessOutput(outputBuffer,commandLine);
-	strcat(buffer,outputBuffer);
-
-	strcat(buffer,"======filter=======\n");
-	sprintf(commandLine,"tc filter ls dev %s",interface);
-	GetProcessOutput(outputBuffer,commandLine);
-	strcat(buffer,outputBuffer);
-
-	strcat(buffer,"======ip route=====\n");
-	sprintf(commandLine,"ip route");
-	GetProcessOutput(outputBuffer,commandLine);
-	strcat(buffer,outputBuffer);
+	char temp[1000];
+	sprintf(temp,"-A FORWARD -s %s/32 -m limit --limit",ip);
+	DoRemoveRule(temp);
+	sprintf(temp,"-A FORWARD -d %s/32 -m limit --limit",ip);
+	DoRemoveRule(temp);
+	sprintf(temp,"-A FORWARD -s %s/32 -j DROP",ip);
+	DoRemoveRule(temp);
+	sprintf(temp,"-A FORWARD -d %s/32 -j DROP",ip);
+	DoRemoveRule(temp);
 }

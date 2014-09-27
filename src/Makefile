@@ -194,7 +194,7 @@ plugins/limit/Core.o: plugins/limit/Core.c
 NETD_LIMIT_PLUGIN_OBJECTS=plugins/limit/Api.o plugins/limit/Core.o
 
 plugins/limit/limit.so: plugins/limit/Api.o plugins/limit/Core.o \
-	common/Process.o common/Logger.o common/String.o
+	common/Process.o common/Logger.o common/String.o common/File.o
 	$(NETD_LD) $(LDLIBFLAGS) -o $@ $^
 
 # Loadbalancer Plugin

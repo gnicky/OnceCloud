@@ -20,29 +20,8 @@ int Destroy()
 
 int HandleGetRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * interface=request->GetHeader(request,"x-bws-interface");
-	if(interface==NULL)
-	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify ethernet interface.\n</Error>\n";
-
-		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
-		return TRUE;		
-	}
-
-	char * buffer=malloc(1048576);
-	buffer[0]='\0';
-
-	ShowLimitConfiguration(buffer,interface);
-
 	response->StatusCode=200;
-	response->SetHeader(response,"Content-Type","text/plain");
-	response->SetContent(response,buffer);
-
-	free(buffer);
+	response->SetContent(response,"");
 
 	return TRUE;
 }
@@ -57,66 +36,18 @@ int HandleHeadRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	if(request->QueryString==NULL)
+	const char * ip=request->GetHeader(request,"x-bws-ip-address");
+	const char * speed=request->GetHeader(request,"x-bws-speed");
+
+	if(ip!=NULL && speed!=NULL)
 	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify function you need.\n</Error>\n";
+		AddLimit(ip,speed);
 
-		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
-		return TRUE;		
+		response->StatusCode=200;
+		response->SetContent(response,"");
+		return TRUE;
 	}
-
-	if(strcmp(request->QueryString,"class")==0)
-	{
-		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * classId=request->GetHeader(request,"x-bws-class-id");
-		const char * speed=request->GetHeader(request,"x-bws-speed");
-
-		if(interface!=NULL && classId!=NULL && speed!=NULL)
-		{
-			AddLimitClass(interface,classId,speed);
-
-			response->StatusCode=200;
-			response->SetContent(response,"");
-			return TRUE;
-		}
-	}
-
-	if(strcmp(request->QueryString,"filter")==0)
-	{
-		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * flowId=request->GetHeader(request,"x-bws-flow-id");
-
-		if(interface!=NULL && flowId!=NULL)
-		{
-			AddLimitFilter(interface,flowId);
-
-			response->StatusCode=200;
-			response->SetContent(response,"");
-			return TRUE;
-		}
-	}
-
-	if(strcmp(request->QueryString,"ip")==0)
-	{
-		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * gateway=request->GetHeader(request,"x-bws-gateway");
-		const char * ip=request->GetHeader(request,"x-bws-ip-address");
-		const char * flowId=request->GetHeader(request,"x-bws-flow-id");
-
-		if(interface!=NULL && gateway!=NULL && ip!=NULL && flowId!=NULL)
-		{
-			AddLimitIP(interface,gateway,ip,flowId);
-
-			response->StatusCode=200;
-			response->SetContent(response,"");
-			return TRUE;
-		}
-	}
-
+	
 	char ErrorMessage[]=
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<Error>\n\tInvalid parameters.\n</Error>\n";
@@ -130,87 +61,18 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * interface=request->GetHeader(request,"x-bws-interface");
-	if(interface==NULL)
+	const char * ip=request->GetHeader(request,"x-bws-ip-address");
+	const char * speed=request->GetHeader(request,"x-bws-speed");
+
+	if(ip!=NULL && speed!=NULL)
 	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify ethernet interface.\n</Error>\n";
+		AddLimit(ip,speed);
 
-		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
-		return TRUE;		
+		response->StatusCode=200;
+		response->SetContent(response,"");
+		return TRUE;
 	}
-
-	LimitEthernet(interface);
-
-	response->StatusCode=200;
-	response->SetContent(response,"");
-
-	return TRUE;
-}
-
-int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
-{
-	if(request->QueryString==NULL)
-	{
-		char ErrorMessage[]=
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			"<Error>\n\tPlease specify function you need.\n</Error>\n";
-
-		response->StatusCode=400;
-		response->SetHeader(response,"Content-Type","application/xml");
-		response->SetContent(response,ErrorMessage);
-		return TRUE;		
-	}
-
-	if(strcmp(request->QueryString,"class")==0)
-	{
-		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * classId=request->GetHeader(request,"x-bws-class-id");
-
-		if(interface!=NULL && classId!=NULL)
-		{
-			RemoveLimitClass(interface,classId);
-
-			response->StatusCode=200;
-			response->SetContent(response,"");
-			return TRUE;
-		}
-	}
-
-	if(strcmp(request->QueryString,"filter")==0)
-	{
-		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * flowId=request->GetHeader(request,"x-bws-flow-id");
-
-		if(interface!=NULL && flowId!=NULL)
-		{
-			RemoveLimitFilter(interface,flowId);
-
-			response->StatusCode=200;
-			response->SetContent(response,"");
-			return TRUE;
-		}
-	}
-
-	if(strcmp(request->QueryString,"ip")==0)
-	{
-		const char * interface=request->GetHeader(request,"x-bws-interface");
-		const char * gateway=request->GetHeader(request,"x-bws-gateway");
-		const char * ip=request->GetHeader(request,"x-bws-ip-address");
-
-		if(interface!=NULL && gateway!=NULL && ip!=NULL)
-		{
-			RemoveLimitIP(interface,gateway,ip);
-
-			response->StatusCode=200;
-			response->SetContent(response,"");
-			return TRUE;
-		}
-	}
-
+	
 	char ErrorMessage[]=
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		"<Error>\n\tInvalid parameters.\n</Error>\n";
@@ -221,3 +83,28 @@ int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * resp
 
 	return TRUE;
 }
+
+int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
+{
+	const char * ip=request->GetHeader(request,"x-bws-ip-address");
+
+	if(ip!=NULL)
+	{
+		RemoveLimit(ip);
+
+		response->StatusCode=200;
+		response->SetContent(response,"");
+		return TRUE;
+	}
+	
+	char ErrorMessage[]=
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		"<Error>\n\tInvalid parameters.\n</Error>\n";
+
+	response->StatusCode=400;
+	response->SetHeader(response,"Content-Type","application/xml");
+	response->SetContent(response,ErrorMessage);
+
+	return TRUE;
+}
+
