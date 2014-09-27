@@ -135,7 +135,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="tunnel" class="pane-filter" style="display: none;">
+						<!-- <div id="tunnel" class="pane-filter" style="display: none;">
 							<div>
 								<p class="alert alert-info">
 									隧道服务可以将多个不同地域的局域网连接在一起，形成兼顾公有私有的混合云计算环境，助您有效管理多地域的数据中心。更多详情请查看
@@ -157,7 +157,7 @@
 								<p class="alert alert-info">
 									缺省情况下，路由器所管理的私有网络之间是可以相互连通的，你可以通过设置过滤规则来控制路由器内部私有网络之间的隔离。</p>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>

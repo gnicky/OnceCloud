@@ -707,7 +707,7 @@ public class RouterManager {
 		return result;
 	}
 
-	public JSONObject enableDHCP(String vnetUuid, int userId, int start, int end) {
+	public JSONObject enableDHCP(String vnetUuid, int userId) {
 		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
 		JSONObject jo = new JSONObject();
 		boolean result = false;
@@ -726,16 +726,16 @@ public class RouterManager {
 					String netmask = "255.255.255.0";
 					String gateway = "192.168." + net + "."
 							+ vnet.getVnetGate();
-					String rangeStart = "192.168." + net + "." + start;
-					String rangeEnd = "192.168." + net + "." + end;
+					String rangeStart = "192.168." + net + "." + "2";
+					String rangeEnd = "192.168." + net + "." + "254";
 					logger.info("Configure Subnet: URL [" + url + "] Netmask ["
 							+ netmask + "] RangeStart [" + rangeStart
 							+ "] RangeEnd [" + rangeEnd + "]");
 					boolean addSubnetResult = RouterManager.addSubnet(c, url,
 							subnet, netmask, gateway, rangeStart, rangeEnd);
 					if (addSubnetResult) {
-						vnet.setVnetStart(start);
-						vnet.setVnetEnd(end);
+						vnet.setVnetStart(2);
+						vnet.setVnetEnd(254);
 						vnet.setDhcpStatus(1);
 						this.getVnetDAO().updateVnet(vnet);
 						this.getVmManager().assginIpAddress(c, url, subnet,
@@ -840,6 +840,7 @@ public class RouterManager {
 					}
 					jo.put("ocvm", javm);
 				}
+				jo.put("vn_uuid", vnet.getVnetUuid());
 				jo.put("vn_net", vnet.getVnetNet());
 				jo.put("vn_gate", vnet.getVnetGate());
 				jo.put("vn_dhcp_start", vnet.getVnetStart());
