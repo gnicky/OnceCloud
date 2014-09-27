@@ -30,7 +30,7 @@ void GenerateOutboundRule(char * buffer, const char * protocol, const char * int
 {
 	buffer[0]='\0';
 
-	strcat(buffer,"-A FORWARD ");
+	strcat(buffer,"-A RULE ");
 
 	strcat(buffer,"-s ");
 	strcat(buffer,internal);
@@ -70,7 +70,7 @@ void GenerateInboundRule(char * buffer, const char * protocol, const char * inte
 {
 	buffer[0]='\0';
 
-	strcat(buffer,"-A FORWARD ");
+	strcat(buffer,"-A RULE ");
 
 	if(external!=NULL)
 	{
@@ -110,7 +110,7 @@ void GenerateInboundPingRule(char * buffer, const char * target, const char * fr
 {
 	buffer[0]='\0';
 
-	strcat(buffer,"-A FORWARD ");
+	strcat(buffer,"-A RULE ");
 
 	if(from!=NULL)
 	{
@@ -132,7 +132,7 @@ void GenerateOutboundPingRule(char * buffer, const char * target, const char * f
 {
 	buffer[0]='\0';
 
-	strcat(buffer,"-A FORWARD ");
+	strcat(buffer,"-A RULE ");
 
 	strcat(buffer,"-s ");
 	strcat(buffer,target);
@@ -355,6 +355,7 @@ void GenerateDefaultConfiguration(char * buffer)
 	strcat(buffer,":INPUT DROP [0:0]\n");
 	strcat(buffer,":FORWARD DROP [0:0]\n");
 	strcat(buffer,":OUTPUT ACCEPT [0:0]\n");
+	strcat(buffer,":RULE - [0:0]\n");
 
 	// Rules
 	// Allow Local Loopback
@@ -383,7 +384,7 @@ void GenerateDefaultConfiguration(char * buffer)
 
 	// Allow Established Connection
 	strcat(buffer,"-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
-	strcat(buffer,"-A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
+	strcat(buffer,"-A RULE -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
 	strcat(buffer,"-A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT\n");
 
 	strcat(buffer,"COMMIT\n");
@@ -433,11 +434,11 @@ int ListPingRule(struct PingRule * buffer, int * count)
 	{
 		char * filterEnd=strstr(filterStart,"COMMIT\n");
 		*filterEnd='\0';
-		char * ruleStart=strstr(filterStart,"-A FORWARD ");
+		char * ruleStart=strstr(filterStart,"-A RULE ");
 		if(ruleStart!=NULL)
 		{
 			char * position=NULL;
-			while((position=strstr(ruleStart,"-A FORWARD "))!=NULL)
+			while((position=strstr(ruleStart,"-A RULE "))!=NULL)
 			{
 				char * lineEnd=strstr(ruleStart,"\n");
 				*lineEnd='\0';
@@ -484,11 +485,11 @@ int ListFirewallRule(struct FirewallRule * buffer, int * count)
 	{
 		char * filterEnd=strstr(filterStart,"COMMIT\n");
 		*filterEnd='\0';
-		char * ruleStart=strstr(filterStart,"-A FORWARD ");
+		char * ruleStart=strstr(filterStart,"-A RULE ");
 		if(ruleStart!=NULL)
 		{
 			char * position=NULL;
-			while((position=strstr(ruleStart,"-A FORWARD "))!=NULL)
+			while((position=strstr(ruleStart,"-A RULE "))!=NULL)
 			{
 				char * lineEnd=strstr(ruleStart,"\n");
 				*lineEnd='\0';
@@ -546,7 +547,7 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 		}
 
 		char rule[1000];
-		sprintf(rule,"-A FORWARD -s %s%s -j ACCEPT\n",internal,strstr(internal,"/")==NULL?"":"/32");
+		sprintf(rule,"-A RULE -s %s%s -j ACCEPT\n",internal,strstr(internal,"/")==NULL?"":"/32");
 		DoAddRule(rule);
 		for(i=0;i<configuration->RuleCount;i++)
 		{
