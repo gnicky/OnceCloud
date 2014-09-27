@@ -1046,7 +1046,7 @@ public class RouterManager {
 		boolean result = false;
 		try {
 			String url = "http://" + srcIP + ":9090";
-			result = Host.addPortForwarding(c, url, protocol, destIP, destPort,
+			result = Host.addPortForwarding(c, url, protocol.toLowerCase(), destIP, destPort,
 					srcIP, srcPort);
 			if (result) {
 				String uuidString = UUID.randomUUID().toString();
@@ -1078,7 +1078,7 @@ public class RouterManager {
 		boolean result = false;
 		try {
 			String url = "http://" + srcIP + ":9090";
-			result = Host.delPortForwarding(c, url, protocol, destIP, destPort,
+			result = Host.delPortForwarding(c, url, protocol.toLowerCase(), destIP, destPort,
 					srcIP, srcPort);
 			if (result) {
 				ForwardPort pf = new ForwardPort();
