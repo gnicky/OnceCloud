@@ -166,6 +166,7 @@ function getRouterBasicList() {
 
             $("#routeDiv").find(".private-ip").text(rtIp == "null" ? "" : rtIp);
             $("#routeDiv").find(".router-id").text(showuuid);
+       
         }
     });
 }
@@ -235,6 +236,9 @@ $('.filter-once-tab').on('click', '.tab-filter', function (event) {
     var type = $(this).attr("type").toString();
     $(".pane-filter").hide();
     $("#" + type).show();
+    
+    if(type=="filtering")
+      filterreloadList(1);
 });
 
 $('#vxnets-t').on('click', '.id', function (event) {

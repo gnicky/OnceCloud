@@ -88,7 +88,215 @@ function init() {
     $(".components").on("click", ".add-instance-btn", function () {
     	addinstance($(this).attr("vnetid"));
     });
+    
+    
+    
+    ////过滤器功能
+  
+    
+    $('.rule-refresh').on('click', function (event) {
+    	filterreloadList(1);
+    });
+
+    $('#filtertablebody').on('change', 'input:checkbox', function (event) {
+        event.preventDefault();
+        allDisable();
+        var count = 0;
+        $('input[name="rulerow"]:checked').each(function () {
+            count++;
+        });
+        if (count > 0) {
+            $('#deleterule').removeClass('btn-disable').attr('disabled', false);
+        }
+    });
+    
+    $('#createrule').on('click', function (event) {
+        event.preventDefault();
+        $('#RouterModalContainer').load($(this).attr('url'), '', function () {
+            $('#RouterModalContainer').modal({
+                backdrop: false,
+                show: true
+            });
+        });
+    });
+    
+    $('#deleterule').on('click', function (event) {
+        event.preventDefault();
+        var firewallId = $('#firewallid').attr("uuid");
+        $('input[name="rulerow"]:checked').each(function () {
+            var ruleId = $(this).parent().parent().attr("ruleid");
+            deleteRule(ruleId, firewallId);
+        });
+        removeAllCheck();
+    });
+    
+    $('#filterconfirm').on('click', function (event) {
+        event.preventDefault();
+        var firewallId = $('#firewallid').attr("uuid");
+        updateFirewall(firewallId);
+        removeAllCheck();
+    });
+    
+    $('#limit').unbind();
+    $('#limit').on('focusout', function () {
+        var limit = $("#limit").val();
+        var reg = /^[0-9]*[1-9][0-9]*$/;
+        if (!reg.test(limit)) {
+            $("#limit").val(10);
+        }
+        filterreloadList(1);
+    });
+
+    
+    $('#filtertablebody').on('click', '.operate', function (event) {
+        event.preventDefault();
+        var thistd = $(this);
+        var ruleId = $(this).parent().attr('ruleid');
+        var ruleState = $(this).parent().attr('state');
+        var firewallId = $('#firewallid').attr("uuid");
+        $.ajax({
+            type: 'get',
+            url: '/FirewallAction/OperateRule',
+            data: {ruleId: ruleId},
+            dataType: 'json',
+            success: function (obj) {
+                if (obj.isSuccess) {
+                    if (ruleState == '1') {
+                        $(thistd).parent().attr('state', '0');
+                        $(thistd).parent().addClass('idle');
+                        $(thistd).html('<a>启用</a>');
+                    } else if (ruleState == '0') {
+                        $(thistd).parent().attr('state', '1');
+                        $(thistd).parent().removeClass('idle');
+                        $(thistd).html('<a>禁用</a>');
+                    }
+                    $('#filterconfirm').removeClass('btn-default').addClass('btn-primary');
+                    $('#suggestion').show();
+                }
+            }
+        });
+    });
 }
+
+///过滤器功能 start
+function filterreloadList(page) {
+    var limit = $('#limit').val();
+    var firewallId = $('#firewallid').attr("uuid");
+    getfilterRuleList(page, limit, "", firewallId);
+    if (page == 1) {
+        options = {
+            currentPage: 1
+        };
+        $('#pageDivider').bootstrapPaginator(options);
+    }
+    allDisable();
+}
+
+
+function removeAllCheck() {
+    $('input[name="rulerow"]:checked').each(function () {
+        $(this)[0].checked = false;
+        $(this).change();
+    });
+}
+
+function allDisable() {
+    $('#deleterule').addClass('btn-disable').attr('disabled', true);
+}
+
+function getfilterRuleList(page, limit, search, firewallId) {
+    $('#filtertablebody').html("");
+    $.ajax({
+        type: 'get',
+        url: '/FirewallAction/RuleList',
+        data: {page: page, limit: limit, search: search, uuid: firewallId},
+        dataType: 'json',
+        success: function (array) {
+            var totalnum = array[0].total;
+            var totalp = 1;
+            if (totalnum != 0) {
+                totalp = Math.ceil(totalnum / limit);
+            }
+            options = {
+                totalPages: totalp
+            };
+            $('#pageDivider').bootstrapPaginator(options);
+            pageDisplayUpdate(page, totalp);
+            if (array[0].confirm == 0) {
+                $('#filterconfirm').removeClass('btn-default').addClass('btn-primary');
+                $('#suggestion').show();
+            }
+            var tableStr = "";
+            for (var i = 1; i < array.length; i++) {
+                var obj = array[i];
+                var ruleId = obj.ruleId;
+                var ruleName = decodeURIComponent(obj.ruleName);
+                var rulePriority = obj.rulePriority;
+                var ruleProtocol = obj.ruleProtocol;
+                var ruleSport = obj.ruleSport;
+                var ruleEport = obj.ruleEport;
+                var ruleIp = obj.ruleIp;
+                var ruleState = obj.ruleState;
+                var opStr = '';
+                var trClass = "";
+                if (ruleState == 1) {
+                    opStr = '<td class="operate"><a href="javascript:void(0)">禁用</a></td>';
+                } else if (ruleState == 0) {
+                    opStr = '<td class="operate"><a href="javascript:void(0)">启用</a></td>';
+                    trClass = 'class="idle"';
+                }
+                if (ruleIp == "") {
+                    ruleIp = "所有地址";
+                }
+                var thistr = '<tr ruleid="' + ruleId + '" state="' + ruleState + '"' + trClass + '><td class="rcheck"><input type="checkbox" name="rulerow"></td><td name="rulename">'
+                    + ruleName + '</td><td name="priority">' + rulePriority + '</td><td name="protocol">'
+                    + ruleProtocol + '</td><td name="sport">' + ruleSport + '</td><td name="eport">'
+                    + ruleEport + '</td><td name="ip">' + ruleIp + '</td>' + opStr + '</tr>';
+                tableStr += thistr;
+            }
+            $('#filtertablebody').html(tableStr);
+        }
+    });
+}
+
+
+function deleteRule(ruleId, firewallId) {
+    var thistr = $("#filtertablebody").find('[ruleid="' + ruleId + '"]');
+    $.ajax({
+        type: 'post',
+        url: '/FirewallAction/DeleteRule',
+        data: {ruleId: ruleId, firewallId: firewallId},
+        dataType: 'json',
+        success: function (obj) {
+            if (obj.result == true) {
+                $(thistr).remove();
+                $('#deleterule').addClass('btn-disable').attr('disabled', true);
+                $("#filterconfirm").removeClass('btn-default').addClass('btn-primary');
+                $("#suggestion").show();
+                getFirewallBasicList();
+            }
+        }
+    });
+}
+
+function updateFirewall(firewallId) {
+    $.ajax({
+        type: 'get',
+        url: '/FirewallAction/UpdateFirewall',
+        data: {firewallId: firewallId},
+        dataType: 'json',
+        success: function (obj) {
+            if (obj.result == true) {
+                $("#filterconfirm").removeClass('btn-primary').addClass('btn-default');
+                $("#suggestion").hide();
+            }
+        }
+    });
+}
+
+///过滤器功能 end
+
+
 
 function addvnet()
 {
