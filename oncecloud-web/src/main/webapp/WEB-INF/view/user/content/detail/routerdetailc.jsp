@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <div class="content detail" id="platformcontent"
-	routerUuid="${routerUuid}" showid="{showId}" basepath="${basePath}">
+	routerUuid="${routerUuid}" showid="${showId}" basepath="${basePath}" rtIp="">
 	<div class="intro">
 		<h1>网络&nbsp;Networks</h1>
 		<p class="lead">
@@ -106,12 +106,12 @@
 								</p>
 								<div class="hty-pane">
 									<div class="once-toolbar">
-										<button class="btn btn-default rule-refresh">
+										<button class="btn btn-default" id="pf-refresh">
 											<span class="glyphicon glyphicon-refresh"
 												style="margin-right:0"></span>
 										</button>
-										<button id="fe_create" class="btn btn-default">+&nbsp;添加</button>
-										<button id="deleterule" class="btn btn-default btn-disable"
+										<button id="pf_create" class="btn btn-default">+&nbsp;添加</button>
+										<button id="deletepf" class="btn btn-default btn-disable"
 											disabled style="color: #b8b8b8">
 											<span class="glyphicon glyphicon-trash"></span>删除
 										</button>

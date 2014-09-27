@@ -1,10 +1,16 @@
 getRouterBasicList();
 getVxnets();
+getpfList();
 
 $('#RouterModalContainer').on('hide', function (event) {
     $(this).removeData("modal");
     $(this).children().remove();
 });
+
+$('.pf-refresh').on('click', function (event) {
+     event.preventDefault();
+     getpfList();
+ });
 
 $('#modify').on('click', function (event) {
     event.preventDefault();
@@ -13,6 +19,17 @@ $('#modify').on('click', function (event) {
     var rtDesc = $('#rtdesc').text();
     var rtUuid = $('#platformcontent').attr("routerUuid");
     $('#RouterModalContainer').load(url, {"modifyType": "rt", "modifyUuid": rtUuid, "modifyName": rtName, "modifyDesc": rtDesc}, function () {
+        $('#RouterModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
+$('#pf_create').on('click', function (event) {
+    event.preventDefault();
+    var url = basePath + 'router/forwadport';
+    $('#RouterModalContainer').load(url,"", function () {
         $('#RouterModalContainer').modal({
             backdrop: false,
             show: true
@@ -51,6 +68,7 @@ function getRouterBasicList() {
             var rtName = decodeURIComponent(obj.routerName);
             var rtDesc = decodeURIComponent(obj.routerDesc);
             var rtIp = obj.routerIp;
+            $("#platformcontent").attr("rtIp", rtIp);
             var rtMac = obj.routerMac;
             var rtStatus = obj.routerStatus;
             if (rtStatus == 2) {
@@ -274,7 +292,7 @@ function getVxnets() {
                     var spantwo = $('<span></span>');
                     spantwo.addClass("none");
                     spantwo.text("管理地址：192.168.");
-                    spantwo.append(json.vn_net + json.vn_gate);
+                    spantwo.append(json.vn_net + "." + json.vn_gate);
                     divinner.append(spantwo);
                     var spanthree = $('<span></span>');
                     spanthree.addClass("none");
@@ -400,3 +418,67 @@ function getVxnets() {
         }
     });
 }
+
+function getpfList(){
+	var routerUuid = $('#platformcontent').attr("routerUuid");
+	var routerip = $("#platformcontent").attr("rtIp");
+    $.ajax({
+        type: 'post',
+        url: '/RouterAction/ForwardPortList',
+        data: {routerUuid: routerUuid},
+        dataType: 'json',
+        success: function (array) {
+        	$("#tablebody").html("");
+        	var tableStr = "";
+        	$.each(array, function(index, json){
+        		var uuid = json.pf_uuid;
+        		var name = decodeURIComponent(json.pf_name);
+        		var protocal = json.pf_protocal;
+        		var sourceport = json.pf_sourceport;
+        		var internalIP = json.pf_internalIP;
+        		var internalport = json.pf_internalport;
+        		var thistr = '<tr pfuuid="'+uuid+'" pfrouter="'+routerip+'" protocol="'+protocal+'" srcPort="'+sourceport+'" destIP="'+internalIP+'" destPort="'+internalport+'">'+
+        			'<td class="rcheck"><input type="checkbox" name="rulerow"></td><td>'
+        			+ name +'</td><td>' + protocal +'</td><td>' + sourceport +
+        			'</td><td>' + internalIP +'</td><td>' + internalport +'</td></tr>';
+        		tableStr += thistr;
+        	});
+        	$('#tablebody').html(tableStr);
+        }
+    });
+}
+
+$('#tablebody').on('change', 'input:checkbox', function (event) {
+        event.preventDefault();
+        var count = 0;
+        $('input[name="rulerow"]:checked').each(function () {
+            count++;
+        });
+        if (count == 0) {
+            $('#deletepf').addClass('btn-disable').attr('disabled', true);
+        } else {
+            $('#deletepf').removeClass('btn-disable').attr('disabled', false);
+        }
+    });
+    
+$("#deletepf").on("click", function(){
+	var routerUuid = $('#platformcontent').attr("routerUuid");
+	$('input[name="rulerow"]:checked').each(function() {
+		var uuid = $(this).parents("tr").attr("pfuuid");
+		var srcIP = $(this).parents("tr").attr("pfrouter");
+		var protocol = $(this).parents("tr").attr("protocol");
+		var srcPort = $(this).parents("tr").attr("srcPort");
+		var destIP = $(this).parents("tr").attr("destIP");
+		var destPort = $(this).parents("tr").attr("destPort");
+		$.ajax({
+			type: 'post',
+	        url: '/RouterAction/DelPortForwarding',
+	        data: {uuid: uuid,srcIP:srcIP,protocol:protocol,srcPort:srcPort,destIP:destIP,destPort:destPort},
+	        dataType: 'json',
+	        success: function (array) {
+	        	getpfList();
+	        }
+		});
+	});
+});
+    

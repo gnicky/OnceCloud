@@ -125,6 +125,11 @@ public class ModalControllerUser {
 		model.put("vnetid", vnetid);
 		return new ModelAndView("user/modal/bindvmimage",model);
 	}
+
+	@RequestMapping(value = "/router/forwadport")
+	public ModelAndView forwadport(HttpServletRequest request) {
+		return new ModelAndView("user/modal/forwardingport");
+	}
 	
 	@RequestMapping(value = "/expense/view", method = { RequestMethod.POST })
 	public ModelAndView viewExpense(HttpServletRequest request, @RequestParam String type, @RequestParam String resourceUuid) {

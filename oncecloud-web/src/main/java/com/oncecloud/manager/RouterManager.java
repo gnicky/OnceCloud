@@ -2,6 +2,7 @@ package com.oncecloud.manager;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -19,6 +20,7 @@ import com.once.xenapi.VM.Record;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FirewallDAO;
+import com.oncecloud.dao.ForwardPortDAO;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
@@ -28,6 +30,7 @@ import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.entity.DHCP;
+import com.oncecloud.entity.ForwardPort;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
@@ -64,6 +67,7 @@ public class RouterManager {
 	private FirewallDAO firewallDAO;
 	private HostDAO hostDAO;
 	private UserDAO userDAO;
+	private ForwardPortDAO forwardPortDAO;
 
 	private MessagePush messagePush;
 
@@ -205,6 +209,15 @@ public class RouterManager {
 	@Autowired
 	private void setConstant(Constant constant) {
 		this.constant = constant;
+	}
+
+	public ForwardPortDAO getForwardPortDAO() {
+		return forwardPortDAO;
+	}
+
+	@Autowired
+	public void setForwardPortDAO(ForwardPortDAO forwardPortDAO) {
+		this.forwardPortDAO = forwardPortDAO;
 	}
 
 	public void createRouter(String uuid, int userId, String name,
@@ -945,13 +958,23 @@ public class RouterManager {
 
 	public JSONObject addPortForwarding(int userId, String allocate,
 			String protocol, String srcIP, String srcPort, String destIP,
-			String destPort) {
+			String destPort, String pfName) {
 		JSONObject jo = new JSONObject();
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
 			Host.addPortForwarding(c, srcIP, protocol, destIP, destPort, srcIP,
 					srcPort);
+			ForwardPort pf = new ForwardPort();
+			String uuidString = UUID.randomUUID().toString();
+			pf.setPfUuid(uuidString);
+			jo.put("uuid", uuidString);
+			pf.setPfName(pfName);
+			pf.setPfProtocal(protocol);
+			pf.setPfSourcePort(Integer.parseInt(srcPort));
+			pf.setPfInteranlIP(destIP);
+			pf.setPfInternalPort(Integer.parseInt(destPort));
+			this.getForwardPortDAO().addPF(pf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -968,13 +991,16 @@ public class RouterManager {
 
 	public JSONObject delPortForwarding(int userId, String allocate,
 			String protocol, String srcIP, String srcPort, String destIP,
-			String destPort) {
+			String destPort, String uuid) {
 		JSONObject jo = new JSONObject();
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
 			result = Host.delPortForwarding(c, srcIP, protocol, destIP,
 					destPort, srcIP, srcPort);
+			ForwardPort pf = new ForwardPort();
+			pf.setPfUuid(uuid);
+			this.getForwardPortDAO().deletePF(pf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -987,5 +1013,21 @@ public class RouterManager {
 					Utilities.stickyToSuccess("端口转发删除失败"));
 		}
 		return jo;
+	}
+	
+	public JSONArray getpfList(String routerUuid) {
+		JSONArray ja = new JSONArray();
+		List<ForwardPort> pfList = this.getForwardPortDAO().getpfListByRouter(routerUuid);
+		for (ForwardPort forwardPort : pfList) {
+			JSONObject jo = new JSONObject();
+			jo.put("pf_uuid", forwardPort.getPfUuid());
+			jo.put("pf_name", Utilities.encodeText(forwardPort.getPfName()));
+			jo.put("pf_protocal", forwardPort.getPfProtocal());
+			jo.put("pf_sourceport", forwardPort.getPfSourcePort());
+			jo.put("pf_internalIP", forwardPort.getPfInteranlIP());
+			jo.put("pf_internalport", forwardPort.getPfInternalPort());
+			ja.put(jo);
+		}
+		return ja;
 	}
 }

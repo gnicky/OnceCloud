@@ -174,10 +174,10 @@ public class RouterAction {
 	public String addPortForwarding(HttpServletRequest request,
 			@RequestParam String protocol, @RequestParam String srcIP,
 			@RequestParam String srcPort, @RequestParam String destIP,
-			@RequestParam String destPort) {
+			@RequestParam String destPort, @RequestParam String pfName) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jo = this.getRouterManager().addPortForwarding(
-				user.getUserId(), user.getUserAllocate(), protocol, srcIP, srcPort, destIP, destPort);
+				user.getUserId(), user.getUserAllocate(), protocol, srcIP, srcPort, destIP, destPort, pfName);
 		return jo.toString();
 	}
 
@@ -186,10 +186,18 @@ public class RouterAction {
 	public String delPortForwarding(HttpServletRequest request,
 			@RequestParam String protocol, @RequestParam String srcIP,
 			@RequestParam String srcPort, @RequestParam String destIP,
-			@RequestParam String destPort) {
+			@RequestParam String destPort, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jo = this.getRouterManager().delPortForwarding(
-				user.getUserId(), user.getUserAllocate(), protocol, srcIP, srcPort, destIP, destPort);
+				user.getUserId(), user.getUserAllocate(), protocol, srcIP, srcPort, destIP, destPort, uuid);
 		return jo.toString();
+	}
+
+	@RequestMapping(value = "/ForwardPortList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String forwardPortList(HttpServletRequest request,
+			@RequestParam String routerUuid) {
+		JSONArray ja = this.getRouterManager().getpfList(routerUuid);
+		return ja.toString();
 	}
 }

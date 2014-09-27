@@ -3,7 +3,7 @@
 <script src="${basePath}js/jquery.validate.js"></script>
 <script src="${basePath}js/uuid.js"></script>
 <script src="${basePath}js/user/modal/modifyperiod.js"></script>
-<link rel="stylesheet" href="${basePath}css/alarms.css" />
+<link rel="stylesheet" href="${basePath}css/alarm.css" />
 <div class="modal-dialog" style="margin-top:100px">
 	<div class="modal-content">
 		<div class="modal-header">
