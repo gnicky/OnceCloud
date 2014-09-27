@@ -4,7 +4,7 @@
 
 RemoveInterfaceResponse::RemoveInterfaceResponse(bool result)
 {
-	this->SetResponseType("removeInterface");
+ 	this->SetResponseType("Router.RemoveInterface");
 	this->SetResult(result);
 	this->BuildRawResponse();
 }
