@@ -152,7 +152,7 @@
 							<div>
 								VPN服务&nbsp;<a href="#" id="openvpn">[打开]</a>
 							</div>
-						</div>
+						</div>-->
 						<div id="filtering" class="pane-filter" style="display: none;">
 							<div>
 								<p class="alert alert-info">
@@ -190,7 +190,7 @@
 									<thead>
 										<tr>
 											<th>
-												<!--checkbox-->
+												
 											</th>
 											<th>名称</th>
 											<th>优先级</th>
@@ -206,7 +206,7 @@
 								</table>
 								
 							</div>
-						</div> -->
+						</div> 
 					</div>
 				</div>
 			</div>
