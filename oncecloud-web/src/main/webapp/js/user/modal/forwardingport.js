@@ -2,14 +2,14 @@
  * 
  */
 $("#pfsubmit").on("click", function() {
+	var routerUuid = $('#platformcontent').attr("routerUuid");
 	var pfName = $("#pf_name").val();
 	var protocol = $("#period").find("option:selected").text();
 	var srcPort = $("#pf_srcport").val();
 	var destIP = $("#pf_desIp").val();
 	var destPort = $("#pf_desport").val();
-	var srcIP = $("#platformcontent").attr("rtIp");
+	var srcIP = $("#platformcontent").attr("rtip");
 	if ($("#forwardport-form").valid() && checkIP(destIP)) {
-		console.log("say hello");
 		$.ajax({
 			type : "post",
 			url : "/RouterAction/AddPortForwarding",
@@ -19,29 +19,32 @@ $("#pfsubmit").on("click", function() {
 				srcPort : srcPort,
 				destIP : destIP,
 				destPort : destPort,
-				pfName : pfName
+				pfName : pfName,
+				routerUuid: routerUuid
 			},
 			dataType : "json",
 			success : function(json) {
-				var uuid = json.uuid;
-				var thistr = '<tr pfuuid="'
-						+ uuid
-						+ '" pfrouter="'
-						+ srcIP
-						+ '" protocol="'
-						+ protocol
-						+ '" srcPort="'
-						+ srcPort
-						+ '" destIP="'
-						+ destIP
-						+ '" destPort="'
-						+ destPort
-						+ '">'
-						+ '<td class="rcheck"><input type="checkbox" name="rulerow"></td><td>'
-						+ pfName + '</td><td>' + protocol + '</td><td>'
-						+ srcPort + '</td><td>' + destIP + '</td><td>'
-						+ destPort + '</td></tr>';
-				$('#tablebody').prepend(thistr);
+				if (json.result) {
+					var uuid = json.uuid;
+					var thistr = '<tr pfuuid="'
+							+ uuid
+							+ '" pfrouter="'
+							+ srcIP
+							+ '" protocol="'
+							+ protocol
+							+ '" srcPort="'
+							+ srcPort
+							+ '" destIP="'
+							+ destIP
+							+ '" destPort="'
+							+ destPort
+							+ '">'
+							+ '<td class="rcheck"><input type="checkbox" name="rulerow"></td><td>'
+							+ pfName + '</td><td>' + protocol + '</td><td>'
+							+ srcPort + '</td><td>' + destIP + '</td><td>'
+							+ destPort + '</td></tr>';
+					$('#tablebody').prepend(thistr);
+				}
 			}
 		});
 		$('#RouterModalContainer').modal('hide');
@@ -80,7 +83,6 @@ function checkIP(internalIP) {
 			}
 		}
 	});
-	console.log(result);
 	return result;
 }
 

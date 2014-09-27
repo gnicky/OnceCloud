@@ -174,10 +174,10 @@ public class RouterAction {
 	public String addPortForwarding(HttpServletRequest request,
 			@RequestParam String protocol, @RequestParam String srcIP,
 			@RequestParam String srcPort, @RequestParam String destIP,
-			@RequestParam String destPort, @RequestParam String pfName) {
+			@RequestParam String destPort, @RequestParam String pfName, @RequestParam String routerUuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jo = this.getRouterManager().addPortForwarding(
-				user.getUserId(), user.getUserAllocate(), protocol, srcIP, srcPort, destIP, destPort, pfName);
+				user.getUserId(), user.getUserAllocate(), protocol, srcIP, srcPort, destIP, destPort, pfName, routerUuid);
 		return jo.toString();
 	}
 

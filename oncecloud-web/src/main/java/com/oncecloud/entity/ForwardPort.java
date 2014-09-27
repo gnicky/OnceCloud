@@ -15,7 +15,23 @@ public class ForwardPort {
 	private Integer pfSourcePort;
 	private String pfInteranlIP;
 	private Integer pfInternalPort;
-	private String	routerUuid;
+	private String routerUuid;
+
+	public ForwardPort() {
+
+	}
+
+	public ForwardPort(String pfUuid, String pfName, String pfProtocal,
+			Integer pfSourcePort, String pfInteranlIP, Integer pfInternalPort,
+			String routerUuid) {
+		this.pfUuid = pfUuid;
+		this.pfName = pfName;
+		this.pfProtocal = pfProtocal;
+		this.pfSourcePort = pfSourcePort;
+		this.pfInteranlIP = pfInteranlIP;
+		this.pfInternalPort = pfInternalPort;
+		this.routerUuid = routerUuid;
+	}
 
 	@Id
 	@Column(name = "pf_uuid")

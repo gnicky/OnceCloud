@@ -63,5 +63,6 @@
 		<mapping class="com.oncecloud.entity.Vlan" />
 		<mapping class="com.oncecloud.entity.Vnet" />
 		<mapping class="com.oncecloud.entity.Volume" />
+		<mapping class="com.oncecloud.entity.ForwardPort" />
 	</session-factory>
 </hibernate-configuration>

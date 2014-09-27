@@ -32,9 +32,10 @@ public class ForwardPortDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(pf);
-			result = true;
 			session.getTransaction().commit();
+			result = true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
@@ -68,10 +69,12 @@ public class ForwardPortDAO {
 			session.beginTransaction();
 			String queryString = "from ForwardPort where routerUuid=:routerUuid";
 			Query query = session.createQuery(queryString);
+			query.setString("routerUuid", routerUuid);
 			pfList = query.list();
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}

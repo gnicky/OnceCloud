@@ -958,23 +958,20 @@ public class RouterManager {
 
 	public JSONObject addPortForwarding(int userId, String allocate,
 			String protocol, String srcIP, String srcPort, String destIP,
-			String destPort, String pfName) {
+			String destPort, String pfName, String routerUuid) {
 		JSONObject jo = new JSONObject();
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
-			Host.addPortForwarding(c, srcIP, protocol, destIP, destPort, srcIP,
+			srcIP = "http://" + srcIP +":9090";
+			result = Host.addPortForwarding(c, srcIP, protocol, destIP, destPort, srcIP,
 					srcPort);
-			ForwardPort pf = new ForwardPort();
-			String uuidString = UUID.randomUUID().toString();
-			pf.setPfUuid(uuidString);
-			jo.put("uuid", uuidString);
-			pf.setPfName(pfName);
-			pf.setPfProtocal(protocol);
-			pf.setPfSourcePort(Integer.parseInt(srcPort));
-			pf.setPfInteranlIP(destIP);
-			pf.setPfInternalPort(Integer.parseInt(destPort));
-			this.getForwardPortDAO().addPF(pf);
+			if (result) {
+				String uuidString = UUID.randomUUID().toString();
+				ForwardPort pf = new ForwardPort(uuidString, pfName, protocol, Integer.parseInt(srcPort), destIP, Integer.parseInt(destPort), routerUuid);
+				jo.put("uuid", uuidString);
+				this.getForwardPortDAO().addPF(pf);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -996,11 +993,14 @@ public class RouterManager {
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
+			srcIP = "http://" + srcIP +":9090";
 			result = Host.delPortForwarding(c, srcIP, protocol, destIP,
 					destPort, srcIP, srcPort);
-			ForwardPort pf = new ForwardPort();
-			pf.setPfUuid(uuid);
-			this.getForwardPortDAO().deletePF(pf);
+			if (result) {
+				ForwardPort pf = new ForwardPort();
+				pf.setPfUuid(uuid);
+				this.getForwardPortDAO().deletePF(pf);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
