@@ -734,6 +734,10 @@ public class RouterManager {
 					boolean addSubnetResult = RouterManager.addSubnet(c, url,
 							subnet, netmask, gateway, rangeStart, rangeEnd);
 					if (addSubnetResult) {
+						vnet.setVnetStart(start);
+						vnet.setVnetEnd(end);
+						vnet.setDhcpStatus(1);
+						this.getVnetDAO().updateVnet(vnet);
 						this.getVmManager().assginIpAddress(c, url, subnet,
 								vnetUuid);
 						logger.info("Configure Subnet Result: "
@@ -771,6 +775,8 @@ public class RouterManager {
 					boolean delSubnetResult = Host.delSubnet(c, url,
 							delJo.toString());
 					if (delSubnetResult) {
+						vnet.setDhcpStatus(0);
+						this.getVnetDAO().updateVnet(vnet);
 						this.getVmManager().unAssginIpAddress(c, vnetUuid);
 						result = true;
 					}

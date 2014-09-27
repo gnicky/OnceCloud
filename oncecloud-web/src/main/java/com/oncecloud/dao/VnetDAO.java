@@ -366,6 +366,30 @@ public class VnetDAO {
 	/**
 	 * 更新私有网络
 	 * 
+	 * @param vnet
+	 * @return
+	 */
+	public boolean updateVnet(Vnet vnet) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.update(vnet);
+			session.getTransaction().commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * 更新私有网络
+	 * 
 	 * @param vnetuuid
 	 * @param newName
 	 * @param description
@@ -470,6 +494,7 @@ public class VnetDAO {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Vnet> getAvailableVnet(Integer userId) {
 		List<Vnet> vnetList = null;
 		Session session = null;
