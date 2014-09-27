@@ -314,8 +314,7 @@ public class VMManager {
 			if (thisVM != null) {
 				String ip = thisVM.getVmIP();
 				if (ip != null) {
-					Host.limitDelIp(c, ip);
-					result = Host.limitAddIp(c, ip, String.valueOf(size + 1));
+					result = Host.addIOLimit(c, ip, "1");
 					logger.info("Change Bandwidth: IP [" + ip + "] Bandwidth ["
 							+ size + " Mbps]");
 				}

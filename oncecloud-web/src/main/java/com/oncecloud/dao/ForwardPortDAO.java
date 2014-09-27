@@ -60,8 +60,8 @@ public class ForwardPortDAO {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<ForwardPort> getpfListByRouter(String routerUuid) {
-		boolean result = false;
 		Session session = null;
 		List<ForwardPort> pfList = new ArrayList<ForwardPort>();
 		try {
@@ -71,7 +71,6 @@ public class ForwardPortDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("routerUuid", routerUuid);
 			pfList = query.list();
-			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
