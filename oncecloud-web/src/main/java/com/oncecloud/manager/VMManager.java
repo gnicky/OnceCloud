@@ -1097,22 +1097,61 @@ public class VMManager {
 				this.getMessagePush().editRowStatus(userId, vmUuid, "running",
 						"正常运行");
 				this.getMessagePush().editRowConsole(userId, vmUuid, "add");
-				this.getMessagePush().pushMessage(
-						userId,
-						Utilities.stickyToSuccess("主机 [i-"
-								+ vmUuid.substring(0, 8) + "] 已启动"));
 			} else {
 				NoVNC.deleteToken(vmUuid.substring(0, 8));
 				this.getMessagePush().editRowStatus(userId, vmUuid, "stopped",
 						"已关机");
 				this.getMessagePush().editRowConsole(userId, vmUuid, "del");
-				this.getMessagePush().pushMessage(
-						userId,
-						Utilities.stickyToSuccess("主机 [i-"
-								+ vmUuid.substring(0, 8) + "] 已关闭"));
 			}
 		}
 		return result;
+	}
+
+	public void syncDelVMOperate(String vmUuid, String hostUuid) {
+		OCVM vm = this.getVmDAO().getVM(vmUuid);
+		if (vm != null && vm.getVmStatus() != 0) {
+			if (hostUuid.equals(vm.getHostUuid())) {
+				this.getVmDAO().removeVM(vm.getVmUID(), vmUuid);
+				this.getFeeDAO().destoryVM(new Date(), vmUuid);
+				NoVNC.deleteToken(vmUuid.substring(0, 8));
+				this.getMessagePush().deleteRow(vm.getVmUID(), vmUuid);
+			}
+		}
+	}
+	
+	public void syncUpdateVM(String vmUuid, int powerAttrvalue) {
+		OCVM ocvm = this.getVmDAO().getVM(vmUuid);
+		if (ocvm != null) {
+			int userId = ocvm.getVmUID();
+			String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
+			if (powerAttrvalue == 1
+					&& ocvm.getVmPower() == 0) {
+				this.getVmDAO().updatePowerStatus(
+						vmUuid, powerAttrvalue);
+				String hostAddress = this.getHostAddress(
+								ocvm.getHostUuid());
+				int port = this.getVNCPort(vmUuid, poolUuid);
+				NoVNC.createToken(
+						vmUuid.substring(0, 8),
+						hostAddress, port);
+				this.getMessagePush().editRowStatus(
+						userId, vmUuid, "running",
+						"正常运行");
+				this.getMessagePush().editRowConsole(
+						userId, vmUuid, "add");
+			} else if (powerAttrvalue == 0
+					&& ocvm.getVmPower() == 1) {
+				this.getVmDAO().updatePowerStatus(
+						vmUuid, powerAttrvalue);
+				NoVNC.deleteToken(vmUuid
+						.substring(0, 8));
+				this.getMessagePush().editRowStatus(
+						userId, vmUuid, "stopped",
+						"已关机");
+				this.getMessagePush().editRowConsole(
+						userId, vmUuid, "del");
+			}
+		}
 	}
 
 	public void updateImportance(String uuid, int importance) {
@@ -1266,7 +1305,9 @@ public class VMManager {
 		}
 	}
 
-	public void createVMByISO(String vmUuid, String isoUuid, String srUuid, String name, int cpu, int memory, int volumeSize, String poolUuid, int userId) {
+	public void createVMByISO(String vmUuid, String isoUuid, String srUuid,
+			String name, int cpu, int memory, int volumeSize, String poolUuid,
+			int userId) {
 		int memoryCapacity = (int) (memory * 1024);
 		Date startTime = new Date();
 		boolean result = doCreateVMByISO(vmUuid, isoUuid, srUuid, name, cpu,
@@ -1321,9 +1362,9 @@ public class VMManager {
 				SR sr = SR.getByUuid(conn, srUuid);
 				String type = sr.getType(conn);
 				// Create VM By ISO
-				VM.Record record = VM.createVMFromISO(vmUuid, "i-" + vmUuid.substring(0, 8), cpu,
-						memory, conn, hostUuid, isoUuid, volumeSize, srUuid,
-						type);
+				VM.Record record = VM.createVMFromISO(vmUuid,
+						"i-" + vmUuid.substring(0, 8), cpu, memory, conn,
+						hostUuid, isoUuid, volumeSize, srUuid, type);
 				if (record != null) {
 					result = this.getVmDAO().updateVM(1, vmUuid, null,
 							VMManager.POWER_RUNNING, hostUuid, null);

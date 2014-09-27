@@ -624,7 +624,7 @@ public class VMDAO {
 	 */
 	public void removeVM(int userId, String vmUuid) {
 		OCVM toDelete = this.getVM(vmUuid);
-		if (toDelete != null) {
+		if (toDelete != null && toDelete.getVmStatus() != 0) {
 			Session session = null;
 			try {
 				toDelete.setVmStatus(0);
@@ -996,7 +996,7 @@ public class VMDAO {
 	 */
 	public void syncDelVMOperate(String hostUuid, String vmUuid) {
 		OCVM vm = this.getVM(vmUuid);
-		if (vm != null) {
+		if (vm != null && vm.getVmStatus() != 0) {
 			Session session = null;
 			try {
 				if (hostUuid.equals(vm.getHostUuid())) {

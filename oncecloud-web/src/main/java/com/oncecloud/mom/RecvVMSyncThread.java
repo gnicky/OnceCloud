@@ -1,5 +1,8 @@
 package com.oncecloud.mom;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.oncecloud.main.OnceConfig;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -7,6 +10,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
 public class RecvVMSyncThread extends Thread {
+	private final static Logger logger = Logger.getLogger(RecvVMSyncThread.class);
 	private static final String EXCHANGE_NAME = "oncecloud";
 	private static final String AMPQHostIP = OnceConfig.getValue("rabbitmq");
 	private static final int Port = 5672;
@@ -18,12 +22,12 @@ public class RecvVMSyncThread extends Thread {
 		return processMsg;
 	}
 
+	@Autowired
 	private void setProcessMsg(ProcessMsg processMsg) {
 		this.processMsg = processMsg;
 	}
 
-	public RecvVMSyncThread(ProcessMsg processMsg) {
-		this.setProcessMsg(processMsg);
+	public RecvVMSyncThread() {
 	}
 
 	public void run() {
@@ -45,7 +49,7 @@ public class RecvVMSyncThread extends Thread {
 				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 				String message = new String(delivery.getBody());
 				this.getProcessMsg().ProcessSync(message);
-				System.out.println(message);
+				logger.info(message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

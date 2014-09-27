@@ -2,6 +2,8 @@ package com.oncecloud.thread;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.oncecloud.dao.FeeDAO;
 
 /**
@@ -9,19 +11,15 @@ import com.oncecloud.dao.FeeDAO;
  * @version 2014/04/04
  */
 public class UpdateFeeThread extends Thread {
-
 	private FeeDAO feeDAO;
 
 	private FeeDAO getFeeDAO() {
 		return feeDAO;
 	}
 
+	@Autowired
 	private void setFeeDAO(FeeDAO feeDAO) {
 		this.feeDAO = feeDAO;
-	}
-
-	public UpdateFeeThread(FeeDAO feeDAO) {
-		this.setFeeDAO(feeDAO);
 	}
 
 	public void run() {
