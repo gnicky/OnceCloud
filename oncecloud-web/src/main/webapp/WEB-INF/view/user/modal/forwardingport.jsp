@@ -8,7 +8,7 @@
 					class="glyphicon glyphicon-remove"></span> </a>
 			</h4>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body" style="padding:0px 10px">
 			<form class="form form-horizontal" id="forwardport-form">
 				<fieldset>
 					<div class="item">

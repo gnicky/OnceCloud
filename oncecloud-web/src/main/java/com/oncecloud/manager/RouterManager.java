@@ -963,8 +963,8 @@ public class RouterManager {
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
-			srcIP = "http://" + srcIP +":9090";
-			result = Host.addPortForwarding(c, srcIP, protocol, destIP, destPort, srcIP,
+			String url = "http://" + srcIP +":9090";
+			result = Host.addPortForwarding(c, url, protocol, destIP, destPort, srcIP,
 					srcPort);
 			if (result) {
 				String uuidString = UUID.randomUUID().toString();
@@ -993,8 +993,8 @@ public class RouterManager {
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
-			srcIP = "http://" + srcIP +":9090";
-			result = Host.delPortForwarding(c, srcIP, protocol, destIP,
+			String url = "http://" + srcIP +":9090";
+			result = Host.delPortForwarding(c, url, protocol, destIP,
 					destPort, srcIP, srcPort);
 			if (result) {
 				ForwardPort pf = new ForwardPort();
