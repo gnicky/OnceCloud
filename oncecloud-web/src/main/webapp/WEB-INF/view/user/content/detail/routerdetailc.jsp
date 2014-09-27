@@ -112,8 +112,7 @@
 												style="margin-right: 0"></span>
 										</button>
 										<button id="pf_create" class="btn btn-default">+&nbsp;添加</button>
-										<button id="deletepf" class="btn btn-default btn-disable"
-											disabled style="color: #b8b8b8">
+										<button id="deletepf" class="btn btn-default btn-disable" disabled="disabled">
 											<span class="glyphicon glyphicon-trash"></span>删除
 										</button>
 									</div>
@@ -137,7 +136,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="tunnel" class="pane-filter" style="display: none;">
+						<!-- <div id="tunnel" class="pane-filter" style="display: none;">
 							<div>
 								<p class="alert alert-info">
 									隧道服务可以将多个不同地域的局域网连接在一起，形成兼顾公有私有的混合云计算环境，助您有效管理多地域的数据中心。更多详情请查看
@@ -207,7 +206,7 @@
 								</table>
 								
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>

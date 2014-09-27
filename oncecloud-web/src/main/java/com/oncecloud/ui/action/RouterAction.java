@@ -208,4 +208,22 @@ public class RouterAction {
 		JSONArray ja = this.getRouterManager().checkVnetIp(internalIP, routerUuid);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/DisableDHCP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String disableDHCP(HttpServletRequest request,
+			@RequestParam String vxuuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getRouterManager().disableDHCP(vxuuid, user.getUserId());
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/EnableDHCP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String enableDHCP(HttpServletRequest request,
+			@RequestParam String vxuuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getRouterManager().enableDHCP(vxuuid, user.getUserId());
+		return jo.toString();
+	}
 }

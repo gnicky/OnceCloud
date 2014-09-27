@@ -298,7 +298,8 @@ function getVxnets() {
                     _a.addClass("static-title");
                     _a.text(json.vn_name);
                     divone.append(_a);
-                    var __a = $('<a></a>');
+                    var vnetuuid = json.vn_uuid;
+                    var __a = $('<a id="dhcp-od" isopen="open" vxuuid="'+vnetuuid+'"></a>');
                     __a.addClass("static-title");
                     __a.html("&nbsp;[关闭 DHCP 服务]");
                     divone.append(__a);
@@ -386,7 +387,7 @@ function getVxnets() {
                             }
                             var hosip = jsonocvm.hostip;
                             if (hosip == "null") {
-                                hosip = '<span class="none">分配中...</span>';
+                                hosip = '<span class="none">手工分配</span>';
                             }
                             var tbody = $('<tbody></tbody>');
                             tbody
@@ -569,3 +570,100 @@ $("#deletepf").on("click", function () {
         });
     });
 });
+
+function isClosed(vxuuid) {
+    var showMessage = '';
+    var showTitle = '';
+    var result = true;
+    showMessage = '<div class="alert alert-info" style="margin:10px">'
+        + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要关闭DHCP服务&nbsp;?</div>';
+    showTitle = '提示';
+
+    bootbox.dialog({
+        className: "oc-bootbox",
+        message: showMessage,
+        title: showTitle,
+        buttons: {
+            main: {
+                label: "确定",
+                className: "btn-primary",
+                callback: function () {
+                   $.ajax({
+						type: "post",
+						url: "/RouterAction/DisableDHCP",
+						data: {vxuuid:vxuuid},
+						dataType: "json",
+						success: function(obj) {
+							if (obj.result) {
+								result = true;
+								getVxnets();
+							}
+						}
+                   });
+                }
+            },
+            cancel: {
+                label: "取消",
+                className: "btn-default",
+                callback: function () {
+                    
+                }
+            }
+        }
+    });
+    return result;
+}
+
+function isOpen(vxuuid) {
+	var result = true;
+	 $.ajax({
+		type : "post",
+		url : "/RouterAction/EnableDHCP",
+		data : {
+			vxuuid : vxuuid
+		},
+		dataType : "json",
+		success : function(obj) {
+			if (obj.result) {
+				getVxnets();
+				result = true;
+			}
+		}	 
+	 });
+	 return result;
+}
+
+$("#dhcp").on("click", "#dhcp-od", function(){
+	var isopen = $(this).attr("isopen");
+	var vxuuid = $(this).attr("vxuuid");
+	if(isopen == "open") {
+		if(isClosed(vxuuid)) {
+			$(this).attr("isopen", "close");
+			$(this).html("&nbsp;[打开 DHCP 服务]");
+		}
+	} else if (isopen == "close"){
+		if(isOpen(vxuuid)) {
+			$(this).attr("isopen", "open");
+			$(this).html("&nbsp;[关闭 DHCP 服务]");
+		}
+	}
+});
+
+/*$("#openvpn").on("click", function(){
+	event.preventDefault();
+    var url = basePath + 'common/modify';
+    var rtName = $('#rtname').text();
+    var rtDesc = $('#rtdesc').text();
+    var rtUuid = $('#platformcontent').attr("routerUuid");
+    $('#RouterModalContainer').load(url, {
+        "modifyType": "rt",
+        "modifyUuid": rtUuid,
+        "modifyName": rtName,
+        "modifyDesc": rtDesc
+    }, function () {
+        $('#RouterModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});*/
