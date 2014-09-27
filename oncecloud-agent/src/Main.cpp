@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <signal.h>
 #include <sys/file.h>
 #include <termios.h>
-#include <signal.h>
 
 #include "json/json.h"
 #include "Logger.h"
