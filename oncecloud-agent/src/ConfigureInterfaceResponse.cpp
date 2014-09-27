@@ -6,7 +6,7 @@
 
 ConfigureInterfaceResponse::ConfigureInterfaceResponse(bool result)
 {
-	this->SetResponseType("configureInterface");
+ 	this->SetResponseType("Router.ConfigureInterface");
 	this->SetResult(result);
 	this->BuildRawResponse();
 }
