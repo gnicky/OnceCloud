@@ -3498,4 +3498,79 @@ public class Host extends XenAPIObject {
 		return Types.toBoolean(result);
 	}	
 	
+	public static Boolean addPPTP(Connection c, String ip, String json_obj)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.add_PPTP";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip),
+				Marshalling.toXMLRPC(json_obj)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}	
+	
+	public static Boolean delPPTP(Connection c, String ip)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.del_PPTP";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}	
+	
+	public static Boolean addOpenVPN(Connection c, String ip, String json_obj)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.add_open_vpn";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip),
+				Marshalling.toXMLRPC(json_obj)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}	
+	
+	public static Boolean delOpenVPN(Connection c, String ip)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.del_open_vpn";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}
+
+	public static Boolean addIOLimit(Connection c, String internal_ip, String speed)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.add_IO_limit";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(internal_ip),
+				Marshalling.toXMLRPC(speed)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}	
+	
+	public static Boolean delIOLimit(Connection c, String ip)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.del_IO_limit";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(ip)
+				};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	}
+	
 }

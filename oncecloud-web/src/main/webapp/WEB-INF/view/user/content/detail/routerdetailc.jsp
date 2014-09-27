@@ -149,6 +149,9 @@
 									VPN&nbsp;服务使得您可以远程安全地拨入网驰&nbsp;OnceAsCloud&nbsp;中的私有网络。更多详情请查看
 								</p>
 							</div>
+							<div>
+								VPN服务&nbsp;<a href="#" id="openvpn">[打开]</a>
+							</div>
 						</div>
 						<div id="filtering" class="pane-filter" style="display: none;">
 							<div>
