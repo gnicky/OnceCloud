@@ -7,7 +7,7 @@ $('#RouterModalContainer').on('hide', function (event) {
     $(this).children().remove();
 });
 
-$('.pf-refresh').on('click', function (event) {
+$('#pf-refresh').on('click', function (event) {
      event.preventDefault();
      getpfList();
  });

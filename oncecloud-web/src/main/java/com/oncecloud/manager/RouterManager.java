@@ -1030,4 +1030,17 @@ public class RouterManager {
 		}
 		return ja;
 	}
+	
+	public JSONArray checkVnetIp(String internalIP, String routerUuid) {
+		JSONArray ja = new JSONArray();
+		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(routerUuid);
+		if (vxnetsList != null) {
+			for (Vnet vnet : vxnetsList) {
+				JSONObject jo = new JSONObject();
+				jo.put("vnet", vnet.getVnetNet());
+				ja.put(jo);
+			}
+		}
+		return ja;
+	}
 }

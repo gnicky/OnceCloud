@@ -200,4 +200,12 @@ public class RouterAction {
 		JSONArray ja = this.getRouterManager().getpfList(routerUuid);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/CheckVnetIP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String checkVnetIP(HttpServletRequest request,
+			@RequestParam String routerUuid, @RequestParam String internalIP) {
+		JSONArray ja = this.getRouterManager().checkVnetIp(internalIP, routerUuid);
+		return ja.toString();
+	}
 }

@@ -127,7 +127,7 @@
 												<th>源端口</th>
 												<th>内网 IP</th>
 												<th>内网端口</th>
-												<th>操作</th>
+												<!-- <th>操作</th> -->
 											</tr>
 										</thead>
 										<tbody id="tablebody">

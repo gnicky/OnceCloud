@@ -9,7 +9,7 @@
 			</h4>
 		</div>
 		<div class="modal-body">
-			<form class="form form-horizontal" id="modify-form">
+			<form class="form form-horizontal" id="forwardport-form">
 				<fieldset>
 					<div class="item">
 						<div class="alarm-price-info">
@@ -18,7 +18,7 @@
 						<div style="padding-top:10px">
 							<div class="control-label">名称</div>
 							<div class="controls">
-								<input type="text" id="pf_name" style="width: 70px !important">
+								<input type="text" id="pf_name" name="pf_name" style="width: 70px !important">
 							</div>
 						</div>
 						<div style="padding-top:10px">
@@ -35,19 +35,19 @@
 						<div style="padding-top:10px">
 							<div class="control-label">源端口</div>
 							<div class="controls">
-								<input type="text" id="pf_srcport" name="rule_threshold" style="width: 70px !important">
+								<input type="text" id="pf_srcport" name="pf_srcport" style="width: 70px !important">
 							</div>
 						</div>
 						<div style="padding-top:10px">
 							<div class="control-label">内网IP</div>
 							<div class="controls">
-								<input type="text" id="pf_desIp" name="rule_threshold" style="width: 170px !important">
+								<input type="text" id="pf_desIp" name="pf_desIp" style="width: 170px !important">
 							</div>
 						</div>
 						<div style="padding-top:10px">
 							<div class="control-label">内网端口</div>
 							<div class="controls">
-								<input type="text" id="pf_desport" name="rule_threshold" style="width: 70px !important">
+								<input type="text" id="pf_desport" name="pf_desport" style="width: 70px !important">
 							</div>
 						</div>
 					</div>
