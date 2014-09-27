@@ -840,6 +840,7 @@ public class RouterManager {
 					}
 					jo.put("ocvm", javm);
 				}
+				jo.put("vn_dhcp", vnet.getDhcpStatus());
 				jo.put("vn_uuid", vnet.getVnetUuid());
 				jo.put("vn_net", vnet.getVnetNet());
 				jo.put("vn_gate", vnet.getVnetGate());

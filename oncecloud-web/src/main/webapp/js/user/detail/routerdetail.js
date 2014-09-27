@@ -260,6 +260,7 @@ function getVxnets() {
     var routerUuid = $('#platformcontent').attr("routerUuid");
     $.ajax({
         type: 'get',
+        async: false,
         url: '/RouterAction/Vxnets',
         data: {
             routerUuid: routerUuid
@@ -299,9 +300,16 @@ function getVxnets() {
                     _a.text(json.vn_name);
                     divone.append(_a);
                     var vnetuuid = json.vn_uuid;
-                    var __a = $('<a id="dhcp-od" isopen="open" vxuuid="'+vnetuuid+'"></a>');
-                    __a.addClass("static-title");
-                    __a.html("&nbsp;[关闭 DHCP 服务]");
+                    var __a = $('<a id="dhcp-od" class="vnet-dhcp" vxuuid="' + vnetuuid + '"></a>');
+                    if (json.vn_dhcp == 1) {
+                        __a.attr("isopen", "open");
+                        __a.addClass("static-title");
+                        __a.html("&nbsp;[关闭 DHCP 服务]");
+                    } else {
+                        __a.attr("isopen", "close");
+                        __a.addClass("static-title");
+                        __a.html("&nbsp;[打开 DHCP 服务]");
+                    }
                     divone.append(__a);
                     var divinner = $('<div></div>');
                     var spanone = $('<span></span>');
@@ -329,7 +337,6 @@ function getVxnets() {
                         var pvm = $('<p></p>');
                         pvm.addClass("none");
                         pvm.text("当前私有网络中没有主机。");
-                        $('#vxnets-t').append(table);
                         $('#vxnets-t').append(pvm);
 
                         ///cyh可视化 绑定私有网络
@@ -575,10 +582,10 @@ function isClosed(vxuuid) {
     var showMessage = '';
     var showTitle = '';
     var result = true;
-    showMessage = '<div class="alert alert-info" style="margin:10px">'
-        + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要关闭DHCP服务&nbsp;?</div>';
+    showMessage = '<div class="alert alert-info" style="margin:10px;">'
+        + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要关闭私有网络&nbsp;[vn-'
+        + vxuuid.substring(0,8) + ']&nbsp;的DHCP服务&nbsp;?</div>';
     showTitle = '提示';
-
     bootbox.dialog({
         className: "oc-bootbox",
         message: showMessage,
@@ -588,82 +595,70 @@ function isClosed(vxuuid) {
                 label: "确定",
                 className: "btn-primary",
                 callback: function () {
-                   $.ajax({
-						type: "post",
-						url: "/RouterAction/DisableDHCP",
-						data: {vxuuid:vxuuid},
-						dataType: "json",
-						success: function(obj) {
-							if (obj.result) {
-								result = true;
-								getVxnets();
-							}
-						}
-                   });
+                    $.ajax({
+                        type: "post",
+                        url: "/RouterAction/DisableDHCP",
+                        data: {vxuuid: vxuuid},
+                        dataType: "json",
+                        success: function (obj) {
+                            if (obj.result) {
+                                getVxnets();
+                            }
+                        }
+                    });
                 }
             },
             cancel: {
                 label: "取消",
                 className: "btn-default",
                 callback: function () {
-                    
                 }
             }
         }
     });
-    return result;
 }
 
 function isOpen(vxuuid) {
-	var result = true;
-	 $.ajax({
-		type : "post",
-		url : "/RouterAction/EnableDHCP",
-		data : {
-			vxuuid : vxuuid
-		},
-		dataType : "json",
-		success : function(obj) {
-			if (obj.result) {
-				getVxnets();
-				result = true;
-			}
-		}	 
-	 });
-	 return result;
+    $.ajax({
+        type: "post",
+        url: "/RouterAction/EnableDHCP",
+        data: {
+            vxuuid: vxuuid
+        },
+        dataType: "json",
+        success: function (obj) {
+            if (obj.result) {
+                getVxnets();
+            }
+        }
+    });
 }
 
-$("#dhcp").on("click", "#dhcp-od", function(){
-	var isopen = $(this).attr("isopen");
-	var vxuuid = $(this).attr("vxuuid");
-	if(isopen == "open") {
-		if(isClosed(vxuuid)) {
-			$(this).attr("isopen", "close");
-			$(this).html("&nbsp;[打开 DHCP 服务]");
-		}
-	} else if (isopen == "close"){
-		if(isOpen(vxuuid)) {
-			$(this).attr("isopen", "open");
-			$(this).html("&nbsp;[关闭 DHCP 服务]");
-		}
-	}
+$("#dhcp").on("click", "#dhcp-od", function () {
+    var isopen = $(this).attr("isopen");
+    var vxuuid = $(this).attr("vxuuid");
+    if (isopen == "open") {
+        isClosed(vxuuid);
+    } else if (isopen == "close") {
+        isOpen(vxuuid);
+    }
 });
 
 /*$("#openvpn").on("click", function(){
-	event.preventDefault();
-    var url = basePath + 'common/modify';
-    var rtName = $('#rtname').text();
-    var rtDesc = $('#rtdesc').text();
-    var rtUuid = $('#platformcontent').attr("routerUuid");
-    $('#RouterModalContainer').load(url, {
-        "modifyType": "rt",
-        "modifyUuid": rtUuid,
-        "modifyName": rtName,
-        "modifyDesc": rtDesc
-    }, function () {
-        $('#RouterModalContainer').modal({
-            backdrop: false,
-            show: true
-        });
-    });
-});*/
+ event.preventDefault();
+ var url = basePath + 'common/modify';
+ var rtName = $('#rtname').text();
+ var rtDesc = $('#rtdesc').text();
+ var rtUuid = $('#platformcontent').attr("routerUuid");
+ $('#RouterModalContainer').load(url, {
+ "modifyType": "rt",
+ "modifyUuid": rtUuid,
+ "modifyName": rtName,
+ "modifyDesc": rtDesc
+ }, function () {
+ $('#RouterModalContainer').modal({
+ backdrop: false,
+ show: true
+ });
+ });
+ });*/
