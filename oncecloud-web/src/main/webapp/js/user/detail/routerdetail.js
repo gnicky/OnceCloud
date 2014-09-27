@@ -362,7 +362,7 @@ function getVxnets() {
 					} else {
 						var thead = $('<thead></thead>');
 						thead
-								.html('<tr><th>主机 ID</th><th>名称</th><th>状态</th><th>IP 地址</th><th>DHCP 选项</th><th>操作</th></tr>');
+								.html('<tr><th>主机 ID</th><th>名称</th><th>状态</th><th>IP 地址</th><th>DHCP 选项</th></tr>');
 						table.append(thead);
 						var vmlist = "";
 						$.each(json.ocvm, function(index, jsonocvm) {
@@ -396,7 +396,7 @@ function getVxnets() {
 											+ stateStr
 											+ '</td><td>'
 											+ hosip
-											+ '</td><td></td><td><a href="#">修改</a></td>');
+											+ '</td><td></td>');
 							table.append(tbody);
 
 							var endip = jsonocvm.hostip;

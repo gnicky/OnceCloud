@@ -72,12 +72,12 @@
 					<h3 class="uppercase">功能</h3>
 					<span class="oc-update" id="suggestion" style="display: none">修改尚未更新，请点击"应用修改"</span>
 				</div>
-				<div class="once-toolbar">
+				<!-- <div class="once-toolbar">
 					<button id="fe_create" class="btn btn-default">+&nbsp;添加</button>
 					<button id="apply" class="btn btn-default">&nbsp;应用修改</button>
 					<button id="monitor" style="display: none;"
 						class="btn btn-default btn-disable" disabled>流量监控</button>
-				</div>
+				</div> -->
 				<div class="tabs">
 					<ul class="nav nav-tabs filter-once-tab">
 						<li class="tab-filter selected" type="dhcp"><a href="#">DHCP服务器</a>
