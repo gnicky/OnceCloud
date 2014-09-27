@@ -707,6 +707,82 @@ public class RouterManager {
 		return result;
 	}
 
+	public JSONObject enableDHCP(String vnetUuid, int userId, int start, int end) {
+		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
+		JSONObject jo = new JSONObject();
+		boolean result = false;
+		if (vnet != null) {
+			try {
+				if (vnet.getDhcpStatus() == 1) {
+					result = true;
+				} else {
+					Connection c = this.getConstant().getConnection(userId);
+					String routerUuid = vnet.getVnetRouter();
+					Router router = this.getRouterDAO().getAliveRouter(
+							routerUuid);
+					String url = router.getRouterIP() + ":9090";
+					int net = vnet.getVnetNet();
+					String subnet = "192.168." + net + ".0";
+					String netmask = "255.255.255.0";
+					String gateway = "192.168." + net + "."
+							+ vnet.getVnetGate();
+					String rangeStart = "192.168." + net + "." + start;
+					String rangeEnd = "192.168." + net + "." + end;
+					logger.info("Configure Subnet: URL [" + url + "] Netmask ["
+							+ netmask + "] RangeStart [" + rangeStart
+							+ "] RangeEnd [" + rangeEnd + "]");
+					boolean addSubnetResult = RouterManager.addSubnet(c, url,
+							subnet, netmask, gateway, rangeStart, rangeEnd);
+					if (addSubnetResult) {
+						this.getVmManager().assginIpAddress(c, url, subnet,
+								vnetUuid);
+						logger.info("Configure Subnet Result: "
+								+ addSubnetResult);
+						result = true;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		jo.put("result", result);
+		return jo;
+	}
+
+	public JSONObject disableDHCP(String vnetUuid, int userId) {
+		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
+		JSONObject jo = new JSONObject();
+		boolean result = false;
+		if (vnet != null) {
+			if (vnet.getDhcpStatus() == 0) {
+				result = true;
+			} else {
+				try {
+					Connection c = this.getConstant().getConnection(userId);
+					String routerUuid = vnet.getVnetRouter();
+					Router router = this.getRouterDAO().getAliveRouter(
+							routerUuid);
+					String url = router.getRouterIP() + ":9090";
+					String subnet = "192.168." + vnet.getVnetNet() + ".0";
+					String netmask = "255.255.255.0";
+					JSONObject delJo = new JSONObject();
+					delJo.put("subnet", subnet);
+					delJo.put("netmask", netmask);
+					boolean delSubnetResult = Host.delSubnet(c, url,
+							delJo.toString());
+					if (delSubnetResult) {
+						this.getVmManager().unAssginIpAddress(c, vnetUuid);
+						result = true;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		jo.put("result", result);
+		return jo;
+	}
+
 	private static boolean addSubnet(Connection c, String url, String subnet,
 			String netmask, String gateway, String rangeStart, String rangeEnd) {
 		boolean result = false;
@@ -963,12 +1039,14 @@ public class RouterManager {
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
-			String url = "http://" + srcIP +":9090";
-			result = Host.addPortForwarding(c, url, protocol, destIP, destPort, srcIP,
-					srcPort);
+			String url = "http://" + srcIP + ":9090";
+			result = Host.addPortForwarding(c, url, protocol, destIP, destPort,
+					srcIP, srcPort);
 			if (result) {
 				String uuidString = UUID.randomUUID().toString();
-				ForwardPort pf = new ForwardPort(uuidString, pfName, protocol, Integer.parseInt(srcPort), destIP, Integer.parseInt(destPort), routerUuid);
+				ForwardPort pf = new ForwardPort(uuidString, pfName, protocol,
+						Integer.parseInt(srcPort), destIP,
+						Integer.parseInt(destPort), routerUuid);
 				jo.put("uuid", uuidString);
 				this.getForwardPortDAO().addPF(pf);
 			}
@@ -993,9 +1071,9 @@ public class RouterManager {
 		Connection c = this.getConstant().getConnectionFromPool(allocate);
 		boolean result = false;
 		try {
-			String url = "http://" + srcIP +":9090";
-			result = Host.delPortForwarding(c, url, protocol, destIP,
-					destPort, srcIP, srcPort);
+			String url = "http://" + srcIP + ":9090";
+			result = Host.delPortForwarding(c, url, protocol, destIP, destPort,
+					srcIP, srcPort);
 			if (result) {
 				ForwardPort pf = new ForwardPort();
 				pf.setPfUuid(uuid);
@@ -1014,10 +1092,11 @@ public class RouterManager {
 		}
 		return jo;
 	}
-	
+
 	public JSONArray getpfList(String routerUuid) {
 		JSONArray ja = new JSONArray();
-		List<ForwardPort> pfList = this.getForwardPortDAO().getpfListByRouter(routerUuid);
+		List<ForwardPort> pfList = this.getForwardPortDAO().getpfListByRouter(
+				routerUuid);
 		for (ForwardPort forwardPort : pfList) {
 			JSONObject jo = new JSONObject();
 			jo.put("pf_uuid", forwardPort.getPfUuid());
@@ -1030,7 +1109,7 @@ public class RouterManager {
 		}
 		return ja;
 	}
-	
+
 	public JSONArray checkVnetIp(String internalIP, String routerUuid) {
 		JSONArray ja = new JSONArray();
 		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(routerUuid);
