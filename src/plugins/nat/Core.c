@@ -5,6 +5,7 @@
 #include "File.h"
 #include "Process.h"
 #include "NatEntry.h"
+#include "Logger.h"
 
 void LoadConfiguration(char * buffer)
 {
@@ -185,6 +186,8 @@ int DoAddRule(const char * rule)
 
 	free(newConfiguration);
 	free(originalConfiguration);
+
+	WriteLog(LOG_NOTICE,"NAT.DoAddRule: Rule added: %s",rule);
 	return 0;
 }
 
@@ -271,6 +274,7 @@ int DoRemoveRule(const char * rule)
 
 	free(newConfiguration);
 	free(originalConfiguration);
+	WriteLog(LOG_NOTICE,"NAT.DoRemoveRule: Rule removed: %s",rule);
 	return 0;
 }
 

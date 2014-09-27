@@ -41,7 +41,7 @@ int HandlePostRequest(struct HttpRequest * request, struct HttpResponse * respon
 
 	if(ip!=NULL && speed!=NULL)
 	{
-		AddLimit(ip,speed);
+		SetLimit(ip,speed);
 
 		response->StatusCode=200;
 		response->SetContent(response,"");
@@ -66,7 +66,7 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 	if(ip!=NULL && speed!=NULL)
 	{
-		AddLimit(ip,speed);
+		SetLimit(ip,speed);
 
 		response->StatusCode=200;
 		response->SetContent(response,"");
@@ -86,24 +86,8 @@ int HandlePutRequest(struct HttpRequest * request, struct HttpResponse * respons
 
 int HandleDeleteRequest(struct HttpRequest * request, struct HttpResponse * response)
 {
-	const char * ip=request->GetHeader(request,"x-bws-ip-address");
-
-	if(ip!=NULL)
-	{
-		RemoveLimit(ip);
-
-		response->StatusCode=200;
-		response->SetContent(response,"");
-		return TRUE;
-	}
-	
-	char ErrorMessage[]=
-		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		"<Error>\n\tInvalid parameters.\n</Error>\n";
-
-	response->StatusCode=400;
-	response->SetHeader(response,"Content-Type","application/xml");
-	response->SetContent(response,ErrorMessage);
+	response->StatusCode=200;
+	response->SetContent(response,"");
 
 	return TRUE;
 }

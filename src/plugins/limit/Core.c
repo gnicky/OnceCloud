@@ -150,24 +150,7 @@ int DoRemoveRule(const char * rule)
 	return 0;
 }
 
-void AddLimit(const char * ip, const char * speed)
-{
-	char temp[1000];
-	sprintf(temp,"-A FORWARD -s %s/32 -j",ip);
-	DoRemoveRule(temp);
-	sprintf(temp,"-A FORWARD -d %s/32 -j",ip);
-	DoRemoveRule(temp);
-	sprintf(temp,"-A FORWARD -s %s/32 -m limit --limit %s/sec -j RULE",ip,speed);
-	DoAddRule(temp);
-	sprintf(temp,"-A FORWARD -d %s/32 -m limit --limit %s/sec -j RULE",ip,speed);
-	DoAddRule(temp);
-	sprintf(temp,"-A FORWARD -s %s/32 -j DROP",ip);
-	DoAddRule(temp);
-	sprintf(temp,"-A FORWARD -d %s/32 -j DROP",ip);
-	DoAddRule(temp);
-}
-
-void RemoveLimit(const char * ip)
+void DoRemoveLimit(const char * ip)
 {
 	char temp[1000];
 	sprintf(temp,"-A FORWARD -s %s/32 -m limit --limit",ip);
@@ -178,8 +161,24 @@ void RemoveLimit(const char * ip)
 	DoRemoveRule(temp);
 	sprintf(temp,"-A FORWARD -d %s/32 -j",ip);
 	DoRemoveRule(temp);
-	sprintf(temp,"-A FORWARD -s %s/32 -j RULE",ip);
+}
+
+void SetLimit(const char * ip, const char * speed)
+{
+	DoRemoveLimit(ip);
+
+	int convertedSpeed;
+	sscanf(speed,"%d",&convertedSpeed);
+	convertedSpeed=convertedSpeed*175;
+	char temp[1000];
+	sprintf(temp,"-A FORWARD -s %s/32 -m limit --limit %d/sec -j RULE",ip,convertedSpeed);
 	DoAddRule(temp);
-	sprintf(temp,"-A FORWARD -d %s/32 -j RULE",ip);
+	sprintf(temp,"-A FORWARD -d %s/32 -m limit --limit %d/sec -j RULE",ip,convertedSpeed);
+	DoAddRule(temp);
+	sprintf(temp,"-A FORWARD -s %s/32 -j DROP",ip);
+	DoAddRule(temp);
+	sprintf(temp,"-A FORWARD -d %s/32 -j DROP",ip);
 	DoAddRule(temp);
 }
+
+
