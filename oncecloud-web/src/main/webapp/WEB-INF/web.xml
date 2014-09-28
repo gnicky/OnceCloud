@@ -39,7 +39,6 @@
 			<param-name>ContextConfigLocation</param-name>
 			<param-value>
 					classpath*:/com/oncecloud/config/application-context.xml
-					classpath*:/com/oncecloud/config/application-context－rabbitmq.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -57,9 +56,9 @@
 		</init-param> 
 		<load-on-startup>0</load-on-startup>
 	</servlet>
-<!-- 	<servlet>
+	<servlet>
 		<servlet-name>OnceServlet</servlet-name> 
 		<servlet-class>com.oncecloud.main.OnceServlet</servlet-class> 
 		<load-on-startup>2</load-on-startup>
-	</servlet> -->
+	</servlet>
 </web-app>

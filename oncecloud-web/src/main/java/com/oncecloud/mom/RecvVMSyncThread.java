@@ -20,17 +20,17 @@ public class RecvVMSyncThread extends Thread {
 	private static final int Port = 5672;
 	private static final String HostUser = "root";
 	private static final String HostPwd = "onceas";
-	private ProcessMsg processMsg;
-
+	private static ProcessMsg processMsg;
+	
 	public ProcessMsg getProcessMsg() {
 		return processMsg;
 	}
 
 	@Autowired
 	public void setProcessMsg(ProcessMsg processMsg) {
-		this.processMsg = processMsg;
+		RecvVMSyncThread.processMsg = processMsg;
 	}
-	
+
 	public RecvVMSyncThread() {
 		// do nothing
 	}
@@ -49,21 +49,16 @@ public class RecvVMSyncThread extends Thread {
 			channel.exchangeDeclare(EXCHANGE_NAME, "topic");
 			String queueName = channel.queueDeclare().getQueue();
 			System.out.println("Queue Name: " + queueName);
-			channel.queueBind("myQueue", EXCHANGE_NAME, "SyncVM");
+			channel.queueBind(queueName, EXCHANGE_NAME, "SyncVM");
 			QueueingConsumer consumer = new QueueingConsumer(channel);
-			channel.basicConsume("myQueue", true, consumer);
+			channel.basicConsume(queueName, true, consumer);
 			System.out.println("Begin listen to RabbitMQ on " + AMPQHostIP + ":" + Port);
-			if (this.getProcessMsg() == null) {
-				System.out.println("Is null");
-			} else {
-				System.out.println("Not null");
+			while (true) {
+				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+				String message = new String(delivery.getBody());
+				System.out.println("Receive new Message: " + message);
+				this.getProcessMsg().ProcessSync(message);
 			}
-//			while (true) {
-//				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
-//				String message = new String(delivery.getBody());
-//				System.out.println("Receive new Message: " + message);
-//				this.getProcessMsg().ProcessSync(message);
-//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
