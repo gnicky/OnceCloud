@@ -36,13 +36,18 @@
 		<servlet-name>dispatcherServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
-			<param-name>contextConfigLocation</param-name>
+			<param-name>ContextConfigLocation</param-name>
 			<param-value>
 					classpath*:/com/oncecloud/config/application-context.xml
+					classpath*:/com/oncecloud/config/application-context－rabbitmq.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>default</servlet-name> 
 		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class> 
@@ -50,11 +55,11 @@
 			<param-name>useFileMappedBuffer</param-name> 
 			<param-value>false</param-value> 
 		</init-param> 
-		<load-on-startup>0</load-on-startup> 
+		<load-on-startup>0</load-on-startup>
 	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>dispatcherServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+<!-- 	<servlet>
+		<servlet-name>OnceServlet</servlet-name> 
+		<servlet-class>com.oncecloud.main.OnceServlet</servlet-class> 
+		<load-on-startup>2</load-on-startup>
+	</servlet> -->
 </web-app>

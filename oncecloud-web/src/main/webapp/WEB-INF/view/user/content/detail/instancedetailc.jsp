@@ -100,12 +100,12 @@
 				<div id="chart-area-1">
 					<div id="cpupic"></div>
 				</div>
-				<h4 class="chart-title">
-					内存
-					<div class="chart-label">
-						间隔： <span class="chart-span"> 5 分钟 <span>
-					</div>
-				</h4>
+				<%--<h4 class="chart-title">--%>
+					<%--内存--%>
+					<%--<div class="chart-label">--%>
+						<%--间隔： <span class="chart-span"> 5 分钟 <span>--%>
+					<%--</div>--%>
+				<%--</h4>--%>
 				<div id="chart-area-2">
 					<div id="memorypic"></div>
 				</div>

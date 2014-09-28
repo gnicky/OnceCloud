@@ -1,19 +1,19 @@
 $(function () {
     getInstanceBasicList();
     var cpuChart;
-    var memoryChart;
+//    var memoryChart;
     var vbdChart;
     var vifChart;
     drawCpuLine('sixhours');
-    drawMemoryLine('sixhours');
+//    drawMemoryLine('sixhours');
     drawVbdLine('sixhours');
     drawVifLine('sixhours');
     cpuTimer = setInterval(function () {
         drawCpuLine('sixhours');
     }, 5 * 60 * 1000);
-    memoryTimer = setInterval(function () {
-        drawMemoryLine('sixhours');
-    }, 5 * 60 * 1000);
+//    memoryTimer = setInterval(function () {
+//        drawMemoryLine('sixhours');
+//    }, 5 * 60 * 1000);
     vbdTimer = setInterval(function () {
         drawVbdLine('sixhours');
     }, 5 * 60 * 1000);
@@ -161,19 +161,19 @@ function thirtymin() {
     $('.chart-span').addClass("chart-right");
     $('#chart-group').addClass("chart-right");
     window.clearInterval(cpuTimer);
-    window.clearInterval(memoryTimer);
+//    window.clearInterval(memoryTimer);
     window.clearInterval(vbdTimer);
     window.clearInterval(vifTimer);
     drawCpuLine('thirtymin');
-    drawMemoryLine('thirtymin');
+//    drawMemoryLine('thirtymin');
     drawVbdLine('thirtymin');
     drawVifLine('thirtymin');
     cpuTimer = setInterval(function () {
         drawCpuLine('thirtymin');
     }, 30 * 1000);
-    memoryTimer = setInterval(function () {
-        drawMemoryLine('thirtymin');
-    }, 30 * 1000);
+//    memoryTimer = setInterval(function () {
+//        drawMemoryLine('thirtymin');
+//    }, 30 * 1000);
     vbdTimer = setInterval(function () {
         drawVbdLine('thirtymin');
     }, 30 * 1000);
@@ -207,19 +207,19 @@ function sixhours() {
     $('.chart-span').addClass("chart-right");
     $('#chart-group').addClass("chart-right");
     window.clearInterval(cpuTimer);
-    window.clearInterval(memoryTimer);
+//    window.clearInterval(memoryTimer);
     window.clearInterval(vbdTimer);
     window.clearInterval(vifTimer);
     drawCpuLine('sixhours');
-    drawMemoryLine('sixhours');
+//    drawMemoryLine('sixhours');
     drawVbdLine('sixhours');
     drawVifLine('sixhours');
     cpuTimer = setInterval(function () {
         drawCpuLine('sixhours');
     }, 5 * 60 * 1000);
-    memoryTimer = setInterval(function () {
-        drawMemoryLine('sixhours');
-    }, 5 * 60 * 1000);
+//    memoryTimer = setInterval(function () {
+//        drawMemoryLine('sixhours');
+//    }, 5 * 60 * 1000);
     vbdTimer = setInterval(function () {
         drawVbdLine('sixhours');
     }, 5 * 60 * 1000);
@@ -238,19 +238,19 @@ $("#oneday").on('click', function (event) {
     $('.chart-span').addClass("chart-right");
     $('#chart-group').addClass("chart-right");
     window.clearInterval(cpuTimer);
-    window.clearInterval(memoryTimer);
+//    window.clearInterval(memoryTimer);
     window.clearInterval(vbdTimer);
     window.clearInterval(vifTimer);
     drawCpuLine('oneday');
-    drawMemoryLine('oneday');
+//    drawMemoryLine('oneday');
     drawVbdLine('oneday');
     drawVifLine('oneday');
     cpuTimer = setInterval(function () {
         drawCpuLine('oneday');
     }, 15 * 60 * 1000);
-    memoryTimer = setInterval(function () {
-        drawMemoryLine('oneday');
-    }, 15 * 60 * 1000);
+//    memoryTimer = setInterval(function () {
+//        drawMemoryLine('oneday');
+//    }, 15 * 60 * 1000);
     vbdTimer = setInterval(function () {
         drawVbdLine('oneday');
     }, 15 * 60 * 1000);
@@ -269,19 +269,19 @@ $("#twoweeks").on('click', function (event) {
     $('.chart-span').addClass("chart-right");
     $('#chart-group').addClass("chart-right");
     window.clearInterval(cpuTimer);
-    window.clearInterval(memoryTimer);
+//    window.clearInterval(memoryTimer);
     window.clearInterval(vbdTimer);
     window.clearInterval(vifTimer);
     drawCpuLine('twoweeks');
-    drawMemoryLine('twoweeks');
+//    drawMemoryLine('twoweeks');
     drawVbdLine('twoweeks');
     drawVifLine('twoweeks');
     cpuTimer = setInterval(function () {
         drawCpuLine('twoweeks');
     }, 4 * 3600 * 1000);
-    memoryTimer = setInterval(function () {
-        drawMemoryLine('twoweeks');
-    }, 4 * 3600 * 1000);
+//    memoryTimer = setInterval(function () {
+//        drawMemoryLine('twoweeks');
+//    }, 4 * 3600 * 1000);
     vbdTimer = setInterval(function () {
         drawVbdLine('twoweeks');
     }, 4 * 3600 * 1000);
@@ -300,19 +300,19 @@ $("#onemonth").on('click', function (event) {
     $('.chart-span').addClass("chart-right");
     $('#chart-group').addClass("chart-right");
     window.clearInterval(cpuTimer);
-    window.clearInterval(memoryTimer);
+//    window.clearInterval(memoryTimer);
     window.clearInterval(vbdTimer);
     window.clearInterval(vifTimer);
     drawCpuLine('onemonth');
-    drawMemoryLine('onemonth');
+//    drawMemoryLine('onemonth');
     drawVbdLine('onemonth');
     drawVifLine('onemonth');
     cpuTimer = setInterval(function () {
         drawCpuLine('onemonth');
     }, 24 * 3600 * 1000);
-    memoryTimer = setInterval(function () {
-        drawMemoryLine('onemonth');
-    }, 24 * 3600 * 1000);
+//    memoryTimer = setInterval(function () {
+//        drawMemoryLine('onemonth');
+//    }, 24 * 3600 * 1000);
     vbdTimer = setInterval(function () {
         drawVbdLine('onemonth');
     }, 24 * 3600 * 1000);

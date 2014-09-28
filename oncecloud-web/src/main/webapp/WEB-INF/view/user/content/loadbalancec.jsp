@@ -10,9 +10,9 @@
 		<li class="tab-filter active">
 			<a href="javascript:void(0)"><span class="glyphicon glyphicon-random"></span>负载均衡</a>
 		</li>
-		<li class="tab-filter">
-			<a href="javascript:void(0)"><span class="glyphicon glyphicon-barcode"></span>转发策略</a>
-		</li>
+		<%--<li class="tab-filter">--%>
+			<%--<a href="javascript:void(0)"><span class="glyphicon glyphicon-barcode"></span>转发策略</a>--%>
+		<%--</li>--%>
 	</ul>
 	<div class="once-pane">
 		<div class="once-toolbar">

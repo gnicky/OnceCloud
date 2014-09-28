@@ -85,8 +85,8 @@
 						</li>
 						<li class="tab-filter" type="port-forwarding"><a href="#">端口转发</a>
 						</li>
-						<li class="tab-filter" type="tunnel"><a href="#">隧道服务</a></li>
-						<li class="tab-filter" type="vpn"><a href="#">VPN服务</a></li>
+						<%--<li class="tab-filter" type="tunnel"><a href="#">隧道服务</a></li>--%>
+						<%--<li class="tab-filter" type="vpn"><a href="#">VPN服务</a></li>--%>
 						<li class="tab-filter" type="filtering"><a href="#">过滤控制</a>
 						</li>
 					</ul>
