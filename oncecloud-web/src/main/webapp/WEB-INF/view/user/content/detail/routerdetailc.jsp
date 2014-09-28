@@ -112,7 +112,8 @@
 												style="margin-right: 0"></span>
 										</button>
 										<button id="pf_create" class="btn btn-default">+&nbsp;添加</button>
-										<button id="deletepf" class="btn btn-default btn-disable" disabled="disabled">
+										<button id="deletepf" class="btn btn-default btn-disable"
+											disabled="disabled">
 											<span class="glyphicon glyphicon-trash"></span>删除
 										</button>
 									</div>
@@ -189,9 +190,7 @@
 								<table class="table table-bordered once-table">
 									<thead>
 										<tr>
-											<th>
-												
-											</th>
+											<th></th>
 											<th>名称</th>
 											<th>优先级</th>
 											<th>协议</th>
@@ -204,15 +203,14 @@
 									<tbody id="filtertablebody"></tbody>
 									<tfoot></tfoot>
 								</table>
-								
+
 							</div>
-						</div> 
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 <!-- 分割线 -->
 <div id="imageview" style="display: none">
