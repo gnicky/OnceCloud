@@ -7,14 +7,14 @@
    	<rabbit:connection-factory id="connectionFactory" host="133.133.134.145" username="root"
         password="onceas" port="5672" />       
    	<rabbit:admin connection-factory="connectionFactory" />  
-   	<rabbit:queue name="VMQueue" />     
-	<rabbit:topic-exchange name="oncecloud">  
+   	<rabbit:queue name="syncQueue" durable="true" auto-delete="false" exclusive="false" />     
+	<rabbit:topic-exchange name="beyondcloud" durable="true" auto-delete="false"> 
         <rabbit:bindings>  
-            <rabbit:binding queue="VMQueue" pattern="SyncVM" />
+            <rabbit:binding queue="syncQueue" pattern="SyncVM" />
         </rabbit:bindings>  
     </rabbit:topic-exchange>
     <rabbit:listener-container connection-factory="connectionFactory">  
-        <rabbit:listener ref="consumeMessage" method="listen" queue-names="VMQueue" />
+        <rabbit:listener ref="consumeRabbitMessage" method="listen" queue-names="syncQueue" />
     </rabbit:listener-container>  
-    <bean id="consumeMessage" class="com.oncecloud.mom.ConsumeMessage" />
+    <bean id="consumeRabbitMessage" class="com.oncecloud.listener.ConsumeRabbitMessage" />
 </beans>
