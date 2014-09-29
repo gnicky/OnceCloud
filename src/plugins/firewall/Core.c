@@ -538,8 +538,6 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 
 	for(k=0;k<configuration->IPCount;k++)
 	{
-		char * internal=configuration->FromIPAddress[k];
-		DoRemoveRule(internal);
 
 		if(configuration->RuleCount==0)
 		{
@@ -547,7 +545,10 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 		}
 
 		char rule[1000];
-		sprintf(rule,"-A RULE -s %s%s -j ACCEPT\n",internal,strstr(internal,"/")==NULL?"":"/32");
+		char * internal=configuration->FromIPAddress[k];
+		sprintf(rule,"-A RULE -s %s",internal);
+		DoRemoveRule(rule);
+		sprintf(rule,"-A RULE -s %s%s -j ACCEPT",internal,strstr(internal,"/")==NULL?"":"/32");
 		DoAddRule(rule);
 		for(i=0;i<configuration->RuleCount;i++)
 		{
