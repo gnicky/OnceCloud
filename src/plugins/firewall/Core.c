@@ -116,11 +116,19 @@ void GenerateInboundPingRule(char * buffer, const char * target, const char * fr
 	{
 		strcat(buffer,"-s ");
 		strcat(buffer,from);
+		if(strstr(from,"/")==NULL)
+		{
+			strcat(buffer,"/32");
+		}
 		strcat(buffer," ");
 	}
 
 	strcat(buffer,"-d ");
 	strcat(buffer,target);
+	if(strstr(target,"/")==NULL)
+	{
+		strcat(buffer,"/32");
+	}
 	strcat(buffer," ");
 
 	// echo request
@@ -136,12 +144,20 @@ void GenerateOutboundPingRule(char * buffer, const char * target, const char * f
 
 	strcat(buffer,"-s ");
 	strcat(buffer,target);
+	if(strstr(target,"/")==NULL)
+	{
+		strcat(buffer,"/32");
+	}
 	strcat(buffer," ");
 
 	if(from!=NULL)
 	{
 		strcat(buffer,"-d ");
 		strcat(buffer,from);
+		if(strstr(from,"/")==NULL)
+		{
+			strcat(buffer,"/32");
+		}
 		strcat(buffer," ");
 	}
 
@@ -547,6 +563,8 @@ int SetFirewallRules(struct FirewallConfiguration * configuration)
 		char rule[1000];
 		char * internal=configuration->FromIPAddress[k];
 		sprintf(rule,"-A RULE -s %s",internal);
+		DoRemoveRule(rule);
+		sprintf(rule,"-A RULE -d %s",internal);
 		DoRemoveRule(rule);
 		sprintf(rule,"-A RULE -s %s%s -j ACCEPT",internal,strstr(internal,"/")==NULL?"":"/32");
 		DoAddRule(rule);
