@@ -570,12 +570,12 @@ $("#deletepf").on("click", function () {
 function isClosed(vxuuid) {
     var showMessage = '';
     var showTitle = '';
-    var result = true;
+    var result = false;
     showMessage = '<div class="alert alert-info" style="margin:10px">'
         + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要关闭DHCP服务&nbsp;?</div>';
     showTitle = '提示';
 
-    bootbox.dialog({
+    var temp = bootbox.dialog({
         className: "oc-bootbox",
         message: showMessage,
         title: showTitle,
@@ -602,7 +602,7 @@ function isClosed(vxuuid) {
                 label: "取消",
                 className: "btn-default",
                 callback: function () {
-                    
+                	
                 }
             }
         }
