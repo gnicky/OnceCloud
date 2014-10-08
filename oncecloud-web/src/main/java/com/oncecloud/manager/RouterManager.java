@@ -1067,7 +1067,7 @@ public class RouterManager {
 					Utilities.stickyToSuccess("端口转发添加成功"));
 		} else {
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess("端口转发添加失败"));
+					Utilities.stickyToError("端口转发添加失败"));
 		}
 		return jo;
 	}
@@ -1096,7 +1096,7 @@ public class RouterManager {
 					Utilities.stickyToSuccess("端口转发删除成功"));
 		} else {
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess("端口转发删除失败"));
+					Utilities.stickyToError("端口转发删除失败"));
 		}
 		return jo;
 	}
@@ -1118,16 +1118,37 @@ public class RouterManager {
 		return ja;
 	}
 
-	public JSONArray checkVnetIp(String internalIP, String routerUuid) {
-		JSONArray ja = new JSONArray();
+	public JSONObject checkPortForwarding(String routerUuid, String destIP, int destPort, int srcPort) {
+		JSONObject jo = new JSONObject();
 		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(routerUuid);
+		boolean destIPLegal = false;
 		if (vxnetsList != null) {
 			for (Vnet vnet : vxnetsList) {
-				JSONObject jo = new JSONObject();
-				jo.put("vnet", vnet.getVnetNet());
-				ja.put(jo);
+				String net = "192.168." + vnet.getVnetNet() + ".";
+				if (destIP.startsWith(net)) {
+					destIPLegal = true;
+					break;
+				}
 			}
 		}
-		return ja;
+		jo.put("ipLegal", destIPLegal);
+		List<ForwardPort> fpList = this.getForwardPortDAO().getpfListByRouter(routerUuid);
+		boolean pfLegal = true;
+		if (fpList != null) {
+			for (ForwardPort fp : fpList) {
+				String inIP = fp.getPfInteranlIP();
+				int inPort = fp.getPfInternalPort();
+				int outPort = fp.getPfSourcePort();
+				if (outPort == srcPort || srcPort == 9090) {
+					pfLegal = false;
+					break;
+				} else if (inIP.equals(destIP) && inPort == destPort) {
+					pfLegal = false;
+					break;
+				}
+			}
+		}
+		jo.put("pfLegal", pfLegal);
+		return jo;
 	}
 }

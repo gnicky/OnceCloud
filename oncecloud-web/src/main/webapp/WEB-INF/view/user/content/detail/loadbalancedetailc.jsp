@@ -60,7 +60,7 @@
 				<div class="once-toolbar">
 					<button id="fe_create" class="btn btn-default">+&nbsp;添加监听器</button>
 					<button id="fe_apply" class="btn btn-default">&nbsp;应用修改</button>
-					<button id="monitor" class="btn btn-default btn-disable" disabled>流量监控</button>
+					<%--<button id="monitor" class="btn btn-default btn-disable" disabled>流量监控</button>--%>
 				</div>
 				<div id="fore_list">
 				</div>

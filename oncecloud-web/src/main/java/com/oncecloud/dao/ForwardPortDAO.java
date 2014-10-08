@@ -67,7 +67,7 @@ public class ForwardPortDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			String queryString = "from ForwardPort where routerUuid=:routerUuid";
+			String queryString = "from ForwardPort where routerUuid = :routerUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("routerUuid", routerUuid);
 			pfList = query.list();

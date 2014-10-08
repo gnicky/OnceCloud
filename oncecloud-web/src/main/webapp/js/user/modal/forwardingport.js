@@ -9,7 +9,8 @@ $("#pfsubmit").on("click", function () {
     var destIP = $("#pf_desIp").val();
     var destPort = $("#pf_desport").val();
     var srcIP = $("#platformcontent").attr("rtip");
-    if ($("#forwardport-form").valid() && checkIP(destIP)) {
+    var checkResult = checkIP(destIP, destPort, srcPort);
+    if ($("#forwardport-form").valid() && checkResult) {
         $.ajax({
             type: "post",
             url: "/RouterAction/AddPortForwarding",
@@ -51,23 +52,17 @@ $("#pfsubmit").on("click", function () {
     }
 });
 
-function checkIP(internalIP) {
+function checkIP(internalIP, destPort, srcPort) {
     var routerUuid = $('#platformcontent').attr("routerUuid");
     var result = false;
     $.ajax({
         type: "post",
-        url: "/RouterAction/CheckVnetIP",
-        data: {routerUuid: routerUuid, internalIP: internalIP},
+        url: "/RouterAction/CheckPortForwarding",
+        data: {routerUuid: routerUuid, internalIP: internalIP, destPort: destPort, srcPort: srcPort},
         dataType: "json",
         async: false,
         success: function (obj) {
-            $.each(obj, function (index, json) {
-                var ip = '192.168.' + json.vnet + '.*';
-                var reg = new RegExp(ip, "g");
-                var destIP = $("#pf_desIp").val();
-                result |= reg.test(destIP);
-            });
-            if (!result) {
+            if (!obj.ipLegal) {
                 bootbox.dialog({
                     message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;内网IP不在路由器管辖范围内，请重新填写</div>',
                     title: "提示",
@@ -80,6 +75,21 @@ function checkIP(internalIP) {
                         }
                     }
                 });
+            } else if (!obj.pfLegal) {
+                bootbox.dialog({
+                    message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;端口转发规则重复，或使用了保留端口</div>',
+                    title: "提示",
+                    buttons: {
+                        main: {
+                            label: "确定",
+                            className: "btn-primary",
+                            callback: function () {
+                            }
+                        }
+                    }
+                });
+            } else {
+                result = true;
             }
         }
     });
