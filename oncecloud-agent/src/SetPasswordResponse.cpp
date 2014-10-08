@@ -4,7 +4,7 @@
 
 SetPasswordResponse::SetPasswordResponse(bool result)
 {
-	this->SetResponseType("setPassword");
+	this->SetResponseType("Agent.SetPassword");
 	this->SetResult(result);
 	this->BuildRawResponse();
 }

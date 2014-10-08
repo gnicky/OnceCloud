@@ -840,6 +840,7 @@ public class RouterManager {
 					}
 					jo.put("ocvm", javm);
 				}
+				jo.put("vn_dhcp", vnet.getDhcpStatus());
 				jo.put("vn_uuid", vnet.getVnetUuid());
 				jo.put("vn_net", vnet.getVnetNet());
 				jo.put("vn_gate", vnet.getVnetGate());
@@ -1047,7 +1048,7 @@ public class RouterManager {
 		boolean result = false;
 		try {
 			String url = "http://" + srcIP + ":9090";
-			result = Host.addPortForwarding(c, url, protocol, destIP, destPort,
+			result = Host.addPortForwarding(c, url, protocol.toLowerCase(), destIP, destPort,
 					srcIP, srcPort);
 			if (result) {
 				String uuidString = UUID.randomUUID().toString();
@@ -1079,7 +1080,7 @@ public class RouterManager {
 		boolean result = false;
 		try {
 			String url = "http://" + srcIP + ":9090";
-			result = Host.delPortForwarding(c, url, protocol, destIP, destPort,
+			result = Host.delPortForwarding(c, url, protocol.toLowerCase(), destIP, destPort,
 					srcIP, srcPort);
 			if (result) {
 				ForwardPort pf = new ForwardPort();

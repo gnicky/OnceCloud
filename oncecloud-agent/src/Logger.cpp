@@ -1,15 +1,8 @@
-#include <stdio.h>
-#include <memory.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <time.h>
-#include <syslog.h>
-#include <time.h>
-#include <errno.h>
-#include <unistd.h>
-
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <string>
+
 #include "LogLevel.h"
 #include "Logger.h"
 
@@ -42,19 +35,19 @@ void Logger::Write(const LogLevel & level, const std::string & message)
 		return;
 	}
 
-	char header[MAX_LINE_SIZE];
-	memset(header,0,sizeof(header));
-
-	time_t now;
-	time(&now);
+	time_t now=time(NULL);
 	struct tm * localTime=localtime(&now);
 
-	sprintf(header,"[%04d-%02d-%02d %02d:%02d:%02d] [%d agent] [%s] "
-		,(1900+localTime->tm_year),(1+localTime->tm_mon)
-		,localTime->tm_mday,localTime->tm_hour
-		,localTime->tm_min,localTime->tm_sec
-		,getpid(),level.GetLevel().c_str());
-
-	std::cout<<header<<message<<std::endl;
+	std::stringstream log;
+	log<<"["<<std::setw(4)<<std::setfill('0')<<(1900+localTime->tm_year)<<"-"
+		<<std::setw(2)<<std::setfill('0')<<(1+localTime->tm_mon)<<"-"
+		<<std::setw(2)<<std::setfill('0')<<localTime->tm_mday<<" "
+		<<std::setw(2)<<std::setfill('0')<<localTime->tm_hour<<":"
+		<<std::setw(2)<<std::setfill('0')<<localTime->tm_min<<":"
+		<<std::setw(2)<<std::setfill('0')<<localTime->tm_sec<<"]"
+		<<" ["<<getpid()<<" agent] ["<<level.GetLevel()<<"] "
+		<<message<<std::endl;
+	std::cout<<log.str();
 }
+
 

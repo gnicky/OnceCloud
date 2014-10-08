@@ -150,11 +150,11 @@
 							class="glyphicon glyphicon-record cool-blue"></span><span
 							class="name">映像</span><span class="title">Images</span></a>
 						<div class="cool-border" style="margin-left: 0"></div></li>
-					<li <c:if test="${sideActive==13}">class="active"</c:if>><a
-						href="${basePath}alarm"><span
-							class="glyphicon glyphicon-bell cool-red"></span><span
-							class="name">监控警告</span><span class="title">Alarms</span></a>
-						<div class="cool-border" style="margin-left: 0"></div></li>
+					<%--<li <c:if test="${sideActive==13}">class="active"</c:if>><a--%>
+						<%--href="${basePath}alarm"><span--%>
+							<%--class="glyphicon glyphicon-bell cool-red"></span><span--%>
+							<%--class="name">监控警告</span><span class="title">Alarms</span></a>--%>
+						<%--<div class="cool-border" style="margin-left: 0"></div></li>--%>
 				</ul>
 				<ul class="nav nav-list" style="margin-top: 50px">
 					<li <c:if test="${sideActive==9}">class="active"</c:if>><div

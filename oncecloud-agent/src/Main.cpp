@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <signal.h>
 #include <sys/file.h>
 #include <termios.h>
-#include <signal.h>
 
 #include "json/json.h"
 #include "Logger.h"
@@ -40,16 +40,16 @@ void OnHangup(int signal)
 
 void InitializeHandlers()
 {
-	handlers["setPassword"]=new SetPasswordHandler();
-	handlers["configureInterface"]=new ConfigureInterfaceHandler();
-	handlers["removeInterface"]=new RemoveInterfaceHandler();
+	handlers["Agent.SetPassword"]=new SetPasswordHandler();
+	handlers["Router.ConfigureInterface"]=new ConfigureInterfaceHandler();
+	handlers["Router.RemoveInterface"]=new RemoveInterfaceHandler();
 }
 
 void CleanupHandlers()
 {
-	delete handlers["setPassword"];
-	delete handlers["configureInterface"];
-	delete handlers["removeInterface"];
+	delete handlers["Agent.SetPassword"];
+	delete handlers["Router.ConfigureInterface"];
+	delete handlers["Router.RemoveInterface"];
 }
 
 void DoRead(int fileDescriptor, void * buffer, int count)

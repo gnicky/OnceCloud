@@ -80,6 +80,11 @@ public class CreateControllerUser {
 		return new ModelAndView("user/create/createfirewallrule");
 	}
 	
+	@RequestMapping(value = "/filterrule/create", method = { RequestMethod.GET })
+	public ModelAndView createfilterrule(HttpServletRequest request) {
+		return new ModelAndView("user/create/createfilterrule");
+	}
+	
 	@RequestMapping(value = "/loadbalance/create", method = { RequestMethod.GET })
 	public ModelAndView createLoadbalance(HttpServletRequest request) {
 		return new ModelAndView("user/create/createloadbalance");
