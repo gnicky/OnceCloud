@@ -48,7 +48,6 @@ public class EIPManager {
 	private RouterDAO routerDAO;
 	private QuotaDAO quotaDAO;
 	private FirewallManager firewallManager;
-	private VMManager vmManager;
 	private Constant constant;
 	private MessagePush messagePush;
 
@@ -131,15 +130,6 @@ public class EIPManager {
 	@Autowired
 	private void setFirewallManager(FirewallManager firewallManager) {
 		this.firewallManager = firewallManager;
-	}
-
-	private VMManager getVmManager() {
-		return vmManager;
-	}
-
-	@Autowired
-	private void setVmManager(VMManager vmManager) {
-		this.vmManager = vmManager;
 	}
 
 	private Constant getConstant() {
@@ -239,8 +229,9 @@ public class EIPManager {
 						jo.put("eipDepen", vmuuid);
 						switch (eip.getDepenType()) {
 						case 0:
-							jo.put("depenName", Utilities.encodeText(this
-									.getVmDAO().getVM(vmuuid).getVmName()));
+							jo.put("depenName",
+									Utilities.encodeText(this.getVmDAO()
+											.getVM(vmuuid).getVmName()));
 							break;
 						case 1:
 							jo.put("depenName", Utilities.encodeText(this
@@ -451,13 +442,27 @@ public class EIPManager {
 				logger.info("Bind Result: " + bindResult);
 				if (bindResult) {
 					EIP eip = this.getEipDAO().getEip(eipIp);
-					this.getVmManager().changeBandwidth(userId, uuid,
-							eip.getEipBandwidth());
+					this.changeBandwidth(userId, eip.getEipBandwidth(), ip);
 					this.getEipDAO().bindEip(eipIp, uuid, bindtype);
 					result.put("result", true);
 					result.put("rsUuid", uuid);
 					result.put("rsName", Utilities.encodeText(name));
 				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public boolean changeBandwidth(int userId, int size, String ip) {
+		boolean result = false;
+		try {
+			Connection c = this.getConstant().getConnection(userId);
+			if (ip != null) {
+				result = Host.addIOLimit(c, ip, String.valueOf(size));
+				logger.info("Change Bandwidth: IP [" + ip + "] Bandwidth ["
+						+ size + " Mbps]");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -569,17 +574,25 @@ public class EIPManager {
 		Date startTime = new Date();
 		EIP eipObj = this.getEipDAO().getEip(eip);
 		JSONObject jo = new JSONObject();
-		String eipVM = null;
 		if (eipObj != null) {
 			boolean limitResult = true;
-			eipVM = eipObj.getEipDependency();
 			if (eipObj.getEipDependency() != null) {
-				limitResult = this.getVmManager().changeBandwidth(
-						userId, eipVM, size);
+				String uuid = eipObj.getEipDependency();
+				int type = eipObj.getDepenType();
+				logger.info("Change Bandwidth: ResourceUuid [" + uuid + "] ResourceType [" + type + "]");
+				String ip = null;
+				if (type == 0) {
+					ip = this.getVmDAO().getAliveVM(uuid).getVmIP();
+				} else if (type == 1) {
+					ip = this.getLbDAO().getAliveLB(uuid).getLbIP();
+				} else if (type == 3) {
+					ip = this.getRouterDAO().getAliveRouter(uuid).getRouterIP();
+				}
+				limitResult = this.changeBandwidth(userId, size, ip);
 			}
 			if (limitResult == true) {
-				boolean cr = this.getEipDAO()
-						.changeBandwidth(userId, eipObj, size);
+				boolean cr = this.getEipDAO().changeBandwidth(userId, eipObj,
+						size);
 				if (cr) {
 					Date endDate = new Date();
 					String eipUuid = eipObj.getEipUuid();
@@ -600,11 +613,6 @@ public class EIPManager {
 		JSONArray infoArray = new JSONArray();
 		infoArray.put(Utilities.createLogInfo(
 				LogConstant.logObject.公网IP.toString(), eip));
-		if (eipVM != null) {
-			infoArray.put(Utilities.createLogInfo(
-					LogConstant.logObject.主机.toString(),
-					"i-" + eipVM.substring(0, 8)));
-		}
 		if (jo.getBoolean("result") == true) {
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.公网带宽.ordinal(),

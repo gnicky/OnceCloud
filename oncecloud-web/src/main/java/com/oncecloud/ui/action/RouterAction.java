@@ -201,12 +201,12 @@ public class RouterAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/CheckVnetIP", method = { RequestMethod.POST })
+	@RequestMapping(value = "/CheckPortForwarding", method = { RequestMethod.POST })
 	@ResponseBody
-	public String checkVnetIP(HttpServletRequest request,
-			@RequestParam String routerUuid, @RequestParam String internalIP) {
-		JSONArray ja = this.getRouterManager().checkVnetIp(internalIP, routerUuid);
-		return ja.toString();
+	public String checkPortForwarding(HttpServletRequest request,
+			@RequestParam String routerUuid, @RequestParam String internalIP, @RequestParam int destPort, @RequestParam int srcPort) {
+		JSONObject jo = this.getRouterManager().checkPortForwarding(routerUuid, internalIP, destPort, srcPort);
+		return jo.toString();
 	}
 
 	@RequestMapping(value = "/DisableDHCP", method = { RequestMethod.POST })

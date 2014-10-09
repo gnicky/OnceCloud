@@ -3032,6 +3032,26 @@ public class Host extends XenAPIObject {
 		Map response = c.dispatch(method_call, method_params);
 		return;
 	}
+	
+	public void startPerformanceXML(Connection c)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.start_per";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(this.ref) };
+		Map response = c.dispatch(method_call, method_params);
+		return;
+	}	
+	
+	public void stopPerformanceXML(Connection c)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "host.stop_per";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(this.ref) };
+		Map response = c.dispatch(method_call, method_params);
+		return;
+	}	
 
 	/**
 	 * Return a list of all the hosts known to the system.
@@ -3072,12 +3092,13 @@ public class Host extends XenAPIObject {
 	 * @param port
 	 * 
 	 */
-	public static Boolean firewallApplyRule(Connection c,  String json_obj)
+	public static Boolean firewallApplyRule(Connection c,  String json_obj, String ip)
 			throws BadServerResponse, XenAPIException, XmlRpcException {
 		String method_call = "host.firewall_set_rule_list";
 		String session = c.getSessionReference();
 		Object[] method_params = { Marshalling.toXMLRPC(session), 
-				Marshalling.toXMLRPC(json_obj)};
+				Marshalling.toXMLRPC(json_obj),
+				Marshalling.toXMLRPC(ip)};
 		Map response = c.dispatch(method_call, method_params);
 		Object result = response.get("Value");
 		return Types.toBoolean(result);

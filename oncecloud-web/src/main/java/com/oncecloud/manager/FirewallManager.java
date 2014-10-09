@@ -178,7 +178,7 @@ public class FirewallManager {
 				Connection c = this.getConstant().getConnection(userId);
 				boolean applyResult = false;
 				try {
-					applyResult = Host.firewallApplyRule(c, total.toString());
+					applyResult = Host.firewallApplyRule(c, total.toString(), null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -243,7 +243,7 @@ public class FirewallManager {
 			}
 			total.put("IP", ipArray);
 			total.put("rules", ruleArray);
-			result = Host.firewallApplyRule(c, total.toString());
+			result = Host.firewallApplyRule(c, total.toString(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -259,7 +259,7 @@ public class FirewallManager {
 			JSONArray ruleArray = new JSONArray();
 			total.put("IP", ipArray);
 			total.put("rules", ruleArray);
-			result = Host.firewallApplyRule(c, total.toString());
+			result = Host.firewallApplyRule(c, total.toString(), null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -351,7 +351,7 @@ public class FirewallManager {
 			total.put("rules", ruleArray);
 			Connection c = this.getConstant().getConnection(userId);
 			try {
-				result = Host.firewallApplyRule(c, total.toString());
+				result = Host.firewallApplyRule(c, total.toString(), null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
