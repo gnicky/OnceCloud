@@ -45,7 +45,8 @@ void Response::SetJson(const Json::Value & json)
 
 void Response::BuildRawResponse()
 {
+	Json::FastWriter writer;
 	this->BuildJson();
-	this->SetRawResponse(this->GetJson().toStyledString());
+	this->SetRawResponse(writer.write(this->GetJson()));
 }
 

@@ -130,7 +130,7 @@ int main(int argc, char * argv [])
 		Response * response=NULL;
 		try
 		{
-			int requestLength;
+			int requestLength=0;
 			DoRead(serialPortDescriptor,&requestLength,sizeof(int));
 			DoRead(serialPortDescriptor,requestBuffer,requestLength);
 
