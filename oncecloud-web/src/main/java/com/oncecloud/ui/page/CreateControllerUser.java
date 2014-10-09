@@ -89,6 +89,11 @@ public class CreateControllerUser {
 	public ModelAndView createLoadbalance(HttpServletRequest request) {
 		return new ModelAndView("user/create/createloadbalance");
 	}
+
+	@RequestMapping(value = "/pptp/create", method = { RequestMethod.GET })
+	public ModelAndView createPPTP(HttpServletRequest request) {
+		return new ModelAndView("user/create/createpptp");
+	}
 	
 	@RequestMapping(value = "/foreend/create", method = { RequestMethod.POST })
 	public ModelAndView createforeend(HttpServletRequest request,@RequestParam String name,

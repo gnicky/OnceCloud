@@ -42,6 +42,17 @@ $('#pf_create').on('click', function (event) {
     });
 });
 
+$('#openpptp').on('click', function (event) {
+    event.preventDefault();
+    var url = basePath + 'pptp/create';
+    $('#RouterModalContainer').load(url, "", function () {
+        $('#RouterModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
 $('.btn-refresh').unbind();
 $('.btn-refresh').on('click', function (event) {
     event.preventDefault();

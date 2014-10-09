@@ -86,7 +86,7 @@
 						<li class="tab-filter" type="port-forwarding"><a href="#">端口转发</a>
 						</li>
 						<%--<li class="tab-filter" type="tunnel"><a href="#">隧道服务</a></li>--%>
-						<%--<li class="tab-filter" type="vpn"><a href="#">VPN服务</a></li>--%>
+						<li class="tab-filter" type="vpn"><a href="#">VPN服务</a></li>
 						<li class="tab-filter" type="filtering"><a href="#">过滤控制</a>
 						</li>
 					</ul>
@@ -143,7 +143,7 @@
 									隧道服务可以将多个不同地域的局域网连接在一起，形成兼顾公有私有的混合云计算环境，助您有效管理多地域的数据中心。更多详情请查看
 								</p>
 							</div>
-						</div>
+						</div>-->
 						<div id="vpn" class="pane-filter" style="display: none;">
 							<div>
 								<p class="alert alert-info">
@@ -151,9 +151,9 @@
 								</p>
 							</div>
 							<div>
-								VPN服务&nbsp;<a href="#" id="openvpn">[打开]</a>
+								PPTP服务&nbsp;<a id="openpptp">[打开]</a>
 							</div>
-						</div>-->
+						</div>
 						<div id="filtering" class="pane-filter" style="display: none;">
 							<div>
 								<p class="alert alert-info">
