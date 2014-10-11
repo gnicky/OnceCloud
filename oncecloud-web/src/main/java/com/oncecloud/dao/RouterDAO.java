@@ -70,6 +70,21 @@ public class RouterDAO {
 		return router;
 	}
 
+	public void updateRouter(Router router) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.update(router);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+	
 	/**
 	 * 获取路由器名称
 	 * 

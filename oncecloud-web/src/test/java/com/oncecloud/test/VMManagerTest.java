@@ -1,7 +1,6 @@
 package com.oncecloud.test;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.dialect.function.VarArgsSQLFunction;
 import org.json.JSONArray;

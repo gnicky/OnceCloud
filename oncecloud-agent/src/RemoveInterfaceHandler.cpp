@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "Process.h"
 #include "String.h"

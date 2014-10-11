@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <unistd.h>
 #include <signal.h>
 #include <sys/file.h>
 #include <termios.h>
@@ -101,7 +102,7 @@ int main(int argc, char * argv [])
 	
 	logger.Write(LogLevel::Information,"BeyondCloud Agent started.");
 
-	std::string serialPortPath="/dev/ttyS1";
+	std::string serialPortPath="/dev/ttyS0";
 	int serialPortDescriptor=open(serialPortPath.c_str(),O_RDWR|O_NOCTTY);
 
 	if(serialPortDescriptor==-1)
@@ -130,7 +131,7 @@ int main(int argc, char * argv [])
 		Response * response=NULL;
 		try
 		{
-			int requestLength;
+			int requestLength=0;
 			DoRead(serialPortDescriptor,&requestLength,sizeof(int));
 			DoRead(serialPortDescriptor,requestBuffer,requestLength);
 
