@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 
+#include <unistd.h>
+
 #include "LogLevel.h"
 #include "Logger.h"
 

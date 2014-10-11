@@ -42,6 +42,118 @@ $('#pf_create').on('click', function (event) {
     });
 });
 
+function openPPTP() {
+    var showMessage = '';
+    var showTitle = '';
+    var result = true;
+    showMessage = '<div class="alert alert-info" style="margin:10px;">'
+        + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;打开 PPTP服务后请检查防火墙规则，确保 PPTP端口(默认为 UDP 1723)流量可以通过，否则从外网无法接入您的PPTP服务&nbsp;</div>';
+    showTitle = '提示';
+    var routerUuid = $('#platformcontent').attr("routerUuid");
+    bootbox.dialog({
+        className: "oc-bootbox",
+        message: showMessage,
+        title: showTitle,
+        buttons: {
+            main: {
+                label: "确定",
+                className: "btn-primary",
+                callback: function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/RouterAction/OpenPPTP",
+                        data: {routerUuid: routerUuid},
+                        dataType: "json",
+                        success: function (obj) {
+                        	if(obj.result) {
+                        		$("#openpptp").attr("pptp", "close");
+                        		$("#openpptp").html("[关闭]");
+                        	}
+                        },
+                        error: function () {
+                        	$("#openpptp").html("[打开]");
+                        }
+                    });
+                }
+            },
+            cancel: {
+                label: "取消",
+                className: "btn-default",
+                callback: function () {
+                	
+                }
+            }
+        }
+    });
+}
+
+function closePPTP() {
+    var showMessage = '';
+    var showTitle = '';
+    var result = true;
+    showMessage = '<div class="alert alert-info" style="margin:10px;">'
+        + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要关闭PPTP服务&nbsp;?</div>';
+    showTitle = '提示';
+    var routerUuid = $('#platformcontent').attr("routerUuid");
+    bootbox.dialog({
+        className: "oc-bootbox",
+        message: showMessage,
+        title: showTitle,
+        buttons: {
+            main: {
+                label: "确定",
+                className: "btn-primary",
+                callback: function () {
+                    $.ajax({
+                        type: "post",
+                        url: "/RouterAction/ClosePPTP",
+                        data: {routerUuid: routerUuid},
+                        dataType: "json",
+                        success: function (obj) {
+                        	if(obj.result) {
+                        		$("#openpptp").attr("pptp", "open");
+                        		$("#openpptp").html("[打开]");
+                        	}
+                        },
+                        error: function () {
+                        	$("#openpptp").html("[关闭]");
+                        }
+                    });
+                }
+            },
+            cancel: {
+                label: "取消",
+                className: "btn-default",
+                callback: function () {
+                	
+                }
+            }
+        }
+    });
+}
+
+$('#openpptp').on('click', function (event) {
+    event.preventDefault();
+    if($("#openpptp").attr("pptp") == "open") {
+    	$("#openpptp").html("");
+    	openPPTP();
+    } else if ($("#openpptp").attr("pptp") == "close") {
+    	$("#openpptp").html("");
+    	closePPTP();
+    }
+});
+
+$('#add-pptp-user').on('click', function (event) {
+    event.preventDefault();
+    var url = basePath + 'pptpuser/create';
+    $('#RouterModalContainer').load(url, "", function () {
+        $('#RouterModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
 $('.btn-refresh').unbind();
 $('.btn-refresh').on('click', function (event) {
     event.preventDefault();
@@ -128,6 +240,14 @@ function getRouterBasicList() {
             } else {
                 rtEip = '<a class="id" id="eip" eipip="' + rtEip + '" eipid="'
                     + rtEipUuid + '">' + rtEip + '</a>';
+            }
+            var pptpStatus = obj.pptpStatus;
+            if (pptpStatus == 0) {
+            	$("#openpptp").attr("pptp", "open");
+                $("#openpptp").html("[打开]");
+            } else {
+            	$("#openpptp").attr("pptp", "close");
+                $("#openpptp").html("[关闭]");
             }
             $('#basic-list')
                 .html('<dt>ID</dt><dd>' + showstr
@@ -590,7 +710,7 @@ function isClosed(vxuuid) {
         + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;确定要关闭私有网络&nbsp;[vn-'
         + vxuuid.substring(0,8) + ']&nbsp;的DHCP服务&nbsp;?</div>';
     showTitle = '提示';
-    var temp = bootbox.dialog({
+    bootbox.dialog({
         className: "oc-bootbox",
         message: showMessage,
         title: showTitle,
@@ -648,21 +768,61 @@ $("#dhcp").on("click", "#dhcp-od", function () {
     }
 });
 
-/*$("#openvpn").on("click", function(){
- event.preventDefault();
- var url = basePath + 'common/modify';
- var rtName = $('#rtname').text();
- var rtDesc = $('#rtdesc').text();
- var rtUuid = $('#platformcontent').attr("routerUuid");
- $('#RouterModalContainer').load(url, {
- "modifyType": "rt",
- "modifyUuid": rtUuid,
- "modifyName": rtName,
- "modifyDesc": rtDesc
- }, function () {
- $('#RouterModalContainer').modal({
- backdrop: false,
- show: true
- });
- });
- });*/
+function pptpList() {
+	var routerUuid = $('#platformcontent').attr("routerUuid");
+	$.ajax({
+		type : "post",
+		url : "/RouterAction/PPTPList",
+		data : {routerUuid:routerUuid},
+		dataType : "json",
+		success : function(obj) {
+			var tablestr = "";
+			var tmpstr = "";
+			if (obj.length > 1) {
+				tmpstr += '<td><a id="pptp-delete">[删除]&nbsp;</a><a id="pptp-modify">&nbsp;[修改]</a></td></tr>';
+			} else {
+				tmpstr += '<td><a id="pptp-modify">[修改]</a></td></tr>';
+			}
+			$.each(obj, function(index, json){
+				tablestr += '<tr pptpid="'+ json.pptpid +'"><td id="pname">' + json.name +'</td><td>******</td>';
+				tablestr += tmpstr;
+			});
+			$("#pptp-user").append(tablestr);
+		}
+	});
+}
+
+pptpList();
+
+$("#pptp-user").on("click", "#pptp-delete", function(){
+	var pptpid = $(this).parents("tr").attr("pptpid");
+	var removetr = $(this).parents("tr");
+	var rownum = $("#pptp-user tr").length;
+	$.ajax({
+		type : "post",
+		url : "/RouterAction/DeletePPTP",
+		data : {pptpid:pptpid},
+		dataType : "json",
+		success : function(obj) {
+			if(obj.result) {
+				removetr.remove();
+				if(rownum == 2) {
+					$("#pptp-user tr:eq(0) td:eq(2)").html('<a id="pptp-modify">&nbsp;[修改]</a>');
+				}
+			}
+		}
+	});
+});
+
+$("#pptp-user").on("click", "#pptp-modify", function(){
+	event.preventDefault();
+    var url = basePath + 'pptpuser/modify';
+    var pptpid = $(this).parents("tr").attr("pptpid");
+    var pname = $(this).parents("tr").find("#pname").html();
+    $('#RouterModalContainer').load(url, {"pptpid":pptpid, "pname":pname}, function () {
+        $('#RouterModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});

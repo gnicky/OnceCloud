@@ -126,6 +126,15 @@ public class ModalControllerUser {
 		return new ModelAndView("user/modal/bindvmimage",model);
 	}
 
+	@RequestMapping(value = "/pptpuser/modify", method = { RequestMethod.POST })
+	public ModelAndView pptpuerModify(HttpServletRequest request, @RequestParam int pptpid,
+			@RequestParam String pname) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("pptpid", pptpid);
+		model.put("pname", pname);
+		return new ModelAndView("user/modal/modifypptpuser",model);
+	}
+
 	@RequestMapping(value = "/router/forwadport")
 	public ModelAndView forwadport(HttpServletRequest request) {
 		return new ModelAndView("user/modal/forwardingport");

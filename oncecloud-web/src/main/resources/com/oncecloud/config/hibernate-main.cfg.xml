@@ -64,5 +64,6 @@
 		<mapping class="com.oncecloud.entity.Vnet" />
 		<mapping class="com.oncecloud.entity.Volume" />
 		<mapping class="com.oncecloud.entity.ForwardPort" />
+		<mapping class="com.oncecloud.entity.PPTPUser" />
 	</session-factory>
 </hibernate-configuration>

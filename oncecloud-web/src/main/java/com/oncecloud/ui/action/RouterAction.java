@@ -226,4 +226,52 @@ public class RouterAction {
 		JSONObject jo = this.getRouterManager().enableDHCP(vxuuid, user.getUserId());
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/PPTPUserCreate", method = { RequestMethod.POST })
+	@ResponseBody
+	public String pptpUserCreate(HttpServletRequest request, @RequestParam String name,
+			@RequestParam String pwd, @RequestParam String routerUuid) {
+		JSONObject jo = this.getRouterManager().savePPTPUser(name, pwd, routerUuid);
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/PPTPList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String pptpList(HttpServletRequest request, @RequestParam String routerUuid) {
+		JSONArray ja = this.getRouterManager().getPPTPList(routerUuid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/DeletePPTP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deletePPTP(HttpServletRequest request, @RequestParam int pptpid) {
+		JSONObject jo = this.getRouterManager().deletePPTP(pptpid);
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/ModifyPPTPUser", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deletePPTP(HttpServletRequest request, @RequestParam String pwd, @RequestParam int pptpid) {
+		JSONObject jo = this.getRouterManager().updatePPTP(pwd, pptpid);
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/OpenPPTP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String openPPTP(HttpServletRequest request, @RequestParam String routerUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getRouterManager().openPPTP(routerUuid, user));
+		return jo.toString();
+	}
+
+	@RequestMapping(value = "/ClosePPTP", method = { RequestMethod.POST })
+	@ResponseBody
+	public String closePPTP(HttpServletRequest request, @RequestParam String routerUuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getRouterManager().closePPTP(routerUuid, user));
+		return jo.toString();
+	}
+	
 }

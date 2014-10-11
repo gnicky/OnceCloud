@@ -31,6 +31,7 @@ public class Router {
 	private Date createDate;
 	private String alarmUuid;
 	private String innerFirewallUuid;
+	private Integer pptp;
 
 	public Router() {
 	}
@@ -193,6 +194,15 @@ public class Router {
 
 	public void setInnerFirewallUuid(String innerFirewallUuid) {
 		this.innerFirewallUuid = innerFirewallUuid;
+	}
+	
+	@Column(name = "rt_pptp")
+	public Integer getPptp() {
+		return pptp;
+	}
+
+	public void setPptp(Integer pptp) {
+		this.pptp = pptp;
 	}
 
 	@Override
