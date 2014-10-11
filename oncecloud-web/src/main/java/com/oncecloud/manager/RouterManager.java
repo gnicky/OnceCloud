@@ -24,6 +24,7 @@ import com.oncecloud.dao.ForwardPortDAO;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.PPTPUserDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.UserDAO;
@@ -34,8 +35,11 @@ import com.oncecloud.entity.ForwardPort;
 import com.oncecloud.entity.Image;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
+import com.oncecloud.entity.PPTPUser;
 import com.oncecloud.entity.Router;
+import com.oncecloud.entity.User;
 import com.oncecloud.entity.Vnet;
+import com.oncecloud.helper.HashHelper;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
@@ -68,9 +72,10 @@ public class RouterManager {
 	private HostDAO hostDAO;
 	private UserDAO userDAO;
 	private ForwardPortDAO forwardPortDAO;
+	private PPTPUserDAO pptpUserDAO;
 
 	private MessagePush messagePush;
-
+	private HashHelper hashHelper;
 	private EIPManager eipManager;
 	private VMManager vmManager;
 
@@ -184,6 +189,15 @@ public class RouterManager {
 		this.userDAO = userDAO;
 	}
 
+	public PPTPUserDAO getPptpUserDAO() {
+		return pptpUserDAO;
+	}
+
+	@Autowired
+	public void setPptpUserDAO(PPTPUserDAO pptpUserDAO) {
+		this.pptpUserDAO = pptpUserDAO;
+	}
+
 	private EIPManager getEipManager() {
 		return eipManager;
 	}
@@ -206,6 +220,15 @@ public class RouterManager {
 		return constant;
 	}
 
+	private HashHelper getHashHelper() {
+		return hashHelper;
+	}
+
+	@Autowired
+	private void setHashHelper(HashHelper hashHelper) {
+		this.hashHelper = hashHelper;
+	}
+	
 	@Autowired
 	private void setConstant(Constant constant) {
 		this.constant = constant;
@@ -999,6 +1022,7 @@ public class RouterManager {
 			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(router
 					.getCreateDate()));
 			jo.put("useDate", timeUsed);
+			jo.put("pptpStatus", router.getPptp());
 		}
 		return jo;
 	}
@@ -1150,5 +1174,107 @@ public class RouterManager {
 		}
 		jo.put("pfLegal", pfLegal);
 		return jo;
+	}
+	
+	public JSONObject savePPTPUser(String name, String pwd, String routerUuid) {
+		JSONObject jo = new JSONObject();
+		PPTPUser pu = new PPTPUser();
+		pu.setPptpName(name);
+		pu.setPptpPwd(this.getHashHelper().md5Hash(pwd));
+		pu.setRouterUuid(routerUuid);
+		boolean result = this.getPptpUserDAO().save(pu);
+		jo.put("result", result);
+		jo.put("pptpid", pu.getPptpId());
+		return jo;
+	}
+	
+	public JSONArray getPPTPList(String routerUuid) {
+		JSONArray ja = new JSONArray();
+		List<PPTPUser> list = this.getPptpUserDAO().getList(routerUuid);
+		for (PPTPUser pu : list) {
+			JSONObject jo = new JSONObject();
+			jo.put("pptpid", pu.getPptpId());
+			jo.put("name", pu.getPptpName());
+			ja.put(jo);
+		}
+		return ja;
+	}
+
+	public JSONObject deletePPTP(int pptpid) {
+		JSONObject jo = new JSONObject();
+		PPTPUser pu = new PPTPUser();
+		pu.setPptpId(pptpid);
+		boolean result = this.getPptpUserDAO().delete(pu);
+		jo.put("result", result);
+		return jo;
+	}
+	
+	public JSONObject updatePPTP(String pwd, int pptpid) {
+		JSONObject jo = new JSONObject();
+		PPTPUser pu = this.getPptpUserDAO().getPPTPUser(pptpid);
+		pu.setPptpPwd(this.getHashHelper().md5Hash(pwd));
+		boolean result = this.getPptpUserDAO().update(pu);
+		jo.put("result", result);
+		return jo;
+	}
+	
+	public boolean openPPTP(String routerUuid, User user) {
+		Connection c = this.getConstant().getConnectionFromPool(user.getUserAllocate());
+		boolean result = false;
+		try {
+			JSONObject jo = new JSONObject();
+			String ip = this.getRouterDAO().getRouter(routerUuid).getRouterIP() + ":9090";
+			jo.put("networkAddress", "172.16.1.0");
+			jo.put("maxConnections", 253);
+			JSONArray ja = new JSONArray();
+			List<PPTPUser> list = this.getPptpUserDAO().getList(routerUuid);
+			for (PPTPUser pu : list) {
+				JSONObject tmjo = new JSONObject();
+				tmjo.put("userName", pu.getPptpName());
+				tmjo.put("password", this.getHashHelper().md5Hash(pu.getPptpPwd()));
+				ja.put(tmjo);
+			}
+			jo.put("users", ja);
+			result = Host.addPPTP(c, ip, jo.toString());
+			if (result) {
+				Router router = this.getRouterDAO().getRouter(routerUuid);
+				router.setPptp(1);
+				this.getRouterDAO().updateRouter(router);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (result) {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToSuccess("PPTP服务开启成功"));
+		} else {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToError("PPTP服务开启失败"));
+		}
+		return result;
+	}
+	
+	public boolean closePPTP(String routerUuid, User user) {
+		Connection c = this.getConstant().getConnectionFromPool(user.getUserAllocate());
+		boolean result = false;
+		try {
+			String ip = this.getRouterDAO().getRouter(routerUuid).getRouterIP() + ":9090";
+			result = Host.delPPTP(c, ip);
+			if (result) {
+				Router router = this.getRouterDAO().getRouter(routerUuid);
+				router.setPptp(0);
+				this.getRouterDAO().updateRouter(router);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (result) {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToSuccess("PPTP服务关闭成功"));
+		} else {
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToError("PPTP服务关闭失败"));
+		}
+		return result;
 	}
 }

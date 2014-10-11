@@ -147,11 +147,30 @@
 						<div id="vpn" class="pane-filter" style="display: none;">
 							<div>
 								<p class="alert alert-info">
-									VPN&nbsp;服务使得您可以远程安全地拨入网驰&nbsp;OnceAsCloud&nbsp;中的私有网络。更多详情请查看
+									VPN&nbsp;服务使得您可以远程安全地拨入网驰&nbsp;OnceCloud&nbsp;中的私有网络。更多详情请查看
 								</p>
 							</div>
 							<div>
-								PPTP服务&nbsp;<a id="openpptp">[打开]</a>
+								PPTP服务&nbsp;<a id="openpptp" pptp="open">[打开]</a>
+								<div style="margin-top:5px">
+									<span class="none">端口: 1723 &nbsp;协议: TCP &nbsp;最大连接数: 253&nbsp; 网络地址: 172.16.1.0/24</span>
+								</div>
+							</div>
+							<div class="hty-pane" style="margin-top:10px">
+								<div class="once-toolbar">
+									<button id="add-pptp-user" class="btn btn-default">+&nbsp;添加账户</button>
+								</div>
+								<table class="table table-bordered once-table" id="pptptable">
+									<thead>
+										<tr>
+											<th>账户</th>
+											<th>密码</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody id="pptp-user">
+									</tbody>
+								</table>
 							</div>
 						</div>
 						<div id="filtering" class="pane-filter" style="display: none;">
@@ -212,89 +231,89 @@
 		</div>
 	</div>
 
-<!-- 分割线 -->
-<div id="imageview" style="display: none">
-	<div class="graph graph-router">
-		<div class="graph-wrapper">
-			<h2 class="graph-title">
-				Router: ${showId} 结构示意图
-				<!-- <a class="btn btn-monitor"><span
+	<!-- 分割线 -->
+	<div id="imageview" style="display: none">
+		<div class="graph graph-router">
+			<div class="graph-wrapper">
+				<h2 class="graph-title">
+					Router: ${showId} 结构示意图
+					<!-- <a class="btn btn-monitor"><span
 						class="icon icon-chart"></span>&nbsp;流量监控</a><a
 						class="btn btn-applied" href="#"><span
 						class="icon icon-router"></span><span class="text">应用修改</span></a> -->
-			</h2>
-			<div class="col-md-2 actions">
-				<div class="graph-actions">
-					<a id="startup" class="btn btn-forbidden" href="#"><span
-						class="glyphicon glyphicon-play"></span> <span class="text">启动</span></a>
-					<a id="shutdown" class="btn" href="#"><span
-						class="glyphicon glyphicon-stop"></span> <span class="text">关闭</span></a>
-					<a id="destroy" class="btn btn-danger" href="#"> <span
-						class="glyphicon glyphicon-trash"></span> <span class="text">销毁</span></a>
-				</div>
-			</div>
-			<div class="col-md-10 components">
-				<div class="graph-component component-router-network"
-					id="componentsId" style="height: 250px;">
-					<div class="graph-component component-router-cloud"></div>
-					<div class="graph-component component-router-eip" id="routerip"
-						style="display: none">
-						<a class="btn-delete" id="deleteIp" href="#"> <span
-							class="glyphicon glyphicon-remove"></span>
-						</a> <span class="glyphicon glyphicon-globe"></span> <a
-							class="component-id" href="#" data-permalink="">117.121.26.40</a>
+				</h2>
+				<div class="col-md-2 actions">
+					<div class="graph-actions">
+						<a id="startup" class="btn btn-forbidden" href="#"><span
+							class="glyphicon glyphicon-play"></span> <span class="text">启动</span></a>
+						<a id="shutdown" class="btn" href="#"><span
+							class="glyphicon glyphicon-stop"></span> <span class="text">关闭</span></a>
+						<a id="destroy" class="btn btn-danger" href="#"> <span
+							class="glyphicon glyphicon-trash"></span> <span class="text">销毁</span></a>
 					</div>
+				</div>
+				<div class="col-md-10 components">
+					<div class="graph-component component-router-network"
+						id="componentsId" style="height: 250px;">
+						<div class="graph-component component-router-cloud"></div>
+						<div class="graph-component component-router-eip" id="routerip"
+							style="display: none">
+							<a class="btn-delete" id="deleteIp" href="#"> <span
+								class="glyphicon glyphicon-remove"></span>
+							</a> <span class="glyphicon glyphicon-globe"></span> <a
+								class="component-id" href="#" data-permalink="">117.121.26.40</a>
+						</div>
 
-					<a id="routernoip" class="btn" href="#"><span
-						class="glyphicon glyphicon-globe"></span><span class="text">绑定公网IP</span></a>
-					<div class="graph-component component-router-vxnet0"></div>
-				</div>
-				<div class="graph-component component-router-sg" id="firewalldiv">
-					<a class="sg-name" href="#" data-permalink="">缺省防火墙</a><a
-						id="changefirewall" class="btn" href="#"><span
-						class="glyphicon glyphicon-pencil"></span><span class="text">修改防火墙</span></a>
-				</div>
-				<div class="graph-component component-router" id="routeDiv">
-					<span class="private-ip">10.50.23.137</span><a class="router-id"
-						data-permalink="">rtr-9v87p09x</a>
-				</div>
-				<div id="vnetslist" class="graph-component component-router-vxnets"
-					style="height: 250px;">
-					<div class="tree">
-						<div class="component-router-vxnet" style="height: 125px;">
-							<a class="btn-delete btn-delete-vxnet" href="#"
-								style="top: 50.5px;"><span
-								class="glyphicon glyphicon-remove"></span></a><a class="ip-network"
-								href="#" data-permalink="" style="top: 72.5px;">192.168.1.0/24
-								/ 192.168.1.1</a><a class="vxnet-name" href="#" data-permalink="">vnet</a>
-							<div class="graph-component component-vxnet-instances"
-								style="height: 125px; width: 104px;">
-								<div class="component-vxnet-instance"
-									style="margin-top: 32.5px; margin-bottom: 32.5px;">
-									<a class="btn-delete" href="#"><span
-										class="glyphicon glyphicon-remove"></span></a><span
-										class="private-ip">.2</span><a class="instance-name" href="#"
-										data-permalink="">vmtest</a>
-								</div>
-								<div class="component-vxnet-instance none"
-									style="height: 125px;">
-									<a class="btn" href="#"
-										style="margin-top: 29.5px; margin-bottom: 29.5px;"><span
-										class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>
+						<a id="routernoip" class="btn" href="#"><span
+							class="glyphicon glyphicon-globe"></span><span class="text">绑定公网IP</span></a>
+						<div class="graph-component component-router-vxnet0"></div>
+					</div>
+					<div class="graph-component component-router-sg" id="firewalldiv">
+						<a class="sg-name" href="#" data-permalink="">缺省防火墙</a><a
+							id="changefirewall" class="btn" href="#"><span
+							class="glyphicon glyphicon-pencil"></span><span class="text">修改防火墙</span></a>
+					</div>
+					<div class="graph-component component-router" id="routeDiv">
+						<span class="private-ip">10.50.23.137</span><a class="router-id"
+							data-permalink="">rtr-9v87p09x</a>
+					</div>
+					<div id="vnetslist" class="graph-component component-router-vxnets"
+						style="height: 250px;">
+						<div class="tree">
+							<div class="component-router-vxnet" style="height: 125px;">
+								<a class="btn-delete btn-delete-vxnet" href="#"
+									style="top: 50.5px;"><span
+									class="glyphicon glyphicon-remove"></span></a><a class="ip-network"
+									href="#" data-permalink="" style="top: 72.5px;">192.168.1.0/24
+									/ 192.168.1.1</a><a class="vxnet-name" href="#" data-permalink="">vnet</a>
+								<div class="graph-component component-vxnet-instances"
+									style="height: 125px; width: 104px;">
+									<div class="component-vxnet-instance"
+										style="margin-top: 32.5px; margin-bottom: 32.5px;">
+										<a class="btn-delete" href="#"><span
+											class="glyphicon glyphicon-remove"></span></a><span
+											class="private-ip">.2</span><a class="instance-name" href="#"
+											data-permalink="">vmtest</a>
+									</div>
+									<div class="component-vxnet-instance none"
+										style="height: 125px;">
+										<a class="btn" href="#"
+											style="margin-top: 29.5px; margin-bottom: 29.5px;"><span
+											class="glyphicon glyphicon-plus"></span><span class="text">添加主机</span></a>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="component-router-vxnet none" style="height: 125px;">
-							<a id="addvnet" class="btn" href="#" style="top: 38.5px;"><span
-								class="icon icon-vxnet" id="iconid"></span><span class="text">连接路由器</span></a>
+							<div class="component-router-vxnet none" style="height: 125px;">
+								<a id="addvnet" class="btn" href="#" style="top: 38.5px;"><span
+									class="icon icon-vxnet" id="iconid"></span><span class="text">连接路由器</span></a>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div id="RouterModalContainer" type="edit" class="modal fade"
-	tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-	aria-hidden="true"></div>
+	<div id="RouterModalContainer" type="edit" class="modal fade"
+		tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="true"></div>
 </div>

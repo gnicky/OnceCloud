@@ -30,6 +30,7 @@ public class Router {
 	private String firewallUuid;
 	private Date createDate;
 	private String alarmUuid;
+	private Integer pptp;
 
 	public Router() {
 	}
@@ -183,6 +184,15 @@ public class Router {
 
 	public void setRouterImportance(Integer routerImportance) {
 		this.routerImportance = routerImportance;
+	}
+
+	@Column(name = "rt_pptp")
+	public Integer getPptp() {
+		return pptp;
+	}
+
+	public void setPptp(Integer pptp) {
+		this.pptp = pptp;
 	}
 
 	@Override

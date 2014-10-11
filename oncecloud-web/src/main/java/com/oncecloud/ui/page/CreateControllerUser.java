@@ -94,6 +94,11 @@ public class CreateControllerUser {
 	public ModelAndView createPPTP(HttpServletRequest request) {
 		return new ModelAndView("user/create/createpptp");
 	}
+
+	@RequestMapping(value = "/pptpuser/create", method = { RequestMethod.GET })
+	public ModelAndView createPPTPUser(HttpServletRequest request) {
+		return new ModelAndView("user/create/createpptpuser");
+	}
 	
 	@RequestMapping(value = "/foreend/create", method = { RequestMethod.POST })
 	public ModelAndView createforeend(HttpServletRequest request,@RequestParam String name,
