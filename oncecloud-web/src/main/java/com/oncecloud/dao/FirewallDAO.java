@@ -244,7 +244,7 @@ public class FirewallDAO {
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "from Firewall where firewallUID = :userId"
-					+ " and firewallName like :search order by createDate desc";
+					+ " and firewallName like :search and isDefault <2 order by createDate desc";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
@@ -309,6 +309,27 @@ public class FirewallDAO {
 			Query query3 = session.createQuery(queryString3);
 			query3.setString("firewallId", firewallId);
 			rsList.addAll(query3.list());
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return rsList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object> getRSListOfFirewallOnlyInnerRoute(String firewallId) {
+		List<Object> rsList = null;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString1 = "select routerUuid, routerIP from Router where innerFirewallUuid = :firewallId and routerStatus = 1";
+			Query query1 = session.createQuery(queryString1);
+			query1.setString("firewallId", firewallId);
+			rsList = query1.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -432,6 +453,28 @@ public class FirewallDAO {
 			session.save(firewall);
 			this.getQuotaDAO().updateQuotaFieldNoTransaction(firewallUID,
 					"quotaFirewall", 1, true);
+			result = true;
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+	
+	///cyh 插入用于路由器内部的防火墙 默认值状态 为2 ，在防火墙列表中，也不显示出来
+	public boolean insertFirewallForinnerRoute(String firewallId, String firewallName,
+			int firewallUID, Date createDate) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Firewall firewall = new Firewall(firewallId, firewallName,
+					firewallUID, createDate, 1, 2);
+			session.save(firewall);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {

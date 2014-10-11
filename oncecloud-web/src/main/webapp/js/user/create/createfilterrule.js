@@ -14,7 +14,7 @@ $("#createruleAction").on('click', function (event) {
         var ruleEport = $("#rule_eport").val();
         var ruleIp = $("#rule_ip").val();
         var ruleId = uuid.v4();
-        var firewallId = $('#firewallid').attr("uuid");
+        var firewallId =  $("#hide_innerfirewall").val();
         $.ajax({
             type: 'post',
             url: '/FirewallAction/CreateRule',
@@ -25,7 +25,7 @@ $("#createruleAction").on('click', function (event) {
                     if (ruleIp == "") {
                         ruleIp = "所有地址";
                     }
-                    $("#tablebody").append('<tr ruleid="' + ruleId + '" state="1"><td class="rcheck"><input type="checkbox" name="rulerow"></td><td name="rulename">'
+                    $("#filtertablebody").append('<tr ruleid="' + ruleId + '" state="1"><td class="rcheck"><input type="checkbox" name="rulerow"></td><td name="rulename">'
                         + ruleName + '</td><td name="priority">' + rulePriority + '</td><td name="protocol">'
                         + ruleProtocol + '</td><td name="sport">' + ruleSport + '</td><td name="eport">'
                         + ruleEport + '</td><td name="ip">' + ruleIp + '</td><td class="operate"><a>禁用</a></td></tr>');

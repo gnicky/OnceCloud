@@ -218,6 +218,102 @@ public class FirewallManager {
 		return obj;
 	}
 
+	////cyh 只用于更新路由器内部的防火墙  过滤器
+	public JSONObject updateFirewallForinnerFirewall(int userId, String firewallId) {
+		JSONObject obj = new JSONObject();
+		boolean result = false;
+		Date startTime = new Date();
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.防火墙.toString(),
+				"fw-" + firewallId.substring(0, 8)));
+		List<Object> rsList = this.getFirewallDAO().getRSListOfFirewallOnlyInnerRoute(
+				firewallId);
+		if (rsList != null && rsList.size() != 0) {
+			JSONObject total = new JSONObject();
+			JSONArray ipArray = new JSONArray();
+			String addr = "";
+			for (int i = 0; i < rsList.size(); i++) {
+				Object[] values = (Object[]) rsList.get(i);
+				String rsUuid = values[0].toString();
+				String rsIP = values[1].toString();
+				if (i != rsList.size() - 1) {
+					addr += rsIP + "， ";
+				} else {
+					addr += rsIP;
+				}
+				if (this.getEipDAO().getEipIp(rsUuid) != null) {
+					ipArray.put(rsIP);
+				}
+			}
+			infoArray.put(Utilities.createLogInfo(
+					LogConstant.logObject.地址.toString(), addr));
+			if (ipArray.length() > 0) {
+				JSONArray ruleArray = new JSONArray();
+				List<Rule> ruleList = this.getFirewallDAO().getRuleList(
+						firewallId);
+				if (ruleList != null) {
+					for (int j = 0; j < ruleList.size(); j++) {
+						Rule rule = ruleList.get(j);
+						JSONObject ruleObject = new JSONObject();
+						String protocol = rule.getRuleProtocol().toLowerCase();
+						ruleObject.put("protocol", protocol);
+						if (!protocol.equals("icmp")) {
+							ruleObject
+									.put("startPort", rule.getRuleStartPort());
+							ruleObject.put("endPort", rule.getRuleEndPort());
+						}
+						ruleObject.put("IP", rule.getRuleIp());
+						ruleArray.put(ruleObject);
+					}
+				}
+				total.put("IP", ipArray);
+				total.put("rules", ruleArray);
+				Connection c = this.getConstant().getConnection(userId);
+				boolean applyResult = false;
+				try {
+					applyResult = Host.firewallApplyRule(c, total.toString(), firewallId);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (applyResult == true) {
+					this.getFirewallDAO().updateConfirm(firewallId, 1);
+					result = true;
+				}
+			} else {
+				this.getFirewallDAO().updateConfirm(firewallId, 1);
+				result = true;
+			}
+		} else {
+			this.getFirewallDAO().updateConfirm(firewallId, 1);
+			result = true;
+		}
+		obj.put("result", result);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		if (result) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.防火墙.ordinal(),
+					LogConstant.logAction.更新.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.防火墙.ordinal(),
+					LogConstant.logAction.更新.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+		return obj;
+	}
+
+	
+	
 	public boolean activeFirewall(Connection c, int userId, String ip,
 			String firewallId) {
 		boolean result = false;

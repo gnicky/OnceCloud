@@ -653,6 +653,32 @@ public class RouterDAO {
 			}
 		}
 	}
+	
+	/**
+	 * 更新路由器防火墙
+	 * 
+	 * @param routerUuid
+	 * @param innerfirewallId
+	 */
+	public void updateInnerFirewall(String routerUuid, String innerfirewallId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryString = "update Router set innerFirewallUuid= :firewallId "
+					+ "where routerUuid = :routerUuid";
+			Query query = session.createQuery(queryString);
+			query.setString("firewallId", innerfirewallId);
+			query.setString("routerUuid", routerUuid);
+			query.executeUpdate();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
 
 	/**
 	 * 更新路由器名称和描述
