@@ -1,13 +1,16 @@
 # OnceCloud Agent Makefile
 
-CPP=g++
-LD=g++
+#CPP=g++
+#LD=g++
+
+CPP=x86_64-beyond-linux-uclibc-g++
+LD=x86_64-beyond-linux-uclibc-g++
 
 AGENT_CPP=$(QUIET_CPP)$(CPP)
 AGENT_LD=$(QUIET_LD)$(LD)
 
 CPPFLAGS=-g -Wall -Werror -Ilib/include/ -Isrc/include/ -c
-LDFLAGS=-g -Wall -Werror
+LDFLAGS=-g
 
 LIBFLAGS=-lcrypt
 
