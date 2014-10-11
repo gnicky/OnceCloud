@@ -215,6 +215,10 @@ function getRouterBasicList() {
             var rtCapacity = obj.routerCapacity;
             var rtPower = obj.routerPower;
             var rtFirewall = obj.routerFirewall;
+         
+            var rtInnerFirewall = obj.routerInnerFirewall;
+            $("#hide_innerfirewall").val(rtInnerFirewall);
+            
             var rtFirewallName = decodeURIComponent(obj.routerFirewallName);
             var createDate = obj.createDate;
             var useDate = decodeURIComponent(obj.useDate);

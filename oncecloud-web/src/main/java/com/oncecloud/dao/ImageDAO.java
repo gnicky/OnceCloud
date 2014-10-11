@@ -114,7 +114,7 @@ public class ImageDAO {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				Query query = session
-						.createQuery("from Image where imagePlatform = 3 and poolUuid = :poolUuid");
+						.createQuery("from Image where imagePlatform = 3 and imageStatus = 1 and poolUuid = :poolUuid");
 				query.setString("poolUuid", poolUuid);
 				image = (Image) query.uniqueResult();
 				session.getTransaction().commit();

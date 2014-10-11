@@ -8,7 +8,7 @@
 			通过云平台的SDN技术，您可以快速地搭建您专属的私有云环境。相比于基础网络而言，这个网络可以提供100%的安全隔离，而且有丰富的工具帮助您进行自动化管理。要使用私有网络，请创建一个路由器，然后再创建一个或多个私有网络并连接到这个路由器，最后创建主机并加入到这些私有网络即可。
 		</p>
 	</div>
-
+    <input type="hidden" id="hide_innerfirewall" name="hide_innerfirewall" > 
 	<div class="row" style="margin: 0; border-bottom: 1px solid #f3f3f3">
 		<div class="col-md-4">
 			<ol class="breadcrumb oc-crumb">

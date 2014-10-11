@@ -146,4 +146,14 @@ public class FirewallAction {
 				user.getUserId(), firewallId);
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/UpdateFirewallForRouteInner", method = { RequestMethod.GET })
+	@ResponseBody
+	public String updateFirewallForRouteInner(HttpServletRequest request,
+			@RequestParam String firewallId) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = this.getFirewallManager().updateFirewallForinnerFirewall(
+				user.getUserId(), firewallId);
+		return jo.toString();
+	}
 }

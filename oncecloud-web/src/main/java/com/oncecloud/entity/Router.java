@@ -30,6 +30,7 @@ public class Router {
 	private String firewallUuid;
 	private Date createDate;
 	private String alarmUuid;
+	private String innerFirewallUuid;
 	private Integer pptp;
 
 	public Router() {
@@ -181,11 +182,20 @@ public class Router {
 	public Integer getRouterImportance() {
 		return routerImportance;
 	}
-
+	
 	public void setRouterImportance(Integer routerImportance) {
 		this.routerImportance = routerImportance;
 	}
 
+	@Column(name = "rt_innerfirewall")
+	public String getInnerFirewallUuid() {
+		return innerFirewallUuid;
+	}
+
+	public void setInnerFirewallUuid(String innerFirewallUuid) {
+		this.innerFirewallUuid = innerFirewallUuid;
+	}
+	
 	@Column(name = "rt_pptp")
 	public Integer getPptp() {
 		return pptp;

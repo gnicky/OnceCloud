@@ -268,8 +268,7 @@ public class RouterManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			infoArray.put(Utilities.createLogInfo("原因",
-					result.getString("error")));
+			infoArray.put(Utilities.createLogInfo("原因",result.has("error")?result.getString("error"):"未知"));
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.路由器.ordinal(),
 					LogConstant.logAction.创建.ordinal(),
@@ -382,6 +381,17 @@ public class RouterManager {
 			if (dbRolrtack == true) {
 				this.getRouterDAO().removeRouter(userId, uuid);
 				jo.put("isSuccess", false);
+			}
+		}
+		
+		///cyh 绑定内部防火墙
+		if (jo.getBoolean("isSuccess") == true) 
+		{
+			///1  创建内部防火墙，2 绑定到当前路由器
+			String firewallinner = UUID.randomUUID().toString();
+			if(this.getFirewallDAO().insertFirewallForinnerRoute(firewallinner, name, userId, new Date()))
+			{
+				this.getRouterDAO().updateInnerFirewall(uuid, firewallinner);
 			}
 		}
 		return jo;
@@ -1022,6 +1032,7 @@ public class RouterManager {
 			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(router
 					.getCreateDate()));
 			jo.put("useDate", timeUsed);
+			jo.put("routerInnerFirewall", router.getInnerFirewallUuid());
 			jo.put("pptpStatus", router.getPptp());
 		}
 		return jo;

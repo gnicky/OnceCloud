@@ -122,7 +122,7 @@ function init() {
     
     $('#deleterule').on('click', function (event) {
         event.preventDefault();
-        var firewallId = $('#firewallid').attr("uuid");
+        var firewallId =  $("#hide_innerfirewall").val();
         $('input[name="rulerow"]:checked').each(function () {
             var ruleId = $(this).parent().parent().attr("ruleid");
             deleteRule(ruleId, firewallId);
@@ -132,7 +132,7 @@ function init() {
     
     $('#filterconfirm').on('click', function (event) {
         event.preventDefault();
-        var firewallId = $('#firewallid').attr("uuid");
+        var firewallId = $("#hide_innerfirewall").val();
         updateFirewall(firewallId);
         removeAllCheck();
     });
@@ -153,7 +153,7 @@ function init() {
         var thistd = $(this);
         var ruleId = $(this).parent().attr('ruleid');
         var ruleState = $(this).parent().attr('state');
-        var firewallId = $('#firewallid').attr("uuid");
+        var firewallId =  $("#hide_innerfirewall").val();
         $.ajax({
             type: 'get',
             url: '/FirewallAction/OperateRule',
@@ -181,7 +181,7 @@ function init() {
 ///过滤器功能 start
 function filterreloadList(page) {
     var limit = $('#limit').val();
-    var firewallId = $('#firewallid').attr("uuid");
+    var firewallId =  $("#hide_innerfirewall").val();
     getfilterRuleList(page, limit, "", firewallId);
     if (page == 1) {
         options = {
@@ -273,7 +273,7 @@ function deleteRule(ruleId, firewallId) {
                 $('#deleterule').addClass('btn-disable').attr('disabled', true);
                 $("#filterconfirm").removeClass('btn-default').addClass('btn-primary');
                 $("#suggestion").show();
-                getFirewallBasicList();
+               // getFirewallBasicList();
             }
         }
     });
@@ -282,7 +282,7 @@ function deleteRule(ruleId, firewallId) {
 function updateFirewall(firewallId) {
     $.ajax({
         type: 'get',
-        url: '/FirewallAction/UpdateFirewall',
+        url: '/FirewallAction/UpdateFirewallForRouteInner',
         data: {firewallId: firewallId},
         dataType: 'json',
         success: function (obj) {
