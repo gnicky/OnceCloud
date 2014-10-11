@@ -134,13 +134,29 @@ function closePPTP() {
 
 $('#openpptp').on('click', function (event) {
     event.preventDefault();
-    if($("#openpptp").attr("pptp") == "open") {
-    	$("#openpptp").html("");
-    	openPPTP();
-    } else if ($("#openpptp").attr("pptp") == "close") {
-    	$("#openpptp").html("");
-    	closePPTP();
-    }
+    var rownum = $("#pptp-user tr").length;
+    if (rownum == 0) {
+		bootbox.dialog({
+			message : '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;请先设置账户</div>',
+			title : "提示",
+			buttons : {
+				main : {
+					label : "确定",
+					className : "btn-primary",
+					callback : function() {
+					}
+				}
+			}
+		});
+	} else {
+	    if($("#openpptp").attr("pptp") == "open") {
+	    	$("#openpptp").html("");
+	    	openPPTP();
+	    } else if ($("#openpptp").attr("pptp") == "close") {
+	    	$("#openpptp").html("");
+	    	closePPTP();
+	    }
+	}
 });
 
 $('#add-pptp-user').on('click', function (event) {

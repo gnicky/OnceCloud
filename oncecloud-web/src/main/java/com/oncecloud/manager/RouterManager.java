@@ -1180,7 +1180,7 @@ public class RouterManager {
 		JSONObject jo = new JSONObject();
 		PPTPUser pu = new PPTPUser();
 		pu.setPptpName(name);
-		pu.setPptpPwd(this.getHashHelper().md5Hash(pwd));
+		pu.setPptpPwd(pwd);
 		pu.setRouterUuid(routerUuid);
 		boolean result = this.getPptpUserDAO().save(pu);
 		jo.put("result", result);
@@ -1212,7 +1212,7 @@ public class RouterManager {
 	public JSONObject updatePPTP(String pwd, int pptpid) {
 		JSONObject jo = new JSONObject();
 		PPTPUser pu = this.getPptpUserDAO().getPPTPUser(pptpid);
-		pu.setPptpPwd(this.getHashHelper().md5Hash(pwd));
+		pu.setPptpPwd(pwd);
 		boolean result = this.getPptpUserDAO().update(pu);
 		jo.put("result", result);
 		return jo;
@@ -1231,7 +1231,7 @@ public class RouterManager {
 			for (PPTPUser pu : list) {
 				JSONObject tmjo = new JSONObject();
 				tmjo.put("userName", pu.getPptpName());
-				tmjo.put("password", this.getHashHelper().md5Hash(pu.getPptpPwd()));
+				tmjo.put("password", pu.getPptpPwd());
 				ja.put(tmjo);
 			}
 			jo.put("users", ja);
