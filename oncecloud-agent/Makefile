@@ -1,10 +1,10 @@
 # OnceCloud Agent Makefile
 
-#CPP=g++
-#LD=g++
+CPP=g++
+LD=g++
 
-CPP=x86_64-beyond-linux-uclibc-g++
-LD=x86_64-beyond-linux-uclibc-g++
+#CPP=/root/buildroot/output/host/usr/bin/x86_64-beyond-linux-uclibc-g++
+#LD=/root/buildroot/output/host/usr/bin/x86_64-beyond-linux-uclibc-g++
 
 AGENT_CPP=$(QUIET_CPP)$(CPP)
 AGENT_LD=$(QUIET_LD)$(LD)
@@ -32,6 +32,7 @@ COMPONENT=output/Main.o \
 	output/Process.o output/String.o output/LogLevel.o output/Logger.o \
 	output/Request.o output/Response.o \
 	output/SetPasswordRequest.o output/SetPasswordResponse.o output/SetPasswordHandler.o \
+	output/RestartNetworkRequest.o output/RestartNetworkResponse.o output/RestartNetworkHandler.o \
 	output/ConfigureInterfaceRequest.o output/ConfigureInterfaceResponse.o output/ConfigureInterfaceHandler.o \
 	output/RemoveInterfaceRequest.o output/RemoveInterfaceResponse.o output/RemoveInterfaceHandler.o
 
@@ -85,6 +86,15 @@ output/SetPasswordResponse.o: src/SetPasswordResponse.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/SetPasswordHandler.o: src/SetPasswordHandler.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/RestartNetworkRequest.o: src/RestartNetworkRequest.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/RestartNetworkResponse.o: src/RestartNetworkResponse.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/RestartNetworkHandler.o: src/RestartNetworkHandler.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/ConfigureInterfaceRequest.o: src/ConfigureInterfaceRequest.cpp
