@@ -157,5 +157,6 @@ $(function(){
 				
 			}
 		$(".sticky").css('height', 38);
+		
 	}
 })
