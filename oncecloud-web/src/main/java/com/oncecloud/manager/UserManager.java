@@ -157,7 +157,7 @@ public class UserManager {
 
 	public void initPlatform() {
 		this.userRegister("admin", "onceas", "admin@beyondcent.com",
-				"12345678901", "BeyondCent", "0");
+				"12345678901", "BeyondCent", "0", "0");
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class UserManager {
 
 	public User userRegister(String userName, String userPassword,
 			String userEmail, String userTelephone, String userCompany,
-			String uLevel) {
+			String uLevel, String poolUuid) {
 		try {
 			if (userName == null || userPassword == null) {
 				logger.error("User Register: User [" + userName
@@ -191,7 +191,7 @@ public class UserManager {
 				return null;
 			}
 			this.getUserDAO().insertUser(userName, userPassword, userEmail,
-					userTelephone, userCompany, userLevel, date);
+					userTelephone, userCompany, userLevel, date, poolUuid);
 			User check = this.getUserDAO().getUser(userName);
 			if (check == null) {
 				logger.error("User Register: User [" + userName
@@ -247,7 +247,7 @@ public class UserManager {
 			throws UnsupportedEncodingException {
 		JSONArray ja = new JSONArray();
 		User result = this.userRegister(userName, userPassword, userEmail,
-				userTelephone, "", "2");
+				userTelephone, "", "2", "0");
 		if (result != null) {
 			JSONObject tObj = new JSONObject();
 			tObj.put("username",
@@ -279,11 +279,11 @@ public class UserManager {
 
 	public JSONArray doCreateUser(String userName, String userPassword,
 			String userEmail, String userTelephone, String userCompany,
-			String userLevel, int userid) {
+			String userLevel, int userid, String poolUuid) {
 		JSONArray ja = new JSONArray();
 		Date startTime = new Date();
 		User result = this.userRegister(userName, userPassword, userEmail,
-				userTelephone, userCompany, userLevel);
+				userTelephone, userCompany, userLevel, poolUuid);
 		if (result != null) {
 			JSONObject tObj = new JSONObject();
 			tObj.put("username", Utilities.encodeText(result.getUserName()));

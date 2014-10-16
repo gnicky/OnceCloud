@@ -244,7 +244,7 @@ public class UserDAO {
 	 * @param userDate
 	 */
 	public void insertUser(String userName, String userPass, String userMail,
-			String userPhone, String userCompany, int userLevel, Date userDate) {
+			String userPhone, String userCompany, int userLevel, Date userDate, String poolUuid) {
 		Session session = null;
 		try {
 			User user = new User();
@@ -257,8 +257,11 @@ public class UserDAO {
 			user.setUserStatus(1);
 			user.setUserDate(userDate);
 			user.setUserBalance(0.0);
-			String allocatePool = this.getPoolDAO().getRandomPool();
-			user.setUserAllocate(allocatePool);
+			if (poolUuid.equals("0")){
+				user.setUserAllocate(this.getPoolDAO().getRandomPool());
+			} else {
+				user.setUserAllocate(poolUuid);
+			}
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(user);

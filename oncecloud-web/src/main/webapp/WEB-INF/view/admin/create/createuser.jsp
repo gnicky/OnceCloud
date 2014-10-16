@@ -59,6 +59,18 @@
 							</div>
 						</div>
 					</div>
+					<div id="pool">
+                    <div class="item">
+						<div class="control-label">选择资源池</div>
+						<div class="controls">
+							<div class="select-con">
+								<select class="dropdown-select" id="pool_select" name="pool_select">
+									<option value="0">系统随机分配</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					</div>
 				</fieldset>
 			</form>
 		</div>
