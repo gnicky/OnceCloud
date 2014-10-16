@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
 import com.once.xenapi.SR;
 import com.once.xenapi.Types;
+import com.once.xenapi.Types.BadServerResponse;
+import com.once.xenapi.Types.XenAPIException;
 import com.once.xenapi.VDI;
 import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
@@ -1167,6 +1170,7 @@ public class VMManager {
 					String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
 					vm.setVmIP(vnetIp);
 					this.getVmDAO().updateVM(vm);
+					this.restartNetwork(c, vm.getVmUuid(), false);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1174,18 +1178,39 @@ public class VMManager {
 		}
 	}
 
-	public void assginIpAddressToVM(Connection c, String url, String subnet,
+	private boolean restartNetwork(Connection c, String vmuuid, boolean sync) {
+		boolean result = false;
+		try {
+			VM temVM = VM.getByUuid(c, vmuuid);
+			JSONObject temjo = new JSONObject();
+			temjo.put("requestType", "Agent.RestartNetwork");
+			temVM.sendRequestViaSerial(c, temjo.toString(), sync);
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean assginIpAddressToVM(Connection c, String url, String subnet,
 			OCVM vm) {
+		boolean result = false;
 		if (vm != null) {
 			try {
 				String mac = vm.getVmMac();
 				String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
 				vm.setVmIP(vnetIp);
 				this.getVmDAO().updateVM(vm);
+				this.restartNetwork(c, vm.getVmUuid(), false);
+				result = true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		return result;
 	}
 
 	public void unAssginIpAddress(Connection c, String vnUuid) {
@@ -1193,6 +1218,7 @@ public class VMManager {
 		if (vmList != null) {
 			try {
 				for (OCVM vm : vmList) {
+					this.restartNetwork(c, vm.getVmUuid(), true);
 					vm.setVmIP(null);
 					this.getVmDAO().updateVM(vm);
 				}
@@ -1207,6 +1233,7 @@ public class VMManager {
 		OCVM vm = this.getVmDAO().getVM(uuid);
 		String vlan = vm.getVmVlan();
 		boolean result = false;
+		Connection conn = null;
 		if (vlan == null) {
 			String eip = this.getEipDAO().getEipIp(uuid);
 			if (eip != null) {
@@ -1222,6 +1249,14 @@ public class VMManager {
 			}
 		} else {
 			result = this.setVlan(uuid, 1, user.getUserAllocate());
+		}
+		if(result) {
+			try {
+				conn = this.getConstant().getConnectionFromPool(user.getUserAllocate());
+				this.restartNetwork(conn, uuid, true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		jo.put("result", result);
 		if (result) {

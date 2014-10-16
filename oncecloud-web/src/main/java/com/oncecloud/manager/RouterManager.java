@@ -2,6 +2,7 @@ package com.oncecloud.manager;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -658,6 +659,11 @@ public class RouterManager {
 			String routerUuid = vnet.getVnetRouter();
 			Router router = this.getRouterDAO().getAliveRouter(routerUuid);
 			VM routerVm = VM.getByUuid(c, routerUuid);
+			Set<VIF> vifs = routerVm.getVIFs(c);
+			for (VIF vif : vifs) {
+				VIF.Record record = vif.getRecord(c);
+				System.out.println(record.MAC + "|" + record.device + "|" + record.uuid);
+			}
 			routerVm.destroyVIF(c, Types.toVIF(vifUuid));
 			logger.info("Delete VIF: UUID [vif-" + vifUuid.substring(0, 8)
 					+ "]");

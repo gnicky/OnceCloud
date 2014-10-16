@@ -100,11 +100,12 @@ public class UserAction {
 	public String create(HttpServletRequest request,
 			@RequestParam String userName, @RequestParam String userPassword,
 			@RequestParam String userEmail, @RequestParam String userTelephone,
-			@RequestParam String userCompany, @RequestParam String userLevel) {
+			@RequestParam String userCompany, @RequestParam String userLevel,
+			@RequestParam String poolUuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONArray ja = this.getUserManager().doCreateUser(userName,
 				userPassword, userEmail, userTelephone, userCompany, userLevel,
-				user.getUserId());
+				user.getUserId(), poolUuid);
 		return ja.toString();
 	}
 

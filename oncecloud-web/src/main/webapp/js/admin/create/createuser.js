@@ -21,6 +21,20 @@ $(document).ready(function () {
             $('#user_tel').val(phone);
             $('#user_company').val(company);
             $('#user_level').val(level);
+            $('#pool').hide();
+        } else {
+        	$.ajax({
+		        type: 'post',
+		        url: '/PoolAction/AllPool',
+		        dataType: 'json',
+		        success: function (array) {
+		            $.each (array, function (index, obj){
+						var pooluuid = obj.poolid;
+						var poolname = decodeURIComponent(obj.poolname);
+						$('#pool_select').append('<option value="'+pooluuid+'">'+poolname+'</option>');
+		            });
+		        }
+    		});
         }
     }
 
@@ -37,9 +51,8 @@ $(document).ready(function () {
             var userTel = document.getElementById("user_tel").value;
             var userCom = document.getElementById("user_company").value;
             var userLevel = document.getElementById("user_level").value;
-            console.log(type);
+            var poolUuid = $("#pool_select option:selected").val();
             if ('new' == type) {
-                console.log("aaa");
                 $.ajax({
                     type: 'post',
                     url: '/UserAction/Create',
@@ -49,7 +62,8 @@ $(document).ready(function () {
                         userEmail: userEmail,
                         userTelephone: userTel,
                         userCompany: userCom,
-                        userLevel: userLevel
+                        userLevel: userLevel,
+                        poolUuid: poolUuid
                     },
                     dataType: 'json',
                     success: function (array) {

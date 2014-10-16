@@ -5793,5 +5793,24 @@ public class VM extends XenAPIObject {
 			return "";
 		}
 	}
+	
+	
+	/**
+	 * Add a new interface in VM via serial.
+	 * 
+	 */
+	public boolean sendRequestViaSerial(Connection c, String json_obj, boolean rsync)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "VM.send_request_via_serial";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(this.ref),
+				Marshalling.toXMLRPC(json_obj),
+				Marshalling.toXMLRPC(rsync)};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toBoolean(result);
+	
+	}
 
 }
