@@ -46,7 +46,7 @@ function send(message) {
 }
 
 function ws_sticky(obj) {
-    $.sticky(obj.content);
+    $.sticky(obj.content,{'autoclose':false});
 }
 
 function ws_delete_row(obj) {
@@ -99,3 +99,63 @@ function ws_edit_row_status(obj) {
         thistr.find('[name="stateword"]').text(obj.word);
     }
 }
+
+
+var arrayid ="";
+
+///展示一个提示
+function showMessageNoAutoClose(content) {
+   var showid = $.sticky(content,{'autoclose':false});
+   arrayid = $.cookie('alertStr');
+   if(arrayid==null)
+   {
+      arrayid="";
+   }
+   setTimeout("",500);
+   arrayid+=$("#"+showid.id)[0].outerHTML+"---";
+   alert(arrayid);
+   $.cookie('alertStr',arrayid);
+   return showid.id;
+}
+
+///根据id，关闭对应的提示
+function hideMessageNoAutoClose(objId) {
+	$("#"+objId).dequeue().slideUp('fast', function(){
+		var closest = $(this).closest('.sticky-queue');
+		var elem = closest.find('.sticky');
+		
+		arrayid = $.cookie('alertStr');
+		var newstr= $("#"+objId)[0].outerHTML +"---";
+		var indexi = arrayid.indexOf(newstr);
+		var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
+		$.cookie('alertStr',newcookie);
+		
+		$(this).remove();
+		if(elem.length == '1'){
+			closest.remove()
+		}
+	});
+}
+
+///新页面中，还原没有关闭的提示
+$(function(){
+	arrayid = $.cookie('alertStr');
+	if(arrayid!="" && arrayid !=null)
+	{
+		var words = arrayid.split('---');
+		for(var i=0;i<words.length -1 ;i++)
+			{
+			    
+				var position = 'top-right'; 
+				// Make sure the sticky queue exists
+				if(!$('body').find('.sticky-queue').html())
+					{ $('body').append('<div class="sticky-queue ' + position + '"></div>'); }
+				
+				// Building and inserting sticky note
+				$('.sticky-queue').prepend(words[i]);
+				
+				
+			}
+		$(".sticky").css('height', 38);
+	}
+})

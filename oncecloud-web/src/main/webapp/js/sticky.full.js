@@ -111,6 +111,5 @@
 			{ callback(response); }
 		else
 			{ return(response); }
-		
 		}
 	})( jQuery );
