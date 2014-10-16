@@ -113,7 +113,7 @@ function showMessageNoAutoClose(content) {
    }
    setTimeout("",500);
    arrayid+=$("#"+showid.id)[0].outerHTML+"---";
-   alert(arrayid);
+//   alert(arrayid);
    $.cookie('alertStr',arrayid);
    return showid.id;
 }
