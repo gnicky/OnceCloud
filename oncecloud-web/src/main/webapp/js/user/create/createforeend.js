@@ -55,7 +55,10 @@ $(document).ready(function () {
     function createListener(name, lbuuid, protocol, port, policy) {
         var basicPath = basePath;
         var feuuid = uuid.v4();
-        var way = '轮询';
+        
+        
+        ///cyh 修改，直接重新绑定一次，因为可视化那边也需要重新绑定，
+        /*var way = '轮询';
         if (1 == policy) {
             way = '最小响应时间';
         }
@@ -71,19 +74,22 @@ $(document).ready(function () {
             + port + '" fepolicy="' + policy + '" festate="1"><div class="fe_bar"><div class="foretitle">监听器:&nbsp;lbl-'
             + feuuid.substring(0, 8) + '&nbsp;(' + name + ')</div>' + btngroup + '</div>' + settings + bebar
             + '<table class="table table-bordered once-table"><thead><tr><th></th><th>名称</th><th>状态</th><th>主机/路由器</th><th>端口</th>'
-            + '<th>权重</th><th>监控</th><th>操作</th></tr></thead><tbody class="backbody"></tbody></table></div>';
+            + '<th>权重</th><th>监控</th><th>操作</th></tr></thead><tbody class="backbody"></tbody></table></div>';*/
         $.ajax({
             type: 'post',
             url: '/LBAction/CreateFore',
             data: {name: name, foreUuid: feuuid, lbUuid: lbuuid, protoCol: protocol, port: port, policy: policy},
             dataType: 'text',
             success: function () {
-                var hasListener = $('#fore_list').find('.unit');
+            	getForeList();
+
+                ///cyh 修改，直接重新绑定一次，因为可视化那边也需要重新绑定，
+                /*var hasListener = $('#fore_list').find('.unit');
                 if (hasListener.size() != 0) {
                     $('#fore_list').html("");
                 }
                 $("#fore_list").prepend(forecontent);
-                needApply();
+                needApply();*/
             },
             error: function () {
             }

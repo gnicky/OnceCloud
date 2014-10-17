@@ -46,7 +46,7 @@ function send(message) {
 }
 
 function ws_sticky(obj) {
-    $.sticky(obj.content,{'autoclose':false});
+    $.sticky(obj.content);
 }
 
 function ws_delete_row(obj) {

@@ -70,9 +70,11 @@ $('#createBEAction').on('click', function (event) {
                 data: {name: name, backUuid: beuuid, vmUuid: vm[0], vmIP: vm[1], port: port, weight: weight, feUuid: feuuid, lbUuid: lbUuid},
                 dataType: 'text',
                 complete: function () {
-                    window.location = window.location.href;
+                	getForeList();
+                	$('#LbModalContainer').modal('hide');
                 },
                 error: function () {
+                	 $('#LbModalContainer').modal('hide');
                 }
             });
         } else {

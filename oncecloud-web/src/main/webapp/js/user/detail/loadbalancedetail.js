@@ -94,8 +94,18 @@ function getLbBasicList() {
             var lbEipUuid = obj.eipUuid;
             if (lbEip == "") {
                 lbEip = "&nbsp;";
+                
+                ///cyh 公网ip 可视化
+                $("#bandingIp").show();
+                $("#unbandingIp").hide();
+                $("#ipcontent").css("padding-top","50px").css("padding-bottom","50px");
             } else {
                 lbEip = '<a class="id" id="eip" eipip="' + lbEip + '" eipid="' + lbEipUuid + '">' + lbEip + '</a>';
+                ///cyh 公网ip 可视化
+                $("#bandingIp").hide();
+                $("#unbandingIp").show();
+                $("#unbandingIp").find(".component-id").text(obj.eip);
+                $("#ipcontent").css("padding-top","100px").css("padding-bottom","100px");
             }
             $('#basic-list').html('<dt>ID</dt><dd>'
                 + showstr + '</dd><dt>名称</dt><dd id="lbname">'
@@ -139,11 +149,21 @@ function getForeList() {
         data: {lbuuid: lbUuid},
         dataType: 'json',
         success: function (array) {
+        	$("#addlistener").html("");
             if (array.length == 0) {
                 $('#fore_list').html('<span class="unit">没有监听器</span>');
+                
+                ///可视化 cyh
+                $("#addlistener").html('<div class="graph-component component-LB-listener none">\
+						<a class="btn btn-add-listener" href="#" id="btn_add_listener"><span\
+						class="glyphicon glyphicon-plus"></span>&nbsp;添加监听器</a>\
+				</div>');
             } else {
                 var content = "";
                 for (var i = 0; i < array.length; i++) {
+                	
+                	var strlistener="";
+                	var strlistenerInstance="";
                     var feobj = array[i];
                     var foreUuid = feobj.foreUuid;
                     var foreName = decodeURIComponent(feobj.foreName);
@@ -198,10 +218,33 @@ function getForeList() {
                             + vmPort + '</td><td>' + backWeight + '</td><td><span class="glyphicon glyphicon-stats"></span></td>'
                             + '<td class="be_show"><a bestate="' + backStatus + '" class="id be_forbid">' + bstate + '</a></td></tr>';
                         forecontent = forecontent + backcontent;
+                        
+                        strlistenerInstance+='<div class="component-LB-backend down instance">\
+							<a class="btn-delete btn-delete-backend" \
+								data-id="'+backUuid+'"><span class="glyphicon glyphicon-remove"></span></a><a\
+								class="component-name" \
+								data-permalink="">'+backName+'</a><span class="port">:'+vmPort+'</span>\
+						</div>';
                     }
+                    strlistenerInstance +='<div class="component-LB-backend none">\
+						<a class="btn btn-add-backends" ><span\
+						class="glyphicon glyphicon-plus"></span><span class="text">添加后端</span></a>\
+				</div>';
+                    
                     forecontent = forecontent + '</tbody></table></div>';
                     content = content + forecontent;
+                    strlistener='<div class="graph-component component-LB-listener" data-id="'+foreUuid+'"><div class="listener-title">\
+						<a class="btn-delete btn-delete-listener"\
+							data-id="'+foreUuid+'"><span class="glyphicon glyphicon-remove"></span></a><span\
+							class="component-id">lbl-'+foreUuid.substring(0, 8)+'</span><br>'+foreProtocol+' :'+forePort+'\
+					</div><div class="component-LB-backends">'+strlistenerInstance+'</div>\
+					</div>';
+                    $("#addlistener").append(strlistener);
                 }
+                $("#addlistener").append('<div class="graph-component component-LB-listener none">\
+						<a class="btn btn-add-listener" href="#" id="btn_add_listener"><span\
+						class="glyphicon glyphicon-plus"></span>&nbsp;添加监听器</a>\
+				</div>');
                 $('#fore_list').html(content);
             }
         }
@@ -373,8 +416,11 @@ function deleteFE(feuuid) {
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
-                $('div[feid="' + feuuid + '"]').remove();
-                needApply();
+            	//cyh 重新绑定
+               /* $('div[feid="' + feuuid + '"]').remove();
+                needApply();*/
+                
+                getForeList();
             }
         }
     });
@@ -389,8 +435,10 @@ function deleteBE(beuuid) {
         dataType: 'json',
         success: function (obj) {
             if (obj.result == true) {
-                $('tr[rowid="' + beuuid + '"]').remove();
-                needApply();
+            	//cyh 重新绑定
+              /*  $('tr[rowid="' + beuuid + '"]').remove();
+                needApply();*/
+            	  getForeList();
             }
         }
     });
@@ -433,7 +481,7 @@ function removeAllCheck() {
 }
 
 function showbox(type, feuuid) {
-    var infoArray = new Array("删除监听器", "删除后端");
+    var infoArray = new Array("删除监听器", "删除后端", "删除后端");
     var showMessage = '';
     var showTitle = '';
     if (type == 0) {
@@ -444,6 +492,11 @@ function showbox(type, feuuid) {
         showMessage = '<div class="alert alert-info" style="margin:10px">'
             + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;'
             + infoArray[type] + '&nbsp;' + info + '?</div>';
+        showTitle = '提示';
+    } else if (type == 2) {
+        showMessage = '<div class="alert alert-info" style="margin:10px">'
+            + '<span class="glyphicon glyphicon-info-sign"></span>&nbsp;'
+            + infoArray[type] + '&nbsp;[lbb-' + feuuid.substring(0, 8) + ']&nbsp;?</div>';
         showTitle = '提示';
     }
     bootbox.dialog({
@@ -463,6 +516,8 @@ function showbox(type, feuuid) {
                             deleteBE(beuuid);
                         });
                         removeAllCheck();
+                    } else if (type == 2) {
+                        deleteBE(feuuid);
                     }
                 }
             },
