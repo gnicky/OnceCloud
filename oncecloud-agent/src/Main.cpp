@@ -62,9 +62,9 @@ void DoRead(int fileDescriptor, void * buffer, int count)
 	int remainingBytes=count;
 	while(remainingBytes>0 && isRunning)
 	{
-		int count=read(fileDescriptor,((char *)buffer)+readBytes,remainingBytes);
-		readBytes+=count;
-		remainingBytes-=count;
+		int currentRead=read(fileDescriptor,((char *)buffer)+readBytes,remainingBytes);
+		readBytes+=currentRead;
+		remainingBytes-=currentRead;
 	}
 }
 
@@ -91,8 +91,8 @@ void SetSerialPort(int serialPortDescriptor)
 	serialPortOption.c_cc[VTIME]=0;
 	serialPortOption.c_cc[VMIN]=0;
 	// Baud Rate
-	cfsetispeed(&serialPortOption,B38400);
-	cfsetospeed(&serialPortOption,B38400);
+	cfsetispeed(&serialPortOption,B115200);
+	cfsetospeed(&serialPortOption,B115200);
 	
 	tcsetattr(serialPortDescriptor,TCSANOW,&serialPortOption);
 }

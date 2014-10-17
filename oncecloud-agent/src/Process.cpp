@@ -71,7 +71,7 @@ bool Process::Execute(const std::string & commandLine)
 
 	if(processId==0)
 	{
-		Process::CloseAllFiles();
+		// Process::CloseAllFiles();
 		int status=system(commandLine.c_str());
 		exit(status);
 	}
