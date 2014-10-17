@@ -663,6 +663,21 @@ public class VMDAO {
 		}
 	}
 
+	public void saveVM(OCVM vm) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.save(vm);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
+
 	/**
 	 * 更新主机
 	 * 

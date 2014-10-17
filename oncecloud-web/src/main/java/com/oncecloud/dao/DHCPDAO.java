@@ -272,4 +272,18 @@ public class DHCPDAO {
 		return result;
 	}
 
+	public void saveVM(DHCP dhcp) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.saveOrUpdate(dhcp);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
 }

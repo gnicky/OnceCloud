@@ -550,4 +550,16 @@ public class UserManager {
 		
 		return jsonarray;
 	}
+	
+	public JSONArray getUserList() {
+		JSONArray ja = new JSONArray();
+		List<User> list = this.getUserDAO().getUserList();
+		for (User user : list) {
+			JSONObject jo = new JSONObject();
+			jo.put("userid", user.getUserId());
+			jo.put("username", user.getUserName());
+			ja.put(jo);
+		}
+		return ja;
+	}
 }

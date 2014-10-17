@@ -1120,38 +1120,27 @@ public class VMManager {
 			}
 		}
 	}
-	
+
 	public void syncUpdateVM(String vmUuid, int powerAttrvalue) {
 		OCVM ocvm = this.getVmDAO().getVM(vmUuid);
 		if (ocvm != null) {
 			int userId = ocvm.getVmUID();
-			String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
-			if (powerAttrvalue == 1
-					&& ocvm.getVmPower() == 0) {
-				this.getVmDAO().updatePowerStatus(
-						vmUuid, powerAttrvalue);
-				String hostAddress = this.getHostAddress(
-								ocvm.getHostUuid());
+			String poolUuid = this.getUserDAO().getUser(userId)
+					.getUserAllocate();
+			if (powerAttrvalue == 1 && ocvm.getVmPower() == 0) {
+				this.getVmDAO().updatePowerStatus(vmUuid, powerAttrvalue);
+				String hostAddress = this.getHostAddress(ocvm.getHostUuid());
 				int port = this.getVNCPort(vmUuid, poolUuid);
-				NoVNC.createToken(
-						vmUuid.substring(0, 8),
-						hostAddress, port);
-				this.getMessagePush().editRowStatus(
-						userId, vmUuid, "running",
+				NoVNC.createToken(vmUuid.substring(0, 8), hostAddress, port);
+				this.getMessagePush().editRowStatus(userId, vmUuid, "running",
 						"正常运行");
-				this.getMessagePush().editRowConsole(
-						userId, vmUuid, "add");
-			} else if (powerAttrvalue == 0
-					&& ocvm.getVmPower() == 1) {
-				this.getVmDAO().updatePowerStatus(
-						vmUuid, powerAttrvalue);
-				NoVNC.deleteToken(vmUuid
-						.substring(0, 8));
-				this.getMessagePush().editRowStatus(
-						userId, vmUuid, "stopped",
+				this.getMessagePush().editRowConsole(userId, vmUuid, "add");
+			} else if (powerAttrvalue == 0 && ocvm.getVmPower() == 1) {
+				this.getVmDAO().updatePowerStatus(vmUuid, powerAttrvalue);
+				NoVNC.deleteToken(vmUuid.substring(0, 8));
+				this.getMessagePush().editRowStatus(userId, vmUuid, "stopped",
 						"已关机");
-				this.getMessagePush().editRowConsole(
-						userId, vmUuid, "del");
+				this.getMessagePush().editRowConsole(userId, vmUuid, "del");
 			}
 		}
 	}
@@ -1194,7 +1183,7 @@ public class VMManager {
 		}
 		return result;
 	}
-	
+
 	public boolean assginIpAddressToVM(Connection c, String url, String subnet,
 			OCVM vm) {
 		boolean result = false;
@@ -1250,9 +1239,10 @@ public class VMManager {
 		} else {
 			result = this.setVlan(uuid, 1, user.getUserAllocate());
 		}
-		if(result) {
+		if (result) {
 			try {
-				conn = this.getConstant().getConnectionFromPool(user.getUserAllocate());
+				conn = this.getConstant().getConnectionFromPool(
+						user.getUserAllocate());
 				this.restartNetwork(conn, uuid, true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1416,5 +1406,71 @@ public class VMManager {
 			}
 		}
 		return result;
+	}
+
+	public void addMac(String uuid, String type, String physical,
+			String vnetuuid) {
+
+	}
+
+	public void modifyVnet(String uuid, String type, String vnetuuid) {
+
+	}
+
+	public void modifyPhysical(String uuid, String type, String physical) {
+
+	}
+
+	public void deleteMac(String uuid, String type, String mac) {
+
+	}
+
+	public void getMacs(String uuid) {
+
+	}
+
+	public void saveToDataBase(String vmUuid, String vmPWD, int vmUID,
+			int vmPlatform, String vmName, String vmIP) {
+		Connection conn = null;
+		try {
+			conn = this.getConstant().getConnection(vmUID);
+			VM vm = VM.getByUuid(conn, vmUuid);
+			VM.Record record = vm.getRecord(conn);
+			String vmMac = null;
+			for (String temMac : record.MAC) {
+				vmMac = temMac;
+				break;
+			}
+			OCVM ocvm = new OCVM();
+			ocvm.setVmUuid(vmUuid);
+			ocvm.setVmPWD(vmPWD);
+			ocvm.setVmUID(vmUID);
+			ocvm.setVmName(vmName);
+			ocvm.setVmPlatform(vmPlatform);
+			ocvm.setVmIP(vmIP);
+			ocvm.setVmMac(vmMac);
+			ocvm.setVmMem((int) (record.memoryStaticMax / (1024 * 1024)));
+			ocvm.setVmCpu((record.VCPUsMax).intValue());
+			ocvm.setVmPower(1);
+			ocvm.setVmStatus(1);
+			ocvm.setHostUuid(record.residentOn.toWireString());
+			ocvm.setCreateDate(new Date());
+			this.getVmDAO().saveVM(ocvm);
+//			firewallId = this.getFirewallDAO()
+//					.getDefaultFirewall(userId).getFirewallId();
+			DHCP dhcp = new DHCP();
+			dhcp.setDhcpMac(vmMac);
+			dhcp.setDhcpIp(vmIP);
+			dhcp.setTenantUuid(vmUuid);
+			dhcp.setDepenType(0);
+			dhcp.setCreateDate(new Date());
+			this.getDhcpDAO().saveVM(dhcp);
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
 	}
 }
