@@ -72,6 +72,16 @@ $("#creatVMISO").on("click", function (event) {
     });
 });
 
+$("#savetodb").on("click", function (event) {
+	event.preventDefault();
+    $('#InstanceModalContainer').load('/admin/modal/savetodb', '', function () {
+        $('#InstanceModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
 $("#all-star").on("click", function () {
     $("#selectimportant").text("全部");
     importance = 6;

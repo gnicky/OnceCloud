@@ -1,5 +1,6 @@
 package com.oncecloud.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -465,5 +466,24 @@ public class UserDAO {
 			}
 		}
 		return result;
+	}
+	
+	public List<User> getUserList() {
+		List<User> list = new ArrayList<User>();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String queryStr = "from User";
+			Query query = session.createQuery(queryStr);
+			list = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return list;
 	}
 }

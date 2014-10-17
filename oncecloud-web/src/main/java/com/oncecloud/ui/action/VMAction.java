@@ -131,8 +131,7 @@ public class VMAction {
 			@RequestParam String uuid, @RequestParam String force) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		this.getVmManager().shutdownVM(user.getUserId(), uuid, force,
-				poolUuid);
+		this.getVmManager().shutdownVM(user.getUserId(), uuid, force, poolUuid);
 	}
 
 	@RequestMapping(value = "/CreateVM", method = { RequestMethod.POST })
@@ -148,7 +147,8 @@ public class VMAction {
 
 	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
 	@ResponseBody
-	public String unbindNet(HttpServletRequest request, @RequestParam String uuid) {
+	public String unbindNet(HttpServletRequest request,
+			@RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONObject jo = this.getVmManager().unbindNet(uuid, user);
 		return jo.toString();
@@ -158,7 +158,8 @@ public class VMAction {
 	@ResponseBody
 	public String basicNetworkList(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getVmManager().getBasicNetworkList(user.getUserId());
+		JSONArray ja = this.getVmManager()
+				.getBasicNetworkList(user.getUserId());
 		return ja.toString();
 	}
 
@@ -173,18 +174,32 @@ public class VMAction {
 
 	@RequestMapping(value = "/ISOList", method = { RequestMethod.POST })
 	@ResponseBody
-	public String isoList(HttpServletRequest request, @RequestParam String poolUuid) {
+	public String isoList(HttpServletRequest request,
+			@RequestParam String poolUuid) {
 		JSONArray ja = this.getVmManager().getISOList(poolUuid);
 		return ja.toString();
 	}
 
 	@RequestMapping(value = "/ISOCreate", method = { RequestMethod.POST })
 	@ResponseBody
-	public void createWithISO(HttpServletRequest request, @RequestParam String pooluuid
-			, @RequestParam int cpu, @RequestParam int memory, @RequestParam String vmName
-			, @RequestParam String isouuid, @RequestParam String vmUuid, @RequestParam String diskuuid
-			, @RequestParam int volum) {
+	public void createWithISO(HttpServletRequest request,
+			@RequestParam String pooluuid, @RequestParam int cpu,
+			@RequestParam int memory, @RequestParam String vmName,
+			@RequestParam String isouuid, @RequestParam String vmUuid,
+			@RequestParam String diskuuid, @RequestParam int volum) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getVmManager().createVMByISO(vmUuid, isouuid, diskuuid, vmName, cpu, memory, volum, pooluuid, user.getUserId());
+		this.getVmManager().createVMByISO(vmUuid, isouuid, diskuuid, vmName,
+				cpu, memory, volum, pooluuid, user.getUserId());
 	}
+
+	@RequestMapping(value = "/SaveToDataBase", method = { RequestMethod.POST })
+	@ResponseBody
+	public void saveToDataBase(HttpServletRequest request,
+			@RequestParam String vmUuid, @RequestParam String vmPWD,
+			@RequestParam int vmPlatform, @RequestParam String vmName,
+			@RequestParam String vmIP, @RequestParam int vmUID) {
+		this.getVmManager().saveToDataBase(vmUuid, vmPWD, vmUID,
+				vmPlatform, vmName, vmIP);
+	}
+
 }

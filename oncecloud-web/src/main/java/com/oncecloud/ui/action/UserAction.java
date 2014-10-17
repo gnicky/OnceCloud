@@ -150,4 +150,11 @@ public class UserAction {
 		return ja.toString();
 	}
 
+	@RequestMapping(value = "/UserListSave", method = { RequestMethod.GET })
+	@ResponseBody
+	public String list(HttpServletRequest request) {
+		JSONArray ja = this.getUserManager().getUserList();
+		return ja.toString();
+	}
+
 }

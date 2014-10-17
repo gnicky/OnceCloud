@@ -52,14 +52,19 @@ public class VMManagerTest {
 	}
 
 	@Test
-	public void testList() {
+	public void test() {
+		this.getVmManager().saveToDataBase("fc6a1d4d-aa7a-46e2-afb5-0740839e4e72", "iii", 36, 1, "oo","192.168.1.1");
+	}
+	
+//	@Test
+//	public void testList() {
 //		JSONArray ja = this.getVmManager().getISOList("ee35fa2e-0916-4f85-95ed-2f665df1d479");
 //		System.out.println(ja);
 //		String uuidString = UUID.randomUUID().toString();
 //		ForwardPort pf = new ForwardPort();
 //		pf.setPfUuid("5e0ded46-3ab5-4a60-a65d-5ccc9f436485");
 //		boolean result = this.getrForwardPortDAO().deletePF(pf);
-		List<ForwardPort> list = this.getrForwardPortDAO().getpfListByRouter("742c6bd4-6bde-41bb-88c7-0ac773e30264");
+//		List<ForwardPort> list = this.getrForwardPortDAO().getpfListByRouter("742c6bd4-6bde-41bb-88c7-0ac773e30264");
 		/*pf.setPfUuid(uuidString);
 		pf.setPfName("8080");
 		pf.setPfProtocal("TCP");
@@ -68,8 +73,8 @@ public class VMManagerTest {
 		pf.setPfInternalPort(Integer.parseInt("8080"));
 		pf.setRouterUuid("21df858d-6d8b-442c-9760-30c76133dabf");
 		boolean result = this.getrForwardPortDAO().addPF(pf);*/
-		System.out.println(list.size());
-	}
+//		System.out.println(list.size());
+//	}
 	
 //	@Test
 //	public void testSRList() {

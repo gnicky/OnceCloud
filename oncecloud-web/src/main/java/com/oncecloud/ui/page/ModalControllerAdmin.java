@@ -23,6 +23,11 @@ public class ModalControllerAdmin {
 		return new ModelAndView("admin/modal/addtohost");
 	}
 
+	@RequestMapping(value = "/savetodb")
+	public ModelAndView savetodb(HttpServletRequest request) {
+		return new ModelAndView("admin/modal/savetodb");
+	}
+
 	@RequestMapping(value = "/storageofhost")
 	public ModelAndView storageofhost(HttpServletRequest request,
 			@RequestParam String hostuuid, @RequestParam String hostname) {

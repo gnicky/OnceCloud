@@ -18,6 +18,7 @@
 					<li><a class="btn-forbidden" id="shutdown"><span class="glyphicon glyphicon-stop"></span>关机</a></li>
 					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 					<li><a id="creatVMISO"><span class="glyphicon glyphicon-record"></span>新建</a></li>
+					<li><a id="savetodb"><span class="glyphicon glyphicon-arrow-down"></span>导入</a></li>
 				</ul>
 			</div>
 			<div class="btn-group">
