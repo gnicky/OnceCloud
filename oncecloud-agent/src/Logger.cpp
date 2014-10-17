@@ -32,6 +32,8 @@ void Logger::SetMaxLevel(const LogLevel & maxLevel)
 
 void Logger::Write(const LogLevel & level, const std::string & message)
 {
+	return;
+/*
 	if(level.GetPriority()>this->GetMaxLevel().GetPriority())
 	{
 		return;
@@ -50,6 +52,7 @@ void Logger::Write(const LogLevel & level, const std::string & message)
 		<<" ["<<getpid()<<" agent] ["<<level.GetLevel()<<"] "
 		<<message<<std::endl;
 	std::cout<<log.str();
+*/
 }
 
 
