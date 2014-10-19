@@ -189,9 +189,10 @@ public class VnetManager {
 					if (vnet.getDhcpStatus() == 1) {
 						String subnet = "192.168." + vnet.getVnetNet() + ".0";
 						Connection c = this.getConstant().getConnectionFromPool(poolUuid);
-						result = this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
+						this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
 					}
 				}
+				result = true;
 				// write log and push message
 				Date endTime = new Date();
 				int elapse = Utilities.timeElapse(startTime, endTime);
@@ -269,9 +270,10 @@ public class VnetManager {
 							if (vnet.getDhcpStatus() == 1) {
 								String subnet = "192.168." + vnet.getVnetNet() + ".0";
 								Connection c = this.getConstant().getConnectionFromPool(poolUuid);
-								result = this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
+								this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
 							}
 						}
+						result = true;
 					}
 					Date endTime = new Date();
 					int elapse = Utilities.timeElapse(startTime, endTime);

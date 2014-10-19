@@ -295,6 +295,7 @@ public class ImageDAO {
 					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}

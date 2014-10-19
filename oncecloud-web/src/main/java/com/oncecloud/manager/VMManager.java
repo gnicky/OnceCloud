@@ -1,8 +1,10 @@
 package com.oncecloud.manager;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
+import com.once.xenapi.Network;
 import com.once.xenapi.SR;
 import com.once.xenapi.Types;
+import com.once.xenapi.VIF;
 import com.once.xenapi.Types.BadServerResponse;
 import com.once.xenapi.Types.XenAPIException;
 import com.once.xenapi.VDI;
@@ -30,17 +34,21 @@ import com.oncecloud.dao.FeeDAO;
 import com.oncecloud.dao.FirewallDAO;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
+import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
+import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.dao.VolumeDAO;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Image;
+import com.oncecloud.entity.LB;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
+import com.oncecloud.entity.Router;
 import com.oncecloud.entity.User;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
@@ -77,6 +85,8 @@ public class VMManager {
 	private FirewallDAO firewallDAO;
 	private QuotaDAO quotaDAO;
 	private UserDAO userDAO;
+	private RouterDAO routerDAO;
+	private LBDAO lbDAO;
 
 	private MessagePush messagePush;
 
@@ -194,6 +204,24 @@ public class VMManager {
 
 	public UserDAO getUserDAO() {
 		return userDAO;
+	}
+
+	public RouterDAO getRouterDAO() {
+		return routerDAO;
+	}
+
+	@Autowired
+	public void setRouterDAO(RouterDAO routerDAO) {
+		this.routerDAO = routerDAO;
+	}
+
+	public LBDAO getLbDAO() {
+		return lbDAO;
+	}
+
+	@Autowired
+	public void setLbDAO(LBDAO lbDAO) {
+		this.lbDAO = lbDAO;
 	}
 
 	@Autowired
@@ -1408,27 +1436,153 @@ public class VMManager {
 		return result;
 	}
 
-	public void addMac(String uuid, String type, String physical,
-			String vnetuuid) {
-
+	private String getPoolUuid(String uuid, String type) {
+		String poolUuid = "";
+		if (type.equals("instance")){
+			OCVM ocvm = this.getVmDAO().getVM(uuid);
+			String hostUuid = ocvm.getHostUuid();
+			poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		} else if (type.equals("router")) {
+			Router router = this.getRouterDAO().getRouter(uuid);
+			String hostUuid = router.getHostUuid();
+			poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		} else if (type.equals("loadbalance")) {
+			LB lb = this.getLbDAO().getLB(uuid);
+			String hostUuid = lb.getHostUuid();
+			poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+		}
+		return poolUuid;
+	}
+	
+	public boolean addMac(String uuid, String type, String physical,
+			String vnetid) {
+		String poolUuid = this.getPoolUuid(uuid, type);
+		if (!poolUuid.equals("")) {
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				String mac = Utilities.randomMac();
+				VIF vif = VIF.createBindToPhysicalNetwork(conn, vm, physical, mac);
+				vm.setTag(conn, vif, vnetid);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void modifyVnet(String uuid, String type, String vnetuuid) {
-
+	public boolean modifyVnet(String uuid, String type, String vnetid, String vifUuid) {
+		String poolUuid = this.getPoolUuid(uuid, type);
+		if (!poolUuid.equals("")) {
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				VIF vif = VIF.getByUuid(conn, vifUuid);
+				vm.setTag(conn, vif, vnetid);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void modifyPhysical(String uuid, String type, String physical) {
-
+	public boolean modifyPhysical(String uuid, String type, String physical, String vifUuid) {
+		String poolUuid = this.getPoolUuid(uuid, type);
+		if (!poolUuid.equals("")) {
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				VIF vif = VIF.getByUuid(conn, vifUuid);
+				vif.set_physical_network(conn, vm, physical);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void deleteMac(String uuid, String type, String mac) {
-
+	public boolean deleteMac(String uuid, String type, String vifUuid) {
+		String poolUuid = this.getPoolUuid(uuid, type);
+		if (!poolUuid.equals("")) {
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				VIF vif = VIF.getByUuid(conn, vifUuid);
+				vm.destroyVIF(conn, vif);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public void getMacs(String uuid) {
-
+	public JSONArray getMacs(String uuid, String type) {
+		String poolUuid = this.getPoolUuid(uuid, type);
+		JSONArray ja = new JSONArray();
+		if (!poolUuid.equals("")) {
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				Set<VIF> vifset = vm.getVIFs(conn);
+				for (VIF vif : vifset) {
+					JSONObject jo = new JSONObject();
+					VIF.Record record = vif.getRecord(conn);
+					String tag = vm.getTag(conn, vif);
+					String physical = record.network.getNameLabel(conn);
+					jo.put("vifuuid", record.uuid);
+					System.out.println(record.uuid);
+					jo.put("device", record.device);
+					jo.put("mac", record.MAC);
+					jo.put("tag", tag);
+					jo.put("physical", physical);
+					ja.put(jo);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return ja;
 	}
 
+	public JSONArray getNets(String uuid, String type) {
+		JSONArray ja = new JSONArray();
+		String poolUuid = this.getPoolUuid(uuid, type);
+		if (!poolUuid.equals("")) {
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				Map<Network, Network.Record> map = Network.getAllRecords(conn);
+				Collection<Network.Record> collection = map.values();
+				Iterator<Network.Record> it = collection.iterator();
+				while (it.hasNext()) {
+					JSONObject jo = new JSONObject();
+					jo.put("nets", it.next().nameLabel);
+					ja.put(jo);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return ja;
+	}
+	
 	public void saveToDataBase(String vmUuid, String vmPWD, int vmUID,
 			int vmPlatform, String vmName, String vmIP) {
 		Connection conn = null;
@@ -1456,8 +1610,6 @@ public class VMManager {
 			ocvm.setHostUuid(record.residentOn.toWireString());
 			ocvm.setCreateDate(new Date());
 			this.getVmDAO().saveVM(ocvm);
-//			firewallId = this.getFirewallDAO()
-//					.getDefaultFirewall(userId).getFirewallId();
 			DHCP dhcp = new DHCP();
 			dhcp.setDhcpMac(vmMac);
 			dhcp.setDhcpIp(vmIP);
