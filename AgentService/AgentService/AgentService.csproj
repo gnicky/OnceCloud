@@ -72,6 +72,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -94,6 +95,7 @@
     <Compile Include="Protocol\Request.cs" />
     <Compile Include="Protocol\Response.cs" />
     <Compile Include="Protocol\RestartNetworkRequest.cs" />
+    <Compile Include="Protocol\SetPasswordResponse.cs" />
     <Compile Include="Protocol\RestartNetworkResponse.cs" />
     <Compile Include="AgentService.cs">
       <SubType>Component</SubType>
@@ -103,6 +105,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocol\SetPasswordRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AgentService.resx">

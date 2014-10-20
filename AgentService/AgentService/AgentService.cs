@@ -2,6 +2,7 @@
 using AgentService.Protocol;
 using System;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.IO.Ports;
 using System.ServiceProcess;
@@ -120,6 +121,39 @@ namespace AgentService
                                 ResponseType = "Agent.Ping"
                             };
                             var responseString = JsonHelper.ToString(pingResponse);
+                            serialPort.Write(BitConverter.GetBytes(responseString.Length), 0, 4);
+                            serialPort.Write(responseString);
+                            File.AppendAllText(AgentService.LogFile
+                                , string.Format("[{0}] Send Response: {1}" + Environment.NewLine, DateTime.Now, responseString));
+                        }
+                        else if (requestType == "Agent.SetPassword")
+                        {
+                            var setPasswordRequest = JsonHelper.ToObject<SetPasswordRequest>(content);
+                            bool result = true;
+
+                            try
+                            {
+                                DirectoryEntry localMachine = new DirectoryEntry("WinNT://" + Environment.MachineName + ",computer");
+                                DirectoryEntry user = localMachine.Children.Find(setPasswordRequest.UserName, "User");
+                                object[] password = new object[] { setPasswordRequest.Password };
+                                object ret = user.Invoke("SetPassword", password);
+                                user.CommitChanges();
+                                localMachine.Close();
+                                user.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                File.AppendAllText(AgentService.LogFile
+                                    , string.Format("[{0}] Exception: {1}" + Environment.NewLine, DateTime.Now, ex.Message));
+                                result = false;
+                            }
+
+                            var setPasswordResponse = new SetPasswordResponse()
+                            {
+                                Result = result,
+                                ResponseType = "Agent.SetPassword"
+                            };
+                            var responseString = JsonHelper.ToString(setPasswordResponse);
                             serialPort.Write(BitConverter.GetBytes(responseString.Length), 0, 4);
                             serialPort.Write(responseString);
                             File.AppendAllText(AgentService.LogFile
