@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace AgentService.Message
+namespace AgentService.Protocol
 {
     [DataContract]
     public class Response

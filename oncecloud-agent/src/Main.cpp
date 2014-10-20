@@ -11,8 +11,9 @@
 #include "Request.h"
 #include "Response.h"
 #include "IHandler.h"
-#include "SetPasswordHandler.h"
+#include "PingHandler.h"
 #include "RestartNetworkHandler.h"
+#include "SetPasswordHandler.h"
 #include "ConfigureInterfaceHandler.h"
 #include "RemoveInterfaceHandler.h"
 
@@ -42,16 +43,18 @@ void OnHangup(int signal)
 
 void InitializeHandlers()
 {
-	handlers["Agent.SetPassword"]=new SetPasswordHandler();
+	handlers["Agent.Ping"]=new PingHandler();
 	handlers["Agent.RestartNetwork"]=new RestartNetworkHandler();
+	handlers["Agent.SetPassword"]=new SetPasswordHandler();
 	handlers["Router.ConfigureInterface"]=new ConfigureInterfaceHandler();
 	handlers["Router.RemoveInterface"]=new RemoveInterfaceHandler();
 }
 
 void CleanupHandlers()
 {
-	delete handlers["Agent.SetPassword"];
+	delete handlers["Agent.Ping"];
 	delete handlers["Agent.RestartNetwork"];
+	delete handlers["Agent.SetPassword"];
 	delete handlers["Router.ConfigureInterface"];
 	delete handlers["Router.RemoveInterface"];
 }

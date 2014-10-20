@@ -3,7 +3,7 @@
 namespace AgentService.Protocol
 {
     [DataContract]
-    public class RestartNetworkResponse
+    public class SetPasswordResponse
     {
         [DataMember(Name = "requestType")]
         public string ResponseType { get; set; }
