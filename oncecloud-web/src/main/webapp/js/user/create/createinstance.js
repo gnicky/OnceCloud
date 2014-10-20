@@ -130,6 +130,8 @@ $('#createvmAction').on('click', function (event) {
         var vmName = $('#instance_name').val();
         var vmCount = parseInt($('#count').val(), 10);
         var loginPwd = $('#login_passwd').val();
+        var vnetuuid = $("#vlan option:selected").val();
+        console.log(vnetuuid);
         $.ajax({
             type: 'post',
             url: '/VMAction/Quota',
@@ -159,7 +161,7 @@ $('#createvmAction').on('click', function (event) {
                 } else {
                     for (var i = 0; i < vmCount; i++) {
                         var vmuuid = uuid.v4();
-                        preCreateVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd);
+                        preCreateVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd, vnetuuid);
                     }
                     $('#InstanceModalContainer').modal('hide');
                 }
@@ -211,7 +213,7 @@ function modalPageUpdate(current, total) {
     $('#totalPtpl').html(total);
 }
 
-function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd) {
+function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd, vnetuuid) {
     cpuCore = cpuCore1 + "&nbsp;核";
     var memoryInt = parseInt(memoryCapacity);
     var memoryStr;
@@ -228,14 +230,14 @@ function preCreateVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginP
         + vmName + '</td><td><span class="icon-status icon-process" name="stateicon"></span><span name="stateword">创建中</span></td><td name="cpuCore">'
         + cpuCore + '</td><td name="memoryCapacity">'
         + memoryStr + '</td><td name="sip"><a></a></td><td name="pip"></td><td name="backuptime">' + backupStr + '</td><td name="createtime" class="time"><1分钟</td></tr>');
-    createVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd);
+    createVM(vmuuid, imageuuid, cpuCore1, memoryCapacity, vmName, loginPwd, vnetuuid);
 }
 
-function createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd) {
+function createVM(vmuuid, imageuuid, cpuCore, memoryCapacity, vmName, loginPwd, vnetuuid) {
     $.ajax({
         type: 'post',
         url: '/VMAction/CreateVM',
-        data: {imageUuid: imageuuid, cpu: cpuCore, memory: memoryCapacity, vmName: vmName, password: loginPwd, vmUuid: vmuuid},
+        data: {imageUuid: imageuuid, cpu: cpuCore, memory: memoryCapacity, vmName: vmName, password: loginPwd, vmUuid: vmuuid, vnetuuid:vnetuuid},
         dataType: 'json'
     });
 }

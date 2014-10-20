@@ -765,7 +765,8 @@ public class VMManager {
 	}
 
 	private JSONObject doCreateVM(String vmUuid, String tplUuid, int userId,
-			String vmName, int cpu, int memory, String pwd, String poolUuid) {
+			String vmName, int cpu, int memory, String pwd, String poolUuid,
+			String vnetuuid) {
 		JSONObject jo = new JSONObject();
 		String ip = null;
 		String allocateHost = null;
@@ -776,7 +777,125 @@ public class VMManager {
 		String OS = null;
 		String imagePwd = null;
 		Connection c = null;
-		try {
+		if (vnetuuid.equals("0")) {
+			try {
+				image = this.getImageDAO().getImage(tplUuid);
+				if (image.getImagePlatform() == 1) {
+					OS = "linux";
+				} else {
+					OS = "windows";
+				}
+				imagePwd = image.getImagePwd();
+				DHCP dhcp = this.getDhcpDAO().getFreeDHCP(vmUuid, 0);
+				ip = dhcp.getDhcpIp();
+				mac = dhcp.getDhcpMac();
+				c = this.getConstant().getConnectionFromPool(poolUuid);
+				allocateHost = getAllocateHost(poolUuid, memory);
+				logger.info("VM [" + vmBackendName + "] allocated to Host ["
+						+ allocateHost + "]");
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (mac != null) {
+					try {
+						this.getDhcpDAO().returnDHCP(mac);
+					} catch (Exception e1) {
+						e.printStackTrace();
+					}
+					jo.put("isSuccess", false);
+				}
+				return jo;
+			}
+			if (ip == null || allocateHost == null) {
+				jo.put("isSuccess", false);
+			} else {
+				boolean dhcpRollback = false;
+				boolean dbRollback = false;
+				try {
+					boolean preCreate = this.getVmDAO().preCreateVM(vmUuid,
+							pwd, userId, vmName, image.getImagePlatform(), mac,
+							memory, cpu, VMManager.POWER_CREATE, 1, createDate);
+					Date preEndDate = new Date();
+					int elapse = Utilities.timeElapse(createDate, preEndDate);
+					logger.info("VM [" + vmBackendName + "] Pre Create Time ["
+							+ elapse + "]");
+					if (preCreate == true) {
+						Record vmrecord = null;
+						// 如果不能获取该模板的空闲VDI，则直接创建该虚拟机，否则使用该VDI创建虚拟机
+						logger.info("VM Config: Template [" + tplUuid
+								+ "] CPU [" + cpu + "] Memory [" + memory
+								+ "] Mac [" + mac + "] IP [" + ip + "] OS ["
+								+ OS + "]");
+						vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root",
+								pwd, cpu, memory, mac, ip, OS, allocateHost,
+								imagePwd, vmBackendName, false);
+						Thread.sleep(8000);
+						Date createEndDate = new Date();
+						int elapse1 = Utilities.timeElapse(createDate,
+								createEndDate);
+						logger.info("VM [" + vmBackendName + "] Create Time ["
+								+ elapse1 + "]");
+						if (vmrecord != null) {
+							String hostuuid = vmrecord.residentOn
+									.toWireString();
+							if (hostuuid.equals(allocateHost)) {
+								if (!vmrecord.setpasswd) {
+									pwd = imagePwd;
+								}
+								jo.put("ip", ip);
+								this.getVmDAO().updateVM(userId, vmUuid, pwd,
+										VMManager.POWER_RUNNING, hostuuid, ip);
+								Calendar calendar = Calendar.getInstance();
+								calendar.setTime(createDate);
+								calendar.add(Calendar.MINUTE, 60);
+								Date endDate = calendar.getTime();
+								this.getFeeDAO()
+										.insertFeeVM(
+												userId,
+												createDate,
+												endDate,
+												(Constant.CPU_PRICE
+														* (double) cpu + Constant.MEMORY_PRICE
+														* (memory / 1024.0)),
+												1, vmUuid, vmName);
+								String hostAddress = getHostAddress(hostuuid);
+								int port = getVNCPort(vmUuid, poolUuid);
+								NoVNC.createToken(vmUuid.substring(0, 8),
+										hostAddress, port);
+								jo.put("isSuccess", true);
+							} else {
+								jo.put("error", "主机后台启动位置错误");
+								dhcpRollback = true;
+								dbRollback = true;
+							}
+						} else {
+							jo.put("error", "主机后台创建失败");
+							dhcpRollback = true;
+							dbRollback = true;
+						}
+					} else {
+						jo.put("error", "主机预创建失败");
+						dhcpRollback = true;
+					}
+				} catch (Exception e) {
+					jo.put("error", "主机创建异常");
+					e.printStackTrace();
+					dhcpRollback = true;
+					dbRollback = true;
+				}
+				if (dhcpRollback == true) {
+					try {
+						this.getDhcpDAO().returnDHCP(mac);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					jo.put("isSuccess", false);
+				}
+				if (dbRollback == true) {
+					this.getVmDAO().removeVM(userId, vmUuid);
+					jo.put("isSuccess", false);
+				}
+			}
+		} else {
 			image = this.getImageDAO().getImage(tplUuid);
 			if (image.getImagePlatform() == 1) {
 				OS = "linux";
@@ -784,30 +903,12 @@ public class VMManager {
 				OS = "windows";
 			}
 			imagePwd = image.getImagePwd();
-			DHCP dhcp = this.getDhcpDAO().getFreeDHCP(vmUuid, 0);
-			ip = dhcp.getDhcpIp();
-			mac = dhcp.getDhcpMac();
+			mac = Utilities.randomMac();
+			ip = "1.1.1.1";
 			c = this.getConstant().getConnectionFromPool(poolUuid);
 			allocateHost = getAllocateHost(poolUuid, memory);
 			logger.info("VM [" + vmBackendName + "] allocated to Host ["
 					+ allocateHost + "]");
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (mac != null) {
-				try {
-					this.getDhcpDAO().returnDHCP(mac);
-				} catch (Exception e1) {
-					e.printStackTrace();
-				}
-				jo.put("isSuccess", false);
-			}
-			return jo;
-		}
-		if (ip == null || allocateHost == null) {
-			jo.put("isSuccess", false);
-		} else {
-			boolean dhcpRollback = false;
-			boolean dbRollback = false;
 			try {
 				boolean preCreate = this.getVmDAO().preCreateVM(vmUuid, pwd,
 						userId, vmName, image.getImagePlatform(), mac, memory,
@@ -825,7 +926,18 @@ public class VMManager {
 					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
 							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
 							vmBackendName, false);
-					Thread.sleep(8000);
+					OCVM vm = this.getVmDAO().getVM(vmUuid);
+					Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
+					this.setVlan(vmUuid, vnet.getVnetID(), poolUuid);
+					vm.setVmVlan(vnetuuid);
+					this.getVmDAO().updateVM(vm);
+					if (vnet.getVnetRouter() != null) {
+						String routerIp = this.getRouterDAO()
+								.getRouter(vnet.getVnetRouter()).getRouterIP();
+						String url = routerIp + ":9090";
+						ip = "192.168." + vnet.getVnetNet() + ".0";
+						this.assginIpAddressToVMNoRestartNetWork(c, url, ip, vm);
+					}
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
 							createEndDate);
@@ -837,7 +949,12 @@ public class VMManager {
 							if (!vmrecord.setpasswd) {
 								pwd = imagePwd;
 							}
-							jo.put("ip", ip);
+							if (ip.equals("1.1.1.1")) {
+								ip = null;
+								jo.put("ip", "");
+							} else {
+								jo.put("ip", ip);
+							}
 							this.getVmDAO().updateVM(userId, vmUuid, pwd,
 									VMManager.POWER_RUNNING, hostuuid, ip);
 							Calendar calendar = Calendar.getInstance();
@@ -857,35 +974,10 @@ public class VMManager {
 							NoVNC.createToken(vmUuid.substring(0, 8),
 									hostAddress, port);
 							jo.put("isSuccess", true);
-						} else {
-							jo.put("error", "主机后台启动位置错误");
-							dhcpRollback = true;
-							dbRollback = true;
 						}
-					} else {
-						jo.put("error", "主机后台创建失败");
-						dhcpRollback = true;
-						dbRollback = true;
 					}
-				} else {
-					jo.put("error", "主机预创建失败");
-					dhcpRollback = true;
 				}
 			} catch (Exception e) {
-				jo.put("error", "主机创建异常");
-				e.printStackTrace();
-				dhcpRollback = true;
-				dbRollback = true;
-			}
-			if (dhcpRollback == true) {
-				try {
-					this.getDhcpDAO().returnDHCP(mac);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				jo.put("isSuccess", false);
-			}
-			if (dbRollback == true) {
 				this.getVmDAO().removeVM(userId, vmUuid);
 				jo.put("isSuccess", false);
 			}
@@ -1230,6 +1322,23 @@ public class VMManager {
 		return result;
 	}
 
+	public boolean assginIpAddressToVMNoRestartNetWork(Connection c, String url, String subnet,
+			OCVM vm) {
+		boolean result = false;
+		if (vm != null) {
+			try {
+				String mac = vm.getVmMac();
+				String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
+				vm.setVmIP(vnetIp);
+				this.getVmDAO().updateVM(vm);
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 	public void unAssginIpAddress(Connection c, String vnUuid) {
 		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
 		if (vmList != null) {
@@ -1314,11 +1423,11 @@ public class VMManager {
 
 	public void createVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpuCore, double memorySize, String pwd,
-			String poolUuid) {
+			String poolUuid, String vnetuuid) {
 		Date startTime = new Date();
 		int memoryCapacity = (int) (memorySize * 1024);
 		JSONObject jo = doCreateVM(vmUuid, tplUuid, userId, vmName, cpuCore,
-				memoryCapacity, pwd, poolUuid);
+				memoryCapacity, pwd, poolUuid, vnetuuid);
 		// write log and push message
 		Date endTime = new Date();
 		int elapse = Utilities.timeElapse(startTime, endTime);
@@ -1438,7 +1547,7 @@ public class VMManager {
 
 	private String getPoolUuid(String uuid, String type) {
 		String poolUuid = "";
-		if (type.equals("instance")){
+		if (type.equals("instance")) {
 			OCVM ocvm = this.getVmDAO().getVM(uuid);
 			String hostUuid = ocvm.getHostUuid();
 			poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
@@ -1453,7 +1562,7 @@ public class VMManager {
 		}
 		return poolUuid;
 	}
-	
+
 	public boolean addMac(String uuid, String type, String physical,
 			String vnetid) {
 		String poolUuid = this.getPoolUuid(uuid, type);
@@ -1463,7 +1572,8 @@ public class VMManager {
 				conn = this.getConstant().getConnectionFromPool(poolUuid);
 				VM vm = VM.getByUuid(conn, uuid);
 				String mac = Utilities.randomMac();
-				VIF vif = VIF.createBindToPhysicalNetwork(conn, vm, physical, mac);
+				VIF vif = VIF.createBindToPhysicalNetwork(conn, vm, physical,
+						mac);
 				vm.setTag(conn, vif, vnetid);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1475,7 +1585,8 @@ public class VMManager {
 		}
 	}
 
-	public boolean modifyVnet(String uuid, String type, String vnetid, String vifUuid) {
+	public boolean modifyVnet(String uuid, String type, String vnetid,
+			String vifUuid) {
 		String poolUuid = this.getPoolUuid(uuid, type);
 		if (!poolUuid.equals("")) {
 			Connection conn = null;
@@ -1494,7 +1605,8 @@ public class VMManager {
 		}
 	}
 
-	public boolean modifyPhysical(String uuid, String type, String physical, String vifUuid) {
+	public boolean modifyPhysical(String uuid, String type, String physical,
+			String vifUuid) {
 		String poolUuid = this.getPoolUuid(uuid, type);
 		if (!poolUuid.equals("")) {
 			Connection conn = null;
@@ -1581,7 +1693,7 @@ public class VMManager {
 		}
 		return ja;
 	}
-	
+
 	public void saveToDataBase(String vmUuid, String vmPWD, int vmUID,
 			int vmPlatform, String vmName, String vmIP) {
 		Connection conn = null;

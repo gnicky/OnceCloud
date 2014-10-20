@@ -136,13 +136,13 @@ public class VMAction {
 
 	@RequestMapping(value = "/CreateVM", method = { RequestMethod.POST })
 	@ResponseBody
-	public void createVM(HttpServletRequest request, CreateVMModel createvmModel) {
+	public void createVM(HttpServletRequest request, CreateVMModel createvmModel, @RequestParam String vnetuuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVmManager().createVM(createvmModel.getVmUuid(),
 				createvmModel.getImageUuid(), user.getUserId(),
 				createvmModel.getVmName(), createvmModel.getCpu(),
 				createvmModel.getMemory(), createvmModel.getPassword(),
-				user.getUserAllocate());
+				user.getUserAllocate(), vnetuuid);
 	}
 
 	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
