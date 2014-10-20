@@ -76,6 +76,16 @@ function getImageList(page, limit, search, type) {
             }
         }
     });
+    $.ajax({
+    	type: "post",
+    	url: "/VnetAction/ListOfUser",
+    	dataType: "json",
+    	success: function(obj){
+    		$.each(obj, function(index, json){
+    			$("#vlan").append('<option value="'+json.vnetuuid+'">'+decodeURIComponent(json.vnetname)+'</option>');
+    		});
+    	}
+    });
 }
 
 $('.provider').on('click', '.provider-filter', function (event) {
