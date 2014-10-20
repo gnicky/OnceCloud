@@ -31,8 +31,9 @@ LIB=output/jsoncpp.o
 COMPONENT=output/Main.o \
 	output/Process.o output/String.o output/LogLevel.o output/Logger.o \
 	output/Request.o output/Response.o \
-	output/SetPasswordRequest.o output/SetPasswordResponse.o output/SetPasswordHandler.o \
+	output/PingRequest.o output/PingResponse.o output/PingHandler.o \
 	output/RestartNetworkRequest.o output/RestartNetworkResponse.o output/RestartNetworkHandler.o \
+	output/SetPasswordRequest.o output/SetPasswordResponse.o output/SetPasswordHandler.o \
 	output/ConfigureInterfaceRequest.o output/ConfigureInterfaceResponse.o output/ConfigureInterfaceHandler.o \
 	output/RemoveInterfaceRequest.o output/RemoveInterfaceResponse.o output/RemoveInterfaceHandler.o
 
@@ -79,13 +80,13 @@ output/Request.o: src/Request.cpp
 output/Response.o: src/Response.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
-output/SetPasswordRequest.o: src/SetPasswordRequest.cpp
+output/PingRequest.o: src/PingRequest.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
-output/SetPasswordResponse.o: src/SetPasswordResponse.cpp
+output/PingResponse.o: src/PingResponse.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
-output/SetPasswordHandler.o: src/SetPasswordHandler.cpp
+output/PingHandler.o: src/PingHandler.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/RestartNetworkRequest.o: src/RestartNetworkRequest.cpp
@@ -95,6 +96,15 @@ output/RestartNetworkResponse.o: src/RestartNetworkResponse.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/RestartNetworkHandler.o: src/RestartNetworkHandler.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/SetPasswordRequest.o: src/SetPasswordRequest.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/SetPasswordResponse.o: src/SetPasswordResponse.cpp
+	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
+
+output/SetPasswordHandler.o: src/SetPasswordHandler.cpp
 	$(AGENT_CPP) $(CPPFLAGS) -o $@ $<
 
 output/ConfigureInterfaceRequest.o: src/ConfigureInterfaceRequest.cpp
