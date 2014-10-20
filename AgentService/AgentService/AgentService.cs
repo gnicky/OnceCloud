@@ -1,17 +1,12 @@
-﻿using AgentService.Message;
-using AgentService.Helper;
+﻿using AgentService.Helper;
+using AgentService.Protocol;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace AgentService
 {
@@ -84,7 +79,6 @@ namespace AgentService
                         if (requestType == "Agent.RestartNetwork")
                         {
                             var restartNetworkRequest = JsonHelper.ToObject<RestartNetworkRequest>(content);
-
                             File.AppendAllText(AgentService.LogFile
                                 , string.Format("[{0}] Running ipconfig /release" + Environment.NewLine, DateTime.Now));
                             Process.Start(
@@ -113,6 +107,19 @@ namespace AgentService
                                 Result = true
                             };
                             var responseString = JsonHelper.ToString(restartNetworkResponse);
+                            serialPort.Write(BitConverter.GetBytes(responseString.Length), 0, 4);
+                            serialPort.Write(responseString);
+                            File.AppendAllText(AgentService.LogFile
+                                , string.Format("[{0}] Send Response: {1}" + Environment.NewLine, DateTime.Now, responseString));
+                        }
+                        else if (requestType == "Agent.Ping")
+                        {
+                            var pingRequest = JsonHelper.ToObject<PingRequest>(content);
+                            var pingResponse = new PingResponse()
+                            {
+                                ResponseType = "Agent.Ping"
+                            };
+                            var responseString = JsonHelper.ToString(pingResponse);
                             serialPort.Write(BitConverter.GetBytes(responseString.Length), 0, 4);
                             serialPort.Write(responseString);
                             File.AppendAllText(AgentService.LogFile

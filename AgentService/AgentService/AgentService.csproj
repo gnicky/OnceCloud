@@ -89,6 +89,8 @@
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Protocol\PingRequest.cs" />
+    <Compile Include="Protocol\PingResponse.cs" />
     <Compile Include="Protocol\Request.cs" />
     <Compile Include="Protocol\Response.cs" />
     <Compile Include="Protocol\RestartNetworkRequest.cs" />

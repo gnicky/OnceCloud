@@ -3,7 +3,7 @@
 namespace AgentService.Protocol
 {
     [DataContract]
-    public class Request
+    public class PingRequest
     {
         [DataMember(Name = "requestType")]
         public string RequestType { get; set; }

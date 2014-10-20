@@ -3,9 +3,9 @@
 namespace AgentService.Protocol
 {
     [DataContract]
-    public class Request
+    public class PingResponse
     {
         [DataMember(Name = "requestType")]
-        public string RequestType { get; set; }
+        public string ResponseType { get; set; }
     }
 }
