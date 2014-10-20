@@ -36,4 +36,14 @@ public class ModalControllerAdmin {
 		return new ModelAndView("admin/modal/storageofhost");
 	}
 
+	@RequestMapping(value = "/modifynetwork")
+	public ModelAndView modifynetwork(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String type,
+			@RequestParam String isrun) {
+		request.setAttribute("uuid", uuid);
+		request.setAttribute("type", type);
+		request.setAttribute("isrun", isrun);
+		return new ModelAndView("admin/modal/modifynetwork");
+	}
+
 }

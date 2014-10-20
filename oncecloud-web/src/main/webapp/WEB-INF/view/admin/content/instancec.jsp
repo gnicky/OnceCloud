@@ -19,6 +19,7 @@
 					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
 					<li><a id="creatVMISO"><span class="glyphicon glyphicon-record"></span>新建</a></li>
 					<li><a id="savetodb"><span class="glyphicon glyphicon-arrow-down"></span>导入</a></li>
+					<li><a  class="btn-forbidden" id="editNetwork"><span class="glyphicon glyphicon-pencil"></span>网卡编辑</a></li>
 				</ul>
 			</div>
 			<div class="btn-group">
@@ -86,4 +87,5 @@
 		</table>
 	</div>
 	<div id="InstanceModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+	<div id="ModifyModalContainer" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 </div>

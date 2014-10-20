@@ -201,5 +201,57 @@ public class VMAction {
 		this.getVmManager().saveToDataBase(vmUuid, vmPWD, vmUID,
 				vmPlatform, vmName, vmIP);
 	}
+	
+	@RequestMapping(value = "/MacList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getMacList(HttpServletRequest request, @RequestParam String uuid, 
+			@RequestParam String type) {
+		JSONArray ja = this.getVmManager().getMacs(uuid, type);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/NetList", method = { RequestMethod.POST })
+	@ResponseBody
+	public String getNetList(HttpServletRequest request, @RequestParam String uuid, 
+			@RequestParam String type) {
+		JSONArray ja = this.getVmManager().getNets(uuid, type);
+		return ja.toString();
+	}
+	
+	@RequestMapping(value = "/AddMac", method = { RequestMethod.POST })
+	@ResponseBody
+	public String addMac(HttpServletRequest request, @RequestParam String uuid, 
+			@RequestParam String type, @RequestParam String physical,
+			@RequestParam String vnetid) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getVmManager().addMac(uuid, type, physical, vnetid));
+		return jo.toString();
+	}
 
+	@RequestMapping(value = "/DeleteMac", method = { RequestMethod.POST })
+	@ResponseBody
+	public String deleteMac(HttpServletRequest request, @RequestParam String uuid, 
+			@RequestParam String type, @RequestParam String vifUuid) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getVmManager().deleteMac(uuid, type, vifUuid));
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/ModifyVnet", method = { RequestMethod.POST })
+	@ResponseBody
+	public String modifyVnet(HttpServletRequest request, @RequestParam String uuid, 
+			@RequestParam String type, @RequestParam String vifUuid, @RequestParam String vnetid) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getVmManager().modifyVnet(uuid, type, vnetid, vifUuid));
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/ModifyPhysical", method = { RequestMethod.POST })
+	@ResponseBody
+	public String modifyPhysical(HttpServletRequest request, @RequestParam String uuid, 
+			@RequestParam String type, @RequestParam String vifUuid, @RequestParam String physical) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getVmManager().modifyPhysical(uuid, type, physical, vifUuid));
+		return jo.toString();
+	}
 }

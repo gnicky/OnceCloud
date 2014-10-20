@@ -27,6 +27,7 @@ function allDisable() {
     $("#startup").addClass('btn-forbidden');
     $("#shutdown").addClass('btn-forbidden');
     $("#destroy").addClass('btn-forbidden');
+    $("#editNetwork").addClass('btn-forbidden');
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
@@ -56,8 +57,14 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         if (running > 0 && stopped == 0) {
             $("#shutdown").removeClass('btn-forbidden');
             $("#restart").removeClass('btn-forbidden');
+            if (total == 1) {
+            	$("#editNetwork").removeClass('btn-forbidden');
+            }
         } else if (running == 0 && stopped > 0) {
             $("#startup").removeClass('btn-forbidden');
+            if (total == 1) {
+            	$("#editNetwork").removeClass('btn-forbidden');
+            }
         }
     }
 });
@@ -75,6 +82,27 @@ $("#creatVMISO").on("click", function (event) {
 $("#savetodb").on("click", function (event) {
 	event.preventDefault();
     $('#InstanceModalContainer').load('/admin/modal/savetodb', '', function () {
+        $('#InstanceModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
+$("#editNetwork").on("click", function (event) {
+	event.preventDefault();
+	var uuid;
+	var isrun;
+	$('input[name="vmrow"]:checked').each(function () {
+    	uuid = $(this).parent().parent().attr("rowid");
+    	var stateicon = $(this).parent().parent().find('[name="stateicon"]');
+    	if (stateicon.hasClass('icon-running')) {
+            isrun = "run";
+        } else if (stateicon.hasClass('icon-stopped')) {
+            isrun = "stop";
+        }
+	});
+    $('#InstanceModalContainer').load('/admin/modal/modifynetwork', {"type":type, "uuid":uuid, "isrun":isrun} , function () {
         $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true

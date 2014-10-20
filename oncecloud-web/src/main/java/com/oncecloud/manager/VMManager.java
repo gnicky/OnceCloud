@@ -1547,7 +1547,6 @@ public class VMManager {
 					String tag = vm.getTag(conn, vif);
 					String physical = record.network.getNameLabel(conn);
 					jo.put("vifuuid", record.uuid);
-					System.out.println(record.uuid);
 					jo.put("device", record.device);
 					jo.put("mac", record.MAC);
 					jo.put("tag", tag);
