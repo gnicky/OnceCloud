@@ -928,15 +928,17 @@ public class VMManager {
 							vmBackendName, false);
 					OCVM vm = this.getVmDAO().getVM(vmUuid);
 					Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
-					this.setVlan(vmUuid, vnet.getVnetID(), poolUuid);
+					jo.put("vname", vnet.getVnetName());
+					VM pvm = VM.getByUuid(c, vmUuid);
+					pvm.setTag(c, pvm.getVIFs(c).iterator().next(),
+							String.valueOf(vnet.getVnetID()));
 					vm.setVmVlan(vnetuuid);
-					this.getVmDAO().updateVM(vm);
 					if (vnet.getVnetRouter() != null) {
 						String routerIp = this.getRouterDAO()
 								.getRouter(vnet.getVnetRouter()).getRouterIP();
 						String url = routerIp + ":9090";
-						ip = "192.168." + vnet.getVnetNet() + ".0";
-						this.assginIpAddressToVMNoRestartNetWork(c, url, ip, vm);
+						String subnet = "192.168." + vnet.getVnetNet() + ".0";
+						ip = Host.assignIpAddress(c, url, mac, subnet);
 					}
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
@@ -955,8 +957,12 @@ public class VMManager {
 							} else {
 								jo.put("ip", ip);
 							}
-							this.getVmDAO().updateVM(userId, vmUuid, pwd,
-									VMManager.POWER_RUNNING, hostuuid, ip);
+							vm.setVmUID(userId);
+							vm.setVmPWD(pwd);
+							vm.setVmPower(VMManager.POWER_RUNNING);
+							vm.setHostUuid(hostuuid);
+							vm.setVmIP(ip);
+							this.getVmDAO().updateVM(vm);
 							Calendar calendar = Calendar.getInstance();
 							calendar.setTime(createDate);
 							calendar.add(Calendar.MINUTE, 60);
@@ -1322,23 +1328,6 @@ public class VMManager {
 		return result;
 	}
 
-	public boolean assginIpAddressToVMNoRestartNetWork(Connection c, String url, String subnet,
-			OCVM vm) {
-		boolean result = false;
-		if (vm != null) {
-			try {
-				String mac = vm.getVmMac();
-				String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
-				vm.setVmIP(vnetIp);
-				this.getVmDAO().updateVM(vm);
-				result = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
 	public void unAssginIpAddress(Connection c, String vnUuid) {
 		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
 		if (vmList != null) {
@@ -1448,8 +1437,13 @@ public class VMManager {
 					startTime, elapse);
 			this.getMessagePush().editRowStatus(userId, vmUuid, "running",
 					"正常运行");
-			this.getMessagePush().editRowIP(userId, vmUuid, "基础网络",
-					jo.getString("ip"));
+			if (vnetuuid.equals("0")) {
+				this.getMessagePush().editRowIP(userId, vmUuid, "基础网络",
+						jo.getString("ip"));
+			} else {
+				this.getMessagePush().editRowIP(userId, vmUuid, jo.getString("vname"),
+						jo.getString("ip"));
+			}
 			this.getMessagePush().editRowConsole(userId, vmUuid, "add");
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));

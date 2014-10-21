@@ -135,9 +135,9 @@
 								</div>
 								<h3>私有网络</h3>
 								<div class="item">
-									<div class="select-con">
-										<select class="dropdown-select" id="vlan" name="vlan">
-											<option value="0" selected>请选择</option>
+									<div class="select-con" style="border: 2px solid #cfeaf8;width: 520px ! important">
+										<select class="dropdown-select" id="vlan" name="vlan" style="color: #1f90c8">
+											<option value="0" selected>请选择&nbsp;(默认为基础网络)</option>
 										</select>
 									</div>
 								</div>
