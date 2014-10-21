@@ -28,6 +28,7 @@ function allDisable() {
     $("#shutdown").addClass('btn-forbidden');
     $("#destroy").addClass('btn-forbidden');
     $("#editNetwork").addClass('btn-forbidden');
+    $("#vm-to-template").addClass('btn-forbidden');
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
@@ -66,6 +67,9 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
             	$("#editNetwork").removeClass('btn-forbidden');
             }
         }
+    }
+    if (total == 1 && stopped == 1) {
+    	$("#vm-to-template").removeClass('btn-forbidden');
     }
 });
 
@@ -108,6 +112,27 @@ $("#editNetwork").on("click", function (event) {
             show: true
         });
     });
+});
+
+$("#vm-to-template").on("click", function(event) {
+	event.preventDefault();
+	var uuid;
+	$('input[name="vmrow"]:checked').each(function () {
+    	uuid = $(this).parents("tr").attr("rowid");
+	});
+	$.ajax({
+		type: "post",
+		url: "/VMAction/VMToTemplate",
+		data: {uuid:uuid},
+		dataType: "json",
+		success: function (obj) {
+			if(obj) {
+				$('input[name="vmrow"]:checked').each(function () {
+					$(this).parents('tr').remove();
+				});
+			}
+		}
+	});
 });
 
 $("#all-star").on("click", function () {

@@ -57,42 +57,64 @@ public class ImageAction {
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
 	@ResponseBody
 	public String create(HttpServletRequest request,
-			@RequestParam String imageUUId, @RequestParam String imageName
-			, @RequestParam String imageServer, @RequestParam int imageOs
-			, @RequestParam String imageDesc, @RequestParam String imagePwd) {
+			@RequestParam String imageUUId, @RequestParam String imageName,
+			@RequestParam String imageServer, @RequestParam int imageOs,
+			@RequestParam String imageDesc, @RequestParam String imagePwd) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getImageManager().createImage(user.getUserId(), user.getUserLevel(), imageUUId, imageName, imageServer, imageOs, imageDesc, imagePwd);
+		JSONArray ja = this.getImageManager().createImage(user.getUserId(),
+				user.getUserLevel(), imageUUId, imageName, imageServer,
+				imageOs, imageDesc, imagePwd);
 		return ja.toString();
 	}
-	
-	@RequestMapping(value = "/Clone", method = {RequestMethod.POST })
+
+	@RequestMapping(value = "/Clone", method = { RequestMethod.POST })
 	@ResponseBody
-	public void clone(HttpServletRequest request, ImageCloneModel imagecloneModel) {
+	public void clone(HttpServletRequest request,
+			ImageCloneModel imagecloneModel) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getImageManager().cloneImage(user.getUserId(), user.getUserLevel(),imagecloneModel.getVmUuid(),imagecloneModel.getImageName(),imagecloneModel.getImageDesc());
+		this.getImageManager().cloneImage(user.getUserId(),
+				user.getUserLevel(), imagecloneModel.getVmUuid(),
+				imagecloneModel.getImageName(), imagecloneModel.getImageDesc());
 	}
 
 	@RequestMapping(value = "/BasicList", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
-	public String basicList(HttpServletRequest request, @RequestParam String uuid) {
+	public String basicList(HttpServletRequest request,
+			@RequestParam String uuid) {
 		JSONObject jo = this.getImageManager().getBasciList(uuid);
 		return jo.toString();
 	}
 
 	@RequestMapping(value = "/ShareImageList", method = { RequestMethod.POST })
 	@ResponseBody
-	public String shareImageList(HttpServletRequest request, @RequestParam String pooluuid, @RequestParam String images) {
-		String[] imageArray = images.split(","); 
-		JSONArray ja = this.getImageManager().getShareImageList(pooluuid, imageArray);
+	public String shareImageList(HttpServletRequest request,
+			@RequestParam String pooluuid, @RequestParam String images) {
+		String[] imageArray = images.split(",");
+		JSONArray ja = this.getImageManager().getShareImageList(pooluuid,
+				imageArray);
 		return ja.toString();
 	}
 
 	@RequestMapping(value = "/ImageShare", method = { RequestMethod.POST })
 	@ResponseBody
-	public String imageShare(HttpServletRequest request, @RequestParam String sorpooluuid, @RequestParam String images ,@RequestParam String despooluuid) {
-		String[] imageArray = images.split(","); 
-		JSONArray ja = this.getImageManager().shareImages(sorpooluuid, despooluuid, imageArray);
+	public String imageShare(HttpServletRequest request,
+			@RequestParam String sorpooluuid, @RequestParam String images,
+			@RequestParam String despooluuid) {
+		String[] imageArray = images.split(",");
+		JSONArray ja = this.getImageManager().shareImages(sorpooluuid,
+				despooluuid, imageArray);
 		return ja.toString();
+	}
+
+	@RequestMapping(value = "/ImageUpdate", method = { RequestMethod.POST })
+	@ResponseBody
+	public String updateImage(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String pwd,
+			@RequestParam String desc, @RequestParam int disk,
+			@RequestParam int platform) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getImageManager().updateImage(uuid, pwd, desc, disk, platform));
+		return jo.toString();
 	}
 }

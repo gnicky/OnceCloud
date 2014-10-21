@@ -254,4 +254,20 @@ public class VMAction {
 		jo.put("result", this.getVmManager().modifyPhysical(uuid, type, physical, vifUuid));
 		return jo.toString();
 	}
+	
+	@RequestMapping(value = "/TemplateToVM", method = { RequestMethod.POST })
+	@ResponseBody
+	public String templateToVM(HttpServletRequest request, @RequestParam String uuid) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getVmManager().templateToVM(uuid));
+		return jo.toString();
+	}
+	
+	@RequestMapping(value = "/VMToTemplate", method = { RequestMethod.POST })
+	@ResponseBody
+	public String vmToTemplate(HttpServletRequest request, @RequestParam String uuid) {
+		JSONObject jo = new JSONObject();
+		jo.put("result", this.getVmManager().vmToTemplate(uuid));
+		return jo.toString();
+	}
 }

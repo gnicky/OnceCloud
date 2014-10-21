@@ -156,4 +156,10 @@ public class CommonController {
 	public ModelAndView shareImage(HttpServletRequest request) {
 		return new ModelAndView("common/modal/imageshare");
 	}
+
+	@RequestMapping(value = "/image/update")
+	@ResponseBody
+	public ModelAndView updateImage(HttpServletRequest request) {
+		return new ModelAndView("common/modal/imageupdate");
+	}
 }

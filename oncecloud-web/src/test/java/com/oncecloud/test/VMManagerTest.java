@@ -13,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.oncecloud.dao.ForwardPortDAO;
 import com.oncecloud.entity.ForwardPort;
+import com.oncecloud.manager.ImageManager;
 import com.oncecloud.manager.SRManager;
 import com.oncecloud.manager.VMManager;
 
@@ -23,6 +24,16 @@ public class VMManagerTest {
 	private VMManager vmManager;
 	private SRManager srManager;
 	private ForwardPortDAO rForwardPortDAO;
+	private ImageManager imageManager;
+
+	public ImageManager getImageManager() {
+		return imageManager;
+	}
+
+	@Autowired
+	public void setImageManager(ImageManager imageManager) {
+		this.imageManager = imageManager;
+	}
 
 	public ForwardPortDAO getrForwardPortDAO() {
 		return rForwardPortDAO;
@@ -50,8 +61,17 @@ public class VMManagerTest {
 	public void setSrManager(SRManager srManager) {
 		this.srManager = srManager;
 	}
-
+	
 	@Test
+	public void testImage() {
+//		this.getVmManager().templateToVM("bb335e71-7996-3fb5-1be5-050256028e93");
+//		this.getVmManager().vmToTemplate("bb335e71-7996-3fb5-1be5-050256028e93");
+//		this.getVmManager().templateToVM("e9e2c221-1633-1905-815a-e9497f8f4b7a");
+//		this.getVmManager().vmToTemplate("e9e2c221-1633-1905-815a-e9497f8f4b7a");
+//		System.out.println(this.getVmManager().checkImage("e9e2c221-1633-1905-815a-e9497f8f4b7a"));
+	}
+
+	/*@Test
 	public void test() {
 		// this.getVmManager().saveToDataBase("fc6a1d4d-aa7a-46e2-afb5-0740839e4e72",
 		// "iii", 36, 1, "oo","192.168.1.1");
@@ -67,7 +87,7 @@ public class VMManagerTest {
 //				"instance", "ovs1", "98824f2b-2e0c-7f63-f534-335197eb3c42");
 //		this.getVmManager().getNets("fc6a1d4d-aa7a-46e2-afb5-0740839e4e72",
 //				"instance");
-	}
+	}*/
 
 	// @Test
 	// public void testList() {

@@ -22,8 +22,10 @@ function removeAllCheck() {
 }
 
 function allDisable() {
-    $("#delete").addClass('btn-forbidden').attr('disabled', true);
-    $("#share-image").addClass('btn-forbidden').attr('disabled', true);
+    $("#delete").addClass('btn-forbidden');
+    $("#share-image").addClass('btn-forbidden');
+    $("#change-to-vm").addClass('btn-forbidden');
+    $("#update-image").addClass('btn-forbidden');
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
@@ -48,10 +50,14 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         }
     });
     if (noref && flag) {
-    	$("#share-image").removeClass('btn-forbidden').attr('disabled', false);
+    	$("#share-image").removeClass('btn-forbidden');
+	    if (count == 1) {
+	    	$("#change-to-vm").removeClass('btn-forbidden');
+	    	$("#update-image").removeClass('btn-forbidden');
+	    }
     }
     if (count > 0) {
-        $("#delete").removeClass('btn-forbidden').attr('disabled', false);
+        $("#delete").removeClass('btn-forbidden');
     }
 });
 
@@ -74,6 +80,16 @@ $('#create').on('click', function (event) {
 $('#share-image').on('click', function (event) {
     event.preventDefault();
     $('#ImageModalContainer').load('image/share', '', function () {
+        $('#ImageModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
+$('#update-image').on('click', function (event) {
+    event.preventDefault();
+    $('#ImageModalContainer').load('image/update', '', function () {
         $('#ImageModalContainer').modal({
             backdrop: false,
             show: true
@@ -207,3 +223,24 @@ function deleteImage(imageId, imageName) {
         }
     });
 }
+
+$("#change-to-vm").on('click', function(event){
+	event.preventDefault();
+	var uuid;
+	$('input[name="imagerow"]:checked').each(function () {
+		uuid = $(this).parents('tr').attr("imageUId");
+	});
+	$.ajax({
+		type: "post",
+		url: "/VMAction/TemplateToVM",
+		data: {uuid: uuid},
+		dataType: "json",
+		success: function (obj) {
+			if(obj) {
+				$('input[name="imagerow"]:checked').each(function () {
+					$(this).parents('tr').remove();
+				});
+			}
+		}
+	});
+});

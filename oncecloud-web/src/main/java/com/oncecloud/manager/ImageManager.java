@@ -482,4 +482,17 @@ public class ImageManager {
 		}
 		return ja;
 	}
+	
+	public boolean updateImage(String uuid, String pwd, String desc, int disk, int platform) {
+		if((!pwd.equals(""))&&(!desc.equals(""))&& (disk != 0) && (platform != 0)) {
+			Image image = this.getImageDAO().getImage(uuid);
+			image.setImagePwd(pwd);
+			image.setImageDisk(disk);
+			image.setImagePlatform(platform);
+			image.setImageDesc(desc);
+			return this.getImageDAO().updateImage(image);
+		} else {
+			return true;
+		}
+	}
 }

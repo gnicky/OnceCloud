@@ -21,10 +21,10 @@ import com.once.xenapi.Host;
 import com.once.xenapi.Network;
 import com.once.xenapi.SR;
 import com.once.xenapi.Types;
-import com.once.xenapi.VIF;
 import com.once.xenapi.Types.BadServerResponse;
 import com.once.xenapi.Types.XenAPIException;
 import com.once.xenapi.VDI;
+import com.once.xenapi.VIF;
 import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
 import com.once.xenapi.VMUtil;
@@ -1441,8 +1441,8 @@ public class VMManager {
 				this.getMessagePush().editRowIP(userId, vmUuid, "基础网络",
 						jo.getString("ip"));
 			} else {
-				this.getMessagePush().editRowIP(userId, vmUuid, jo.getString("vname"),
-						jo.getString("ip"));
+				this.getMessagePush().editRowIP(userId, vmUuid,
+						jo.getString("vname"), jo.getString("ip"));
 			}
 			this.getMessagePush().editRowConsole(userId, vmUuid, "add");
 			this.getMessagePush().pushMessage(userId,
@@ -1508,7 +1508,7 @@ public class VMManager {
 		boolean dbRollback = true;
 		try {
 			preCreate = this.getVmDAO().preCreateVM(vmUuid, null, 1, name,
-					null, null, memory, cpu, VMManager.POWER_CREATE, 1,
+					1, null, memory, cpu, VMManager.POWER_CREATE, 1,
 					new Date());
 			if (preCreate) {
 				conn = this.getConstant().getConnectionFromPool(poolUuid);
@@ -1521,7 +1521,7 @@ public class VMManager {
 						"i-" + vmUuid.substring(0, 8), cpu, memory, conn,
 						hostUuid, isoUuid, volumeSize, srUuid, type);
 				if (record != null) {
-					result = this.getVmDAO().updateVM(1, vmUuid, null,
+					result = this.getVmDAO().updateVM(1, vmUuid, "onceas",
 							VMManager.POWER_RUNNING, hostUuid, null);
 					String hostAddress = getHostAddress(hostUuid);
 					int port = getVNCPort(vmUuid, poolUuid);
@@ -1730,4 +1730,82 @@ public class VMManager {
 			e.printStackTrace();
 		}
 	}
+
+	public boolean templateToVM(String uuid) {
+		Image image = this.getImageDAO().getImage(uuid);
+		String poolUuid = image.getPoolUuid();
+		Connection conn = null;
+		boolean result = false;
+		try {
+			conn = this.getConstant().getConnectionFromPool(poolUuid);
+			VM vm = VM.getByUuid(conn, uuid);
+			VM.Record record = vm.getRecord(conn);
+			vm.setIsATemplate(conn, false);
+			String vmMac = null;
+			for (String temMac : record.MAC) {
+				vmMac = temMac;
+				break;
+			}
+			image.setImageStatus(-1);
+			this.getImageDAO().updateImage(image);
+			OCVM ocvm = new OCVM(uuid, image.getImagePwd(),
+					image.getImageUID(), image.getImageName(),
+					image.getImagePlatform(), vmMac,
+					(int) (record.memoryStaticMax / (1024 * 1024)),
+					(record.VCPUsMax).intValue(), 0, 1, image.getCreateDate());
+			String hostUuid = record.residentOn.toWireString();
+			ocvm.setHostUuid(hostUuid);
+			this.getVmDAO().saveVM(ocvm);
+			String hostAddress = getHostAddress(hostUuid);
+			int port = getVNCPort(uuid, poolUuid);
+			NoVNC.createToken(uuid.substring(0, 8), hostAddress, port);
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public boolean vmToTemplate(String uuid) {
+		boolean result = false;
+		if (this.getImageDAO().checkImage(uuid)) {
+			OCVM ocvm = this.getVmDAO().getVM(uuid);
+			Image image = this.getImageDAO().getImage(uuid);
+			String poolUuid = image.getPoolUuid();
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				vm.setIsATemplate(conn, true);
+				image.setImageStatus(1);
+				this.getImageDAO().updateImage(image);
+				this.getVmDAO().deleteVM(ocvm);
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return result;
+		} else {
+			OCVM ocvm = this.getVmDAO().getVM(uuid);
+			String hostUuid = ocvm.getHostUuid();
+			String poolUuid = this.getHostDAO().getHost(hostUuid).getPoolUuid();
+			Connection conn = null;
+			try {
+				conn = this.getConstant().getConnectionFromPool(poolUuid);
+				VM vm = VM.getByUuid(conn, uuid);
+				vm.setIsATemplate(conn, true);
+				Image image = new Image(ocvm.getVmUuid(), ocvm.getVmName(),
+						ocvm.getVmPWD(), ocvm.getVmUID(), 20,
+						ocvm.getVmPlatform(), 1, poolUuid, ocvm.getVmDesc(),
+						ocvm.getCreateDate(), null);
+				this.getImageDAO().save(image);
+				this.getVmDAO().deleteVM(ocvm);
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return result;
+		}
+	}
+
 }
