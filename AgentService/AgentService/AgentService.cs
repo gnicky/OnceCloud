@@ -118,7 +118,8 @@ namespace AgentService
                             var pingRequest = JsonHelper.ToObject<PingRequest>(content);
                             var pingResponse = new PingResponse()
                             {
-                                ResponseType = "Agent.Ping"
+                                ResponseType = "Agent.Ping",
+                                Result = true
                             };
                             var responseString = JsonHelper.ToString(pingResponse);
                             serialPort.Write(BitConverter.GetBytes(responseString.Length), 0, 4);
