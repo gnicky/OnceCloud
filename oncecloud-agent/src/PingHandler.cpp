@@ -25,6 +25,6 @@ Request * PingHandler::ParseRequest(const std::string & request)
 Response * PingHandler::Handle(Request * request)
 {
 	// PingRequest * pingRequest=dynamic_cast<PingRequest *>(request);
-	return new PingResponse();
+	return new PingResponse(true);
 }
 
