@@ -1,7 +1,10 @@
 # Net Daemon Makefile
 
-CC=gcc
-LD=gcc
+#CC=gcc
+#LD=gcc
+
+CC=x86_64-beyond-linux-uclibc-gcc
+LD=x86_64-beyond-linux-uclibc-gcc
 
 NETD_CC=$(QUIET_CC)$(CC)
 NETD_LD=$(QUIET_LD)$(LD)
