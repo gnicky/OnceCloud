@@ -826,7 +826,7 @@ public class VMManager {
 								+ "] Mac [" + mac + "] IP [" + ip + "] OS ["
 								+ OS + "]");
 						vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root",
-								pwd, cpu, memory, mac, ip, OS, allocateHost,
+								pwd, cpu, memory, mac, "", OS, allocateHost,
 								imagePwd, vmBackendName, false);
 						Thread.sleep(8000);
 						Date createEndDate = new Date();
@@ -904,7 +904,7 @@ public class VMManager {
 			}
 			imagePwd = image.getImagePwd();
 			mac = Utilities.randomMac();
-			ip = "1.1.1.1";
+			ip = "";
 			c = this.getConstant().getConnectionFromPool(poolUuid);
 			allocateHost = getAllocateHost(poolUuid, memory);
 			logger.info("VM [" + vmBackendName + "] allocated to Host ["
@@ -924,7 +924,7 @@ public class VMManager {
 							+ cpu + "] Memory [" + memory + "] Mac [" + mac
 							+ "] IP [" + ip + "] OS [" + OS + "]");
 					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
-							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
+							cpu, memory, mac, "", OS, allocateHost, imagePwd,
 							vmBackendName, false);
 					OCVM vm = this.getVmDAO().getVM(vmUuid);
 					Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
@@ -951,7 +951,7 @@ public class VMManager {
 							if (!vmrecord.setpasswd) {
 								pwd = imagePwd;
 							}
-							if (ip.equals("1.1.1.1")) {
+							if (ip.equals("")) {
 								ip = null;
 								jo.put("ip", "");
 							} else {
@@ -1807,5 +1807,8 @@ public class VMManager {
 			return result;
 		}
 	}
-
+	
+	public int getCount(int userId) {
+		return this.getVmDAO().countVMsOfUser(userId);
+	}
 }

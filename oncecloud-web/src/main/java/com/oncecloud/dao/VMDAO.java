@@ -441,6 +441,7 @@ public class VMDAO {
 	 * 
 	 * @param userId
 	 * @return
+	 * @throws Exception 
 	 */
 	public int countVMsOfUser(int userId) {
 		int count = 0;
@@ -449,7 +450,7 @@ public class VMDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "select count(*) from OCVM where vmUID = :userId"
-					+ "and vmStatus = 1";
+					+ " and vmStatus = 1";
 			Query query = session.createQuery(queryString);
 			query.setInteger("userId", userId);
 			count = ((Number) query.uniqueResult()).intValue();
