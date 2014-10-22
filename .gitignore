@@ -10,3 +10,6 @@ target/
 oncecloud-web/BeyondCloud.log
 oncecloud-web/BeyondCloud.log.*
 oncecloud-agent/output
+.*.swp
+*.o
+*.so
