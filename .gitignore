@@ -1,0 +1,12 @@
+.DS_Store
+.classpath
+.project
+.settings
+*.o
+*.suo
+bin/
+obj/
+target/
+oncecloud-web/BeyondCloud.log
+oncecloud-web/BeyondCloud.log.*
+oncecloud-agent/output
