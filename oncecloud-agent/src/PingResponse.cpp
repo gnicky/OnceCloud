@@ -2,9 +2,10 @@
 #include "Response.h"
 #include "PingResponse.h"
 
-PingResponse::PingResponse()
+PingResponse::PingResponse(bool result)
 {
- 	this->SetResponseType("Agent.Ping");
+	this->SetResponseType("Agent.Ping");
+	this->SetResult(result);
 	this->BuildRawResponse();
 }
 
@@ -13,10 +14,20 @@ PingResponse::~PingResponse()
 
 }
 
+bool PingResponse::GetResult() const
+{
+	return this->result;
+}
+
+void PingResponse::SetResult(bool result)
+{
+	this->result=result;
+}
+
 void PingResponse::BuildJson()
 {
-	Json::Value value;
-	this->SetJson(value);
+	this->SetJson(Json::Value());
 	this->GetJson()["responseType"]=this->GetResponseType();
+	this->GetJson()["result"]=this->GetResult();
 }
 

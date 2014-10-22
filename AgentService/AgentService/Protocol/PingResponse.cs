@@ -7,5 +7,7 @@ namespace AgentService.Protocol
     {
         [DataMember(Name = "requestType")]
         public string ResponseType { get; set; }
+        [DataMember(Name = "result")]
+        public bool Result { get; set; }
     }
 }
