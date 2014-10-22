@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
 #include <string>
 
 #include <unistd.h>
@@ -32,8 +33,6 @@ void Logger::SetMaxLevel(const LogLevel & maxLevel)
 
 void Logger::Write(const LogLevel & level, const std::string & message)
 {
-	return;
-/*
 	if(level.GetPriority()>this->GetMaxLevel().GetPriority())
 	{
 		return;
@@ -52,7 +51,15 @@ void Logger::Write(const LogLevel & level, const std::string & message)
 		<<" ["<<getpid()<<" agent] ["<<level.GetLevel()<<"] "
 		<<message<<std::endl;
 	std::cout<<log.str();
-*/
+	std::stringstream fileName;
+	fileName<<"/var/log/agent-log-"
+		<<std::setw(4)<<std::setfill('0')<<(1900+localTime->tm_year)<<"-"
+		<<std::setw(2)<<std::setfill('0')<<(1+localTime->tm_mon)<<"-"
+		<<std::setw(2)<<std::setfill('0')<<localTime->tm_mday<<".log";
+	std::fstream writeFile;
+	writeFile.open(fileName.str().c_str(),std::ios::app|std::ios::out);
+	writeFile<<log.str();
+	writeFile.close();
 }
 
 
