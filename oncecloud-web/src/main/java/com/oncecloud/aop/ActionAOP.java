@@ -39,10 +39,24 @@ public class ActionAOP {
 		this.ocExceptionDAO = ocExceptionDAO;
 	}
 
-	@Pointcut("execution(* com.oncecloud.manager..*.*(..))")
+	@Pointcut("execution(* com.oncecloud.ui.action..*.*(..))")
 	public void myMethod() {
 		
 	};
+
+//	@Before("myMethod()")
+	public void beforeAction(JoinPoint joinpoint) {
+		/*User user = (User) request.getSession().getAttribute("user");
+		if(user != null) {
+			System.out.println(user.getUserId());
+		}*/
+		System.out.println("方法名称：  " + joinpoint.getSignature().getName());
+		for (Object o : joinpoint.getArgs()) {
+			System.out.println("方法的参数：   " + o.toString());
+		}
+		System.out.println("代理对象：   "
+				+ joinpoint.getTarget().getClass().getName());
+	}
 
 	@AfterThrowing(pointcut="myMethod()",throwing="throwable")
 	public void afterThrowingException(JoinPoint joinpoint,RuntimeException throwable) {
