@@ -145,7 +145,8 @@ namespace AgentService
                             catch (Exception ex)
                             {
                                 File.AppendAllText(AgentService.LogFile
-                                    , string.Format("[{0}] Exception: {1}" + Environment.NewLine, DateTime.Now, ex.Message));
+                                    , string.Format("[{0}] Exception: {1}" + Environment.NewLine, DateTime.Now
+                                    , ex.InnerException == null ? ex.Message : ex.InnerException.Message));
                                 result = false;
                             }
 
