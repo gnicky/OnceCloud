@@ -30,6 +30,11 @@ public class MessagePush {
 				new StickyMessage(content));
 	}
 
+	public void pushMessageClose(int userId, String content, String conid) {
+		this.getMessageWebSocketHandler().sendMessageToUser(userId,
+				new StickyMessageClose(content, conid));
+	}
+
 	public void deleteRow(int userId, String rowId) {
 		logger.info("User [" + userId + "] RowId [" + rowId + "]");
 		this.getMessageWebSocketHandler().sendMessageToUser(userId,

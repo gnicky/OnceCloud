@@ -1043,16 +1043,21 @@ $("#depend-list").on('click', '#remove-net', function (event) {
                 label: "确定",
                 className: "btn-primary",
                 callback: function () {
+                	$("#remove-net").remove();
                     var instanceUuid = $("#platformcontent").attr("instanceUuid");
+                    var content = "<div class='alert alert-warning'>主机正在解绑网络</div>";
+    				var conid = showMessageNoAutoClose(content);
                     $.ajax({
                         type: 'post',
                         url: '/VMAction/UnbindNet',
-                        data: {uuid: instanceUuid},
+                        data: {uuid: instanceUuid, content: content, conid: conid},
                         dataType: 'json',
                         success: function (obj) {
                             if (obj.result) {
                                 $("#netw").html("&nbsp;");
                                 $("#eipw").html("&nbsp;");
+                            } else {
+                            	$("#remove-net").show();
                             }
                         }
                     });

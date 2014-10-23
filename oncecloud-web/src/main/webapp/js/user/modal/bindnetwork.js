@@ -114,10 +114,12 @@ $(document).ready(function () {
     });
 
     function bindvn(vnId, vmuuidStr) {
+    	var content = "<div class='alert alert-warning'>主机正在加入私有网络</div>";
+    	var conid = showMessageNoAutoClose(content);
         $.ajax({
             type: 'get',
             url: '/VnetAction/AddVM',
-            data: {vnId: vnId, vmuuidStr: vmuuidStr},
+            data: {vnId: vnId, vmuuidStr: vmuuidStr, content:content, conid:conid},
             dataType: 'json',
             success: function (obj) {
             	if (obj.isSuccess)

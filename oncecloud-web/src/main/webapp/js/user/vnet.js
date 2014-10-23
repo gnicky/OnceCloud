@@ -205,10 +205,12 @@ $('#link').on('click', function (event) {
 });
 
 function unlink(uuid) {
+	var content = "<div class='alert alert-warning'>私有网络正在离开路由器</div>";
+    var conid = showMessageNoAutoClose(content);
     $.ajax({
         type: 'post',
         url: '/VnetAction/UnlinkRouter',
-        data: {vnetId: uuid},
+        data: {vnetId: uuid, content:content, conid:conid},
         dataType: 'json',
         success: function (obj) {
             if (obj.result) {

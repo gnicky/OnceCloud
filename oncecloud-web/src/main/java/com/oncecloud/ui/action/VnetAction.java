@@ -75,9 +75,11 @@ public class VnetAction {
 
 	@RequestMapping(value = "/UnlinkRouter", method = { RequestMethod.POST })
 	@ResponseBody
-	public String unlinkRouter(HttpServletRequest request, @RequestParam String vnetId) {
+	public String unlinkRouter(HttpServletRequest request,
+			@RequestParam String vnetId, @RequestParam String content, @RequestParam String conid) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVnetManager().unlinkRouter(vnetId, user.getUserId());
+		JSONObject jo = this.getVnetManager().unlinkRouter(vnetId,
+				user.getUserId(), content, conid);
 		return jo.toString();
 	}
 
@@ -85,27 +87,29 @@ public class VnetAction {
 	@ResponseBody
 	public String delete(HttpServletRequest request, @RequestParam String uuid) {
 		User user = (User) request.getSession().getAttribute("user");
-		String result = this.getVnetManager().deleteVnet(user.getUserId(), uuid);
+		String result = this.getVnetManager()
+				.deleteVnet(user.getUserId(), uuid);
 		return result;
 	}
 
 	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public String addVM(HttpServletRequest request, @RequestParam String vnId,
-			@RequestParam String vmuuidStr) {
+			@RequestParam String vmuuidStr, @RequestParam String content, @RequestParam String conid) {
 		User user = (User) request.getSession().getAttribute("user");
 		String poolUuid = user.getUserAllocate();
-		JSONObject jo = this.getVnetManager().vnetAddvm(user.getUserId(), vmuuidStr, vnId,
-				poolUuid);
+		JSONObject jo = this.getVnetManager().vnetAddvm(user.getUserId(),
+				vmuuidStr, vnId, poolUuid, content, conid);
 		return jo.toString();
 	}
 
 	@RequestMapping(value = "/CheckNet", method = { RequestMethod.POST })
 	@ResponseBody
-	public String checkNet(HttpServletRequest request, @RequestParam String routerid,
-			@RequestParam int net) {
+	public String checkNet(HttpServletRequest request,
+			@RequestParam String routerid, @RequestParam int net) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVnetManager().checkNet(user.getUserId(), routerid, net);
+		JSONObject jo = this.getVnetManager().checkNet(user.getUserId(),
+				routerid, net);
 		return jo.toString();
 	}
 
@@ -119,22 +123,26 @@ public class VnetAction {
 
 	@RequestMapping(value = "/LinkRouter", method = { RequestMethod.POST })
 	@ResponseBody
-	public String linkRouter(HttpServletRequest request,@RequestParam String vnetuuid,
-			@RequestParam String routerid, @RequestParam int net, @RequestParam int gate 
-			, @RequestParam int start, @RequestParam int end, @RequestParam int dhcpState) {
+	public String linkRouter(HttpServletRequest request,
+			@RequestParam String vnetuuid, @RequestParam String routerid,
+			@RequestParam int net, @RequestParam int gate,
+			@RequestParam int start, @RequestParam int end,
+			@RequestParam int dhcpState, @RequestParam String content
+			, @RequestParam String conid) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVnetManager().linkRouter(user.getUserId(), vnetuuid, routerid, net, gate, start, end, dhcpState);
+		JSONObject jo = this.getVnetManager().linkRouter(user.getUserId(),
+				vnetuuid, routerid, net, gate, start, end, dhcpState, content, conid);
 		return jo.toString();
 	}
 
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
 	@ResponseBody
-	public void create(HttpServletRequest request,@RequestParam String name,
+	public void create(HttpServletRequest request, @RequestParam String name,
 			@RequestParam String uuid, @RequestParam String desc) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVnetManager().vnetCreate(name, uuid, desc, user.getUserId());
 	}
-	
+
 	@RequestMapping(value = "/AvailableVnet", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getAvailableVnet(HttpServletRequest request) {

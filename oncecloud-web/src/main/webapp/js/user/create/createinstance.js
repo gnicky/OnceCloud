@@ -131,7 +131,6 @@ $('#createvmAction').on('click', function (event) {
         var vmCount = parseInt($('#count').val(), 10);
         var loginPwd = $('#login_passwd').val();
         var vnetuuid = $("#vlan option:selected").val();
-        console.log(vnetuuid);
         $.ajax({
             type: 'post',
             url: '/VMAction/Quota',

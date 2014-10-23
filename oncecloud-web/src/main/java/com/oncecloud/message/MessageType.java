@@ -8,4 +8,5 @@ public class MessageType {
 	public static final String EDIT_ROW_STATUS_FOR_BIND_VOLUME = "ws_edit_row_for_bind_volume";
 	public static final String EDIT_ROW_STATUS_FOR_UNBIND_VOLUME = "ws_edit_row_for_unbind_volume";
 	public static final String EDIT_ROW_STATUS = "ws_edit_row_status";
+	public static final String STICKY_CLOSE = "hideMessageNoAutoClose";
 }

@@ -148,9 +148,9 @@ public class VMAction {
 	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
 	@ResponseBody
 	public String unbindNet(HttpServletRequest request,
-			@RequestParam String uuid) {
+			@RequestParam String uuid, @RequestParam String content, @RequestParam String conid) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVmManager().unbindNet(uuid, user);
+		JSONObject jo = this.getVmManager().unbindNet(uuid, user, content, conid);
 		return jo.toString();
 	}
 

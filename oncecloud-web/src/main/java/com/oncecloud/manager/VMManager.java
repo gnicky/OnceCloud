@@ -1343,7 +1343,7 @@ public class VMManager {
 		}
 	}
 
-	public JSONObject unbindNet(String uuid, User user) {
+	public JSONObject unbindNet(String uuid, User user, String content, String conid) {
 		JSONObject jo = new JSONObject();
 		OCVM vm = this.getVmDAO().getVM(uuid);
 		String vlan = vm.getVmVlan();
@@ -1377,9 +1377,11 @@ public class VMManager {
 		jo.put("result", result);
 		if (result) {
 			this.getVmDAO().unbindNet(uuid);
+			this.getMessagePush().pushMessageClose(user.getUserId(), content, conid);
 			this.getMessagePush().pushMessage(user.getUserId(),
 					Utilities.stickyToSuccess("主机解绑网络成功"));
 		} else {
+			this.getMessagePush().pushMessageClose(user.getUserId(), content, conid);
 			this.getMessagePush().pushMessage(user.getUserId(),
 					Utilities.stickyToError("主机解绑网络失败"));
 		}

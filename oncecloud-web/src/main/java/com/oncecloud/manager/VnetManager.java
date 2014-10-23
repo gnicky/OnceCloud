@@ -225,7 +225,7 @@ public class VnetManager {
 	 * 添加主机到私有网络
 	 */
 	public boolean bindVnetToVMs(int userId, String vmArray, String vnetId,
-			String poolUuid) {
+			String poolUuid, String content, String conid) {
 		boolean result = false;
 		Date startTime = new Date();
 		try {
@@ -283,6 +283,7 @@ public class VnetManager {
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.成功.ordinal(),
 								infoArray.toString(), startTime, elapse);
+						this.getMessagePush().pushMessageClose(userId, content, conid);
 						this.getMessagePush().pushMessage(userId,
 								Utilities.stickyToSuccess(log.toAString()));
 					} else {
@@ -291,6 +292,7 @@ public class VnetManager {
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.失败.ordinal(),
 								infoArray.toString(), startTime, elapse);
+						this.getMessagePush().pushMessageClose(userId, content, conid);
 						this.getMessagePush().pushMessage(userId,
 								Utilities.stickyToError(log.toAString()));
 					}
@@ -459,7 +461,7 @@ public class VnetManager {
 
 	public JSONObject linkRouter(int userId, String vnetUuid, String routerId,
 			Integer net, Integer gate, Integer start, Integer end,
-			Integer dhcpState) {
+			Integer dhcpState, String content, String conid) {
 		Date startTime = new Date();
 		JSONObject jo = this.getRouterManager().doLinkRouter(userId, vnetUuid,
 				routerId, net, gate, start, end, dhcpState);
@@ -479,6 +481,7 @@ public class VnetManager {
 					LogConstant.logAction.连接.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
+			this.getMessagePush().pushMessageClose(userId, content, conid);
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toAString()));
 		} else {
@@ -487,13 +490,14 @@ public class VnetManager {
 					LogConstant.logAction.连接.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
+			this.getMessagePush().pushMessageClose(userId, content, conid);
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toAString()));
 		}
 		return jo;
 	}
 
-	public JSONObject unlinkRouter(String vnetUuid, int userId) {
+	public JSONObject unlinkRouter(String vnetUuid, int userId, String content, String conid) {
 		Date startTime = new Date();
 		JSONObject jo = this.getRouterManager().doUnlinkRouter(vnetUuid, userId);
 		// write log and push message
@@ -510,6 +514,7 @@ public class VnetManager {
 					LogConstant.logAction.离开.ordinal(),
 					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
 					startTime, elapse);
+			this.getMessagePush().pushMessageClose(userId, content, conid);
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
@@ -518,6 +523,7 @@ public class VnetManager {
 					LogConstant.logAction.离开.ordinal(),
 					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
 					startTime, elapse);
+			this.getMessagePush().pushMessageClose(userId, content, conid);
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError(log.toString()));
 		}
@@ -525,9 +531,9 @@ public class VnetManager {
 	}
 
 	public JSONObject vnetAddvm(int userId, String vmuuidStr, String vnId,
-			String poolUuid) {
+			String poolUuid, String content, String conid) {
 		JSONObject jo = new JSONObject();
-		if (this.bindVnetToVMs(userId, vmuuidStr, vnId, poolUuid)) {
+		if (this.bindVnetToVMs(userId, vmuuidStr, vnId, poolUuid, content, conid)) {
 			jo.put("isSuccess", true);
 		} else {
 			jo.put("isSuccess", false);

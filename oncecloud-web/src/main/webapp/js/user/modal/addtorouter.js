@@ -46,6 +46,8 @@ $(document).ready(function () {
             var vn_start = $("#vn_start").val();
             var vn_end = $("#vn_end").val();
             if (checkRepeat(vn_router, vn_net)) {
+            	var content = "<div class='alert alert-warning'>私有网络正在加入路由器</div>";
+            	var conid = showMessageNoAutoClose(content);
                 $.ajax({
                     type: 'post',
                     url: '/VnetAction/LinkRouter',
@@ -56,7 +58,9 @@ $(document).ready(function () {
                         gate: vn_gate,
                         start: vn_start,
                         end: vn_end,
-                        dhcpState: dhcp_status
+                        dhcpState: dhcp_status,
+                        content: content,
+                        conid: conid
                     },
                     dataType: 'json',
                     success: function (obj) {

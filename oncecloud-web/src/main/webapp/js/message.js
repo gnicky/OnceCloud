@@ -1,5 +1,6 @@
 $(function () {
     connect();
+    showmiddle();
 });
 
 $(window).unload(function() {
@@ -101,45 +102,54 @@ function ws_edit_row_status(obj) {
 }
 
 
-var arrayid ="";
+var arrayid;
 
 ///展示一个提示
 function showMessageNoAutoClose(content) {
    var showid = $.sticky(content,{'autoclose':false});
-   arrayid = $.cookie('alertStr');
-   if(arrayid==null)
+   arrayid = localStorage.getItem('alertStr');
+   if(arrayid == null)
    {
       arrayid="";
    }
    setTimeout("",500);
-   arrayid+=$("#"+showid.id)[0].outerHTML+"---";
-//   alert(arrayid);
-   $.cookie('alertStr',arrayid);
+   arrayid += '<div class="sticky" id="'
+			+ showid.id
+			+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
+			+ showid.id + '" title="Close">×</span><div class="sticky-note" rel="'
+			+ showid.id
+			+ '">'+ content +'</div></div>---';
+   localStorage.setItem('alertStr',arrayid);
    return showid.id;
 }
 
 ///根据id，关闭对应的提示
-function hideMessageNoAutoClose(objId) {
-	$("#"+objId).dequeue().slideUp('fast', function(){
+function hideMessageNoAutoClose(obj) {
+	$("#"+obj.conid).dequeue().slideUp('fast', function(){
 		var closest = $(this).closest('.sticky-queue');
 		var elem = closest.find('.sticky');
 		
-		arrayid = $.cookie('alertStr');
-		var newstr= $("#"+objId)[0].outerHTML +"---";
+		arrayid = localStorage.getItem('alertStr');
+		var newstr= '<div class="sticky" id="'
+			+ obj.conid
+			+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
+			+ obj.conid + '" title="Close">×</span><div class="sticky-note" rel="'
+			+ obj.conid
+			+ '">'+ obj.content +'</div></div>---';
 		var indexi = arrayid.indexOf(newstr);
 		var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
-		$.cookie('alertStr',newcookie);
+		localStorage.setItem('alertStr',newcookie);
 		
 		$(this).remove();
 		if(elem.length == '1'){
-			closest.remove()
+			closest.remove();
 		}
 	});
 }
 
 ///新页面中，还原没有关闭的提示
-$(function(){
-	arrayid = $.cookie('alertStr');
+function showmiddle(){
+	arrayid = localStorage.getItem('alertStr');
 	if(arrayid!="" && arrayid !=null)
 	{
 		var words = arrayid.split('---');
@@ -159,4 +169,4 @@ $(function(){
 		$(".sticky").css('height', 38);
 		
 	}
-})
+}

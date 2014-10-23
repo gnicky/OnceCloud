@@ -41,6 +41,8 @@ $(document).ready(function () {
             var vn_start = $("#vn_start").val();
             var vn_end = $("#vn_end").val();
             if (checkRepeat(vn_router, vn_net)) {
+            	var content = "<div class='alert alert-warning'>正在更新私有网络</div>";
+            	var conid = showMessageNoAutoClose(content);
                 $.ajax({
                     type: 'post',
                     url: '/VnetAction/LinkRouter',
@@ -56,6 +58,7 @@ $(document).ready(function () {
                     dataType: 'json',
                     success: function (obj) {
                         if (obj.result) {
+                        	hideMessageNoAutoClose(conid);
                         	getVxnets();
                         }
                     }
