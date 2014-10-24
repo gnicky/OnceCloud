@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import com.oncecloud.entity.User;
 
 @Component
 @Aspect
-public class ActionAOP {
+public class XenAOP {
 	private HttpServletRequest request;
 	private OCExceptionDAO ocExceptionDAO;
 	
@@ -39,13 +40,20 @@ public class ActionAOP {
 		this.ocExceptionDAO = ocExceptionDAO;
 	}
 
-	@Pointcut("execution(* com.oncecloud.ui.action..*.*(..))")
-	public void myMethod() {
+	@Pointcut("execution(* com.once.xenapi..*.*(..))")
+	public void xenMethod() {
 		
 	};
 
-	@AfterThrowing(pointcut="myMethod()",throwing="throwable")
-	public void afterThrowingException(JoinPoint joinpoint,RuntimeException throwable) {
+	@Before("xenMethod()")
+	public void xenBefore(JoinPoint joinpoint) {
+		System.out.println("--------xen---------");
+		System.out.println(joinpoint.getTarget().getClass().getName());
+	}
+	
+	@AfterThrowing(pointcut="xenMethod()",throwing="throwable")
+	public void xenThrowingException(JoinPoint joinpoint, RuntimeException throwable) {
+		System.out.println("--------xen---------");
 		User user = (User) request.getSession().getAttribute("user");
 		OCException oce = new OCException();
 		if(user != null) {
