@@ -4,21 +4,13 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.OCExceptionDAO;
 import com.oncecloud.entity.OCException;
 import com.oncecloud.entity.User;
 
-@Component
-@Aspect
-public class XenAOP {
+public aspect XenAspectJ {
 	private HttpServletRequest request;
 	private OCExceptionDAO ocExceptionDAO;
 	
@@ -39,35 +31,24 @@ public class XenAOP {
 	public void setOcExceptionDAO(OCExceptionDAO ocExceptionDAO) {
 		this.ocExceptionDAO = ocExceptionDAO;
 	}
-
-	@Pointcut("execution(* com.once.xenapi..*.*(..))")
-	public void xenMethod() {
-		
-	};
-
-	@Before("xenMethod()")
-	public void xenBefore(JoinPoint joinpoint) {
-		System.out.println("--------xen---------");
-		System.out.println(joinpoint.getTarget().getClass().getName());
-	}
 	
-	@AfterThrowing(pointcut="xenMethod()",throwing="throwable")
-	public void xenThrowingException(JoinPoint joinpoint, RuntimeException throwable) {
-		System.out.println("--------xen---------");
+	pointcut mypointcut() : execution(public * com.once.xenapi..*(..));
+
+	after() throwing(Exception ex) : mypointcut() {
 		User user = (User) request.getSession().getAttribute("user");
 		OCException oce = new OCException();
 		if(user != null) {
 			oce.setExcUid(user.getUserId());
 		}
-		oce.setExcFunName(joinpoint.getSignature().getName());
+		oce.setExcFunName(thisJoinPoint.getSignature().getName());
 		String args = "";
-		for (Object o : joinpoint.getArgs()) {
+		for (Object o : thisJoinPoint.getArgs()) {
 			args += o.toString() + "|";
 		}
 		oce.setExcArgs(args);
-		oce.setExcClassName(joinpoint.getTarget().getClass().getName());
-		String exception = throwable.getMessage() + "|" + throwable.getCause() + "|";
-		for (StackTraceElement str : throwable.getStackTrace()) {
+		oce.setExcClassName(thisJoinPoint.getSignature().toString());
+		String exception = ex.getMessage() + "|" + ex.getCause() + "|";
+		for (StackTraceElement str : ex.getStackTrace()) {
 			if(str.getClassName().contains("com.oncecloud")) {
 				exception += str.toString() + "|";
 			}
@@ -76,5 +57,5 @@ public class XenAOP {
 		oce.setExcDate(new Date());
 		this.getOcExceptionDAO().save(oce);
 	}
-
+	
 }

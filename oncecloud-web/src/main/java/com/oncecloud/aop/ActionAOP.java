@@ -57,7 +57,7 @@ public class ActionAOP {
 			args += o.toString() + "|";
 		}
 		oce.setExcArgs(args);
-		oce.setExcClassName(joinpoint.getTarget().getClass().getName());
+		oce.setExcClassName(joinpoint.getSignature().toString());
 		String exception = throwable.getMessage() + "|" + throwable.getCause() + "|";
 		for (StackTraceElement str : throwable.getStackTrace()) {
 			if(str.getClassName().contains("com.oncecloud")) {
