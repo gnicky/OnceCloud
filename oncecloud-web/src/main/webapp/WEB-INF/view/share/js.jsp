@@ -5,7 +5,6 @@
 <script src="${basePath}js/jquery.validate.js"></script>
 <script src="${basePath}js/bootstrap-paginator.min.js"></script>
 <script src='${basePath}js/bootbox.min.js'></script>
-<script src="${basePath}js/jquery.cookie.js"></script>
 <script src="${basePath}js/sticky.full.js"></script>
 <script src='${basePath}js/uuid.js'></script>
 <script src="${basePath}js/oncecloud.js"></script>
