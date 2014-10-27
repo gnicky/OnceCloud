@@ -54,6 +54,7 @@
 					</ul>
 				</div>
 			</c:if>
+			
 			<input class="search" id="search" value="">
 			<div class="toolbar-right">
 				<table>

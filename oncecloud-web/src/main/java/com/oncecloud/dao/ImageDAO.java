@@ -255,14 +255,14 @@ public class ImageDAO {
 		return total;
 	}
 
-	public boolean deleteImage(String imageId, Integer imageUID) {
+	public boolean deleteImage(String imageId) {
 		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "update Image set imageStatus = 0 where imageUuid='"
-					+ imageId + "' and imageUID=" + imageUID;
+					+ imageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
 			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
