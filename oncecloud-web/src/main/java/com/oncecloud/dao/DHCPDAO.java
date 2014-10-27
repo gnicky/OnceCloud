@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -231,6 +232,22 @@ public class DHCPDAO {
 		return dhcpList;
 	}
 
+	public List<DHCP> getDHCPList() {
+		List<DHCP> list = new ArrayList<DHCP>();
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			String str = "from DHCP";
+			Query query = session.createQuery(str);
+			list = query.list();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	public boolean ipExist(String dhcpIp) {
 		boolean result = false;
 		Session session = null;
@@ -272,7 +289,7 @@ public class DHCPDAO {
 		return result;
 	}
 
-	public void saveVM(DHCP dhcp) {
+	public void saveDHCP(DHCP dhcp) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();

@@ -1723,7 +1723,7 @@ public class VMManager {
 			dhcp.setTenantUuid(vmUuid);
 			dhcp.setDepenType(0);
 			dhcp.setCreateDate(new Date());
-			this.getDhcpDAO().saveVM(dhcp);
+			this.getDhcpDAO().saveDHCP(dhcp);
 		} catch (BadServerResponse e) {
 			e.printStackTrace();
 		} catch (XenAPIException e) {
