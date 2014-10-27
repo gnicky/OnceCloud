@@ -131,6 +131,9 @@ int main(int argc, char * argv [])
 
 	std::string info="Starting to listen on ";
 	logger.Write(LogLevel::Information,"Starting to listen on "+serialPortPath);
+	int magicNumber=12345678;
+	write(serialPortDescriptor,&magicNumber,sizeof(int));
+	logger.Write(LogLevel::Information,"Magic number written.");
 	while(isRunning)
 	{
 		Request * request=NULL;
