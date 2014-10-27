@@ -336,7 +336,7 @@ public class ImageManager {
 	public JSONObject deleteImage(int userId, String imageId, String imageName) {
 		JSONObject jo = new JSONObject();
 		Date startTime = new Date();
-		boolean result = this.getImageDAO().deleteImage(imageId);
+		boolean result = this.getImageDAO().deleteImage(imageId, userId);
 		jo.put("result", result);
 		// write log and push message
 		Date endTime = new Date();
