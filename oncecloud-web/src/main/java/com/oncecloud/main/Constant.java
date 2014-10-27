@@ -96,8 +96,10 @@ public class Constant {
 	@SuppressWarnings("deprecation")
 	public Connection getConnectionNoTransactional(int userId) {
 		User user = this.getUserDAO().getUserNoTransactional(userId);
-		OCPool pool = this.getPoolDAO().getPoolNoTransactional(user.getUserAllocate());
-		OCHost master = this.getHostDAO().getHostNoTransactional(pool.getPoolMaster());
+		OCPool pool = this.getPoolDAO().getPoolNoTransactional(
+				user.getUserAllocate());
+		OCHost master = this.getHostDAO().getHostNoTransactional(
+				pool.getPoolMaster());
 		String url = "http://" + master.getHostIP() + ":9363";
 		try {
 			Connection c = new Connection(url, "root", master.getHostPwd());

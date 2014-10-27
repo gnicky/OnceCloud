@@ -16,7 +16,7 @@ import com.oncecloud.entity.User;
 
 @Controller
 public class UserController {
-	
+
 	@RequestMapping(value = "/volume", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView volume(HttpServletRequest request) {
@@ -30,7 +30,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/snapshot", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView snapshot(HttpServletRequest request) {
@@ -44,7 +44,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/router", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView router(HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/vnet", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView vnet(HttpServletRequest request) {
@@ -72,7 +72,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/elasticip", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView elasticIP(HttpServletRequest request) {
@@ -86,7 +86,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/loadbalance", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView loadBalance(HttpServletRequest request) {
@@ -100,7 +100,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/firewall", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView firewall(HttpServletRequest request) {
@@ -114,7 +114,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/alarm", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView alarm(HttpServletRequest request) {
@@ -128,7 +128,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/expense/summary", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView expenseSummary(HttpServletRequest request) {
@@ -142,7 +142,7 @@ public class UserController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/expense/query", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView expenseQuery(HttpServletRequest request) {
@@ -162,7 +162,7 @@ public class UserController {
 	public ModelAndView recharge(HttpServletRequest request) {
 		return new ModelAndView("account/recharge");
 	}
-	
+
 	@RequestMapping(value = "/account/history", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView history(HttpServletRequest request) {

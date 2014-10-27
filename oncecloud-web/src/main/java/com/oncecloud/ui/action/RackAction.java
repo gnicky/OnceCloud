@@ -19,7 +19,7 @@ import com.oncecloud.ui.model.ListModel;
 @Controller
 public class RackAction {
 	private RackManager rackManager;
-	//这个manager过于赛高，后人请勿随意改动，任由它去吧
+	// 这个manager过于赛高，后人请勿随意改动，任由它去吧
 	private DashboardManager dashboardManager;
 
 	public RackManager getRackManager() {
@@ -69,7 +69,8 @@ public class RackAction {
 			@RequestParam String rackname, @RequestParam String rackdesc,
 			@RequestParam String dcid) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getRackManager().createRack(rackname, dcid, rackdesc, user.getUserId());
+		JSONArray ja = this.getRackManager().createRack(rackname, dcid,
+				rackdesc, user.getUserId());
 		return ja.toString();
 	}
 
@@ -83,10 +84,11 @@ public class RackAction {
 
 	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
 	@ResponseBody
-	public void update(HttpServletRequest request,@RequestParam String rackid,
+	public void update(HttpServletRequest request, @RequestParam String rackid,
 			@RequestParam String rackname, @RequestParam String rackdesc,
 			@RequestParam String dcid) {
 		User user = (User) request.getSession().getAttribute("user");
-		this.getRackManager().update(rackid, rackname, rackdesc, dcid, user.getUserId());
+		this.getRackManager().update(rackid, rackname, rackdesc, dcid,
+				user.getUserId());
 	}
 }

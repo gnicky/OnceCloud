@@ -318,7 +318,7 @@ public class FirewallDAO {
 		}
 		return rsList;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Object> getRSListOfFirewallOnlyInnerRoute(String firewallId) {
 		List<Object> rsList = null;
@@ -463,10 +463,10 @@ public class FirewallDAO {
 		}
 		return result;
 	}
-	
-	///cyh 插入用于路由器内部的防火墙 默认值状态 为2 ，在防火墙列表中，也不显示出来
-	public boolean insertFirewallForinnerRoute(String firewallId, String firewallName,
-			int firewallUID, Date createDate) {
+
+	// /cyh 插入用于路由器内部的防火墙 默认值状态 为2 ，在防火墙列表中，也不显示出来
+	public boolean insertFirewallForinnerRoute(String firewallId,
+			String firewallName, int firewallUID, Date createDate) {
 		boolean result = false;
 		Session session = null;
 		try {

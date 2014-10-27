@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class DetailControllerAdmin {
-	
+
 	@RequestMapping(value = "/datacenter/detail")
 	@ResponseBody
 	public ModelAndView datacenterDetail(HttpServletRequest request) {
@@ -42,7 +42,8 @@ public class DetailControllerAdmin {
 		String hostid = request.getParameter("hostid");
 		if (hostid != null) {
 			request.getSession().setAttribute("hostid", hostid);
-			request.getSession().setAttribute("showId", "host-" + hostid.substring(0, 8));
+			request.getSession().setAttribute("showId",
+					"host-" + hostid.substring(0, 8));
 			return new ModelAndView("admin/detail/hostdetail", model);
 		} else {
 			if (request.getSession().getAttribute("hostid") != null) {
@@ -92,8 +93,7 @@ public class DetailControllerAdmin {
 			}
 		}
 	}
-	
-	
+
 	@RequestMapping(value = "/switch/detail")
 	@ResponseBody
 	public ModelAndView switchDetail(HttpServletRequest request) {
@@ -112,7 +112,7 @@ public class DetailControllerAdmin {
 			}
 		}
 	}
-	
+
 	@RequestMapping(value = "/companymap/detail")
 	@ResponseBody
 	public ModelAndView companymapDetail(HttpServletRequest request) {
@@ -131,5 +131,5 @@ public class DetailControllerAdmin {
 			}
 		}
 	}
-	
+
 }

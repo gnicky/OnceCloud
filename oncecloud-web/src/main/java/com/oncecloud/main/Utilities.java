@@ -31,13 +31,13 @@ public class Utilities {
 		Date date = format.parse(dateTime);
 		return date.getTime();
 	}
-	
+
 	// 格式化日期和时间
 	public static String formatTime(Date dateTime) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(dateTime);
 	}
-	
+
 	public static Date String2Month(String month) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
 		Date date = null;
@@ -70,7 +70,8 @@ public class Utilities {
 
 	public final static String MD5(String pwd) {
 		// 用于加密的字符
-		char md5String[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+		char md5String[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'A', 'B', 'C', 'D', 'E', 'F' };
 		try {
 			// 使用平台的默认字符集将此 String 编码为 byte序列，并将结果存储到一个新的 byte数组中
 			byte[] btInput = pwd.getBytes();
@@ -177,21 +178,21 @@ public class Utilities {
 		}
 		return macAddr;
 	}
-	
+
 	public static JSONObject createLogInfo(String key, String value) {
 		JSONObject logInfo = new JSONObject();
 		try {
 			logInfo.put("key", URLEncoder.encode(key, "utf-8"));
-			logInfo.put("value", URLEncoder.encode(value, "utf-8").replace("+", "%20"));
+			logInfo.put("value",
+					URLEncoder.encode(value, "utf-8").replace("+", "%20"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return logInfo;
 	}
-	
+
 	public static String encodeText(String name) {
-		if(name==null || name=="" || name.length()==0)
-		{
+		if (name == null || name == "" || name.length() == 0) {
 			return "";
 		}
 		String result = "";
@@ -202,9 +203,10 @@ public class Utilities {
 		}
 		return result;
 	}
-	
+
 	public static boolean hasForbiddenChar(String str) {
-		Pattern pattern = Pattern.compile("[`~!$%^&#*()+|\\\\\\]\\[\\]\\{\\}:;'\\,<>?]+");
+		Pattern pattern = Pattern
+				.compile("[`~!$%^&#*()+|\\\\\\]\\[\\]\\{\\}:;'\\,<>?]+");
 		Matcher m = pattern.matcher(str);
 		return m.find();
 	}

@@ -75,7 +75,7 @@ public class AccountController {
 		if (request.getSession().getAttribute("user") != null) {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
-		
+
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://" + request.getServerName()
 				+ ":" + request.getServerPort() + path + "/";
@@ -108,8 +108,9 @@ public class AccountController {
 				int level = userlogin.getUserLevel();
 				if (level != 0) {
 					String path = request.getContextPath();
-					String basePath = request.getScheme() + "://" + request.getServerName()
-							+ ":" + request.getServerPort() + path + "/";
+					String basePath = request.getScheme() + "://"
+							+ request.getServerName() + ":"
+							+ request.getServerPort() + path + "/";
 					request.getSession().setAttribute("user", userlogin);
 					request.getSession().setAttribute("basePath", basePath);
 					return new ModelAndView(new RedirectView("/dashboard"));
@@ -130,7 +131,7 @@ public class AccountController {
 		if (request.getSession().getAttribute("user") != null) {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
-		
+
 		String path = request.getContextPath();
 		String basePath = request.getScheme() + "://" + request.getServerName()
 				+ ":" + request.getServerPort() + path + "/";
@@ -162,8 +163,9 @@ public class AccountController {
 				int level = userlogin.getUserLevel();
 				if (level == 0) {
 					String path = request.getContextPath();
-					String basePath = request.getScheme() + "://" + request.getServerName()
-							+ ":" + request.getServerPort() + path + "/";
+					String basePath = request.getScheme() + "://"
+							+ request.getServerName() + ":"
+							+ request.getServerPort() + path + "/";
 					request.getSession().setAttribute("user", userlogin);
 					request.getSession().setAttribute("basePath", basePath);
 					return new ModelAndView(new RedirectView("/dashboard"));
@@ -177,12 +179,12 @@ public class AccountController {
 			return new ModelAndView(new RedirectView("/backdoor"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/logout", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView logout(HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") != null) {
-			User user = (User)request.getSession().getAttribute("user");
+			User user = (User) request.getSession().getAttribute("user");
 			request.getSession().removeAttribute("user");
 			request.getSession().removeAttribute("basePath");
 			if (user.getUserLevel() > 0) {
@@ -194,7 +196,7 @@ public class AccountController {
 			return new ModelAndView(new RedirectView("/login"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/404", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView pageNotFound(HttpServletRequest request) {

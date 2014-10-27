@@ -16,7 +16,7 @@ import com.oncecloud.entity.User;
 
 @Controller
 public class AdminController {
-	
+
 	@RequestMapping(value = "/user", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView user(HttpServletRequest request) {
@@ -25,13 +25,14 @@ public class AdminController {
 		model.put("sideActive", 3);
 		model.put("title", "用户管理");
 		if (user.getUserLevel() == 0) {
-			request.getSession().setAttribute("userid", request.getParameter("userid"));
+			request.getSession().setAttribute("userid",
+					request.getParameter("userid"));
 			return new ModelAndView("admin/user", model);
 		} else {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
+
 	@RequestMapping(value = "/storage", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView storage(HttpServletRequest request) {
@@ -59,8 +60,8 @@ public class AdminController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
-	@RequestMapping(value = "/pool", method = {RequestMethod.GET})
+
+	@RequestMapping(value = "/pool", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView pool(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -73,8 +74,8 @@ public class AdminController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
-	@RequestMapping(value = "/address", method = {RequestMethod.GET})
+
+	@RequestMapping(value = "/address", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView address(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -88,7 +89,7 @@ public class AdminController {
 		}
 	}
 
-	@RequestMapping(value = "/datacenter", method = {RequestMethod.GET})
+	@RequestMapping(value = "/datacenter", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView datacenter(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -102,7 +103,7 @@ public class AdminController {
 		}
 	}
 
-	@RequestMapping(value = "/rack", method = {RequestMethod.GET})
+	@RequestMapping(value = "/rack", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView rack(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -115,8 +116,8 @@ public class AdminController {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
-	
-	@RequestMapping(value = "/CompanyMap", method = {RequestMethod.GET})
+
+	@RequestMapping(value = "/CompanyMap", method = { RequestMethod.GET })
 	@ResponseBody
 	public ModelAndView companyMap(HttpServletRequest request) {
 		Map<String, Object> model = new HashMap<String, Object>();
@@ -124,9 +125,8 @@ public class AdminController {
 		model.put("title", "用户分布展示");
 		User user = (User) request.getSession().getAttribute("user");
 		if (user.getUserLevel() == 0) {
-		    return new ModelAndView("admin/companymap",model);
-		}
-		else {
+			return new ModelAndView("admin/companymap", model);
+		} else {
 			return new ModelAndView(new RedirectView("/dashboard"));
 		}
 	}
