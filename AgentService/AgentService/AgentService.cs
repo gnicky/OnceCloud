@@ -58,6 +58,8 @@ namespace AgentService
                 using (var serialPort = new SerialPort("COM1", 115200, Parity.None, 8, StopBits.One))
                 {
                     serialPort.Open();
+                    int magicNumber = 12345678;
+                    serialPort.Write(BitConverter.GetBytes(magicNumber), 0, 4);
                     while (this.Running)
                     {
                         byte[] requestLengthBuffer = new byte[4];
