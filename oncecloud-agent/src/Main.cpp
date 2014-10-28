@@ -159,7 +159,7 @@ int main(int argc, char * argv [])
 			request=handlers[requestType]->ParseRequest(requestString);
 			response=handlers[requestType]->Handle(request);
 
-			int responseLength=response->GetRawResponse().size()+1;
+			int responseLength=response->GetRawResponse().size();
 			write(serialPortDescriptor,&responseLength,sizeof(int));
 			write(serialPortDescriptor,response->GetRawResponse().c_str(),responseLength);
 			logger.Write(LogLevel::Information,"Send Response: Type = "+requestType);
