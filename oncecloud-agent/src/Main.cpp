@@ -75,6 +75,7 @@ void SetSerialPort(int serialPortDescriptor)
 {
 	termios serialPortOption;
 	tcgetattr(serialPortDescriptor,&serialPortOption);
+	tcflush(serialPortDescriptor,TCIOFLUSH);
 
 	// Raw Mode
 	serialPortOption.c_lflag&=~ICANON;
@@ -104,6 +105,7 @@ void SetSerialPort(int serialPortDescriptor)
 	cfsetospeed(&serialPortOption,B115200);
 	
 	tcsetattr(serialPortDescriptor,TCSANOW,&serialPortOption);
+	tcflush(serialPortDescriptor, TCIOFLUSH);
 }
 
 int main(int argc, char * argv [])
