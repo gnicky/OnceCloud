@@ -82,6 +82,12 @@ void SetSerialPort(int serialPortDescriptor)
 	serialPortOption.c_lflag&=~ECHOE;
 	serialPortOption.c_lflag&=~ISIG;
 	serialPortOption.c_oflag&=~OPOST;
+
+	serialPortOption.c_cflag|=(CLOCAL|CREAD);
+	serialPortOption.c_oflag&=~(ONLCR|OCRNL);
+	serialPortOption.c_iflag&=~(ICRNL|INLCR);
+	serialPortOption.c_iflag&=~(IXON|IXOFF|IXANY);
+
 	// Character Size
 	serialPortOption.c_cflag&=~CSIZE;
 	serialPortOption.c_cflag|=CS8;
