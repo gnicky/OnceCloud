@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "oc_exc")
-public class OCException {
+public class OCHException {
 
 	private Integer excId;
 	private Integer excUid;

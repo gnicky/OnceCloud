@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.OCExceptionDAO;
-import com.oncecloud.entity.OCException;
+import com.oncecloud.entity.OCHException;
 import com.oncecloud.entity.User;
 
 @Component
@@ -47,7 +47,7 @@ public class ActionAOP {
 	@AfterThrowing(pointcut="myMethod()",throwing="throwable")
 	public void afterThrowingException(JoinPoint joinpoint,RuntimeException throwable) {
 		User user = (User) request.getSession().getAttribute("user");
-		OCException oce = new OCException();
+		OCHException oce = new OCHException();
 		if(user != null) {
 			oce.setExcUid(user.getUserId());
 		}

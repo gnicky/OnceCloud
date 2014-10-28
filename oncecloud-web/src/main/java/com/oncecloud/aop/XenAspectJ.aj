@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oncecloud.dao.OCExceptionDAO;
-import com.oncecloud.entity.OCException;
+import com.oncecloud.entity.OCHException;
 import com.oncecloud.entity.User;
 
 public aspect XenAspectJ {
@@ -36,7 +36,7 @@ public aspect XenAspectJ {
 
 	after() throwing(Exception ex) : mypointcut() {
 		User user = (User) request.getSession().getAttribute("user");
-		OCException oce = new OCException();
+		OCHException oce = new OCHException();
 		if(user != null) {
 			oce.setExcUid(user.getUserId());
 		}
