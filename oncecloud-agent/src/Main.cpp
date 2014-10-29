@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <sys/file.h>
@@ -139,9 +140,9 @@ int main(int argc, char * argv [])
 
 	std::string info="Starting to listen on ";
 	logger.Write(LogLevel::Information,"Starting to listen on "+serialPortPath);
-	int magicNumber=12345678;
-	write(serialPortDescriptor,&magicNumber,sizeof(int));
-	logger.Write(LogLevel::Information,"Magic number written.");
+	const char * ready="Ready";
+	write(serialPortDescriptor,ready,strlen(ready));
+	logger.Write(LogLevel::Information,"Greeting string written.");
 	while(isRunning)
 	{
 		Request * request=NULL;
