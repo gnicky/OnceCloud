@@ -469,14 +469,12 @@ public class VMUtil {
 			Long vcpuNumber = vm.getVCPUsMax(conn);
 			if(vcpuNumber > new Long(cpuNumber))
 			{
-				//�Ӵ��С
 				vm.setVCPUsNumberLive(conn, new Long(cpuNumber));
 				vm.setVCPUsMax(conn, new Long(cpuNumber));
 				vm.setVCPUsAtStartup(conn, new Long(cpuNumber));
 			}
 			else if(vcpuNumber < new Long(cpuNumber))
 			{
-				//��С���
 				vm.setVCPUsMax(conn, new Long(cpuNumber));
 				vm.setVCPUsNumberLive(conn, new Long(cpuNumber));
 				vm.setVCPUsAtStartup(conn, new Long(cpuNumber));
@@ -485,14 +483,12 @@ public class VMUtil {
 			Long memory = vm.getMemoryStaticMax(conn);
 			if(memory > new Long((long)memoryValue * 1024 * 1024 ))
 			{
-				//�Ӵ��С
 				vm.setMemoryDynamicMax(conn, new Long((long)memoryValue * 1024 * 1024));
 				vm.setMemoryDynamicMin(conn, new Long((long)512 * 1024 * 1024));
 				vm.setMemoryStaticMax(conn, new Long((long)memoryValue * 1024 * 1024 ));
 			}
 			else if(memory < new Long((long)memoryValue * 1024 * 1024 ))
 			{
-				//��С���
 				vm.setMemoryStaticMax(conn, new Long((long)memoryValue * 1024 * 1024 ));
 				vm.setMemoryDynamicMax(conn, new Long((long)memoryValue * 1024 * 1024));
 				vm.setMemoryDynamicMin(conn, new Long((long)512 * 1024 * 1024));

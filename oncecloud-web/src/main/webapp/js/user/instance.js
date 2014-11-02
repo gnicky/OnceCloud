@@ -28,6 +28,7 @@ function allDisable() {
     $("#backup").addClass('btn-forbidden');
     $("#image").addClass('btn-forbidden');
     $("#addtovlan").addClass('btn-forbidden');
+    $('#adjust').addClass('btn-forbidden');
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
@@ -60,11 +61,24 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
             $("#startup").attr('disabled', false).removeClass('btn-disable');
         }
     }
+    if (total == 1 && stopped == 1) {
+    	$('#adjust').removeClass('btn-forbidden');
+    }
 });
 
 $('#create, #image, #addtovlan').on('click', function (event) {
     event.preventDefault();
     $('#InstanceModalContainer').load($(this).attr('url'), '', function () {
+        $('#InstanceModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
+$('#adjust').on('click', function (event) {
+	event.preventDefault();
+    $('#InstanceModalContainer').load('user/modal/adjust', '', function () {
         $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true

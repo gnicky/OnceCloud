@@ -29,7 +29,13 @@ public class OCExceptionDAO {
 	public void save(OCHException exc) {
 		Session session = null;
 		try {
-			session = this.getSessionHelper().getMainSession();
+			if(this.getSessionHelper() != null) {
+				session = this.getSessionHelper().getMainSession();
+			}
+			if (session == null) {
+				SessionHelper sh = new SessionHelper();
+				session = sh.getMainSession();
+			}
 			session.beginTransaction();
 			session.save(exc);
 			session.getTransaction().commit();

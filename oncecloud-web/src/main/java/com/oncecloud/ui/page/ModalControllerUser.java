@@ -139,6 +139,11 @@ public class ModalControllerUser {
 	public ModelAndView forwadport(HttpServletRequest request) {
 		return new ModelAndView("user/modal/forwardingport");
 	}
+
+	@RequestMapping(value = "/user/modal/adjust")
+	public ModelAndView adjust(HttpServletRequest request) {
+		return new ModelAndView("user/modal/adjustVM");
+	}
 	
 	@RequestMapping(value = "/expense/view", method = { RequestMethod.POST })
 	public ModelAndView viewExpense(HttpServletRequest request, @RequestParam String type, @RequestParam String resourceUuid) {

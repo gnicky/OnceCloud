@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessagePush {
 	private final static Logger logger = Logger.getLogger(MessagePush.class);
-	
+
 	private MessageWebSocketHandler messageWebSocketHandler;
 
 	private MessageWebSocketHandler getMessageWebSocketHandler() {
@@ -42,7 +42,8 @@ public class MessagePush {
 	}
 
 	public void editRowStatus(int userId, String rowId, String icon, String word) {
-		logger.info("User [" + userId + "] RowId [" + rowId + "] Icon [" + icon + "] Word [" + word + "]");
+		logger.info("User [" + userId + "] RowId [" + rowId + "] Icon [" + icon
+				+ "] Word [" + word + "]");
 		this.getMessageWebSocketHandler().sendMessageToUser(userId,
 				new EditRowStatusMessage(rowId, icon, word));
 	}
@@ -66,5 +67,10 @@ public class MessagePush {
 	public void editRowConsole(int userId, String rowId, String option) {
 		this.getMessageWebSocketHandler().sendMessageToUser(userId,
 				new EditRowConsoleMessage(rowId, option));
+	}
+
+	public void editRowCpuMem(int userId, String rowId, String cpu, String mem) {
+		this.getMessageWebSocketHandler().sendMessageToUser(userId,
+				new EditCpuMem(rowId, cpu, mem));
 	}
 }

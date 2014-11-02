@@ -101,6 +101,13 @@ function ws_edit_row_status(obj) {
     }
 }
 
+function ws_edit_row_cpumem(obj) {
+	var thistr = $('#tablebody').find('[rowid="' + obj.rowId + '"]');
+	if (thistr.size() == 1) {
+		thistr.find('[name="cpuCore"]').html(obj.cpu+"&nbsp;核");
+		thistr.find('[name="memoryCapacity"]').html(obj.mem+"&nbsp;GB");
+	}
+}
 
 var arrayid;
 

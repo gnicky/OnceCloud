@@ -22,6 +22,7 @@
 					<li><a class="btn-forbidden backup" id="backup" url="${basePath}snapshot/create?rsid=null&rstype=null&rsname=null"><span class="glyphicon glyphicon-camera"></span>备份</a></li>
 					<li><a class="btn-forbidden" id="image" url="${basePath}image/clone?rsid="><span class="glyphicon glyphicon-record"></span>制作映像</a></li>
 					<li><a class="btn-forbidden" id="destroy"><span class="glyphicon glyphicon-trash"></span>销毁</a></li>
+					<li><a class="btn-forbidden" id="adjust"><span class="glyphicon glyphicon-cog"></span>更改配置</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

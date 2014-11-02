@@ -136,7 +136,8 @@ public class VMAction {
 
 	@RequestMapping(value = "/CreateVM", method = { RequestMethod.POST })
 	@ResponseBody
-	public void createVM(HttpServletRequest request, CreateVMModel createvmModel, @RequestParam String vnetuuid) {
+	public void createVM(HttpServletRequest request,
+			CreateVMModel createvmModel, @RequestParam String vnetuuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVmManager().createVM(createvmModel.getVmUuid(),
 				createvmModel.getImageUuid(), user.getUserId(),
@@ -148,9 +149,11 @@ public class VMAction {
 	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
 	@ResponseBody
 	public String unbindNet(HttpServletRequest request,
-			@RequestParam String uuid, @RequestParam String content, @RequestParam String conid) {
+			@RequestParam String uuid, @RequestParam String content,
+			@RequestParam String conid) {
 		User user = (User) request.getSession().getAttribute("user");
-		JSONObject jo = this.getVmManager().unbindNet(uuid, user, content, conid);
+		JSONObject jo = this.getVmManager().unbindNet(uuid, user, content,
+				conid);
 		return jo.toString();
 	}
 
@@ -198,76 +201,100 @@ public class VMAction {
 			@RequestParam String vmUuid, @RequestParam String vmPWD,
 			@RequestParam int vmPlatform, @RequestParam String vmName,
 			@RequestParam String vmIP, @RequestParam int vmUID) {
-		this.getVmManager().saveToDataBase(vmUuid, vmPWD, vmUID,
-				vmPlatform, vmName, vmIP);
+		this.getVmManager().saveToDataBase(vmUuid, vmPWD, vmUID, vmPlatform,
+				vmName, vmIP);
 	}
-	
+
 	@RequestMapping(value = "/MacList", method = { RequestMethod.POST })
 	@ResponseBody
-	public String getMacList(HttpServletRequest request, @RequestParam String uuid, 
-			@RequestParam String type) {
+	public String getMacList(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String type) {
 		JSONArray ja = this.getVmManager().getMacs(uuid, type);
 		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/NetList", method = { RequestMethod.POST })
 	@ResponseBody
-	public String getNetList(HttpServletRequest request, @RequestParam String uuid, 
-			@RequestParam String type) {
+	public String getNetList(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String type) {
 		JSONArray ja = this.getVmManager().getNets(uuid, type);
 		return ja.toString();
 	}
-	
+
 	@RequestMapping(value = "/AddMac", method = { RequestMethod.POST })
 	@ResponseBody
-	public String addMac(HttpServletRequest request, @RequestParam String uuid, 
+	public String addMac(HttpServletRequest request, @RequestParam String uuid,
 			@RequestParam String type, @RequestParam String physical,
 			@RequestParam String vnetid) {
 		JSONObject jo = new JSONObject();
-		jo.put("result", this.getVmManager().addMac(uuid, type, physical, vnetid));
+		jo.put("result",
+				this.getVmManager().addMac(uuid, type, physical, vnetid));
 		return jo.toString();
 	}
 
 	@RequestMapping(value = "/DeleteMac", method = { RequestMethod.POST })
 	@ResponseBody
-	public String deleteMac(HttpServletRequest request, @RequestParam String uuid, 
-			@RequestParam String type, @RequestParam String vifUuid) {
+	public String deleteMac(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String type,
+			@RequestParam String vifUuid) {
 		JSONObject jo = new JSONObject();
 		jo.put("result", this.getVmManager().deleteMac(uuid, type, vifUuid));
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/ModifyVnet", method = { RequestMethod.POST })
 	@ResponseBody
-	public String modifyVnet(HttpServletRequest request, @RequestParam String uuid, 
-			@RequestParam String type, @RequestParam String vifUuid, @RequestParam String vnetid) {
+	public String modifyVnet(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String type,
+			@RequestParam String vifUuid, @RequestParam String vnetid) {
 		JSONObject jo = new JSONObject();
-		jo.put("result", this.getVmManager().modifyVnet(uuid, type, vnetid, vifUuid));
+		jo.put("result",
+				this.getVmManager().modifyVnet(uuid, type, vnetid, vifUuid));
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/ModifyPhysical", method = { RequestMethod.POST })
 	@ResponseBody
-	public String modifyPhysical(HttpServletRequest request, @RequestParam String uuid, 
-			@RequestParam String type, @RequestParam String vifUuid, @RequestParam String physical) {
+	public String modifyPhysical(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String type,
+			@RequestParam String vifUuid, @RequestParam String physical) {
 		JSONObject jo = new JSONObject();
-		jo.put("result", this.getVmManager().modifyPhysical(uuid, type, physical, vifUuid));
+		jo.put("result",
+				this.getVmManager().modifyPhysical(uuid, type, physical,
+						vifUuid));
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/TemplateToVM", method = { RequestMethod.POST })
 	@ResponseBody
-	public String templateToVM(HttpServletRequest request, @RequestParam String uuid) {
+	public String templateToVM(HttpServletRequest request,
+			@RequestParam String uuid) {
 		JSONObject jo = new JSONObject();
 		jo.put("result", this.getVmManager().templateToVM(uuid));
 		return jo.toString();
 	}
-	
+
 	@RequestMapping(value = "/VMToTemplate", method = { RequestMethod.POST })
 	@ResponseBody
-	public String vmToTemplate(HttpServletRequest request, @RequestParam String uuid) {
+	public String vmToTemplate(HttpServletRequest request,
+			@RequestParam String uuid) {
 		JSONObject jo = new JSONObject();
 		jo.put("result", this.getVmManager().vmToTemplate(uuid));
 		return jo.toString();
+	}
+
+	@RequestMapping(value = "/VMAdjust", method = { RequestMethod.POST })
+	@ResponseBody
+	public String adjustVM(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam int mem,
+			@RequestParam int cpu, @RequestParam String content,
+			@RequestParam String conid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = new JSONObject();
+		jo.put("result",
+				this.getVmManager().adjustMemAndCPU(uuid, user.getUserId(),
+						cpu, mem, content, conid));
+		return jo.toString();
+
 	}
 }

@@ -64,11 +64,7 @@ public class VMManagerTest {
 	
 	@Test
 	public void testImage() {
-//		this.getVmManager().templateToVM("bb335e71-7996-3fb5-1be5-050256028e93");
-//		this.getVmManager().vmToTemplate("bb335e71-7996-3fb5-1be5-050256028e93");
-//		this.getVmManager().templateToVM("e9e2c221-1633-1905-815a-e9497f8f4b7a");
-//		this.getVmManager().vmToTemplate("e9e2c221-1633-1905-815a-e9497f8f4b7a");
-//		System.out.println(this.getVmManager().checkImage("e9e2c221-1633-1905-815a-e9497f8f4b7a"));
+//		this.getVmManager().adjustMemAndCPU("b306dc9e-728c-4b9d-ae96-ffe7e0f48063", 36, 1, 512);
 	}
 
 	/*@Test

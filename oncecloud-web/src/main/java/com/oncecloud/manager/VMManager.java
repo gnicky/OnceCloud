@@ -1343,7 +1343,8 @@ public class VMManager {
 		}
 	}
 
-	public JSONObject unbindNet(String uuid, User user, String content, String conid) {
+	public JSONObject unbindNet(String uuid, User user, String content,
+			String conid) {
 		JSONObject jo = new JSONObject();
 		OCVM vm = this.getVmDAO().getVM(uuid);
 		String vlan = vm.getVmVlan();
@@ -1377,11 +1378,13 @@ public class VMManager {
 		jo.put("result", result);
 		if (result) {
 			this.getVmDAO().unbindNet(uuid);
-			this.getMessagePush().pushMessageClose(user.getUserId(), content, conid);
+			this.getMessagePush().pushMessageClose(user.getUserId(), content,
+					conid);
 			this.getMessagePush().pushMessage(user.getUserId(),
 					Utilities.stickyToSuccess("主机解绑网络成功"));
 		} else {
-			this.getMessagePush().pushMessageClose(user.getUserId(), content, conid);
+			this.getMessagePush().pushMessageClose(user.getUserId(), content,
+					conid);
 			this.getMessagePush().pushMessage(user.getUserId(),
 					Utilities.stickyToError("主机解绑网络失败"));
 		}
@@ -1509,9 +1512,8 @@ public class VMManager {
 		boolean preCreate = false;
 		boolean dbRollback = true;
 		try {
-			preCreate = this.getVmDAO().preCreateVM(vmUuid, null, 1, name,
-					1, null, memory, cpu, VMManager.POWER_CREATE, 1,
-					new Date());
+			preCreate = this.getVmDAO().preCreateVM(vmUuid, null, 1, name, 1,
+					null, memory, cpu, VMManager.POWER_CREATE, 1, new Date());
 			if (preCreate) {
 				conn = this.getConstant().getConnectionFromPool(poolUuid);
 				String hostUuid = this.getAllocateHost(poolUuid, memory);
@@ -1809,8 +1811,52 @@ public class VMManager {
 			return result;
 		}
 	}
-	
+
 	public int getCount(int userId) {
 		return this.getVmDAO().countVMsOfUser(userId);
+	}
+
+	public boolean adjustMemAndCPU(String uuid, int userId, int cpu, int mem, String content, String conid) {
+		Connection conn = null;
+		try {
+			conn = this.getConstant().getConnection(userId);
+			VM vm = VM.getByUuid(conn, uuid);
+			if (VMUtil.AdjustCpuMemory(vm, cpu, mem * 1024, conn)) {
+				OCVM ocvm = this.getVmDAO().getVM(uuid);
+				ocvm.setVmCpu(cpu);
+				ocvm.setVmMem(mem * 1024);
+				this.getVmDAO().updateVM(ocvm);
+				this.getMessagePush().pushMessageClose(userId, content, conid);
+				this.getMessagePush().editRowCpuMem(userId, uuid,
+						String.valueOf(cpu), String.valueOf(mem));
+				this.getMessagePush().pushMessage(userId,
+						Utilities.stickyToSuccess("配置修改成功"));
+			}
+			return true;
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		}
 	}
 }
