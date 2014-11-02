@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <sys/file.h>
@@ -75,6 +76,7 @@ void SetSerialPort(int serialPortDescriptor)
 {
 	termios serialPortOption;
 	tcgetattr(serialPortDescriptor,&serialPortOption);
+	tcflush(serialPortDescriptor,TCIOFLUSH);
 
 	// Raw Mode
 	serialPortOption.c_lflag&=~ICANON;
@@ -82,6 +84,12 @@ void SetSerialPort(int serialPortDescriptor)
 	serialPortOption.c_lflag&=~ECHOE;
 	serialPortOption.c_lflag&=~ISIG;
 	serialPortOption.c_oflag&=~OPOST;
+
+	serialPortOption.c_cflag|=(CLOCAL|CREAD);
+	serialPortOption.c_oflag&=~(ONLCR|OCRNL);
+	serialPortOption.c_iflag&=~(ICRNL|INLCR);
+	serialPortOption.c_iflag&=~(IXON|IXOFF|IXANY);
+
 	// Character Size
 	serialPortOption.c_cflag&=~CSIZE;
 	serialPortOption.c_cflag|=CS8;
@@ -98,6 +106,7 @@ void SetSerialPort(int serialPortDescriptor)
 	cfsetospeed(&serialPortOption,B115200);
 	
 	tcsetattr(serialPortDescriptor,TCSANOW,&serialPortOption);
+	tcflush(serialPortDescriptor, TCIOFLUSH);
 }
 
 int main(int argc, char * argv [])
@@ -131,9 +140,9 @@ int main(int argc, char * argv [])
 
 	std::string info="Starting to listen on ";
 	logger.Write(LogLevel::Information,"Starting to listen on "+serialPortPath);
-	int magicNumber=12345678;
-	write(serialPortDescriptor,&magicNumber,sizeof(int));
-	logger.Write(LogLevel::Information,"Magic number written.");
+	const char * ready="Ready";
+	write(serialPortDescriptor,ready,strlen(ready));
+	logger.Write(LogLevel::Information,"Greeting string written.");
 	while(isRunning)
 	{
 		Request * request=NULL;
@@ -159,7 +168,7 @@ int main(int argc, char * argv [])
 			request=handlers[requestType]->ParseRequest(requestString);
 			response=handlers[requestType]->Handle(request);
 
-			int responseLength=response->GetRawResponse().size()+1;
+			int responseLength=response->GetRawResponse().size();
 			write(serialPortDescriptor,&responseLength,sizeof(int));
 			write(serialPortDescriptor,response->GetRawResponse().c_str(),responseLength);
 			logger.Write(LogLevel::Information,"Send Response: Type = "+requestType);
