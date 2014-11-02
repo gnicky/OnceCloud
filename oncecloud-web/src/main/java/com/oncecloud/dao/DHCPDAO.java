@@ -60,7 +60,7 @@ public class DHCPDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	public boolean addDHCPPool(String prefix, int start, int end, Date date) {
+	public boolean addDHCPPool(int userId, String prefix, int start, int end, Date date) {
 		boolean result = true;
 		Session session = null;
 		try {
@@ -86,7 +86,7 @@ public class DHCPDAO {
 				}
 			}
 			total.put("hosts", ipMacArray);
-			Connection connection = this.getConstant().getConnectionNoTransactional(1);
+			Connection connection = this.getConstant().getConnectionNoTransactional(userId);
 			boolean bindResult = Host.bindIpMac(connection, total.toString());
 			if (bindResult) {
 				for (DHCP dhcp : dhcpList) {

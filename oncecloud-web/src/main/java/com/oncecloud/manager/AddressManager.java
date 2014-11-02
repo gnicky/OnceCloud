@@ -128,7 +128,7 @@ public class AddressManager {
 	public JSONArray addDHCPPool(int userId, String prefix, int start, int end) {
 		JSONArray ja = new JSONArray();
 		Date startTime = new Date();
-		boolean result = this.getDhcpDAO().addDHCPPool(prefix, start, end,
+		boolean result = this.getDhcpDAO().addDHCPPool(userId, prefix, start, end,
 				new Date());
 		JSONObject jo = new JSONObject();
 		jo.put("result", result);

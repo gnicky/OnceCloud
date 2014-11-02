@@ -134,7 +134,7 @@ public class UserDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			Query query = session
-					.createQuery("from User where userName = :userName");
+					.createQuery("from User where userName = :userName and userStatus > 0");
 			query.setString("userName", userName);
 			user = (User) query.uniqueResult();
 			session.getTransaction().commit();
