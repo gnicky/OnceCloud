@@ -41,13 +41,13 @@ public class AOPTest {
 	public void aopTest() {
 //		System.out.println(this.getVmdao().countVMsOfUser(34));
 //		System.out.println(this.getVmManager().getCount(34));
-		String ip = null;
+	/*	String ip = null;
 		ip = "";
 		if (ip.equals("")) {
 			System.out.println("ip");
 		} else {
 			System.out.println("null");
-		}
+		}*/
 	}
 	
 }
