@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.oncecloud.common.helper.Helper;
+import com.oncecloud.helper.Helper;
 
 @Entity
 @Table(name = "fee_vm")

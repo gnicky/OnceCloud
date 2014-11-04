@@ -24,7 +24,7 @@
 	<mvc:interceptors>  
 		<mvc:interceptor>  
 			<mvc:mapping path="/**" /> 
-			<bean class="com.oncecloud.common.interceptor.CommonInterceptor"> 
+			<bean class="com.oncecloud.interceptor.CommonInterceptor"> 
 				<property name="uncheckUrls"> 
 					<list> 
 						<value>/login</value> 

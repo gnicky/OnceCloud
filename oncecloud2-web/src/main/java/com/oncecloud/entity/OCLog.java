@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.oncecloud.common.log.LogConstant;
+import com.oncecloud.log.LogConstant;
 
 /**
  * @author hehai

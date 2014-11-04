@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.oncecloud.common.main.Utilities;
+import com.oncecloud.main.Utilities;
 
 /**
  * @author yly hehai
