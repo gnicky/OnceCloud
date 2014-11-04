@@ -332,8 +332,8 @@ public class HostDAOImpl implements HostDAO {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.save(host);
-				this.getOverViewDAO().updateOverViewfieldNoTransaction(
-						"viewServer", true);
+			/*	this.getOverViewDAO().updateOverViewfieldNoTransaction(
+						"viewServer", true);*/
 				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
