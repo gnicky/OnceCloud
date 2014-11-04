@@ -20,7 +20,8 @@ public aspect XenAspectJ {
 		oce.setExcClassName(thisJoinPoint.getSignature().toString());
 		String exception = ex.getMessage() + "|" + ex.getCause() + "|";
 		for (StackTraceElement str : ex.getStackTrace()) {
-			if(str.getClassName().contains("com.oncecloud")) {
+			if(str.getClassName().contains("com.oncecloud") ||
+					str.getClassName().contains("com.once")) {
 				exception += str.toString() + "|";
 			}
 		}
