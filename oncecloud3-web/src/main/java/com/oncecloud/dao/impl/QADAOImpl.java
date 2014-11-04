@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.QADAO;
 import com.oncecloud.dao.UserDAO;
@@ -13,6 +14,7 @@ import com.oncecloud.entity.QA;
 import com.oncecloud.entity.User;
 import com.oncecloud.helper.SessionHelper;
 
+@Component("QADAO")
 public class QADAOImpl implements QADAO {
 	private SessionHelper sessionHelper;
 
