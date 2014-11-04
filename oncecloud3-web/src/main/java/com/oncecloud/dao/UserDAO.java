@@ -17,13 +17,13 @@ public interface UserDAO {
 
 	public abstract User getUserNoTransactional(int userId);
 
-//	/**
-//	 * 获取用户（通过用户名）
-//	 * 
-//	 * @param userName
-//	 * @return
-//	 */
-//	public abstract User getUser(String userName);
+	/**
+	 * 获取用户（通过用户名）
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	public abstract User getUser(String userName);
 //
 //	/**
 //	 * 获取一页用户列表
