@@ -1,0 +1,26 @@
+package com.oncecloud.dao;
+
+import java.util.List;
+
+import com.oncecloud.entity.Datacenter;
+
+public interface DatacenterDAO {
+
+/*	public abstract int countAllDatacenter(String search);
+
+	public abstract Datacenter createDatacenter(String dcName,
+			String dcLocation, String dcDesc);
+
+	public abstract boolean deleteDatacenter(String dcUuid);
+
+	public abstract List<Datacenter> getAllPageDCList();
+
+	public abstract Datacenter getDatacenter(String dcUuid);
+
+	public abstract List<Datacenter> getOnePageDCList(int page, int limit,
+			String search);
+
+	public abstract boolean updateDatacenter(String dcUuid, String dcName,
+			String dcLocation, String dcDesc);*/
+
+}

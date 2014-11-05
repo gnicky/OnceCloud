@@ -28,7 +28,7 @@ public class HostDAOImpl implements HostDAO {
 		this.sessionHelper = sessionHelper;
 	}
 	
-	public int countAllHostList(String search) {
+/*	public int countAllHostList(String search) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -67,7 +67,7 @@ public class HostDAOImpl implements HostDAO {
 			}
 		}
 		return list;
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
 	public OCHost getHost(String hostUuid) {
@@ -113,7 +113,7 @@ public class HostDAOImpl implements HostDAO {
 		return host;
 	}
 
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public List<OCHost> getHostForImage() {
 		List<OCHost> hostList = null;
 		Session session = null;
@@ -456,5 +456,5 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return result;
 
-	}
+	}*/
 }

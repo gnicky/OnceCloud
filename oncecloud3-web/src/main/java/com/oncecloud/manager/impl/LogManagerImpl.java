@@ -1,4 +1,4 @@
-package com.oncecloud.log;
+package com.oncecloud.manager.impl;
 
 import java.util.List;
 
@@ -9,14 +9,18 @@ import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.entity.OCLog;
+import com.oncecloud.log.LogConstant;
+import com.oncecloud.log.LogConstant.logAction;
+import com.oncecloud.log.LogConstant.logObject;
 import com.oncecloud.main.Utilities;
+import com.oncecloud.manager.LogManager;
 
 /**
  * @author hehai
  * @version 2014/08/25
  */
-@Component
-public class LogManager {
+@Component("LogManager")
+public class LogManagerImpl implements LogManager {
 	private LogDAO logDAO;
 
 	private LogDAO getLogDAO() {

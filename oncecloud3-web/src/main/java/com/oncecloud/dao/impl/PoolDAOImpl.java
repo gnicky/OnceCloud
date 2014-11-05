@@ -70,11 +70,11 @@ public class PoolDAOImpl implements PoolDAO{
 		return pool;
 	}
 
-	/**
+/*	*//**
 	 * 获取随机资源池
 	 * 
 	 * @return
-	 */
+	 *//*
 	public String getRandomPool() {
 		String pool = null;
 		Session session = null;
@@ -96,14 +96,14 @@ public class PoolDAOImpl implements PoolDAO{
 		return pool;
 	}
 
-	/**
+	*//**
 	 * 获取一页资源池列表
 	 * 
 	 * @param page
 	 * @param limit
 	 * @param search
 	 * @return
-	 */
+	 *//*
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getOnePagePoolList(int page, int limit, String search) {
 		List<OCPool> poolList = null;
@@ -128,11 +128,11 @@ public class PoolDAOImpl implements PoolDAO{
 		return poolList;
 	}
 
-	/**
+	*//**
 	 * 获取所有资源池列表
 	 * 
 	 * @return
-	 */
+	 *//*
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getPoolList() {
 		List<OCPool> poolList = null;
@@ -153,12 +153,12 @@ public class PoolDAOImpl implements PoolDAO{
 		return poolList;
 	}
 
-	/**
+	*//**
 	 * 获取数据中心的资源池列表
 	 * 
 	 * @param dcUuid
 	 * @return
-	 */
+	 *//*
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getPoolListOfDC(String dcUuid) {
 		List<OCPool> pooList = null;
@@ -200,12 +200,12 @@ public class PoolDAOImpl implements PoolDAO{
 		return pool;
 	}
 
-	/**
+	*//**
 	 * 获取资源池总数
 	 * 
 	 * @param search
 	 * @return
-	 */
+	 *//*
 	public int countAllPoolList(String search) {
 		int count = 0;
 		Session session = null;
@@ -228,14 +228,14 @@ public class PoolDAOImpl implements PoolDAO{
 		return count;
 	}
 
-	/**
+	*//**
 	 * 创建资源池
 	 * 
 	 * @param poolName
 	 * @param poolDesc
 	 * @param dcuuid
 	 * @return
-	 */
+	 *//*
 	public OCPool createPool(String poolName, String poolDesc, String dcuuid) {
 		OCPool pool = new OCPool();
 		pool.setPoolUuid(UUID.randomUUID().toString());
@@ -262,12 +262,12 @@ public class PoolDAOImpl implements PoolDAO{
 		return pool;
 	}
 
-	/**
+	*//**
 	 * 删除资源池
 	 * 
 	 * @param poolId
 	 * @return
-	 */
+	 *//*
 	public boolean deletePool(String poolId) {
 		OCPool delPool = getPool(poolId);
 		boolean result = false;
@@ -292,13 +292,13 @@ public class PoolDAOImpl implements PoolDAO{
 		return result;
 	}
 
-	/**
+	*//**
 	 * 添加资源池到数据中心
 	 * 
 	 * @param poolUuid
 	 * @param dcUuid
 	 * @return
-	 */
+	 *//*
 	public boolean bindPool(String poolUuid, String dcUuid) {
 		boolean result = false;
 		Session session = null;
@@ -321,13 +321,13 @@ public class PoolDAOImpl implements PoolDAO{
 		return result;
 	}
 
-	/**
+	*//**
 	 * 从数据中心中删除资源池
 	 * 
 	 * @param poolUuid
 	 * @param dcUuid
 	 * @return
-	 */
+	 *//*
 	public boolean unbindPool(String poolId) {
 		boolean result = false;
 		OCPool pool = this.getPool(poolId);
@@ -350,7 +350,7 @@ public class PoolDAOImpl implements PoolDAO{
 		return result;
 	}
 
-	/**
+	*//**
 	 * 更新资源池
 	 * 
 	 * @param poolId
@@ -358,7 +358,7 @@ public class PoolDAOImpl implements PoolDAO{
 	 * @param poolDesc
 	 * @param dcuuid
 	 * @return
-	 */
+	 *//*
 	public boolean updatePool(String poolId, String poolName, String poolDesc,
 			String dcUuid) {
 		boolean result = false;
@@ -383,5 +383,5 @@ public class PoolDAOImpl implements PoolDAO{
 			}
 		}
 		return result;
-	}
+	}*/
 }

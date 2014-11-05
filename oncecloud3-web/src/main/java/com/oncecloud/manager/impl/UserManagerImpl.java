@@ -1,12 +1,19 @@
 package com.oncecloud.manager.impl;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.UserDAO;
+import com.oncecloud.entity.EIP;
+import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.User;
+import com.oncecloud.entity.Volume;
 import com.oncecloud.helper.HashHelper;
 import com.oncecloud.manager.UserManager;
 

@@ -89,8 +89,6 @@ public interface UserManager {
 //			HttpServletResponse response, String basePath, HttpSession session)
 //			throws IOException;
 //
-//	public abstract JSONArray doGetcompanyDetail(int companyuid);
-//
 //	public abstract JSONArray getUserList();
 
 }

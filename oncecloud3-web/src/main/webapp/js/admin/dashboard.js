@@ -3,7 +3,7 @@ getQuestionList(1, 10, "");
 
 $.ajax({
     type: 'get',
-    url: '/DatacenterAction/Overview',
+    url: '/OverviewAction/Overview',
     dataType: 'json',
     success: function (array) {
         if (array.length == 1) {
@@ -73,7 +73,7 @@ function getLogList(status, start) {
     $('#act-area').html("");
     $.ajax({
         type: 'get',
-        url: '/LogAction',
+        url: '/LogAction/LogList',
         data: {status: status, start: start, num: "10"},
         dataType: 'json',
         success: function (jsonArray) {
