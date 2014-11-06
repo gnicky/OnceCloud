@@ -20,11 +20,11 @@ public interface HostDAO {
 //	public abstract List<OCHost> getHostForImage();
 //
 //	public abstract OCHost getHostFromIp(String hostIp);
-//
-//	public abstract List<OCHost> getHostListOfPool(String poolUuid);
-//
-//	public abstract List<OCHost> getHostListOfRack(String rackUuid);
-//
+
+	public abstract List<OCHost> getHostListOfPool(String poolUuid);
+
+	public abstract List<OCHost> getHostListOfRack(String rackUuid);
+
 //	public abstract List<OCHost> getOnePageHostList(int page, int limit,
 //			String search);
 //

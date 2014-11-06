@@ -35,7 +35,7 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
     if (count > 0) {
         $("#delete").removeClass('btn-forbidden');
         if (count == 1) {
-            $("#udpate").removeClass('btn-forbidden');
+            $("#update").removeClass('btn-forbidden');
         }
     }
 });

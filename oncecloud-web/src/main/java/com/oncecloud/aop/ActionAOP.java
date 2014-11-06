@@ -18,18 +18,8 @@ import com.oncecloud.entity.User;
 @Component
 @Aspect
 public class ActionAOP {
-	private HttpServletRequest request;
 	private OCExceptionDAO ocExceptionDAO;
 	
-	public HttpServletRequest getRequest() {
-		return request;
-	}
-
-	@Autowired
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
-	}
-
 	public OCExceptionDAO getOcExceptionDAO() {
 		return ocExceptionDAO;
 	}
@@ -46,11 +36,8 @@ public class ActionAOP {
 
 	@AfterThrowing(pointcut="myMethod()",throwing="throwable")
 	public void afterThrowingException(JoinPoint joinpoint,RuntimeException throwable) {
-		User user = (User) request.getSession().getAttribute("user");
 		OCHException oce = new OCHException();
-		if(user != null) {
-			oce.setExcUid(user.getUserId());
-		}
+		oce.setExcUid(1);
 		oce.setExcFunName(joinpoint.getSignature().getName());
 		String args = "";
 		for (Object o : joinpoint.getArgs()) {

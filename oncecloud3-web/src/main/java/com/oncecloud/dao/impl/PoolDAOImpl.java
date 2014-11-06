@@ -152,13 +152,13 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return poolList;
 	}
-
-	*//**
+*/
+	/**
 	 * 获取数据中心的资源池列表
 	 * 
 	 * @param dcUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getPoolListOfDC(String dcUuid) {
 		List<OCPool> pooList = null;
@@ -179,7 +179,7 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return pooList;
 	}
-
+/*
 	public OCPool getPoolByMaster(String poolMaster) {
 		OCPool pool = null;
 		Session session = null;

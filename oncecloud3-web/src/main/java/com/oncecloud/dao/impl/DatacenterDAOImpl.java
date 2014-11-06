@@ -33,7 +33,7 @@ public class DatacenterDAOImpl implements DatacenterDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-/*	public int countAllDatacenter(String search) {
+	public int countAllDatacenter(String search) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -117,12 +117,12 @@ public class DatacenterDAOImpl implements DatacenterDAO {
 	}
 
 	private Datacenter doGetDatacenter(Session session, String dcUuid) {
-		Datacenter datacenter;
 		Criteria criteria = session.createCriteria(Datacenter.class).add(
 				Restrictions.eq("dcUuid", dcUuid));
-		datacenter = (Datacenter) criteria.uniqueResult();
-		return datacenter;
+		return (Datacenter) criteria.uniqueResult();
 	}
+	
+	/*
 
 	@SuppressWarnings("unchecked")
 	public List<Datacenter> getAllPageDCList() {
@@ -144,7 +144,7 @@ public class DatacenterDAOImpl implements DatacenterDAO {
 		}
 		return datacenterList;
 	}
-
+*/
 	public Datacenter getDatacenter(String dcUuid) {
 		Datacenter datacenter = null;
 		Session session = null;
@@ -213,5 +213,5 @@ public class DatacenterDAOImpl implements DatacenterDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

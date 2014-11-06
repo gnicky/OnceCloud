@@ -152,7 +152,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return host;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getHostListOfPool(String poolUuid) {
 		List<OCHost> hostList = null;
@@ -194,7 +194,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return hostList;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageHostList(int page, int limit, String search) {
 		List<OCHost> hostList = null;

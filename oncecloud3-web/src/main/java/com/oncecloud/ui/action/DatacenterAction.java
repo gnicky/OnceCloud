@@ -39,7 +39,7 @@ public class DatacenterAction {
 		this.datacenterManager = datacenterManager;
 	}
 	
-/*	@RequestMapping(value = "/DCList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/DCList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String dcList(HttpServletRequest request, ListModel list) {
 		JSONArray ja = this.getDatacenterManager().getDatacenterList(
@@ -47,6 +47,16 @@ public class DatacenterAction {
 		return ja.toString();
 	}
 
+	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
+	@ResponseBody
+	public String create(HttpServletRequest request,
+			@RequestParam String dcname, @RequestParam String dclocation,
+			@RequestParam String dcdesc) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getDatacenterManager().createDatacenter(dcname, dclocation, dcdesc, user.getUserId());
+		return ja.toString();
+	}
+	
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
 	public String delete(HttpServletRequest request,
@@ -58,23 +68,13 @@ public class DatacenterAction {
 		return ja.toString();
 	}
 
-	@RequestMapping(value = "/AllList", method = { RequestMethod.GET })
+/*	@RequestMapping(value = "/AllList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String allList(HttpServletRequest request) {
 		JSONArray ja = this.getDatacenterManager().getDatacenterAllList();
 		return ja.toString();
 	}
-	
-	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
-	@ResponseBody
-	public String create(HttpServletRequest request,
-			@RequestParam String dcname, @RequestParam String dclocation,
-			@RequestParam String dcdesc) {
-		User user = (User) request.getSession().getAttribute("user");
-		JSONArray ja = this.getDatacenterManager().createDatacenter(dcname, dclocation, dcdesc, user.getUserId());
-		return ja.toString();
-	}
-
+*/
 	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
 	@ResponseBody
 	public void update(HttpServletRequest request,
@@ -98,6 +98,6 @@ public class DatacenterAction {
 		String dcid = (String) request.getSession().getAttribute("dcid");
 		JSONArray ja = this.getDatacenterManager().getRackList(dcid);
 		return ja.toString();
-	}*/
+	}
 	
 }

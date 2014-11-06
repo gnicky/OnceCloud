@@ -1,47 +1,66 @@
 package com.oncecloud.manager.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.oncecloud.dao.DatacenterDAO;
+import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.ImageDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.OverViewDAO;
+import com.oncecloud.dao.PoolDAO;
+import com.oncecloud.dao.RackDAO;
+import com.oncecloud.dao.StorageDAO;
+import com.oncecloud.dao.VMDAO;
+import com.oncecloud.entity.Datacenter;
+import com.oncecloud.entity.OCHost;
+import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCPool;
+import com.oncecloud.entity.Rack;
+import com.oncecloud.entity.Storage;
+import com.oncecloud.entity.Switch;
+import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.DatacenterManager;
+import com.oncecloud.message.MessagePush;
 
 @Component("DatacenterManager")
 public class DatacenterManagerImpl implements DatacenterManager {
-	/*private DatacenterDAO datacenterDAO;
-	private LogDAO logDAO;
-	private OverViewDAO overViewDAO;
+	
+	private DatacenterDAO datacenterDAO;
 	private PoolDAO poolDAO;
 	private HostDAO hostDAO;
+	private RackDAO rackDAO;
+	private LogDAO logDAO;
+	private OverViewDAO overViewDAO;
 	private StorageDAO storageDAO;
 	private ImageDAO imageDAO;
 	private VMDAO vmDAO;
-	private RackDAO rackDAO;
-	private MessagePush messagePush;
 
+	private MessagePush messagePush;
+	
 	private DatacenterDAO getDatacenterDAO() {
 		return datacenterDAO;
 	}
-
+	
 	@Autowired
 	private void setDatacenterDAO(DatacenterDAO datacenterDAO) {
 		this.datacenterDAO = datacenterDAO;
 	}
-
-	private LogDAO getLogDAO() {
-		return logDAO;
+	
+	private MessagePush getMessagePush() {
+		return messagePush;
 	}
 
 	@Autowired
-	private void setLogDAO(LogDAO logDAO) {
-		this.logDAO = logDAO;
-	}
-
-	private OverViewDAO getOverViewDAO() {
-		return overViewDAO;
-	}
-
-	@Autowired
-	private void setOverViewDAO(OverViewDAO overViewDAO) {
-		this.overViewDAO = overViewDAO;
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	private PoolDAO getPoolDAO() {
@@ -60,6 +79,24 @@ public class DatacenterManagerImpl implements DatacenterManager {
 	@Autowired
 	private void setHostDAO(HostDAO hostDAO) {
 		this.hostDAO = hostDAO;
+	}
+	
+	private LogDAO getLogDAO() {
+		return logDAO;
+	}
+
+	@Autowired
+	private void setLogDAO(LogDAO logDAO) {
+		this.logDAO = logDAO;
+	}
+
+	private OverViewDAO getOverViewDAO() {
+		return overViewDAO;
+	}
+
+	@Autowired
+	private void setOverViewDAO(OverViewDAO overViewDAO) {
+		this.overViewDAO = overViewDAO;
 	}
 
 	private StorageDAO getStorageDAO() {
@@ -96,15 +133,6 @@ public class DatacenterManagerImpl implements DatacenterManager {
 	@Autowired
 	private void setRackDAO(RackDAO rackDAO) {
 		this.rackDAO = rackDAO;
-	}
-
-	private MessagePush getMessagePush() {
-		return messagePush;
-	}
-
-	@Autowired
-	private void setMessagePush(MessagePush messagePush) {
-		this.messagePush = messagePush;
 	}
 
 	public JSONArray createDatacenter(String dcName, String dcLocation,
@@ -171,7 +199,40 @@ public class DatacenterManagerImpl implements DatacenterManager {
 		}
 		return qaArray;
 	}
-
+	
+	private List<Integer> getDCVolume(String dcUuid) {
+		int totalCpu = 0;
+		int totalMemory = 0;
+		List<OCPool> poolList = this.getPoolDAO().getPoolListOfDC(dcUuid);
+		if (poolList != null) {
+			for (OCPool pool : poolList) {
+				List<Integer> poolVolume = getPoolVolume(pool.getPoolUuid());
+				totalCpu += poolVolume.get(0);
+				totalMemory += poolVolume.get(1);
+			}
+		}
+		List<Integer> volumeList = new ArrayList<Integer>();
+		volumeList.add(totalCpu);
+		volumeList.add(totalMemory);
+		return volumeList;
+	}
+	
+	private List<Integer> getPoolVolume(String poolUuid) {
+		int totalCpu = 0;
+		int totalMemory = 0;
+		List<OCHost> hostList = this.getHostDAO().getHostListOfPool(poolUuid);
+		if (hostList != null) {
+			for (OCHost host : hostList) {
+				totalCpu += host.getHostCpu();
+				totalMemory += host.getHostMem();
+			}
+		}
+		List<Integer> volumeList = new ArrayList<Integer>();
+		volumeList.add(totalCpu);
+		volumeList.add(totalMemory);
+		return volumeList;
+	}
+/*
 	public JSONArray getDatacenterAllList() {
 		JSONArray qaArray = new JSONArray();
 		List<Datacenter> dcList = this.getDatacenterDAO().getAllPageDCList();
@@ -185,7 +246,7 @@ public class DatacenterManagerImpl implements DatacenterManager {
 		}
 		return qaArray;
 	}
-
+*/
 	public JSONArray deleteDatacenter(String dcId, String dcName, int userid) {
 		Date startTime = new Date();
 		JSONArray qaArray = new JSONArray();
@@ -230,39 +291,6 @@ public class DatacenterManagerImpl implements DatacenterManager {
 			this.getMessagePush().pushMessage(userid,
 					Utilities.stickyToError("数据中心更新失败"));
 		}
-	}
-
-	public List<Integer> getDCVolume(String dcUuid) {
-		int totalCpu = 0;
-		int totalMemory = 0;
-		List<OCPool> poolList = this.getPoolDAO().getPoolListOfDC(dcUuid);
-		if (poolList != null) {
-			for (OCPool pool : poolList) {
-				List<Integer> poolVolume = getPoolVolume(pool.getPoolUuid());
-				totalCpu += poolVolume.get(0);
-				totalMemory += poolVolume.get(1);
-			}
-		}
-		List<Integer> volumeList = new ArrayList<Integer>();
-		volumeList.add(totalCpu);
-		volumeList.add(totalMemory);
-		return volumeList;
-	}
-
-	public List<Integer> getPoolVolume(String poolUuid) {
-		int totalCpu = 0;
-		int totalMemory = 0;
-		List<OCHost> hostList = this.getHostDAO().getHostListOfPool(poolUuid);
-		if (hostList != null) {
-			for (OCHost host : hostList) {
-				totalCpu += host.getHostCpu();
-				totalMemory += host.getHostMem();
-			}
-		}
-		List<Integer> volumeList = new ArrayList<Integer>();
-		volumeList.add(totalCpu);
-		volumeList.add(totalMemory);
-		return volumeList;
 	}
 
 	public JSONArray getPoolList(String dcid) {
@@ -319,13 +347,13 @@ public class DatacenterManagerImpl implements DatacenterManager {
 				}
 				track.put("storagelist", jsonArrayStorage);
 
-				List<Switch> switchlist = this.getSwitchDAO().getSwitchOfRack(
-						rack.getRackUuid());
+//				List<Switch> switchlist = this.getSwitchDAO().getSwitchOfRack(
+//						rack.getRackUuid());
 				JSONArray jsonArraySwitch = new JSONArray();
-				if (switchlist != null) {
-					for (Switch sw : switchlist)
-						jsonArraySwitch.put(sw.toJsonString());
-				}
+//				if (switchlist != null) {
+//					for (Switch sw : switchlist)
+//						jsonArraySwitch.put(sw.toJsonString());
+//				}
 				track.put("switchlist", jsonArraySwitch);
 
 				JSONArray jsonArrayServer = new JSONArray();
@@ -347,5 +375,5 @@ public class DatacenterManagerImpl implements DatacenterManager {
 
 		}
 		return jsonArrayRack;
-	}*/
+	}
 }

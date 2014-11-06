@@ -33,7 +33,7 @@ $(document).ready(function () {
                     success: function (array) {
                         if (array.length == 1) {
                             if (array[0].result == true) {
-                                getIPList(1, 10, "", "dhcp");
+                                getAddressList(1, 10, "", "dhcp");
                             }
                         }
                         $('#IPModalContainer').modal('hide');
@@ -54,7 +54,7 @@ $(document).ready(function () {
                     success: function (array) {
                         if (array.length == 1) {
                             if (array[0].result == true) {
-                                getIPList(1, 10, "", "publicip");
+                                getAddressList(1, 10, "", "publicip");
                             }
                         }
                         $('#IPModalContainer').modal('hide');
@@ -138,125 +138,7 @@ $(document).ready(function () {
         }
         return result;
     }
-
-    function getIPList(page, limitnum, search, type) {
-        if (type == "dhcp") {
-            $.ajax({
-                type: 'get',
-                url: '/AddressAction/DHCPList',
-                data: {page: page, limit: limitnum, search: search},
-                dataType: 'json',
-                success: function (array) {
-                    if (array.length >= 1) {
-                        var totalnum = array[0];
-                        var totalp = Math.ceil(totalnum / limitnum);
-                        if (totalp == 0) {
-                            totalp = 1;
-                        }
-                        options = {
-                            totalPages: totalp
-                        }
-                        $('#pageDivider').bootstrapPaginator(options);
-                        pageDisplayUpdate(page, totalp);
-                        var btable = document.getElementById("tablebody");
-                        var tableStr = "";
-                        $("#tablethead").html('<tr><th width="4%"></th><th width="20%">MAC</th><th width="20%">IP</th><th width="12%">状态</th><th width="16%">应用资源</th><th width="12%">所属用户</th><th width="16%">创建时间</th> </tr>');
-
-                        for (var i = 1; i < array.length; i++) {
-                            var obj = array[i];
-                            var ip = obj.dhcpip;
-                            var mac = obj.dhcpmac;
-                            var uuid = obj.tenantuuid;
-                            var showid = obj.showid;
-                            var type = obj.depenType;
-                            var stateStr = '<td state="free"><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">空闲</span></td>';
-                            if (uuid != "") {
-                                stateStr = '<td state="using"><span class="icon-status icon-using" name="stateicon"></span><span name="stateword">租用中</span></td>';
-                            }
-                            if (0 == type) {
-                                showid = '<span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + showid;
-                            } else if (1 == type) {
-                                showid = '<span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;' + showid;
-                            } else if (2 == type) {
-                                showid = '<span class="glyphicon glyphicon-inbox"></span>&nbsp;&nbsp;' + showid;
-                            } else if (3 == type) {
-                                showid = '<span class="glyphicon glyphicon-fullscreen"></span>&nbsp;&nbsp;' + showid;
-                            }
-                            var username = obj.tenantuser;
-                            var createdate = obj.createdate;
-                            var mytr = '<tr mac="' + mac + '" ip="' + ip + '"><td class="rcheck"><input type="checkbox" name="addressrow"></td>'
-                                + '<td><a class="id">' + mac + '</a></td><td>' + ip + '</td>' + stateStr + '<td><a class="id">' + showid + '</a></td><td>' + username + '</td><td class="time">' + createdate + '</td>';
-                            tableStr += mytr;
-                        }
-                        btable.innerHTML = tableStr;
-                    }
-                }
-            });
-        } else if (type == "publicip") {
-            $.ajax({
-                type: 'get',
-                url: '/AddressAction/EIPList',
-                data: {page: page, limit: limitnum, search: search},
-                dataType: 'json',
-                success: function (array) {
-                    if (array.length >= 1) {
-                        var totalnum = array[0];
-                        var totalp = Math.ceil(totalnum / limitnum);
-                        if (totalp == 0) {
-                            totalp = 1;
-                        }
-                        options = {
-                            totalPages: totalp
-                        }
-                        $('#pageDivider').bootstrapPaginator(options);
-                        pageDisplayUpdate(page, totalp);
-                        var btable = document.getElementById("tablebody");
-                        var tableStr = "";
-                        $("#tablethead").html('<tr><th width="4%"></th><th width="12%">IP</th><th width="12%">'
-                            + '状态</th><th width="12%">应用资源</th><th width="12%">带宽&nbsp;(Mbps)</th><th width="12%">IP分组</th><th width="12%">网关接口</th><th width="12%">所属用户</th><th width="12%">创建时间</th> </tr>');
-                        for (var i = 1; i < array.length; i++) {
-                            var obj = array[i];
-                            var eip = obj.eip;
-                            var euuid = obj.euuid;
-                            var depenType = obj.depenType;
-                            var eipDependency = "";
-                            if (obj.eipDependency != "") {
-                                eipDependency = obj.eipDependency.substring(0, 8);
-                                if (0 == depenType) {
-                                    eipDependency = '<span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;i-' + eipDependency;
-                                } else if (1 == depenType) {
-                                    eipDependency = '<span class="glyphicon glyphicon-random"></span>&nbsp;&nbsp;lb-' + eipDependency;
-                                } else if (2 == depenType) {
-                                    eipDependency = '<span class="glyphicon glyphicon-inbox"></span>&nbsp;&nbsp;db-' + eipDependency;
-                                } else if (3 == depenType) {
-                                    eipDependency = '<span class="glyphicon glyphicon-fullscreen"></span>&nbsp;&nbsp;db-' + eipDependency;
-                                }
-                            }
-                            var eipBandwidth = obj.eipBandwidth;
-                            var eipDescription = decodeURIComponent(obj.eipDescription);
-                            var eipType = decodeURIComponent(obj.eipType);
-                            var eipIf = obj.eif;
-                            var euername = decodeURIComponent(obj.euername);
-                            if (!eipBandwidth) {
-                                eipBandwidth = "";
-                            }
-                            var stateStr = '<td state="free"><span class="icon-status icon-running" name="stateicon"></span><span name="stateword">空闲</span></td>';
-                            if (euername != "") {
-                                stateStr = '<td state="using"><span class="icon-status icon-using" name="stateicon"></span><span name="stateword">租用中</span></td>';
-                            }
-                            var createdate = obj.createdate;
-                            var mytr = '<tr ip="' + eip + '" euuid="' + euuid + '"><td class="rcheck"><input type="checkbox" name="addressrow"></td>'
-                                + '<td>' + eip + '</td>' + stateStr + '<td><a class="id">' + eipDependency + '</a></td><td>' + eipBandwidth + '</td><td>' + eipType + '</td><td>Interface&nbsp;' + eipIf + '</td><td>' + euername + '</td><td class="time">' + createdate + '</td></tr>';
-                            tableStr += mytr;
-                        }
-                        btable.innerHTML = tableStr;
-                    }
-                }
-            });
-        }
-    }
-
-
+    
     function pageDisplayUpdate(current, total) {
         var c = document.getElementById("currentPS");
         var t = document.getElementById("totalPS");

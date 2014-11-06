@@ -5,13 +5,13 @@ import java.util.List;
 import com.oncecloud.entity.Rack;
 
 public interface RackDAO {
-	/**
-	 * 获取机架
-	 * 
-	 * @param rackUuid
-	 * @return
-	 */
-	public abstract Rack getRack(String rackUuid);
+//	/**
+//	 * 获取机架
+//	 * 
+//	 * @param rackUuid
+//	 * @return
+//	 */
+//	public abstract Rack getRack(String rackUuid);
 
 	/**
 	 * 获取一页机架列表
@@ -24,12 +24,12 @@ public interface RackDAO {
 	public abstract List<Rack> getOnePageRackList(int page, int limit,
 			String search);
 
-	/**
-	 * 获取全部机架列表
-	 * 
-	 * @return
-	 */
-	public abstract List<Rack> getRackList();
+//	/**
+//	 * 获取全部机架列表
+//	 * 
+//	 * @return
+//	 */
+//	public abstract List<Rack> getRackList();
 
 	/**
 	 * 获取数据中心的机架列表
@@ -66,32 +66,32 @@ public interface RackDAO {
 	 */
 	public abstract boolean deleteRack(String rackId);
 
-	/**
-	 * 添加机架到数据中心
-	 * 
-	 * @param rackId
-	 * @param dcId
-	 * @return
-	 */
-	public abstract boolean bindDatacenter(String rackId, String dcId);
-
-	/**
-	 * 从数据中心中删除机架
-	 * 
-	 * @param rackId
-	 * @return
-	 */
-	public abstract boolean unbindDatacenter(String rackId);
-
-	/**
-	 * 更新机架
-	 * 
-	 * @param rackId
-	 * @param rackName
-	 * @param rackDesc
-	 * @param dcid
-	 * @return
-	 */
-	public abstract boolean updateRack(String rackUuid, String rackName,
-			String rackDesc, String dcUuid);
+//	/**
+//	 * 添加机架到数据中心
+//	 * 
+//	 * @param rackId
+//	 * @param dcId
+//	 * @return
+//	 */
+//	public abstract boolean bindDatacenter(String rackId, String dcId);
+//
+//	/**
+//	 * 从数据中心中删除机架
+//	 * 
+//	 * @param rackId
+//	 * @return
+//	 */
+//	public abstract boolean unbindDatacenter(String rackId);
+//
+//	/**
+//	 * 更新机架
+//	 * 
+//	 * @param rackId
+//	 * @param rackName
+//	 * @param rackDesc
+//	 * @param dcid
+//	 * @return
+//	 */
+//	public abstract boolean updateRack(String rackUuid, String rackName,
+//			String rackDesc, String dcUuid);
 }

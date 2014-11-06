@@ -33,21 +33,21 @@ public interface PoolDAO {
 //	 */
 //	public abstract List<OCPool> getOnePagePoolList(int page, int limit,
 //			String search);
-//
+
 //	/**
 //	 * 获取所有资源池列表
 //	 * 
 //	 * @return
 //	 */
 //	public abstract List<OCPool> getPoolList();
-//
-//	/**
-//	 * 获取数据中心的资源池列表
-//	 * 
-//	 * @param dcUuid
-//	 * @return
-//	 */
-//	public abstract List<OCPool> getPoolListOfDC(String dcUuid);
+
+	/**
+	 * 获取数据中心的资源池列表
+	 * 
+	 * @param dcUuid
+	 * @return
+	 */
+	public abstract List<OCPool> getPoolListOfDC(String dcUuid);
 //
 //	public abstract OCPool getPoolByMaster(String poolMaster);
 //
