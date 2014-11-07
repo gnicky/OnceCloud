@@ -84,7 +84,6 @@ function getrackList() {
 				                <p>内存：' + Math.round(host.hostMem / 1024) + 'GB</p>\
 				                <p>CPU：' + host.hostCpu + '</p>\
 				                <p>虚拟机：' + vmcount + '个</p>\
-				                <p>映像：' + imagecount + '个</p>\
 				               </span>\
 				               <b class="arrow"></b>\
 				          </div>\
@@ -188,7 +187,6 @@ function getPoolList() {
 							<h5>内存：' + Math.round(host.hostMem / 1024) + 'GB</h5>\
 							<h5>CPU：' + host.hostCpu + '</h5>\
 							<h5>虚拟机：' + vmcount + '个</h5>\
-							<h5>映像：' + imagecount + '个</h5>\
 						</div>\
 						<div class="col-md-4 attrcontent">\
 							<h5>IP：' + host.hostIP + '</h5>\

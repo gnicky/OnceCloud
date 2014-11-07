@@ -94,12 +94,19 @@
 						<div class="cool-border"></div></li>
 				</ul>
 				<ul class="nav nav-list" style="margin-top: 50px">
+				<li <c:if test="${sideActive==122}">class="active"</c:if>><a
+						href="${basePath}alarmlog"><span
+							class="glyphicon glyphicon-bell cool-blue"></span><span
+							class="name">告警日志</span><span class="title">AlarmLog</span></a>
+						<div class="cool-border" style="margin-left: 0"></div></li>
+				
 					<li <c:if test="${sideActive==9}">class="active"</c:if>><div
 							class="cool-border" style="margin-left: 0"></div> <a
 						href="${basePath}log"><span
 							class="glyphicon glyphicon-list-alt cool-purple"></span><span
 							class="name">操作日志</span><span class="title">Activities</span></a>
 						<div class="cool-border"></div></li>
+						
 					<li <c:if test="${sideActive==11}">class="active"</c:if>><a
 						href="${basePath}service"><span
 							class="glyphicon glyphicon-question-sign cool-cyan"></span><span
@@ -150,13 +157,19 @@
 							class="glyphicon glyphicon-record cool-blue"></span><span
 							class="name">映像</span><span class="title">Images</span></a>
 						<div class="cool-border" style="margin-left: 0"></div></li>
-					<%--<li <c:if test="${sideActive==13}">class="active"</c:if>><a--%>
-						<%--href="${basePath}alarm"><span--%>
-							<%--class="glyphicon glyphicon-bell cool-red"></span><span--%>
-							<%--class="name">监控警告</span><span class="title">Alarms</span></a>--%>
-						<%--<div class="cool-border" style="margin-left: 0"></div></li>--%>
+					<%-- <li <c:if test="${sideActive==13}">class="active"</c:if>><a
+						href="${basePath}alarm"><span
+							class="glyphicon glyphicon-bell cool-red"></span><span
+							class="name">监控警告</span><span class="title">Alarms</span></a>
+						<div class="cool-border" style="margin-left: 0"></div></li> --%>
 				</ul>
 				<ul class="nav nav-list" style="margin-top: 50px">
+				<li <c:if test="${sideActive==122}">class="active"</c:if>><a
+						href="${basePath}alarmlog"><span
+							class="glyphicon glyphicon-bell cool-blue"></span><span
+							class="name">告警日志</span><span class="title">AlarmLog</span></a>
+						<div class="cool-border" style="margin-left: 0"></div></li>
+				
 					<li <c:if test="${sideActive==9}">class="active"</c:if>><div
 							class="cool-border" style="margin-left: 0"></div> <a
 						href="${basePath}log"><span

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.entity.Alarm;
+import com.oncecloud.entity.performance.Cpu30min;
 import com.oncecloud.helper.SessionHelper;
 
 @Component
@@ -205,4 +207,7 @@ public class AlarmDAO {
 		}
 		return result;
 	}
+	
+	
+	
 }

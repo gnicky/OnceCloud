@@ -80,6 +80,15 @@ public class CommonController {
 		model.put("title", "映像");
 		return new ModelAndView("common/image", model);
 	}
+	
+	@RequestMapping(value = "/alarmlog", method = { RequestMethod.GET })
+	@ResponseBody
+	public ModelAndView alarmlog(HttpServletRequest request) {
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("sideActive", 122);
+		model.put("title", "告警日志");
+		return new ModelAndView("common/alarmlog", model);
+	}
 
 	@RequestMapping(value = "/log", method = { RequestMethod.GET })
 	@ResponseBody
