@@ -287,8 +287,8 @@ public class RackDAOImpl implements RackDAO {
 		}
 		return result;
 	}
-
-	*//**
+*/
+	/**
 	 * 更新机架
 	 * 
 	 * @param rackId
@@ -296,7 +296,7 @@ public class RackDAOImpl implements RackDAO {
 	 * @param rackDesc
 	 * @param dcid
 	 * @return
-	 *//*
+	 */
 	public boolean updateRack(String rackUuid, String rackName,
 			String rackDesc, String dcUuid) {
 		boolean result = false;
@@ -321,5 +321,5 @@ public class RackDAOImpl implements RackDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

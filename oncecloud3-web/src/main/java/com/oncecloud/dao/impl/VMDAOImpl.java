@@ -884,25 +884,27 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新主机电源状态和所在服务器
 	 * 
 	 * @param session
 	 * @param uuid
 	 * @param power
 	 * @param hostUuid
-	 *//*
-	public void updatePowerAndHostNoTransaction(String uuid, int power,
+	 */
+	public void updatePowerAndHost(String uuid, int power,
 			String hostUuid) {
 		Session session = this.getSessionHelper().getMainSession();
+		session.beginTransaction();
 		String queryString = "update OCVM set vmPower = :power, hostUuid = :hostUuid where vmUuid = :uuid";
 		Query query = session.createQuery(queryString);
 		query.setInteger("power", power);
 		query.setString("hostUuid", hostUuid);
 		query.setString("uuid", uuid);
 		query.executeUpdate();
+		session.getTransaction().commit();
 	}
-
+/*
 	*//**
 	 * 更新主机私有网络
 	 * 

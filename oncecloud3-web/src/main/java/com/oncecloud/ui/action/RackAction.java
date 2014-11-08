@@ -74,14 +74,14 @@ public class RackAction {
 				rackdesc, user.getUserId());
 		return ja.toString();
 	}
-/*
-	@RequestMapping(value = "/RackDetail", method = { RequestMethod.POST })
+
+/*	@RequestMapping(value = "/RackDetail", method = { RequestMethod.POST })
 	@ResponseBody
 	public String rackDetail(HttpServletRequest request) {
 		String rackId = request.getSession().getAttribute("rackid").toString();
 		JSONArray ja = this.getDashboardManager().getTuoputu(rackId);
 		return ja.toString();
-	}
+	}*/
 
 	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
 	@ResponseBody
@@ -91,5 +91,5 @@ public class RackAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getRackManager().update(rackid, rackname, rackdesc, dcid,
 				user.getUserId());
-	}*/
+	}
 }

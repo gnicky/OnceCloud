@@ -122,8 +122,6 @@ public class DatacenterDAOImpl implements DatacenterDAO {
 		return (Datacenter) criteria.uniqueResult();
 	}
 	
-	/*
-
 	@SuppressWarnings("unchecked")
 	public List<Datacenter> getAllPageDCList() {
 		List<Datacenter> datacenterList = null;
@@ -144,7 +142,7 @@ public class DatacenterDAOImpl implements DatacenterDAO {
 		}
 		return datacenterList;
 	}
-*/
+
 	public Datacenter getDatacenter(String dcUuid) {
 		Datacenter datacenter = null;
 		Session session = null;

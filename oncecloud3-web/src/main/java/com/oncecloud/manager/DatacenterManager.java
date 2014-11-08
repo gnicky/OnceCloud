@@ -12,7 +12,7 @@ public interface DatacenterManager {
 	public abstract JSONArray getDatacenterList(int page, int limit,
 			String search);
 
-//	public abstract JSONArray getDatacenterAllList();
+	public abstract JSONArray getDatacenterAllList();
 
 	public abstract JSONArray deleteDatacenter(String dcId, String dcName,
 			int userid);

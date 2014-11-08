@@ -232,7 +232,7 @@ public class DatacenterManagerImpl implements DatacenterManager {
 		volumeList.add(totalMemory);
 		return volumeList;
 	}
-/*
+
 	public JSONArray getDatacenterAllList() {
 		JSONArray qaArray = new JSONArray();
 		List<Datacenter> dcList = this.getDatacenterDAO().getAllPageDCList();
@@ -246,7 +246,7 @@ public class DatacenterManagerImpl implements DatacenterManager {
 		}
 		return qaArray;
 	}
-*/
+
 	public JSONArray deleteDatacenter(String dcId, String dcName, int userid) {
 		Date startTime = new Date();
 		JSONArray qaArray = new JSONArray();

@@ -68,13 +68,13 @@ public class DatacenterAction {
 		return ja.toString();
 	}
 
-/*	@RequestMapping(value = "/AllList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/AllList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String allList(HttpServletRequest request) {
 		JSONArray ja = this.getDatacenterManager().getDatacenterAllList();
 		return ja.toString();
 	}
-*/
+
 	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
 	@ResponseBody
 	public void update(HttpServletRequest request,

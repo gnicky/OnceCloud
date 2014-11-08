@@ -263,18 +263,18 @@ public interface VMDAO {
 //			int power);
 //
 //	public abstract boolean updateVMImportance(String vmUuid, int vmImportance);
-//
-//	/**
-//	 * 更新主机电源状态和所在服务器
-//	 * 
-//	 * @param session
-//	 * @param uuid
-//	 * @param power
-//	 * @param hostUuid
-//	 */
-//	public abstract void updatePowerAndHostNoTransaction(String uuid,
-//			int power, String hostUuid);
-//
+
+	/**
+	 * 更新主机电源状态和所在服务器
+	 * 
+	 * @param session
+	 * @param uuid
+	 * @param power
+	 * @param hostUuid
+	 */
+	public abstract void updatePowerAndHost(String uuid,
+			int power, String hostUuid);
+
 //	/**
 //	 * 更新主机私有网络
 //	 * 

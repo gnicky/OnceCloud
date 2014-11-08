@@ -14,10 +14,10 @@ public interface RackManager {
 //	public abstract JSONArray bind(String rackId, String dcId, int userid);
 //
 //	public abstract JSONArray unbind(String rackId, int userid);
-//
-//	public abstract void update(String rackId, String rackName,
-//			String rackDesc, String dcid, int userid);
-//
+
+	public abstract void update(String rackId, String rackName,
+			String rackDesc, String dcid, int userid);
+
 //	public abstract JSONArray getRackAllList();
 
 }

@@ -95,15 +95,15 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return pool;
 	}
-
-	*//**
+*/
+	/**
 	 * 获取一页资源池列表
 	 * 
 	 * @param page
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getOnePagePoolList(int page, int limit, String search) {
 		List<OCPool> poolList = null;
@@ -127,8 +127,8 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return poolList;
 	}
-
-	*//**
+/*
+	/**
 	 * 获取所有资源池列表
 	 * 
 	 * @return
@@ -199,13 +199,13 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return pool;
 	}
-
-	*//**
+*/
+	/**
 	 * 获取资源池总数
 	 * 
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countAllPoolList(String search) {
 		int count = 0;
 		Session session = null;
@@ -228,14 +228,14 @@ public class PoolDAOImpl implements PoolDAO{
 		return count;
 	}
 
-	*//**
+	/**
 	 * 创建资源池
 	 * 
 	 * @param poolName
 	 * @param poolDesc
 	 * @param dcuuid
 	 * @return
-	 *//*
+	 */
 	public OCPool createPool(String poolName, String poolDesc, String dcuuid) {
 		OCPool pool = new OCPool();
 		pool.setPoolUuid(UUID.randomUUID().toString());
@@ -249,8 +249,6 @@ public class PoolDAOImpl implements PoolDAO{
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(pool);
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewPool",
-					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -262,12 +260,12 @@ public class PoolDAOImpl implements PoolDAO{
 		return pool;
 	}
 
-	*//**
+	/**
 	 * 删除资源池
 	 * 
 	 * @param poolId
 	 * @return
-	 *//*
+	 */
 	public boolean deletePool(String poolId) {
 		OCPool delPool = getPool(poolId);
 		boolean result = false;
@@ -278,8 +276,6 @@ public class PoolDAOImpl implements PoolDAO{
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(delPool);
-				this.getOverViewDAO().updateOverViewfieldNoTransaction(
-						"viewPool", false);
 				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
@@ -291,8 +287,8 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return result;
 	}
-
-	*//**
+/*
+	/**
 	 * 添加资源池到数据中心
 	 * 
 	 * @param poolUuid
@@ -349,8 +345,8 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return result;
 	}
-
-	*//**
+*/
+	/**
 	 * 更新资源池
 	 * 
 	 * @param poolId
@@ -358,7 +354,7 @@ public class PoolDAOImpl implements PoolDAO{
 	 * @param poolDesc
 	 * @param dcuuid
 	 * @return
-	 *//*
+	 */
 	public boolean updatePool(String poolId, String poolName, String poolDesc,
 			String dcUuid) {
 		boolean result = false;
@@ -383,5 +379,5 @@ public class PoolDAOImpl implements PoolDAO{
 			}
 		}
 		return result;
-	}*/
+	}
 }

@@ -182,61 +182,104 @@ public class RackManagerImpl implements RackManager {
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-	/*
-	 * public JSONArray bind(String rackId, String dcId, int userid) { Date
-	 * startTime = new Date(); boolean result =
-	 * this.getRackDAO().bindDatacenter(rackId, dcId); JSONArray ja = new
-	 * JSONArray(); JSONObject jo = new JSONObject(); jo.put("result", result);
-	 * Datacenter dc = this.getDatacenterDAO().getDatacenter(dcId); String
-	 * dcName = dc.getDcName(); jo.put("dcname", Utilities.encodeText(dcName));
-	 * ja.put(jo); // write log and push message Date endTime = new Date(); int
-	 * elapse = Utilities.timeElapse(startTime, endTime); JSONArray infoArray =
-	 * new JSONArray(); infoArray.put(Utilities.createLogInfo(
-	 * LogConstant.logObject.机架.toString(), "rack-" + rackId.substring(0, 8)));
-	 * infoArray.put(Utilities.createLogInfo(
-	 * LogConstant.logObject.数据中心.toString(), dcName)); if (result) { OCLog log
-	 * = this.getLogDAO().insertLog(userid, LogConstant.logObject.机架.ordinal(),
-	 * LogConstant.logAction.添加.ordinal(), LogConstant.logStatus.成功.ordinal(),
-	 * infoArray.toString(), startTime, elapse);
-	 * this.getMessagePush().pushMessage(userid,
-	 * Utilities.stickyToSuccess(log.toString())); } else { OCLog log =
-	 * this.getLogDAO().insertLog(userid, LogConstant.logObject.机架.ordinal(),
-	 * LogConstant.logAction.添加.ordinal(), LogConstant.logStatus.失败.ordinal(),
-	 * infoArray.toString(), startTime, elapse);
-	 * this.getMessagePush().pushMessage(userid,
-	 * Utilities.stickyToError(log.toString())); } return ja; }
-	 * 
-	 * public JSONArray unbind(String rackId, int userid) { Date startTime = new
-	 * Date(); JSONArray ja = new JSONArray(); boolean result =
-	 * this.getRackDAO().unbindDatacenter(rackId); JSONObject jo = new
-	 * JSONObject(); jo.put("result", result); ja.put(jo); // write log and push
-	 * message Date endTime = new Date(); int elapse =
-	 * Utilities.timeElapse(startTime, endTime); JSONArray infoArray = new
-	 * JSONArray(); infoArray.put(Utilities.createLogInfo(
-	 * LogConstant.logObject.机架.toString(), "rack-" + rackId.substring(0, 8)));
-	 * if (result) { OCLog log = this.getLogDAO().insertLog(userid,
-	 * LogConstant.logObject.机架.ordinal(), LogConstant.logAction.移除.ordinal(),
-	 * LogConstant.logStatus.成功.ordinal(), infoArray.toString(), startTime,
-	 * elapse); this.getMessagePush().pushMessage(userid,
-	 * Utilities.stickyToSuccess(log.toString())); } else { OCLog log =
-	 * this.getLogDAO().insertLog(userid, LogConstant.logObject.机架.ordinal(),
-	 * LogConstant.logAction.移除.ordinal(), LogConstant.logStatus.失败.ordinal(),
-	 * infoArray.toString(), startTime, elapse);
-	 * this.getMessagePush().pushMessage(userid,
-	 * Utilities.stickyToError(log.toString())); } return ja; }
-	 * 
-	 * public void update(String rackId, String rackName, String rackDesc,
-	 * String dcid, int userid) { boolean result =
-	 * this.getRackDAO().updateRack(rackId, rackName, rackDesc, dcid); // push
-	 * message if (result) { this.getMessagePush().pushMessage(userid,
-	 * Utilities.stickyToSuccess("机架更新成功")); } else {
-	 * this.getMessagePush().pushMessage(userid,
-	 * Utilities.stickyToError("机架更新失败")); } }
-	 * 
-	 * public JSONArray getRackAllList() { List<Rack> rackList =
-	 * this.getRackDAO().getRackList(); JSONArray ja = new JSONArray(); for
-	 * (Rack result : rackList) { JSONObject jo = new JSONObject();
-	 * jo.put("rackname", Utilities.encodeText(result.getRackName()));
-	 * jo.put("rackid", result.getRackUuid()); ja.put(jo); } return ja; }
-	 */
+/*
+	public JSONArray bind(String rackId, String dcId, int userid) {
+		Date startTime = new Date();
+		boolean result = this.getRackDAO().bindDatacenter(rackId, dcId);
+		JSONArray ja = new JSONArray();
+		JSONObject jo = new JSONObject();
+		jo.put("result", result);
+		Datacenter dc = this.getDatacenterDAO().getDatacenter(dcId);
+		String dcName = dc.getDcName();
+		jo.put("dcname", Utilities.encodeText(dcName));
+		ja.put(jo);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.机架.toString(),
+				"rack-" + rackId.substring(0, 8)));
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.数据中心.toString(), dcName));
+		if (result) {
+			OCLog log = this.getLogDAO().insertLog(userid,
+					LogConstant.logObject.机架.ordinal(),
+					LogConstant.logAction.添加.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userid,
+					LogConstant.logObject.机架.ordinal(),
+					LogConstant.logAction.添加.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError(log.toString()));
+		}
+		return ja;
+	}
+
+	public JSONArray unbind(String rackId, int userid) {
+		Date startTime = new Date();
+		JSONArray ja = new JSONArray();
+		boolean result = this.getRackDAO().unbindDatacenter(rackId);
+		JSONObject jo = new JSONObject();
+		jo.put("result", result);
+		ja.put(jo);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.机架.toString(),
+				"rack-" + rackId.substring(0, 8)));
+		if (result) {
+			OCLog log = this.getLogDAO().insertLog(userid,
+					LogConstant.logObject.机架.ordinal(),
+					LogConstant.logAction.移除.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userid,
+					LogConstant.logObject.机架.ordinal(),
+					LogConstant.logAction.移除.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError(log.toString()));
+		}
+		return ja;
+	}
+*/
+	public void update(String rackId, String rackName, String rackDesc,
+			String dcid, int userid) {
+		boolean result = this.getRackDAO().updateRack(rackId, rackName,
+				rackDesc, dcid);
+		// push message
+		if (result) {
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToSuccess("机架更新成功"));
+		} else {
+			this.getMessagePush().pushMessage(userid,
+					Utilities.stickyToError("机架更新失败"));
+		}
+	}
+/*
+	public JSONArray getRackAllList() {
+		List<Rack> rackList = this.getRackDAO().getRackList();
+		JSONArray ja = new JSONArray();
+		for (Rack result : rackList) {
+			JSONObject jo = new JSONObject();
+			jo.put("rackname", Utilities.encodeText(result.getRackName()));
+			jo.put("rackid", result.getRackUuid());
+			ja.put(jo);
+		}
+		return ja;
+	}
+*/
 }

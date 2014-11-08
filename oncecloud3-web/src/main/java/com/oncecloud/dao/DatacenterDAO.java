@@ -13,7 +13,7 @@ public interface DatacenterDAO {
 
 	public abstract boolean deleteDatacenter(String dcUuid);
 
-//	public abstract List<Datacenter> getAllPageDCList();
+	public abstract List<Datacenter> getAllPageDCList();
 	/**
 	 * 非本模块使用，获取dc信息
 	 * @param dcUuid

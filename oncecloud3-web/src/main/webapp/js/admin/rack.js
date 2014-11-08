@@ -102,7 +102,7 @@ function getRackList(page, limit, search) {
     });
 }
 
-$('#tablebody').on('click', '.id', function (event) {
+/*$('#tablebody').on('click', '.id', function (event) {
     event.preventDefault();
     var rackid = $(this).parent().parent().attr('rowid');
     var form = $("<form></form>");
@@ -113,7 +113,7 @@ $('#tablebody').on('click', '.id', function (event) {
     form.css('display', 'none');
     form.appendTo($('body'));
     form.submit();
-});
+});*/
 
 
 $('#delete').on('click', function (event) {

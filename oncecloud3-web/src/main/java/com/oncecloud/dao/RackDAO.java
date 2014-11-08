@@ -5,13 +5,13 @@ import java.util.List;
 import com.oncecloud.entity.Rack;
 
 public interface RackDAO {
-//	/**
-//	 * 获取机架
-//	 * 
-//	 * @param rackUuid
-//	 * @return
-//	 */
-//	public abstract Rack getRack(String rackUuid);
+	/**
+	 * 获取机架
+	 * 
+	 * @param rackUuid
+	 * @return
+	 */
+	public abstract Rack getRack(String rackUuid);
 
 	/**
 	 * 获取一页机架列表
@@ -82,16 +82,16 @@ public interface RackDAO {
 //	 * @return
 //	 */
 //	public abstract boolean unbindDatacenter(String rackId);
-//
-//	/**
-//	 * 更新机架
-//	 * 
-//	 * @param rackId
-//	 * @param rackName
-//	 * @param rackDesc
-//	 * @param dcid
-//	 * @return
-//	 */
-//	public abstract boolean updateRack(String rackUuid, String rackName,
-//			String rackDesc, String dcUuid);
+
+	/**
+	 * 更新机架
+	 * 
+	 * @param rackId
+	 * @param rackName
+	 * @param rackDesc
+	 * @param dcid
+	 * @return
+	 */
+	public abstract boolean updateRack(String rackUuid, String rackName,
+			String rackDesc, String dcUuid);
 }
