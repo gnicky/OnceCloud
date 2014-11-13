@@ -3,10 +3,12 @@ package com.oncecloud.dao.impl;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.LBDAO;
 import com.oncecloud.helper.SessionHelper;
 
+@Component("LBDAO")
 public class LBDAOImpl implements LBDAO {
 	private SessionHelper sessionHelper;
 	

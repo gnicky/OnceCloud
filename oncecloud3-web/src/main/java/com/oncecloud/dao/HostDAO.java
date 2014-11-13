@@ -9,8 +9,8 @@ import com.oncecloud.entity.Storage;
 
 public interface HostDAO {
 
-//	public abstract int countAllHostList(String search);
-//
+	public abstract int countAllHostList(String search);
+
 //	public abstract List<OCHost> getAllHost();
 
 	public abstract OCHost getHost(String hostUuid);
@@ -25,9 +25,9 @@ public interface HostDAO {
 
 	public abstract List<OCHost> getHostListOfRack(String rackUuid);
 
-//	public abstract List<OCHost> getOnePageHostList(int page, int limit,
-//			String search);
-//
+	public abstract List<OCHost> getOnePageHostList(int page, int limit,
+			String search);
+
 //	public abstract List<OCHost> getOnePageLoadHostList(int page, int limit,
 //			String search, String sruuid);
 //

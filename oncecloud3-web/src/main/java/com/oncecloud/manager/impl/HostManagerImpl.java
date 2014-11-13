@@ -1,83 +1,29 @@
-package com.oncecloud.manager;
+package com.oncecloud.manager.impl;
 
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.once.xenapi.Connection;
-import com.once.xenapi.Host;
-import com.once.xenapi.Pool;
-import com.once.xenapi.Types;
 import com.oncecloud.dao.HostDAO;
-import com.oncecloud.dao.HostSRDAO;
-import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
 import com.oncecloud.entity.OCHost;
-import com.oncecloud.entity.OCLog;
-import com.oncecloud.entity.OCPool;
-import com.oncecloud.entity.Storage;
-import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
-import com.oncecloud.message.MessagePush;
+import com.oncecloud.manager.HostManager;
 
-/**
- * @author hehai
- * @version 2014/03/28
- */
-@Component
-public class HostManager {
+@Component("HostManager")
+public class HostManagerImpl implements HostManager{
 	private final static long MB = 1024 * 1024;
-	public final static String DEFAULT_USER = "root";
-	public final static String DEFAULT_PORT = "9363";
 	
-	private SRManager srManager;
-	private MessagePush messagePush;
-	private LogDAO logDAO;
 	private HostDAO hostDAO;
 	private PoolDAO poolDAO;
 	private RackDAO rackDAO;
 	private StorageDAO storageDAO;
-	private HostSRDAO hostSRDAO;
-
-	private SRManager getSrManager() {
-		return srManager;
-	}
-
-	@Autowired
-	private void setSrManager(SRManager srManager) {
-		this.srManager = srManager;
-	}
-
-	private MessagePush getMessagePush() {
-		return messagePush;
-	}
-
-	@Autowired
-	private void setMessagePush(MessagePush messagePush) {
-		this.messagePush = messagePush;
-	}
-
-	private LogDAO getLogDAO() {
-		return logDAO;
-	}
-
-	@Autowired
-	private void setLogDAO(LogDAO logDAO) {
-		this.logDAO = logDAO;
-	}
-
+	
 	private HostDAO getHostDAO() {
 		return hostDAO;
 	}
@@ -105,6 +51,7 @@ public class HostManager {
 		this.rackDAO = rackDAO;
 	}
 
+
 	private StorageDAO getStorageDAO() {
 		return storageDAO;
 	}
@@ -112,6 +59,38 @@ public class HostManager {
 	@Autowired
 	private void setStorageDAO(StorageDAO storageDAO) {
 		this.storageDAO = storageDAO;
+	}
+	
+	/*private SRManager srManager;
+	private MessagePush messagePush;
+	private LogDAO logDAO;
+	private HostSRDAO hostSRDAO;
+
+	private SRManager getSrManager() {
+		return srManager;
+	}
+
+	@Autowired
+	private void setSrManager(SRManager srManager) {
+		this.srManager = srManager;
+	}
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
+
+	private LogDAO getLogDAO() {
+		return logDAO;
+	}
+
+	@Autowired
+	private void setLogDAO(LogDAO logDAO) {
+		this.logDAO = logDAO;
 	}
 
 	private HostSRDAO getHostSRDAO() {
@@ -172,7 +151,7 @@ public class HostManager {
 		}
 		return qaArray;
 	}
-
+*/
 	public JSONArray getHostList(int page, int limit, String search) {
 		JSONArray qaArray = new JSONArray();
 		int totalNum = this.getHostDAO().countAllHostList(search);
@@ -216,7 +195,7 @@ public class HostManager {
 		}
 		return qaArray;
 	}
-
+/*
 	public JSONArray getHostLoadList(int page, int limit, String searchStr,
 			String srUuid) {
 		int totalNum = this.getHostDAO().countAllHostList(searchStr);
@@ -806,5 +785,5 @@ public class HostManager {
 			}
 		}
 		return ja;
-	}
+	}*/
 }

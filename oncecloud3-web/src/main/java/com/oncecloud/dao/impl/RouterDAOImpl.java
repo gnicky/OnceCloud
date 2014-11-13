@@ -11,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
@@ -18,6 +19,7 @@ import com.oncecloud.entity.Router;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.main.Utilities;
 
+@Component("RouterDAO")
 public class RouterDAOImpl implements RouterDAO {
 	private SessionHelper sessionHelper;
 	

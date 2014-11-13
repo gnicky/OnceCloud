@@ -52,13 +52,13 @@ public class StorageDAOImpl implements StorageDAO {
 		}
 		return sr;
 	}
-
-	*//**
+*/
+	/**
 	 * 获取存储大小
 	 * 
 	 * @param hostUuid
 	 * @return
-	 *//*
+	 */
 	public int getStorageSize(String hostUuid) {
 		int total = 0;
 		Session session = null;
@@ -73,13 +73,13 @@ public class StorageDAOImpl implements StorageDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
+			if (session != null) {
+				session.getTransaction().rollback();
 			}
 		}
 		return total;
 	}
-
+/*
 	*//**
 	 * 获取一页存储列表
 	 * 

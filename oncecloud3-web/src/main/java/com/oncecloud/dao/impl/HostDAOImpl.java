@@ -28,7 +28,7 @@ public class HostDAOImpl implements HostDAO {
 		this.sessionHelper = sessionHelper;
 	}
 	
-/*	public int countAllHostList(String search) {
+	public int countAllHostList(String search) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -47,8 +47,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return count;
 	}
-
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getAllHost() {
 		List<OCHost> list = null;
@@ -194,7 +193,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return hostList;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageHostList(int page, int limit, String search) {
 		List<OCHost> hostList = null;
@@ -218,7 +217,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return hostList;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getOnePageLoadHostList(int page, int limit,
 			String search, String sruuid) {

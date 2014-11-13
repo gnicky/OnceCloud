@@ -13,15 +13,15 @@ public interface StorageDAO {
 //	 * @return
 //	 */
 //	public abstract Storage getStorage(String srUuid);
-//
-//	/**
-//	 * 获取存储大小
-//	 * 
-//	 * @param hostUuid
-//	 * @return
-//	 */
-//	public abstract int getStorageSize(String hostUuid);
-//
+
+	/**
+	 * 获取存储大小
+	 * 
+	 * @param hostUuid
+	 * @return
+	 */
+	public abstract int getStorageSize(String hostUuid);
+
 //	/**
 //	 * 获取一页存储列表
 //	 * 
