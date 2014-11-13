@@ -5812,5 +5812,22 @@ public class VM extends XenAPIObject {
 		return Types.toBoolean(result);
 	
 	}
+	
+	/**
+	 * Get Network record by VIF.
+	 * 
+	 */
+	public Network.Record getNetworkRecord(Connection c, VIF vif)
+			throws BadServerResponse, XenAPIException, XmlRpcException {
+		String method_call = "VM.get_network_record";
+		String session = c.getSessionReference();
+		Object[] method_params = { Marshalling.toXMLRPC(session),
+				Marshalling.toXMLRPC(this.ref),
+				Marshalling.toXMLRPC(vif)};
+		Map response = c.dispatch(method_call, method_params);
+		Object result = response.get("Value");
+		return Types.toNetworkRecord(result);
+	
+	}
 
 }

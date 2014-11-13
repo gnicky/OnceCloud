@@ -45,7 +45,7 @@ public interface HostManager {
 	public abstract boolean updateHost(String hostId, String hostName,
 			String hostDesc, String rackUuid);
 
-//	public abstract JSONArray getAllList();
+	public abstract JSONArray getAllList();
 //  public abstract boolean recover(int userId, String ip, String username,
 //			String password);
 }

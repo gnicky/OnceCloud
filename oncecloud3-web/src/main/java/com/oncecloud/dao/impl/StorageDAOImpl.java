@@ -72,7 +72,6 @@ public class StorageDAOImpl implements StorageDAO {
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}

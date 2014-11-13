@@ -3,7 +3,7 @@ getLogList(4, 0, 0);
 function getLogList(status, append, start) {
     $.ajax({
         type: 'get',
-        url: '/LogAction',
+        url: '/LogAction/LogList',
         data: {status: status, start: start, num: "10"},
         dataType: 'json',
         success: function (jsonArray) {

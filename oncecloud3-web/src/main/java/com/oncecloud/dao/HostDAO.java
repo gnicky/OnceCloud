@@ -11,7 +11,7 @@ public interface HostDAO {
 
 	public abstract int countAllHostList(String search);
 
-//	public abstract List<OCHost> getAllHost();
+	public abstract List<OCHost> getAllHost();
 
 	public abstract OCHost getHost(String hostUuid);
 

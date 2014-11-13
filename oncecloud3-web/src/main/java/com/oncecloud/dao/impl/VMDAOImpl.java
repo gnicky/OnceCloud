@@ -1,11 +1,18 @@
 package com.oncecloud.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.VMDAO;
+import com.oncecloud.entity.OCVM;
 import com.oncecloud.helper.SessionHelper;
 
 @Component("VMDAO")
@@ -173,7 +180,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param host
 	 * @param importance
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsOfAdmin(int page, int limit, String host,
 			int importance) {
@@ -205,7 +212,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取一页未设置监控警告的主机列表
 	 * 
 	 * @param page
@@ -398,7 +405,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param host
 	 * @param importance
 	 * @return
-	 *//*
+	 */
 	public int countVMsOfAdmin(String host, int importance) {
 		int count = 0;
 		Session session = null;
@@ -425,7 +432,7 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取用户的主机总数
 	 * 
 	 * @param userId

@@ -28,13 +28,13 @@ public class HostAction {
 		this.hostManager = hostManager;
 	}
 
-/*	@RequestMapping(value = "/ALLList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/ALLList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String allList(HttpServletRequest request) {
 		JSONArray ja = this.getHostManager().getAllList();
 		return ja.toString();
 	}
-*/
+
 	@RequestMapping(value = "/LoadList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String loadList(HttpServletRequest request, ListModel list,

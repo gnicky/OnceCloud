@@ -45,7 +45,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return count;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getAllHost() {
 		List<OCHost> list = null;
@@ -64,7 +64,7 @@ public class HostDAOImpl implements HostDAO {
 			}
 		}
 		return list;
-	}*/
+	}
 
 	@SuppressWarnings("unchecked")
 	public OCHost getHost(String hostUuid) {

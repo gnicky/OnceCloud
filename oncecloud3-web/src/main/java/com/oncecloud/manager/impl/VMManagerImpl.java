@@ -1,81 +1,59 @@
-package com.oncecloud.manager;
+package com.oncecloud.manager.impl;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.once.xenapi.Connection;
-import com.once.xenapi.Host;
-import com.once.xenapi.Network;
-import com.once.xenapi.SR;
-import com.once.xenapi.Types;
-import com.once.xenapi.Types.BadServerResponse;
-import com.once.xenapi.Types.XenAPIException;
-import com.once.xenapi.VDI;
-import com.once.xenapi.VIF;
-import com.once.xenapi.VM;
-import com.once.xenapi.VM.Record;
-import com.once.xenapi.VMUtil;
-import com.oncecloud.dao.DHCPDAO;
-import com.oncecloud.dao.EIPDAO;
-import com.oncecloud.dao.FeeDAO;
-import com.oncecloud.dao.FirewallDAO;
-import com.oncecloud.dao.HostDAO;
-import com.oncecloud.dao.ImageDAO;
-import com.oncecloud.dao.LBDAO;
-import com.oncecloud.dao.LogDAO;
-import com.oncecloud.dao.QuotaDAO;
-import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.UserDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
-import com.oncecloud.dao.VolumeDAO;
-import com.oncecloud.entity.DHCP;
-import com.oncecloud.entity.Image;
-import com.oncecloud.entity.LB;
-import com.oncecloud.entity.OCHost;
-import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
-import com.oncecloud.entity.Router;
 import com.oncecloud.entity.User;
-import com.oncecloud.entity.Vnet;
-import com.oncecloud.log.LogConstant;
-import com.oncecloud.main.Constant;
-import com.oncecloud.main.NoVNC;
 import com.oncecloud.main.Utilities;
-import com.oncecloud.message.MessagePush;
+import com.oncecloud.manager.VMManager;
 
-/**
- * @author hehai
- * @version 2014/08/22
- */
-@Component
-public class VMManager {
+@Component("VMManager")
+public class VMManagerImpl implements VMManager {
 	private final static Logger logger = Logger.getLogger(VMManager.class);
 	private final static long MB = 1024 * 1024;
-	public final static int POWER_HALTED = 0;
-	public final static int POWER_RUNNING = 1;
-	public final static int POWER_CREATE = 2;
-	public final static int POWER_DESTROY = 3;
-	public final static int POWER_BOOT = 4;
-	public final static int POWER_SHUTDOWN = 5;
-	public final static int POWER_RESTART = 6;
 	
-	private HostDAO hostDAO;
-	private VnetDAO vnetDAO;
 	private VMDAO vmDAO;
+	private VnetDAO vnetDAO;
+	private UserDAO userDAO;
+	
+	private VnetDAO getVnetDAO() {
+		return vnetDAO;
+	}
+
+	@Autowired
+	private void setVnetDAO(VnetDAO vnetDAO) {
+		this.vnetDAO = vnetDAO;
+	}
+
+	private VMDAO getVmDAO() {
+		return vmDAO;
+	}
+
+	@Autowired
+	private void setVmDAO(VMDAO vmDAO) {
+		this.vmDAO = vmDAO;
+	}
+	
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	@Autowired
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
+	/*	
+ 	private HostDAO hostDAO;
 	private LogDAO logDAO;
 	private DHCPDAO dhcpDAO;
 	private EIPDAO eipDAO;
@@ -84,7 +62,6 @@ public class VMManager {
 	private ImageDAO imageDAO;
 	private FirewallDAO firewallDAO;
 	private QuotaDAO quotaDAO;
-	private UserDAO userDAO;
 	private RouterDAO routerDAO;
 	private LBDAO lbDAO;
 
@@ -110,24 +87,6 @@ public class VMManager {
 	@Autowired
 	private void setHostDAO(HostDAO hostDAO) {
 		this.hostDAO = hostDAO;
-	}
-
-	private VnetDAO getVnetDAO() {
-		return vnetDAO;
-	}
-
-	@Autowired
-	private void setVnetDAO(VnetDAO vnetDAO) {
-		this.vnetDAO = vnetDAO;
-	}
-
-	private VMDAO getVmDAO() {
-		return vmDAO;
-	}
-
-	@Autowired
-	private void setVmDAO(VMDAO vmDAO) {
-		this.vmDAO = vmDAO;
 	}
 
 	private LogDAO getLogDAO() {
@@ -310,9 +269,9 @@ public class VMManager {
 		return port;
 	}
 
-	/*
+	
 	 * 如果vlan为null，则绑定到基础网络，否则绑定到对应到私有网络
-	 */
+	 
 	private int bindVlan(String uuid, String vlan, String poolUuid) {
 		int vlanId = -1;
 		if (vlan != null) {
@@ -991,7 +950,7 @@ public class VMManager {
 		return jo;
 	}
 
-	/**
+	*//**
 	 * 获取用户主机列表
 	 * 
 	 * @param userId
@@ -999,7 +958,7 @@ public class VMManager {
 	 * @param limit
 	 * @param search
 	 * @return
-	 */
+	 *//*
 	public JSONArray getVMList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getVmDAO().countVMs(userId, search);
@@ -1049,7 +1008,7 @@ public class VMManager {
 		}
 		return ja;
 	}
-
+*/
 	public JSONArray getAdminVMList(int page, int limit, String host,
 			int importance, String type) {
 		JSONArray ja = new JSONArray();
@@ -1091,7 +1050,7 @@ public class VMManager {
 		}
 		return ja;
 	}
-
+/*
 	public JSONArray getVMsOfUser(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getVmDAO().countVMs(userId, search);
@@ -1126,12 +1085,12 @@ public class VMManager {
 		return ja;
 	}
 
-	/**
+	*//**
 	 * 获取主机详细信息
 	 * 
 	 * @param vmUuid
 	 * @return
-	 */
+	 *//*
 	public JSONObject getVMDetail(String vmUuid) {
 		JSONObject jo = new JSONObject();
 		OCVM ocvm = this.getVmDAO().getVM(vmUuid);
@@ -1655,12 +1614,12 @@ public class VMManager {
 					JSONObject jo = new JSONObject();
 					VIF.Record record = vm.getVIFRecord(conn, vif);
 					String tag = vm.getTag(conn, vif);
-					Network.Record record2 = vm.getNetworkRecord(conn, vif);
+					String physical = record.network.getNameLabel(conn);
 					jo.put("vifuuid", record.uuid);
 					jo.put("device", record.device);
 					jo.put("mac", record.MAC);
 					jo.put("tag", tag);
-					jo.put("physical", record2.nameLabel);
+					jo.put("physical", physical);
 					ja.put(jo);
 				}
 			} catch (Exception e) {
@@ -1858,6 +1817,5 @@ public class VMManager {
 					Utilities.stickyToError("配置修改失败"));
 			return false;
 		}
-	}
-	
+	}*/
 }

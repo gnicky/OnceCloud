@@ -41,19 +41,19 @@ public interface VMDAO {
 //	 */
 //	public abstract List<OCVM> getOnePageVMs(int userId, int page, int limit,
 //			String search);
-//
-//	/**
-//	 * 获取一页管理员主机列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param host
-//	 * @param importance
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getOnePageVMsOfAdmin(int page, int limit,
-//			String host, int importance);
-//
+
+	/**
+	 * 获取一页管理员主机列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param host
+	 * @param importance
+	 * @return
+	 */
+	public abstract List<OCVM> getOnePageVMsOfAdmin(int page, int limit,
+			String host, int importance);
+
 //	/**
 //	 * 获取一页未设置监控警告的主机列表
 //	 * 
@@ -111,16 +111,16 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract int countVMs(int userId, String search);
-//
-//	/**
-//	 * 获取管理员主机总数
-//	 * 
-//	 * @param host
-//	 * @param importance
-//	 * @return
-//	 */
-//	public abstract int countVMsOfAdmin(String host, int importance);
-//
+
+	/**
+	 * 获取管理员主机总数
+	 * 
+	 * @param host
+	 * @param importance
+	 * @return
+	 */
+	public abstract int countVMsOfAdmin(String host, int importance);
+
 //	/**
 //	 * 获取用户的主机总数
 //	 * 

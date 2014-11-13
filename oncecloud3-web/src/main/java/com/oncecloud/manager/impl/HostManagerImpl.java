@@ -811,7 +811,7 @@ public class HostManagerImpl implements HostManager{
 		return this.getHostDAO().updateHost(hostId, hostName, hostDesc,
 				rackUuid);
 	}
-/*
+
 	public JSONArray getAllList() {
 		JSONArray ja = new JSONArray();
 		List<OCHost> list = this.getHostDAO().getAllHost();
@@ -824,5 +824,5 @@ public class HostManagerImpl implements HostManager{
 			}
 		}
 		return ja;
-	}*/
+	}
 }
