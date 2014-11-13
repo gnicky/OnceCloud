@@ -60,4 +60,6 @@ public interface HostManager {
 //			String hostDesc, String rackUuid);
 //
 //	public abstract JSONArray getAllList();
+//  public abstract boolean (int userId, String ip, String username,
+//			String password);
 }

@@ -1653,7 +1653,7 @@ public class VMManager {
 				Set<VIF> vifset = vm.getVIFs(conn);
 				for (VIF vif : vifset) {
 					JSONObject jo = new JSONObject();
-					VIF.Record record = vif.getRecord(conn);
+					VIF.Record record = vm.getVIFRecord(conn, vif);
 					String tag = vm.getTag(conn, vif);
 					String physical = record.network.getNameLabel(conn);
 					jo.put("vifuuid", record.uuid);
@@ -1859,4 +1859,5 @@ public class VMManager {
 			return false;
 		}
 	}
+	
 }

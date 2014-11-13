@@ -29,6 +29,7 @@ import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCPool;
 import com.oncecloud.entity.Storage;
 import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.SSH;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.message.MessagePush;
 
@@ -41,7 +42,7 @@ public class HostManager {
 	private final static long MB = 1024 * 1024;
 	public final static String DEFAULT_USER = "root";
 	public final static String DEFAULT_PORT = "9363";
-	
+
 	private SRManager srManager;
 	private MessagePush messagePush;
 	private LogDAO logDAO;
@@ -667,8 +668,8 @@ public class HostManager {
 				OCHost masterHost = this.getHostDAO().getHost(masterUuid);
 				OCHost targetHost = this.getHostDAO().getHost(hostUuid);
 				if (masterHost != null & targetHost != null) {
-					boolean checkResult = this.getSrManager()
-							.checkSREquals(masterUuid, hostUuid);
+					boolean checkResult = this.getSrManager().checkSREquals(
+							masterUuid, hostUuid);
 					if (checkResult == true) {
 						Connection conn = new Connection("http://"
 								+ targetHost.getHostIP() + ":9363",
@@ -806,5 +807,31 @@ public class HostManager {
 			}
 		}
 		return ja;
+	}
+
+	public boolean recover(int userId, String ip, String username,
+			String password) {
+		SSH ssh = new SSH(ip, username, password);
+		if (!ssh.Connect()) {
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("IP不存在，或者用户名密码不匹配"));
+			return false;
+		}
+		try {
+			int code = ssh.Command("/etc/init.d/xend restart");
+			if (code != 0) {
+				this.getMessagePush().pushMessage(userId,
+						Utilities.stickyToError("修复中出现未知错误，请联系管理员"));
+				return false;
+			} else {
+				this.getMessagePush().pushMessage(userId,
+						Utilities.stickyToSuccess("修复成功"));
+				return true;
+			}
+		} catch (Exception e) {
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("修复中出现未知错误，请联系管理员"));
+			return false;
+		}
 	}
 }
