@@ -56,14 +56,14 @@ public class RackAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getRackManager().deleteRack(rackid, rackname, user.getUserId());
 	}
-/*
+
 	@RequestMapping(value = "/AllList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String allList(HttpServletRequest request) {
 		JSONArray ja = this.getRackManager().getRackAllList();
 		return ja.toString();
 	}
-*/
+
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
 	@ResponseBody
 	public String create(HttpServletRequest request,

@@ -269,7 +269,7 @@ public class RackManagerImpl implements RackManager {
 					Utilities.stickyToError("机架更新失败"));
 		}
 	}
-/*
+
 	public JSONArray getRackAllList() {
 		List<Rack> rackList = this.getRackDAO().getRackList();
 		JSONArray ja = new JSONArray();
@@ -281,5 +281,5 @@ public class RackManagerImpl implements RackManager {
 		}
 		return ja;
 	}
-*/
+
 }

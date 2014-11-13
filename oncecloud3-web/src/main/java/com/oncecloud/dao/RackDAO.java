@@ -24,12 +24,12 @@ public interface RackDAO {
 	public abstract List<Rack> getOnePageRackList(int page, int limit,
 			String search);
 
-//	/**
-//	 * 获取全部机架列表
-//	 * 
-//	 * @return
-//	 */
-//	public abstract List<Rack> getRackList();
+	/**
+	 * 获取全部机架列表
+	 * 
+	 * @return
+	 */
+	public abstract List<Rack> getRackList();
 
 	/**
 	 * 获取数据中心的机架列表

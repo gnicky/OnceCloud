@@ -34,7 +34,7 @@ public class HostAction {
 		JSONArray ja = this.getHostManager().getAllList();
 		return ja.toString();
 	}
-
+*/
 	@RequestMapping(value = "/LoadList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String loadList(HttpServletRequest request, ListModel list,
@@ -43,7 +43,7 @@ public class HostAction {
 				list.getLimit(), list.getSearch(), sruuid);
 		return ja.toString();
 	}
-*/
+
 	@RequestMapping(value = "/HostList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String hostList(HttpServletRequest request, ListModel list) {
@@ -51,7 +51,7 @@ public class HostAction {
 				list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/Delete", method = { RequestMethod.POST })
 	@ResponseBody
 	public String delete(HttpServletRequest request,
@@ -144,5 +144,5 @@ public class HostAction {
 	public String srOfHost(HttpServletRequest request,@RequestParam String hostUuid) {
 		JSONArray ja = this.getHostManager().getSrOfHost(hostUuid);
 		return ja.toString();
-	}*/
+	}
 }

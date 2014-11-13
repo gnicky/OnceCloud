@@ -26,13 +26,13 @@ public class StorageDAOImpl implements StorageDAO {
 	private void setSessionHelper(SessionHelper sessionHelper) {
 		this.sessionHelper = sessionHelper;
 	}
-/*
+
 	/**
 	 * 获取存储
 	 * 
 	 * @param srUuid
 	 * @return
-	 *//*
+	 */
 	public Storage getStorage(String srUuid) {
 		Storage sr = null;
 		Session session = null;
@@ -52,7 +52,7 @@ public class StorageDAOImpl implements StorageDAO {
 		}
 		return sr;
 	}
-*/
+
 	/**
 	 * 获取存储大小
 	 * 
@@ -79,15 +79,15 @@ public class StorageDAOImpl implements StorageDAO {
 		}
 		return total;
 	}
-/*
-	*//**
+
+	/**
 	 * 获取一页存储列表
 	 * 
 	 * @param page
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Storage> getOnePageStorageList(int page, int limit,
 			String search) {
@@ -112,7 +112,7 @@ public class StorageDAOImpl implements StorageDAO {
 		}
 		return srList;
 	}
-*/
+
 	/**
 	 * 获取机架存储列表
 	 * 
@@ -167,13 +167,13 @@ public class StorageDAOImpl implements StorageDAO {
 		}
 		return srList;
 	}
-/*
-	*//**
+
+	/**
 	 * 获取对应目标IP的存储
 	 * 
 	 * @param address
 	 * @return
-	 *//*
+	 */
 	public Storage getStorageOfAddress(String address) {
 		Session session = null;
 		Storage sr = null;
@@ -195,12 +195,12 @@ public class StorageDAOImpl implements StorageDAO {
 		return sr;
 	}
 
-	*//**
+	/**
 	 * 获取存储总数
 	 * 
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countAllStorageList(String search) {
 		int count = 0;
 		Session session = null;
@@ -221,12 +221,12 @@ public class StorageDAOImpl implements StorageDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取挂载该存储的服务器数目
 	 * 
 	 * @param srUuid
 	 * @return
-	 *//*
+	 */
 	public int countHostsOfStorage(String srUuid) {
 		int total = 0;
 		Session session = null;
@@ -247,7 +247,7 @@ public class StorageDAOImpl implements StorageDAO {
 		return total;
 	}
 
-	*//**
+	/**
 	 * 创建存储
 	 * 
 	 * @param srname
@@ -257,7 +257,7 @@ public class StorageDAOImpl implements StorageDAO {
 	 * @param srDir
 	 * @param rackid
 	 * @return
-	 *//*
+	 */
 	public Storage createStorage(String srname, String srAddress,
 			String srDesc, String srType, String srDir, String rackid) {
 		Storage storage = new Storage();
@@ -278,8 +278,6 @@ public class StorageDAOImpl implements StorageDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(storage);
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewSr",
-					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -290,12 +288,12 @@ public class StorageDAOImpl implements StorageDAO {
 		return storage;
 	}
 
-	*//**
+	/**
 	 * 删除存储
 	 * 
 	 * @param storageId
 	 * @return
-	 *//*
+	 */
 	public boolean removeStorage(String storageId) {
 		boolean result = false;
 		Session session = null;
@@ -306,8 +304,6 @@ public class StorageDAOImpl implements StorageDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("storageId", storageId);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewSr",
-					false);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -319,7 +315,7 @@ public class StorageDAOImpl implements StorageDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新存储
 	 * 
 	 * @param srId
@@ -327,7 +323,7 @@ public class StorageDAOImpl implements StorageDAO {
 	 * @param srDesc
 	 * @param rackId
 	 * @return
-	 *//*
+	 */
 	public boolean updateSR(String srId, String srName, String srDesc,
 			String rackId) {
 		boolean result = false;
@@ -352,5 +348,5 @@ public class StorageDAOImpl implements StorageDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

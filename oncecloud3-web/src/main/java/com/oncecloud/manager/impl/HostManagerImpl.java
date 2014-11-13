@@ -1,19 +1,39 @@
 package com.oncecloud.manager.impl;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.once.xenapi.Connection;
+import com.once.xenapi.Host;
+import com.once.xenapi.Pool;
+import com.once.xenapi.Types;
 import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.HostSRDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.OverViewDAO;
 import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
 import com.oncecloud.entity.OCHost;
+import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCPool;
+import com.oncecloud.entity.Storage;
+import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.HostManager;
+import com.oncecloud.manager.SRManager;
+import com.oncecloud.message.MessagePush;
 
 @Component("HostManager")
 public class HostManagerImpl implements HostManager{
@@ -23,6 +43,13 @@ public class HostManagerImpl implements HostManager{
 	private PoolDAO poolDAO;
 	private RackDAO rackDAO;
 	private StorageDAO storageDAO;
+	private LogDAO logDAO;
+	private OverViewDAO overViewDAO;
+	private HostSRDAO hostSRDAO;
+	
+	private MessagePush messagePush;
+	
+	private SRManager srManager;
 	
 	private HostDAO getHostDAO() {
 		return hostDAO;
@@ -60,21 +87,34 @@ public class HostManagerImpl implements HostManager{
 	private void setStorageDAO(StorageDAO storageDAO) {
 		this.storageDAO = storageDAO;
 	}
-	
-	/*private SRManager srManager;
-	private MessagePush messagePush;
-	private LogDAO logDAO;
-	private HostSRDAO hostSRDAO;
 
-	private SRManager getSrManager() {
-		return srManager;
+	private LogDAO getLogDAO() {
+		return logDAO;
+	}
+
+	public OverViewDAO getOverViewDAO() {
+		return overViewDAO;
 	}
 
 	@Autowired
-	private void setSrManager(SRManager srManager) {
-		this.srManager = srManager;
+	public void setOverViewDAO(OverViewDAO overViewDAO) {
+		this.overViewDAO = overViewDAO;
 	}
 
+	@Autowired
+	private void setLogDAO(LogDAO logDAO) {
+		this.logDAO = logDAO;
+	}
+	
+	private HostSRDAO getHostSRDAO() {
+		return hostSRDAO;
+	}
+
+	@Autowired
+	private void setHostSRDAO(HostSRDAO hostSRDAO) {
+		this.hostSRDAO = hostSRDAO;
+	}
+	
 	private MessagePush getMessagePush() {
 		return messagePush;
 	}
@@ -84,22 +124,13 @@ public class HostManagerImpl implements HostManager{
 		this.messagePush = messagePush;
 	}
 
-	private LogDAO getLogDAO() {
-		return logDAO;
+	private SRManager getSrManager() {
+		return srManager;
 	}
 
 	@Autowired
-	private void setLogDAO(LogDAO logDAO) {
-		this.logDAO = logDAO;
-	}
-
-	private HostSRDAO getHostSRDAO() {
-		return hostSRDAO;
-	}
-
-	@Autowired
-	private void setHostSRDAO(HostSRDAO hostSRDAO) {
-		this.hostSRDAO = hostSRDAO;
+	private void setSrManager(SRManager srManager) {
+		this.srManager = srManager;
 	}
 
 	public JSONArray createHost(String hostName, String hostPwd,
@@ -151,7 +182,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-*/
+
 	public JSONArray getHostList(int page, int limit, String search) {
 		JSONArray qaArray = new JSONArray();
 		int totalNum = this.getHostDAO().countAllHostList(search);
@@ -195,7 +226,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-/*
+
 	public JSONArray getHostLoadList(int page, int limit, String searchStr,
 			String srUuid) {
 		int totalNum = this.getHostDAO().countAllHostList(searchStr);
@@ -217,7 +248,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-
+/*
 	public void bindHost(String srUuid, String hostUuid, int userid) {
 		Date startTime = new Date();
 		boolean result = this.getSrManager()
@@ -250,7 +281,7 @@ public class HostManagerImpl implements HostManager{
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-
+*/
 	public JSONArray getSrOfHost(String hostUuid) {
 		List<Storage> srOfHost = this.getHostDAO().getSROfHost(hostUuid);
 		JSONArray qaArray = new JSONArray();
@@ -297,7 +328,7 @@ public class HostManagerImpl implements HostManager{
 				for (Storage sr : srlist2) {
 					srSet2.add(sr.getSrUuid());
 				}
-				if (!this.getHostDAO().isSameSr(srSet1, srSet2)) {
+				if (isSameSr(srSet1, srSet2)) {
 					isSame = false;
 					break;
 				}
@@ -342,7 +373,7 @@ public class HostManagerImpl implements HostManager{
 				for (Storage sr : poolsrlist) {
 					poolsrSet.add(sr.getSrUuid());
 				}
-				if (this.getHostDAO().isSameSr(srSet1, poolsrSet)) {
+				if (isSameSr(srSet1, poolsrSet)) {
 					JSONObject tObj = new JSONObject();
 					tObj.put("pooluuid", poolUuid);
 					tObj.put("poolname", Utilities.encodeText(poolName));
@@ -360,10 +391,24 @@ public class HostManagerImpl implements HostManager{
 		return qaArray;
 	}
 
+	private boolean isSameSr(Set<String> sr1, Set<String> sr2) {
+		if (sr1.size() != sr2.size()) {
+			return false;
+		} else {
+			sr1.retainAll(sr2);
+			if (sr1.size() == sr2.size()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
 	public JSONArray deleteHost(String hostId, String hostName, int userid) {
 		Date startTime = new Date();
 		JSONArray qaArray = new JSONArray();
 		boolean result = this.getHostDAO().deleteHost(hostId);
+		result = this.getOverViewDAO().updateOverViewfield("viewServer", false);
 		JSONObject tObj = new JSONObject();
 		tObj.put("result", result);
 		qaArray.put(tObj);
@@ -569,7 +614,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-
+/*
 	public JSONArray getHostForImage() {
 		List<OCHost> hostlist = this.getHostDAO().getHostForImage();
 		JSONArray qaArray = new JSONArray();
@@ -583,7 +628,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-
+*/
 	public JSONArray getOneHost(String hostid) {
 		OCHost ochost = this.getHostDAO().getHost(hostid);
 		JSONArray qaArray = new JSONArray();
@@ -622,22 +667,8 @@ public class HostManagerImpl implements HostManager{
 		return qaArray;
 	}
 
-	public void update(String hostId, String hostName, String hostDesc,
-			String rackUuid, int userid) {
-		HostManager hm = new HostManager();
-		boolean result = hm.updateHost(hostId, hostName, hostDesc, rackUuid);
-		// push message
-		if (result) {
-			this.getMessagePush().pushMessage(userid,
-					Utilities.stickyToSuccess("服务器更新成功"));
-		} else {
-			this.getMessagePush().pushMessage(userid,
-					Utilities.stickyToError("服务器更新成功"));
-		}
-	}
-
 	@SuppressWarnings("deprecation")
-	public boolean addHostToPool(String hostUuid, String poolUuid) {
+	private boolean addHostToPool(String hostUuid, String poolUuid) {
 		boolean result = false;
 		try {
 			OCPool pool = this.getPoolDAO().getPool(poolUuid);
@@ -667,7 +698,7 @@ public class HostManagerImpl implements HostManager{
 		return result;
 	}
 
-	public OCHost getPoolMaster(String poolUuid) {
+	private OCHost getPoolMaster(String poolUuid) {
 		OCHost master = null;
 		if (poolUuid != null) {
 			OCPool pool = this.getPoolDAO().getPool(poolUuid);
@@ -682,7 +713,7 @@ public class HostManagerImpl implements HostManager{
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean ejectHostFromPool(String hostUuid) {
+	private boolean ejectHostFromPool(String hostUuid) {
 		boolean result = false;
 		OCHost host = this.getHostDAO().getHost(hostUuid);
 		String poolUuid = host.getPoolUuid();
@@ -703,13 +734,19 @@ public class HostManagerImpl implements HostManager{
 			e.printStackTrace();
 		}
 		if (result == true) {
-			result = this.getHostDAO().eject(host, poolUuid, masterUuid);
+			OCPool pool = this.getPoolDAO().getPool(poolUuid);
+			if (host.getHostUuid().equals(masterUuid)) {
+				pool.setPoolMaster(null);
+				this.getPoolDAO().update(pool);
+			}
+			host.setPoolUuid(null);
+			result = this.getHostDAO().update(host);
 		}
 		return result;
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean createPool(String hostUuid, String poolUuid) {
+	private boolean createPool(String hostUuid, String poolUuid) {
 		boolean result = false;
 		try {
 			OCHost targetHost = this.getHostDAO().getHost(hostUuid);
@@ -719,8 +756,9 @@ public class HostManagerImpl implements HostManager{
 						+ targetHost.getHostIP() + ":9363",
 						HostManager.DEFAULT_USER, targetHost.getHostPwd());
 				Pool.create(conn, poolUuid);
-				result = this.getHostDAO().updatePoolMaster(pool, targetHost);
-
+				pool.setPoolMaster(targetHost.getHostUuid());
+				result = this.getHostDAO().update(targetHost);
+				result = this.getPoolDAO().update(pool);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -729,7 +767,7 @@ public class HostManagerImpl implements HostManager{
 	}
 
 	@SuppressWarnings("deprecation")
-	public OCHost addHost(String hostName, String hostPwd, String hostDesc,
+	private OCHost addHost(String hostName, String hostPwd, String hostDesc,
 			String hostIp, String rackUuid) {
 		OCHost exist = this.getHostDAO().getHostFromIp(hostIp);
 		if (exist != null) {
@@ -763,6 +801,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		if (host != null) {
 			this.getHostDAO().saveHost(host);
+			this.getOverViewDAO().updateOverViewfield("viewServer", true);
 		}
 		return host;
 	}
@@ -772,7 +811,7 @@ public class HostManagerImpl implements HostManager{
 		return this.getHostDAO().updateHost(hostId, hostName, hostDesc,
 				rackUuid);
 	}
-
+/*
 	public JSONArray getAllList() {
 		JSONArray ja = new JSONArray();
 		List<OCHost> list = this.getHostDAO().getAllHost();

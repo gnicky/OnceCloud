@@ -18,6 +18,6 @@ public interface RackManager {
 	public abstract void update(String rackId, String rackName,
 			String rackDesc, String dcid, int userid);
 
-//	public abstract JSONArray getRackAllList();
+	public abstract JSONArray getRackAllList();
 
 }

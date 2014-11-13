@@ -288,7 +288,7 @@ public class HostDAO {
 		if (sr1.size() != sr2.size()) {
 			return false;
 		} else {
-			sr1.retainAll(sr1);
+			sr1.retainAll(sr2);
 			if (sr1.size() == sr2.size()) {
 				return true;
 			} else {

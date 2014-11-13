@@ -127,12 +127,12 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return poolList;
 	}
-/*
+
 	/**
 	 * 获取所有资源池列表
 	 * 
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCPool> getPoolList() {
 		List<OCPool> poolList = null;
@@ -152,7 +152,7 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return poolList;
 	}
-*/
+
 	/**
 	 * 获取数据中心的资源池列表
 	 * 
@@ -380,4 +380,21 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return result;
 	}
+
+public boolean update(OCPool pool) {
+	Session session = null;
+	try {
+		session = this.getSessionHelper().getMainSession();
+		session.beginTransaction();
+		session.update(pool);
+		session.getTransaction().commit();
+		return true;
+	} catch (Exception e) {
+		e.printStackTrace();
+		if (session != null) {
+			session.getTransaction().rollback();
+		}
+		return false;
+	}
+}
 }

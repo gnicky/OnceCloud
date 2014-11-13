@@ -34,12 +34,12 @@ public interface PoolDAO {
 	public abstract List<OCPool> getOnePagePoolList(int page, int limit,
 			String search);
 
-//	/**
-//	 * 获取所有资源池列表
-//	 * 
-//	 * @return
-//	 */
-//	public abstract List<OCPool> getPoolList();
+	/**
+	 * 获取所有资源池列表
+	 * 
+	 * @return
+	 */
+	public abstract List<OCPool> getPoolList();
 
 	/**
 	 * 获取数据中心的资源池列表
@@ -107,4 +107,6 @@ public interface PoolDAO {
 	 */
 	public abstract boolean updatePool(String poolId, String poolName,
 			String poolDesc, String dcUuid);
+	
+	public abstract boolean update(OCPool pool);
 }

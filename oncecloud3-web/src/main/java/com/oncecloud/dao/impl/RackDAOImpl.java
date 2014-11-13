@@ -85,12 +85,12 @@ public class RackDAOImpl implements RackDAO {
 		}
 		return rackList;
 	}
-/*
+
 	/**
 	 * 获取全部机架列表
 	 * 
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Rack> getRackList() {
 		List<Rack> rackList = null;
@@ -110,7 +110,7 @@ public class RackDAOImpl implements RackDAO {
 		}
 		return rackList;
 	}
-*/
+
 	/**
 	 * 获取数据中心的机架列表
 	 * 
