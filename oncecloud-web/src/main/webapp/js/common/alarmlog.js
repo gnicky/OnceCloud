@@ -195,7 +195,7 @@ $('#read').on('click', function (event) {
 });
 
 function readAlarmLog(alarmlogid) {
-	alert(alarmlogid)
+	//alert(alarmlogid);
     $.ajax({
         type: 'post',
         url: '/AlarmLogAction/read',
