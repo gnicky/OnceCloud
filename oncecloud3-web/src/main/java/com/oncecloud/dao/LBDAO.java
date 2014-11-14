@@ -7,8 +7,8 @@ import com.oncecloud.entity.LB;
 
 public interface LBDAO {
 
-//	public abstract int countAllAdminVMList(String host, int importance);
-//
+	public abstract int countAllAdminVMList(String host, int importance);
+
 //	public abstract int countAllLBList(String search, int lbUID);
 //
 //	public abstract int countAllLBListAlarm(String search, int lbUID);
@@ -28,10 +28,10 @@ public interface LBDAO {
 	public abstract LB getLB(String lbUuid);
 
 //	public abstract String getLBName(String lbuuid);
-//
-//	public abstract List<LB> getOnePageAdminVmList(int page, int limit,
-//			String host, int importance);
-//
+
+	public abstract List<LB> getOnePageAdminVmList(int page, int limit,
+			String host, int importance);
+
 //	public abstract List<LB> getOnePageLBList(int userId, int page, int limit,
 //			String search);
 //
@@ -61,14 +61,14 @@ public interface LBDAO {
 //			Date createDate);
 //
 //	public abstract void removeLB(int userId, String uuid);
-//
-//	public abstract boolean setLBHostUuid(String uuid, String hostUuid);
-//
-//	public abstract boolean setLBPowerStatus(String uuid, int powerStatus);
-//
-//	public abstract boolean updateLBImportance(String uuid, int lbImportance);
-//
-//	public abstract boolean setLBStatus(String lbUuid, int state);
+
+	public abstract boolean updateLBHostUuid(String uuid, String hostUuid);
+
+	public abstract boolean updateLBPowerStatus(String uuid, int powerStatus);
+
+	public abstract boolean updateLBImportance(String uuid, int lbImportance);
+
+//	public abstract boolean updateLBStatus(String lbUuid, int state);
 //
 //	/**
 //	 * @author hty

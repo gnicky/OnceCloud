@@ -1,7 +1,12 @@
 package com.oncecloud.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +49,7 @@ public class LBDAOImpl implements LBDAO {
 		this.quotaDAO = quotaDAO;
 	}
 
-
+*/
 	public int countAllAdminVMList(String host, int importance) {
 		int count = 0;
 		Session session = null;
@@ -71,7 +76,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return count;
 	}
-
+/*
 	public int countAllLBList(String search, int lbUID) {
 		int count = 0;
 		Session session = null;
@@ -231,7 +236,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return result;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
 	public List<LB> getOnePageAdminVmList(int page, int limit, String host,
 			int importance) {
@@ -261,7 +266,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return lbList;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<LB> getOnePageLBList(int userId, int page, int limit,
 			String search) {
@@ -426,18 +431,17 @@ public class LBDAOImpl implements LBDAO {
 			}
 		}
 	}
-
-	public boolean setLBHostUuid(String uuid, String hostUuid) {
+*/
+	public boolean updateLBHostUuid(String uuid, String hostUuid) {
 		boolean result = false;
 		LB lb = this.getLB(uuid);
 		Session session = null;
-		Transaction tx = null;
 		try {
 			lb.setHostUuid(hostUuid);
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.update(lb);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -448,17 +452,16 @@ public class LBDAOImpl implements LBDAO {
 		return result;
 	}
 
-	public boolean setLBPowerStatus(String uuid, int powerStatus) {
+	public boolean updateLBPowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		LB lb = this.getLB(uuid);
 		Session session = null;
-		Transaction tx = null;
 		try {
 			lb.setLbPower(powerStatus);
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.update(lb);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -473,13 +476,12 @@ public class LBDAOImpl implements LBDAO {
 		boolean result = false;
 		LB lb = this.getLB(uuid);
 		Session session = null;
-		Transaction tx = null;
 		try {
 			lb.setLbImportance(lbImportance);
 			session = this.getSessionHelper().getMainSession();
-			tx = session.beginTransaction();
+			session.beginTransaction();
 			session.update(lb);
-			tx.commit();
+			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -489,8 +491,8 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return result;
 	}
-
-	public boolean setLBStatus(String lbUuid, int state) {
+/*
+	public boolean updateLBStatus(String lbUuid, int state) {
 		boolean result = false;
 		Session session = null;
 		Transaction tx = null;

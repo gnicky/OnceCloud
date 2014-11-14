@@ -45,19 +45,19 @@ public interface RouterDAO {
 //	 */
 //	public abstract List<Router> getOnePageRouters(int userId, int page,
 //			int limit, String search);
-//
-//	/**
-//	 * 获取一页管理员路由器列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param host
-//	 * @param importance
-//	 * @return
-//	 */
-//	public abstract List<Router> getOnePageRoutersOfAdmin(int page, int limit,
-//			String host, int importance);
-//
+
+	/**
+	 * 获取一页管理员路由器列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param host
+	 * @param importance
+	 * @return
+	 */
+	public abstract List<Router> getOnePageRoutersOfAdmin(int page, int limit,
+			String host, int importance);
+
 //	/**
 //	 * 获取一页未设置监控警告的路由器列表
 //	 * 
@@ -108,16 +108,16 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract int countRouters(int userId, String search);
-//
-//	/**
-//	 * 获取管理员路由器总数
-//	 * 
-//	 * @param host
-//	 * @param importance
-//	 * @return
-//	 */
-//	public abstract int countRoutersOfAdmin(String host, int importance);
-//
+
+	/**
+	 * 获取管理员路由器总数
+	 * 
+	 * @param host
+	 * @param importance
+	 * @return
+	 */
+	public abstract int countRoutersOfAdmin(String host, int importance);
+
 //	/**
 //	 * 获取未设置监控警告的路由器总数
 //	 * 
@@ -185,18 +185,18 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract boolean updateStatus(String routerUuid, int status);
-//
-//	/**
-//	 * 更新路由器电源状态
-//	 * 
-//	 * @param uuid
-//	 * @param powerStatus
-//	 * @return
-//	 */
-//	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
-//
-//	public abstract boolean updateImportance(String uuid, int routerImportance);
-//
+
+	/**
+	 * 更新路由器电源状态
+	 * 
+	 * @param uuid
+	 * @param powerStatus
+	 * @return
+	 */
+	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
+
+	public abstract boolean updateImportance(String uuid, int routerImportance);
+
 //	/**
 //	 * 更新路由器防火墙
 //	 * 
@@ -224,16 +224,16 @@ public interface RouterDAO {
 //	 */
 //	public abstract boolean updateName(String routeruuid, String routerName,
 //			String routerDesc);
-//
-//	/**
-//	 * 更新路由器所在服务器
-//	 * 
-//	 * @param uuid
-//	 * @param hostUuid
-//	 * @return
-//	 */
-//	public abstract boolean updateHostUuid(String uuid, String hostUuid);
-//
+
+	/**
+	 * 更新路由器所在服务器
+	 * 
+	 * @param uuid
+	 * @param hostUuid
+	 * @return
+	 */
+	public abstract boolean updateHostUuid(String uuid, String hostUuid);
+
 //	/**
 //	 * 更新路由器监控警告
 //	 * 
