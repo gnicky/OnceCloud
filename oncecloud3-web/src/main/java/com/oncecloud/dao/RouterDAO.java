@@ -8,14 +8,14 @@ import org.json.JSONArray;
 import com.oncecloud.entity.Router;
 
 public interface RouterDAO {
-//	/**
-//	 * 获取路由器
-//	 * 
-//	 * @param routerUuid
-//	 * @return
-//	 */
-//	public abstract Router getRouter(String routerUuid);
-//
+	/**
+	 * 获取路由器
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public abstract Router getRouter(String routerUuid);
+
 //	public abstract void updateRouter(Router router);
 //
 //	/**

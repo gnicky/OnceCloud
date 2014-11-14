@@ -49,7 +49,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	public Router getRouter(String routerUuid) {
 		Router router = null;
 		Session session = null;
@@ -69,7 +69,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 		return router;
 	}
-
+/*
 	public void updateRouter(Router router) {
 		Session session = null;
 		try {

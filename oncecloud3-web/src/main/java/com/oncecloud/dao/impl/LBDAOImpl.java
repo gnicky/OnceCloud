@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.LBDAO;
+import com.oncecloud.entity.LB;
 import com.oncecloud.helper.SessionHelper;
 
 @Component("LBDAO")
@@ -188,7 +189,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return list;
 	}
-
+*/
 	public LB getLB(String lbUuid) {
 		LB lb = null;
 		Session session = null;
@@ -198,7 +199,7 @@ public class LBDAOImpl implements LBDAO {
 			String queryString = "from LB where lbUuid = :lbUuid";
 			Query query = session.createQuery(queryString);
 			query.setString("lbUuid", lbUuid);
-			lb = (LB) query.list().get(0);
+			lb = (LB) query.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -208,7 +209,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return lb;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public String getLBName(String lbuuid) {
 		Session session = null;

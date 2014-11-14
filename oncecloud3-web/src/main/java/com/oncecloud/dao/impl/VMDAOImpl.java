@@ -1,5 +1,6 @@
 package com.oncecloud.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -75,7 +76,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	public OCVM getVM(String vmUuid) {
 		OCVM vm = null;
 		Session session = null;
@@ -96,7 +97,7 @@ public class VMDAOImpl implements VMDAO {
 		return vm;
 	}
 
-	*//**
+	/**
 	 * 获取主机名称
 	 * 
 	 * @param vmUuid
@@ -572,7 +573,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 		return count;
 	}
-/*
+
 	/**
 	 * 预创建虚拟机
 	 * 
@@ -588,7 +589,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param vmStatus
 	 * @param createDate
 	 * @return
-	 *//*
+	 */
 	public boolean preCreateVM(String vmUuid, String vmPWD, Integer vmUID,
 			String vmName, Integer vmPlatform, String vmMac, Integer vmMem,
 			Integer vmCpu, Integer vmPower, Integer vmStatus, Date createDate) {
@@ -600,8 +601,6 @@ public class VMDAOImpl implements VMDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(vm);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(vmUID, "quotaVM",
-					1, true);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -613,12 +612,12 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 删除主机
 	 * 
 	 * @param userId
 	 * @param vmUuid
-	 *//*
+	 */
 	public void removeVM(int userId, String vmUuid) {
 		OCVM toDelete = this.getVM(vmUuid);
 		if (toDelete != null && toDelete.getVmStatus() != 0) {
@@ -628,8 +627,6 @@ public class VMDAOImpl implements VMDAO {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(toDelete);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaVM", 1, false);
 				session.getTransaction().commit();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -640,7 +637,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新主机
 	 * 
 	 * @param vm
@@ -659,7 +656,7 @@ public class VMDAOImpl implements VMDAO {
 			}
 		}
 	}
-
+*/
 	public void saveVM(OCVM vm) {
 		Session session = null;
 		try {
@@ -689,7 +686,7 @@ public class VMDAOImpl implements VMDAO {
 			}
 		}
 	}
-	*//**
+	/**
 	 * 更新主机
 	 * 
 	 * @param userId
@@ -699,19 +696,14 @@ public class VMDAOImpl implements VMDAO {
 	 * @param hostUuid
 	 * @param ip
 	 * @return
-	 *//*
-	public boolean updateVM(int userId, String vmUuid, String vmPWD,
+	 */
+	public boolean updateVM(String firewallId, String vmUuid, String vmPWD,
 			int vmPower, String hostUuid, String ip) {
 		boolean result = false;
 		OCVM vm = this.getVM(vmUuid);
 		if (vm != null) {
 			Session session = null;
 			try {
-				String firewallId = null;
-				if (userId != 1) {
-					firewallId = this.getFirewallDAO()
-							.getDefaultFirewall(userId).getFirewallId();
-				}
 				vm.setVmPWD(vmPWD);
 				vm.setVmPower(vmPower);
 				vm.setHostUuid(hostUuid);
@@ -732,7 +724,7 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新主机备份时间
 	 * 
 	 * @param vmUuid
@@ -868,7 +860,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 		return result;
 	}
-
+*/
 	public boolean updateVMImportance(String vmUuid, int vmImportance) {
 		boolean result = false;
 		OCVM vm = this.getVM(vmUuid);
@@ -947,7 +939,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param uuid
 	 * @param powerStatus
 	 * @return
-	 *//*
+	 */
 	public boolean updatePowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		OCVM vm = this.getVM(uuid);
@@ -969,7 +961,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 		return result;
 	}
-	
+/*	
 	public void unbindNet(String uuid) {
 		OCVM vm = this.getVM(uuid);
 		if (vm != null) {
@@ -995,7 +987,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param uuid
 	 * @param hostUuid
 	 * @return
-	 *//*
+	 */
 	public boolean updateHostUuid(String uuid, String hostUuid) {
 		boolean result = false;
 		OCVM vm = this.getVM(uuid);
@@ -1016,7 +1008,7 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 主机一致性删除
 	 * 
 	 * @param hostUuid

@@ -74,28 +74,14 @@ public class QuotaDAOImpl implements QuotaDAO{
 	}
 
 	/**
-	 * 获取全部的配额（不包含事务）
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public Quota getQuotaTotalNoTransaction(int userId) {
-		Session session = this.getSessionHelper().getMainSession();
-		Query query = session
-				.createQuery("from Quota where quotaUID = :userId and quotaType = 0");
-		query.setInteger("userId", userId);
-		return (Quota) query.uniqueResult();
-	}
-
-	/**
-	 * 更新配额（不包含事务）
+	 * 更新配额
 	 * 
 	 * @param userId
 	 * @param filedName
 	 * @param size
 	 * @param isadd
 	 */
-	public synchronized void updateQuotaFieldNoTransaction(int userId,
+	public synchronized void updateQuota(int userId,
 			String filedName, int size, boolean isadd) {
 		Session session = sessionHelper.getMainSession();
 		String setString = filedName + "=" + filedName + "+" + size;
@@ -111,25 +97,29 @@ public class QuotaDAOImpl implements QuotaDAO{
 	}
 
 	/**
-	 * 初始化配额（不包含事务）
+	 * 初始化配额
 	 * 
 	 * @param userId
 	 * @throws Exception
 	 */
-	public void initQuotaNoTransaction(Integer userId) throws Exception {
-		Session session = sessionHelper.getMainSession();
-		if (userId == 1) {
-			Quota quota = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
-					10, 20, 10, 0);
-			session.save(quota);
-		} else {
-			Quota def = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
-					10, 20, 10, 0);
-			def.setQuotaUID(userId);
-			Quota current = new Quota(userId, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-					0, 0, 0, 1);
-			session.save(def);
-			session.save(current);
+	public void initQuota(Integer userId) {
+		try {
+			Session session = sessionHelper.getMainSession();
+			if (userId == 1) {
+				Quota quota = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
+						10, 20, 10, 0);
+				session.save(quota);
+			} else {
+				Quota def = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
+						10, 20, 10, 0);
+				def.setQuotaUID(userId);
+				Quota current = new Quota(userId, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+						0, 0, 0, 1);
+				session.save(def);
+				session.save(current);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

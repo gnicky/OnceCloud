@@ -5,13 +5,13 @@ import java.util.List;
 import com.oncecloud.entity.Vnet;
 
 public interface VnetDAO {
-//	/**
-//	 * 获取用户私有网络
-//	 * 
-//	 * @param vnetUuid
-//	 * @return
-//	 */
-//	public abstract Vnet getVnet(String vnetUuid);
+	/**
+	 * 获取用户私有网络
+	 * 
+	 * @param vnetUuid
+	 * @return
+	 */
+	public abstract Vnet getVnet(String vnetUuid);
 
 	/**
 	 * 获取私有网络名称

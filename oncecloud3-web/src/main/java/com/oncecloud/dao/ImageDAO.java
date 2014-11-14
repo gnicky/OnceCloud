@@ -5,9 +5,9 @@ import java.util.List;
 import com.oncecloud.entity.Image;
 
 public interface ImageDAO {
-//
-//	public abstract Image getImage(String imageUuid);
-//
+
+	public abstract Image getImage(String imageUuid);
+
 //	public abstract Image getDBImage(String type, int throughout);
 //
 //	public abstract Image getLBImage(int userId);
@@ -43,10 +43,10 @@ public interface ImageDAO {
 //
 //	public abstract boolean shareImage(String imageUuid, String referenceUuid,
 //			String poolUuid);
-//
-//	public abstract boolean updateImage(Image image);
-//
-//	public abstract boolean save(Image image);
-//
-//	public abstract boolean checkImage(String uuid);
+
+	public abstract boolean updateImage(Image image);
+
+	public abstract boolean save(Image image);
+
+	public abstract boolean checkImage(String uuid);
 }

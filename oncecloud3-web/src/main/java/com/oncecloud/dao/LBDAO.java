@@ -24,9 +24,9 @@ public interface LBDAO {
 //	 * @return
 //	 */
 //	public abstract List<LB> getAllListAlarm(int lbUID, String alarmUuid);
-//
-//	public abstract LB getLB(String lbUuid);
-//
+
+	public abstract LB getLB(String lbUuid);
+
 //	public abstract String getLBName(String lbuuid);
 //
 //	public abstract List<LB> getOnePageAdminVmList(int page, int limit,

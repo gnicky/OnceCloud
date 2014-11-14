@@ -59,7 +59,7 @@ public class ImageDAOImpl implements ImageDAO {
 	private void setQuotaDAO(QuotaDAO quotaDAO) {
 		this.quotaDAO = quotaDAO;
 	}
-
+*/
 	public Image getImage(String imageUuid) {
 		Image image = null;
 		Session session = null;
@@ -78,7 +78,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return image;
 	}
-
+/*
 	public Image getDBImage(String type, int throughout) {
 		return null;
 	}
@@ -376,7 +376,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-	
+*/	
 	public boolean updateImage(Image image) {
 		boolean result = false;
 		Session session = null;
@@ -412,7 +412,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-	
+
 	public boolean checkImage(String uuid) {
 		boolean result = false;
 		Session session = null;
@@ -427,5 +427,5 @@ public class ImageDAOImpl implements ImageDAO {
 			e.printStackTrace();
 		}
 		return result;
-	}*/
+	}
 }

@@ -21,14 +21,6 @@ public interface QuotaDAO {
 	public abstract Quota getQuotaTotal(int userId);
 
 	/**
-	 * 获取全部的配额（不包含事务）
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public abstract Quota getQuotaTotalNoTransaction(int userId);
-
-	/**
 	 * 更新配额（不包含事务）
 	 * 
 	 * @param userId
@@ -36,7 +28,7 @@ public interface QuotaDAO {
 	 * @param size
 	 * @param isadd
 	 */
-	public abstract void updateQuotaFieldNoTransaction(int userId,
+	public abstract void updateQuota(int userId,
 			String filedName, int size, boolean isadd);
 
 	/**
@@ -45,8 +37,7 @@ public interface QuotaDAO {
 	 * @param userId
 	 * @throws Exception
 	 */
-	public abstract void initQuotaNoTransaction(Integer userId)
-			throws Exception;
+	public abstract void initQuota(Integer userId);
 
 	/**
 	 * 更新配额

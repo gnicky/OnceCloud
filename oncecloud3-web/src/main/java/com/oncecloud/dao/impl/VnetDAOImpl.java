@@ -46,7 +46,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * 
 	 * @param vnetUuid
 	 * @return
-	 *//*
+	 */
 	public Vnet getVnet(String vnetUuid) {
 		Vnet vnet = null;
 		Session session = null;
@@ -67,7 +67,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return vnet;
 	}
 
-	*//**
+	/**
 	 * 获取私有网络名称
 	 * 
 	 * @param vnetuuid

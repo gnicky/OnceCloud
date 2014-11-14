@@ -6,14 +6,14 @@ import java.util.List;
 import com.oncecloud.entity.OCVM;
 
 public interface VMDAO {
-//	/**
-//	 * 获取主机
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract OCVM getVM(String vmUuid);
-//
+	/**
+	 * 获取主机
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract OCVM getVM(String vmUuid);
+
 //	/**
 //	 * 获取主机名称
 //	 * 
@@ -164,60 +164,59 @@ public interface VMDAO {
 	 */
 	public abstract int countVMsOfHost(String hostUuid);
 
-//	/**
-//	 * 预创建虚拟机
-//	 * 
-//	 * @param vmUuid
-//	 * @param vmPWD
-//	 * @param vmUID
-//	 * @param vmName
-//	 * @param vmPlatform
-//	 * @param vmMac
-//	 * @param vmMem
-//	 * @param vmCpu
-//	 * @param vmPower
-//	 * @param vmStatus
-//	 * @param createDate
-//	 * @return
-//	 */
-//	public abstract boolean preCreateVM(String vmUuid, String vmPWD,
-//			Integer vmUID, String vmName, Integer vmPlatform, String vmMac,
-//			Integer vmMem, Integer vmCpu, Integer vmPower, Integer vmStatus,
-//			Date createDate);
-//
-//	/**
-//	 * 删除主机
-//	 * 
-//	 * @param userId
-//	 * @param vmUuid
-//	 */
-//	public abstract void removeVM(int userId, String vmUuid);
-//
+	/**
+	 * 预创建虚拟机
+	 * 
+	 * @param vmUuid
+	 * @param vmPWD
+	 * @param vmUID
+	 * @param vmName
+	 * @param vmPlatform
+	 * @param vmMac
+	 * @param vmMem
+	 * @param vmCpu
+	 * @param vmPower
+	 * @param vmStatus
+	 * @param createDate
+	 * @return
+	 */
+	public abstract boolean preCreateVM(String vmUuid, String vmPWD,
+			Integer vmUID, String vmName, Integer vmPlatform, String vmMac,
+			Integer vmMem, Integer vmCpu, Integer vmPower, Integer vmStatus,
+			Date createDate);
+
+	/**
+	 * 删除主机
+	 * 
+	 * @param userId
+	 * @param vmUuid
+	 */
+	public abstract void removeVM(int userId, String vmUuid);
+
 //	/**
 //	 * 更新主机
 //	 * 
 //	 * @param vm
 //	 */
 //	public abstract void updateVM(OCVM vm);
-//
-//	public abstract void saveVM(OCVM vm);
-//
-//	public abstract void deleteVM(OCVM vm);
-//
-//	/**
-//	 * 更新主机
-//	 * 
-//	 * @param userId
-//	 * @param vmUuid
-//	 * @param vmPWD
-//	 * @param vmPower
-//	 * @param hostUuid
-//	 * @param ip
-//	 * @return
-//	 */
-//	public abstract boolean updateVM(int userId, String vmUuid, String vmPWD,
-//			int vmPower, String hostUuid, String ip);
-//
+
+	public abstract void saveVM(OCVM vm);
+
+	public abstract void deleteVM(OCVM vm);
+
+	/**
+	 * 更新主机
+	 * 
+	 * @param vmUuid
+	 * @param vmPWD
+	 * @param vmPower
+	 * @param hostUuid
+	 * @param ip
+	 * @return
+	 */
+	public abstract boolean updateVM(String firewallId, String vmUuid, String vmPWD,
+			int vmPower, String hostUuid, String ip);
+
 //	/**
 //	 * 更新主机备份时间
 //	 * 
@@ -261,8 +260,8 @@ public interface VMDAO {
 //	 */
 //	public abstract boolean updateVMStatus(String vmUuid, String hostUuid,
 //			int power);
-//
-//	public abstract boolean updateVMImportance(String vmUuid, int vmImportance);
+
+	public abstract boolean updateVMImportance(String vmUuid, int vmImportance);
 
 	/**
 	 * 更新主机电源状态和所在服务器
@@ -283,27 +282,27 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract boolean updateVMVlan(String vmuuid, String vnetid);
-//
-//	/**
-//	 * 更新主机电源状态
-//	 * 
-//	 * @param uuid
-//	 * @param powerStatus
-//	 * @return
-//	 */
-//	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
+
+	/**
+	 * 更新主机电源状态
+	 * 
+	 * @param uuid
+	 * @param powerStatus
+	 * @return
+	 */
+	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
 //
 //	public abstract void unbindNet(String uuid);
-//
-//	/**
-//	 * 更新主机所在服务器
-//	 * 
-//	 * @param uuid
-//	 * @param hostUuid
-//	 * @return
-//	 */
-//	public abstract boolean updateHostUuid(String uuid, String hostUuid);
-//
+
+	/**
+	 * 更新主机所在服务器
+	 * 
+	 * @param uuid
+	 * @param hostUuid
+	 * @return
+	 */
+	public abstract boolean updateHostUuid(String uuid, String hostUuid);
+
 //	/**
 //	 * 主机一致性删除
 //	 * 
