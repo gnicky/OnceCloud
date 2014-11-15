@@ -825,12 +825,12 @@ public class VMManager {
 								+ "] CPU [" + cpu + "] Memory [" + memory
 								+ "] Mac [" + mac + "] IP [" + ip + "] OS ["
 								+ OS + "]");
-//						vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root",
-//								pwd, cpu, memory, mac, "", OS, allocateHost,
-//								imagePwd, vmBackendName, false);
 						vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root",
-								pwd, cpu, memory, mac, ip, OS, allocateHost,
+								pwd, cpu, memory, mac, "", OS, allocateHost,
 								imagePwd, vmBackendName, false);
+//						vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root",
+//								pwd, cpu, memory, mac, ip, OS, allocateHost,
+//								imagePwd, vmBackendName, false);
 						Thread.sleep(8000);
 						Date createEndDate = new Date();
 						int elapse1 = Utilities.timeElapse(createDate,
@@ -907,8 +907,8 @@ public class VMManager {
 			}
 			imagePwd = image.getImagePwd();
 			mac = Utilities.randomMac();
-//			ip = "";
-			ip = "1.1.1.1";
+			ip = "";
+//			ip = "1.1.1.1";
 			c = this.getConstant().getConnectionFromPool(poolUuid);
 			allocateHost = getAllocateHost(poolUuid, memory);
 			logger.info("VM [" + vmBackendName + "] allocated to Host ["
@@ -927,12 +927,12 @@ public class VMManager {
 					logger.info("VM Config: Template [" + tplUuid + "] CPU ["
 							+ cpu + "] Memory [" + memory + "] Mac [" + mac
 							+ "] IP [" + ip + "] OS [" + OS + "]");
-//					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
-//							cpu, memory, mac, "", OS, allocateHost, imagePwd,
-//							vmBackendName, false);
 					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
-							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
+							cpu, memory, mac, "", OS, allocateHost, imagePwd,
 							vmBackendName, false);
+//					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
+//							cpu, memory, mac, ip, OS, allocateHost, imagePwd,
+//							vmBackendName, false);
 					OCVM vm = this.getVmDAO().getVM(vmUuid);
 					Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
 					jo.put("vname", vnet.getVnetName());

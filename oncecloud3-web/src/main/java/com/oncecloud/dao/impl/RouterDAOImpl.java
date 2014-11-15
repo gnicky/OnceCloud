@@ -169,7 +169,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param host
 	 * @param importance
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRoutersOfAdmin(int page, int limit,
 			String host, int importance) {
@@ -200,7 +200,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return rtList;
 	}
 
-	*//**
+	/**
 	 * 获取一页未设置监控警告的路由器列表
 	 * 
 	 * @param page
@@ -373,7 +373,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param host
 	 * @param importance
 	 * @return
-	 *//*
+	 */
 	public int countRoutersOfAdmin(String host, int importance) {
 		int count = 0;
 		Session session = null;
@@ -400,7 +400,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取未设置监控警告的路由器总数
 	 * 
 	 * @param search
@@ -598,7 +598,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param uuid
 	 * @param powerStatus
 	 * @return
-	 *//*
+	 */
 	public boolean updatePowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		Router router = this.getRouter(uuid);
@@ -643,7 +643,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新路由器防火墙
 	 * 
 	 * @param routerUuid
@@ -731,7 +731,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param uuid
 	 * @param hostUuid
 	 * @return
-	 *//*
+	 */
 	public boolean updateHostUuid(String uuid, String hostUuid) {
 		boolean result = false;
 		Router rt = getRouter(uuid);
@@ -751,7 +751,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新路由器监控警告
 	 * 
 	 * @param routerUuid

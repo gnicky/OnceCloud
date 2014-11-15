@@ -47,15 +47,15 @@ public interface VnetDAO {
 //	 * @return
 //	 */
 //	public abstract List<Vnet> getVnetsOfUser(int userId);
-//
-//	/**
-//	 * 获取路由器私有网络列表
-//	 * 
-//	 * @param routerUuid
-//	 * @return
-//	 */
-//	public abstract List<Vnet> getVnetsOfRouter(String routerUuid);
-//
+
+	/**
+	 * 获取路由器私有网络列表
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public abstract List<Vnet> getVnetsOfRouter(String routerUuid);
+
 //	/**
 //	 * 获取路由器私有网络数目
 //	 * 
