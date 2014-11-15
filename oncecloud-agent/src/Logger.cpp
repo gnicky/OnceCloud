@@ -11,6 +11,8 @@
 
 #define MAX_LINE_SIZE 1024
 
+bool EnableLogger=false;
+
 Logger::Logger(const LogLevel & maxLevel)
 {
 	this->SetMaxLevel(maxLevel);
@@ -33,6 +35,11 @@ void Logger::SetMaxLevel(const LogLevel & maxLevel)
 
 void Logger::Write(const LogLevel & level, const std::string & message)
 {
+	if(!EnableLogger)
+	{
+		return;
+	}
+
 	if(level.GetPriority()>this->GetMaxLevel().GetPriority())
 	{
 		return;
