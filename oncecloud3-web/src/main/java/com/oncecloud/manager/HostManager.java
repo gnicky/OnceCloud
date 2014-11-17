@@ -47,6 +47,6 @@ public interface HostManager {
 
 	public abstract JSONArray getAllList();
 	
-//  public abstract boolean recover(int userId, String ip, String username,
-//			String password);
+	public abstract boolean recover(int userId, String ip, String username,
+			String password);
 }
