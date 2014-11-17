@@ -14,9 +14,9 @@ public interface LBDAO {
 //	public abstract int countAllLBListAlarm(String search, int lbUID);
 //
 //	public abstract int countLBsWithoutEIP(String search, int userId);
-//
-//	public abstract LB getAliveLB(String lbUuid);
-//
+
+	public abstract LB getAliveLB(String lbUuid);
+
 //	/**
 //	 * @author hty
 //	 * @param alarmUuid

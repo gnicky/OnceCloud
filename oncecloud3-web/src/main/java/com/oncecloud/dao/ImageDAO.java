@@ -15,21 +15,20 @@ public interface ImageDAO {
 //	public abstract Image getRTImage(int userId);
 //
 //	public abstract List<Image> getSystemImage();
-//
-//	public abstract List<Image> getOnePageImageList(int userId, int userLevel,
-//			int page, int limit, String search, String type);
+
+	public abstract List<Image> getOnePageImageList(int userId,
+			int page, int limit, String search, String type);
 
 	public abstract int countByHost(String hostUuid);
 
-//	public abstract int countAllImageList(int userId, String search,
-//			int userLevel, String type);
-//
-//	public abstract boolean deleteImage(String imageId);
-//
-//	public abstract Image createImage(String imageUuid, String imageName,
-//			int imageUID, int imagePlatform, String imageServer,
-//			String imageDesc, String imagePwd);
-//
+	public abstract int countAllImageList(int userId, String search, String type);
+
+	public abstract boolean deleteImage(String imageId);
+
+	public abstract Image createImage(String imageUuid, String imageName,
+			int imageUID, int imagePlatform, String imageServer,
+			String imageDesc, String imagePwd);
+
 //	/**
 //	 * @param imageuuid
 //	 * @param newName
@@ -38,11 +37,11 @@ public interface ImageDAO {
 //	 */
 //	public abstract boolean updateName(String imageuuid, String newName,
 //			String description);
-//
-//	public abstract boolean isShared(String poolUuid, String referenceUuid);
-//
-//	public abstract boolean shareImage(String imageUuid, String referenceUuid,
-//			String poolUuid);
+
+	public abstract boolean isShared(String poolUuid, String referenceUuid);
+
+	public abstract boolean shareImage(String imageUuid, String referenceUuid,
+			String poolUuid);
 
 	public abstract boolean updateImage(Image image);
 

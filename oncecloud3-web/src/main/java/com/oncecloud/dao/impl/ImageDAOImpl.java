@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.ImageDAO;
-import com.oncecloud.dao.OverViewDAO;
-import com.oncecloud.dao.QuotaDAO;
-import com.oncecloud.dao.UserDAO;
 import com.oncecloud.entity.Image;
 import com.oncecloud.helper.SessionHelper;
 
@@ -147,41 +144,25 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return imageList;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
-	public List<Image> getOnePageImageList(int userId, int userLevel, int page,
+	public List<Image> getOnePageImageList(int userId, int page,
 			int limit, String search, String type) {
 		List<Image> imageList = null;
 		Session session = null;
 		try {
-			String poolUuid = this.getUserDAO().getUser(userId)
-					.getUserAllocate();
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			int startPos = (page - 1) * limit;
 			String queryString = "";
-			if (userLevel == 0) {
-				if (type.equals("system")) {
-					queryString = "from Image where imageUID = 1 and imageName like '%"
-							+ search
-							+ "%' and imageStatus = 1 order by createDate desc";
-				} else {
-					queryString = "from Image where imageUID != 1 and imageName like '%"
-							+ search
-							+ "%' and imageStatus = 1 order by createDate desc";
-				}
+			if (type.equals("system")) {
+				queryString = "from Image where imageUID = 1 and imageName like '%"
+						+ search
+						+ "%' and imageStatus = 1 order by createDate desc";
 			} else {
-				if (type.equals("system")) {
-					queryString = "from Image where imageUID = 1 and imageName like '%"
-							+ search
-							+ "%' and imageStatus = 1 and poolUuid = '"
-							+ poolUuid
-							+ "' and imagePlatform < 2 order by createDate desc";
-				} else {
-					queryString = "from Image where imageUID = " + userId
-							+ " and imageName like '%" + search
-							+ "%' and imageStatus = 1 order by createDate desc";
-				}
+				queryString = "from Image where imageUID != 1 and imageName like '%"
+						+ search
+						+ "%' and imageStatus = 1 order by createDate desc";
 			}
 			Query query = session.createQuery(queryString);
 			query.setFirstResult(startPos);
@@ -195,7 +176,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return imageList;
 	}
-*/
+
 	public int countByHost(String hostUuid) {
 		int count = 0;
 		Session session = null;
@@ -216,8 +197,8 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return count;
 	}
-/*
-	public int countAllImageList(int userId, String search, int userLevel,
+
+	public int countAllImageList(int userId, String search,
 			String type) {
 		int total = 0;
 		Session session = null;
@@ -225,26 +206,12 @@ public class ImageDAOImpl implements ImageDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "";
-			if (userLevel == 0) {
-				if (type.equals("system")) {
-					queryString = "select count(*) from Image where imageUID = 1 and imageName like '%"
-							+ search + "%' and imageStatus = 1";
-				} else {
-					queryString = "select count(*) from Image where imageUID != 1 and imageName like '%"
-							+ search + "%' and imageStatus = 1";
-				}
+			if (type.equals("system")) {
+				queryString = "select count(*) from Image where imageUID = 1 and imageName like '%"
+						+ search + "%' and imageStatus = 1";
 			} else {
-				if (type.equals("system")) {
-					queryString = "select count(*) from Image where imageUID = 1 and imageName like '%"
-							+ search
-							+ "%' and imageStatus = 1 and imagePlatform < 2";
-				} else {
-					queryString = "select count(*) from Image where imageUID = "
-							+ userId
-							+ " and imageName like '%"
-							+ search
-							+ "%' and imageStatus = 1";
-				}
+				queryString = "select count(*) from Image where imageUID != 1 and imageName like '%"
+						+ search + "%' and imageStatus = 1";
 			}
 			Query query = session.createQuery(queryString);
 			total = ((Number) query.iterate().next()).intValue();
@@ -267,8 +234,6 @@ public class ImageDAOImpl implements ImageDAO {
 					+ imageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
-					false);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -291,10 +256,6 @@ public class ImageDAOImpl implements ImageDAO {
 					imagePlatform, 1, imageServer, imageDesc, new Date(), null);
 			image.setPreAllocate(0);
 			session.saveOrUpdate(image);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(imageUID,
-					"quotaImage", 1, true);
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
-					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -305,7 +266,7 @@ public class ImageDAOImpl implements ImageDAO {
 		return image;
 	}
 
-	*//**
+	/**
 	 * @param imageuuid
 	 * @param newName
 	 * @param description
@@ -333,7 +294,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-	
+*/
 	public boolean isShared(String poolUuid, String referenceUuid) {
 		boolean result = false;
 		Session session = null;
@@ -356,7 +317,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-	
+
 	public boolean shareImage(String imageUuid, String referenceUuid, String poolUuid) {
 		boolean result = false;
 		Session session = null;
@@ -376,7 +337,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-*/	
+	
 	public boolean updateImage(Image image) {
 		boolean result = false;
 		Session session = null;

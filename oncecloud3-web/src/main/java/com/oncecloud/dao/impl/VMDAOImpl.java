@@ -117,7 +117,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	public OCVM getAliveVM(String vmUuid) {
 		OCVM vm = null;
 		Session session = null;
@@ -138,7 +138,7 @@ public class VMDAOImpl implements VMDAO {
 		return vm;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户主机列表
 	 * 
 	 * @param userId
@@ -146,7 +146,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMs(int userId, int page, int limit,
 			String search) {
@@ -173,7 +173,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取一页管理员主机列表
 	 * 
 	 * @param page

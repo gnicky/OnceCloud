@@ -16,12 +16,12 @@ public interface PoolDAO {
 
 	public abstract OCPool getPoolNoTransactional(String poolUuid);
 
-//	/**
-//	 * 获取随机资源池
-//	 * 
-//	 * @return
-//	 */
-//	public abstract String getRandomPool();
+	/**
+	 * 获取随机资源池
+	 * 
+	 * @return
+	 */
+	public abstract String getRandomPool();
 
 	/**
 	 * 获取一页资源池列表
@@ -48,8 +48,8 @@ public interface PoolDAO {
 	 * @return
 	 */
 	public abstract List<OCPool> getPoolListOfDC(String dcUuid);
-//
-//	public abstract OCPool getPoolByMaster(String poolMaster);
+
+	public abstract OCPool getPoolByMaster(String poolMaster);
 
 	/**
 	 * 获取资源池总数

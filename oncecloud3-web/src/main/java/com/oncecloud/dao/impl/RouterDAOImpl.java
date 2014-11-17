@@ -105,7 +105,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	public Router getAliveRouter(String routerUuid) {
 		Router router = null;
 		Session session = null;
@@ -126,7 +126,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return router;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户路由器列表
 	 * 
 	 * @param userId

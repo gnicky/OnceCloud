@@ -146,7 +146,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return count;
 	}
-
+*/
 	public LB getAliveLB(String lbUuid) {
 		LB lb = null;
 		Session session = null;
@@ -166,7 +166,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return lb;
 	}
-
+/*
 	*//**
 	 * @author hty
 	 * @param alarmUuid

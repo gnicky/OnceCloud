@@ -69,7 +69,7 @@ public class HostSRDAOImpl implements HostSRDAO {
 		}
 		return srList;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public Set<String> getHostList(String srUuid) {
 		Set<String> hostList = null;
@@ -92,5 +92,5 @@ public class HostSRDAOImpl implements HostSRDAO {
 			}
 		}
 		return hostList;
-	}*/
+	}
 }

@@ -13,18 +13,18 @@ public interface VolumeDAO {
 //	 * @return
 //	 */
 //	public abstract Volume getVolume(String volumeUuid);
-//
-//	/**
-//	 * 获取一页用户硬盘列表
-//	 * 
-//	 * @param userId
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract List<Volume> getOnePageVolumes(int userId, int page,
-//			int limit, String search);
+
+	/**
+	 * 获取一页用户硬盘列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract List<Volume> getOnePageVolumes(int userId, int page,
+			int limit, String search);
 
 	/**
 	 * 获取主机硬盘列表

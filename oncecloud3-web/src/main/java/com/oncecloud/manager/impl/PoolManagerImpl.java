@@ -347,7 +347,7 @@ public class PoolManagerImpl implements PoolManager {
 					Utilities.stickyToError("资源池更新失败"));
 		}
 	}
-/*
+
 	public JSONArray getAllPool() {
 		JSONArray ja = new JSONArray();
 		List<OCPool> poolList = this.getPoolDAO().getPoolList();
@@ -361,7 +361,7 @@ public class PoolManagerImpl implements PoolManager {
 		}
 		return ja;
 	}
-*/
+
 	@SuppressWarnings("deprecation")
 	public void keepAccordance(int userId, String poolUuid) {
 		boolean result = false;

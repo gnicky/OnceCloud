@@ -10,6 +10,6 @@ public interface HostSRDAO {
 
 	public abstract Set<String> getSRList(String hostUuid);
 
-//	public abstract Set<String> getHostList(String srUuid);
+	public abstract Set<String> getHostList(String srUuid);
 
 }

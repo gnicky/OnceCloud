@@ -115,7 +115,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<User> getOnePageUserList(int page, int limit, String search) {
 		List<User> userList = null;
@@ -140,12 +140,12 @@ public class UserDAOImpl implements UserDAO {
 		return userList;
 	}
 
-	*//**
+	/**
 	 * 获取全部用户列表
 	 * 
 	 * @param searchStr
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<User> getCompanyUserList(String search) {
 		List<User> userList = null;
@@ -168,12 +168,12 @@ public class UserDAOImpl implements UserDAO {
 		return userList;
 	}
 
-	*//**
+	/**
 	 * 获取用户总数
 	 * 
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countAllUserList(String search) {
 		int count = 0;
 		Session session = null;
@@ -194,7 +194,7 @@ public class UserDAOImpl implements UserDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 添加用户
 	 * 
 	 * @param userName
@@ -204,10 +204,11 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userCompany
 	 * @param userLevel
 	 * @param userDate
-	 *//*
-	public void insertUser(String userName, String userPass, String userMail,
+	 */
+	public int insertUser(String userName, String userPass, String userMail,
 			String userPhone, String userCompany, int userLevel, Date userDate, String poolUuid) {
 		Session session = null;
+		int userId = -1;
 		try {
 			User user = new User();
 			user.setUserName(userName);
@@ -219,17 +220,11 @@ public class UserDAOImpl implements UserDAO {
 			user.setUserStatus(1);
 			user.setUserDate(userDate);
 			user.setUserBalance(0.0);
-			if (poolUuid.equals("0")){
-				user.setUserAllocate(this.getPoolDAO().getRandomPool());
-			} else {
-				user.setUserAllocate(poolUuid);
-			}
+			user.setUserAllocate(poolUuid);
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(user);
-			int userId = user.getUserId();
-			this.getQuotaDAO().initQuotaNoTransaction(userId);
-			this.getFirewallDAO().createDefaultFirewallNoTransaction(userId);
+			userId = user.getUserId();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -237,14 +232,15 @@ public class UserDAOImpl implements UserDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return userId;
 	}
 
-	*//**
+	/**
 	 * 禁用用户
 	 * 
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public boolean disableUser(int userId) {
 		boolean result = false;
 		User delUser = getUser(userId);
@@ -267,7 +263,7 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 申请代金券
 	 * 
 	 * @param userId
@@ -371,7 +367,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userCompany
 	 * @param userLevel
 	 * @return
-	 *//*
+	 */
 	public boolean updateUser(Integer userid, String userName, String userMail,
 			String userPhone, String userCompany, int userLevel) {
 		boolean result = false;
@@ -401,7 +397,7 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新用户余额
 	 * 
 	 * @param userid
@@ -428,7 +424,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return result;
 	}
-	
+*/	
 	public List<User> getUserList() {
 		List<User> list = new ArrayList<User>();
 		Session session = null;
@@ -446,6 +442,6 @@ public class UserDAOImpl implements UserDAO {
 			}
 		}
 		return list;
-	}*/
+	}
 
 }

@@ -74,7 +74,7 @@ public class PoolDAOImpl implements PoolDAO{
 	 * 获取随机资源池
 	 * 
 	 * @return
-	 *//*
+	 */
 	public String getRandomPool() {
 		String pool = null;
 		Session session = null;
@@ -95,7 +95,7 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return pool;
 	}
-*/
+
 	/**
 	 * 获取一页资源池列表
 	 * 
@@ -179,7 +179,7 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return pooList;
 	}
-/*
+
 	public OCPool getPoolByMaster(String poolMaster) {
 		OCPool pool = null;
 		Session session = null;
@@ -199,7 +199,7 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return pool;
 	}
-*/
+
 	/**
 	 * 获取资源池总数
 	 * 

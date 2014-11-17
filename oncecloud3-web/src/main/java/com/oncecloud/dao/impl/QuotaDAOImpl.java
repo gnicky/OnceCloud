@@ -84,6 +84,7 @@ public class QuotaDAOImpl implements QuotaDAO{
 	public synchronized void updateQuota(int userId,
 			String filedName, int size, boolean isadd) {
 		Session session = sessionHelper.getMainSession();
+		session.beginTransaction();
 		String setString = filedName + "=" + filedName + "+" + size;
 		if (isadd == false) {
 			setString = filedName + "=" + filedName + "-" + size;
@@ -94,6 +95,7 @@ public class QuotaDAOImpl implements QuotaDAO{
 		Query query = session.createQuery(queryString);
 		query.setInteger("userId", userId);
 		query.executeUpdate();
+		session.getTransaction().commit();
 	}
 
 	/**
@@ -105,6 +107,7 @@ public class QuotaDAOImpl implements QuotaDAO{
 	public void initQuota(Integer userId) {
 		try {
 			Session session = sessionHelper.getMainSession();
+			session.beginTransaction();
 			if (userId == 1) {
 				Quota quota = new Quota(1, 2, 5, 5, 5, 10, 100, 10, 10, 2, 5, 3,
 						10, 20, 10, 0);
@@ -118,6 +121,7 @@ public class QuotaDAOImpl implements QuotaDAO{
 				session.save(def);
 				session.save(current);
 			}
+			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

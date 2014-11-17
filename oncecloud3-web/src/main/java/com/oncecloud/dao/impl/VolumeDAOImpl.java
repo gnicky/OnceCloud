@@ -72,7 +72,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Volume> getOnePageVolumes(int userId, int page, int limit,
 			String search) {
@@ -101,7 +101,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		return volumeList;
 	}
 
-	*//**
+	/**
 	 * 获取主机硬盘列表
 	 * 
 	 * @param vmUuid

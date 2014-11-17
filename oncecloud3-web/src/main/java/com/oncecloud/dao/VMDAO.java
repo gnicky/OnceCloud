@@ -21,26 +21,26 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract String getVmName(String vmUuid);
-//
-//	/**
-//	 * 获取使用中的主机
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract OCVM getAliveVM(String vmUuid);
-//
-//	/**
-//	 * 获取一页用户主机列表
-//	 * 
-//	 * @param userId
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getOnePageVMs(int userId, int page, int limit,
-//			String search);
+
+	/**
+	 * 获取使用中的主机
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract OCVM getAliveVM(String vmUuid);
+
+	/**
+	 * 获取一页用户主机列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract List<OCVM> getOnePageVMs(int userId, int page, int limit,
+			String search);
 
 	/**
 	 * 获取一页管理员主机列表

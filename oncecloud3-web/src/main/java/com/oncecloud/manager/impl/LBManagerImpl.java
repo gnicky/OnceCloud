@@ -17,6 +17,7 @@ import com.once.xenapi.VM;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.UserDAO;
 import com.oncecloud.entity.LB;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.log.LogConstant;
@@ -34,6 +35,7 @@ public class LBManagerImpl implements LBManager {
 	private LBDAO lbDAO;
 	private HostDAO hostDAO;
 	private LogDAO logDAO;
+	private UserDAO userDAO;
 	
 	private MessagePush messagePush;
 	
@@ -64,6 +66,15 @@ public class LBManagerImpl implements LBManager {
 	@Autowired
 	public void setLogDAO(LogDAO logDAO) {
 		this.logDAO = logDAO;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	@Autowired
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 	public MessagePush getMessagePush() {

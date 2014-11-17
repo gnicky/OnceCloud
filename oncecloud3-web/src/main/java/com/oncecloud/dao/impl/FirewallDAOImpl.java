@@ -87,10 +87,11 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return count;
 	}
-
-	public void createDefaultFirewallNoTransaction(Integer userId)
+*/
+	public void createDefaultFirewall(Integer userId)
 			throws Exception {
 		Session session = this.getSessionHelper().getMainSession();
+		session.beginTransaction();
 		String firewallUuid = UUID.randomUUID().toString();
 		String ruleIcmpId = UUID.randomUUID().toString();
 		String rule22Id = UUID.randomUUID().toString();
@@ -107,8 +108,9 @@ public class FirewallDAOImpl implements FirewallDAO {
 		session.save(ruleIcmp);
 		session.save(rule22);
 		session.save(rule3389);
+		session.getTransaction().commit();
 	}
-
+/*
 	public boolean deleteAllRuleOfFirewall(String firewallId) {
 		boolean result = false;
 		Session session = null;

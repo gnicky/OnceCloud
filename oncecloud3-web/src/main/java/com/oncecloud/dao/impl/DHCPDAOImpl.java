@@ -60,55 +60,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 	private void setOverViewDAO(OverViewDAO overViewDAO) {
 		this.overViewDAO = overViewDAO;
 	}
-
-	public boolean addDHCPPool(int userId, String prefix, int start, int end, Date date) {
-		boolean result = true;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			List<DHCP> dhcpList = new ArrayList<DHCP>();
-			JSONObject total = new JSONObject();
-			JSONArray ipMacArray = new JSONArray();
-			for (int i = start; i <= end; i++) {
-				String currentIp = prefix + i;
-				boolean check = ipExist(currentIp);
-				if (check == false) {
-					DHCP dhcp = new DHCP();
-					String mac = Utilities.randomMac();
-					dhcp.setDhcpMac(mac);
-					dhcp.setDhcpIp(currentIp);
-					dhcp.setCreateDate(date);
-					JSONObject ipMacObj = new JSONObject();
-					ipMacObj.put("ipAddress", currentIp);
-					ipMacObj.put("hardwareAddress", mac);
-					ipMacArray.put(ipMacObj);
-					dhcpList.add(dhcp);
-				}
-			}
-			total.put("hosts", ipMacArray);
-			Connection connection = this.getConstant().getConnectionNoTransactional(userId);
-			boolean bindResult = Host.bindIpMac(connection, total.toString());
-			if (bindResult) {
-				for (DHCP dhcp : dhcpList) {
-					session.save(dhcp);
-					this.getOverViewDAO().updateOverViewfieldNoTransaction(
-							"viewDhcp", true);
-				}
-				session.getTransaction().commit();
-				result = true;
-			} else {
-				result = false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-	}
-
+*/
 	public int countAllDHCP(String search) {
 		int count = 0;
 		Session session = null;
@@ -142,8 +94,6 @@ public class DHCPDAOImpl implements DHCPDAO {
 				session.delete(dhcp);
 				result = true;
 			}
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewDhcp",
-					false);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -154,7 +104,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 		}
 		return result;
 	}
-*/
+
 	private DHCP doGetDHCP(Session session, String dhcpMac) {
 		DHCP dhcp;
 		Criteria criteria = session.createCriteria(DHCP.class).add(
@@ -206,7 +156,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 		}
 		return dhcp;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
 	public List<DHCP> getOnePageDHCPList(int page, int limit, String search) {
 		List<DHCP> dhcpList = null;
@@ -232,7 +182,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 		}
 		return dhcpList;
 	}
-
+/*
 	public List<DHCP> getDHCPList() {
 		List<DHCP> list = new ArrayList<DHCP>();
 		Session session = null;
@@ -248,15 +198,17 @@ public class DHCPDAOImpl implements DHCPDAO {
 		}
 		return list;
 	}
-	
+*/
 	public boolean ipExist(String dhcpIp) {
 		boolean result = false;
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
 			Criteria criteria = session.createCriteria(DHCP.class).add(
 					Restrictions.eq("dhcpIp", dhcpIp));
 			DHCP dhcp = (DHCP) criteria.uniqueResult();
+			session.getTransaction().commit();
 			result = (dhcp != null);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -266,7 +218,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 		}
 		return result;
 	}
-*/
+
 	public synchronized boolean returnDHCP(String dhcpMac) {
 		boolean result = false;
 		Session session = null;

@@ -33,5 +33,5 @@ public interface SRManager {
 	public abstract void updateStorage(int userId, String srId, String srName,
 			String srDesc, String rackId);
 
-//	public abstract JSONArray getRealSRList(String poolUuid);
+	public abstract JSONArray getRealSRList(String poolUuid);
 }

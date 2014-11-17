@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.PoolManager;
+import com.oncecloud.ui.model.ImageCloneModel;
 import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/PoolAction")
@@ -71,14 +72,14 @@ public class PoolAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getPoolManager().updatePool(pooluuid, poolname, pooldesc, dcuuid, user.getUserId());
 	}
-/*	
+	
 	@RequestMapping(value = "/AllPool", method = {RequestMethod.POST })
 	@ResponseBody
 	public String allPool(HttpServletRequest request, ImageCloneModel imagecloneModel) {
 		JSONArray ja = this.getPoolManager().getAllPool();
 		return ja.toString();
 	}
-*/	
+	
 	@RequestMapping(value = "/KeepAccordance", method = {RequestMethod.POST })
 	@ResponseBody
 	public void keepAccordance(HttpServletRequest request, @RequestParam String poolUuid) {

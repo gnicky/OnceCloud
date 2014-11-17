@@ -9,10 +9,11 @@ import com.oncecloud.entity.EIP;
 
 public interface EIPDAO {
 //	public abstract boolean abandonEip(String eipIp, int userId);
-//
-//	public abstract boolean addEIP(String prefix, int start, int end,
-//			Date date, int eiptype, String eipInterface);
-//
+
+	public abstract boolean ipExist(String eIp);
+	
+	public abstract boolean saveEIP(EIP eip);
+	
 //	public abstract EIP applyEip(String eipName, int userId, int eipBandwidth,
 //			Date createDate, String eipUuid);
 //
@@ -30,11 +31,11 @@ public interface EIPDAO {
 //	 * @return
 //	 */
 //	public abstract int countAllEipListAlarm(String search, int eipUID);
-//
-//	public abstract int countAllEipListNoUserid(String searchStr);
-//
-//	public abstract boolean deleteEIP(String ip, String uuid);
-//
+
+	public abstract int countAllEipListNoUserid(String searchStr);
+
+	public abstract boolean deleteEIP(String ip, String uuid);
+
 //	// 获取可用公网IP
 //	public abstract List<EIP> getableeips(int uid);
 //
@@ -52,9 +53,9 @@ public interface EIPDAO {
 
 	public abstract String getEipIp(String dependencyUuid);
 
-//	public abstract List<EIP> getOnePageEipList(int userId, int page,
-//			int limit, String search);
-//
+	public abstract List<EIP> getOnePageEipList(int userId, int page,
+			int limit, String search);
+
 //	/**
 //	 * @author hty
 //	 * @param page
@@ -65,10 +66,10 @@ public interface EIPDAO {
 //	 */
 //	public abstract List<EIP> getOnePageEipListAlarm(int page, int limit,
 //			String search, int eipUID);
-//
-//	public abstract List<EIP> getOnePageEIPListNoUserid(int page, int limit,
-//			String searchStr);
-//
+
+	public abstract List<EIP> getOnePageEIPListNoUserid(int page, int limit,
+			String searchStr);
+
 //	public abstract boolean ipExist(Session session, String eIp);
 //
 //	/**

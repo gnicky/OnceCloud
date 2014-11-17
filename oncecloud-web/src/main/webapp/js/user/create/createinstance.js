@@ -119,6 +119,14 @@ $('.btn-next').on('click', function (event) {
     $("#wizard").bwizard("next");
 });
 
+$('#vlan').change(function(event) {
+	if($("#vlan option:selected").val() == 0) {
+		$('.vxnet-item').find('.glyphicon-ok').show();
+	} else {
+		$('.vxnet-item').find('.glyphicon-ok').hide();
+	}
+});
+
 $('#createvmAction').on('click', function (event) {
     event.preventDefault();
     var valid = $('#basicinfo-form').valid();

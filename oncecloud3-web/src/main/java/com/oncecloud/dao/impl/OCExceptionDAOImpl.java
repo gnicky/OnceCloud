@@ -47,6 +47,21 @@ public class OCExceptionDAOImpl implements OCExceptionDAO{
 			}
 		}
 	}
+
+	public void saveForAction(OCHException exc) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			session.save(exc);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+	}
 	
 	public void delete(Date startTime, Date endTime) {
 		Session session = null;

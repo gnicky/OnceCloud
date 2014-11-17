@@ -25,15 +25,15 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract String getRouterName(String routerUuid);
-//
-//	/**
-//	 * 获取使用中的路由器
-//	 * 
-//	 * @param routerUuid
-//	 * @return
-//	 */
-//	public abstract Router getAliveRouter(String routerUuid);
-//
+
+	/**
+	 * 获取使用中的路由器
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public abstract Router getAliveRouter(String routerUuid);
+
 //	/**
 //	 * 获取一页用户路由器列表
 //	 * 

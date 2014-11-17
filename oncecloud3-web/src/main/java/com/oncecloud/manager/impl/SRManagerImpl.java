@@ -2,6 +2,7 @@ package com.oncecloud.manager.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
+import com.once.xenapi.SR;
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.HostSRDAO;
 import com.oncecloud.dao.LogDAO;
@@ -349,7 +351,7 @@ public class SRManagerImpl implements SRManager {
 					Utilities.stickyToError("存储更新失败"));
 		}
 	}
-/*	
+	
 	public JSONArray getRealSRList(String poolUuid) {
 		JSONArray ja = new JSONArray();
 		Connection conn = null;
@@ -373,5 +375,5 @@ public class SRManagerImpl implements SRManager {
 			e.printStackTrace();
 		}
 		return ja;
-	}*/
+	}
 }

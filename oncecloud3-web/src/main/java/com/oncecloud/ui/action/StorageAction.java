@@ -81,12 +81,12 @@ public class StorageAction {
 		JSONArray ja = this.getSrManager().load2Server(user.getUserId(), sruuid, hostuuid);
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/RealSRList", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getRealSRList(HttpServletRequest request, @RequestParam String poolUuid) {
 		JSONArray ja = this.getSrManager().getRealSRList(poolUuid);
 		return ja.toString();
 	}
-*/
+
 }

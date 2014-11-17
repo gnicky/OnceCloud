@@ -87,40 +87,21 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return result;
 	}
-
-	public boolean addEIP(String prefix, int start, int end, Date date,
-			int eiptype, String eipInterface) {
-		boolean result = false;
+*/
+	public boolean saveEIP(EIP eip) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			for (int i = start; i <= end; i++) {
-				String currentIp = prefix + i;
-				boolean check = this.ipExist(session, currentIp);
-				if (check == false) {
-					EIP eip = new EIP();
-					eip.setEipIp(currentIp);
-					eip.setEipType(eiptype);
-					eip.setEipUuid(UUID.randomUUID().toString());
-					eip.setEipInterface(eipInterface);
-					eip.setCreateDate(date);
-					session.save(eip);
-					this.getOverViewDAO().updateOverViewfieldNoTransaction(
-							"viewOutip", true);
-					result = true;
-				}
-			}
+			session.save(eip);
 			session.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
+			return false;
 		}
-		return result;
 	}
-
+/*
 	@SuppressWarnings({ "unchecked" })
 	public synchronized EIP applyEip(String eipName, int userId,
 			int eipBandwidth, Date createDate, String eipUuid) {
@@ -258,7 +239,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return count;
 	}
-
+*/
 	public int countAllEipListNoUserid(String searchStr) {
 		int count = 0;
 		Session session = null;
@@ -293,8 +274,6 @@ public class EIPDAOImpl implements EIPDAO {
 			EIP eip = (EIP) criteria.uniqueResult();
 			if (eip != null) {
 				session.delete(eip);
-				this.getOverViewDAO().updateOverViewfieldNoTransaction(
-						"viewOutip", false);
 				result = true;
 			}
 			session.getTransaction().commit();
@@ -306,7 +285,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return result;
 	}
-*/
+
 	private EIP doGetEip(Session session, String eipIp) {
 		EIP eip;
 		Criteria criteria = session.createCriteria(EIP.class).add(
@@ -425,7 +404,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipIp;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEipList(int userId, int page, int limit,
 			String search) {
@@ -453,7 +432,7 @@ public class EIPDAOImpl implements EIPDAO {
 		return eipList;
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param page
 	 * @param limit
@@ -488,7 +467,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipList;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEIPListNoUserid(int page, int limit,
 			String searchStr) {
@@ -516,13 +495,16 @@ public class EIPDAOImpl implements EIPDAO {
 		return eipList;
 	}
 
-	public boolean ipExist(Session session, String eIp) {
+	public boolean ipExist(String eIp) {
+		Session session = this.getSessionHelper().getMainSession();
+		session.beginTransaction();
 		Criteria criteria = session.createCriteria(EIP.class).add(
 				Restrictions.eq("eipIp", eIp));
+		session.getTransaction().commit();
 		return (criteria.uniqueResult() != null);
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param alarmUuid
 	 * @return

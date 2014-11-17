@@ -8,6 +8,8 @@ import com.oncecloud.entity.OCHException;
 public interface OCExceptionDAO {
 
 	public abstract void save(OCHException exc);
+	
+	public abstract void saveForAction(OCHException exc);
 
 	public abstract void delete(Date startTime, Date endTime);
 

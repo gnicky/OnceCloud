@@ -13,10 +13,10 @@ public interface FirewallDAO {
 //	public abstract int countAllFirewallList(String search, int userId);
 //
 //	public abstract int countAllRuleList(String search, String firewallId);
-//
-//	public abstract void createDefaultFirewallNoTransaction(Integer userId)
-//			throws Exception;
-//
+
+	public abstract void createDefaultFirewall(Integer userId)
+			throws Exception;
+
 //	public abstract boolean deleteAllRuleOfFirewall(String firewallId);
 //
 //	public abstract boolean deleteFirewall(Integer userId, String firewallId);
