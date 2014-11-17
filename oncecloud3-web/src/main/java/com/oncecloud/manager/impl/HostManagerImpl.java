@@ -248,40 +248,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-/*
-	public void bindHost(String srUuid, String hostUuid, int userid) {
-		Date startTime = new Date();
-		boolean result = this.getSrManager()
-				.addStorage2Server(srUuid, hostUuid);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.存储.toString(),
-				"sr-" + srUuid.substring(0, 8)));
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.服务器.toString(),
-				"host-" + hostUuid.substring(0, 8)));
-		if (result == true) {
-			OCLog log = this.getLogDAO().insertLog(userid,
-					LogConstant.logObject.存储.ordinal(),
-					LogConstant.logAction.添加.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userid,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			OCLog log = this.getLogDAO().insertLog(userid,
-					LogConstant.logObject.存储.ordinal(),
-					LogConstant.logAction.添加.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userid,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
-*/
+
 	public JSONArray getSrOfHost(String hostUuid) {
 		List<Storage> srOfHost = this.getHostDAO().getSROfHost(hostUuid);
 		JSONArray qaArray = new JSONArray();
@@ -614,21 +581,7 @@ public class HostManagerImpl implements HostManager{
 		}
 		return qaArray;
 	}
-/*
-	public JSONArray getHostForImage() {
-		List<OCHost> hostlist = this.getHostDAO().getHostForImage();
-		JSONArray qaArray = new JSONArray();
-		for (OCHost host : hostlist) {
-			JSONObject tObj = new JSONObject();
-			tObj.put("hostname", Utilities.encodeText(host.getHostName()));
-			String hostUuid = host.getHostUuid();
-			tObj.put("hostid", hostUuid);
-			tObj.put("hostip", host.getHostIP());
-			qaArray.put(tObj);
-		}
-		return qaArray;
-	}
-*/
+
 	public JSONArray getOneHost(String hostid) {
 		OCHost ochost = this.getHostDAO().getHost(hostid);
 		JSONArray qaArray = new JSONArray();

@@ -264,77 +264,7 @@ public class PoolManagerImpl implements PoolManager {
 		}
 		return ja;
 	}
-/*
-	public void bind(String poolId, String dcid, int userId) {
-		Date startTime = new Date();
-		boolean result = this.getPoolDAO().bindPool(poolId, dcid);
-		JSONArray ja = new JSONArray();
-		JSONObject jo = new JSONObject();
-		jo.put("result", result);
-		Datacenter dc = this.getDatacenterDAO().getDatacenter(dcid);
-		String dcName = dc.getDcName();
-		jo.put("dcname", Utilities.encodeText(dcName));
-		ja.put(jo);
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.资源池.toString(),
-				"pool-" + poolId.substring(0, 8)));
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.数据中心.toString(), dcName));
-		if (result) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.资源池.ordinal(),
-					LogConstant.logAction.添加.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.资源池.ordinal(),
-					LogConstant.logAction.添加.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-	}
 
-	public JSONArray unbind(String poolId, int userId) {
-		Date startTime = new Date();
-		JSONArray ja = new JSONArray();
-		boolean result = this.getPoolDAO().unbindPool(poolId);
-		JSONObject jo = new JSONObject();
-		jo.put("result", result);
-		ja.put(jo);
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				LogConstant.logObject.资源池.toString(),
-				"pool-" + poolId.substring(0, 8)));
-		if (result) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.资源池.ordinal(),
-					LogConstant.logAction.移除.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.资源池.ordinal(),
-					LogConstant.logAction.移除.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-		return ja;
-	}
-*/
 	public void updatePool(String poolUuid, String poolName, String poolDesc,
 			String dcUuid, int userId) {
 		boolean result = this.getPoolDAO().updatePool(poolUuid, poolName,

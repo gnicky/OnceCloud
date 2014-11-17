@@ -214,67 +214,7 @@ public class ImageManagerImpl implements ImageManager {
 		}
 		return ja;
 	}
-/*
-	public JSONObject cloneImage(int userId, int userLevel, String vmUuid,
-			String imageName, String imageDesc) {
-		Date startTime = new Date();
-		if (userLevel == 0) {
-			userId = 1;
-		}
-		JSONObject result = makeImage(vmUuid, imageName, userId, imageDesc);
-		// write log and push message
-		Date endTime = new Date();
-		int elapse = Utilities.timeElapse(startTime, endTime);
-		JSONArray infoArray = new JSONArray();
-		infoArray.put(Utilities.createLogInfo(
-				Utilities.encodeText(LogConstant.logObject.映像.toString()),
-				Utilities.encodeText(imageName)));
-		if (result.getBoolean("result")) {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.映像.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToSuccess(log.toString()));
-		} else {
-			OCLog log = this.getLogDAO().insertLog(userId,
-					LogConstant.logObject.映像.ordinal(),
-					LogConstant.logAction.创建.ordinal(),
-					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
-					startTime, elapse);
-			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError(log.toString()));
-		}
-		return result;
-	}
 
-	public JSONObject makeImage(String uuid, String newName, int uid,
-			String desc) {
-		JSONObject result = new JSONObject();
-		result.put("result", false);
-		OCVM fromVM = this.getVmDAO().getVM(uuid);
-		if (fromVM != null) {
-			try {
-				String poolUuid = this.getHostDAO()
-						.getHost(fromVM.getHostUuid()).getPoolUuid();
-				Connection c = this.getConstant().getConnection(uid);
-				VM thisVM = VM.getByUuid(c, uuid);
-				String imageUuid = UUID.randomUUID().toString();
-				boolean createResult = thisVM.createImage(c, imageUuid);
-				if (createResult == true) {
-					this.getImageDAO().createImage(imageUuid, newName, uid,
-							fromVM.getVmPlatform(), poolUuid, desc,
-							fromVM.getVmPWD());
-					result.put("result", true);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-*/
 	public JSONArray createImage(int userId, int userLevel, String imageUuid,
 			String imageName, String imageServer, int imageOs,
 			String imageDesc, String imagePwd) {

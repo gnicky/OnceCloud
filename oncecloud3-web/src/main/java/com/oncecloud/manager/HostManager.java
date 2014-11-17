@@ -46,6 +46,7 @@ public interface HostManager {
 			String hostDesc, String rackUuid);
 
 	public abstract JSONArray getAllList();
+	
 //  public abstract boolean recover(int userId, String ip, String username,
 //			String password);
 }
