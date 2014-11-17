@@ -500,8 +500,9 @@ public class EIPDAOImpl implements EIPDAO {
 		session.beginTransaction();
 		Criteria criteria = session.createCriteria(EIP.class).add(
 				Restrictions.eq("eipIp", eIp));
+		boolean result = (criteria.uniqueResult() != null);
 		session.getTransaction().commit();
-		return (criteria.uniqueResult() != null);
+		return result;
 	}
 
 	/**

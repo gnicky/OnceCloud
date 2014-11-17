@@ -162,7 +162,7 @@ public class AddressManagerImpl implements AddressManager {
 				}
 			}
 			total.put("hosts", ipMacArray);
-			Connection connection = this.getConstant().getConnectionNoTransactional(userId);
+			Connection connection = this.getConstant().getConnection(userId);
 			boolean bindResult = Host.bindIpMac(connection, total.toString());
 			if (bindResult) {
 				for (DHCP dhcp : dhcpList) {

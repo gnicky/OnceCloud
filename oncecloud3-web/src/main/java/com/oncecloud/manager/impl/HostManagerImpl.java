@@ -756,6 +756,7 @@ public class HostManagerImpl implements HostManager{
 						+ targetHost.getHostIP() + ":9363",
 						HostManager.DEFAULT_USER, targetHost.getHostPwd());
 				Pool.create(conn, poolUuid);
+				targetHost.setPoolUuid(pool.getPoolUuid());
 				pool.setPoolMaster(targetHost.getHostUuid());
 				result = this.getHostDAO().update(targetHost);
 				result = this.getPoolDAO().update(pool);
