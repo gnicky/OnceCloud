@@ -641,22 +641,24 @@ public class VMDAOImpl implements VMDAO {
 	 * 更新主机
 	 * 
 	 * @param vm
-	 *//*
-	public void updateVM(OCVM vm) {
+	 */
+	public boolean updateVM(OCVM vm) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.update(vm);
 			session.getTransaction().commit();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
+			return false;
 		}
 	}
-*/
+
 	public void saveVM(OCVM vm) {
 		Session session = null;
 		try {

@@ -29,9 +29,9 @@ public class LogDAOTest {
 	
 	@Test
 	public void logTest() {
-		List<OCLog> list = this.getLogDAO().getLogList(1, 0, 1, 10);
-		for (OCLog ocLog : list) {
-			System.out.println(ocLog.getLogInfo());
-		}
+//		List<OCLog> list = this.getLogDAO().getLogList(1, 0, 1, 10);
+//		for (OCLog ocLog : list) {
+//			System.out.println(ocLog.getLogInfo());
+//		}
 	}
 }

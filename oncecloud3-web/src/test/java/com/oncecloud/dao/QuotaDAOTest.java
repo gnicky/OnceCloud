@@ -27,8 +27,8 @@ public class QuotaDAOTest {
 	
 	@Test
 	public void quotaTest() {
-		Quota quota = this.getQuotaDAO().getQuotaTotal(1);
-		System.out.println(quota.getQuotaCpu());
+//		Quota quota = this.getQuotaDAO().getQuotaTotal(1);
+//		System.out.println(quota.getQuotaCpu());
 	}
 	
 }

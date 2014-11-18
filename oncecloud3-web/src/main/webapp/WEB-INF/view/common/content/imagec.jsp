@@ -46,11 +46,11 @@
 						<li><a class="btn-forbidden" id="delete"><span
 								class="glyphicon glyphicon-trash"></span>删除</a></li>
 						<li><a class="btn-forbidden" id="share-image"><span
-								class="glyphicon glyphicon-share"></span>共享镜像</a></li>
+								class="glyphicon glyphicon-share"></span>共享映像</a></li>
 						<li><a class="btn-forbidden" id="change-to-vm"><span
 								class="glyphicon glyphicon-share"></span>转化为虚拟机</a></li>
 						<li><a class="btn-forbidden" id="update-image"><span
-								class="glyphicon glyphicon-sort"></span>更新镜像信息</a></li>
+								class="glyphicon glyphicon-sort"></span>更新映像信息</a></li>
 					</ul>
 				</div>
 			</c:if>

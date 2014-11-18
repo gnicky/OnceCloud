@@ -29,8 +29,8 @@ public class QADAOTest {
 
 	@Test
 	public void qadaotest() {
-		int count = this.getQadao().insertQuestion(1, "test", "test-hty",
-				new Date());
-		System.out.println(count);
+//		int count = this.getQadao().insertQuestion(1, "test", "test-hty",
+//				new Date());
+//		System.out.println(count);
 	}
 }

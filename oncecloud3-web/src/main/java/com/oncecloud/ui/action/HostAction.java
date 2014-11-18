@@ -1,8 +1,10 @@
 package com.oncecloud.ui.action;
 
+import javax.naming.spi.DirStateFactory.Result;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -98,51 +100,78 @@ public class HostAction {
 
 	@RequestMapping(value = "/Create", method = { RequestMethod.POST })
 	@ResponseBody
-	public String create(HttpServletRequest request,@RequestParam String hostname,
-			@RequestParam String hostpwd,@RequestParam String hostdesc,
-			@RequestParam String hostip,@RequestParam String rackUuid,
-			@RequestParam String rackName) {
-		User user = (User)request.getSession().getAttribute("user");
-		JSONArray ja = this.getHostManager().createHost(hostname, hostpwd, hostdesc, hostip, rackUuid, rackName, user.getUserId());
+	public String create(HttpServletRequest request,
+			@RequestParam String hostname, @RequestParam String hostpwd,
+			@RequestParam String hostdesc, @RequestParam String hostip,
+			@RequestParam String rackUuid, @RequestParam String rackName) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getHostManager().createHost(hostname, hostpwd,
+				hostdesc, hostip, rackUuid, rackName, user.getUserId());
 		return ja.toString();
 	}
 
 	@RequestMapping(value = "/AddToPool", method = { RequestMethod.POST })
 	@ResponseBody
-	public String addToPool(HttpServletRequest request,@RequestParam String uuidjsonstr,
-			@RequestParam String hasmaster,@RequestParam String pooluuid) {
-		User user = (User)request.getSession().getAttribute("user");
-		JSONArray ja = this.getHostManager().add2Pool(uuidjsonstr, hasmaster, pooluuid, user.getUserId());
+	public String addToPool(HttpServletRequest request,
+			@RequestParam String uuidjsonstr, @RequestParam String hasmaster,
+			@RequestParam String pooluuid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONArray ja = this.getHostManager().add2Pool(uuidjsonstr, hasmaster,
+				pooluuid, user.getUserId());
 		return ja.toString();
 	}
 
 	@RequestMapping(value = "/UnbindSR", method = { RequestMethod.GET })
 	@ResponseBody
-	public void unbindSR(HttpServletRequest request,@RequestParam String hostuuid,
-			@RequestParam String sruuid) {
-		User user = (User)request.getSession().getAttribute("user");
+	public void unbindSR(HttpServletRequest request,
+			@RequestParam String hostuuid, @RequestParam String sruuid) {
+		User user = (User) request.getSession().getAttribute("user");
 		this.getHostManager().unbindSr(hostuuid, sruuid, user.getUserId());
 	}
 
 	@RequestMapping(value = "/TablePool", method = { RequestMethod.POST })
 	@ResponseBody
-	public String tablePool(HttpServletRequest request,@RequestParam String uuidjsonstr) {
+	public String tablePool(HttpServletRequest request,
+			@RequestParam String uuidjsonstr) {
 		JSONArray ja = this.getHostManager().getTablePool(uuidjsonstr);
 		return ja.toString();
 	}
 
 	@RequestMapping(value = "/Update", method = { RequestMethod.POST })
 	@ResponseBody
-	public void update(HttpServletRequest request,@RequestParam String hostid,
-			@RequestParam String hostname,@RequestParam String hostdesc,
+	public void update(HttpServletRequest request, @RequestParam String hostid,
+			@RequestParam String hostname, @RequestParam String hostdesc,
 			@RequestParam String rackUuid) {
 		this.getHostManager().updateHost(hostid, hostname, hostdesc, rackUuid);
 	}
 
 	@RequestMapping(value = "/SRofhost", method = { RequestMethod.GET })
 	@ResponseBody
-	public String srOfHost(HttpServletRequest request,@RequestParam String hostUuid) {
+	public String srOfHost(HttpServletRequest request,
+			@RequestParam String hostUuid) {
 		JSONArray ja = this.getHostManager().getSrOfHost(hostUuid);
 		return ja.toString();
 	}
+
+	@RequestMapping(value = "/MigrationTar", method = { RequestMethod.GET })
+	@ResponseBody
+	public String migrationTar(HttpServletRequest request,
+			@RequestParam String vmuuid) {
+		JSONArray ja = this.getHostManager().getHostListForMigration(vmuuid);
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "/Recover", method = { RequestMethod.POST })
+	@ResponseBody
+	public String recover(HttpServletRequest request, @RequestParam String ip,
+			@RequestParam String username, @RequestParam String password,
+			@RequestParam String content, @RequestParam String conid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = new JSONObject();
+		jo.put("result",
+				this.getHostManager().recover(user.getUserId(), ip, username,
+						password, content, conid));
+		return jo.toString();
+	}
+
 }

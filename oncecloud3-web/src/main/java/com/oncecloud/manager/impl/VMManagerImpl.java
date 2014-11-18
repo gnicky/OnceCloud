@@ -1023,5 +1023,52 @@ public class VMManagerImpl implements VMManager {
 			return result;
 		}
 	}
+
+	public boolean migrate(int userId, String uuid, String tarHost, String content, String conid) {
+		Connection conn = null;
+		OCVM ocvm = this.getVmDAO().getVM(uuid);
+		try {
+			conn = this.getConstant().getConnection(userId);
+			VM vm = VM.getByUuid(conn, uuid);
+			VM.Record record = vm.getRecord(conn);
+			double vmMemory = 0;
+			if(record!=null){
+	        	vmMemory = record.memoryDynamicMax/1024.0/1024.0;
+	        }
+			Host host = Host.getByUuid(conn, tarHost);
+			Host.Record hrecord = host.getRecord(conn);
+			double freemem = hrecord.memoryFree;
+			if (freemem > vmMemory) {
+				try {
+					Map<String, String> op = vm.getOtherConfig(conn);
+					vm.poolMigrate(conn, host, op);
+					ocvm.setHostUuid(tarHost);
+					if(this.getVmDAO().updateVM(ocvm)) {
+						this.getMessagePush().pushMessageClose(userId, content, conid);
+						this.getMessagePush().pushMessage(userId, Utilities.stickyToSuccess("迁移成功"));
+						return true;
+					} else {
+						this.getMessagePush().pushMessageClose(userId, content, conid);
+						this.getMessagePush().pushMessage(userId, Utilities.stickyToError("数据信息更新失败"));
+						return false;
+					}
+				} catch (Exception e) {
+					this.getMessagePush().pushMessageClose(userId, content, conid);
+					this.getMessagePush().pushMessage(userId, Utilities.stickyToError("迁移中出现未知错误"));
+					e.printStackTrace();
+					return false;
+				}
+			} else {
+				this.getMessagePush().pushMessageClose(userId, content, conid);
+				this.getMessagePush().pushMessage(userId, Utilities.stickyToError("内存空间不够，迁移失败"));
+				return false;
+			}
+		} catch (Exception e) {
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId, Utilities.stickyToError("无法建立连接"));
+			e.printStackTrace();
+			return false;
+		} 
+	}
 	
 }

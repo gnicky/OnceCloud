@@ -20,7 +20,8 @@
 					<li><a id="creatVMISO"><span class="glyphicon glyphicon-record"></span>新建</a></li>
 					<li><a id="savetodb"><span class="glyphicon glyphicon-arrow-down"></span>导入</a></li>
 					<li><a  class="btn-forbidden" id="editNetwork"><span class="glyphicon glyphicon-pencil"></span>网卡编辑</a></li>
-					<li><a  class="btn-forbidden" id="vm-to-template"><span class="glyphicon glyphicon-share"></span>转化为模板</a></li>
+					<li><a  class="btn-forbidden" id="vm-to-template"><span class="glyphicon glyphicon-share"></span>转化为映像</a></li>
+					<li><a  class="btn-forbidden" id="migration"><span class="glyphicon glyphicon-arrow-right"></span>迁移</a></li>
 				</ul>
 			</div>
 			<div class="btn-group">

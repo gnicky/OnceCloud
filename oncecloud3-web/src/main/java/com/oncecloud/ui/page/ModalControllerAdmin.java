@@ -28,6 +28,16 @@ public class ModalControllerAdmin {
 		return new ModelAndView("admin/modal/savetodb");
 	}
 
+	@RequestMapping(value = "/recover")
+	public ModelAndView recover(HttpServletRequest request) {
+		return new ModelAndView("admin/modal/recover");
+	}
+
+	@RequestMapping(value = "/migration")
+	public ModelAndView migration(HttpServletRequest request) {
+		return new ModelAndView("admin/modal/migration");
+	}
+
 	@RequestMapping(value = "/storageofhost")
 	public ModelAndView storageofhost(HttpServletRequest request,
 			@RequestParam String hostuuid, @RequestParam String hostname) {

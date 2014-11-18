@@ -182,4 +182,17 @@ public class VMAction {
 		return jo.toString();
 	}
 
+	@RequestMapping(value = "/Migration", method = { RequestMethod.POST })
+	@ResponseBody
+	public String vmToTemplate(HttpServletRequest request,
+			@RequestParam String uuid, @RequestParam String tarHost,
+			@RequestParam String content, @RequestParam String conid) {
+		User user = (User) request.getSession().getAttribute("user");
+		JSONObject jo = new JSONObject();
+		jo.put("result",
+				this.getVmManager().migrate(user.getUserId(), uuid, tarHost,
+						content, conid));
+		return jo.toString();
+	}
+
 }

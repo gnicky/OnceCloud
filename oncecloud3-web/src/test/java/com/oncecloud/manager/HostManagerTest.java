@@ -1,4 +1,4 @@
-package com.oncecloud.dao;
+package com.oncecloud.manager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,27 +7,25 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.oncecloud.entity.OverView;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:./com/oncecloud/config/application-context.xml")
 @WebAppConfiguration
-public class OverviewDAOTest {
+public class HostManagerTest {
 
-	private OverViewDAO overViewDAO;
+	private HostManager hostManager;
 
-	public OverViewDAO getOverViewDAO() {
-		return overViewDAO;
+	public HostManager getHostManager() {
+		return hostManager;
 	}
 
 	@Autowired
-	public void setOverViewDAO(OverViewDAO overViewDAO) {
-		this.overViewDAO = overViewDAO;
+	public void setHostManager(HostManager hostManager) {
+		this.hostManager = hostManager;
 	}
 	
 	@Test
-	public void testOverview() {
-//		OverView oView = this.getOverViewDAO().getOverViewTotal();
-//		System.out.println(oView.getViewDc());
+	public void test() {
+//		this.getHostManager().recover(1, "133.133.135.16", "root", "onceas", "", "");
 	}
+	
 }

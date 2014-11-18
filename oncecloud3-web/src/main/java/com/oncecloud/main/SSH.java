@@ -77,14 +77,18 @@ public class SSH {
 			String line = stdoutReader.readLine();
 			if (line == null)
 				break;
+			System.out.println(line);
 		}
 
 		while (true) {
 			String line = stderrReader.readLine();
 			if (line == null)
 				break;
+			System.out.println(line);
 		}
+		System.out.println("ExitCode:");
 		int strexit = session.getExitStatus();
+		System.out.println(strexit);
 		session.close();
 
 		return strexit;

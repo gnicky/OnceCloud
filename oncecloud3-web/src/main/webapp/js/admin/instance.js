@@ -29,6 +29,7 @@ function allDisable() {
     $("#destroy").addClass('btn-forbidden');
     $("#editNetwork").addClass('btn-forbidden');
     $("#vm-to-template").addClass('btn-forbidden');
+    $("#migration").addClass('btn-forbidden');
 }
 
 $('#tablebody').on('change', 'input:checkbox', function (event) {
@@ -71,11 +72,24 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
     if (total == 1 && stopped == 1) {
     	$("#vm-to-template").removeClass('btn-forbidden');
     }
+    if (total == 1 && running == 1) {
+    	$("#migration").removeClass('btn-forbidden');
+    }
 });
 
 $("#creatVMISO").on("click", function (event) {
 	event.preventDefault();
     $('#InstanceModalContainer').load('/instanceiso/create', '', function () {
+        $('#InstanceModalContainer').modal({
+            backdrop: false,
+            show: true
+        });
+    });
+});
+
+$("#migration").on("click", function (event) {
+	event.preventDefault();
+    $('#InstanceModalContainer').load('/admin/modal/migration', '', function () {
         $('#InstanceModalContainer').modal({
             backdrop: false,
             show: true

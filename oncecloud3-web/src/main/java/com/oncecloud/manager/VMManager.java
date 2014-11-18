@@ -1,15 +1,6 @@
 package com.oncecloud.manager;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.once.xenapi.Connection;
-import com.once.xenapi.VM.Record;
-import com.oncecloud.dao.LBDAO;
-import com.oncecloud.dao.RouterDAO;
-import com.oncecloud.dao.UserDAO;
-import com.oncecloud.entity.OCVM;
-import com.oncecloud.entity.User;
 
 public interface VMManager {
 	public final static int POWER_HALTED = 0;
@@ -143,4 +134,6 @@ public interface VMManager {
 //
 //	public abstract boolean adjustMemAndCPU(String uuid, int userId, int cpu,
 //			int mem, String content, String conid);
+	
+	public abstract boolean migrate(int userId, String uuid, String tarHost, String content, String conid);
 }

@@ -18,6 +18,7 @@ function allDisable() {
     $("#delete").addClass('btn-forbidden');
     $("#add2pool").addClass('btn-forbidden');
     $("#remove4pool").addClass('btn-forbidden');
+    $("#recover").addClass('btn-forbidden');
 }
 
 function removeAllCheck() {
@@ -46,6 +47,9 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
     });
     if (count == 1) {
         $('#update').removeClass('btn-forbidden');
+        if (unbindcount == 1) {
+        	$("#recover").removeClass('btn-forbidden');
+        }
     }
     if (count == bindcount) {
 		$("#remove4pool").removeClass('btn-forbidden');
@@ -79,6 +83,16 @@ $('#update').on('click', function (event) {
         });
 });
 
+$("#recover").on('click', function(event) {
+	event.preventDefault();
+    $('#ServerModalContainer').load('/admin/modal/recover', '',
+        function () {
+            $('#ServerModalContainer').modal({
+                backdrop: false,
+                show: true
+            });
+    	});
+});
 
 $('#tablebody').on('click', '.srdetail', function (event) {
     event.preventDefault();

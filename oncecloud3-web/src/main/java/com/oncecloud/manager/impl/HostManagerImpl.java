@@ -25,6 +25,7 @@ import com.oncecloud.dao.OverViewDAO;
 import com.oncecloud.dao.PoolDAO;
 import com.oncecloud.dao.RackDAO;
 import com.oncecloud.dao.StorageDAO;
+import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCPool;
@@ -47,6 +48,7 @@ public class HostManagerImpl implements HostManager{
 	private LogDAO logDAO;
 	private OverViewDAO overViewDAO;
 	private HostSRDAO hostSRDAO;
+	private VMDAO vmDAO;
 	
 	private MessagePush messagePush;
 	
@@ -116,6 +118,15 @@ public class HostManagerImpl implements HostManager{
 		this.hostSRDAO = hostSRDAO;
 	}
 	
+	public VMDAO getVmDAO() {
+		return vmDAO;
+	}
+
+	@Autowired
+	public void setVmDAO(VMDAO vmDAO) {
+		this.vmDAO = vmDAO;
+	}
+
 	private MessagePush getMessagePush() {
 		return messagePush;
 	}
@@ -782,9 +793,10 @@ public class HostManagerImpl implements HostManager{
 	}
 	
 	public boolean recover(int userId, String ip, String username,
-			String password) {
+			String password, String content, String conid) {
 		SSH ssh = new SSH(ip, username, password);
 		if (!ssh.Connect()) {
+			this.messagePush.pushMessageClose(userId, content, conid);
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError("IP不存在，或者用户名密码不匹配"));
 			return false;
@@ -792,18 +804,41 @@ public class HostManagerImpl implements HostManager{
 		try {
 			int code = ssh.Command("/etc/init.d/xend restart");
 			if (code != 0) {
+				this.messagePush.pushMessageClose(userId, content, conid);
 				this.getMessagePush().pushMessage(userId,
-						Utilities.stickyToError("修复中出现未知错误，请联系管理员"));
+						Utilities.stickyToError("修复中出现未知错误"));
 				return false;
 			} else {
+				this.messagePush.pushMessageClose(userId, content, conid);
 				this.getMessagePush().pushMessage(userId,
 						Utilities.stickyToSuccess("修复成功"));
 				return true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			this.messagePush.pushMessageClose(userId, content, conid);
 			this.getMessagePush().pushMessage(userId,
-					Utilities.stickyToError("修复中出现未知错误，请联系管理员"));
+					Utilities.stickyToError("修复中出现未知错误"));
 			return false;
 		}
+	}
+
+	public JSONArray getHostListForMigration(String vmuuid) {
+		String hostuuid = this.getVmDAO().getVM(vmuuid).getHostUuid();
+		OCHost ochost = this.getHostDAO().getHost(hostuuid);
+		String pooluuid = ochost.getPoolUuid();
+		List<OCHost> list = this.getHostDAO().getHostListOfPool(pooluuid);
+		JSONArray ja = new JSONArray();
+		if (list.size() > 0) {
+			for (OCHost oh : list) {
+				if (oh.getHostUuid().equals(hostuuid))
+					continue;
+				JSONObject jo = new JSONObject();
+				jo.put("ip", oh.getHostIP());
+				jo.put("uuid", oh.getHostUuid());
+				ja.put(jo);
+			}
+		}
+		return ja;
 	}
 }

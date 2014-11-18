@@ -193,12 +193,12 @@ public interface VMDAO {
 	 */
 	public abstract void removeVM(int userId, String vmUuid);
 
-//	/**
-//	 * 更新主机
-//	 * 
-//	 * @param vm
-//	 */
-//	public abstract void updateVM(OCVM vm);
+	/**
+	 * 更新主机
+	 * 
+	 * @param vm
+	 */
+	public abstract boolean updateVM(OCVM vm);
 
 	public abstract void saveVM(OCVM vm);
 

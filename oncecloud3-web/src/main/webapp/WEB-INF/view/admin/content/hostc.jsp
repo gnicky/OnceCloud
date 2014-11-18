@@ -21,6 +21,7 @@
 					<li><a class="btn-forbidden" id="remove4pool"><span class="glyphicon glyphicon-save"></span>从资源池移除</a></li>
 					<li><a class="btn-forbidden" id="update" url="${basePath}host/create"><span class="glyphicon glyphicon-pencil"></span>修改</a></li>
 					<li><a class="btn-forbidden" id="delete"><span class="glyphicon glyphicon-trash"></span>删除</a></li>
+					<li><a class="btn-forbidden" id="recover"><span class="glyphicon glyphicon-flash"></span>修复</a></li>
 				</ul>
 			</div>
 			<input class="search" id="search" value="">

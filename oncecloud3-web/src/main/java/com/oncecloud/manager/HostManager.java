@@ -2,8 +2,6 @@ package com.oncecloud.manager;
 
 import org.json.JSONArray;
 
-import com.oncecloud.entity.OCHost;
-
 public interface HostManager {
 
 	public final static String DEFAULT_USER = "root";
@@ -48,5 +46,7 @@ public interface HostManager {
 	public abstract JSONArray getAllList();
 	
 	public abstract boolean recover(int userId, String ip, String username,
-			String password);
+			String password, String content, String conid);
+	
+	public abstract JSONArray getHostListForMigration(String vmuuid);
 }
