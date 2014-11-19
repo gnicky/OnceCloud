@@ -47,7 +47,7 @@ public class VMAction {
 		JSONObject jo = this.getVmManager().getVMDetail(uuid);
 		return jo.toString();
 	}
-
+*/
 	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
@@ -57,7 +57,7 @@ public class VMAction {
 				user.getUserLevel(), count);
 		return quota;
 	}
-
+/*
 	@RequestMapping(value = "/StartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void startVM(HttpServletRequest request, @RequestParam String uuid) {

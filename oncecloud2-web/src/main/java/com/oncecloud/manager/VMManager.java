@@ -66,9 +66,9 @@ public interface VMManager {
 //	 * @return
 //	 */
 //	public abstract JSONObject getVMDetail(String vmUuid);
-//
-//	public abstract String getQuota(int userId, int userLevel, int count);
-//
+
+	public abstract String getQuota(int userId, int userLevel, int count);
+
 //	public abstract boolean syncAddVMOperate(String hostUuid, String vmUuid,
 //			int power);
 //

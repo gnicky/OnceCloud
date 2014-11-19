@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.once.xenapi.Connection;
@@ -16,8 +17,20 @@ import com.once.xenapi.Host;
 import com.once.xenapi.Types;
 import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
+import com.oncecloud.dao.DHCPDAO;
+import com.oncecloud.dao.EIPDAO;
+import com.oncecloud.dao.FeeDAO;
+import com.oncecloud.dao.FirewallDAO;
+import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.ImageDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.QuotaDAO;
+import com.oncecloud.dao.RouterDAO;
+import com.oncecloud.dao.VMDAO;
+import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.entity.Image;
+import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Vnet;
@@ -26,13 +39,146 @@ import com.oncecloud.main.Constant;
 import com.oncecloud.main.NoVNC;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.VMManager;
+import com.oncecloud.message.MessagePush;
 
 @Component
 public class VMManagerImpl implements VMManager {
 	private final static Logger logger = Logger.getLogger(VMManager.class);
 	private final static long MB = 1024 * 1024;
 	
-	private 
+	private VMDAO vmDAO;
+	private LogDAO logDAO;
+	private VnetDAO vnetDAO;
+	private EIPDAO eipDAO;
+	private ImageDAO imageDAO;
+	private DHCPDAO dhcpDAO;
+	private QuotaDAO quotaDAO;
+	private FirewallDAO firewallDAO;
+	private FeeDAO feeDAO;
+	private HostDAO hostDAO;
+	private RouterDAO routerDAO;
+	
+	private MessagePush messagePush;
+	
+	private Constant constant;
+	
+	public VMDAO getVmDAO() {
+		return vmDAO;
+	}
+
+	@Autowired
+	public void setVmDAO(VMDAO vmDAO) {
+		this.vmDAO = vmDAO;
+	}
+
+	public LogDAO getLogDAO() {
+		return logDAO;
+	}
+
+	@Autowired
+	public void setLogDAO(LogDAO logDAO) {
+		this.logDAO = logDAO;
+	}
+
+	public VnetDAO getVnetDAO() {
+		return vnetDAO;
+	}
+
+	@Autowired
+	public void setVnetDAO(VnetDAO vnetDAO) {
+		this.vnetDAO = vnetDAO;
+	}
+
+	public EIPDAO getEipDAO() {
+		return eipDAO;
+	}
+
+	@Autowired
+	public void setEipDAO(EIPDAO eipDAO) {
+		this.eipDAO = eipDAO;
+	}
+
+	public ImageDAO getImageDAO() {
+		return imageDAO;
+	}
+
+	@Autowired
+	public void setImageDAO(ImageDAO imageDAO) {
+		this.imageDAO = imageDAO;
+	}
+
+	public DHCPDAO getDhcpDAO() {
+		return dhcpDAO;
+	}
+
+	@Autowired
+	public void setDhcpDAO(DHCPDAO dhcpDAO) {
+		this.dhcpDAO = dhcpDAO;
+	}
+
+	public QuotaDAO getQuotaDAO() {
+		return quotaDAO;
+	}
+
+	@Autowired
+	public void setQuotaDAO(QuotaDAO quotaDAO) {
+		this.quotaDAO = quotaDAO;
+	}
+
+	public FirewallDAO getFirewallDAO() {
+		return firewallDAO;
+	}
+
+	@Autowired
+	public void setFirewallDAO(FirewallDAO firewallDAO) {
+		this.firewallDAO = firewallDAO;
+	}
+
+	public FeeDAO getFeeDAO() {
+		return feeDAO;
+	}
+
+	@Autowired
+	public void setFeeDAO(FeeDAO feeDAO) {
+		this.feeDAO = feeDAO;
+	}
+
+	public MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	public HostDAO getHostDAO() {
+		return hostDAO;
+	}
+
+	@Autowired
+	public void setHostDAO(HostDAO hostDAO) {
+		this.hostDAO = hostDAO;
+	}
+
+	public RouterDAO getRouterDAO() {
+		return routerDAO;
+	}
+
+	@Autowired
+	public void setRouterDAO(RouterDAO routerDAO) {
+		this.routerDAO = routerDAO;
+	}
+
+	@Autowired
+	public void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
+
+	public Constant getConstant() {
+		return constant;
+	}
+
+	@Autowired
+	public void setConstant(Constant constant) {
+		this.constant = constant;
+	}
+
 	/**
 	 * 获取用户主机列表
 	 * 
@@ -161,6 +307,54 @@ public class VMManagerImpl implements VMManager {
 		return vmrecord;
 	}
 	
+	public String getAllocateHost(Connection conn, int memory) {
+		String host = null;
+		try {
+			Map<Host, Host.Record> hostMap = Host.getAllRecords(conn);
+			long maxFree = 0;
+			for (Host thisHost : hostMap.keySet()) {
+				Host.Record hostRecord = hostMap.get(thisHost);
+				long memoryFree = hostRecord.memoryFree;
+				if (memoryFree > maxFree) {
+					maxFree = memoryFree;
+					host = thisHost.toWireString();
+				}
+			}
+			if ((int) (maxFree / MB) >= memory) {
+				return host;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private String getHostAddress(String hostUuid) {
+		String hostIP = null;
+		OCHost host = this.getHostDAO().getHost(hostUuid);
+		if (host != null) {
+			hostIP = host.getHostIP();
+		}
+		return hostIP;
+	}
+	
+	private int getVNCPort(String uuid, String poolUuid) {
+		int port = 0;
+		try {
+			VM vm = Types.toVM(uuid);
+			String location = vm.getVNCLocation(this.getConstant()
+					.getConnectionFromPool(poolUuid));
+			port = 5900;
+			int len = location.length();
+			if (len > 5 && location.charAt(len - 5) == ':') {
+				port = Integer.parseInt(location.substring(len - 4));
+			}
+		} catch (Exception e) {
+		}
+		return port;
+	}
+	
 	private JSONObject doCreateVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpu, int memory, String pwd, String poolUuid,
 			String vnetuuid) {
@@ -211,6 +405,7 @@ public class VMManagerImpl implements VMManager {
 					boolean preCreate = this.getVmDAO().preCreateVM(vmUuid,
 							pwd, userId, vmName, image.getImagePlatform(), mac,
 							memory, cpu  , VMManager.POWER_CREATE, 1, createDate);
+					this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, true);
 					Date preEndDate = new Date();
 					int elapse = Utilities.timeElapse(createDate, preEndDate);
 					logger.info("VM [" + vmBackendName + "] Pre Create Time ["
@@ -239,8 +434,10 @@ public class VMManagerImpl implements VMManager {
 									pwd = imagePwd;
 								}
 								jo.put("ip", ip);
+								String firewallId = this.getFirewallDAO()
+										.getDefaultFirewall(userId).getFirewallId();
 								this.getVmDAO().updateVM(userId, vmUuid, pwd,
-										VMManager.POWER_RUNNING, hostuuid, ip);
+										VMManager.POWER_RUNNING, hostuuid, ip, firewallId);
 								Calendar calendar = Calendar.getInstance();
 								calendar.setTime(createDate);
 								calendar.add(Calendar.MINUTE, 60);
@@ -288,6 +485,7 @@ public class VMManagerImpl implements VMManager {
 					jo.put("isSuccess", false);
 				}
 				if (dbRollback == true) {
+					this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
 					this.getVmDAO().removeVM(userId, vmUuid);
 					jo.put("isSuccess", false);
 				}
@@ -386,5 +584,17 @@ public class VMManagerImpl implements VMManager {
 			}
 		}
 		return jo;
+	}
+	
+	public String getQuota(int userId, int userLevel, int count) {
+		String result = "ok";
+		if (userLevel != 0) {
+			int free = this.getQuotaDAO().getQuotaTotal(userId).getQuotaVM()
+					- this.getQuotaDAO().getQuotaUsed(userId).getQuotaVM();
+			if (free < count) {
+				result = String.valueOf(free);
+			}
+		}
+		return result;
 	}
 }

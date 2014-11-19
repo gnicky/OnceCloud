@@ -38,6 +38,7 @@ $('.hidden-phone').attr("href", "javascript:void(0)");
 
 function getImageList(page, limit, search, type) {
     $('#imagelist').html("");
+    $("#vlan").html('<option value="0" selected>请选择&nbsp;(默认为基础网络)</option>');
     $.ajax({
         type: 'post',
         url: '/ImageAction/ImageList',
@@ -117,6 +118,14 @@ $('.btn-next').on('click', function (event) {
         $('#vmDefaultUser').val("root");
     }
     $("#wizard").bwizard("next");
+});
+
+$('#vlan').change(function(event) {
+	if($("#vlan option:selected").val() == 0) {
+		$('.vxnet-item').find('.glyphicon-ok').show();
+	} else {
+		$('.vxnet-item').find('.glyphicon-ok').hide();
+	}
 });
 
 $('#createvmAction').on('click', function (event) {
