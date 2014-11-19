@@ -1,6 +1,5 @@
 package com.oncecloud.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import com.oncecloud.entity.DHCP;
@@ -28,4 +27,5 @@ public interface DHCPDAO {
 	
 	public abstract boolean ipExist(String dhcpIp);
 	
+	public abstract boolean macExist(String mac);
 }

@@ -28,7 +28,6 @@
 				<property name="uncheckUrls"> 
 					<list> 
 						<value>/login</value> 
-						<value>/backdoor</value>  
 						<value>/captcha</value>
 						<value>/account/register</value>
 						<value>/UserAction/Register</value>

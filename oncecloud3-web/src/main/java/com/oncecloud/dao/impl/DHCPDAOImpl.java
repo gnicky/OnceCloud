@@ -1,30 +1,20 @@
 package com.oncecloud.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.once.xenapi.Connection;
-import com.once.xenapi.Host;
 import com.oncecloud.dao.DHCPDAO;
-import com.oncecloud.dao.OverViewDAO;
 import com.oncecloud.entity.DHCP;
 import com.oncecloud.helper.SessionHelper;
 import com.oncecloud.main.Constant;
-import com.oncecloud.main.Utilities;
 
 @Component("DHCPDAO")
 public class DHCPDAOImpl implements DHCPDAO {
@@ -219,6 +209,26 @@ public class DHCPDAOImpl implements DHCPDAO {
 		return result;
 	}
 
+	public boolean macExist(String mac) {
+		boolean result = false;
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getMainSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(DHCP.class).add(
+					Restrictions.eq("dhcpMac", mac));
+			DHCP dhcp = (DHCP) criteria.uniqueResult();
+			session.getTransaction().commit();
+			result = (dhcp != null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+		}
+		return result;
+	}
+	
 	public synchronized boolean returnDHCP(String dhcpMac) {
 		boolean result = false;
 		Session session = null;

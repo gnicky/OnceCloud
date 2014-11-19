@@ -151,14 +151,16 @@ public class AddressManagerImpl implements AddressManager {
 				if (check == false) {
 					DHCP dhcp = new DHCP();
 					String mac = Utilities.randomMac();
-					dhcp.setDhcpMac(mac);
-					dhcp.setDhcpIp(currentIp);
-					dhcp.setCreateDate(new Date());
-					JSONObject ipMacObj = new JSONObject();
-					ipMacObj.put("ipAddress", currentIp);
-					ipMacObj.put("hardwareAddress", mac);
-					ipMacArray.put(ipMacObj);
-					dhcpList.add(dhcp);
+					if (!this.getDhcpDAO().macExist(mac)) {
+						dhcp.setDhcpMac(mac);
+						dhcp.setDhcpIp(currentIp);
+						dhcp.setCreateDate(new Date());
+						JSONObject ipMacObj = new JSONObject();
+						ipMacObj.put("ipAddress", currentIp);
+						ipMacObj.put("hardwareAddress", mac);
+						ipMacArray.put(ipMacObj);
+						dhcpList.add(dhcp);
+					}
 				}
 			}
 			total.put("hosts", ipMacArray);
