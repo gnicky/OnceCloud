@@ -108,7 +108,7 @@ public class UserDAOImpl implements UserDAO {
 		return user;
 	}
 
-	/**
+/*	*//**
 	 * 获取一页用户列表
 	 * 
 	 * @param page
@@ -205,9 +205,10 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userLevel
 	 * @param userDate
 	 */
-	public void insertUser(String userName, String userPass, String userMail,
+	public int insertUser(String userName, String userPass, String userMail,
 			String userPhone, String userCompany, int userLevel, Date userDate, String poolUuid) {
 		Session session = null;
+		int userId = -1;
 		try {
 			User user = new User();
 			user.setUserName(userName);
@@ -219,17 +220,11 @@ public class UserDAOImpl implements UserDAO {
 			user.setUserStatus(1);
 			user.setUserDate(userDate);
 			user.setUserBalance(0.0);
-			if (poolUuid.equals("0")){
-				user.setUserAllocate(this.getPoolDAO().getRandomPool());
-			} else {
-				user.setUserAllocate(poolUuid);
-			}
+			user.setUserAllocate(poolUuid);
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(user);
-			int userId = user.getUserId();
-			this.getQuotaDAO().initQuotaNoTransaction(userId);
-			this.getFirewallDAO().createDefaultFirewallNoTransaction(userId);
+			userId = user.getUserId();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -237,6 +232,7 @@ public class UserDAOImpl implements UserDAO {
 				session.getTransaction().rollback();
 			}
 		}
+		return userId;
 	}
 
 	/**
@@ -273,7 +269,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userId
 	 * @param voucher
 	 * @return
-	 */
+	 *//*
 	public boolean applyVoucher(int userId, int voucher) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -297,12 +293,12 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	/**
+	*//**
 	 * 确认代金券
 	 * 
 	 * @param userId
 	 * @return
-	 */
+	 *//*
 	public boolean confirmVoucher(int userId) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -332,12 +328,12 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	/**
+	*//**
 	 * 拒绝代金券
 	 * 
 	 * @param userid
 	 * @return
-	 */
+	 *//*
 	public boolean denyVoucher(int userId) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -361,7 +357,7 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	/**
+	*//**
 	 * 更新用户
 	 * 
 	 * @param userid
@@ -407,7 +403,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userid
 	 * @param bill
 	 * @return
-	 */
+	 *//*
 	public boolean updateBalance(int userId, double bill) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -428,7 +424,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return result;
 	}
-	
+*/	
 	public List<User> getUserList() {
 		List<User> list = new ArrayList<User>();
 		Session session = null;

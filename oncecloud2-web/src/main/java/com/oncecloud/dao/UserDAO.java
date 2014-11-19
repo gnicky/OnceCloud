@@ -17,64 +17,64 @@ public interface UserDAO {
 
 	public abstract User getUserNoTransactional(int userId);
 
-//	/**
-//	 * 获取用户（通过用户名）
-//	 * 
-//	 * @param userName
-//	 * @return
-//	 */
-//	public abstract User getUser(String userName);
-//
-//	/**
-//	 * 获取一页用户列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract List<User> getOnePageUserList(int page, int limit,
-//			String search);
-//
-//	/**
-//	 * 获取全部用户列表
-//	 * 
-//	 * @param searchStr
-//	 * @return
-//	 */
-//	public abstract List<User> getCompanyUserList(String search);
-//
-//	/**
-//	 * 获取用户总数
-//	 * 
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract int countAllUserList(String search);
-//
-//	/**
-//	 * 添加用户
-//	 * 
-//	 * @param userName
-//	 * @param userPass
-//	 * @param userMail
-//	 * @param userPhone
-//	 * @param userCompany
-//	 * @param userLevel
-//	 * @param userDate
-//	 */
-//	public abstract void insertUser(String userName, String userPass,
-//			String userMail, String userPhone, String userCompany,
-//			int userLevel, Date userDate, String poolUuid);
-//
-//	/**
-//	 * 禁用用户
-//	 * 
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract boolean disableUser(int userId);
-//
+	/**
+	 * 获取用户（通过用户名）
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	public abstract User getUser(String userName);
+
+	/**
+	 * 获取一页用户列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract List<User> getOnePageUserList(int page, int limit,
+			String search);
+
+	/**
+	 * 获取全部用户列表
+	 * 
+	 * @param searchStr
+	 * @return
+	 */
+	public abstract List<User> getCompanyUserList(String search);
+
+	/**
+	 * 获取用户总数
+	 * 
+	 * @param search
+	 * @return
+	 */
+	public abstract int countAllUserList(String search);
+
+	/**
+	 * 添加用户
+	 * 
+	 * @param userName
+	 * @param userPass
+	 * @param userMail
+	 * @param userPhone
+	 * @param userCompany
+	 * @param userLevel
+	 * @param userDate
+	 */
+	public abstract int insertUser(String userName, String userPass,
+			String userMail, String userPhone, String userCompany,
+			int userLevel, Date userDate, String poolUuid);
+
+	/**
+	 * 禁用用户
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public abstract boolean disableUser(int userId);
+
 //	/**
 //	 * 申请代金券
 //	 * 
@@ -99,21 +99,21 @@ public interface UserDAO {
 //	 * @return
 //	 */
 //	public abstract boolean denyVoucher(int userId);
-//
-//	/**
-//	 * 更新用户
-//	 * 
-//	 * @param userid
-//	 * @param userName
-//	 * @param userMail
-//	 * @param userPhone
-//	 * @param userCompany
-//	 * @param userLevel
-//	 * @return
-//	 */
-//	public abstract boolean updateUser(Integer userid, String userName,
-//			String userMail, String userPhone, String userCompany, int userLevel);
-//
+
+	/**
+	 * 更新用户
+	 * 
+	 * @param userid
+	 * @param userName
+	 * @param userMail
+	 * @param userPhone
+	 * @param userCompany
+	 * @param userLevel
+	 * @return
+	 */
+	public abstract boolean updateUser(Integer userid, String userName,
+			String userMail, String userPhone, String userCompany, int userLevel);
+
 //	/**
 //	 * 更新用户余额
 //	 * 
@@ -122,6 +122,6 @@ public interface UserDAO {
 //	 * @return
 //	 */
 //	public abstract boolean updateBalance(int userId, double bill);
-//
-//	public abstract List<User> getUserList();
+
+	public abstract List<User> getUserList();
 }

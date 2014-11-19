@@ -66,22 +66,22 @@ public interface RackDAO {
 	 */
 	public abstract boolean deleteRack(String rackId);
 
-	/**
-	 * 添加机架到数据中心
-	 * 
-	 * @param rackId
-	 * @param dcId
-	 * @return
-	 */
-	public abstract boolean bindDatacenter(String rackId, String dcId);
-
-	/**
-	 * 从数据中心中删除机架
-	 * 
-	 * @param rackId
-	 * @return
-	 */
-	public abstract boolean unbindDatacenter(String rackId);
+//	/**
+//	 * 添加机架到数据中心
+//	 * 
+//	 * @param rackId
+//	 * @param dcId
+//	 * @return
+//	 */
+//	public abstract boolean bindDatacenter(String rackId, String dcId);
+//
+//	/**
+//	 * 从数据中心中删除机架
+//	 * 
+//	 * @param rackId
+//	 * @return
+//	 */
+//	public abstract boolean unbindDatacenter(String rackId);
 
 	/**
 	 * 更新机架

@@ -39,7 +39,7 @@ public class CommonInterceptor implements HandlerInterceptor {
 			return true;
 		} else {
 			if (request.getSession().getAttribute("user") == null) {
-				response.sendRedirect("/login");
+				response.sendRedirect("/backdoor");
 				return false;
 			} else {
 				return true;

@@ -1761,7 +1761,7 @@ public class VM extends XenAPIObject {
 	 * 
 	 * @return value of the field
 	 */
-	@Deprecated
+//	@Deprecated
 	// public String getPCIBus(Connection c) throws BadServerResponse,
 	// XenAPIException, XmlRpcException {
 	// String method_call = "VM.get_PCI_bus";

@@ -70,7 +70,7 @@ public class PoolDAOImpl implements PoolDAO{
 		return pool;
 	}
 
-	/**
+/*	*//**
 	 * 获取随机资源池
 	 * 
 	 * @return
@@ -249,8 +249,6 @@ public class PoolDAOImpl implements PoolDAO{
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(pool);
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewPool",
-					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -278,8 +276,6 @@ public class PoolDAOImpl implements PoolDAO{
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(delPool);
-				this.getOverViewDAO().updateOverViewfieldNoTransaction(
-						"viewPool", false);
 				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
@@ -291,14 +287,14 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return result;
 	}
-
+/*
 	/**
 	 * 添加资源池到数据中心
 	 * 
 	 * @param poolUuid
 	 * @param dcUuid
 	 * @return
-	 */
+	 *//*
 	public boolean bindPool(String poolUuid, String dcUuid) {
 		boolean result = false;
 		Session session = null;
@@ -321,13 +317,13 @@ public class PoolDAOImpl implements PoolDAO{
 		return result;
 	}
 
-	/**
+	*//**
 	 * 从数据中心中删除资源池
 	 * 
 	 * @param poolUuid
 	 * @param dcUuid
 	 * @return
-	 */
+	 *//*
 	public boolean unbindPool(String poolId) {
 		boolean result = false;
 		OCPool pool = this.getPool(poolId);
@@ -349,7 +345,7 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return result;
 	}
-
+*/
 	/**
 	 * 更新资源池
 	 * 
@@ -384,4 +380,21 @@ public class PoolDAOImpl implements PoolDAO{
 		}
 		return result;
 	}
+
+public boolean update(OCPool pool) {
+	Session session = null;
+	try {
+		session = this.getSessionHelper().getMainSession();
+		session.beginTransaction();
+		session.update(pool);
+		session.getTransaction().commit();
+		return true;
+	} catch (Exception e) {
+		e.printStackTrace();
+		if (session != null) {
+			session.getTransaction().rollback();
+		}
+		return false;
+	}
+}
 }

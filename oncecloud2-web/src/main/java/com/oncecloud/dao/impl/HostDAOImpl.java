@@ -1,7 +1,6 @@
 package com.oncecloud.dao.impl;
 
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.oncecloud.dao.HostDAO;
 import com.oncecloud.entity.OCHost;
-import com.oncecloud.entity.OCPool;
 import com.oncecloud.entity.Storage;
 import com.oncecloud.helper.SessionHelper;
 
@@ -47,7 +45,6 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return count;
 	}
-
 
 	@SuppressWarnings("unchecked")
 	public List<OCHost> getAllHost() {
@@ -113,7 +110,7 @@ public class HostDAOImpl implements HostDAO {
 		return host;
 	}
 
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public List<OCHost> getHostForImage() {
 		List<OCHost> hostList = null;
 		Session session = null;
@@ -132,7 +129,7 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return hostList;
 	}
-
+*/
 	public OCHost getHostFromIp(String hostIp) {
 		OCHost host = null;
 		Session session = null;
@@ -267,19 +264,6 @@ public class HostDAOImpl implements HostDAO {
 		return storageList;
 	}
 
-	public boolean isSameSr(Set<String> sr1, Set<String> sr2) {
-		if (sr1.size() != sr2.size()) {
-			return false;
-		} else {
-			sr1.retainAll(sr1);
-			if (sr1.size() == sr2.size()) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-
 	public boolean setPool(String hostUuid, String poolUuid) {
 		boolean result = false;
 		Session session = null;
@@ -332,8 +316,6 @@ public class HostDAOImpl implements HostDAO {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.save(host);
-				this.getOverViewDAO().updateOverViewfieldNoTransaction(
-						"viewServer", true);
 				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
@@ -382,8 +364,6 @@ public class HostDAOImpl implements HostDAO {
 				session.beginTransaction();
 				this.deleteHostSR(hostId);
 				session.delete(host);
-				this.getOverViewDAO().updateOverViewfieldNoTransaction(
-						"viewServer", false);
 				session.getTransaction().commit();
 				result = true;
 			} catch (Exception e) {
@@ -395,8 +375,8 @@ public class HostDAOImpl implements HostDAO {
 		}
 		return result;
 	}
-	
-	public void deleteHostSR(String hostId) {
+
+	private void deleteHostSR(String hostId) {
 		Session session = null;
 		try {
 			session = getSessionHelper().getMainSession();
@@ -412,19 +392,13 @@ public class HostDAOImpl implements HostDAO {
 		}
 	}
 
-	public boolean eject(OCHost host, String poolUuid, String masterUuid) {
+	public boolean update(OCHost host) {
 		boolean result = false;
 		Session session = null;
-		OCPool pool = this.getPoolDAO().getPool(poolUuid);
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			host.setPoolUuid(null);
 			session.update(host);
-			if (host.getHostUuid().equals(masterUuid)) {
-				pool.setPoolMaster(null);
-				session.update(pool);
-			}
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -436,25 +410,4 @@ public class HostDAOImpl implements HostDAO {
 		return result;
 	}
 
-	public boolean updatePoolMaster(OCPool pool, OCHost targetHost) {
-		boolean result = false;
-		Session session = null;
-		try {
-			session = this.getSessionHelper().getMainSession();
-			session.beginTransaction();
-			targetHost.setPoolUuid(pool.getPoolUuid());
-			pool.setPoolMaster(targetHost.getHostUuid());
-			session.update(targetHost);
-			session.update(pool);
-			session.getTransaction().commit();
-			result = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (session != null) {
-				session.getTransaction().rollback();
-			}
-		}
-		return result;
-
-	}
 }
