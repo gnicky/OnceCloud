@@ -57,7 +57,7 @@ public class VMAction {
 				user.getUserLevel(), count);
 		return quota;
 	}
-/*
+
 	@RequestMapping(value = "/StartVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public void startVM(HttpServletRequest request, @RequestParam String uuid) {
@@ -90,7 +90,7 @@ public class VMAction {
 		String poolUuid = user.getUserAllocate();
 		this.getVmManager().shutdownVM(user.getUserId(), uuid, force, poolUuid);
 	}
-*/
+
 	@RequestMapping(value = "/CreateVM", method = { RequestMethod.POST })
 	@ResponseBody
 	public void createVM(HttpServletRequest request,

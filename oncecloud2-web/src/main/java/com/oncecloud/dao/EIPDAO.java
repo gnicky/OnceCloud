@@ -45,9 +45,9 @@ public interface EIPDAO {
 //	 * @return
 //	 */
 //	public abstract List<EIP> getAllListAlarm(int eipUID, String alarmUuid);
-//
-//	public abstract EIP getEip(String eipIp);
-//
+
+	public abstract EIP getEip(String eipIp);
+
 //	public abstract String getEipId(String eip);
 
 	public abstract String getEipIp(String dependencyUuid);
@@ -77,9 +77,9 @@ public interface EIPDAO {
 //	 * @return
 //	 */
 //	public abstract boolean isNotExistAlarm(String alarmUuid);
-//
-//	public abstract boolean unBindEip(String eipIp);
-//
+
+	public abstract boolean unBindEip(String eipIp);
+
 //	/**
 //	 * @author hty
 //	 * @param eipip

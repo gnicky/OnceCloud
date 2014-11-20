@@ -283,27 +283,27 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract boolean updateVMVlan(String vmuuid, String vnetid);
-//
-//	/**
-//	 * 更新主机电源状态
-//	 * 
-//	 * @param uuid
-//	 * @param powerStatus
-//	 * @return
-//	 */
-//	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
-//
+
+	/**
+	 * 更新主机电源状态
+	 * 
+	 * @param uuid
+	 * @param powerStatus
+	 * @return
+	 */
+	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
+
 //	public abstract void unbindNet(String uuid);
-//
-//	/**
-//	 * 更新主机所在服务器
-//	 * 
-//	 * @param uuid
-//	 * @param hostUuid
-//	 * @return
-//	 */
-//	public abstract boolean updateHostUuid(String uuid, String hostUuid);
-//
+
+	/**
+	 * 更新主机所在服务器
+	 * 
+	 * @param uuid
+	 * @param hostUuid
+	 * @return
+	 */
+	public abstract boolean updateHostUuid(String uuid, String hostUuid);
+
 //	/**
 //	 * 主机一致性删除
 //	 * 

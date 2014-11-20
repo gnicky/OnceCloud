@@ -891,7 +891,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param uuid
 	 * @param powerStatus
 	 * @return
-	 *//*
+	 */
 	public boolean updatePowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		OCVM vm = this.getVM(uuid);
@@ -913,7 +913,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 		return result;
 	}
-	
+/*	
 	public void unbindNet(String uuid) {
 		OCVM vm = this.getVM(uuid);
 		if (vm != null) {
@@ -939,7 +939,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param uuid
 	 * @param hostUuid
 	 * @return
-	 *//*
+	 */
 	public boolean updateHostUuid(String uuid, String hostUuid) {
 		boolean result = false;
 		OCVM vm = this.getVM(uuid);
@@ -960,7 +960,7 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 主机一致性删除
 	 * 
 	 * @param hostUuid

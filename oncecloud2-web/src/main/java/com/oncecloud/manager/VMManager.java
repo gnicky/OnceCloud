@@ -33,14 +33,14 @@ public interface VMManager {
 //
 //	public abstract String getAllocateHost(String poolUuid, int memory);
 
-//	public abstract void deleteVM(int userId, String uuid, String poolUuid);
-//
-//	public abstract void restartVM(int userId, String uuid, String poolUuid);
+	public abstract void deleteVM(int userId, String uuid, String poolUuid);
 
-//	public abstract void startVM(int userId, String uuid, String poolUuid);
-//
-//	public abstract void shutdownVM(int userId, String uuid, String force,
-//			String poolUuid);
+	public abstract void restartVM(int userId, String uuid, String poolUuid);
+
+	public abstract void startVM(int userId, String uuid, String poolUuid);
+
+	public abstract void shutdownVM(int userId, String uuid, String force,
+			String poolUuid);
 
 	/**
 	 * 获取用户主机列表

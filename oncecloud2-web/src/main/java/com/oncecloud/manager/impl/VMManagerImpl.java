@@ -28,11 +28,15 @@ import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
+import com.oncecloud.dao.VolumeDAO;
 import com.oncecloud.entity.DHCP;
+import com.oncecloud.entity.Database;
 import com.oncecloud.entity.Image;
+import com.oncecloud.entity.LB;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
+import com.oncecloud.entity.Router;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
@@ -57,6 +61,7 @@ public class VMManagerImpl implements VMManager {
 	private FeeDAO feeDAO;
 	private HostDAO hostDAO;
 	private RouterDAO routerDAO;
+	private VolumeDAO volumeDAO;
 	
 	private MessagePush messagePush;
 	
@@ -163,6 +168,15 @@ public class VMManagerImpl implements VMManager {
 	@Autowired
 	public void setRouterDAO(RouterDAO routerDAO) {
 		this.routerDAO = routerDAO;
+	}
+
+	public VolumeDAO getVolumeDAO() {
+		return volumeDAO;
+	}
+
+	@Autowired
+	public void setVolumeDAO(VolumeDAO volumeDAO) {
+		this.volumeDAO = volumeDAO;
 	}
 
 	@Autowired
@@ -508,6 +522,7 @@ public class VMManagerImpl implements VMManager {
 				boolean preCreate = this.getVmDAO().preCreateVM(vmUuid, pwd,
 						userId, vmName, image.getImagePlatform(), mac, memory,
 						cpu, VMManager.POWER_CREATE, 1, createDate);
+				this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, true);
 				Date preEndDate = new Date();
 				int elapse = Utilities.timeElapse(createDate, preEndDate);
 				logger.info("VM [" + vmBackendName + "] Pre Create Time ["
@@ -580,6 +595,7 @@ public class VMManagerImpl implements VMManager {
 				}
 			} catch (Exception e) {
 				this.getVmDAO().removeVM(userId, vmUuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
 				jo.put("isSuccess", false);
 			}
 		}
@@ -597,4 +613,429 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
+	
+	public void shutdownVM(int userId, String uuid, String force,
+			String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doShutdownVM(uuid, force, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.主机.toString(),
+				"i-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.关闭.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.关闭.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doShutdownVM(String uuid, String force, String poolUuid) {
+		boolean result = false;
+		String powerState = null;
+		String hostUuid = null;
+		try {
+			OCVM currentVM = this.getVmDAO().getVM(uuid);
+			if (currentVM != null) {
+				boolean preShutdownVM = this.getVmDAO().updatePowerStatus(uuid,
+						VMManager.POWER_SHUTDOWN);
+				if (preShutdownVM == true) {
+					Connection c = this.getConstant().getConnectionFromPool(
+							poolUuid);
+					VM thisVM = VM.getByUuid(c, uuid);
+					powerState = thisVM.getPowerState(c).toString();
+					hostUuid = thisVM.getResidentOn(c).toWireString();
+					if (powerState.equals("Running")) {
+						if (force.equals("true")) {
+							thisVM.hardShutdown(c);
+						} else {
+							if (thisVM.cleanShutdown(c)) {
+							} else {
+								thisVM.hardShutdown(c);
+							}
+						}
+					}
+					this.getVmDAO().updateHostUuid(uuid, hostUuid);
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_HALTED);
+					result = true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (powerState != null) {
+				if (powerState.equals("Running")) {
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_RUNNING);
+				} else {
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_HALTED);
+				}
+			} else {
+				this.getVmDAO()
+						.updatePowerStatus(uuid, VMManager.POWER_RUNNING);
+			}
+		} finally {
+			if (result == true) {
+				NoVNC.deleteToken(uuid.substring(0, 8));
+			}
+		}
+		return result;
+	}
+	
+	private int bindVlan(String uuid, String vlan, Connection c) {
+		int vlanId = -1;
+		if (vlan != null) {
+			try {
+				vlanId = this.getVnetDAO().getVnet(vlan).getVnetID();
+			} catch (Exception e) {
+			}
+		}
+		setVlan(uuid, vlanId, c);
+		return vlanId;
+	}
+	
+	public boolean setVlan(String uuid, int vlanId, Connection c) {
+		try {
+			VM vm = VM.getByUuid(c, uuid);
+			vm.setTag(c, vm.getVIFs(c).iterator().next(),
+					String.valueOf(vlanId));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public void startVM(int userId, String uuid, String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doStartVM(uuid, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.主机.toString(),
+				"i-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.启动.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush().editRowStatus(userId, uuid, "stopped", "已关机");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.启动.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doStartVM(String uuid, String poolUuid) {
+		boolean result = false;
+		String hostUuid = null;
+		String powerState = null;
+		OCVM currentVM = null;
+		Connection c = null;
+		try {
+			currentVM = this.getVmDAO().getVM(uuid);
+			if (currentVM != null) {
+				boolean preStartVM = this.getVmDAO().updatePowerStatus(uuid,
+						VMManager.POWER_BOOT);
+				if (preStartVM == true) {
+					c = this.getConstant().getConnectionFromPool(
+							poolUuid);
+					VM thisVM = VM.getByUuid(c, uuid);
+					powerState = thisVM.getPowerState(c).toString();
+					if (!powerState.equals("Running")) {
+						hostUuid = getAllocateHost(c,
+								currentVM.getVmMem());
+						Host allocateHost = Types.toHost(hostUuid);
+						thisVM.startOn(c, allocateHost, false, true);
+					} else {
+						hostUuid = thisVM.getResidentOn(c).toWireString();
+					}
+					this.getVmDAO().updateHostUuid(uuid, hostUuid);
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_RUNNING);
+					result = true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (powerState != null) {
+				if (powerState.equals("Running")) {
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_RUNNING);
+				} else {
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_HALTED);
+				}
+			} else {
+				this.getVmDAO().updatePowerStatus(uuid, VMManager.POWER_HALTED);
+			}
+		} finally {
+			if (result = true) {
+				int vlan = bindVlan(uuid, currentVM.getVmVlan(), c);
+				logger.debug("Bind Vlan: VM [i-" + uuid.substring(0, 8)
+						+ "] Result [" + vlan + "]");
+				String hostAddress = getHostAddress(hostUuid);
+				int port = getVNCPort(uuid, poolUuid);
+				logger.debug("Override Token: Token [" + uuid.substring(0, 8)
+						+ "] Host Address [" + hostAddress + "] Port [" + port
+						+ "]");
+				NoVNC.createToken(uuid.substring(0, 8), hostAddress, port);
+			}
+		}
+		return result;
+	}
+	
+	public void restartVM(int userId, String uuid, String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doRestartVM(uuid, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.主机.toString(),
+				"i-" + uuid.substring(0, 8)));
+		if (result == true) {
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.重启.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			this.getMessagePush()
+					.editRowStatus(userId, uuid, "running", "正常运行");
+			this.getMessagePush().editRowConsole(userId, uuid, "add");
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.重启.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private boolean doRestartVM(String uuid, String poolUuid) {
+		boolean result = false;
+		String hostUuid = null;
+		String powerState = null;
+		OCVM currentVM = null;
+		Connection c = null;
+		try {
+			currentVM = this.getVmDAO().getVM(uuid);
+			if (currentVM != null) {
+				boolean preRestartVM = this.getVmDAO().updatePowerStatus(uuid,
+						VMManager.POWER_RESTART);
+				if (preRestartVM == true) {
+					c = this.getConstant().getConnectionFromPool(
+							poolUuid);
+					VM thisVM = VM.getByUuid(c, uuid);
+					powerState = thisVM.getPowerState(c).toString();
+					hostUuid = thisVM.getResidentOn(c).toWireString();
+					if (powerState.equals("Running")) {
+						boolean cleanReboot = thisVM.cleanReboot(c);
+						if (cleanReboot == false) {
+							thisVM.hardShutdown(c);
+							thisVM.start(c, false, true);
+						}
+					} else {
+						thisVM.start(c, false, true);
+					}
+					this.getVmDAO().updateHostUuid(uuid, hostUuid);
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_RUNNING);
+					result = true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (powerState != null) {
+				if (powerState.equals("Running")) {
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_RUNNING);
+				} else {
+					this.getVmDAO().updatePowerStatus(uuid,
+							VMManager.POWER_HALTED);
+				}
+			} else {
+				this.getVmDAO().updatePowerStatus(hostUuid,
+						VMManager.POWER_RUNNING);
+			}
+		} finally {
+			if (result == true) {
+				int vlan = bindVlan(uuid, currentVM.getVmVlan(), c);
+				logger.debug("Bind Vlan: VM [i-" + uuid.substring(0, 8)
+						+ "] Result [" + vlan + "]");
+				String hostAddress = this.getHostAddress(hostUuid);
+				int port = this.getVNCPort(uuid, poolUuid);
+				logger.debug("Override Token: Token [" + uuid.substring(0, 8)
+						+ "] Host Address [" + hostAddress + "] Port [" + port
+						+ "]");
+				NoVNC.createToken(uuid.substring(0, 8), hostAddress, port);
+			}
+		}
+		return result;
+	}
+	
+	public void deleteVM(int userId, String uuid, String poolUuid) {
+		Date startTime = new Date();
+		boolean result = this.doDeleteVM(userId, uuid, poolUuid);
+		// write log and push message
+		Date endTime = new Date();
+		int elapse = Utilities.timeElapse(startTime, endTime);
+		JSONArray infoArray = new JSONArray();
+		infoArray.put(Utilities.createLogInfo(
+				LogConstant.logObject.主机.toString(),
+				"i-" + uuid.substring(0, 8)));
+		if (result == true) {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.销毁.ordinal(),
+					LogConstant.logStatus.成功.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().deleteRow(userId, uuid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToSuccess(log.toString()));
+		} else {
+			OCLog log = this.getLogDAO().insertLog(userId,
+					LogConstant.logObject.主机.ordinal(),
+					LogConstant.logAction.销毁.ordinal(),
+					LogConstant.logStatus.失败.ordinal(), infoArray.toString(),
+					startTime, elapse);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError(log.toString()));
+		}
+	}
+
+	private void emptyAttachedVolume(Connection c, String uuid) {
+		try {
+			List<String> volumeList = this.getVolumeDAO().getVolumesOfVM(uuid);
+			for (String volume : volumeList) {
+				try {
+					VM.deleteDataVBD(c, uuid, volume);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				this.getVolumeDAO().emptyDependency(volume);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private JSONObject unbindElasticIp(Connection c, String uuid, String eipIp) {
+		JSONObject result = new JSONObject();
+		result.put("result", false);
+		try {
+			String ip = null;
+			String eif = this.getEipDAO().getEip(eipIp).getEipInterface();
+			OCVM vm = this.getVmDAO().getVM(uuid);
+			ip = vm.getVmIP();
+			boolean deActiveResult =  deActiveFirewall(c, ip);
+			if (deActiveResult) {
+				if (Host.unbindOuterIp(c, ip, eipIp, eif)) {
+					this.getEipDAO().unBindEip(eipIp);
+					result.put("result", true);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private boolean deActiveFirewall(Connection c, String ip) {
+		boolean result = false;
+		try {
+			JSONObject total = new JSONObject();
+			JSONArray ipArray = new JSONArray();
+			ipArray.put(ip);
+			JSONArray ruleArray = new JSONArray();
+			total.put("IP", ipArray);
+			total.put("rules", ruleArray);
+			result = Host.firewallApplyRule(c, total.toString(), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private boolean doDeleteVM(int userId, String uuid, String poolUuid) {
+		boolean result = false;
+		Connection c = null;
+		try {
+			c = this.getConstant().getConnectionFromPool(poolUuid);
+			boolean preDeleteVM = this.getVmDAO().updatePowerStatus(uuid,
+					VMManager.POWER_DESTROY);
+			if (preDeleteVM == true) {
+				VM thisVM = VM.getByUuid(c, uuid);
+				thisVM.hardShutdown(c);
+				thisVM.destroy(c, true);
+				OCVM currentVM = this.getVmDAO().getVM(uuid);
+				String ip = currentVM.getVmIP();
+				String mac = currentVM.getVmMac();
+				if (ip != null) {
+					this.getDhcpDAO().returnDHCP(mac);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (c != null) {
+					emptyAttachedVolume(c, uuid);
+				}
+				String publicip = this.getEipDAO().getEipIp(uuid);
+				if (publicip != null) {
+					unbindElasticIp(c, uuid, publicip);
+				}
+				Date endDate = new Date();
+				this.getFeeDAO().destoryVM(endDate, uuid);
+				NoVNC.deleteToken(uuid.substring(0, 8));
+				this.getVmDAO().removeVM(userId, uuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 }

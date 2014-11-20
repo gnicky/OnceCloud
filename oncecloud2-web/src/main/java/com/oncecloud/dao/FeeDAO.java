@@ -50,9 +50,9 @@ public interface FeeDAO {
 //	public abstract boolean deleteSnapshot(Date endDate, String vmUuid);
 //
 //	public abstract boolean deleteVolume(Date endDate, String volumeUuid);
-//
-//	public abstract boolean destoryVM(Date endDate, String vmUuid);
-//
+
+	public abstract boolean destoryVM(Date endDate, String vmUuid);
+
 //	public abstract double getEipTotalFee(int uid);
 //
 //	public abstract List<FeeEip> getFeeEipDetailList(int page, int limit,

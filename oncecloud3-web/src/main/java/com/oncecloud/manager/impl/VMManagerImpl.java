@@ -867,12 +867,12 @@ public class VMManagerImpl implements VMManager {
 					JSONObject jo = new JSONObject();
 					VIF.Record record = vm.getVIFRecord(conn, vif);
 					String tag = vm.getTag(conn, vif);
-					String physical = record.network.getNameLabel(conn);
+					Network.Record record2 = vm.getNetworkRecord(conn, vif);
 					jo.put("vifuuid", record.uuid);
 					jo.put("device", record.device);
 					jo.put("mac", record.MAC);
 					jo.put("tag", tag);
-					jo.put("physical", physical);
+					jo.put("physical", record2.nameLabel);
 					ja.put(jo);
 				}
 			} catch (Exception e) {

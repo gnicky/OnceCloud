@@ -283,7 +283,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return result;
 	}
-
+*/
 	private EIP doGetEip(Session session, String eipIp) {
 		EIP eip;
 		Criteria criteria = session.createCriteria(EIP.class).add(
@@ -291,7 +291,7 @@ public class EIPDAOImpl implements EIPDAO {
 		eip = (EIP) criteria.uniqueResult();
 		return eip;
 	}
-
+/*
 	// 获取可用公网IP
 	@SuppressWarnings("unchecked")
 	public List<EIP> getableeips(int uid) {
@@ -341,7 +341,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipList;
 	}
-
+*/
 	public EIP getEip(String eipIp) {
 		EIP eip = null;
 		Session session = null;
@@ -358,7 +358,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eip;
 	}
-
+/*
 	public String getEipId(String eip) {
 		String eipId = null;
 		Session session = null;
@@ -526,7 +526,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return result;
 	}
-
+*/
 	public boolean unBindEip(String eipIp) {
 		boolean result = false;
 		Session session = null;
@@ -550,7 +550,7 @@ public class EIPDAOImpl implements EIPDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param eipip
 	 * @param alarmUuid

@@ -464,7 +464,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+*/
 	public boolean destoryVM(Date endDate, String vmUuid) {
 		boolean result = false;
 		Session session = null;
@@ -491,7 +491,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+/*
 	public double getEipTotalFee(int uid) {
 		double result = 0.0;
 		Session session = null;
