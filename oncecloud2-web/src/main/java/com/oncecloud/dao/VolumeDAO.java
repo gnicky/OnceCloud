@@ -7,14 +7,14 @@ import com.oncecloud.entity.Volume;
 
 public interface VolumeDAO {
 
-//	/**
-//	 * 获取硬盘
-//	 * 
-//	 * @param volumeUuid
-//	 * @return
-//	 */
-//	public abstract Volume getVolume(String volumeUuid);
-//
+	/**
+	 * 获取硬盘
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public abstract Volume getVolume(String volumeUuid);
+
 //	/**
 //	 * 获取一页用户硬盘列表
 //	 * 
@@ -35,8 +35,8 @@ public interface VolumeDAO {
 	 */
 	public abstract List<String> getVolumesOfVM(String vmUuid);
 
-//	public abstract List<Volume> getVolListByVM(String vmUuid);
-//
+	public abstract List<Volume> getVolListByVM(String vmUuid);
+
 //	/**
 //	 * 获取用户硬盘总数
 //	 * 
@@ -81,8 +81,8 @@ public interface VolumeDAO {
 
 	public abstract void emptyDependency(String volumeUuid);
 
-//	public abstract void updateBackupDate(String volumeUuid, Date backupDate);
-//
+	public abstract void updateBackupDate(String volumeUuid, Date backupDate);
+
 //	public abstract void updateName(String volumeUuid, String newName,
 //			String description);
 //

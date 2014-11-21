@@ -1,16 +1,33 @@
 package com.oncecloud.manager.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.xmlrpc.XmlRpcException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.once.xenapi.Connection;
+import com.once.xenapi.Host;
+import com.once.xenapi.VM;
+import com.once.xenapi.Types.BadServerResponse;
+import com.once.xenapi.Types.XenAPIException;
+import com.oncecloud.dao.DHCPDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.QuotaDAO;
+import com.oncecloud.dao.RouterDAO;
+import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
+import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Vnet;
+import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.VnetManager;
+import com.oncecloud.message.MessagePush;
 
 @Component("VnetManager")
 public class VnetManagerImpl implements VnetManager {
@@ -25,13 +42,12 @@ public class VnetManagerImpl implements VnetManager {
 	private void setVnetDAO(VnetDAO vnetDAO) {
 		this.vnetDAO = vnetDAO;
 	}
-	/*private VMDAO vmDAO;
+
+	private VMDAO vmDAO;
 	private DHCPDAO dhcpDAO;
 	private LogDAO logDAO;
 	private QuotaDAO quotaDAO;
 	private RouterDAO routerDAO;
-	private VMManager vmManager;
-	private RouterManager routerManager;
 	private MessagePush messagePush;
 	private Constant constant;
 
@@ -89,24 +105,6 @@ public class VnetManagerImpl implements VnetManager {
 		this.routerDAO = routerDAO;
 	}
 
-	private VMManager getVmManager() {
-		return vmManager;
-	}
-
-	@Autowired
-	private void setVmManager(VMManager vmManager) {
-		this.vmManager = vmManager;
-	}
-
-	private RouterManager getRouterManager() {
-		return routerManager;
-	}
-
-	@Autowired
-	private void setRouterManager(RouterManager routerManager) {
-		this.routerManager = routerManager;
-	}
-	
 	private Constant getConstant() {
 		return constant;
 	}
@@ -115,7 +113,7 @@ public class VnetManagerImpl implements VnetManager {
 	private void setConstant(Constant constant) {
 		this.constant = constant;
 	}
-
+/*
 	public enum DeleteVnetResult {
 		Success, Using, Failed
 	}
@@ -207,14 +205,65 @@ public class VnetManagerImpl implements VnetManager {
 		return result;
 	}
 
-	*//**
+	*/
+	private boolean setVlan(String uuid, int vlanId, Connection c) {
+		try {
+			VM vm = VM.getByUuid(c, uuid);
+			vm.setTag(c, vm.getVIFs(c).iterator().next(),
+					String.valueOf(vlanId));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	private boolean assginIpAddressToVM(Connection c, String url, String subnet,
+			OCVM vm) {
+		boolean result = false;
+		if (vm != null) {
+			try {
+				String mac = vm.getVmMac();
+				String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
+				vm.setVmIP(vnetIp);
+				this.getVmDAO().updateVM(vm);
+				this.restartNetwork(c, vm.getVmUuid(), false);
+				result = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	private boolean restartNetwork(Connection c, String vmuuid, boolean sync) {
+		try {
+			VM temVM = VM.getByUuid(c, vmuuid);
+			JSONObject temjo = new JSONObject();
+			temjo.put("requestType", "Agent.RestartNetwork");
+			temVM.sendRequestViaSerial(c, temjo.toString(), sync);
+			return true;
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+			return false;
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+			return false;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
 	 * 添加主机到私有网络
-	 *//*
+	 */
 	public boolean bindVnetToVMs(int userId, String vmArray, String vnetId,
 			String poolUuid, String content, String conid) {
 		boolean result = false;
 		Date startTime = new Date();
+		Connection conn = null;
 		try {
+			conn = this.getConstant().getConnectionFromPool(poolUuid);
 			JSONArray jArray = new JSONArray(vmArray);
 			for (int i = 0; i < jArray.length(); i++) {
 				String vmUuid = jArray.getString(i);
@@ -234,7 +283,7 @@ public class VnetManagerImpl implements VnetManager {
 							LogConstant.logObject.主机.toString(),
 							"i-" + vmUuid.substring(0, 8)));
 					if (vnetId.equals("-1")) {
-						this.getVmManager().setVlan(vmUuid, -1, poolUuid);
+						this.setVlan(vmUuid, -1, conn);
 						String ip = this
 								.getDhcpDAO()
 								.getDHCP(
@@ -244,9 +293,7 @@ public class VnetManagerImpl implements VnetManager {
 								ip);
 					} else {
 						Vnet vnet = this.getVnetDAO().getVnet(vnetId);
-						this.getVmManager().setVlan(vmUuid,
-								vnet.getVnetID(),
-								poolUuid);
+						setVlan(vmUuid, vnet.getVnetID(), conn);
 						vm.setVmVlan(vnetId);
 						this.getVmDAO().updateVM(vm);
 						if (vnet.getVnetRouter() != null) {
@@ -255,8 +302,7 @@ public class VnetManagerImpl implements VnetManager {
 							String url = routerIp + ":9090";
 							if (vnet.getDhcpStatus() == 1) {
 								String subnet = "192.168." + vnet.getVnetNet() + ".0";
-								Connection c = this.getConstant().getConnectionFromPool(poolUuid);
-								this.getVmManager().assginIpAddressToVM(c, url, subnet, vm);
+								this.assginIpAddressToVM(conn, url, subnet, vm);
 							}
 						}
 						result = true;
@@ -290,7 +336,7 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return result;
 	}
-
+/*
 	public String deleteVnet(int userId, String vnetUuid) {
 		Date startTime = new Date();
 		DeleteVnetResult result = DeleteVnetResult.Failed;
@@ -339,7 +385,7 @@ public class VnetManagerImpl implements VnetManager {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public JSONArray getVnetList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getVnetDAO().countVnets(userId, search);
@@ -364,7 +410,7 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return ja;
 	}
-
+/*
 	public void vnetCreate(String name, String uuid, String desc, int userId) {
 		Date startTime = new Date();
 		boolean result = this.getVnetDAO().createVnet(uuid, userId, name, desc);
@@ -515,7 +561,7 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return jo;
 	}
-
+*/
 	public JSONObject vnetAddvm(int userId, String vmuuidStr, String vnId,
 			String poolUuid, String content, String conid) {
 		JSONObject jo = new JSONObject();
@@ -526,7 +572,7 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return jo;
 	}
-*/
+
 	public JSONArray getVnetsOfUser(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Vnet> vnetList = this.getVnetDAO().getVnetsOfUser(userId);

@@ -202,7 +202,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return firewall;
 	}
-/*
+
 	public Firewall getFirewall(String firewallId) {
 		Firewall firewall = null;
 		Session session = null;
@@ -222,7 +222,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return firewall;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getOnePageFirewallList(int page, int limit,
 			String search, int userId) {

@@ -27,18 +27,18 @@ public interface VnetDAO {
 //	 * @return
 //	 */
 //	public abstract int getFreeVnetID();
-//
-//	/**
-//	 * 获取一页用户私有网络列表
-//	 * 
-//	 * @param userId
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract List<Vnet> getOnePageVnets(int userId, int page, int limit,
-//			String search);
+
+	/**
+	 * 获取一页用户私有网络列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract List<Vnet> getOnePageVnets(int userId, int page, int limit,
+			String search);
 
 	/**
 	 * 获取用户私有网络列表
@@ -55,25 +55,25 @@ public interface VnetDAO {
 //	 * @return
 //	 */
 //	public abstract List<Vnet> getVnetsOfRouter(String routerUuid);
-//
-//	/**
-//	 * 获取路由器私有网络数目
-//	 * 
-//	 * @param routerUuid
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract int countVnetsOfRouter(String routerUuid, int userId);
-//
-//	/**
-//	 * 获取用户私有网络总数
-//	 * 
-//	 * @param userId
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract int countVnets(int userId, String search);
-//
+
+	/**
+	 * 获取路由器私有网络数目
+	 * 
+	 * @param routerUuid
+	 * @param userId
+	 * @return
+	 */
+	public abstract int countVnetsOfRouter(String routerUuid, int userId);
+
+	/**
+	 * 获取用户私有网络总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public abstract int countVnets(int userId, String search);
+
 //	/**
 //	 * 查看是否被占用
 //	 * 

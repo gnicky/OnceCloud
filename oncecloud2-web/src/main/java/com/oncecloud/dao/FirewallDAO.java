@@ -27,8 +27,8 @@ public interface FirewallDAO {
 
 	public abstract Firewall getDefaultFirewall(int userId);
 
-//	public abstract Firewall getFirewall(String firewallId);
-//
+	public abstract Firewall getFirewall(String firewallId);
+
 //	public abstract List<Firewall> getOnePageFirewallList(int page, int limit,
 //			String search, int userId);
 //

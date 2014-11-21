@@ -46,9 +46,9 @@ public interface FeeDAO {
 //			Date endMonth);
 //
 //	public abstract int countFeeVolumeDetailList(int uid, String uuid);
-//
-//	public abstract boolean deleteSnapshot(Date endDate, String vmUuid);
-//
+
+	public abstract boolean deleteSnapshot(Date endDate, String vmUuid);
+
 //	public abstract boolean deleteVolume(Date endDate, String volumeUuid);
 
 	public abstract boolean destoryVM(Date endDate, String vmUuid);
@@ -111,10 +111,10 @@ public interface FeeDAO {
 //	public abstract boolean insertFeeEip(Integer eipUID, Date startDate,
 //			Date endDate, Double eipPrice, Integer eipState, String eipUuid,
 //			String eipName);
-//
-//	public abstract boolean insertFeeSnapshot(Integer snapshotUID,
-//			Date startDate, Date endDate, Double snapshotPrice,
-//			Integer snapshotState, String vmUuid, String vmName);
+
+	public abstract boolean insertFeeSnapshot(Integer snapshotUID,
+			Date startDate, Date endDate, Double snapshotPrice,
+			Integer snapshotState, String vmUuid, String vmName);
 
 	public abstract boolean insertFeeVM(Integer vmUID, Date startDate,
 			Date endDate, Double vmPrice, Integer vmState, String vmUuid,

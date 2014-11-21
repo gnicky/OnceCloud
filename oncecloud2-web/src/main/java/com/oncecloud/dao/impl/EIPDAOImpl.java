@@ -358,7 +358,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eip;
 	}
-/*
+
 	public String getEipId(String eip) {
 		String eipId = null;
 		Session session = null;
@@ -380,7 +380,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipId;
 	}
-*/
+
 	public String getEipIp(String dependencyUuid) {
 		String eipIp = null;
 		Session session = null;
@@ -402,7 +402,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipIp;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEipList(int userId, int page, int limit,
 			String search) {
@@ -430,7 +430,7 @@ public class EIPDAOImpl implements EIPDAO {
 		return eipList;
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param page
 	 * @param limit

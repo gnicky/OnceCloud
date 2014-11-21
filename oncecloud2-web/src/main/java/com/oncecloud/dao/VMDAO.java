@@ -14,14 +14,14 @@ public interface VMDAO {
 	 */
 	public abstract OCVM getVM(String vmUuid);
 
-//	/**
-//	 * 获取主机名称
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract String getVmName(String vmUuid);
-//
+	/**
+	 * 获取主机名称
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract String getVmName(String vmUuid);
+
 //	/**
 //	 * 获取使用中的主机
 //	 * 
@@ -94,14 +94,14 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract List<OCVM> getVMsOfVnet(String vmVlan);
-//
-//	/**
-//	 * 获取简单用户主机列表
-//	 * 
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract List<Object[]> getBasicNetworkList(int userId);
+
+	/**
+	 * 获取简单用户主机列表
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public abstract List<Object[]> getBasicNetworkList(int userId);
 
 	/**
 	 * 获取用户主机总数
@@ -218,14 +218,14 @@ public interface VMDAO {
 	public abstract boolean updateVM(int userId, String vmUuid, String vmPWD,
 			int vmPower, String hostUuid, String ip, String firewallId);
 
-//	/**
-//	 * 更新主机备份时间
-//	 * 
-//	 * @param vmUuid
-//	 * @param date
-//	 */
-//	public abstract void updateBackupDate(String vmUuid, Date date);
-//
+	/**
+	 * 更新主机备份时间
+	 * 
+	 * @param vmUuid
+	 * @param date
+	 */
+	public abstract void updateBackupDate(String vmUuid, Date date);
+
 //	/**
 //	 * 更新主机防火墙
 //	 * 
@@ -293,7 +293,7 @@ public interface VMDAO {
 	 */
 	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
 
-//	public abstract void unbindNet(String uuid);
+	public abstract void unbindNet(String uuid);
 
 	/**
 	 * 更新主机所在服务器
@@ -311,16 +311,16 @@ public interface VMDAO {
 //	 * @param vmUuid
 //	 */
 //	public abstract void syncDelVMOperate(String hostUuid, String vmUuid);
-//
-//	/**
-//	 * 主机回到基础网络
-//	 * 
-//	 * @param vmuuid
-//	 * @param ip
-//	 * @return
-//	 */
-//	public abstract boolean returnToBasicNetwork(String vmuuid, String ip);
-//
+
+	/**
+	 * 主机回到基础网络
+	 * 
+	 * @param vmuuid
+	 * @param ip
+	 * @return
+	 */
+	public abstract boolean returnToBasicNetwork(String vmuuid, String ip);
+
 //	/**
 //	 * 是否有主机具有该监控警告
 //	 * 

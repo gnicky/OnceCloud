@@ -10,7 +10,7 @@ public interface DHCPDAO {
 //
 //	public abstract boolean deleteDHCP(String ip, String mac);
 
-//	public abstract DHCP getDHCP(String dhcpMac);
+	public abstract DHCP getDHCP(String dhcpMac);
 
 	public abstract DHCP getFreeDHCP(String tenantUuid, int depenType);
 

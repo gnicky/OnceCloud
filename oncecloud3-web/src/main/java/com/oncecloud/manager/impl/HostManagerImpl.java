@@ -292,7 +292,7 @@ public class HostManagerImpl implements HostManager{
 		JsonElement je = jp.parse(uuidJsonStr);
 		JsonArray ja = je.getAsJsonArray();
 		JSONArray qaArray = new JSONArray();
-		boolean isSame = true;
+		boolean isSame = false;
 		if (ja.size() > 0) {
 			String firstUuid = ja.get(0).getAsString();
 			List<Storage> srlist1 = this.getHostDAO().getSROfHost(firstUuid);
@@ -308,7 +308,7 @@ public class HostManagerImpl implements HostManager{
 					srSet2.add(sr.getSrUuid());
 				}
 				if (isSameSr(srSet1, srSet2)) {
-					isSame = false;
+					isSame = true;
 					break;
 				}
 			}

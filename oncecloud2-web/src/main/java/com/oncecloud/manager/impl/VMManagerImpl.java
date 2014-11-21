@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
 import com.once.xenapi.Types;
 import com.once.xenapi.VM;
+import com.once.xenapi.VMUtil;
+import com.once.xenapi.Types.BadServerResponse;
+import com.once.xenapi.Types.XenAPIException;
 import com.once.xenapi.VM.Record;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
@@ -37,6 +41,7 @@ import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.Router;
+import com.oncecloud.entity.User;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
@@ -49,7 +54,7 @@ import com.oncecloud.message.MessagePush;
 public class VMManagerImpl implements VMManager {
 	private final static Logger logger = Logger.getLogger(VMManager.class);
 	private final static long MB = 1024 * 1024;
-	
+
 	private VMDAO vmDAO;
 	private LogDAO logDAO;
 	private VnetDAO vnetDAO;
@@ -62,11 +67,11 @@ public class VMManagerImpl implements VMManager {
 	private HostDAO hostDAO;
 	private RouterDAO routerDAO;
 	private VolumeDAO volumeDAO;
-	
+
 	private MessagePush messagePush;
-	
+
 	private Constant constant;
-	
+
 	public VMDAO getVmDAO() {
 		return vmDAO;
 	}
@@ -251,7 +256,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return ja;
 	}
-	
+
 	public void createVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpuCore, double memorySize, String pwd,
 			String poolUuid, String vnetuuid) {
@@ -301,7 +306,7 @@ public class VMManagerImpl implements VMManager {
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-	
+
 	private Record createVMOnHost(Connection c, String vmUuid, String tplUuid,
 			String loginName, String loginPwd, long cpuCore,
 			long memoryCapacity, String mac, String ip, String OS,
@@ -320,7 +325,7 @@ public class VMManagerImpl implements VMManager {
 				map, ping);
 		return vmrecord;
 	}
-	
+
 	public String getAllocateHost(Connection conn, int memory) {
 		String host = null;
 		try {
@@ -343,7 +348,7 @@ public class VMManagerImpl implements VMManager {
 			return null;
 		}
 	}
-	
+
 	private String getHostAddress(String hostUuid) {
 		String hostIP = null;
 		OCHost host = this.getHostDAO().getHost(hostUuid);
@@ -352,7 +357,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return hostIP;
 	}
-	
+
 	private int getVNCPort(String uuid, String poolUuid) {
 		int port = 0;
 		try {
@@ -368,7 +373,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return port;
 	}
-	
+
 	private JSONObject doCreateVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpu, int memory, String pwd, String poolUuid,
 			String vnetuuid) {
@@ -418,7 +423,7 @@ public class VMManagerImpl implements VMManager {
 				try {
 					boolean preCreate = this.getVmDAO().preCreateVM(vmUuid,
 							pwd, userId, vmName, image.getImagePlatform(), mac,
-							memory, cpu  , VMManager.POWER_CREATE, 1, createDate);
+							memory, cpu, VMManager.POWER_CREATE, 1, createDate);
 					this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, true);
 					Date preEndDate = new Date();
 					int elapse = Utilities.timeElapse(createDate, preEndDate);
@@ -449,9 +454,11 @@ public class VMManagerImpl implements VMManager {
 								}
 								jo.put("ip", ip);
 								String firewallId = this.getFirewallDAO()
-										.getDefaultFirewall(userId).getFirewallId();
+										.getDefaultFirewall(userId)
+										.getFirewallId();
 								this.getVmDAO().updateVM(userId, vmUuid, pwd,
-										VMManager.POWER_RUNNING, hostuuid, ip, firewallId);
+										VMManager.POWER_RUNNING, hostuuid, ip,
+										firewallId);
 								Calendar calendar = Calendar.getInstance();
 								calendar.setTime(createDate);
 								calendar.add(Calendar.MINUTE, 60);
@@ -514,20 +521,20 @@ public class VMManagerImpl implements VMManager {
 			imagePwd = image.getImagePwd();
 			mac = Utilities.randomMac();
 			ip = "";
-			c = this.getConstant().getConnectionFromPool(poolUuid);
-			allocateHost = getAllocateHost(c, memory);
 			logger.info("VM [" + vmBackendName + "] allocated to Host ["
 					+ allocateHost + "]");
 			try {
+				c = this.getConstant().getConnectionFromPool(poolUuid);
+				allocateHost = getAllocateHost(c, memory);
 				boolean preCreate = this.getVmDAO().preCreateVM(vmUuid, pwd,
 						userId, vmName, image.getImagePlatform(), mac, memory,
 						cpu, VMManager.POWER_CREATE, 1, createDate);
-				this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, true);
-				Date preEndDate = new Date();
-				int elapse = Utilities.timeElapse(createDate, preEndDate);
-				logger.info("VM [" + vmBackendName + "] Pre Create Time ["
-						+ elapse + "]");
 				if (preCreate == true) {
+					this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, true);
+					Date preEndDate = new Date();
+					int elapse = Utilities.timeElapse(createDate, preEndDate);
+					logger.info("VM [" + vmBackendName + "] Pre Create Time ["
+							+ elapse + "]");
 					Record vmrecord = null;
 					// 如果不能获取该模板的空闲VDI，则直接创建该虚拟机，否则使用该VDI创建虚拟机
 					logger.info("VM Config: Template [" + tplUuid + "] CPU ["
@@ -536,26 +543,28 @@ public class VMManagerImpl implements VMManager {
 					vmrecord = createVMOnHost(c, vmUuid, tplUuid, "root", pwd,
 							cpu, memory, mac, "", OS, allocateHost, imagePwd,
 							vmBackendName, false);
-					OCVM vm = this.getVmDAO().getVM(vmUuid);
-					Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
-					jo.put("vname", vnet.getVnetName());
-					VM pvm = VM.getByUuid(c, vmUuid);
-					pvm.setTag(c, pvm.getVIFs(c).iterator().next(),
-							String.valueOf(vnet.getVnetID()));
-					vm.setVmVlan(vnetuuid);
-					if (vnet.getVnetRouter() != null) {
-						String routerIp = this.getRouterDAO()
-								.getRouter(vnet.getVnetRouter()).getRouterIP();
-						String url = routerIp + ":9090";
-						String subnet = "192.168." + vnet.getVnetNet() + ".0";
-						ip = Host.assignIpAddress(c, url, mac, subnet);
-					}
-					Date createEndDate = new Date();
-					int elapse1 = Utilities.timeElapse(createDate,
-							createEndDate);
-					logger.info("VM [" + vmBackendName + "] Create Time ["
-							+ elapse1 + "]");
 					if (vmrecord != null) {
+						OCVM vm = this.getVmDAO().getVM(vmUuid);
+						Vnet vnet = this.getVnetDAO().getVnet(vnetuuid);
+						jo.put("vname", vnet.getVnetName());
+						VM pvm = VM.getByUuid(c, vmUuid);
+						pvm.setTag(c, pvm.getVIFs(c).iterator().next(),
+								String.valueOf(vnet.getVnetID()));
+						vm.setVmVlan(vnetuuid);
+						if (vnet.getVnetRouter() != null) {
+							String routerIp = this.getRouterDAO()
+									.getRouter(vnet.getVnetRouter())
+									.getRouterIP();
+							String url = routerIp + ":9090";
+							String subnet = "192.168." + vnet.getVnetNet()
+									+ ".0";
+							ip = Host.assignIpAddress(c, url, mac, subnet);
+						}
+						Date createEndDate = new Date();
+						int elapse1 = Utilities.timeElapse(createDate,
+								createEndDate);
+						logger.info("VM [" + vmBackendName + "] Create Time ["
+								+ elapse1 + "]");
 						String hostuuid = vmrecord.residentOn.toWireString();
 						if (hostuuid.equals(allocateHost)) {
 							if (!vmrecord.setpasswd) {
@@ -590,10 +599,24 @@ public class VMManagerImpl implements VMManager {
 							NoVNC.createToken(vmUuid.substring(0, 8),
 									hostAddress, port);
 							jo.put("isSuccess", true);
+						} else {
+							jo.put("error", "主机后台启动位置错误");
+							this.getVmDAO().removeVM(userId, vmUuid);
+							this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
+							jo.put("isSuccess", false);
 						}
+					} else {
+						jo.put("error", "后台主机创建错误");
+						this.getVmDAO().removeVM(userId, vmUuid);
+						this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
+						jo.put("isSuccess", false);
 					}
+				} else {
+					jo.put("error", "主机预创建失败");
+					jo.put("isSuccess", false);
 				}
 			} catch (Exception e) {
+				jo.put("error", "主机创建未知错误");
 				this.getVmDAO().removeVM(userId, vmUuid);
 				this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
 				jo.put("isSuccess", false);
@@ -601,7 +624,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return jo;
 	}
-	
+
 	public String getQuota(int userId, int userLevel, int count) {
 		String result = "ok";
 		if (userLevel != 0) {
@@ -613,7 +636,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
-	
+
 	public void shutdownVM(int userId, String uuid, String force,
 			String poolUuid) {
 		Date startTime = new Date();
@@ -700,7 +723,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
-	
+
 	private int bindVlan(String uuid, String vlan, Connection c) {
 		int vlanId = -1;
 		if (vlan != null) {
@@ -712,8 +735,8 @@ public class VMManagerImpl implements VMManager {
 		setVlan(uuid, vlanId, c);
 		return vlanId;
 	}
-	
-	public boolean setVlan(String uuid, int vlanId, Connection c) {
+
+	private boolean setVlan(String uuid, int vlanId, Connection c) {
 		try {
 			VM vm = VM.getByUuid(c, uuid);
 			vm.setTag(c, vm.getVIFs(c).iterator().next(),
@@ -723,7 +746,7 @@ public class VMManagerImpl implements VMManager {
 			return false;
 		}
 	}
-	
+
 	public void startVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.doStartVM(uuid, poolUuid);
@@ -769,13 +792,11 @@ public class VMManagerImpl implements VMManager {
 				boolean preStartVM = this.getVmDAO().updatePowerStatus(uuid,
 						VMManager.POWER_BOOT);
 				if (preStartVM == true) {
-					c = this.getConstant().getConnectionFromPool(
-							poolUuid);
+					c = this.getConstant().getConnectionFromPool(poolUuid);
 					VM thisVM = VM.getByUuid(c, uuid);
 					powerState = thisVM.getPowerState(c).toString();
 					if (!powerState.equals("Running")) {
-						hostUuid = getAllocateHost(c,
-								currentVM.getVmMem());
+						hostUuid = getAllocateHost(c, currentVM.getVmMem());
 						Host allocateHost = Types.toHost(hostUuid);
 						thisVM.startOn(c, allocateHost, false, true);
 					} else {
@@ -815,7 +836,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
-	
+
 	public void restartVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.doRestartVM(uuid, poolUuid);
@@ -863,8 +884,7 @@ public class VMManagerImpl implements VMManager {
 				boolean preRestartVM = this.getVmDAO().updatePowerStatus(uuid,
 						VMManager.POWER_RESTART);
 				if (preRestartVM == true) {
-					c = this.getConstant().getConnectionFromPool(
-							poolUuid);
+					c = this.getConstant().getConnectionFromPool(poolUuid);
 					VM thisVM = VM.getByUuid(c, uuid);
 					powerState = thisVM.getPowerState(c).toString();
 					hostUuid = thisVM.getResidentOn(c).toWireString();
@@ -912,7 +932,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
-	
+
 	public void deleteVM(int userId, String uuid, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.doDeleteVM(userId, uuid, poolUuid);
@@ -958,7 +978,7 @@ public class VMManagerImpl implements VMManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private JSONObject unbindElasticIp(Connection c, String uuid, String eipIp) {
 		JSONObject result = new JSONObject();
 		result.put("result", false);
@@ -967,7 +987,7 @@ public class VMManagerImpl implements VMManager {
 			String eif = this.getEipDAO().getEip(eipIp).getEipInterface();
 			OCVM vm = this.getVmDAO().getVM(uuid);
 			ip = vm.getVmIP();
-			boolean deActiveResult =  deActiveFirewall(c, ip);
+			boolean deActiveResult = deActiveFirewall(c, ip);
 			if (deActiveResult) {
 				if (Host.unbindOuterIp(c, ip, eipIp, eif)) {
 					this.getEipDAO().unBindEip(eipIp);
@@ -979,7 +999,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
-	
+
 	private boolean deActiveFirewall(Connection c, String ip) {
 		boolean result = false;
 		try {
@@ -995,7 +1015,7 @@ public class VMManagerImpl implements VMManager {
 		}
 		return result;
 	}
-	
+
 	private boolean doDeleteVM(int userId, String uuid, String poolUuid) {
 		boolean result = false;
 		Connection c = null;
@@ -1036,6 +1056,204 @@ public class VMManagerImpl implements VMManager {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * 获取主机详细信息
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public JSONObject getVMDetail(String vmUuid) {
+		JSONObject jo = new JSONObject();
+		OCVM ocvm = this.getVmDAO().getVM(vmUuid);
+		if (ocvm != null) {
+			jo.put("instanceName", Utilities.encodeText(ocvm.getVmName()));
+			jo.put("instanceDesc", (ocvm.getVmDesc() == null) ? "&nbsp;"
+					: Utilities.encodeText(ocvm.getVmDesc()));
+			jo.put("instanceState", ocvm.getVmPower());
+			jo.put("createDate", Utilities.formatTime(ocvm.getCreateDate()));
+			String timeUsed = Utilities.encodeText(Utilities.dateToUsed(ocvm
+					.getCreateDate()));
+			List<String> volList = this.getVolumeDAO().getVolumesOfVM(vmUuid);
+			if (volList == null || volList.size() == 0) {
+				jo.put("volList", "&nbsp;");
+			} else {
+				jo.put("volList", volList);
+			}
+			if (ocvm.getBackupDate() == null) {
+				jo.put("backupdate", "");
+			} else {
+				String tUsed = Utilities.encodeText(Utilities.dateToUsed(ocvm
+						.getBackupDate()));
+				jo.put("backupdate", tUsed);
+			}
+			jo.put("useDate", timeUsed);
+			jo.put("instanceCPU", ocvm.getVmCpu());
+			jo.put("instanceMemory", ocvm.getVmMem());
+			jo.put("instancevlan", ocvm.getVmVlan());
+			String fw = ocvm.getVmFirewall();
+			if (fw == null) {
+				jo.put("instanceFirewall", "");
+				jo.put("instanceFirewallName", "");
+			} else {
+				jo.put("instanceFirewall", fw);
+				jo.put("instanceFirewallName",
+						Utilities.encodeText(this.getFirewallDAO()
+								.getFirewall(fw).getFirewallName()));
+			}
+			String ip = ocvm.getVmIP();
+			if (ip == null) {
+				jo.put("instanceIP", "null");
+			} else {
+				jo.put("instanceIP", ip);
+			}
+			jo.put("instanceMAC", ocvm.getVmMac());
+			String eip = this.getEipDAO().getEipIp(vmUuid);
+			String eipUuid = this.getEipDAO().getEipId(eip);
+			if (eip == null) {
+				jo.put("instanceEip", "null");
+				jo.put("instanceEipUuid", "null");
+			} else {
+				jo.put("instanceEip", eip);
+				jo.put("instanceEipUuid", eipUuid);
+			}
+			String vlan = ocvm.getVmVlan();
+			if (vlan == null) {
+				jo.put("vlan", "null");
+			} else {
+				Vnet vnet = this.getVnetDAO().getVnet(vlan);
+				jo.put("vlan", vnet.getVnetName());
+				jo.put("vlanUuid", vnet.getVnetUuid());
+				jo.put("routerUuid", vnet.getVnetRouter());
+			}
+		}
+		return jo;
+	}
+
+	private boolean restartNetwork(Connection c, String vmuuid, boolean sync) {
+		try {
+			VM temVM = VM.getByUuid(c, vmuuid);
+			JSONObject temjo = new JSONObject();
+			temjo.put("requestType", "Agent.RestartNetwork");
+			temVM.sendRequestViaSerial(c, temjo.toString(), sync);
+			return true;
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+			return false;
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+			return false;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public JSONObject unbindNet(String uuid, User user, String content,
+			String conid) {
+		JSONObject jo = new JSONObject();
+		OCVM vm = this.getVmDAO().getVM(uuid);
+		String vlan = vm.getVmVlan();
+		boolean result = false;
+		Connection conn = this.getConstant().getConnectionFromPool(
+				user.getUserAllocate());
+		if (vlan == null) {
+			String eip = this.getEipDAO().getEipIp(uuid);
+			if (eip != null) {
+				JSONObject unbind = unbindElasticIp(conn, uuid, eip);
+				if (unbind.getBoolean("result")) {
+					result = this.setVlan(uuid, 1, conn);
+				} else {
+					result = false;
+				}
+			} else {
+				result = this.setVlan(uuid, 1, conn);
+			}
+		} else {
+			result = this.setVlan(uuid, 1, conn);
+		}
+		if (result) {
+			try {
+				this.restartNetwork(conn, uuid, true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		jo.put("result", result);
+		if (result) {
+			this.getVmDAO().unbindNet(uuid);
+			this.getMessagePush().pushMessageClose(user.getUserId(), content,
+					conid);
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToSuccess("主机解绑网络成功"));
+		} else {
+			this.getMessagePush().pushMessageClose(user.getUserId(), content,
+					conid);
+			this.getMessagePush().pushMessage(user.getUserId(),
+					Utilities.stickyToError("主机解绑网络失败"));
+		}
+		return jo;
+	}
+
+	public JSONArray getBasicNetworkList(int userId) {
+		JSONArray ja = new JSONArray();
+		List<Object[]> vmList = this.getVmDAO().getBasicNetworkList(userId);
+		if (vmList != null) {
+			for (Object[] item : vmList) {
+				JSONObject itemjo = new JSONObject();
+				itemjo.put("vmid", item[0]);
+				itemjo.put("vmname", Utilities.encodeText((String) item[1]));
+				itemjo.put("vmip", item[2]);
+				ja.put(itemjo);
+			}
+		}
+		return ja;
+	}
+
+	public boolean adjustMemAndCPU(String uuid, int userId, int cpu, int mem,
+			String content, String conid) {
+		Connection conn = null;
+		try {
+			conn = this.getConstant().getConnection(userId);
+			VM vm = VM.getByUuid(conn, uuid);
+			if (VMUtil.AdjustCpuMemory(vm, cpu, mem * 1024, conn)) {
+				OCVM ocvm = this.getVmDAO().getVM(uuid);
+				ocvm.setVmCpu(cpu);
+				ocvm.setVmMem(mem * 1024);
+				this.getVmDAO().updateVM(ocvm);
+				this.getMessagePush().pushMessageClose(userId, content, conid);
+				this.getMessagePush().editRowCpuMem(userId, uuid,
+						String.valueOf(cpu), String.valueOf(mem));
+				this.getMessagePush().pushMessage(userId,
+						Utilities.stickyToSuccess("配置修改成功"));
+			}
+			return true;
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
+			this.getMessagePush().pushMessage(userId,
+					Utilities.stickyToError("配置修改失败"));
+			return false;
+		}
 	}
 
 }
