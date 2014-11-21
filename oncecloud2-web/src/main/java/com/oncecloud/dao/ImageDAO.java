@@ -25,11 +25,11 @@ public interface ImageDAO {
 			int userLevel, String type);
 
 //	public abstract boolean deleteImage(String imageId);
-//
-//	public abstract Image createImage(String imageUuid, String imageName,
-//			int imageUID, int imagePlatform, String imageServer,
-//			String imageDesc, String imagePwd);
-//
+
+	public abstract Image createImage(String imageUuid, String imageName,
+			int imageUID, int imagePlatform, String imageServer,
+			String imageDesc, String imagePwd);
+
 //	/**
 //	 * @param imageuuid
 //	 * @param newName

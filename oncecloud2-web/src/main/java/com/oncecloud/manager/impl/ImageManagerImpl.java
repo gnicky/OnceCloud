@@ -1,6 +1,8 @@
 package com.oncecloud.manager.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -8,15 +10,26 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.once.xenapi.Connection;
+import com.once.xenapi.VM;
+import com.oncecloud.dao.HostDAO;
 import com.oncecloud.dao.ImageDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.OverViewDAO;
 import com.oncecloud.dao.PoolDAO;
+import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.UserDAO;
+import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.Image;
+import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCPool;
+import com.oncecloud.entity.OCVM;
 import com.oncecloud.entity.User;
+import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.ImageManager;
+import com.oncecloud.message.MessagePush;
 
 @Component("ImageManager")
 public class ImageManagerImpl implements ImageManager {
@@ -25,6 +38,24 @@ public class ImageManagerImpl implements ImageManager {
 	private ImageDAO imageDAO;
 	private UserDAO userDAO;
 	private PoolDAO poolDAO;
+	private LogDAO logDAO;
+	private VMDAO vmDAO;
+	private HostDAO hostDAO;
+	private QuotaDAO quotaDAO;
+	private OverViewDAO overViewDAO;
+	
+	private Constant constant;
+	
+	private MessagePush messagePush;
+
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
+	}
 	
 	private ImageDAO getImageDAO() {
 		return imageDAO;
@@ -52,36 +83,7 @@ public class ImageManagerImpl implements ImageManager {
 	public void setPoolDAO(PoolDAO poolDAO) {
 		this.poolDAO = poolDAO;
 	}
-
-/*	
-	private MessagePush messagePush;
-
-	private MessagePush getMessagePush() {
-		return messagePush;
-	}
-
-	@Autowired
-	private void setMessagePush(MessagePush messagePush) {
-		this.messagePush = messagePush;
-	}
-
-	private HostManager hostManager;
 	
-	private LogDAO logDAO;
-	private VMDAO vmDAO;
-	private HostDAO hostDAO;
-	private Constant constant;
-	private HostSRDAO hostSRDAO;
-
-	private HostManager getHostManager() {
-		return hostManager;
-	}
-
-	@Autowired
-	private void setHostManager(HostManager hostManager) {
-		this.hostManager = hostManager;
-	}
-
 	private LogDAO getLogDAO() {
 		return logDAO;
 	}
@@ -109,6 +111,24 @@ public class ImageManagerImpl implements ImageManager {
 		this.hostDAO = hostDAO;
 	}
 
+	public QuotaDAO getQuotaDAO() {
+		return quotaDAO;
+	}
+
+	@Autowired
+	public void setQuotaDAO(QuotaDAO quotaDAO) {
+		this.quotaDAO = quotaDAO;
+	}
+
+	public OverViewDAO getOverViewDAO() {
+		return overViewDAO;
+	}
+
+	@Autowired
+	public void setOverViewDAO(OverViewDAO overViewDAO) {
+		this.overViewDAO = overViewDAO;
+	}
+
 	private Constant getConstant() {
 		return constant;
 	}
@@ -117,6 +137,21 @@ public class ImageManagerImpl implements ImageManager {
 	private void setConstant(Constant constant) {
 		this.constant = constant;
 	}
+
+/*	
+	private HostManager hostManager;
+	
+	private HostSRDAO hostSRDAO;
+
+	private HostManager getHostManager() {
+		return hostManager;
+	}
+
+	@Autowired
+	private void setHostManager(HostManager hostManager) {
+		this.hostManager = hostManager;
+	}
+
 
 	public HostSRDAO getHostSRDAO() {
 		return hostSRDAO;
@@ -184,7 +219,7 @@ public class ImageManagerImpl implements ImageManager {
 		}
 		return ja;
 	}
-/*
+
 	public JSONObject cloneImage(int userId, int userLevel, String vmUuid,
 			String imageName, String imageDesc) {
 		Date startTime = new Date();
@@ -233,9 +268,12 @@ public class ImageManagerImpl implements ImageManager {
 				String imageUuid = UUID.randomUUID().toString();
 				boolean createResult = thisVM.createImage(c, imageUuid);
 				if (createResult == true) {
-					this.getImageDAO().createImage(imageUuid, newName, uid,
+					Image image = this.getImageDAO().createImage(imageUuid, newName, uid,
 							fromVM.getVmPlatform(), poolUuid, desc,
 							fromVM.getVmPWD());
+					this.getQuotaDAO().updateQuota(image.getImageUID(),
+							"quotaImage", 1, true);
+					this.getOverViewDAO().updateOverViewfield("viewImage", true);
 					result.put("result", true);
 				}
 			} catch (Exception e) {
@@ -244,7 +282,7 @@ public class ImageManagerImpl implements ImageManager {
 		}
 		return result;
 	}
-
+/*
 	public JSONArray createImage(int userId, int userLevel, String imageUuid,
 			String imageName, String imageServer, int imageOs,
 			String imageDesc, String imagePwd) {
