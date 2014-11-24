@@ -55,5 +55,15 @@ public class ModalControllerAdmin {
 		request.setAttribute("isrun", isrun);
 		return new ModelAndView("admin/modal/modifynetwork");
 	}
+	
+	@RequestMapping(value = "/host/power")
+	public ModelAndView power(HttpServletRequest request) {
+		return new ModelAndView("admin/modal/power");
+	}
+	
+	@RequestMapping(value = "/pool/hamanager")
+	public ModelAndView hamanager(HttpServletRequest request) {
+		return new ModelAndView("admin/modal/hamanager");
+	}
 
 }

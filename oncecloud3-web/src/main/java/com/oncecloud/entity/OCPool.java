@@ -18,6 +18,17 @@ public class OCPool {
 	private String dcUuid;
 	private Integer poolStatus;
 	private Date createDate;
+    private String haPath;
+    
+    
+    @Column(name = "ha_path")
+	public String getHaPath() {
+		return haPath;
+	}
+
+	public void setHaPath(String haPath) {
+		this.haPath = haPath;
+	}
 
 	public OCPool() {
 	}

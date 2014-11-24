@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -358,6 +361,69 @@ public class PoolManagerImpl implements PoolManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToError("资源池状态未保持一致"));
 		}
+	}
+
+	public JSONObject getPoolHa(String poolUuid) {
+		// TODO Auto-generated method stub
+		OCPool ocpool = this.getPoolDAO().getPool(poolUuid);
+		OCHost ochost = this.getHostDAO().getHost(ocpool.getPoolMaster());
+		JSONObject jsonobject =new JSONObject();
+		jsonobject.put("hapath", ocpool.getHaPath());
+		jsonobject.put("masterip", ochost.getHostIP());
+		return jsonobject;
+	}
+	
+	public String StartHa(String poolUuid,String masterIP,String haPath) {
+		// TODO Auto-generated method stub
+		saveHaPath(poolUuid,haPath);
+		
+		HttpClient client = new HttpClient();
+		PostMethod post = new PostMethod("http://127.0.0.1/haPool/start");
+		try {
+			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");// 在头文件中设置转码
+			NameValuePair[] data = { new NameValuePair("poolUUID", poolUuid),
+					new NameValuePair("masterIP",masterIP), new NameValuePair("haPath", haPath)};
+			post.setRequestBody(data);
+			client.executeMethod(post);
+			String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
+			System.out.println(result); // 打印返回消息状态
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "失败";
+		} finally {
+			post.releaseConnection();
+		}
+	}
+	
+	public String StopHa(String poolUuid,String masterIP,String haPath) {
+		// TODO Auto-generated method stub
+		saveHaPath(poolUuid,haPath);
+		
+		HttpClient client = new HttpClient();
+		PostMethod post = new PostMethod("http://127.0.0.1/haPool/stop");
+		try {
+			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");// 在头文件中设置转码
+			NameValuePair[] data = { new NameValuePair("poolUUID", poolUuid)};
+			post.setRequestBody(data);
+			client.executeMethod(post);
+			String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
+			System.out.println(result); // 打印返回消息状态
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "失败";
+		} finally {
+			post.releaseConnection();
+		}
+	}
+	
+	private boolean saveHaPath(String poolUuid,String haPath)
+	{
+		OCPool ocpool = this.getPoolDAO().getPool(poolUuid);
+		ocpool.setHaPath(haPath);
+		this.getPoolDAO().update(ocpool);
+		return true;
 	}
 }
 

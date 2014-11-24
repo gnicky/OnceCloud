@@ -12,6 +12,11 @@
 			<button id="create" class="btn btn-primary" url="${basePath}pool/create">
 				+&nbsp;新建资源池
 			</button>
+			
+			<button id="hamanager" class="btn btn-danger" url="${basePath}admin/modal/pool/hamanager">
+				<span class="glyphicon glyphicon-star-empty"></span>&nbsp;高可用管理
+			</button>
+			
             <div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>
