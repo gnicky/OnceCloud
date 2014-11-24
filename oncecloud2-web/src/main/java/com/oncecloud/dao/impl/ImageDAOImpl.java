@@ -1,5 +1,6 @@
 package com.oncecloud.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -216,7 +217,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-
+*/
 	public Image createImage(String imageUuid, String imageName, int imageUID,
 			int imagePlatform, String imageServer, String imageDesc,
 			String imagePwd) {
@@ -229,10 +230,6 @@ public class ImageDAOImpl implements ImageDAO {
 					imagePlatform, 1, imageServer, imageDesc, new Date(), null);
 			image.setPreAllocate(0);
 			session.saveOrUpdate(image);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(imageUID,
-					"quotaImage", 1, true);
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
-					true);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -243,7 +240,7 @@ public class ImageDAOImpl implements ImageDAO {
 		return image;
 	}
 
-	*//**
+	/**
 	 * @param imageuuid
 	 * @param newName
 	 * @param description

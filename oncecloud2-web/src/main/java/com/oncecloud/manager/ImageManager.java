@@ -1,6 +1,7 @@
 package com.oncecloud.manager;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 public interface ImageManager {
@@ -17,9 +18,9 @@ public interface ImageManager {
 	public abstract JSONArray getImageList(int userId, int userLevel, int page,
 			int limit, String search, String type);
 
-//	public abstract JSONObject cloneImage(int userId, int userLevel,
-//			String vmUuid, String imageName, String imageDesc);
-//
+	public abstract JSONObject cloneImage(int userId, int userLevel,
+			String vmUuid, String imageName, String imageDesc);
+
 //	public abstract JSONObject makeImage(String uuid, String newName, int uid,
 //			String desc);
 //

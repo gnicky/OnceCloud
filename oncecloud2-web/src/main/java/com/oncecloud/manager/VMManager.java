@@ -1,6 +1,9 @@
 package com.oncecloud.manager;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.oncecloud.entity.User;
 
 public interface VMManager {
 	public final static int POWER_HALTED = 0;
@@ -56,16 +59,16 @@ public interface VMManager {
 
 //	public abstract JSONArray getVMsOfUser(int userId, int page, int limit,
 //			String search);
-//
-//	public abstract JSONArray getBasicNetworkList(int userId);
-//
-//	/**
-//	 * 获取主机详细信息
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract JSONObject getVMDetail(String vmUuid);
+
+	public abstract JSONArray getBasicNetworkList(int userId);
+
+	/**
+	 * 获取主机详细信息
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract JSONObject getVMDetail(String vmUuid);
 
 	public abstract String getQuota(int userId, int userLevel, int count);
 
@@ -84,16 +87,16 @@ public interface VMManager {
 //
 //	public abstract void unAssginIpAddress(Connection c, String vnUuid);
 //
-//	public abstract JSONObject unbindNet(String uuid, User user,
-//			String content, String conid);
+	public abstract JSONObject unbindNet(String uuid, User user,
+			String content, String conid);
 
 	public abstract void createVM(String vmUuid, String tplUuid, int userId,
 			String vmName, int cpuCore, double memorySize, String pwd,
 			String poolUuid, String vnetuuid);
 
 //	public abstract int getCount(int userId);
-//
-//	public abstract boolean adjustMemAndCPU(String uuid, int userId, int cpu,
-//			int mem, String content, String conid);
+
+	public abstract boolean adjustMemAndCPU(String uuid, int userId, int cpu,
+			int mem, String content, String conid);
 	
 }

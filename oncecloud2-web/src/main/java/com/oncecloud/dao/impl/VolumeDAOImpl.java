@@ -1,5 +1,6 @@
 package com.oncecloud.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -112,7 +113,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		}
 		return volumeList;
 	}
-/*
+	
 	@SuppressWarnings("unchecked")
 	public List<Volume> getVolListByVM(String vmUuid) {
 		List<Volume> volumeList = null;
@@ -133,7 +134,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		return volumeList;
 	}
 
-	*//**
+	/**
 	 * 获取用户硬盘总数
 	 * 
 	 * @param userId
@@ -279,7 +280,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 			}
 		}
 	}
-/*
+
 	public void updateBackupDate(String volumeUuid, Date backupDate) {
 		Volume volume = this.getVolume(volumeUuid);
 		if (volume != null) {
@@ -297,7 +298,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 			}
 		}
 	}
-
+/*
 	public void updateName(String volumeUuid, String newName, String description) {
 		Volume volume = this.getVolume(volumeUuid);
 		if (volume != null) {

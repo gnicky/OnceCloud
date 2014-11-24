@@ -408,7 +408,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return count;
 	}
-
+*/
 	@SuppressWarnings({ "unchecked" })
 	public boolean deleteSnapshot(Date endDate, String vmUuid) {
 		boolean result = false;
@@ -437,7 +437,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+/*
 	public boolean deleteVolume(Date endDate, String volumeUuid) {
 		boolean result = false;
 		Session session = null;
@@ -1063,7 +1063,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+*/
 	public boolean insertFeeSnapshot(Integer snapshotUID, Date startDate,
 			Date endDate, Double snapshotPrice, Integer snapshotState,
 			String vmUuid, String vmName) {
@@ -1085,7 +1085,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean insertFeeVM(Integer vmUID, Date startDate, Date endDate,
 			Double vmPrice, Integer vmState, String vmUuid, String vmName) {
 		boolean result = false;

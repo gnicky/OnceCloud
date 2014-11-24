@@ -29,7 +29,7 @@ public class VnetAction {
 		this.vnetManager = vnetManager;
 	}
 
-	/*@RequestMapping(value = "/VnetList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/VnetList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String getVnetList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -38,7 +38,7 @@ public class VnetAction {
 				list.getPage(), list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-
+/*
 	@RequestMapping(value = "/VnetDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vnetDetail(HttpServletRequest request,
@@ -91,7 +91,7 @@ public class VnetAction {
 				.deleteVnet(user.getUserId(), uuid);
 		return result;
 	}
-
+*/
 	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public String addVM(HttpServletRequest request, @RequestParam String vnId,
@@ -102,7 +102,7 @@ public class VnetAction {
 				vmuuidStr, vnId, poolUuid, content, conid);
 		return jo.toString();
 	}
-
+/*
 	@RequestMapping(value = "/CheckNet", method = { RequestMethod.POST })
 	@ResponseBody
 	public String checkNet(HttpServletRequest request,

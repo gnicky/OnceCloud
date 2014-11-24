@@ -121,7 +121,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Vnet> getOnePageVnets(int userId, int page, int limit,
 			String search) {
@@ -148,7 +148,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return vnetList;
 	}
 
-	*//**
+	/**
 	 * 获取用户私有网络列表
 	 * 
 	 * @param userId
@@ -208,7 +208,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * @param routerUuid
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countVnetsOfRouter(String routerUuid, int userId) {
 		Session session = null;
 		int count = -1;
@@ -230,13 +230,13 @@ public class VnetDAOImpl implements VnetDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取用户私有网络总数
 	 * 
 	 * @param userId
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countVnets(int userId, String search) {
 		int count = 0;
 		Session session = null;
@@ -258,7 +258,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 查看是否被占用
 	 * 
 	 * @param userId

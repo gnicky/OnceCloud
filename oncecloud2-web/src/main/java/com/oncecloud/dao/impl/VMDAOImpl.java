@@ -56,7 +56,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	public String getVmName(String vmUuid) {
 		String name = "";
 		OCVM vm = getVM(vmUuid);
@@ -66,7 +66,7 @@ public class VMDAOImpl implements VMDAO {
 		return name;
 	}
 
-	*//**
+	/**
 	 * 获取使用中的主机
 	 * 
 	 * @param vmUuid
@@ -303,7 +303,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getBasicNetworkList(int userId) {
 		List<Object[]> vmList = null;
@@ -326,7 +326,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取用户主机总数
 	 * 
 	 * @param search
@@ -683,7 +683,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @param date
-	 *//*
+	 */
 	public void updateBackupDate(String vmUuid, Date date) {
 		Session session = null;
 		try {
@@ -703,7 +703,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新主机防火墙
 	 * 
 	 * @param vmUuid
@@ -913,7 +913,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 		return result;
 	}
-/*	
+	
 	public void unbindNet(String uuid) {
 		OCVM vm = this.getVM(uuid);
 		if (vm != null) {
@@ -933,7 +933,7 @@ public class VMDAOImpl implements VMDAO {
 			}
 		}
 	}
-	*//**
+	/**
 	 * 更新主机所在服务器
 	 * 
 	 * @param uuid
@@ -996,7 +996,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param vmuuid
 	 * @param ip
 	 * @return
-	 *//*
+	 */
 	public boolean returnToBasicNetwork(String vmuuid, String ip) {
 		boolean result = false;
 		Session session = null;
@@ -1019,7 +1019,7 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 是否有主机具有该监控警告
 	 * 
 	 * @param alarmUuid

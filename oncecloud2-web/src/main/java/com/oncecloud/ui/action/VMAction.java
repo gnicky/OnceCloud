@@ -40,14 +40,14 @@ public class VMAction {
 				list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/VMDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vmDetail(HttpServletRequest request, @RequestParam String uuid) {
 		JSONObject jo = this.getVmManager().getVMDetail(uuid);
 		return jo.toString();
 	}
-*/
+
 	@RequestMapping(value = "/Quota", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
@@ -102,7 +102,7 @@ public class VMAction {
 				createvmModel.getMemory(), createvmModel.getPassword(),
 				user.getUserAllocate(), vnetuuid);
 	}
-/*
+
 	@RequestMapping(value = "/UnbindNet", method = { RequestMethod.POST })
 	@ResponseBody
 	public String unbindNet(HttpServletRequest request,
@@ -122,7 +122,7 @@ public class VMAction {
 				.getBasicNetworkList(user.getUserId());
 		return ja.toString();
 	}
-
+/*
 	@RequestMapping(value = "/VMsOfUser", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getVMsOfUser(HttpServletRequest request, ListModel lm) {
@@ -131,7 +131,7 @@ public class VMAction {
 				lm.getPage(), lm.getLimit(), lm.getSearch());
 		return ja.toString();
 	}
-
+*/
 	@RequestMapping(value = "/VMAdjust", method = { RequestMethod.POST })
 	@ResponseBody
 	public String adjustVM(HttpServletRequest request,
@@ -145,5 +145,5 @@ public class VMAction {
 						cpu, mem, content, conid));
 		return jo.toString();
 
-	}*/
+	}
 }

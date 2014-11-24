@@ -48,7 +48,7 @@ public interface EIPDAO {
 
 	public abstract EIP getEip(String eipIp);
 
-//	public abstract String getEipId(String eip);
+	public abstract String getEipId(String eip);
 
 	public abstract String getEipIp(String dependencyUuid);
 

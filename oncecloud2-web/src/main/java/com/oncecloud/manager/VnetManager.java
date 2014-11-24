@@ -18,19 +18,19 @@ public interface VnetManager {
 //			String vnetId, String poolUuid, String content, String conid);
 //
 //	public abstract String deleteVnet(int userId, String vnetUuid);
-//
-//	/**
-//	 * 获取用户私有网络列表
-//	 * 
-//	 * @param userId
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract JSONArray getVnetList(int userId, int page, int limit,
-//			String search);
-//
+
+	/**
+	 * 获取用户私有网络列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract JSONArray getVnetList(int userId, int page, int limit,
+			String search);
+
 //	public abstract void vnetCreate(String name, String uuid, String desc,
 //			int userId);
 //
@@ -44,9 +44,9 @@ public interface VnetManager {
 //
 //	public abstract JSONObject unlinkRouter(String vnetUuid, int userId,
 //			String content, String conid);
-//
-//	public abstract JSONObject vnetAddvm(int userId, String vmuuidStr,
-//			String vnId, String poolUuid, String content, String conid);
+
+	public abstract JSONObject vnetAddvm(int userId, String vmuuidStr,
+			String vnId, String poolUuid, String content, String conid);
 
 	public abstract JSONArray getVnetsOfUser(int userId);
 

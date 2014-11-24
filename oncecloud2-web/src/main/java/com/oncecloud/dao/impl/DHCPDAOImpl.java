@@ -100,7 +100,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 		dhcp = (DHCP) criteria.uniqueResult();
 		return dhcp;
 	}
-/*
+
 	public DHCP getDHCP(String dhcpMac) {
 		DHCP dhcp = null;
 		Session session = null;
@@ -117,7 +117,7 @@ public class DHCPDAOImpl implements DHCPDAO {
 		}
 		return dhcp;
 	}
-*/
+
 	@SuppressWarnings("unchecked")
 	public synchronized DHCP getFreeDHCP(String tenantUuid, int depenType) {
 		DHCP dhcp = null;

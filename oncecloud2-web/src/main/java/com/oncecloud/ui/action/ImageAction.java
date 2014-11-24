@@ -66,7 +66,7 @@ public class ImageAction {
 				imageOs, imageDesc, imagePwd);
 		return ja.toString();
 	}
-
+*/
 	@RequestMapping(value = "/Clone", method = { RequestMethod.POST })
 	@ResponseBody
 	public void clone(HttpServletRequest request,
@@ -76,7 +76,7 @@ public class ImageAction {
 				user.getUserLevel(), imagecloneModel.getVmUuid(),
 				imagecloneModel.getImageName(), imagecloneModel.getImageDesc());
 	}
-
+/*
 	@RequestMapping(value = "/BasicList", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
