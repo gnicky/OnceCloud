@@ -126,7 +126,7 @@ $(document).ready(function () {
                 	reloadList(1);
                 else {
 					bootbox.dialog({
-						message : '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;每台主机只能绑定一个网络，请先解除网络</div>',
+						message : '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;每台主机只能绑定一个网络或绑定时出错</div>',
 						title : "提示",
 						buttons : {
 							main : {

@@ -59,7 +59,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Volume> getOnePageVolumes(int userId, int page, int limit,
 			String search) {
@@ -88,7 +88,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		return volumeList;
 	}
 
-	*//**
+	/**
 	 * 获取主机硬盘列表
 	 * 
 	 * @param vmUuid
@@ -140,7 +140,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 	 * @param userId
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countVolumes(int userId, String search) {
 		int count = 0;
 		Session session = null;
@@ -163,7 +163,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 预创建硬盘
 	 * 
 	 * @param volumeUuid
@@ -173,7 +173,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 	 * @param createDate
 	 * @param status
 	 * @return
-	 *//*
+	 */
 	public boolean preCreateVolume(String volumeUuid, String volumeName,
 			Integer volumeUID, Integer volumeSize, Date createDate,
 			Integer status) {
@@ -185,10 +185,6 @@ public class VolumeDAOImpl implements VolumeDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(volume);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(volumeUID,
-					"quotaDiskN", 1, true);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(volumeUID,
-					"quotaDiskS", volumeSize, true);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -199,26 +195,23 @@ public class VolumeDAOImpl implements VolumeDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 删除硬盘
 	 * 
 	 * @param userId
 	 * @param volumeUuid
-	 *//*
-	public void deleteVolume(int userId, String volumeUuid) {
+	 */
+	public int deleteVolume(int userId, String volumeUuid) {
 		Volume volume = this.getVolume(volumeUuid);
+		int size = -1;
 		if (volume != null) {
 			Session session = null;
 			try {
 				volume.setVolumeStatus(0);
-				int size = volume.getVolumeSize();
+				size = volume.getVolumeSize();
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(volume);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaDiskN", 1, false);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaDiskS", size, false);
 				session.getTransaction().commit();
 			} catch (Exception e) {
 				if (session != null) {
@@ -226,9 +219,10 @@ public class VolumeDAOImpl implements VolumeDAO {
 				}
 			}
 		}
+		return size;
 	}
 
-	*//**
+	/**
 	 * 硬盘是否存在
 	 * 
 	 * @param volumeUuid
@@ -317,7 +311,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 			}
 		}
 	}
-
+*/
 	public boolean updateVolumeStatus(String volUuid, int status) {
 		boolean result = false;
 		Volume volume = this.getVolume(volUuid);
@@ -338,7 +332,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		}
 		return result;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<Volume> getAbledVolumes(int userId) {
 		List<Volume> volumeList = null;

@@ -120,10 +120,10 @@ public interface FeeDAO {
 			Date endDate, Double vmPrice, Integer vmState, String vmUuid,
 			String vmName);
 
-//	public abstract boolean insertFeeVolume(Integer volumeUID, Date startDate,
-//			Date endDate, Double volumePrice, Integer volumeState,
-//			String volumeUuid, String volumeName);
-//
+	public abstract boolean insertFeeVolume(Integer volumeUID, Date startDate,
+			Date endDate, Double volumePrice, Integer volumeState,
+			String volumeUuid, String volumeName);
+
 //	public abstract boolean updateAliveEipEndDate(Date nowDate);
 //
 //	public abstract boolean updateAliveImageEndDate(Date nowDate);

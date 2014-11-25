@@ -1106,7 +1106,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-/*
+
 	public boolean insertFeeVolume(Integer volumeUID, Date startDate,
 			Date endDate, Double volumePrice, Integer volumeState,
 			String volumeUuid, String volumeName) {
@@ -1128,7 +1128,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+/*
 	@SuppressWarnings({ "unchecked" })
 	public boolean updateAliveEipEndDate(Date nowDate) {
 		boolean result = false;

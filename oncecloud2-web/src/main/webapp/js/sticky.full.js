@@ -83,19 +83,28 @@
             }
 		});
 		// Closing a sticky
-		$('.sticky-close').click(function()
+		$('.sticky-close').on('click', function()
 			{
-				console.log(localStorage.getItem('alertStr'));
-				if (localStorage.getItem('alertStr') != null) {
-					localStorage.removeItem('alertStr');
-				}
-				console.log(localStorage.getItem('alertStr'));
 				$('#' + $(this).attr('rel')).dequeue().slideUp(settings['speed'], function(){
 					var closest = $(this).closest('.sticky-queue');
 					var elem = closest.find('.sticky');
 					$(this).remove();
 					if(elem.length == '1'){
-						closest.remove()
+						closest.remove();
+					}
+					if (localStorage.getItem('alertStr') != null) {
+						innercontent = $(this).find(".sticky-note").html();
+						innerconid = $(this).attr('rel');
+						arrayid = localStorage.getItem('alertStr');
+							var newstr= '<div class="sticky" id="'
+								+ innerconid
+								+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
+								+ innerconid+ '" title="Close">×</span><div class="sticky-note" rel="'
+								+ innerconid
+								+ '">'+ innercontent +'</div></div>---';
+							var indexi = arrayid.indexOf(newstr);
+							var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
+							localStorage.setItem('alertStr',newcookie);
 					}
 				});
 				

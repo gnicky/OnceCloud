@@ -132,26 +132,35 @@ function showMessageNoAutoClose(content) {
 
 ///根据id，关闭对应的提示
 function hideMessageNoAutoClose(obj) {
+	var flag = true;
 	$("#"+obj.conid).dequeue().slideUp('fast', function(){
 			var closest = $(this).closest('.sticky-queue');
 			var elem = closest.find('.sticky');
 			
 			arrayid = localStorage.getItem('alertStr');
-			var newstr= '<div class="sticky" id="'
-				+ obj.conid
-				+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
-				+ obj.conid + '" title="Close">×</span><div class="sticky-note" rel="'
-				+ obj.conid
-				+ '">'+ obj.content +'</div></div>---';
-			var indexi = arrayid.indexOf(newstr);
-			var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
-			localStorage.setItem('alertStr',newcookie);
-			
-			$(this).remove();
-			if(elem.length == '1'){
-				closest.remove();
+			if (arrayid != null) {
+				var newstr= '<div class="sticky" id="'
+					+ obj.conid
+					+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
+					+ obj.conid + '" title="Close">×</span><div class="sticky-note" rel="'
+					+ obj.conid
+					+ '">'+ obj.content +'</div></div>---';
+				var indexi = arrayid.indexOf(newstr);
+				var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
+				localStorage.setItem('alertStr',newcookie);
+				
+				$(this).remove();
+				if(elem.length == '1'){
+					closest.remove();
+				}
+				flag = false;
 			}
 	});
+	if (flag) {
+		if (localStorage.getItem('alertStr') != null) {
+			localStorage.removeItem('alertStr');
+		}
+	}
 }
 
 ///新页面中，还原没有关闭的提示
@@ -174,6 +183,29 @@ function showmiddle(){
 				
 			}
 		$(".sticky").css('height', 38);
-		
+		$('.sticky-close').on('click', function(){
+			$('#' + $(this).attr('rel')).dequeue().slideUp(function(){
+				var closest = $(this).closest('.sticky-queue');
+				var elem = closest.find('.sticky');
+				$(this).remove();
+				if (elem.length == '1') {
+					closest.remove();
+				}
+				innercontent = $(this).find(".sticky-note").html();
+				innerconid = $(this).attr('rel');
+				arrayid = localStorage.getItem('alertStr');
+				if (arrayid != null) {
+					var newstr= '<div class="sticky" id="'
+						+ innerconid
+						+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
+						+ innerconid+ '" title="Close">×</span><div class="sticky-note" rel="'
+						+ innerconid
+						+ '">'+ innercontent +'</div></div>---';
+					var indexi = arrayid.indexOf(newstr);
+					var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
+					localStorage.setItem('alertStr',newcookie);
+				}
+			});
+		});
 	}
 }

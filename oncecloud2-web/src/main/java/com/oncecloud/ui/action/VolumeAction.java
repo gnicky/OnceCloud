@@ -30,7 +30,7 @@ public class VolumeAction {
 		this.volumeManager = volManager;
 	}
 
-	/*@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/VolumeList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String volumeList(HttpServletRequest request, ListModel list) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -67,7 +67,7 @@ public class VolumeAction {
 			@RequestParam String uuid) {
 		JSONObject jo = this.getVolumeManager().getVolumeDetail(uuid);
 		return jo.toString();
-	}*/
+	}
 
 	@RequestMapping(value = "/VolumesOfVM", method = { RequestMethod.GET })
 	@ResponseBody

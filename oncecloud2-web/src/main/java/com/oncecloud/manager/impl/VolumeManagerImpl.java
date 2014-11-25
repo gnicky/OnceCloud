@@ -30,7 +30,15 @@ import com.oncecloud.message.MessagePush;
 
 @Component("VolumeManager")
 public class VolumeManagerImpl implements VolumeManager {
+	
 	private VolumeDAO volumeDAO;
+	private VMDAO vmDAO;
+	private FeeDAO feeDAO;
+	private LogDAO logDAO;
+	private QuotaDAO quotaDAO;
+	private Constant constant;
+	
+	private MessagePush messagePush;
 	
 	private VolumeDAO getVolumeDAO() {
 		return volumeDAO;
@@ -41,23 +49,6 @@ public class VolumeManagerImpl implements VolumeManager {
 		this.volumeDAO = volumeDAO;
 	}
 	
-/*
-	private VMDAO vmDAO;
-	private FeeDAO feeDAO;
-	private LogDAO logDAO;
-	private QuotaDAO quotaDAO;
-	private Constant constant;
-	private MessagePush messagePush;
-
-	private MessagePush getMessagePush() {
-		return messagePush;
-	}
-
-	@Autowired
-	private void setMessagePush(MessagePush messagePush) {
-		this.messagePush = messagePush;
-	}
-
 	private VMDAO getVmDAO() {
 		return vmDAO;
 	}
@@ -65,6 +56,15 @@ public class VolumeManagerImpl implements VolumeManager {
 	@Autowired
 	private void setVmDAO(VMDAO vmDAO) {
 		this.vmDAO = vmDAO;
+	}
+	
+	private MessagePush getMessagePush() {
+		return messagePush;
+	}
+
+	@Autowired
+	private void setMessagePush(MessagePush messagePush) {
+		this.messagePush = messagePush;
 	}
 
 	private FeeDAO getFeeDAO() {
@@ -103,7 +103,7 @@ public class VolumeManagerImpl implements VolumeManager {
 		this.constant = constant;
 	}
 
-	*//**
+	/**
 	 * 获取用户硬盘列表
 	 * 
 	 * @param userId
@@ -111,7 +111,7 @@ public class VolumeManagerImpl implements VolumeManager {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public JSONArray getVolumeList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
@@ -165,6 +165,8 @@ public class VolumeManagerImpl implements VolumeManager {
 			boolean preCreate = this.getVolumeDAO().preCreateVolume(volUuid,
 					volName, userId, volSize, startTime,
 					VolumeStatus.STATUS_CREATE);
+			this.getQuotaDAO().updateQuota(userId, "quotaDiskN", 1, true);
+			this.getQuotaDAO().updateQuota(userId, "quotaDiskS", volSize, true);
 			if (preCreate) {
 				Connection c = this.getConstant().getConnection(userId);
 				VDI vdi = VDI.createDataDisk(c, volUuid, (long) volSize);
@@ -185,7 +187,11 @@ public class VolumeManagerImpl implements VolumeManager {
 			e.printStackTrace();
 		} finally {
 			if (result == false) {
-				this.getVolumeDAO().deleteVolume(userId, volUuid);
+				int size = this.getVolumeDAO().deleteVolume(userId, volUuid);
+				if (size != -1) {
+					this.getQuotaDAO().updateQuota(userId, "quotaDiskN", 1, false);
+					this.getQuotaDAO().updateQuota(userId, "quotaDiskS", size, false);
+				}
 			}
 		}
 		// write log and push message
@@ -216,7 +222,7 @@ public class VolumeManagerImpl implements VolumeManager {
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-
+/*
 	public void deleteVolume(int userId, String volUuid) {
 		boolean result = false;
 		String showId = "vol-" + volUuid.substring(0, 8);
@@ -383,7 +389,7 @@ public class VolumeManagerImpl implements VolumeManager {
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-
+*/
 	public String getQuota(int userId, int count, int size) {
 		String quota = "ok";
 		Quota qt = this.getQuotaDAO().getQuotaTotal(userId);
@@ -396,12 +402,12 @@ public class VolumeManagerImpl implements VolumeManager {
 		return quota;
 	}
 
-	*//**
+	/**
 	 * 获取硬盘详细信息
 	 * 
 	 * @param volUuid
 	 * @return
-	 *//*
+	 */
 	public JSONObject getVolumeDetail(String volUuid) {
 		JSONObject jo = new JSONObject();
 		Volume volume = this.getVolumeDAO().getVolume(volUuid);
@@ -431,7 +437,7 @@ public class VolumeManagerImpl implements VolumeManager {
 		}
 		return jo;
 	}
-
+/*
 	public JSONArray getAvailableVolumes(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Volume> volumeList = this.getVolumeDAO().getAbledVolumes(userId);
