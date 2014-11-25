@@ -519,16 +519,17 @@ public class VMManagerImpl implements VMManager {
 				OS = "windows";
 			}
 			imagePwd = image.getImagePwd();
-			mac = Utilities.randomMac();
 			ip = "";
 			logger.info("VM [" + vmBackendName + "] allocated to Host ["
 					+ allocateHost + "]");
 			try {
-				c = this.getConstant().getConnectionFromPool(poolUuid);
-				allocateHost = getAllocateHost(c, memory);
+				DHCP dhcp = this.getDhcpDAO().getFreeDHCP(vmUuid, 0);
+				mac = dhcp.getDhcpMac();
 				boolean preCreate = this.getVmDAO().preCreateVM(vmUuid, pwd,
 						userId, vmName, image.getImagePlatform(), mac, memory,
 						cpu, VMManager.POWER_CREATE, 1, createDate);
+				c = this.getConstant().getConnectionFromPool(poolUuid);
+				allocateHost = getAllocateHost(c, memory);
 				if (preCreate == true) {
 					this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, true);
 					Date preEndDate = new Date();
@@ -603,21 +604,25 @@ public class VMManagerImpl implements VMManager {
 							jo.put("error", "主机后台启动位置错误");
 							this.getVmDAO().removeVM(userId, vmUuid);
 							this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
+							this.getDhcpDAO().returnDHCP(mac);
 							jo.put("isSuccess", false);
 						}
 					} else {
 						jo.put("error", "后台主机创建错误");
 						this.getVmDAO().removeVM(userId, vmUuid);
 						this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
+						this.getDhcpDAO().returnDHCP(mac);
 						jo.put("isSuccess", false);
 					}
 				} else {
 					jo.put("error", "主机预创建失败");
+					this.getDhcpDAO().returnDHCP(mac);
 					jo.put("isSuccess", false);
 				}
 			} catch (Exception e) {
 				jo.put("error", "主机创建未知错误");
 				this.getVmDAO().removeVM(userId, vmUuid);
+				this.getDhcpDAO().returnDHCP(mac);
 				this.getQuotaDAO().updateQuota(userId, "quotaVM", 1, false);
 				jo.put("isSuccess", false);
 			}

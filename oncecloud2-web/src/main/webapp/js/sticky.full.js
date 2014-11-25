@@ -85,6 +85,11 @@
 		// Closing a sticky
 		$('.sticky-close').click(function()
 			{
+				console.log(localStorage.getItem('alertStr'));
+				if (localStorage.getItem('alertStr') != null) {
+					localStorage.removeItem('alertStr');
+				}
+				console.log(localStorage.getItem('alertStr'));
 				$('#' + $(this).attr('rel')).dequeue().slideUp(settings['speed'], function(){
 					var closest = $(this).closest('.sticky-queue');
 					var elem = closest.find('.sticky');

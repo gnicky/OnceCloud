@@ -35,9 +35,9 @@ public interface VnetManager {
 //			int userId);
 //
 //	public abstract JSONArray vnetQuota(int userId);
-//
-//	public abstract JSONObject getVnetDetail(String vnetUuid);
-//
+
+	public abstract JSONObject getVnetDetail(String vnetUuid);
+
 //	public abstract JSONObject linkRouter(int userId, String vnetUuid,
 //			String routerId, Integer net, Integer gate, Integer start,
 //			Integer end, Integer dhcpState, String content, String conid);

@@ -6,7 +6,7 @@ package com.oncecloud.log;
  */
 public class LogConstant {
 	public static enum logObject {
-		主机, 硬盘, 备份, 公网IP, 公网带宽, 防火墙规则, 映像, 私有网络, 路由器, 负载均衡, 备份链, 防火墙, 用户, 资源池, 存储, 机架, 服务器, 地址, 数据中心, 地址池, 主节点, 配额, 数据库
+		主机, 硬盘, 备份, 公网IP, 公网带宽, 防火墙规则, 映像, 私有网络, 路由器, 负载均衡, 备份链, 防火墙, 用户, 资源池, 存储, 机架, 服务器, 地址, 数据中心, 地址池, 主节点, 配额, 数据库, 网络
 	};
 
 	public static enum logAction {

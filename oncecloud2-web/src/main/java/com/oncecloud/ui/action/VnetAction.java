@@ -38,14 +38,14 @@ public class VnetAction {
 				list.getPage(), list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/VnetDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vnetDetail(HttpServletRequest request,
 			@RequestParam String uuid) {
 		JSONObject jo = this.getVnetManager().getVnetDetail(uuid);
 		return jo.toString();
-	}*/
+	}
 
 	@RequestMapping(value = "/ListOfUser", method = { RequestMethod.POST })
 	@ResponseBody

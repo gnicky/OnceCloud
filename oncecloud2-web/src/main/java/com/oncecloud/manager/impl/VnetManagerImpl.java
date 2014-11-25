@@ -128,8 +128,8 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return jo;
 	}
-
-	public JSONArray getVMs(String vnUuid) {
+*/
+	private JSONArray getVMs(String vnUuid) {
 		JSONArray ja = new JSONArray();
 		List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(vnUuid);
 		if (ocvmList != null) {
@@ -145,7 +145,7 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return ja;
 	}
-
+/*
 	public boolean bindVnetToVM(int userId, String vmuuid, String vnId,
 			String poolUuid) {
 		boolean result = false;
@@ -257,7 +257,7 @@ public class VnetManagerImpl implements VnetManager {
 	/**
 	 * 添加主机到私有网络
 	 */
-	public boolean bindVnetToVMs(int userId, String vmArray, String vnetId,
+	private boolean bindVnetToVMs(int userId, String vmArray, String vnetId,
 			String poolUuid, String content, String conid) {
 		boolean result = false;
 		Date startTime = new Date();
@@ -270,6 +270,7 @@ public class VnetManagerImpl implements VnetManager {
 				OCVM vm = this.getVmDAO().getVM(vmUuid);
 				if (vm.getVmVlan() != null || vm.getVmIP() != null) {
 					result = false;
+					this.getMessagePush().pushMessageClose(userId, content, conid);
 					break;
 				}
 				if (vm != null) {
@@ -289,6 +290,7 @@ public class VnetManagerImpl implements VnetManager {
 								.getDHCP(
 										this.getVmDAO().getVM(vmUuid)
 												.getVmMac()).getDhcpIp();
+						result = this.restartNetwork(conn, vm.getVmUuid(), false);
 						result = this.getVmDAO().returnToBasicNetwork(vmUuid,
 								ip);
 					} else {
@@ -311,7 +313,7 @@ public class VnetManagerImpl implements VnetManager {
 					int elapse = Utilities.timeElapse(startTime, endTime);
 					if (result) {
 						OCLog log = this.getLogDAO().insertLog(userId,
-								LogConstant.logObject.私有网络.ordinal(),
+								LogConstant.logObject.网络.ordinal(),
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.成功.ordinal(),
 								infoArray.toString(), startTime, elapse);
@@ -320,7 +322,7 @@ public class VnetManagerImpl implements VnetManager {
 								Utilities.stickyToSuccess(log.toAString()));
 					} else {
 						OCLog log = this.getLogDAO().insertLog(userId,
-								LogConstant.logObject.私有网络.ordinal(),
+								LogConstant.logObject.网络.ordinal(),
 								LogConstant.logAction.加入.ordinal(),
 								LogConstant.logStatus.失败.ordinal(),
 								infoArray.toString(), startTime, elapse);
@@ -332,6 +334,7 @@ public class VnetManagerImpl implements VnetManager {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			this.getMessagePush().pushMessageClose(userId, content, conid);
 			result = false;
 		}
 		return result;
@@ -455,7 +458,7 @@ public class VnetManagerImpl implements VnetManager {
 		ja.put(jo);
 		return ja;
 	}
-
+*/
 	public JSONObject getVnetDetail(String vnetUuid) {
 		JSONObject jo = new JSONObject();
 		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
@@ -490,7 +493,7 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return jo;
 	}
-
+/*
 	public JSONObject linkRouter(int userId, String vnetUuid, String routerId,
 			Integer net, Integer gate, Integer start, Integer end,
 			Integer dhcpState, String content, String conid) {

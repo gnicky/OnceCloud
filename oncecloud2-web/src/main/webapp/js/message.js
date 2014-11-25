@@ -133,24 +133,24 @@ function showMessageNoAutoClose(content) {
 ///根据id，关闭对应的提示
 function hideMessageNoAutoClose(obj) {
 	$("#"+obj.conid).dequeue().slideUp('fast', function(){
-		var closest = $(this).closest('.sticky-queue');
-		var elem = closest.find('.sticky');
-		
-		arrayid = localStorage.getItem('alertStr');
-		var newstr= '<div class="sticky" id="'
-			+ obj.conid
-			+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
-			+ obj.conid + '" title="Close">×</span><div class="sticky-note" rel="'
-			+ obj.conid
-			+ '">'+ obj.content +'</div></div>---';
-		var indexi = arrayid.indexOf(newstr);
-		var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
-		localStorage.setItem('alertStr',newcookie);
-		
-		$(this).remove();
-		if(elem.length == '1'){
-			closest.remove();
-		}
+			var closest = $(this).closest('.sticky-queue');
+			var elem = closest.find('.sticky');
+			
+			arrayid = localStorage.getItem('alertStr');
+			var newstr= '<div class="sticky" id="'
+				+ obj.conid
+				+ '" style="height: 38px; display: block;"><span class="close sticky-close" rel="'
+				+ obj.conid + '" title="Close">×</span><div class="sticky-note" rel="'
+				+ obj.conid
+				+ '">'+ obj.content +'</div></div>---';
+			var indexi = arrayid.indexOf(newstr);
+			var newcookie =arrayid.substring(0,indexi) + arrayid.substring(indexi+newstr.length);
+			localStorage.setItem('alertStr',newcookie);
+			
+			$(this).remove();
+			if(elem.length == '1'){
+				closest.remove();
+			}
 	});
 }
 

@@ -208,7 +208,6 @@ $('#platformcontent').on('click', '.backup', function (event) {
         }
     });
 });
-
 function getVMList(page, limit, search) {
     $('#tablebody').html("");
     $.ajax({
@@ -270,8 +269,7 @@ function getVMList(page, limit, search) {
                 var backupdate = obj.backupdate + "";
                 var backupStr = decodeURIComponent(backupdate);
                 if (backupdate == "") {
-                    var basePath = basePath;
-                    backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'instance/createsnapshot?rsid=' + vmuuid + '&rstype=instance&rsname=' + vmName + '"></a>';
+                    backupStr = '<a class="glyphicon glyphicon-camera backup" url="snapshot/create?rsid=' + vmuuid + '&rstype=instance&rsname=' + vmName + '"></a>';
                 }
                 if (publicip != "") {
                     publicip = '<a><span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;' + publicip + '</a>';

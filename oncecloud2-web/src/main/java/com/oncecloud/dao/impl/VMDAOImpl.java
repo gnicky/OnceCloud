@@ -276,7 +276,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmVlan
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getVMsOfVnet(String vmVlan) {
 		List<OCVM> list = null;
@@ -298,7 +298,7 @@ public class VMDAOImpl implements VMDAO {
 		return list;
 	}
 
-	*//**
+	/**
 	 * 获取简单用户主机列表
 	 * 
 	 * @param userId

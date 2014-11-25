@@ -86,14 +86,14 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract List<OCVM> getVMsOfAlarm(int vmUID, String alarmUuid);
-//
-//	/**
-//	 * 获取对应私有网络的主机列表
-//	 * 
-//	 * @param vmVlan
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getVMsOfVnet(String vmVlan);
+
+	/**
+	 * 获取对应私有网络的主机列表
+	 * 
+	 * @param vmVlan
+	 * @return
+	 */
+	public abstract List<OCVM> getVMsOfVnet(String vmVlan);
 
 	/**
 	 * 获取简单用户主机列表
