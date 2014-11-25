@@ -12,6 +12,12 @@
 			<button id="create" class="btn btn-primary" url="${basePath}host/create">
 				+&nbsp;添加服务器
 			</button>
+			
+			<button id="power" class="btn btn-danger" url="${basePath}admin/modal/host/power">
+				<span class="glyphicon glyphicon-off"></span>&nbsp;电源管理
+			</button>
+			
+			
             <div class="btn-group">
 				<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">更多操作...
 					<span class="caret" style="margin-left:15px"></span>

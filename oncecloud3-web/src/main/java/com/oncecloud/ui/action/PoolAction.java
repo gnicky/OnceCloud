@@ -86,4 +86,24 @@ public class PoolAction {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getPoolManager().keepAccordance(user.getUserId(), poolUuid);
 	}
+	
+	@RequestMapping(value = "/PoolHa", method = {RequestMethod.POST })
+	@ResponseBody
+	public String PoolHa(HttpServletRequest request, @RequestParam String poolUuid) {
+		return this.getPoolManager().getPoolHa(poolUuid).toString();
+	}
+	
+	@RequestMapping(value = "/StartHa", method = {RequestMethod.POST })
+	@ResponseBody
+	public String StartHa(HttpServletRequest request, @RequestParam String poolUuid,@RequestParam String masterIP,@RequestParam String haPath) {
+		return  this.getPoolManager().StartHa(poolUuid,masterIP, haPath);
+		 
+	}
+	
+	@RequestMapping(value = "/StopHa", method = {RequestMethod.POST })
+	@ResponseBody
+	public String StopHa(HttpServletRequest request, @RequestParam String poolUuid,@RequestParam String masterIP,@RequestParam String haPath) {
+		return this.getPoolManager().StopHa(poolUuid,masterIP, haPath);
+		 
+	}
 }

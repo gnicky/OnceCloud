@@ -19,6 +19,8 @@ function allDisable() {
     $("#add2pool").addClass('btn-forbidden');
     $("#remove4pool").addClass('btn-forbidden');
     $("#recover").addClass('btn-forbidden');
+    $("#power").addClass('btn-forbidden');
+    $("#power").attr('disabled',"disabled");
 }
 
 function removeAllCheck() {
@@ -50,6 +52,8 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
         if (unbindcount == 1) {
         	$("#recover").removeClass('btn-forbidden');
         }
+        $("#power").removeClass('btn-forbidden');
+        $("#power").removeAttr('disabled');
     }
     if (count == bindcount) {
 		$("#remove4pool").removeClass('btn-forbidden');
@@ -62,6 +66,19 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
 $('#create').on('click', function (event) {
     event.preventDefault();
     $('#ServerModalContainer').attr('type', 'new');
+    $('#ServerModalContainer').load($(this).attr('url'), '',
+        function () {
+            $('#ServerModalContainer').modal({
+                backdrop: false,
+                show: true
+            });
+        });
+});
+
+
+$('#power').on('click', function (event) {
+    event.preventDefault();
+    $('#ServerModalContainer').attr('type', 'power');
     $('#ServerModalContainer').load($(this).attr('url'), '',
         function () {
             $('#ServerModalContainer').modal({

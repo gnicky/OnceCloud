@@ -1,6 +1,7 @@
 package com.oncecloud.manager;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 public interface PoolManager {
@@ -24,4 +25,9 @@ public interface PoolManager {
 
 	public abstract void keepAccordance(int userId, String poolUuid);
 
+	public abstract JSONObject getPoolHa(String poolUuid);
+	
+	public String StartHa(String poolUuid,String masterIP,String haPath);
+	
+	public String StopHa(String poolUuid,String masterIP,String haPath);
 }
