@@ -326,7 +326,7 @@ public class VMManagerImpl implements VMManager {
 		return vmrecord;
 	}
 
-	public String getAllocateHost(Connection conn, int memory) {
+	private String getAllocateHost(Connection conn, int memory) {
 		String host = null;
 		try {
 			Map<Host, Host.Record> hostMap = Host.getAllRecords(conn);

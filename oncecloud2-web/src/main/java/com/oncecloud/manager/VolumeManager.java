@@ -19,11 +19,11 @@ public interface VolumeManager {
 	public abstract void createVolume(int userId, String volUuid,
 			String volName, int volSize);
 
-//	public abstract void deleteVolume(int userId, String volUuid);
-//
-//	public abstract void bindVolume(int userId, String volUuid, String vmUuid);
-//
-//	public abstract void unbindVolume(int userId, String volUuid);
+	public abstract void deleteVolume(int userId, String volUuid);
+
+	public abstract void bindVolume(int userId, String volUuid, String vmUuid);
+
+	public abstract void unbindVolume(int userId, String volUuid);
 
 	public abstract String getQuota(int userId, int count, int size);
 
@@ -35,7 +35,7 @@ public interface VolumeManager {
 	 */
 	public abstract JSONObject getVolumeDetail(String volUuid);
 
-//	public abstract JSONArray getAvailableVolumes(int userId);
+	public abstract JSONArray getAvailableVolumes(int userId);
 
 	public abstract JSONArray getVolumesOfVM(String vmUuid);
 }

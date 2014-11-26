@@ -1,5 +1,6 @@
 package com.oncecloud.manager;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -27,17 +28,17 @@ public interface RouterManager {
 //	public abstract ForwardPortDAO getForwardPortDAO();
 //
 //	public abstract void setForwardPortDAO(ForwardPortDAO forwardPortDAO);
-//
-//	public abstract void createRouter(String uuid, int userId, String name,
-//			int capacity, String fwuuid, String poolUuid);
-//
-//	public abstract void deleteRouter(String uuid, int userId, String poolUuid);
-//
-//	public abstract void startRouter(String uuid, int userId, String poolUuid);
-//
-//	public abstract void shutdownRouter(String uuid, String force, int userId,
-//			String poolUuid);
-//
+
+	public abstract void createRouter(String uuid, int userId, String name,
+			int capacity, String fwuuid, String poolUuid);
+
+	public abstract void deleteRouter(String uuid, int userId, String poolUuid);
+
+	public abstract void startRouter(String uuid, int userId, String poolUuid);
+
+	public abstract void shutdownRouter(String uuid, String force, int userId,
+			String poolUuid);
+
 //	public abstract JSONObject doUnlinkRouter(String vnetUuid, int userId);
 //
 //	public abstract JSONObject doLinkRouter(int userId, String vnetUuid,
@@ -56,19 +57,19 @@ public interface RouterManager {
 //	 * @time 2014/08/14
 //	 */
 //	public abstract JSONArray getVxnets(String rtuuid);
-//
-//	/**
-//	 * 获取用户路由器列表
-//	 * 
-//	 * @param userId
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract JSONArray getRouterList(int userId, int page, int limit,
-//			String search);
-//
+
+	/**
+	 * 获取用户路由器列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract JSONArray getRouterList(int userId, int page, int limit,
+			String search);
+
 //	public abstract JSONArray getAdminRouterList(int page, int limit,
 //			String host, int importance, String type);
 //
@@ -87,9 +88,9 @@ public interface RouterManager {
 //
 //	public abstract void routerAdminShutDown(String uuid, String force,
 //			int userId);
-//
-//	public abstract JSONArray routerQuota(int userId);
-//
+
+	public abstract JSONArray routerQuota(int userId);
+
 //	public abstract void updateImportance(String uuid, int importance);
 //
 //	public abstract JSONArray getRoutersOfUser(int userId);

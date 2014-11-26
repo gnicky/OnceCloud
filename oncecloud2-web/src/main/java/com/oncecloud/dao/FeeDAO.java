@@ -49,7 +49,7 @@ public interface FeeDAO {
 
 	public abstract boolean deleteSnapshot(Date endDate, String vmUuid);
 
-//	public abstract boolean deleteVolume(Date endDate, String volumeUuid);
+	public abstract boolean deleteVolume(Date endDate, String volumeUuid);
 
 	public abstract boolean destoryVM(Date endDate, String vmUuid);
 

@@ -227,7 +227,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 	 * 
 	 * @param volumeUuid
 	 * @return
-	 *//*
+	 */
 	public boolean isExist(String volumeUuid) {
 		boolean result = false;
 		Volume volume = this.getVolume(volumeUuid);
@@ -255,7 +255,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 			}
 		}
 	}
-*/
+
 	public void emptyDependency(String volumeUuid) {
 		Volume volume = this.getVolume(volumeUuid);
 		if (volume != null) {
@@ -332,7 +332,7 @@ public class VolumeDAOImpl implements VolumeDAO {
 		}
 		return result;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<Volume> getAbledVolumes(int userId) {
 		List<Volume> volumeList = null;
@@ -351,5 +351,5 @@ public class VolumeDAOImpl implements VolumeDAO {
 			}
 		}
 		return volumeList;
-	}*/
+	}
 }

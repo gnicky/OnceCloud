@@ -12,23 +12,23 @@ public interface SnapshotDAO {
 	 * @param snapshotId
 	 * @return
 	 */
-//	public abstract Snapshot getSnapshot(String snapshotId);
-//
-//	/**
-//	 * 获取主机的备份链
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract Object getOneVmSnapshot(String vmUuid);
-//
-//	/**
-//	 * 获取硬盘的备份链
-//	 * 
-//	 * @param volumeUuid
-//	 * @return
-//	 */
-//	public abstract Object getOneVolumeSnapshot(String volumeUuid);
+	public abstract Snapshot getSnapshot(String snapshotId);
+
+	/**
+	 * 获取主机的备份链
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract Object getOneVmSnapshot(String vmUuid);
+
+	/**
+	 * 获取硬盘的备份链
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public abstract Object getOneVolumeSnapshot(String volumeUuid);
 
 	/**
 	 * 获取一页主机备份链列表
@@ -55,21 +55,21 @@ public interface SnapshotDAO {
 	public abstract List<Object> getOnePageVolumeSnapshotList(int userId,
 			int page, int limit, String search, int offside);
 
-//	/**
-//	 * 获取虚拟机快照列表
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract List<Snapshot> getVmSnapshotList(String vmUuid);
-//
-//	/**
-//	 * 获取硬盘快照列表
-//	 * 
-//	 * @param volumeUuid
-//	 * @return
-//	 */
-//	public abstract List<Snapshot> getVolumeSnapshotList(String volumeUuid);
+	/**
+	 * 获取虚拟机快照列表
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract List<Snapshot> getVmSnapshotList(String vmUuid);
+
+	/**
+	 * 获取硬盘快照列表
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public abstract List<Snapshot> getVolumeSnapshotList(String volumeUuid);
 
 	/**
 	 * 获取最近的主机快照时间
@@ -145,28 +145,28 @@ public interface SnapshotDAO {
 			int snapshotSize, Date backupDate, String snapshotVm,
 			String snapshotVolume, int userId);
 
-//	/**
-//	 * 删除快照
-//	 * 
-//	 * @param userId
-//	 * @param snapshotId
-//	 */
-//	public abstract void deleteOneSnapshot(int userId, String snapshotId);
-//
-//	/**
-//	 * 删除主机的全部快照
-//	 * 
-//	 * @param vmUuid
-//	 * @param userId
-//	 */
-//	public abstract void deleteVmSnapshot(String vmUuid, int userId);
-//
-//	/**
-//	 * 删除硬盘的全部快照
-//	 * 
-//	 * @param volumeUuid
-//	 * @param userId
-//	 */
-//	public abstract void deleteVolumeSnapshot(String volumeUuid, int userId);
+	/**
+	 * 删除快照
+	 * 
+	 * @param userId
+	 * @param snapshotId
+	 */
+	public abstract Snapshot deleteOneSnapshot(Snapshot ss);
+
+	/**
+	 * 删除主机的全部快照
+	 * 
+	 * @param vmUuid
+	 * @param userId
+	 */
+	public abstract void deleteVmSnapshot(String vmUuid, int userId);
+
+	/**
+	 * 删除硬盘的全部快照
+	 * 
+	 * @param volumeUuid
+	 * @param userId
+	 */
+	public abstract void deleteVolumeSnapshot(String volumeUuid, int userId);
 
 }

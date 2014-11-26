@@ -33,19 +33,19 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract Router getAliveRouter(String routerUuid);
-//
-//	/**
-//	 * 获取一页用户路由器列表
-//	 * 
-//	 * @param userId
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract List<Router> getOnePageRouters(int userId, int page,
-//			int limit, String search);
-//
+
+	/**
+	 * 获取一页用户路由器列表
+	 * 
+	 * @param userId
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @return
+	 */
+	public abstract List<Router> getOnePageRouters(int userId, int page,
+			int limit, String search);
+
 //	/**
 //	 * 获取一页管理员路由器列表
 //	 * 
@@ -99,16 +99,16 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract JSONArray getRoutersOfUser(int userId);
-//
-//	/**
-//	 * 获取用户路由器总数
-//	 * 
-//	 * @param userId
-//	 * @param search
-//	 * @return
-//	 */
-//	public abstract int countRouters(int userId, String search);
-//
+
+	/**
+	 * 获取用户路由器总数
+	 * 
+	 * @param userId
+	 * @param search
+	 * @return
+	 */
+	public abstract int countRouters(int userId, String search);
+
 //	/**
 //	 * 获取管理员路由器总数
 //	 * 
@@ -135,48 +135,48 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract int countRoutersWithoutEIP(String search, int userId);
-//
-//	/**
-//	 * 预创建路由器
-//	 * 
-//	 * @param uuid
-//	 * @param pwd
-//	 * @param userId
-//	 * @param name
-//	 * @param mac
-//	 * @param capacity
-//	 * @param fwuuid
-//	 * @param power
-//	 * @param status
-//	 * @param createDate
-//	 * @return
-//	 */
-//	public abstract boolean preCreateRouter(String uuid, String pwd,
-//			int userId, String name, String mac, int capacity, String fwuuid,
-//			int power, int status, Date createDate);
-//
-//	/**
-//	 * 删除路由器
-//	 * 
-//	 * @param userId
-//	 * @param uuid
-//	 */
-//	public abstract void removeRouter(int userId, String uuid);
-//
-//	/**
-//	 * 更新路由器
-//	 * 
-//	 * @param userId
-//	 * @param uuid
-//	 * @param pwd
-//	 * @param power
-//	 * @param firewallId
-//	 * @param hostUuid
-//	 * @param ip
-//	 */
-//	public abstract void updateRouter(int userId, String uuid, String pwd,
-//			int power, String firewallId, String hostUuid, String ip);
-//
+
+	/**
+	 * 预创建路由器
+	 * 
+	 * @param uuid
+	 * @param pwd
+	 * @param userId
+	 * @param name
+	 * @param mac
+	 * @param capacity
+	 * @param fwuuid
+	 * @param power
+	 * @param status
+	 * @param createDate
+	 * @return
+	 */
+	public abstract boolean preCreateRouter(String uuid, String pwd,
+			int userId, String name, String mac, int capacity, String fwuuid,
+			int power, int status, Date createDate);
+
+	/**
+	 * 删除路由器
+	 * 
+	 * @param userId
+	 * @param uuid
+	 */
+	public abstract void removeRouter(int userId, String uuid);
+
+	/**
+	 * 更新路由器
+	 * 
+	 * @param userId
+	 * @param uuid
+	 * @param pwd
+	 * @param power
+	 * @param firewallId
+	 * @param hostUuid
+	 * @param ip
+	 */
+	public abstract void updateRouter(int userId, String uuid, String pwd,
+			int power, String firewallId, String hostUuid, String ip);
+
 //	/**
 //	 * 更新路由器状态
 //	 * 
@@ -185,16 +185,16 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract boolean updateStatus(String routerUuid, int status);
-//
-//	/**
-//	 * 更新路由器电源状态
-//	 * 
-//	 * @param uuid
-//	 * @param powerStatus
-//	 * @return
-//	 */
-//	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
-//
+
+	/**
+	 * 更新路由器电源状态
+	 * 
+	 * @param uuid
+	 * @param powerStatus
+	 * @return
+	 */
+	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
+
 //	public abstract boolean updateImportance(String uuid, int routerImportance);
 //
 //	/**
@@ -204,16 +204,16 @@ public interface RouterDAO {
 //	 * @param firewallId
 //	 */
 //	public abstract void updateFirewall(String routerUuid, String firewallId);
-//
-//	/**
-//	 * 更新路由器防火墙
-//	 * 
-//	 * @param routerUuid
-//	 * @param innerfirewallId
-//	 */
-//	public abstract void updateInnerFirewall(String routerUuid,
-//			String innerfirewallId);
-//
+
+	/**
+	 * 更新路由器防火墙
+	 * 
+	 * @param routerUuid
+	 * @param innerfirewallId
+	 */
+	public abstract void updateInnerFirewall(String routerUuid,
+			String innerfirewallId);
+
 //	/**
 //	 * 更新路由器名称和描述
 //	 * 
@@ -224,16 +224,16 @@ public interface RouterDAO {
 //	 */
 //	public abstract boolean updateName(String routeruuid, String routerName,
 //			String routerDesc);
-//
-//	/**
-//	 * 更新路由器所在服务器
-//	 * 
-//	 * @param uuid
-//	 * @param hostUuid
-//	 * @return
-//	 */
-//	public abstract boolean updateHostUuid(String uuid, String hostUuid);
-//
+
+	/**
+	 * 更新路由器所在服务器
+	 * 
+	 * @param uuid
+	 * @param hostUuid
+	 * @return
+	 */
+	public abstract boolean updateHostUuid(String uuid, String hostUuid);
+
 //	/**
 //	 * 更新路由器监控警告
 //	 * 

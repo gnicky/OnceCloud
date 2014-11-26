@@ -22,13 +22,13 @@ public interface VMDAO {
 	 */
 	public abstract String getVmName(String vmUuid);
 
-//	/**
-//	 * 获取使用中的主机
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract OCVM getAliveVM(String vmUuid);
+	/**
+	 * 获取使用中的主机
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract OCVM getAliveVM(String vmUuid);
 
 	/**
 	 * 获取一页用户主机列表

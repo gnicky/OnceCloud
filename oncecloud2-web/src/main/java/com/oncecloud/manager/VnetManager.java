@@ -52,8 +52,8 @@ public interface VnetManager {
 
 //	public abstract JSONObject bindVM(String vnId, String vmuuid, int userId,
 //			String poolUuid);
-//
-//	public abstract boolean isRouterHasVnets(String routerUuid, int userId);
-//
+
+	public abstract boolean isRouterHasVnets(String routerUuid, int userId);
+
 //	public abstract JSONArray getAvailableVnet(Integer userId);
 }

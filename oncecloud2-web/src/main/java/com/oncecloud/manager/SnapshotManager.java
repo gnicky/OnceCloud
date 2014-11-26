@@ -20,20 +20,20 @@ public interface SnapshotManager {
 	public abstract JSONObject createSnapshot(int userId, String snapshotId,
 			String snapshotName, String resourceUuid, String resourceType);
 
-//	public abstract JSONObject deleteSnapshotSeries(int userId,
-//			String resourceUuid, String resourceType);
-//
-//	public abstract JSONArray getDetailList(String resourceUuid,
-//			String resourceType);
-//
-//	public abstract JSONObject rollbackSnapshot(int userId, String snapshotId,
-//			String resourceUuid, String resourceType);
-//
-//	public abstract JSONObject deleteSnapshot(int userId, String snapshotId,
-//			String resourceUuid, String resourceType);
-//
-//	public abstract JSONObject getBasicList(int userId, String resourceUuid,
-//			String resourceType);
+	public abstract JSONObject deleteSnapshotSeries(int userId,
+			String resourceUuid, String resourceType);
+
+	public abstract JSONArray getDetailList(String resourceUuid,
+			String resourceType);
+
+	public abstract JSONObject rollbackSnapshot(int userId, String snapshotId,
+			String resourceUuid, String resourceType);
+
+	public abstract JSONObject deleteSnapshot(int userId, String snapshotId,
+			String resourceUuid, String resourceType);
+
+	public abstract JSONObject getBasicList(int userId, String resourceUuid,
+			String resourceType);
 
 	public abstract String getQuota(int userId, int count);
 }

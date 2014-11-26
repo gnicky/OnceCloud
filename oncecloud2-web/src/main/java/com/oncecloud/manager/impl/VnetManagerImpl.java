@@ -601,12 +601,12 @@ public class VnetManagerImpl implements VnetManager {
 		}
 		return jo;
 	}
-
+*/
 	public boolean isRouterHasVnets(String routerUuid, int userId) {
 		int count = this.getVnetDAO().countVnetsOfRouter(routerUuid, userId);
 		return count > 0;
 	}
-
+/*
 	public JSONArray getAvailableVnet(Integer userId) {
 		JSONArray ja = new JSONArray();
 		

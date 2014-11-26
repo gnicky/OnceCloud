@@ -69,15 +69,15 @@ public interface VolumeDAO {
 	 */
 	public abstract int deleteVolume(int userId, String volumeUuid);
 
-//	/**
-//	 * 硬盘是否存在
-//	 * 
-//	 * @param volumeUuid
-//	 * @return
-//	 */
-//	public abstract boolean isExist(String volumeUuid);
-//
-//	public abstract void addDependency(String volumeUuid, String vmUuid);
+	/**
+	 * 硬盘是否存在
+	 * 
+	 * @param volumeUuid
+	 * @return
+	 */
+	public abstract boolean isExist(String volumeUuid);
+
+	public abstract void addDependency(String volumeUuid, String vmUuid);
 
 	public abstract void emptyDependency(String volumeUuid);
 
@@ -88,6 +88,6 @@ public interface VolumeDAO {
 
 	public abstract boolean updateVolumeStatus(String volUuid, int status);
 
-//	public abstract List<Volume> getAbledVolumes(int userId);
+	public abstract List<Volume> getAbledVolumes(int userId);
 	
 }

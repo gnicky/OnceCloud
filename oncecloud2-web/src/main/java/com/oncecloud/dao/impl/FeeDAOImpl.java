@@ -437,7 +437,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-/*
+
 	public boolean deleteVolume(Date endDate, String volumeUuid) {
 		boolean result = false;
 		Session session = null;
@@ -464,7 +464,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean destoryVM(Date endDate, String vmUuid) {
 		boolean result = false;
 		Session session = null;

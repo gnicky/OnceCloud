@@ -71,7 +71,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	public OCVM getAliveVM(String vmUuid) {
 		OCVM vm = null;
 		Session session = null;
@@ -92,7 +92,7 @@ public class VMDAOImpl implements VMDAO {
 		return vm;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户主机列表
 	 * 
 	 * @param userId

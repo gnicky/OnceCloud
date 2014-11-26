@@ -122,7 +122,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRouters(int userId, int page, int limit,
 			String search) {
@@ -149,7 +149,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取一页管理员路由器列表
 	 * 
 	 * @param page
@@ -333,7 +333,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param userId
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countRouters(int userId, String search) {
 		int count = 0;
 		Session session = null;
@@ -355,7 +355,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取管理员路由器总数
 	 * 
 	 * @param host
@@ -463,7 +463,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param status
 	 * @param createDate
 	 * @return
-	 *//*
+	 */
 	public boolean preCreateRouter(String uuid, String pwd, int userId,
 			String name, String mac, int capacity, String fwuuid, int power,
 			int status, Date createDate) {
@@ -475,8 +475,6 @@ public class RouterDAOImpl implements RouterDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(router);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaRoute", 1, true);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -488,12 +486,12 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 删除路由器
 	 * 
 	 * @param userId
 	 * @param uuid
-	 *//*
+	 */
 	public void removeRouter(int userId, String uuid) {
 		Router toDelete = this.getRouter(uuid);
 		if (toDelete != null) {
@@ -503,8 +501,6 @@ public class RouterDAOImpl implements RouterDAO {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(toDelete);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaRoute", 1, false);
 				session.getTransaction().commit();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -515,7 +511,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新路由器
 	 * 
 	 * @param userId
@@ -525,7 +521,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param firewallId
 	 * @param hostUuid
 	 * @param ip
-	 *//*
+	 */
 	public void updateRouter(int userId, String uuid, String pwd, int power,
 			String firewallId, String hostUuid, String ip) {
 		Router router = this.getRouter(uuid);
@@ -550,7 +546,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新路由器状态
 	 * 
 	 * @param routerUuid
@@ -586,7 +582,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param uuid
 	 * @param powerStatus
 	 * @return
-	 *//*
+	 */
 	public boolean updatePowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		Router router = this.getRouter(uuid);
@@ -608,7 +604,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 		return result;
 	}
-
+/*
 	public boolean updateImportance(String uuid, int routerImportance) {
 		boolean result = false;
 		Router router = this.getRouter(uuid);
@@ -662,7 +658,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @param innerfirewallId
-	 *//*
+	 */
 	public void updateInnerFirewall(String routerUuid, String innerfirewallId) {
 		Session session = null;
 		try {
@@ -683,7 +679,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新路由器名称和描述
 	 * 
 	 * @param routeruuid
@@ -719,7 +715,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param uuid
 	 * @param hostUuid
 	 * @return
-	 *//*
+	 */
 	public boolean updateHostUuid(String uuid, String hostUuid) {
 		boolean result = false;
 		Router rt = getRouter(uuid);
@@ -739,7 +735,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新路由器监控警告
 	 * 
 	 * @param routerUuid

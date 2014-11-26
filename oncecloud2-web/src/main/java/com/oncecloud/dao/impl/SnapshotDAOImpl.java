@@ -32,7 +32,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 	 * @param snapshotId
 	 * @return
 	 */
-/*	public Snapshot getSnapshot(String snapshotId) {
+	public Snapshot getSnapshot(String snapshotId) {
 		Snapshot ss = null;
 		Session session = null;
 		try {
@@ -51,12 +51,12 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 		return ss;
 	}
 
-	*//**
+	/**
 	 * 获取主机的备份链
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	public Object getOneVmSnapshot(String vmUuid) {
 		Object object = null;
 		Session session = null;
@@ -80,12 +80,12 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 		return object;
 	}
 
-	*//**
+	/**
 	 * 获取硬盘的备份链
 	 * 
 	 * @param volumeUuid
 	 * @return
-	 *//*
+	 */
 	public Object getOneVolumeSnapshot(String volumeUuid) {
 		Object object = null;
 		Session session = null;
@@ -109,7 +109,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 		return object;
 	}
 
-	*//**
+	/**
 	 * 获取一页主机备份链列表
 	 * 
 	 * @param page
@@ -191,7 +191,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Snapshot> getVmSnapshotList(String vmUuid) {
 		List<Snapshot> snapshotList = null;
@@ -212,12 +212,12 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 		return snapshotList;
 	}
 
-	*//**
+	/**
 	 * 获取硬盘快照列表
 	 * 
 	 * @param volumeUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Snapshot> getVolumeSnapshotList(String volumeUuid) {
 		List<Snapshot> snapshotList = null;
@@ -238,7 +238,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 		return snapshotList;
 	}
 
-	*//**
+	/**
 	 * 获取最近的主机快照时间
 	 * 
 	 * @param vmUuid
@@ -474,24 +474,14 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 	 * 
 	 * @param userId
 	 * @param snapshotId
-	 *//*
-	public void deleteOneSnapshot(int userId, String snapshotId) {
-		Snapshot ss = this.getSnapshot(snapshotId);
+	 */
+	public Snapshot deleteOneSnapshot(Snapshot ss) {
 		if (ss != null) {
-			String vmUuid = ss.getSnapshotVm();
-			String volumeUuid = ss.getSnapshotVolume();
-			int vmSize = getVmSnapshotSize(vmUuid);
-			int volSize = getVolumeSnapshotSize(volumeUuid);
-			int nsize = vmSize + volSize;
 			Session session = null;
 			try {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.delete(ss);
-				if (nsize == 1) {
-					this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-							"quotaSnapshot", 1, false);
-				}
 				session.getTransaction().commit();
 			} catch (Exception e) {
 				if (session != null) {
@@ -499,14 +489,15 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 				}
 			}
 		}
+		return ss;
 	}
 
-	*//**
+	/**
 	 * 删除主机的全部快照
 	 * 
 	 * @param vmUuid
 	 * @param userId
-	 *//*
+	 */
 	public void deleteVmSnapshot(String vmUuid, int userId) {
 		Session session = null;
 		try {
@@ -516,8 +507,6 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("vmUuid", vmUuid);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaSnapshot", 1, false);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
@@ -526,12 +515,12 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 删除硬盘的全部快照
 	 * 
 	 * @param volumeUuid
 	 * @param userId
-	 *//*
+	 */
 	public void deleteVolumeSnapshot(String volumeUuid, int userId) {
 		Session session = null;
 		try {
@@ -541,13 +530,11 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("volumeUuid", volumeUuid);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaSnapshot", 1, false);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
 		}
-	}*/
+	}
 }

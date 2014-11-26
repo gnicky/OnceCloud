@@ -160,7 +160,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-
+*/
 	// /获取可用防火墙
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getabledfirewalls(int uid) {
@@ -182,7 +182,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return firewallList;
 	}
-*/
+
 	public Firewall getDefaultFirewall(int userId) {
 		Firewall firewall = null;
 		Session session = null;
@@ -452,7 +452,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-
+*/
 	// /cyh 插入用于路由器内部的防火墙 默认值状态 为2 ，在防火墙列表中，也不显示出来
 	public boolean insertFirewallForinnerRoute(String firewallId,
 			String firewallName, int firewallUID, Date createDate) {
@@ -474,7 +474,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-
+/*
 	public boolean insertRule(String ruleId, String ruleName,
 			Integer rulePriority, String ruleProtocol, Integer ruleStartPort,
 			Integer ruleEndPort, Integer ruleState, String ruleIp,

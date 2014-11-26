@@ -77,7 +77,7 @@ public class VolumeAction {
 		return ja.toString();
 	}
 
-	/*@RequestMapping(value = "/AvailableVolumes", method = { RequestMethod.POST })
+	@RequestMapping(value = "/AvailableVolumes", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getAvailableVolumes(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
@@ -109,5 +109,5 @@ public class VolumeAction {
 			@RequestParam String volumeUuid) {
 		User user = (User) request.getSession().getAttribute("user");
 		this.getVolumeManager().deleteVolume(user.getUserId(), volumeUuid);
-	}*/
+	}
 }

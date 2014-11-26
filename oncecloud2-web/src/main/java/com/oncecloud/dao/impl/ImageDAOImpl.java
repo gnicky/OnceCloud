@@ -71,10 +71,9 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return image;
 	}
-
-	public Image getRTImage(int userId) {
+*/
+	public Image getRTImage(int userId, String poolUuid) {
 		Image image = null;
-		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
 		if (poolUuid != null) {
 			Session session = null;
 			try {
@@ -93,7 +92,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return image;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<Image> getSystemImage() {
 		List<Image> imageList = null;

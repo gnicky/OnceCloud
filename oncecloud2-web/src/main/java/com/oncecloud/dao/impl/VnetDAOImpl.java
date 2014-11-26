@@ -180,7 +180,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Vnet> getVnetsOfRouter(String routerUuid) {
 		List<Vnet> vxnetsList = null;
@@ -202,7 +202,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return vxnetsList;
 	}
 
-	*//**
+	/**
 	 * 获取路由器私有网络数目
 	 * 
 	 * @param routerUuid

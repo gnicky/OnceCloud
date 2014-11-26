@@ -11,9 +11,9 @@ public interface ImageDAO {
 //	public abstract Image getDBImage(String type, int throughout);
 //
 //	public abstract Image getLBImage(int userId);
-//
-//	public abstract Image getRTImage(int userId);
-//
+
+	public abstract Image getRTImage(int userId, String poolUuid);
+
 //	public abstract List<Image> getSystemImage();
 
 	public abstract List<Image> getOnePageImageList(int userId, int userLevel,
