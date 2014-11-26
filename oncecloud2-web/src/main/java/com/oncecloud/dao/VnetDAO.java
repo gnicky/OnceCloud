@@ -74,45 +74,45 @@ public interface VnetDAO {
 	 */
 	public abstract int countVnets(int userId, String search);
 
-//	/**
-//	 * 查看是否被占用
-//	 * 
-//	 * @param userId
-//	 * @param routerid
-//	 * @param net
-//	 * @return
-//	 */
-//	public abstract int countAbleNet(int userId, String routerid, Integer net);
-//
-//	/**
-//	 * 创建私有网络
-//	 * 
-//	 * @param uuid
-//	 * @param userId
-//	 * @param name
-//	 * @param desc
-//	 * @return
-//	 */
-//	public abstract boolean createVnet(String uuid, int userId, String name,
-//			String desc);
-//
-//	/**
-//	 * 删除私有网络
-//	 * 
-//	 * @param userId
-//	 * @param uuid
-//	 * @return
-//	 */
-//	public abstract boolean removeVnet(int userId, String uuid);
-//
-//	/**
-//	 * 更新私有网络
-//	 * 
-//	 * @param vnet
-//	 * @return
-//	 */
-//	public abstract boolean updateVnet(Vnet vnet);
-//
+	/**
+	 * 查看是否被占用
+	 * 
+	 * @param userId
+	 * @param routerid
+	 * @param net
+	 * @return
+	 */
+	public abstract int countAbleNet(int userId, String routerid, Integer net);
+
+	/**
+	 * 创建私有网络
+	 * 
+	 * @param uuid
+	 * @param userId
+	 * @param name
+	 * @param desc
+	 * @return
+	 */
+	public abstract boolean createVnet(String uuid, int userId, String name,
+			String desc);
+
+	/**
+	 * 删除私有网络
+	 * 
+	 * @param userId
+	 * @param uuid
+	 * @return
+	 */
+	public abstract boolean removeVnet(int userId, String uuid);
+
+	/**
+	 * 更新私有网络
+	 * 
+	 * @param vnet
+	 * @return
+	 */
+	public abstract boolean updateVnet(Vnet vnet);
+
 //	/**
 //	 * 更新私有网络
 //	 * 
@@ -123,31 +123,31 @@ public interface VnetDAO {
 //	 */
 //	public abstract boolean updateVnet(String vnetuuid, String newName,
 //			String description);
-//
-//	/**
-//	 * 私有网络连接路由器
-//	 * 
-//	 * @param vnetuuid
-//	 * @param routerUuid
-//	 * @param net
-//	 * @param gate
-//	 * @param start
-//	 * @param end
-//	 * @param dhcpStatus
-//	 * @param mac
-//	 * @return
-//	 */
-//	public abstract boolean linkToRouter(String vnetuuid, String routerUuid,
-//			Integer net, Integer gate, Integer start, Integer end,
-//			Integer dhcpStatus, String vifUuid, String vifMac);
-//
-//	/**
-//	 * 私有网络离开路由器
-//	 * 
-//	 * @param vnetuuid
-//	 * @return
-//	 */
-//	public abstract boolean unlinkRouter(String vnetuuid);
-//
-//	public abstract List<Vnet> getAvailableVnet(Integer userId);
+
+	/**
+	 * 私有网络连接路由器
+	 * 
+	 * @param vnetuuid
+	 * @param routerUuid
+	 * @param net
+	 * @param gate
+	 * @param start
+	 * @param end
+	 * @param dhcpStatus
+	 * @param mac
+	 * @return
+	 */
+	public abstract boolean linkToRouter(String vnetuuid, String routerUuid,
+			Integer net, Integer gate, Integer start, Integer end,
+			Integer dhcpStatus, String vifUuid, String vifMac);
+
+	/**
+	 * 私有网络离开路由器
+	 * 
+	 * @param vnetuuid
+	 * @return
+	 */
+	public abstract boolean unlinkRouter(String vnetuuid);
+
+	public abstract List<Vnet> getAvailableVnet(Integer userId);
 }

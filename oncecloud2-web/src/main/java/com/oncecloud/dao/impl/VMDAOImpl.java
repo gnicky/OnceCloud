@@ -481,7 +481,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vnetUuid
 	 * @return
-	 *//*
+	 */
 	public int countVMsOfVnet(String vnetUuid) {
 		int count = -1;
 		Session session = null;
@@ -502,7 +502,7 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取指定服务器的主机总数
 	 * 
 	 * @param hostUuid

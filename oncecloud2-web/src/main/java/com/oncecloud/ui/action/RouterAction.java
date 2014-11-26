@@ -109,7 +109,7 @@ public class RouterAction {
 		JSONArray ja = this.getRouterManager().routerQuota(user.getUserId());
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/Vxnets", method = { RequestMethod.GET })
 	@ResponseBody
 	public String getVxnets(HttpServletRequest request,
@@ -239,6 +239,6 @@ public class RouterAction {
 		JSONObject jo = new JSONObject();
 		jo.put("result", this.getRouterManager().closePPTP(routerUuid, user));
 		return jo.toString();
-	}*/
+	}
 	
 }

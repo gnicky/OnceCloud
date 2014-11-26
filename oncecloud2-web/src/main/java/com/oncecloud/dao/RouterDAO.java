@@ -16,8 +16,8 @@ public interface RouterDAO {
 	 */
 	public abstract Router getRouter(String routerUuid);
 
-//	public abstract void updateRouter(Router router);
-//
+	public abstract void updateRouter(Router router);
+
 //	/**
 //	 * 获取路由器名称
 //	 * 
@@ -25,14 +25,14 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract String getRouterName(String routerUuid);
-//
-//	/**
-//	 * 获取使用中的路由器
-//	 * 
-//	 * @param routerUuid
-//	 * @return
-//	 */
-//	public abstract Router getAliveRouter(String routerUuid);
+
+	/**
+	 * 获取使用中的路由器
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public abstract Router getAliveRouter(String routerUuid);
 
 	/**
 	 * 获取一页用户路由器列表
@@ -91,14 +91,14 @@ public interface RouterDAO {
 //	 */
 //	public abstract List<Router> getRoutersOfAlarm(int routerUID,
 //			String alarmUuid);
-//
-//	/**
-//	 * 获取用户路由器列表
-//	 * 
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract JSONArray getRoutersOfUser(int userId);
+
+	/**
+	 * 获取用户路由器列表
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public abstract JSONArray getRoutersOfUser(int userId);
 
 	/**
 	 * 获取用户路由器总数

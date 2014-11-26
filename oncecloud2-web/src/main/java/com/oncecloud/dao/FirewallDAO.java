@@ -15,11 +15,11 @@ public interface FirewallDAO {
 //
 //	public abstract void createDefaultFirewallNoTransaction(Integer userId)
 //			throws Exception;
-//
-//	public abstract boolean deleteAllRuleOfFirewall(String firewallId);
-//
-//	public abstract boolean deleteFirewall(Integer userId, String firewallId);
-//
+
+	public abstract boolean deleteAllRuleOfFirewall(String firewallId);
+
+	public abstract boolean deleteFirewall(Integer userId, String firewallId);
+
 //	public abstract boolean deleteRule(String ruleId);
 
 	// /获取可用防火墙
@@ -54,7 +54,7 @@ public interface FirewallDAO {
 	// /cyh 插入用于路由器内部的防火墙 默认值状态 为2 ，在防火墙列表中，也不显示出来
 	public abstract boolean insertFirewallForinnerRoute(String firewallId,
 			String firewallName, int firewallUID, Date createDate);
-
+	
 //	public abstract boolean insertRule(String ruleId, String ruleName,
 //			Integer rulePriority, String ruleProtocol, Integer ruleStartPort,
 //			Integer ruleEndPort, Integer ruleState, String ruleIp,

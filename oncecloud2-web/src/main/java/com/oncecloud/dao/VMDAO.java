@@ -147,15 +147,15 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract int countVMsWithoutEIP(String search, int userId);
-//
-//	/**
-//	 * 获取指定私有网络的主机总数
-//	 * 
-//	 * @param vnetUuid
-//	 * @return
-//	 */
-//	public abstract int countVMsOfVnet(String vnetUuid);
-//
+
+	/**
+	 * 获取指定私有网络的主机总数
+	 * 
+	 * @param vnetUuid
+	 * @return
+	 */
+	public abstract int countVMsOfVnet(String vnetUuid);
+
 //	/**
 //	 * 获取指定服务器的主机总数
 //	 * 

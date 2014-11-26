@@ -85,9 +85,9 @@ public class VnetDAOImpl implements VnetDAO {
 	 * 获取空闲的私有网络ID
 	 * 
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
-	public int getFreeVnetID() {
+	private int getFreeVnetID() {
 		int freeVnet = 0;
 		List<Integer> usedVnetList = null;
 		Session session = null;
@@ -113,7 +113,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return freeVnet;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户私有网络列表
 	 * 
 	 * @param userId
@@ -265,7 +265,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * @param routerid
 	 * @param net
 	 * @return
-	 *//*
+	 */
 	public int countAbleNet(int userId, String routerid, Integer net) {
 		int count = 0;
 		Session session = null;
@@ -289,7 +289,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 创建私有网络
 	 * 
 	 * @param uuid
@@ -297,7 +297,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * @param name
 	 * @param desc
 	 * @return
-	 *//*
+	 */
 	public boolean createVnet(String uuid, int userId, String name, String desc) {
 		Session session = null;
 		boolean result = false;
@@ -308,8 +308,6 @@ public class VnetDAOImpl implements VnetDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(vnet);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaVlan", 1, true);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -321,13 +319,13 @@ public class VnetDAOImpl implements VnetDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 删除私有网络
 	 * 
 	 * @param userId
 	 * @param uuid
 	 * @return
-	 *//*
+	 */
 	public boolean removeVnet(int userId, String uuid) {
 		boolean result = false;
 		Session session = null;
@@ -338,8 +336,6 @@ public class VnetDAOImpl implements VnetDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("uuid", uuid);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaVlan", 1, false);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -351,12 +347,12 @@ public class VnetDAOImpl implements VnetDAO {
 		return result;
 	}
 	
-	*//**
+	/**
 	 * 更新私有网络
 	 * 
 	 * @param vnet
 	 * @return
-	 *//*
+	 */
 	public boolean updateVnet(Vnet vnet) {
 		boolean result = false;
 		Session session = null;
@@ -375,7 +371,7 @@ public class VnetDAOImpl implements VnetDAO {
 		return result;
 	}
 	
-	*//**
+	/**
 	 * 更新私有网络
 	 * 
 	 * @param vnetuuid
@@ -419,7 +415,7 @@ public class VnetDAOImpl implements VnetDAO {
 	 * @param dhcpStatus
 	 * @param mac
 	 * @return
-	 *//*
+	 */
 	public boolean linkToRouter(String vnetuuid, String routerUuid,
 			Integer net, Integer gate, Integer start, Integer end,
 			Integer dhcpStatus, String vifUuid, String vifMac) {
@@ -453,12 +449,12 @@ public class VnetDAOImpl implements VnetDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 私有网络离开路由器
 	 * 
 	 * @param vnetuuid
 	 * @return
-	 *//*
+	 */
 	public boolean unlinkRouter(String vnetuuid) {
 		boolean result = false;
 		Session session = null;
@@ -501,5 +497,5 @@ public class VnetDAOImpl implements VnetDAO {
 			}
 		}
 		return vnetList;
-	}*/
+	}
 }

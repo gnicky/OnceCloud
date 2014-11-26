@@ -57,7 +57,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 		return router;
 	}
-/*
+
 	public void updateRouter(Router router) {
 		Session session = null;
 		try {
@@ -73,7 +73,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 	
-	*//**
+	/**
 	 * 获取路由器名称
 	 * 
 	 * @param routerUuid
@@ -93,7 +93,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	public Router getAliveRouter(String routerUuid) {
 		Router router = null;
 		Session session = null;
@@ -114,7 +114,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return router;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户路由器列表
 	 * 
 	 * @param userId
@@ -298,7 +298,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray getRoutersOfUser(int userId) {
 		Session session = null;
@@ -327,7 +327,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取用户路由器总数
 	 * 
 	 * @param userId

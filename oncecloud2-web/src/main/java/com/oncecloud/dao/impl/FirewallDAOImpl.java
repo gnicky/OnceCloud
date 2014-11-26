@@ -95,7 +95,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		session.save(rule22);
 		session.save(rule3389);
 	}
-
+*/
 	public boolean deleteAllRuleOfFirewall(String firewallId) {
 		boolean result = false;
 		Session session = null;
@@ -127,8 +127,6 @@ public class FirewallDAOImpl implements FirewallDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("id", firewallId);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaFirewall", 1, false);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -139,7 +137,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-
+/*
 	public boolean deleteRule(String ruleId) {
 		boolean result = false;
 		Session session = null;
@@ -170,7 +168,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "from Firewall where firewallUID=" + uid
-					+ " order by isDefault desc";
+					+ " and isDefault != 2 order by isDefault desc";
 			Query query = session.createQuery(queryString);
 			firewallList = query.list();
 			session.getTransaction().commit();
