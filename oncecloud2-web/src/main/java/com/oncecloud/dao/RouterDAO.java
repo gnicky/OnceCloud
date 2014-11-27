@@ -18,13 +18,13 @@ public interface RouterDAO {
 
 	public abstract void updateRouter(Router router);
 
-//	/**
-//	 * 获取路由器名称
-//	 * 
-//	 * @param routerUuid
-//	 * @return
-//	 */
-//	public abstract String getRouterName(String routerUuid);
+	/**
+	 * 获取路由器名称
+	 * 
+	 * @param routerUuid
+	 * @return
+	 */
+	public abstract String getRouterName(String routerUuid);
 
 	/**
 	 * 获取使用中的路由器
@@ -69,19 +69,19 @@ public interface RouterDAO {
 //	 */
 //	public abstract List<Router> getOnePageRoutersWithoutAlarm(int page,
 //			int limit, String search, int userId);
-//
-//	/**
-//	 * 获取一页没有绑定公网IP的路由器列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract List<Router> getOnePageRoutersWithoutEip(int page,
-//			int limit, String search, int userId);
-//
+
+	/**
+	 * 获取一页没有绑定公网IP的路由器列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract List<Router> getOnePageRoutersWithoutEip(int page,
+			int limit, String search, int userId);
+
 //	/**
 //	 * 获取对应监控警告的路由器列表
 //	 * 
@@ -126,15 +126,15 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract int countRoutersWithoutAlarm(String search, int uuid);
-//
-//	/**
-//	 * 获取未绑定公网IP的路由器总数
-//	 * 
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract int countRoutersWithoutEIP(String search, int userId);
+
+	/**
+	 * 获取未绑定公网IP的路由器总数
+	 * 
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract int countRoutersWithoutEIP(String search, int userId);
 
 	/**
 	 * 预创建路由器

@@ -41,9 +41,9 @@ public interface FirewallDAO {
 //			String firewallId);
 //
 //	public abstract Rule getRule(String ruleId);
-//
-//	public abstract List<Rule> getRuleList(String firewallId);
-//
+
+	public abstract List<Rule> getRuleList(String firewallId);
+
 //	public abstract int getRuleSize(String firewallId);
 //
 //	public abstract JSONObject getSimpleFWList(int userId);

@@ -78,7 +78,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	public String getRouterName(String routerUuid) {
 		String name = "";
 		Router router = this.getRouter(routerUuid);
@@ -88,7 +88,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return name;
 	}
 
-	*//**
+	/**
 	 * 获取使用中的路由器
 	 * 
 	 * @param routerUuid
@@ -232,7 +232,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRoutersWithoutEip(int page, int limit,
 			String search, int userId) {
@@ -263,7 +263,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取对应监控警告的路由器列表
 	 * 
 	 * @param routerUID
@@ -423,7 +423,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countRoutersWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -449,7 +449,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 预创建路由器
 	 * 
 	 * @param uuid

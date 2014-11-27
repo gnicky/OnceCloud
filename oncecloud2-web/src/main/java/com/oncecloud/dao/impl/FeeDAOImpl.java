@@ -32,7 +32,7 @@ public class FeeDAOImpl implements FeeDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-/*	public boolean abandonEip(Date endDate, String eipUuid) {
+	public boolean abandonEip(Date endDate, String eipUuid) {
 		boolean result = false;
 		Session session = null;
 		try {
@@ -58,7 +58,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+/*
 	public int countAllFeeEipList(String search, int uid) {
 		int count = 0;
 		Session session = null;
@@ -1042,7 +1042,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-
+*/
 	public boolean insertFeeEip(Integer eipUID, Date startDate, Date endDate,
 			Double eipPrice, Integer eipState, String eipUuid, String eipName) {
 		boolean result = false;
@@ -1063,7 +1063,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean insertFeeSnapshot(Integer snapshotUID, Date startDate,
 			Date endDate, Double snapshotPrice, Integer snapshotState,
 			String vmUuid, String vmName) {

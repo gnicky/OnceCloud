@@ -32,9 +32,9 @@ public class EIPDAOImpl implements EIPDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-/*	public boolean abandonEip(String eipIp, int userId) {
-		boolean result = false;
+	public int abandonEip(String eipIp, int userId) {
 		Session session = null;
+		int bandwith = -1;
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
@@ -42,18 +42,13 @@ public class EIPDAOImpl implements EIPDAO {
 					Restrictions.eq("eipIp", eipIp));
 			EIP eip = (EIP) criteria.uniqueResult();
 			if (eip != null && eip.getEipUID() == userId) {
-				int bandwith = eip.getEipBandwidth();
+				bandwith = eip.getEipBandwidth();
 				eip.setEipBandwidth(null);
 				eip.setEipDependency(null);
 				eip.setEipDescription(null);
 				eip.setEipName(null);
 				eip.setEipUID(null);
 				session.update(eip);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaIP", 1, false);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaBandwidth", bandwith, false);
-				result = true;
 			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -62,9 +57,9 @@ public class EIPDAOImpl implements EIPDAO {
 				session.getTransaction().rollback();
 			}
 		}
-		return result;
+		return bandwith;
 	}
-
+/*
 	public boolean addEIP(String prefix, int start, int end, Date date,
 			int eiptype, String eipInterface) {
 		boolean result = false;
@@ -97,7 +92,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return result;
 	}
-
+*/
 	@SuppressWarnings({ "unchecked" })
 	public synchronized EIP applyEip(String eipName, int userId,
 			int eipBandwidth, Date createDate, String eipUuid) {
@@ -118,10 +113,6 @@ public class EIPDAOImpl implements EIPDAO {
 				eip.setEipBandwidth(eipBandwidth);
 				eip.setCreateDate(createDate);
 				session.update(eip);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaIP", 1, true);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaBandwidth", eipBandwidth, true);
 			}
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -162,16 +153,8 @@ public class EIPDAOImpl implements EIPDAO {
 		try {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
-			int origin = eipObj.getEipBandwidth();
 			eipObj.setEipBandwidth(size);
 			session.update(eipObj);
-			if (size > origin) {
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaBandwidth", size - origin, true);
-			} else {
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaBandwidth", origin - size, false);
-			}
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -206,7 +189,7 @@ public class EIPDAOImpl implements EIPDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param search
 	 * @param uid
@@ -291,7 +274,7 @@ public class EIPDAOImpl implements EIPDAO {
 		eip = (EIP) criteria.uniqueResult();
 		return eip;
 	}
-/*
+
 	// 获取可用公网IP
 	@SuppressWarnings("unchecked")
 	public List<EIP> getableeips(int uid) {
@@ -314,7 +297,7 @@ public class EIPDAOImpl implements EIPDAO {
 		return eipList;
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param alarmUuid
 	 * @param uid

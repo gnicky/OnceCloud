@@ -65,19 +65,19 @@ public interface VMDAO {
 //	 */
 //	public abstract List<OCVM> getOnePageVMsWithoutAlarm(int page, int limit,
 //			String search, int userId);
-//
-//	/**
-//	 * 获取一页没有绑定公网IP的主机列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
-//			String search, int userId);
-//
+
+	/**
+	 * 获取一页没有绑定公网IP的主机列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
+			String search, int userId);
+
 //	/**
 //	 * 获取对应监控警告的主机列表
 //	 * 
@@ -138,15 +138,15 @@ public interface VMDAO {
 //	 * @return
 //	 */
 //	public abstract int countVMsWithoutAlarm(String search, int userId);
-//
-//	/**
-//	 * 获取未绑定公网IP的主机总数
-//	 * 
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract int countVMsWithoutEIP(String search, int userId);
+
+	/**
+	 * 获取未绑定公网IP的主机总数
+	 * 
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract int countVMsWithoutEIP(String search, int userId);
 
 	/**
 	 * 获取指定私有网络的主机总数

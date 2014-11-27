@@ -10,8 +10,9 @@ import com.oncecloud.entity.FeeVM;
 import com.oncecloud.entity.FeeVolume;
 
 public interface FeeDAO {
-//	public abstract boolean abandonEip(Date endDate, String eipUuid);
-//
+
+	public abstract boolean abandonEip(Date endDate, String eipUuid);
+
 //	public abstract int countAllFeeEipList(String search, int uid);
 //
 //	public abstract int countAllFeeImageList(String search, int uid);
@@ -107,10 +108,10 @@ public interface FeeDAO {
 //	public abstract double getVmTotalFee(int uid);
 //
 //	public abstract double getVolumeTotalFee(int uid);
-//
-//	public abstract boolean insertFeeEip(Integer eipUID, Date startDate,
-//			Date endDate, Double eipPrice, Integer eipState, String eipUuid,
-//			String eipName);
+
+	public abstract boolean insertFeeEip(Integer eipUID, Date startDate,
+			Date endDate, Double eipPrice, Integer eipState, String eipUuid,
+			String eipName);
 
 	public abstract boolean insertFeeSnapshot(Integer snapshotUID,
 			Date startDate, Date endDate, Double snapshotPrice,

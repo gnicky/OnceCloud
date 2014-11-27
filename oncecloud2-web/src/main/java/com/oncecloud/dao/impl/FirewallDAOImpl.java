@@ -346,7 +346,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return rule;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
 	public List<Rule> getRuleList(String firewallId) {
 		List<Rule> ruleList = null;
@@ -367,7 +367,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return ruleList;
 	}
-
+/*
 	public int getRuleSize(String firewallId) {
 		int count = 0;
 		Session session = null;

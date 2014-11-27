@@ -211,7 +211,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
 			String search, int userId) {
@@ -242,7 +242,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取对应监控警告的主机列表
 	 * 
 	 * @param vmUID
@@ -450,7 +450,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countVMsWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -476,7 +476,7 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取指定私有网络的主机总数
 	 * 
 	 * @param vnetUuid

@@ -8,21 +8,22 @@ import org.hibernate.Session;
 import com.oncecloud.entity.EIP;
 
 public interface EIPDAO {
-//	public abstract boolean abandonEip(String eipIp, int userId);
-//
+	
+	public abstract int abandonEip(String eipIp, int userId);
+
 //	public abstract boolean addEIP(String prefix, int start, int end,
 //			Date date, int eiptype, String eipInterface);
-//
-//	public abstract EIP applyEip(String eipName, int userId, int eipBandwidth,
-//			Date createDate, String eipUuid);
-//
-//	public abstract boolean bindEip(String eipIp, String dependencyUuid,
-//			int type);
-//
-//	public abstract boolean changeBandwidth(int userId, EIP eipObj, int size);
-//
-//	public abstract int countAllEipList(int userId, String search);
-//
+
+	public abstract EIP applyEip(String eipName, int userId, int eipBandwidth,
+			Date createDate, String eipUuid);
+
+	public abstract boolean bindEip(String eipIp, String dependencyUuid,
+			int type);
+
+	public abstract boolean changeBandwidth(int userId, EIP eipObj, int size);
+
+	public abstract int countAllEipList(int userId, String search);
+
 //	/**
 //	 * @author hty
 //	 * @param search
@@ -34,10 +35,10 @@ public interface EIPDAO {
 //	public abstract int countAllEipListNoUserid(String searchStr);
 //
 //	public abstract boolean deleteEIP(String ip, String uuid);
-//
-//	// 获取可用公网IP
-//	public abstract List<EIP> getableeips(int uid);
-//
+
+	// 获取可用公网IP
+	public abstract List<EIP> getableeips(int uid);
+
 //	/**
 //	 * @author hty
 //	 * @param alarmUuid
@@ -52,9 +53,9 @@ public interface EIPDAO {
 
 	public abstract String getEipIp(String dependencyUuid);
 
-//	public abstract List<EIP> getOnePageEipList(int userId, int page,
-//			int limit, String search);
-//
+	public abstract List<EIP> getOnePageEipList(int userId, int page,
+			int limit, String search);
+
 //	/**
 //	 * @author hty
 //	 * @param page
