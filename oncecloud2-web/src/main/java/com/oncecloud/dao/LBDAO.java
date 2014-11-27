@@ -8,9 +8,9 @@ import com.oncecloud.entity.LB;
 public interface LBDAO {
 
 //	public abstract int countAllAdminVMList(String host, int importance);
-//
-//	public abstract int countAllLBList(String search, int lbUID);
-//
+
+	public abstract int countAllLBList(String search, int lbUID);
+
 //	public abstract int countAllLBListAlarm(String search, int lbUID);
 
 	public abstract int countLBsWithoutEIP(String search, int userId);
@@ -31,10 +31,10 @@ public interface LBDAO {
 
 //	public abstract List<LB> getOnePageAdminVmList(int page, int limit,
 //			String host, int importance);
-//
-//	public abstract List<LB> getOnePageLBList(int userId, int page, int limit,
-//			String search);
-//
+
+	public abstract List<LB> getOnePageLBList(int userId, int page, int limit,
+			String search);
+
 //	/**
 //	 * @author hty
 //	 * @param page

@@ -56,7 +56,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return count;
 	}
-
+*/
 	public int countAllLBList(String search, int lbUID) {
 		int count = 0;
 		Session session = null;
@@ -80,7 +80,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return count;
 	}
-
+/*
 	public int countAllLBListAlarm(String search, int lbUID) {
 		int count = 0;
 		Session session = null;
@@ -246,7 +246,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return lbList;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
 	public List<LB> getOnePageLBList(int userId, int page, int limit,
 			String search) {
@@ -273,7 +273,7 @@ public class LBDAOImpl implements LBDAO {
 		return lbList;
 	}
 
-	*//**
+	/**
 	 * @author hty
 	 * @param page
 	 * @param limit
