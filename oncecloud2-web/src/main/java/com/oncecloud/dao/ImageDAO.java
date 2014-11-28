@@ -24,7 +24,7 @@ public interface ImageDAO {
 	public abstract int countAllImageList(int userId, String search,
 			int userLevel, String type);
 
-//	public abstract boolean deleteImage(String imageId);
+	public abstract boolean deleteImage(String imageId);
 
 	public abstract Image createImage(String imageUuid, String imageName,
 			int imageUID, int imagePlatform, String imageServer,

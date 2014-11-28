@@ -13,18 +13,9 @@
 		<li class="tab-filter active" type="system">
 			<a href="javascript:void(0)"><span class="glyphicon glyphicon-star"></span>系统</a>
 		</li>
-		<c:choose>
-			<c:when test="${user.userLevel!=0}">
-				<li class="tab-filter" type="user">
-					<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>自有</a>
-				</li>
-			</c:when>
-			<c:otherwise>
-				<li class="tab-filter" type="user">
-					<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>用户</a>
-				</li>
-			</c:otherwise>
-		</c:choose>
+		<li class="tab-filter" type="user">
+			<a href="javascript:void(0)"><span class="glyphicon glyphicon-user"></span>自有</a>
+		</li>
 	</ul>
 	<div class="once-pane">
 		<div class="once-toolbar">
@@ -32,12 +23,7 @@
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
 
-			<c:if test="${user.userLevel==0}">
-				<button id="create" class="btn btn-primary"
-					url="${basePath}image/create">
-					+&nbsp;添加映像</button>
-
-				<div class="btn-group">
+			<div class="btn-group">
 					<button class="btn btn-default dropdown-toggle"
 						data-toggle="dropdown">
 						更多操作... <span class="caret" style="margin-left: 15px"></span>
@@ -45,15 +31,8 @@
 					<ul class="dropdown-menu">
 						<li><a class="btn-forbidden" id="delete"><span
 								class="glyphicon glyphicon-trash"></span>删除</a></li>
-						<li><a class="btn-forbidden" id="share-image"><span
-								class="glyphicon glyphicon-share"></span>共享镜像</a></li>
-						<li><a class="btn-forbidden" id="change-to-vm"><span
-								class="glyphicon glyphicon-share"></span>转化为虚拟机</a></li>
-						<li><a class="btn-forbidden" id="update-image"><span
-								class="glyphicon glyphicon-sort"></span>更新镜像信息</a></li>
 					</ul>
-				</div>
-			</c:if>
+			</div>
 			
 			<input class="search" id="search" value="">
 			<div class="toolbar-right">

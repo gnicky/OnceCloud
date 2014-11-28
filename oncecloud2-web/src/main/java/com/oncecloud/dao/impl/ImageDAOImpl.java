@@ -193,7 +193,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return total;
 	}
-/*
+
 	public boolean deleteImage(String imageId) {
 		boolean result = false;
 		Session session = null;
@@ -204,8 +204,6 @@ public class ImageDAOImpl implements ImageDAO {
 					+ imageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
-					false);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -215,7 +213,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-*/
+
 	public Image createImage(String imageUuid, String imageName, int imageUID,
 			int imagePlatform, String imageServer, String imageDesc,
 			String imagePwd) {
