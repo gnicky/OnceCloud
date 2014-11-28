@@ -9,8 +9,8 @@ public interface ImageDAO {
 	public abstract Image getImage(String imageUuid);
 
 //	public abstract Image getDBImage(String type, int throughout);
-//
-//	public abstract Image getLBImage(int userId);
+
+	public abstract Image getLBImage(String poolUuid);
 
 	public abstract Image getRTImage(int userId, String poolUuid);
 

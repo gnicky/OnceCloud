@@ -55,21 +55,21 @@ public interface LBDAO {
 //	 * @return
 //	 */
 //	public abstract boolean isLNotExistAlarm(String alarmUuid);
-//
-//	public abstract boolean preCreateLB(String uuid, String pwd, int userId,
-//			String name, String mac, int capacity, int power, int status,
-//			Date createDate);
-//
-//	public abstract void removeLB(int userId, String uuid);
-//
-//	public abstract boolean setLBHostUuid(String uuid, String hostUuid);
-//
-//	public abstract boolean setLBPowerStatus(String uuid, int powerStatus);
-//
-//	public abstract boolean updateLBImportance(String uuid, int lbImportance);
-//
-//	public abstract boolean setLBStatus(String lbUuid, int state);
-//
+
+	public abstract boolean preCreateLB(String uuid, String pwd, int userId,
+			String name, String mac, int capacity, int power, int status,
+			Date createDate);
+
+	public abstract void removeLB(int userId, String uuid);
+
+	public abstract boolean setLBHostUuid(String uuid, String hostUuid);
+
+	public abstract boolean setLBPowerStatus(String uuid, int powerStatus);
+
+	public abstract boolean updateLBImportance(String uuid, int lbImportance);
+	
+	public abstract boolean setLBStatus(String lbUuid, int state);
+
 //	/**
 //	 * @author hty
 //	 * @param lbUuid
@@ -78,10 +78,10 @@ public interface LBDAO {
 //	public abstract void updateAlarm(String lbUuid, String alarmUuid);
 //
 //	public abstract void updateFirewall(String lbUuid, String firewallId);
-//
-//	public abstract void updateLB(int userId, String uuid, String pwd,
-//			int power, String hostUuid, String ip);
-//
+
+	public abstract void updateLB(int userId, String uuid, String pwd,
+			int power, String hostUuid, String ip, String firewallId);
+
 //	public abstract void updateName(String lbuuid, String newName,
 //			String description);
 //

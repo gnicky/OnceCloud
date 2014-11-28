@@ -47,11 +47,10 @@ public class ImageDAOImpl implements ImageDAO {
 	public Image getDBImage(String type, int throughout) {
 		return null;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
-	public Image getLBImage(int userId) {
+	public Image getLBImage(String poolUuid) {
 		Image image = null;
-		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
 		if (poolUuid != null) {
 			Session session = null;
 			try {
@@ -71,7 +70,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return image;
 	}
-*/
+
 	public Image getRTImage(int userId, String poolUuid) {
 		Image image = null;
 		if (poolUuid != null) {

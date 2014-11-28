@@ -1,6 +1,10 @@
 package com.oncecloud.manager.impl;
 
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -8,19 +12,57 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.once.xenapi.Connection;
+import com.once.xenapi.Host;
+import com.once.xenapi.Types;
+import com.once.xenapi.VM;
+import com.once.xenapi.VM.Record;
+import com.oncecloud.dao.BackendDAO;
+import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
+import com.oncecloud.dao.FirewallDAO;
+import com.oncecloud.dao.ForeendDAO;
+import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.ImageDAO;
 import com.oncecloud.dao.LBDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.QuotaDAO;
+import com.oncecloud.dao.RouterDAO;
+import com.oncecloud.dao.UserDAO;
+import com.oncecloud.entity.Backend;
+import com.oncecloud.entity.DHCP;
+import com.oncecloud.entity.Foreend;
+import com.oncecloud.entity.Image;
 import com.oncecloud.entity.LB;
+import com.oncecloud.entity.OCLog;
+import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.LBManager;
+import com.oncecloud.message.MessagePush;
 
 @Component("LBManager")
 public class LBManagerImpl implements LBManager {
-
+	
 	private final static Logger logger = Logger.getLogger(LBManager.class);
+	private final static long MB = 1024 * 1024;
 	
 	private LBDAO lbDAO;
 	private EIPDAO eipDAO;
+	private LogDAO logDAO;
+	private FirewallDAO firewallDAO;
+	private ImageDAO imageDAO;
+	private DHCPDAO dhcpDAO;
+	private RouterDAO routerDAO;
+	private ForeendDAO foreendDAO;
+	private BackendDAO backendDAO;
+	private QuotaDAO quotaDAO;
+	private HostDAO hostDAO;
+	private UserDAO userDAO;
+	
+	private MessagePush messagePush;
+	
+	private Constant constant;
 	
 	private LBDAO getLbDAO() {
 		return lbDAO;
@@ -40,21 +82,6 @@ public class LBManagerImpl implements LBManager {
 		this.eipDAO = eipDAO;
 	}
 	
-	/*private ImageDAO imageDAO;
-	private DHCPDAO dhcpDAO;
-	private RouterDAO routerDAO;
-	private ForeendDAO foreendDAO;
-	private LogDAO logDAO;
-	private BackendDAO backendDAO;
-	private QuotaDAO quotaDAO;
-	private EIPManager eipManager;
-	private VMManager vmManager;
-	private Constant constant;
-	private HostDAO hostDAO;
-	private UserDAO userDAO;
-
-	private MessagePush messagePush;
-
 	private ImageDAO getImageDAO() {
 		return imageDAO;
 	}
@@ -118,22 +145,13 @@ public class LBManagerImpl implements LBManager {
 		this.quotaDAO = quotaDAO;
 	}
 
-	private EIPManager getEipManager() {
-		return eipManager;
+	public FirewallDAO getFirewallDAO() {
+		return firewallDAO;
 	}
 
 	@Autowired
-	private void setEipManager(EIPManager eipManager) {
-		this.eipManager = eipManager;
-	}
-
-	private VMManager getVmManager() {
-		return vmManager;
-	}
-
-	@Autowired
-	private void setVmManager(VMManager vmManager) {
-		this.vmManager = vmManager;
+	public void setFirewallDAO(FirewallDAO firewallDAO) {
+		this.firewallDAO = firewallDAO;
 	}
 
 	private Constant getConstant() {
@@ -207,6 +225,48 @@ public class LBManagerImpl implements LBManager {
 		}
 	}
 
+	private String getAllocateHost(Connection conn, int memory) {
+		String host = null;
+		try {
+			Map<Host, Host.Record> hostMap = Host.getAllRecords(conn);
+			long maxFree = 0;
+			for (Host thisHost : hostMap.keySet()) {
+				Host.Record hostRecord = hostMap.get(thisHost);
+				long memoryFree = hostRecord.memoryFree;
+				if (memoryFree > maxFree) {
+					maxFree = memoryFree;
+					host = thisHost.toWireString();
+				}
+			}
+			if ((int) (maxFree / MB) >= memory) {
+				return host;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	private Record createVMOnHost(Connection c, String vmUuid, String tplUuid,
+			String loginName, String loginPwd, long cpuCore,
+			long memoryCapacity, String mac, String ip, String OS,
+			String hostUuid, String imagePwd, String vmName, boolean ping) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cpuNumber", cpuCore);
+		map.put("memoryValue", memoryCapacity);
+		map.put("newUuid", vmUuid);
+		map.put("MAC", mac);
+		map.put("IP", ip);
+		map.put("type", OS);
+		map.put("passwd", loginPwd);
+		map.put("origin_passwd", imagePwd);
+		Host host = Types.toHost(hostUuid);
+		Record vmrecord = VM.createOnFromTemplate(c, host, tplUuid, vmName,
+				map, ping);
+		return vmrecord;
+	}
+	
 	private JSONObject doCreateLB(String uuid, int userId, String name,
 			int capacity, String poolUuid) {
 		Connection c = null;
@@ -221,7 +281,7 @@ public class LBManagerImpl implements LBManager {
 		String backendName = "lb-" + uuid.substring(0, 8);
 		Date createDate = new Date();
 		try {
-			Image lbImage = this.getImageDAO().getLBImage(userId);
+			Image lbImage = this.getImageDAO().getLBImage(poolUuid);
 			OS = "linux";
 			imagePwd = lbImage.getImagePwd();
 			tplUuid = lbImage.getImageUuid();
@@ -229,7 +289,7 @@ public class LBManagerImpl implements LBManager {
 			ip = dhcp.getDhcpIp();
 			mac = dhcp.getDhcpMac();
 			c = this.getConstant().getConnectionFromPool(poolUuid);
-			allocateHost = this.getVmManager().getAllocateHost(poolUuid, 1024);
+			allocateHost = getAllocateHost(c, 1024);
 			logger.info("LB [" + backendName + "] allocated to Host ["
 					+ allocateHost + "]");
 		} catch (Exception e) {
@@ -253,12 +313,13 @@ public class LBManagerImpl implements LBManager {
 				boolean preCreate = this.getLbDAO().preCreateLB(uuid, pwd,
 						userId, name, mac, capacity, LBManager.POWER_CREATE, 1,
 						createDate);
+				this.getQuotaDAO().updateQuota(userId, "quotaLoadBalance", 1, true);
 				Date preEndDate = new Date();
 				int elapse = Utilities.timeElapse(createDate, preEndDate);
 				logger.info("LB [" + backendName + "] Pre Create Time ["
 						+ elapse + "]");
 				if (preCreate == true) {
-					Record lbrecord = this.getVmManager().createVMOnHost(c,
+					Record lbrecord = createVMOnHost(c,
 							uuid, tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
 							allocateHost, imagePwd, backendName, true);
 					Date createEndDate = new Date();
@@ -273,8 +334,10 @@ public class LBManagerImpl implements LBManager {
 								pwd = imagePwd;
 							}
 							jo.put("ip", ip);
+							String firewallId = this.getFirewallDAO()
+									.getDefaultFirewall(userId).getFirewallId();
 							this.getLbDAO().updateLB(userId, uuid, pwd,
-									LBManager.POWER_RUNNING, hostuuid, ip);
+									LBManager.POWER_RUNNING, hostuuid, ip, firewallId);
 							jo.put("isSuccess", true);
 						} else {
 							jo.put("error", "负载均衡后台启动位置错误");
@@ -306,6 +369,7 @@ public class LBManagerImpl implements LBManager {
 			}
 			if (dbRollback == true) {
 				this.getLbDAO().removeLB(userId, uuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaLoadBalance", 1, false);
 				jo.put("isSuccess", false);
 			}
 		}
@@ -358,8 +422,7 @@ public class LBManagerImpl implements LBManager {
 					VM thisVM = VM.getByUuid(c, uuid);
 					powerState = thisVM.getPowerState(c).toString();
 					if (!powerState.equals("Running")) {
-						hostUuid = this.getVmManager().getAllocateHost(
-								poolUuid, 1024);
+						hostUuid = getAllocateHost(c, 1024);
 						Host allocateHost = Types.toHost(hostUuid);
 						thisVM.startOn(c, allocateHost, false, true);
 					} else {
@@ -376,14 +439,14 @@ public class LBManagerImpl implements LBManager {
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
 					this.getLbDAO().setLBPowerStatus(uuid,
-							RouterManager.POWER_RUNNING);
+							LBManager.POWER_RUNNING);
 				} else {
 					this.getLbDAO().setLBPowerStatus(uuid,
-							RouterManager.POWER_HALTED);
+							LBManager.POWER_HALTED);
 				}
 			} else {
 				this.getLbDAO().setLBPowerStatus(uuid,
-						RouterManager.POWER_HALTED);
+						LBManager.POWER_HALTED);
 			}
 		}
 		return result;
@@ -446,7 +509,7 @@ public class LBManagerImpl implements LBManager {
 							}
 						}
 					}
-					this.getRouterDAO().updateHostUuid(uuid, hostUuid);
+					this.getLbDAO().setLBHostUuid(uuid, hostUuid);
 					this.getLbDAO().setLBPowerStatus(uuid,
 							LBManager.POWER_HALTED);
 					result = true;
@@ -457,28 +520,68 @@ public class LBManagerImpl implements LBManager {
 			if (powerState != null) {
 				if (powerState.equals("Running")) {
 					this.getLbDAO().setLBPowerStatus(uuid,
-							RouterManager.POWER_RUNNING);
+							LBManager.POWER_RUNNING);
 				} else {
 					this.getLbDAO().setLBPowerStatus(uuid,
-							RouterManager.POWER_HALTED);
+							LBManager.POWER_HALTED);
 				}
 			} else {
 				this.getLbDAO().setLBPowerStatus(uuid,
-						RouterManager.POWER_RUNNING);
+						LBManager.POWER_RUNNING);
 			}
 		}
 		return result;
 	}
 
 	public JSONArray getFEListByLB(String lbUuid) {
-		return this.getForeendDAO().getFEListByLB(lbUuid);
+		List<Foreend> foreList = this.getForeendDAO().getFEListByLB(lbUuid);
+		JSONArray feArray = new JSONArray();
+		try {
+			if (null != foreList && foreList.size() > 0) {
+				for (Foreend foreend : foreList) {
+					JSONObject feJo = new JSONObject();
+					feJo.put("foreUuid", foreend.getForeUuid());
+					feJo.put("foreName",
+							URLEncoder.encode(foreend.getForeName(), "utf-8")
+									.replace("+", "%20"));
+					feJo.put("foreProtocol", foreend.getForeProtocol());
+					feJo.put("forePort", foreend.getForePort());
+					feJo.put("forePolicy", foreend.getForePolicy());
+					feJo.put("foreStatus", foreend.getForeStatus());
+					List<Backend> backList = this.getBackendDAO()
+							.doGetBackendListByFrontend(foreend.getForeUuid(), 0);
+					JSONArray beArray = new JSONArray();
+					if (null != backList && backList.size() > 0) {
+						for (Backend backend : backList) {
+							JSONObject beJo = new JSONObject();
+							beJo.put("backUuid", backend.getBackUuid());
+							beJo.put(
+									"backName",
+									URLEncoder.encode(backend.getBackName(),
+											"utf-8").replace("+", "%20"));
+							beJo.put("vmUuid", backend.getVmUuid());
+							beJo.put("vmIp", backend.getVmIp());
+							beJo.put("vmPort", backend.getVmPort());
+							beJo.put("backWeight", backend.getBackWeight());
+							beJo.put("backStatus", backend.getBackStatus());
+							beArray.put(beJo);
+						}
+					}
+					feJo.put("beArray", beArray);
+					feArray.put(feJo);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return feArray;
 	}
 	
 	public boolean checkFore(String lbUuid,int port) {
 		return this.getForeendDAO().checkRepeat(lbUuid,port);
 	}
 	
-	public boolean deleteLB(int userId, String uuid) {
+	private boolean deleteLB(int userId, String uuid) {
 		boolean result = false;
 		Connection c = null;
 		try {
@@ -502,10 +605,11 @@ public class LBManagerImpl implements LBManager {
 			try {
 				String publicip = this.getEipDAO().getEipIp(uuid);
 				if (publicip != null) {
-					this.getEipManager().unbindElasticIp(userId, uuid,
+					unbindElasticIp(c, userId, uuid,
 							publicip, "lb");
 				}
 				this.getLbDAO().removeLB(userId, uuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaLoadBalance", 1, false);
 				result = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -513,14 +617,76 @@ public class LBManagerImpl implements LBManager {
 		}
 		return result;
 	}
-
-	public boolean applyLB(int userId, String lbUuid) {
+	
+	private JSONObject unbindElasticIp(Connection c, int userId, String uuid, String eipIp,
+			String type) {
+		JSONObject result = new JSONObject();
+		result.put("result", false);
+		try {
+			String ip = null;
+			String eif = this.getEipDAO().getEip(eipIp).getEipInterface();
+			LB lb = this.getLbDAO().getLB(uuid);
+			ip = lb.getLbIP();
+			boolean deActiveResult = deActiveFirewall(c, userId, ip);
+			if (deActiveResult) {
+				if (Host.unbindOuterIp(c, ip, eipIp, eif)) {
+					this.getEipDAO().unBindEip(eipIp);
+					result.put("result", true);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private boolean deActiveFirewall(Connection c, int userId, String ip) {
 		boolean result = false;
+		try {
+			JSONObject total = new JSONObject();
+			JSONArray ipArray = new JSONArray();
+			ipArray.put(ip);
+			JSONArray ruleArray = new JSONArray();
+			total.put("IP", ipArray);
+			total.put("rules", ruleArray);
+			result = Host.firewallApplyRule(c, total.toString(), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+
+	private boolean applyLB(int userId, String lbUuid) {
+		boolean result = false;
+		JSONArray feArray = new JSONArray();
 		try {
 			Date startTime = new Date();
 			LB lb = this.getLbDAO().getLB(lbUuid);
-			JSONArray feArray = this.getForeendDAO()
+			List<Foreend> foreList = this.getForeendDAO()
 					.getSimpleFEListByLB(lbUuid);
+			if (null != foreList && foreList.size() > 0) {
+				for (Foreend foreend : foreList) {
+					JSONObject feJo = new JSONObject();
+					feJo.put("protocol", foreend.getForeProtocol()
+							.toLowerCase());
+					feJo.put("port", foreend.getForePort());
+					feJo.put("policy", foreend.getForePolicy());
+					List<Backend> backList = this.getBackendDAO()
+							.doGetBackendListByFrontend(foreend.getForeUuid(), 1);
+					JSONArray beArray = new JSONArray();
+					if (null != backList && backList.size() > 0) {
+						for (Backend backend : backList) {
+							JSONObject beJo = new JSONObject();
+							beJo.put("ip", backend.getVmIp());
+							beJo.put("port", backend.getVmPort());
+							beArray.put(beJo);
+						}
+					}
+					feJo.put("rules", beArray);
+					feArray.put(feJo);
+				}
+			}
 			JSONObject jo = new JSONObject();
 			jo.put("listeners", feArray);
 			jo.put("workerProcesses", 5);
@@ -562,7 +728,7 @@ public class LBManagerImpl implements LBManager {
 		}
 		return result;
 	}
-*/
+
 	public JSONArray getLBList(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int total = this.getLbDAO().countAllLBList(search, userId);
@@ -592,7 +758,7 @@ public class LBManagerImpl implements LBManager {
 		}
 		return ja;
 	}
-/*
+
 	public JSONArray getLBsOfUser(int userId, int page, int limit, String search) {
 		JSONArray ja = new JSONArray();
 		int totalNum = this.getLbDAO().countAllLBList(search, userId);
@@ -658,6 +824,7 @@ public class LBManagerImpl implements LBManager {
 
 	public JSONObject lbDeletefore(String foreuuid, String lbuuid, int userId) {
 		JSONObject jo = new JSONObject();
+		this.getBackendDAO().deleteBackendByFrontend(foreuuid);
 		boolean result = this.getForeendDAO().deleteForeend(foreuuid);
 		jo.put("result", result);
 		// push message
@@ -779,7 +946,7 @@ public class LBManagerImpl implements LBManager {
 		jo.put("result", result);
 		return jo;
 	}
-
+/*
 	public void lbAdminShutUp(String uuid, int userId) {
 		LB lb = this.getLbDAO().getLB(uuid);
 		String poolUuid = this.getHostDAO().getHost(lb.getHostUuid())
@@ -793,7 +960,7 @@ public class LBManagerImpl implements LBManager {
 				.getPoolUuid();
 		this.shutdownLB(uuid, force, userId, poolUuid);
 	}
-
+*/
 	public void lbDelete(String uuid, int userId, String poolUuid) {
 		Date startTime = new Date();
 		boolean result = this.deleteLB(userId, uuid);
@@ -873,7 +1040,7 @@ public class LBManagerImpl implements LBManager {
 		}
 		return jo;
 	}
-
+/*
 	public JSONArray getAdminLBList(int page, int limit, String host,
 			int importance, String type) {
 		JSONArray ja = new JSONArray();

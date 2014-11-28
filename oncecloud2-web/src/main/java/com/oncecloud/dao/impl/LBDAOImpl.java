@@ -366,7 +366,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return result;
 	}
-
+*/
 	public boolean preCreateLB(String uuid, String pwd, int userId,
 			String name, String mac, int capacity, int power, int status,
 			Date createDate) {
@@ -379,8 +379,6 @@ public class LBDAOImpl implements LBDAO {
 					status, createDate);
 			tx = session.beginTransaction();
 			session.save(lb);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaLoadBalance", 1, true);
 			tx.commit();
 			result = true;
 		} catch (Exception e) {
@@ -401,8 +399,6 @@ public class LBDAOImpl implements LBDAO {
 			session = this.getSessionHelper().getMainSession();
 			tx = session.beginTransaction();
 			session.update(toDelete);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaLoadBalance", 1, false);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -498,7 +494,7 @@ public class LBDAOImpl implements LBDAO {
 	}
 
 
-	*//**
+	/**
 	 * @author hty
 	 * @param lbUuid
 	 * @param alarmUuid
@@ -542,15 +538,13 @@ public class LBDAOImpl implements LBDAO {
 			}
 		}
 	}
-
+*/
 	public void updateLB(int userId, String uuid, String pwd, int power,
-			String hostUuid, String ip) {
+			String hostUuid, String ip, String firewallId) {
 		Session session = null;
 		Transaction tx = null;
 		try {
 			LB lb = this.getLB(uuid);
-			String firewallId = this.getFirewallDAO()
-					.getDefaultFirewall(userId).getFirewallId();
 			lb.setLbPWD(pwd);
 			lb.setLbPower(power);
 			lb.setHostUuid(hostUuid);
@@ -567,7 +561,7 @@ public class LBDAOImpl implements LBDAO {
 			}
 		}
 	}
-
+/*
 	public void updateName(String lbuuid, String newName, String description) {
 		Session session = null;
 		Transaction tx = null;
@@ -607,4 +601,5 @@ public class LBDAOImpl implements LBDAO {
 		query.setString("uuid", uuid);
 		query.executeUpdate();
 	}*/
+
 }

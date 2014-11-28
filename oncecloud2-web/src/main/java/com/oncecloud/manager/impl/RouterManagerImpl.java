@@ -357,6 +357,7 @@ public class RouterManagerImpl implements RouterManager {
 			}
 			if (dbRolrtack == true) {
 				this.getRouterDAO().removeRouter(userId, uuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaRoute", 1, false);
 				jo.put("isSuccess", false);
 			}
 		}
