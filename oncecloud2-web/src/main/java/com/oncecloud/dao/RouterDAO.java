@@ -196,14 +196,14 @@ public interface RouterDAO {
 	public abstract boolean updatePowerStatus(String uuid, int powerStatus);
 
 //	public abstract boolean updateImportance(String uuid, int routerImportance);
-//
-//	/**
-//	 * 更新路由器防火墙
-//	 * 
-//	 * @param routerUuid
-//	 * @param firewallId
-//	 */
-//	public abstract void updateFirewall(String routerUuid, String firewallId);
+
+	/**
+	 * 更新路由器防火墙
+	 * 
+	 * @param routerUuid
+	 * @param firewallId
+	 */
+	public abstract void updateFirewall(String routerUuid, String firewallId);
 
 	/**
 	 * 更新路由器防火墙

@@ -518,7 +518,7 @@ public class LBDAOImpl implements LBDAO {
 			}
 		}
 	}
-
+*/
 	public void updateFirewall(String lbUuid, String firewallId) {
 		Session session = null;
 		Transaction tx = null;
@@ -538,7 +538,7 @@ public class LBDAOImpl implements LBDAO {
 			}
 		}
 	}
-*/
+
 	public void updateLB(int userId, String uuid, String pwd, int power,
 			String hostUuid, String ip, String firewallId) {
 		Session session = null;

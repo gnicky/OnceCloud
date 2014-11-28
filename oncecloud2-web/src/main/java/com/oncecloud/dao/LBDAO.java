@@ -76,8 +76,8 @@ public interface LBDAO {
 //	 * @param alarmUuid
 //	 */
 //	public abstract void updateAlarm(String lbUuid, String alarmUuid);
-//
-//	public abstract void updateFirewall(String lbUuid, String firewallId);
+
+	public abstract void updateFirewall(String lbUuid, String firewallId);
 
 	public abstract void updateLB(int userId, String uuid, String pwd,
 			int power, String hostUuid, String ip, String firewallId);

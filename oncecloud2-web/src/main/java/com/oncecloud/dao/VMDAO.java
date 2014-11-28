@@ -226,14 +226,14 @@ public interface VMDAO {
 	 */
 	public abstract void updateBackupDate(String vmUuid, Date date);
 
-//	/**
-//	 * 更新主机防火墙
-//	 * 
-//	 * @param vmUuid
-//	 * @param firewallId
-//	 */
-//	public abstract void updateFirewall(String vmUuid, String firewallId);
-//
+	/**
+	 * 更新主机防火墙
+	 * 
+	 * @param vmUuid
+	 * @param firewallId
+	 */
+	public abstract void updateFirewall(String vmUuid, String firewallId);
+
 //	/**
 //	 * 更新主机监控警告
 //	 * 

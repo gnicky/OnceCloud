@@ -3,14 +3,19 @@ package com.oncecloud.ui.action;
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oncecloud.entity.User;
 import com.oncecloud.manager.FirewallManager;
+import com.oncecloud.ui.model.CreateFirewallModel;
+import com.oncecloud.ui.model.CreateRuleModel;
+import com.oncecloud.ui.model.ListModel;
 
 @RequestMapping("/FirewallAction")
 @Controller
@@ -26,7 +31,7 @@ public class FirewallAction {
 		this.firewallManager = firewallManager;
 	}
 
-	/*@RequestMapping(value = "/CreateFirewall", method = { RequestMethod.POST })
+	@RequestMapping(value = "/CreateFirewall", method = { RequestMethod.POST })
 	@ResponseBody
 	public String createFirewall(HttpServletRequest request,
 			CreateFirewallModel cfm) {
@@ -76,7 +81,7 @@ public class FirewallAction {
 				firewallId);
 		return jo.toString();
 	}
-*/
+
 	@RequestMapping(value = "/AvailableFirewalls", method = { RequestMethod.POST })
 	@ResponseBody
 	public String availablefirewalls(HttpServletRequest request) {
@@ -85,7 +90,7 @@ public class FirewallAction {
 		JSONArray ja = this.getFirewallManager().getAvailableFirewalls(userId);
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/Bind", method = { RequestMethod.POST })
 	@ResponseBody
 	public String bindFirewall(HttpServletRequest request,
@@ -150,5 +155,5 @@ public class FirewallAction {
 		JSONObject jo = this.getFirewallManager().updateFirewallForinnerFirewall(
 				user.getUserId(), firewallId);
 		return jo.toString();
-	}*/
+	}
 }

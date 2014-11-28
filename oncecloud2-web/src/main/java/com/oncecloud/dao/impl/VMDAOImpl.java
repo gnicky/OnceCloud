@@ -708,7 +708,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @param firewallId
-	 *//*
+	 */
 	public void updateFirewall(String vmUuid, String firewallId) {
 		Session session = null;
 		try {
@@ -728,7 +728,7 @@ public class VMDAOImpl implements VMDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新主机监控警告
 	 * 
 	 * @param vmUuid

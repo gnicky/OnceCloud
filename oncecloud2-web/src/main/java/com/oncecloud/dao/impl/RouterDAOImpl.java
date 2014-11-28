@@ -632,7 +632,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @param firewallId
-	 *//*
+	 */
 	public void updateFirewall(String routerUuid, String firewallId) {
 		Session session = null;
 		try {
@@ -653,7 +653,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 	
-	*//**
+	/**
 	 * 更新路由器防火墙
 	 * 
 	 * @param routerUuid

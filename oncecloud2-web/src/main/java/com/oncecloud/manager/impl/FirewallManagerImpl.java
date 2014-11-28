@@ -1,5 +1,6 @@
 package com.oncecloud.manager.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -7,13 +8,22 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.once.xenapi.Connection;
+import com.once.xenapi.Host;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FirewallDAO;
+import com.oncecloud.dao.LBDAO;
 import com.oncecloud.dao.LogDAO;
 import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
 import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.Firewall;
+import com.oncecloud.entity.LB;
+import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCVM;
+import com.oncecloud.entity.Router;
+import com.oncecloud.entity.Rule;
+import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.FirewallManager;
@@ -25,7 +35,7 @@ public class FirewallManagerImpl implements FirewallManager {
 	private EIPDAO eipDAO;
 	private LogDAO logDAO;
 	private VMDAO vmDAO;
-//	private LBDAO lbDAO;
+	private LBDAO lbDAO;
 	private RouterDAO routerDAO;
 	private QuotaDAO quotaDAO;
 	private Constant constant;
@@ -67,14 +77,14 @@ public class FirewallManagerImpl implements FirewallManager {
 		this.vmDAO = vmDAO;
 	}
 
-//	private LBDAO getLbDAO() {
-//		return lbDAO;
-//	}
-//
-//	@Autowired
-//	private void setLbDAO(LBDAO lbDAO) {
-//		this.lbDAO = lbDAO;
-//	}
+	private LBDAO getLbDAO() {
+		return lbDAO;
+	}
+
+	@Autowired
+	private void setLbDAO(LBDAO lbDAO) {
+		this.lbDAO = lbDAO;
+	}
 
 	private RouterDAO getRouterDAO() {
 		return routerDAO;
@@ -111,7 +121,7 @@ public class FirewallManagerImpl implements FirewallManager {
 	private void setMessagePush(MessagePush messagePush) {
 		this.messagePush = messagePush;
 	}
-/*
+
 	public JSONObject updateFirewall(int userId, String firewallId) {
 		JSONObject obj = new JSONObject();
 		boolean result = false;
@@ -205,7 +215,7 @@ public class FirewallManagerImpl implements FirewallManager {
 		return obj;
 	}
 
-	////cyh 只用于更新路由器内部的防火墙  过滤器
+	//cyh 只用于更新路由器内部的防火墙  过滤器
 	public JSONObject updateFirewallForinnerFirewall(int userId, String firewallId) {
 		JSONObject obj = new JSONObject();
 		boolean result = false;
@@ -298,9 +308,7 @@ public class FirewallManagerImpl implements FirewallManager {
 		}
 		return obj;
 	}
-
-	
-	
+/*
 	public boolean activeFirewall(Connection c, int userId, String ip,
 			String firewallId) {
 		boolean result = false;
@@ -347,7 +355,7 @@ public class FirewallManagerImpl implements FirewallManager {
 			e.printStackTrace();
 		}
 		return result;
-	}
+	}*/
 
 	public JSONObject bindFirewall(int userId, String vmArray,
 			String firewallId, String bindType) {
@@ -474,6 +482,7 @@ public class FirewallManagerImpl implements FirewallManager {
 		Date startTime = new Date();
 		this.getFirewallDAO().insertFirewall(firewallUuid, firewallName,
 				userId, startTime);
+		this.getQuotaDAO().updateQuota(userId, "quotaFirewall", 1, true);
 		jo.put("isSuccess", true);
 		jo.put("createDate", Utilities.formatTime(startTime));
 		// write log and push message
@@ -611,6 +620,7 @@ public class FirewallManagerImpl implements FirewallManager {
 		} else {
 			this.getFirewallDAO().deleteAllRuleOfFirewall(firewallId);
 			this.getFirewallDAO().deleteFirewall(userId, firewallId);
+			this.getQuotaDAO().updateQuota(userId, "quotaFirewall", 1, false);
 			jo.put("result", true);
 		}
 		// write log and push message
@@ -649,7 +659,7 @@ public class FirewallManagerImpl implements FirewallManager {
 		}
 		return result;
 	}
-*/
+
 	public JSONArray getAvailableFirewalls(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Firewall> firewallList = this.getFirewallDAO().getabledfirewalls(

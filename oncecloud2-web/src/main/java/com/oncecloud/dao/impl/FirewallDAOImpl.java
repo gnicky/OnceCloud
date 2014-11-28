@@ -30,7 +30,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	/*public int countAllFirewallList(String search, int userId) {
+	public int countAllFirewallList(String search, int userId) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -74,7 +74,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return count;
 	}
-
+/*
 	public void createDefaultFirewallNoTransaction(Integer userId)
 			throws Exception {
 		Session session = this.getSessionHelper().getMainSession();
@@ -137,7 +137,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-/*
+
 	public boolean deleteRule(String ruleId) {
 		boolean result = false;
 		Session session = null;
@@ -158,7 +158,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-*/
+
 	// /获取可用防火墙
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getabledfirewalls(int uid) {
@@ -220,7 +220,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return firewall;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getOnePageFirewallList(int page, int limit,
 			String search, int userId) {
@@ -346,7 +346,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return rule;
 	}
-*/
+
 	@SuppressWarnings("unchecked")
 	public List<Rule> getRuleList(String firewallId) {
 		List<Rule> ruleList = null;
@@ -367,7 +367,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return ruleList;
 	}
-/*
+
 	public int getRuleSize(String firewallId) {
 		int count = 0;
 		Session session = null;
@@ -388,7 +388,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return count;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public JSONObject getSimpleFWList(int userId) {
 		JSONObject jo = new JSONObject();
@@ -427,7 +427,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return jo;
 	}
-
+*/
 	public boolean insertFirewall(String firewallId, String firewallName,
 			int firewallUID, Date createDate) {
 		boolean result = false;
@@ -438,8 +438,6 @@ public class FirewallDAOImpl implements FirewallDAO {
 			Firewall firewall = new Firewall(firewallId, firewallName,
 					firewallUID, createDate, 1, 0);
 			session.save(firewall);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(firewallUID,
-					"quotaFirewall", 1, true);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -450,7 +448,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-*/
+
 	// /cyh 插入用于路由器内部的防火墙 默认值状态 为2 ，在防火墙列表中，也不显示出来
 	public boolean insertFirewallForinnerRoute(String firewallId,
 			String firewallName, int firewallUID, Date createDate) {
@@ -472,7 +470,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return result;
 	}
-/*
+
 	public boolean insertRule(String ruleId, String ruleName,
 			Integer rulePriority, String ruleProtocol, Integer ruleStartPort,
 			Integer ruleEndPort, Integer ruleState, String ruleIp,
@@ -538,5 +536,5 @@ public class FirewallDAOImpl implements FirewallDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }
