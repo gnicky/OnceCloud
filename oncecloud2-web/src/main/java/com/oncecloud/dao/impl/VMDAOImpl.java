@@ -175,7 +175,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutAlarm(int page, int limit,
 			String search, int userId) {
@@ -203,7 +203,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取一页没有绑定公网IP的主机列表
 	 * 
 	 * @param page
@@ -248,7 +248,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param vmUID
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getVMsOfAlarm(int vmUID, String alarmUuid) {
 		List<OCVM> vmList = null;
@@ -271,7 +271,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取对应私有网络的主机列表
 	 * 
 	 * @param vmVlan
@@ -421,7 +421,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countVMsWithoutAlarm(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -444,7 +444,7 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取未绑定公网IP的主机总数
 	 * 
 	 * @param search
@@ -733,7 +733,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @param alarmUuid
-	 *//*
+	 */
 	public boolean updateAlarm(String vmUuid, String alarmUuid) {
 		boolean result = false;
 		Session session = null;
@@ -756,7 +756,7 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新主机名称和描述
 	 * 
 	 * @param vmUuid
@@ -1024,7 +1024,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
 		boolean result = true;
@@ -1047,5 +1047,5 @@ public class VMDAOImpl implements VMDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

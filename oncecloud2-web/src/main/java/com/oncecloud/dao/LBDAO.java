@@ -11,19 +11,19 @@ public interface LBDAO {
 
 	public abstract int countAllLBList(String search, int lbUID);
 
-//	public abstract int countAllLBListAlarm(String search, int lbUID);
+	public abstract int countAllLBListAlarm(String search, int lbUID);
 
 	public abstract int countLBsWithoutEIP(String search, int userId);
 
 	public abstract LB getAliveLB(String lbUuid);
 
-//	/**
-//	 * @author hty
-//	 * @param alarmUuid
-//	 * @param uid
-//	 * @return
-//	 */
-//	public abstract List<LB> getAllListAlarm(int lbUID, String alarmUuid);
+	/**
+	 * @author hty
+	 * @param alarmUuid
+	 * @param uid
+	 * @return
+	 */
+	public abstract List<LB> getAllListAlarm(int lbUID, String alarmUuid);
 
 	public abstract LB getLB(String lbUuid);
 
@@ -35,26 +35,26 @@ public interface LBDAO {
 	public abstract List<LB> getOnePageLBList(int userId, int page, int limit,
 			String search);
 
-//	/**
-//	 * @author hty
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param uid
-//	 * @return
-//	 */
-//	public abstract List<LB> getOnePageLBListAlarm(int page, int limit,
-//			String search, int lbUID);
+	/**
+	 * @author hty
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param uid
+	 * @return
+	 */
+	public abstract List<LB> getOnePageLBListAlarm(int page, int limit,
+			String search, int lbUID);
 
 	public abstract List<LB> getOnePageLBsWithoutEip(int page, int limit,
 			String search, int userId);
 
-//	/**
-//	 * @author hty
-//	 * @param alarmUuid
-//	 * @return
-//	 */
-//	public abstract boolean isLNotExistAlarm(String alarmUuid);
+	/**
+	 * @author hty
+	 * @param alarmUuid
+	 * @return
+	 */
+	public abstract boolean isLNotExistAlarm(String alarmUuid);
 
 	public abstract boolean preCreateLB(String uuid, String pwd, int userId,
 			String name, String mac, int capacity, int power, int status,
@@ -70,12 +70,12 @@ public interface LBDAO {
 	
 	public abstract boolean setLBStatus(String lbUuid, int state);
 
-//	/**
-//	 * @author hty
-//	 * @param lbUuid
-//	 * @param alarmUuid
-//	 */
-//	public abstract void updateAlarm(String lbUuid, String alarmUuid);
+	/**
+	 * @author hty
+	 * @param lbUuid
+	 * @param alarmUuid
+	 */
+	public abstract void updateAlarm(String lbUuid, String alarmUuid);
 
 	public abstract void updateFirewall(String lbUuid, String firewallId);
 

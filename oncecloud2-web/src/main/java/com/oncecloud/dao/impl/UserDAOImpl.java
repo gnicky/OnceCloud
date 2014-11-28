@@ -3,7 +3,6 @@ package com.oncecloud.dao.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -269,7 +268,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userId
 	 * @param voucher
 	 * @return
-	 *//*
+	 */
 	public boolean applyVoucher(int userId, int voucher) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -293,7 +292,7 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 确认代金券
 	 * 
 	 * @param userId
@@ -403,7 +402,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userid
 	 * @param bill
 	 * @return
-	 *//*
+	 */
 	public boolean updateBalance(int userId, double bill) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -424,7 +423,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return result;
 	}
-*/	
+	
 	public List<User> getUserList() {
 		List<User> list = new ArrayList<User>();
 		Session session = null;

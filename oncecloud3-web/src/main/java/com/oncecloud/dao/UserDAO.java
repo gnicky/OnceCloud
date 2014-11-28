@@ -83,22 +83,22 @@ public interface UserDAO {
 //	 * @return
 //	 */
 //	public abstract boolean applyVoucher(int userId, int voucher);
-//
-//	/**
-//	 * 确认代金券
-//	 * 
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract boolean confirmVoucher(int userId);
-//
-//	/**
-//	 * 拒绝代金券
-//	 * 
-//	 * @param userid
-//	 * @return
-//	 */
-//	public abstract boolean denyVoucher(int userId);
+
+	/**
+	 * 确认代金券
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public abstract boolean confirmVoucher(int userId);
+
+	/**
+	 * 拒绝代金券
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	public abstract boolean denyVoucher(int userId);
 
 	/**
 	 * 更新用户

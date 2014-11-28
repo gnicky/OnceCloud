@@ -24,14 +24,14 @@ public interface EIPDAO {
 
 	public abstract int countAllEipList(int userId, String search);
 
-//	/**
-//	 * @author hty
-//	 * @param search
-//	 * @param uid
-//	 * @return
-//	 */
-//	public abstract int countAllEipListAlarm(String search, int eipUID);
-//
+	/**
+	 * @author hty
+	 * @param search
+	 * @param uid
+	 * @return
+	 */
+	public abstract int countAllEipListAlarm(String search, int eipUID);
+
 //	public abstract int countAllEipListNoUserid(String searchStr);
 //
 //	public abstract boolean deleteEIP(String ip, String uuid);
@@ -39,13 +39,13 @@ public interface EIPDAO {
 	// 获取可用公网IP
 	public abstract List<EIP> getableeips(int uid);
 
-//	/**
-//	 * @author hty
-//	 * @param alarmUuid
-//	 * @param uid
-//	 * @return
-//	 */
-//	public abstract List<EIP> getAllListAlarm(int eipUID, String alarmUuid);
+	/**
+	 * @author hty
+	 * @param alarmUuid
+	 * @param uid
+	 * @return
+	 */
+	public abstract List<EIP> getAllListAlarm(int eipUID, String alarmUuid);
 
 	public abstract EIP getEip(String eipIp);
 
@@ -56,38 +56,38 @@ public interface EIPDAO {
 	public abstract List<EIP> getOnePageEipList(int userId, int page,
 			int limit, String search);
 
-//	/**
-//	 * @author hty
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param uid
-//	 * @return
-//	 */
-//	public abstract List<EIP> getOnePageEipListAlarm(int page, int limit,
-//			String search, int eipUID);
-//
+	/**
+	 * @author hty
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param uid
+	 * @return
+	 */
+	public abstract List<EIP> getOnePageEipListAlarm(int page, int limit,
+			String search, int eipUID);
+
 //	public abstract List<EIP> getOnePageEIPListNoUserid(int page, int limit,
 //			String searchStr);
 //
 //	public abstract boolean ipExist(Session session, String eIp);
-//
-//	/**
-//	 * @author hty
-//	 * @param alarmUuid
-//	 * @return
-//	 */
-//	public abstract boolean isNotExistAlarm(String alarmUuid);
+
+	/**
+	 * @author hty
+	 * @param alarmUuid
+	 * @return
+	 */
+	public abstract boolean isNotExistAlarm(String alarmUuid);
 
 	public abstract boolean unBindEip(String eipIp);
 
-//	/**
-//	 * @author hty
-//	 * @param eipip
-//	 * @param alarmUuid
-//	 */
-//	public abstract boolean updateAlarm(String eipUuid, String alarmUuid);
-//
+	/**
+	 * @author hty
+	 * @param eipip
+	 * @param alarmUuid
+	 */
+	public abstract boolean updateAlarm(String eipUuid, String alarmUuid);
+
 //	/**
 //	 * @param eipuuid
 //	 * @param newName

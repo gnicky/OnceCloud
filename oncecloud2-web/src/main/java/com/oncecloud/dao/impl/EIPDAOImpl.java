@@ -194,7 +194,7 @@ public class EIPDAOImpl implements EIPDAO {
 	 * @param search
 	 * @param uid
 	 * @return
-	 *//*
+	 */
 	public int countAllEipListAlarm(String search, int eipUID) {
 		int count = 0;
 		Session session = null;
@@ -218,7 +218,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return count;
 	}
-
+/*
 	public int countAllEipListNoUserid(String searchStr) {
 		int count = 0;
 		Session session = null;
@@ -302,7 +302,7 @@ public class EIPDAOImpl implements EIPDAO {
 	 * @param alarmUuid
 	 * @param uid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<EIP> getAllListAlarm(int eipUID, String alarmUuid) {
 		List<EIP> eipList = null;
@@ -324,7 +324,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipList;
 	}
-*/
+
 	public EIP getEip(String eipIp) {
 		EIP eip = null;
 		Session session = null;
@@ -420,7 +420,7 @@ public class EIPDAOImpl implements EIPDAO {
 	 * @param search
 	 * @param uid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEipListAlarm(int page, int limit, String search,
 			int eipUID) {
@@ -448,7 +448,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return eipList;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<EIP> getOnePageEIPListNoUserid(int page, int limit,
 			String searchStr) {
@@ -486,7 +486,7 @@ public class EIPDAOImpl implements EIPDAO {
 	 * @author hty
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
 		boolean result = true;
@@ -509,7 +509,7 @@ public class EIPDAOImpl implements EIPDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean unBindEip(String eipIp) {
 		boolean result = false;
 		Session session = null;
@@ -537,7 +537,7 @@ public class EIPDAOImpl implements EIPDAO {
 	 * @author hty
 	 * @param eipip
 	 * @param alarmUuid
-	 *//*
+	 */
 	public boolean updateAlarm(String eipUuid, String alarmUuid) {
 		boolean result = false;
 		Session session = null;
@@ -561,7 +561,7 @@ public class EIPDAOImpl implements EIPDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @param eipuuid
 	 * @param newName
 	 * @param description

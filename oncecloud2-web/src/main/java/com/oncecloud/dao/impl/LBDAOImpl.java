@@ -80,7 +80,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return count;
 	}
-/*
+
 	public int countAllLBListAlarm(String search, int lbUID) {
 		int count = 0;
 		Session session = null;
@@ -101,7 +101,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return count;
 	}
-*/
+
 	public int countLBsWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -152,7 +152,7 @@ public class LBDAOImpl implements LBDAO {
 	 * @param alarmUuid
 	 * @param uid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<LB> getAllListAlarm(int lbUID, String alarmUuid) {
 		List<LB> list = null;
@@ -174,7 +174,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return list;
 	}
-*/
+
 	public LB getLB(String lbUuid) {
 		LB lb = null;
 		Session session = null;
@@ -280,7 +280,7 @@ public class LBDAOImpl implements LBDAO {
 	 * @param search
 	 * @param uid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<LB> getOnePageLBListAlarm(int page, int limit, String search,
 			int lbUID) {
@@ -307,7 +307,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return lbList;
 	}
-*/
+
 	@SuppressWarnings("unchecked")
 	public List<LB> getOnePageLBsWithoutEip(int page, int limit, String search,
 			int userId) {
@@ -342,7 +342,7 @@ public class LBDAOImpl implements LBDAO {
 	 * @author hty
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isLNotExistAlarm(String alarmUuid) {
 		boolean result = true;
@@ -366,7 +366,7 @@ public class LBDAOImpl implements LBDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean preCreateLB(String uuid, String pwd, int userId,
 			String name, String mac, int capacity, int power, int status,
 			Date createDate) {
@@ -498,7 +498,7 @@ public class LBDAOImpl implements LBDAO {
 	 * @author hty
 	 * @param lbUuid
 	 * @param alarmUuid
-	 *//*
+	 */
 	public void updateAlarm(String lbUuid, String alarmUuid) {
 		Session session = null;
 		Transaction tx = null;
@@ -518,7 +518,7 @@ public class LBDAOImpl implements LBDAO {
 			}
 		}
 	}
-*/
+
 	public void updateFirewall(String lbUuid, String firewallId) {
 		Session session = null;
 		Transaction tx = null;

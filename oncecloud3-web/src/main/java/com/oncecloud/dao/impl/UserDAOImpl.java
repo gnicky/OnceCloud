@@ -298,25 +298,20 @@ public class UserDAOImpl implements UserDAO {
 	 * 
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public boolean confirmVoucher(int userId) {
 		boolean result = false;
 		User user = this.getUser(userId);
 		if (user.getUserLevel() == 1) {
 			Session session = null;
 			try {
-				int voucher = user.getUserVoucher();
 				user.setUserBalance(user.getUserBalance()
 						+ user.getUserVoucher());
 				user.setUserVoucher(null);
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
-				Date date = new Date();
-				String uuid = UUID.randomUUID().toString();
 				session.update(user);
 				session.getTransaction().commit();
-				this.getChargeDAO().createChargeRecord(uuid, (double) voucher,
-						1, date, userId, 1);
 				result = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -328,12 +323,12 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 拒绝代金券
 	 * 
 	 * @param userid
 	 * @return
-	 *//*
+	 */
 	public boolean denyVoucher(int userId) {
 		boolean result = false;
 		User user = this.getUser(userId);
@@ -357,7 +352,7 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新用户
 	 * 
 	 * @param userid

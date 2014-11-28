@@ -196,7 +196,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRoutersWithoutAlarm(int page, int limit,
 			String search, int userId) {
@@ -224,7 +224,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取一页没有绑定公网IP的路由器列表
 	 * 
 	 * @param page
@@ -269,7 +269,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param routerUID
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getRoutersOfAlarm(int routerUID, String alarmUuid) {
 		List<Router> list = null;
@@ -293,7 +293,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return list;
 	}
 
-	*//**
+	/**
 	 * 获取用户路由器列表
 	 * 
 	 * @param userId
@@ -394,7 +394,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param routerUID
 	 * @return
-	 *//*
+	 */
 	public int countRoutersWithoutAlarm(String search, int uuid) {
 		int count = 0;
 		Session session = null;
@@ -417,7 +417,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取未绑定公网IP的路由器总数
 	 * 
 	 * @param search
@@ -740,7 +740,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @param alarmUuid
-	 *//*
+	 */
 	public void updateAlarm(String routerUuid, String alarmUuid) {
 		Session session = null;
 		try {
@@ -760,12 +760,12 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 是否有路由器具有该监控警告
 	 * 
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
 		boolean result = true;
@@ -790,7 +790,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新路由器电源状态和所在服务器
 	 * 
 	 * @param session

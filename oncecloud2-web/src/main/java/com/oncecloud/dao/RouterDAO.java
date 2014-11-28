@@ -57,18 +57,18 @@ public interface RouterDAO {
 //	 */
 //	public abstract List<Router> getOnePageRoutersOfAdmin(int page, int limit,
 //			String host, int importance);
-//
-//	/**
-//	 * 获取一页未设置监控警告的路由器列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract List<Router> getOnePageRoutersWithoutAlarm(int page,
-//			int limit, String search, int userId);
+
+	/**
+	 * 获取一页未设置监控警告的路由器列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract List<Router> getOnePageRoutersWithoutAlarm(int page,
+			int limit, String search, int userId);
 
 	/**
 	 * 获取一页没有绑定公网IP的路由器列表
@@ -82,15 +82,15 @@ public interface RouterDAO {
 	public abstract List<Router> getOnePageRoutersWithoutEip(int page,
 			int limit, String search, int userId);
 
-//	/**
-//	 * 获取对应监控警告的路由器列表
-//	 * 
-//	 * @param routerUID
-//	 * @param alarmUuid
-//	 * @return
-//	 */
-//	public abstract List<Router> getRoutersOfAlarm(int routerUID,
-//			String alarmUuid);
+	/**
+	 * 获取对应监控警告的路由器列表
+	 * 
+	 * @param routerUID
+	 * @param alarmUuid
+	 * @return
+	 */
+	public abstract List<Router> getRoutersOfAlarm(int routerUID,
+			String alarmUuid);
 
 	/**
 	 * 获取用户路由器列表
@@ -117,15 +117,15 @@ public interface RouterDAO {
 //	 * @return
 //	 */
 //	public abstract int countRoutersOfAdmin(String host, int importance);
-//
-//	/**
-//	 * 获取未设置监控警告的路由器总数
-//	 * 
-//	 * @param search
-//	 * @param routerUID
-//	 * @return
-//	 */
-//	public abstract int countRoutersWithoutAlarm(String search, int uuid);
+
+	/**
+	 * 获取未设置监控警告的路由器总数
+	 * 
+	 * @param search
+	 * @param routerUID
+	 * @return
+	 */
+	public abstract int countRoutersWithoutAlarm(String search, int uuid);
 
 	/**
 	 * 获取未绑定公网IP的路由器总数
@@ -234,22 +234,22 @@ public interface RouterDAO {
 	 */
 	public abstract boolean updateHostUuid(String uuid, String hostUuid);
 
-//	/**
-//	 * 更新路由器监控警告
-//	 * 
-//	 * @param routerUuid
-//	 * @param alarmUuid
-//	 */
-//	public abstract void updateAlarm(String routerUuid, String alarmUuid);
-//
-//	/**
-//	 * 是否有路由器具有该监控警告
-//	 * 
-//	 * @param alarmUuid
-//	 * @return
-//	 */
-//	public abstract boolean isNotExistAlarm(String alarmUuid);
-//
+	/**
+	 * 更新路由器监控警告
+	 * 
+	 * @param routerUuid
+	 * @param alarmUuid
+	 */
+	public abstract void updateAlarm(String routerUuid, String alarmUuid);
+
+	/**
+	 * 是否有路由器具有该监控警告
+	 * 
+	 * @param alarmUuid
+	 * @return
+	 */
+	public abstract boolean isNotExistAlarm(String alarmUuid);
+
 //	/**
 //	 * 更新路由器电源状态和所在服务器
 //	 * 
