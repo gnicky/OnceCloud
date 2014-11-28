@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 import com.once.xenapi.Connection;
 import com.once.xenapi.Host;
 import com.once.xenapi.Types;
-import com.once.xenapi.VM;
-import com.once.xenapi.VMUtil;
 import com.once.xenapi.Types.BadServerResponse;
 import com.once.xenapi.Types.XenAPIException;
+import com.once.xenapi.VM;
 import com.once.xenapi.VM.Record;
+import com.once.xenapi.VMUtil;
 import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FeeDAO;
@@ -34,13 +34,10 @@ import com.oncecloud.dao.VMDAO;
 import com.oncecloud.dao.VnetDAO;
 import com.oncecloud.dao.VolumeDAO;
 import com.oncecloud.entity.DHCP;
-import com.oncecloud.entity.Database;
 import com.oncecloud.entity.Image;
-import com.oncecloud.entity.LB;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCVM;
-import com.oncecloud.entity.Router;
 import com.oncecloud.entity.User;
 import com.oncecloud.entity.Vnet;
 import com.oncecloud.log.LogConstant;
@@ -1261,4 +1258,23 @@ public class VMManagerImpl implements VMManager {
 		}
 	}
 
+	public JSONArray getVMsOfUser(int userId, int page, int limit, String search) {
+		JSONArray ja = new JSONArray();
+		int totalNum = this.getVmDAO().countVMs(userId, search);
+		ja.put(totalNum);
+		List<OCVM> vmList = this.getVmDAO().getOnePageVMs(userId, page, limit,
+				search);
+		if (vmList != null) {
+			for (int i = 0; i < vmList.size(); i++) {
+				JSONObject jo = new JSONObject();
+				OCVM ocvm = vmList.get(i);
+				jo.put("vmid", ocvm.getVmUuid());
+				jo.put("vmname", Utilities.encodeText(ocvm.getVmName()));
+				jo.put("vmip", ocvm.getVmIP());
+				ja.put(jo);
+			}
+		}
+		return ja;
+	}
+	
 }

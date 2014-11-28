@@ -66,5 +66,6 @@
 		<mapping class="com.oncecloud.entity.ForwardPort" />
 		<mapping class="com.oncecloud.entity.PPTPUser" />
 		<mapping class="com.oncecloud.entity.OCHException" />
+		<mapping class="com.oncecloud.entity.AlarmLog" />
 	</session-factory>
 </hibernate-configuration>

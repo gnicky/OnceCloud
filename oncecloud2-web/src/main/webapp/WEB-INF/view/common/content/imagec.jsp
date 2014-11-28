@@ -23,7 +23,7 @@
 				<span class="glyphicon glyphicon-refresh" style="margin-right: 0"></span>
 			</button>
 
-			<div class="btn-group">
+			<div class="btn-group" style="display:none">
 					<button class="btn btn-default dropdown-toggle"
 						data-toggle="dropdown">
 						更多操作... <span class="caret" style="margin-left: 15px"></span>

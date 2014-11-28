@@ -64,6 +64,11 @@ $('#tablebody').on('change', 'input:checkbox', function (event) {
 $('.once-tab').on('click', '.tab-filter', function (event) {
     $('li', '.once-tab').removeClass('active');
     $(this).addClass('active');
+    if ($(this).attr('type') == 'system') {
+    	$('.btn-group').hide();
+    } else {
+    	$('.btn-group').show();
+    }
     reloadList(1);
 });
 
