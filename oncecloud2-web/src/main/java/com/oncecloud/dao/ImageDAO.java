@@ -9,11 +9,11 @@ public interface ImageDAO {
 	public abstract Image getImage(String imageUuid);
 
 //	public abstract Image getDBImage(String type, int throughout);
-//
-//	public abstract Image getLBImage(int userId);
-//
-//	public abstract Image getRTImage(int userId);
-//
+
+	public abstract Image getLBImage(String poolUuid);
+
+	public abstract Image getRTImage(int userId, String poolUuid);
+
 //	public abstract List<Image> getSystemImage();
 
 	public abstract List<Image> getOnePageImageList(int userId, int userLevel,
@@ -24,7 +24,7 @@ public interface ImageDAO {
 	public abstract int countAllImageList(int userId, String search,
 			int userLevel, String type);
 
-//	public abstract boolean deleteImage(String imageId);
+	public abstract boolean deleteImage(String imageId);
 
 	public abstract Image createImage(String imageUuid, String imageName,
 			int imageUID, int imagePlatform, String imageServer,

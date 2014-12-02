@@ -292,7 +292,7 @@ public class SnapshotManagerImpl implements SnapshotManager {
 		}
 		return jo;
 	}
-/*
+
 	public JSONObject deleteSnapshotSeries(int userId, String resourceUuid,
 			String resourceType) {
 		JSONObject jo = new JSONObject();
@@ -304,6 +304,7 @@ public class SnapshotManagerImpl implements SnapshotManager {
 				if (vdi.destroyAllSnapshots(c)) {
 					this.getSnapshotDAO()
 							.deleteVmSnapshot(resourceUuid, userId);
+					this.getQuotaDAO().updateQuota(userId, "quotaSnapshot", 1, false);
 					Date endDate = new Date();
 					this.getFeeDAO().deleteSnapshot(endDate, resourceUuid);
 					this.getVmDAO().updateBackupDate(resourceUuid, null);
@@ -322,6 +323,7 @@ public class SnapshotManagerImpl implements SnapshotManager {
 				if (vdi.destroyAllSnapshots(c)) {
 					this.getSnapshotDAO().deleteVolumeSnapshot(resourceUuid,
 							userId);
+					this.getQuotaDAO().updateQuota(userId, "quotaSnapshot", 1, false);
 					Date endDate = new Date();
 					this.getFeeDAO().deleteSnapshot(endDate, resourceUuid);
 					this.getVolumeDAO().updateBackupDate(resourceUuid, null);
@@ -406,8 +408,7 @@ public class SnapshotManagerImpl implements SnapshotManager {
 					VM vm = Types.toVM(resourceUuid);
 					if (this.getVmDAO().getVM(resourceUuid).getVmPower() == 1) {
 						vm.hardShutdown(c);
-						this.getVmDAO().updatePowerStatus(resourceUuid,
-								VMManager.POWER_HALTED);
+						this.getVmDAO().updatePowerStatus(resourceUuid, 0);
 					}
 					if (vm.rollback(c, snapshotId)) {
 						jo.put("exist", true);
@@ -451,8 +452,7 @@ public class SnapshotManagerImpl implements SnapshotManager {
 						if (this.getVmDAO().getVM(resourceUuid).getVmPower() == 1) {
 							VM vm = Types.toVM(dependenVm);
 							vm.hardShutdown(c);
-							this.getVmDAO().updatePowerStatus(dependenVm,
-									VMManager.POWER_HALTED);
+							this.getVmDAO().updatePowerStatus(dependenVm, 0);
 						}
 						VDI vdi = Types.toVDI(resourceUuid);
 						if (vdi.rollback(c, snapshotId)) {
@@ -528,7 +528,13 @@ public class SnapshotManagerImpl implements SnapshotManager {
 			try {
 				Connection c = this.getConstant().getConnection(userId);
 				if (vdi.destroySnapshot(c, snapshotId)) {
-					this.getSnapshotDAO().deleteOneSnapshot(userId, snapshotId);
+					Snapshot ss = this.getSnapshotDAO().getSnapshot(snapshotId);
+					String vmUuid = ss.getSnapshotVm();
+					int vmSize = this.getSnapshotDAO().getVmSnapshotSize(vmUuid);
+					if (vmSize == 1) {
+						this.getQuotaDAO().updateQuota(userId, "quotaSnapshot", 1, false);
+					}
+					this.getSnapshotDAO().deleteOneSnapshot(ss);
 					Date endDate = new Date();
 					this.getFeeDAO().deleteSnapshot(endDate, resourceUuid);
 					double snapshotPrice = this.getSnapshotDAO()
@@ -557,7 +563,13 @@ public class SnapshotManagerImpl implements SnapshotManager {
 			try {
 				Connection c = this.getConstant().getConnection(userId);
 				if (vdi.destroySnapshot(c, snapshotId)) {
-					this.getSnapshotDAO().deleteOneSnapshot(userId, snapshotId);
+					Snapshot ss = this.getSnapshotDAO().getSnapshot(snapshotId);
+					String volumeUuid = ss.getSnapshotVolume();
+					int volSize = this.getSnapshotDAO().getVolumeSnapshotSize(volumeUuid);
+					if (volSize == 1) {
+						this.getQuotaDAO().updateQuota(userId, "quotaSnapshot", 1, false);
+					}
+					this.getSnapshotDAO().deleteOneSnapshot(ss);
 					Date endDate = new Date();
 					this.getFeeDAO().deleteSnapshot(endDate, resourceUuid);
 					double snapshotPrice = this.getSnapshotDAO()
@@ -639,7 +651,7 @@ public class SnapshotManagerImpl implements SnapshotManager {
 		jo.put("backStatus", ((Integer) obj[5]).intValue());
 		return jo;
 	}
-*/
+
 	public String getQuota(int userId, int count) {
 		String result = "ok";
 		int free = this.getQuotaDAO().getQuotaTotal(userId).getQuotaSnapshot()

@@ -57,8 +57,8 @@ public interface VMManager {
 	public abstract JSONArray getVMList(int userId, int page, int limit,
 			String search);
 
-//	public abstract JSONArray getVMsOfUser(int userId, int page, int limit,
-//			String search);
+	public abstract JSONArray getVMsOfUser(int userId, int page, int limit,
+			String search);
 
 	public abstract JSONArray getBasicNetworkList(int userId);
 

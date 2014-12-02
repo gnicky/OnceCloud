@@ -47,11 +47,10 @@ public class ImageDAOImpl implements ImageDAO {
 	public Image getDBImage(String type, int throughout) {
 		return null;
 	}
-
+*/
 	@SuppressWarnings("unchecked")
-	public Image getLBImage(int userId) {
+	public Image getLBImage(String poolUuid) {
 		Image image = null;
-		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
 		if (poolUuid != null) {
 			Session session = null;
 			try {
@@ -72,9 +71,8 @@ public class ImageDAOImpl implements ImageDAO {
 		return image;
 	}
 
-	public Image getRTImage(int userId) {
+	public Image getRTImage(int userId, String poolUuid) {
 		Image image = null;
-		String poolUuid = this.getUserDAO().getUser(userId).getUserAllocate();
 		if (poolUuid != null) {
 			Session session = null;
 			try {
@@ -93,7 +91,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return image;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public List<Image> getSystemImage() {
 		List<Image> imageList = null;
@@ -195,7 +193,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return total;
 	}
-/*
+
 	public boolean deleteImage(String imageId) {
 		boolean result = false;
 		Session session = null;
@@ -206,8 +204,6 @@ public class ImageDAOImpl implements ImageDAO {
 					+ imageId + "'";
 			Query query = session.createQuery(queryString);
 			query.executeUpdate();
-			this.getOverViewDAO().updateOverViewfieldNoTransaction("viewImage",
-					false);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -217,7 +213,7 @@ public class ImageDAOImpl implements ImageDAO {
 		}
 		return result;
 	}
-*/
+
 	public Image createImage(String imageUuid, String imageName, int imageUID,
 			int imagePlatform, String imageServer, String imageDesc,
 			String imagePwd) {

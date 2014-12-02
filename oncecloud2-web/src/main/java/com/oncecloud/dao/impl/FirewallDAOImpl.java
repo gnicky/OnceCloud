@@ -30,7 +30,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-	/*public int countAllFirewallList(String search, int userId) {
+	public int countAllFirewallList(String search, int userId) {
 		int count = 0;
 		Session session = null;
 		try {
@@ -74,7 +74,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return count;
 	}
-
+/*
 	public void createDefaultFirewallNoTransaction(Integer userId)
 			throws Exception {
 		Session session = this.getSessionHelper().getMainSession();
@@ -95,7 +95,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		session.save(rule22);
 		session.save(rule3389);
 	}
-
+*/
 	public boolean deleteAllRuleOfFirewall(String firewallId) {
 		boolean result = false;
 		Session session = null;
@@ -127,8 +127,6 @@ public class FirewallDAOImpl implements FirewallDAO {
 			Query query = session.createQuery(queryString);
 			query.setString("id", firewallId);
 			query.executeUpdate();
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaFirewall", 1, false);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -170,7 +168,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			String queryString = "from Firewall where firewallUID=" + uid
-					+ " order by isDefault desc";
+					+ " and isDefault != 2 order by isDefault desc";
 			Query query = session.createQuery(queryString);
 			firewallList = query.list();
 			session.getTransaction().commit();
@@ -182,7 +180,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return firewallList;
 	}
-*/
+
 	public Firewall getDefaultFirewall(int userId) {
 		Firewall firewall = null;
 		Session session = null;
@@ -222,7 +220,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return firewall;
 	}
-/*
+
 	@SuppressWarnings("unchecked")
 	public List<Firewall> getOnePageFirewallList(int page, int limit,
 			String search, int userId) {
@@ -390,7 +388,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return count;
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	public JSONObject getSimpleFWList(int userId) {
 		JSONObject jo = new JSONObject();
@@ -429,7 +427,7 @@ public class FirewallDAOImpl implements FirewallDAO {
 		}
 		return jo;
 	}
-
+*/
 	public boolean insertFirewall(String firewallId, String firewallName,
 			int firewallUID, Date createDate) {
 		boolean result = false;
@@ -440,8 +438,6 @@ public class FirewallDAOImpl implements FirewallDAO {
 			Firewall firewall = new Firewall(firewallId, firewallName,
 					firewallUID, createDate, 1, 0);
 			session.save(firewall);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(firewallUID,
-					"quotaFirewall", 1, true);
 			result = true;
 			session.getTransaction().commit();
 		} catch (Exception e) {
@@ -540,5 +536,5 @@ public class FirewallDAOImpl implements FirewallDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

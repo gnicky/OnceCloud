@@ -1,26 +1,79 @@
 package com.oncecloud.manager.impl;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.once.xenapi.Connection;
+import com.once.xenapi.Host;
+import com.once.xenapi.Types;
+import com.once.xenapi.VM;
+import com.once.xenapi.Types.BadServerResponse;
+import com.once.xenapi.Types.XenAPIException;
+import com.once.xenapi.VM.Record;
+import com.oncecloud.dao.DHCPDAO;
 import com.oncecloud.dao.EIPDAO;
 import com.oncecloud.dao.FirewallDAO;
+import com.oncecloud.dao.ForwardPortDAO;
+import com.oncecloud.dao.HostDAO;
+import com.oncecloud.dao.ImageDAO;
+import com.oncecloud.dao.LogDAO;
+import com.oncecloud.dao.PPTPUserDAO;
+import com.oncecloud.dao.QuotaDAO;
 import com.oncecloud.dao.RouterDAO;
+import com.oncecloud.dao.UserDAO;
+import com.oncecloud.dao.VMDAO;
+import com.oncecloud.dao.VnetDAO;
+import com.oncecloud.entity.DHCP;
+import com.oncecloud.entity.ForwardPort;
+import com.oncecloud.entity.Image;
+import com.oncecloud.entity.OCLog;
+import com.oncecloud.entity.OCVM;
+import com.oncecloud.entity.PPTPUser;
 import com.oncecloud.entity.Router;
+import com.oncecloud.entity.User;
+import com.oncecloud.entity.Vnet;
+import com.oncecloud.helper.HashHelper;
+import com.oncecloud.log.LogConstant;
+import com.oncecloud.main.Constant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.RouterManager;
+import com.oncecloud.message.MessagePush;
 
 @Component("RouterManager")
 public class RouterManagerImpl implements RouterManager {
 	private final static Logger logger = Logger.getLogger(RouterManager.class);
+	private final static long MB = 1024 * 1024;
 	public static int[] capacity = { 250, 500, 1000 };
-	
+
 	private RouterDAO routerDAO;
 	private EIPDAO eipDAO;
 	private FirewallDAO firewallDAO;
-	
+	private VnetDAO vnetDAO;
+	private VMDAO vmDAO;
+	private LogDAO logDAO;
+	private ImageDAO imageDAO;
+	private DHCPDAO dhcpDAO;
+	private QuotaDAO quotaDAO;
+	private HostDAO hostDAO;
+	private UserDAO userDAO;
+	private ForwardPortDAO forwardPortDAO;
+	private PPTPUserDAO pptpUserDAO;
+
+	private MessagePush messagePush;
+	private HashHelper hashHelper;
+	private Constant constant;
+
 	private RouterDAO getRouterDAO() {
 		return routerDAO;
 	}
@@ -38,7 +91,7 @@ public class RouterManagerImpl implements RouterManager {
 	private void setEipDAO(EIPDAO eipDAO) {
 		this.eipDAO = eipDAO;
 	}
-	
+
 	private FirewallDAO getFirewallDAO() {
 		return firewallDAO;
 	}
@@ -47,24 +100,6 @@ public class RouterManagerImpl implements RouterManager {
 	private void setFirewallDAO(FirewallDAO firewallDAO) {
 		this.firewallDAO = firewallDAO;
 	}
-	
-/*	private ImageDAO imageDAO;
-	private DHCPDAO dhcpDAO;
-	private VnetDAO vnetDAO;
-	private VMDAO vmDAO;
-	private LogDAO logDAO;
-	private QuotaDAO quotaDAO;
-	private HostDAO hostDAO;
-	private UserDAO userDAO;
-	private ForwardPortDAO forwardPortDAO;
-	private PPTPUserDAO pptpUserDAO;
-
-	private MessagePush messagePush;
-	private HashHelper hashHelper;
-	private EIPManager eipManager;
-	private VMManager vmManager;
-
-	private Constant constant;
 
 	private MessagePush getMessagePush() {
 		return messagePush;
@@ -156,24 +191,6 @@ public class RouterManagerImpl implements RouterManager {
 		this.pptpUserDAO = pptpUserDAO;
 	}
 
-	private EIPManager getEipManager() {
-		return eipManager;
-	}
-
-	@Autowired
-	private void setEipManager(EIPManager eipManager) {
-		this.eipManager = eipManager;
-	}
-
-	private VMManager getVmManager() {
-		return vmManager;
-	}
-
-	@Autowired
-	private void setVmManager(VMManager vmManager) {
-		this.vmManager = vmManager;
-	}
-
 	private Constant getConstant() {
 		return constant;
 	}
@@ -186,7 +203,7 @@ public class RouterManagerImpl implements RouterManager {
 	private void setHashHelper(HashHelper hashHelper) {
 		this.hashHelper = hashHelper;
 	}
-	
+
 	@Autowired
 	private void setConstant(Constant constant) {
 		this.constant = constant;
@@ -226,7 +243,8 @@ public class RouterManagerImpl implements RouterManager {
 			this.getMessagePush().pushMessage(userId,
 					Utilities.stickyToSuccess(log.toString()));
 		} else {
-			infoArray.put(Utilities.createLogInfo("原因",result.has("error")?result.getString("error"):"未知"));
+			infoArray.put(Utilities.createLogInfo("原因",
+					result.has("error") ? result.getString("error") : "未知"));
 			OCLog log = this.getLogDAO().insertLog(userId,
 					LogConstant.logObject.路由器.ordinal(),
 					LogConstant.logAction.创建.ordinal(),
@@ -252,7 +270,7 @@ public class RouterManagerImpl implements RouterManager {
 		String backendName = "rt-" + uuid.substring(0, 8);
 		Date createDate = new Date();
 		try {
-			Image rtImage = this.getImageDAO().getRTImage(userId);
+			Image rtImage = this.getImageDAO().getRTImage(userId, poolUuid);
 			OS = "linux";
 			imagePwd = rtImage.getImagePwd();
 			tplUuid = rtImage.getImageUuid();
@@ -260,7 +278,7 @@ public class RouterManagerImpl implements RouterManager {
 			ip = dhcp.getDhcpIp();
 			mac = dhcp.getDhcpMac();
 			c = this.getConstant().getConnectionFromPool(poolUuid);
-			allocateHost = this.getVmManager().getAllocateHost(poolUuid, 1024);
+			allocateHost = getAllocateHost(c, 1024);
 			logger.info("Router [" + backendName + "] allocated to Host ["
 					+ allocateHost + "]");
 		} catch (Exception e) {
@@ -284,14 +302,15 @@ public class RouterManagerImpl implements RouterManager {
 				boolean preCreate = this.getRouterDAO().preCreateRouter(uuid,
 						pwd, userId, name, mac, capacity, fwuuid,
 						RouterManager.POWER_CREATE, 1, createDate);
+				this.getQuotaDAO().updateQuota(userId, "quotaRoute", 1, true);
 				Date preEndDate = new Date();
 				int elapse = Utilities.timeElapse(createDate, preEndDate);
 				logger.info("Router [" + backendName + "] Pre Create Time ["
 						+ elapse + "]");
 				if (preCreate == true) {
-					Record rtrecord = this.getVmManager().createVMOnHost(c,
-							uuid, tplUuid, "root", pwd, 1, 1024, mac, ip, OS,
-							allocateHost, imagePwd, backendName, true);
+					Record rtrecord = createVMOnHost(c, uuid, tplUuid, "root",
+							pwd, 1, 1024, mac, ip, OS, allocateHost, imagePwd,
+							backendName, true);
 					Date createEndDate = new Date();
 					int elapse1 = Utilities.timeElapse(createDate,
 							createEndDate);
@@ -338,21 +357,40 @@ public class RouterManagerImpl implements RouterManager {
 			}
 			if (dbRolrtack == true) {
 				this.getRouterDAO().removeRouter(userId, uuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaRoute", 1, false);
 				jo.put("isSuccess", false);
 			}
 		}
-		
-		///cyh 绑定内部防火墙
-		if (jo.getBoolean("isSuccess") == true) 
-		{
-			///1  创建内部防火墙，2 绑定到当前路由器
+
+		// /cyh 绑定内部防火墙
+		if (jo.getBoolean("isSuccess") == true) {
+			// /1 创建内部防火墙，2 绑定到当前路由器
 			String firewallinner = UUID.randomUUID().toString();
-			if(this.getFirewallDAO().insertFirewallForinnerRoute(firewallinner, name, userId, new Date()))
-			{
+			if (this.getFirewallDAO().insertFirewallForinnerRoute(
+					firewallinner, name, userId, new Date())) {
 				this.getRouterDAO().updateInnerFirewall(uuid, firewallinner);
 			}
 		}
 		return jo;
+	}
+
+	private Record createVMOnHost(Connection c, String vmUuid, String tplUuid,
+			String loginName, String loginPwd, long cpuCore,
+			long memoryCapacity, String mac, String ip, String OS,
+			String hostUuid, String imagePwd, String vmName, boolean ping) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("cpuNumber", cpuCore);
+		map.put("memoryValue", memoryCapacity);
+		map.put("newUuid", vmUuid);
+		map.put("MAC", mac);
+		map.put("IP", ip);
+		map.put("type", OS);
+		map.put("passwd", loginPwd);
+		map.put("origin_passwd", imagePwd);
+		Host host = Types.toHost(hostUuid);
+		Record vmrecord = VM.createOnFromTemplate(c, host, tplUuid, vmName,
+				map, ping);
+		return vmrecord;
 	}
 
 	public void deleteRouter(String uuid, int userId, String poolUuid) {
@@ -409,14 +447,55 @@ public class RouterManagerImpl implements RouterManager {
 			try {
 				String publicip = this.getEipDAO().getEipIp(uuid);
 				if (publicip != null) {
-					this.getEipManager().unbindElasticIp(userId, uuid,
-							publicip, "rt");
+					unbindElasticIp(c, uuid, publicip);
 				}
 				this.getRouterDAO().removeRouter(userId, uuid);
+				this.getQuotaDAO().updateQuota(userId, "quotaRoute", 1, false);
+				String firewallId = this.getRouterDAO().getRouter(uuid)
+						.getInnerFirewallUuid();
+				this.getFirewallDAO().deleteFirewall(userId, firewallId);
+				this.getFirewallDAO().deleteAllRuleOfFirewall(firewallId);
 				result = true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		return result;
+	}
+
+	private JSONObject unbindElasticIp(Connection c, String uuid, String eipIp) {
+		JSONObject result = new JSONObject();
+		result.put("result", false);
+		try {
+			String ip = null;
+			String eif = this.getEipDAO().getEip(eipIp).getEipInterface();
+			Router rt = this.getRouterDAO().getRouter(uuid);
+			ip = rt.getRouterIP();
+			boolean deActiveResult = deActiveFirewall(c, ip);
+			if (deActiveResult) {
+				if (Host.unbindOuterIp(c, ip, eipIp, eif)) {
+					this.getEipDAO().unBindEip(eipIp);
+					result.put("result", true);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private boolean deActiveFirewall(Connection c, String ip) {
+		boolean result = false;
+		try {
+			JSONObject total = new JSONObject();
+			JSONArray ipArray = new JSONArray();
+			ipArray.put(ip);
+			JSONArray ruleArray = new JSONArray();
+			total.put("IP", ipArray);
+			total.put("rules", ruleArray);
+			result = Host.firewallApplyRule(c, total.toString(), null);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}
@@ -456,19 +535,18 @@ public class RouterManagerImpl implements RouterManager {
 		boolean result = false;
 		String hostUuid = null;
 		String powerState = null;
+		Connection c = null;
 		try {
 			Router currentRT = this.getRouterDAO().getRouter(uuid);
 			if (currentRT != null) {
 				boolean preStartRouter = this.getRouterDAO().updatePowerStatus(
 						uuid, RouterManager.POWER_BOOT);
 				if (preStartRouter == true) {
-					Connection c = this.getConstant().getConnectionFromPool(
-							poolUuid);
+					c = this.getConstant().getConnectionFromPool(poolUuid);
 					VM thisVM = VM.getByUuid(c, uuid);
 					powerState = thisVM.getPowerState(c).toString();
 					if (!powerState.equals("Running")) {
-						hostUuid = this.getVmManager().getAllocateHost(
-								poolUuid, 1024);
+						hostUuid = getAllocateHost(c, 1024);
 						Host allocateHost = Types.toHost(hostUuid);
 						thisVM.startOn(c, allocateHost, false, true);
 					} else {
@@ -499,8 +577,7 @@ public class RouterManagerImpl implements RouterManager {
 				List<Vnet> vnetList = this.getVnetDAO().getVnetsOfRouter(uuid);
 				if (vnetList != null && vnetList.size() > 0) {
 					for (Vnet vnet : vnetList) {
-						bindVlan(uuid, vnet.getVifUuid(), vnet.getVnetID(),
-								poolUuid);
+						bindVlan(uuid, vnet.getVifUuid(), vnet.getVnetID(), c);
 						logger.debug("Update Router Vlan: MAC ["
 								+ vnet.getVifMac() + "] Vlan ["
 								+ vnet.getVnetID() + "]");
@@ -511,10 +588,32 @@ public class RouterManagerImpl implements RouterManager {
 		return result;
 	}
 
-	private void bindVlan(String routerUuid, String vifUuid, int vnetId,
-			String poolUuid) {
+	private String getAllocateHost(Connection conn, int memory) {
+		String host = null;
 		try {
-			Connection c = this.getConstant().getConnectionFromPool(poolUuid);
+			Map<Host, Host.Record> hostMap = Host.getAllRecords(conn);
+			long maxFree = 0;
+			for (Host thisHost : hostMap.keySet()) {
+				Host.Record hostRecord = hostMap.get(thisHost);
+				long memoryFree = hostRecord.memoryFree;
+				if (memoryFree > maxFree) {
+					maxFree = memoryFree;
+					host = thisHost.toWireString();
+				}
+			}
+			if ((int) (maxFree / MB) >= memory) {
+				return host;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private void bindVlan(String routerUuid, String vifUuid, int vnetId,
+			Connection c) {
+		try {
 			VM router = VM.getByUuid(c, routerUuid);
 			router.setTag(c, Types.toVIF(vifUuid), String.valueOf(vnetId));
 		} catch (Exception e) {
@@ -602,255 +701,8 @@ public class RouterManagerImpl implements RouterManager {
 		}
 		return result;
 	}
-
-	public JSONObject doUnlinkRouter(String vnetUuid, int userId) {
-		JSONObject result = new JSONObject();
-		result.put("result", false);
-		try {
-			logger.info("Unlink to Router: Vnet [vn-"
-					+ vnetUuid.substring(0, 8) + "]");
-			Connection c = this.getConstant().getConnection(userId);
-			Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
-			String vifUuid = vnet.getVifUuid();
-			String vifMac = vnet.getVifMac();
-			String routerUuid = vnet.getVnetRouter();
-			Router router = this.getRouterDAO().getAliveRouter(routerUuid);
-			VM routerVm = VM.getByUuid(c, routerUuid);
-			Set<VIF> vifs = routerVm.getVIFs(c);
-			for (VIF vif : vifs) {
-				VIF.Record record = vif.getRecord(c);
-				System.out.println(record.MAC + "|" + record.device + "|" + record.uuid);
-			}
-			routerVm.destroyVIF(c, Types.toVIF(vifUuid));
-			logger.info("Delete VIF: UUID [vif-" + vifUuid.substring(0, 8)
-					+ "]");
-			String url = router.getRouterIP() + ":9090";
-			boolean delEthResult = Host.routeDelEth(c, url, vifMac);
-			logger.info("Delete Ethernet: Mac [" + vifMac + "] Result ["
-					+ delEthResult + "]");
-			if (vnet.getDhcpStatus() == 1) {
-				String subnet = "192.168." + vnet.getVnetNet() + ".0";
-				String netmask = "255.255.255.0";
-				JSONObject delJo = new JSONObject();
-				delJo.put("subnet", subnet);
-				delJo.put("netmask", netmask);
-				Host.delSubnet(c, url, delJo.toString());
-			}
-			this.getVnetDAO().unlinkRouter(vnetUuid);
-			this.getVmManager().unAssginIpAddress(c, vnetUuid);
-			result.put("result", true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	public JSONObject doLinkRouter(int userId, String vnetUuid,
-			String routerUuid, int net, int gate, int start, int end,
-			int dhcpState) {
-		JSONObject result = new JSONObject();
-		result.put("result", false);
-		try {
-			logger.info("Link to Router: Router [rt-"
-					+ routerUuid.substring(0, 8) + "] Vnet [vn-"
-					+ vnetUuid.substring(0, 8) + "]");
-			Connection c = this.getConstant().getConnection(userId);
-			VM vm = VM.getByUuid(c, routerUuid);
-			String mac = Utilities.randomMac();
-			VIF vif = VIF.createBindToPhysicalNetwork(c, vm, "ovs0", mac);
-			String vifUuid = vif.getUuid(c);
-			Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
-			vm.setTag(c, vif, String.valueOf(vnet.getVnetID()));
-			String eth = vm.getVIFRecord(c, vif).device;
-			logger.info("Create VIF: Mac [" + mac + "] Ethernet [" + eth + "]");
-			if (!eth.equals("")) {
-				String routerIp = this.getRouterDAO().getRouter(routerUuid)
-						.getRouterIP();
-				String url = routerIp + ":9090";
-				String subnet = "192.168." + net + ".0";
-				String netmask = "255.255.255.0";
-				String gateway = "192.168." + net + "." + gate;
-				logger.info("Configure Ethernet: URL [" + url + "] Gateway ["
-						+ gateway + "] Netmask [" + netmask + "]");
-				boolean addEthResult = Host.routeAddEth(c, url, mac, gateway,
-						netmask);
-				logger.info("Configure Ethernet Result: " + addEthResult);
-				if (addEthResult) {
-					boolean addSubnetResult = true;
-					if (dhcpState == 1) {
-						String rangeStart = "192.168." + net + "." + start;
-						String rangeEnd = "192.168." + net + "." + end;
-						logger.info("Configure Subnet: URL [" + url
-								+ "] Netmask [" + netmask + "] RangeStart ["
-								+ rangeStart + "] RangeEnd [" + rangeEnd + "]");
-						addSubnetResult = RouterManager.addSubnet(c, url,
-								subnet, netmask, gateway, rangeStart, rangeEnd);
-						this.getVmManager().assginIpAddress(c, url, subnet,
-								vnetUuid);
-						logger.info("Configure Subnet Result: "
-								+ addSubnetResult);
-					}
-					if (addSubnetResult) {
-						this.getVnetDAO().linkToRouter(vnetUuid, routerUuid,
-								net, gate, start, end, dhcpState, vifUuid, mac);
-						result.put("result", true);
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	public JSONObject enableDHCP(String vnetUuid, int userId) {
-		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
-		JSONObject jo = new JSONObject();
-		boolean result = false;
-		if (vnet != null) {
-			try {
-				if (vnet.getDhcpStatus() == 1) {
-					result = true;
-				} else {
-					Connection c = this.getConstant().getConnection(userId);
-					String routerUuid = vnet.getVnetRouter();
-					Router router = this.getRouterDAO().getAliveRouter(
-							routerUuid);
-					String url = router.getRouterIP() + ":9090";
-					int net = vnet.getVnetNet();
-					String subnet = "192.168." + net + ".0";
-					String netmask = "255.255.255.0";
-					String gateway = "192.168." + net + "."
-							+ vnet.getVnetGate();
-					String rangeStart = "192.168." + net + "." + "2";
-					String rangeEnd = "192.168." + net + "." + "254";
-					logger.info("Configure Subnet: URL [" + url + "] Netmask ["
-							+ netmask + "] RangeStart [" + rangeStart
-							+ "] RangeEnd [" + rangeEnd + "]");
-					boolean addSubnetResult = RouterManager.addSubnet(c, url,
-							subnet, netmask, gateway, rangeStart, rangeEnd);
-					if (addSubnetResult) {
-						vnet.setVnetStart(2);
-						vnet.setVnetEnd(254);
-						vnet.setDhcpStatus(1);
-						this.getVnetDAO().updateVnet(vnet);
-						this.getVmManager().assginIpAddress(c, url, subnet,
-								vnetUuid);
-						logger.info("Configure Subnet Result: "
-								+ addSubnetResult);
-						result = true;
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		jo.put("result", result);
-		return jo;
-	}
-
-	public JSONObject disableDHCP(String vnetUuid, int userId) {
-		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
-		JSONObject jo = new JSONObject();
-		boolean result = false;
-		if (vnet != null) {
-			if (vnet.getDhcpStatus() == 0) {
-				result = true;
-			} else {
-				try {
-					Connection c = this.getConstant().getConnection(userId);
-					String routerUuid = vnet.getVnetRouter();
-					Router router = this.getRouterDAO().getAliveRouter(
-							routerUuid);
-					String url = router.getRouterIP() + ":9090";
-					String subnet = "192.168." + vnet.getVnetNet() + ".0";
-					String netmask = "255.255.255.0";
-					JSONObject delJo = new JSONObject();
-					delJo.put("subnet", subnet);
-					delJo.put("netmask", netmask);
-					boolean delSubnetResult = Host.delSubnet(c, url,
-							delJo.toString());
-					if (delSubnetResult) {
-						vnet.setDhcpStatus(0);
-						this.getVnetDAO().updateVnet(vnet);
-						this.getVmManager().unAssginIpAddress(c, vnetUuid);
-						result = true;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		jo.put("result", result);
-		return jo;
-	}
-
-	private static boolean addSubnet(Connection c, String url, String subnet,
-			String netmask, String gateway, String rangeStart, String rangeEnd) {
-		boolean result = false;
-		JSONObject params = new JSONObject();
-		params.put("subnet", subnet);
-		params.put("netmask", netmask);
-		params.put("router", gateway);
-		params.put("dns", "114.114.114.114");
-		params.put("rangeStart", rangeStart);
-		params.put("rangeEnd", rangeEnd);
-		params.put("defaultLease", 21600);
-		params.put("maxLease", 43200);
-		try {
-			result = Host.addSubnet(c, url, params.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-	*//**
-	 * @author hty
-	 * @param rtuuid
-	 * @return
-	 * @throws JSONException
-	 * @time 2014/08/14
-	 *//*
-	public JSONArray getVxnets(String rtuuid) {
-		JSONArray ja = new JSONArray();
-		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(rtuuid);
-		if (vxnetsList != null) {
-			for (Vnet vnet : vxnetsList) {
-				JSONObject jo = new JSONObject();
-				List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(
-						vnet.getVnetUuid());
-				if (ocvmList.size() == 0) {
-					jo.put("ocvm", "null");
-				} else {
-					JSONArray javm = new JSONArray();
-					for (OCVM ocvm : ocvmList) {
-						JSONObject jovm = new JSONObject();
-						jovm.put("hostid", ocvm.getVmUuid());
-						jovm.put("hostname",
-								Utilities.encodeText(ocvm.getVmName()));
-						jovm.put("hoststatus", ocvm.getVmPower());
-						jovm.put("hostip", null == ocvm.getVmIP() ? "null"
-								: ocvm.getVmIP());
-						javm.put(jovm);
-					}
-					jo.put("ocvm", javm);
-				}
-				jo.put("vn_dhcp", vnet.getDhcpStatus());
-				jo.put("vn_uuid", vnet.getVnetUuid());
-				jo.put("vn_net", vnet.getVnetNet());
-				jo.put("vn_gate", vnet.getVnetGate());
-				jo.put("vn_dhcp_start", vnet.getVnetStart());
-				jo.put("vn_dhcp_end", vnet.getVnetEnd());
-				jo.put("vn_name", vnet.getVnetName());
-				jo.put("vn_uuid", vnet.getVnetUuid());
-				ja.put(jo);
-			}
-		}
-		return ja;
-	}
-
-	*//**
+	
+	/**
 	 * 获取用户路由器列表
 	 * 
 	 * @param userId
@@ -858,7 +710,7 @@ public class RouterManagerImpl implements RouterManager {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public JSONArray getRouterList(int userId, int page, int limit,
 			String search) {
 		JSONArray ja = new JSONArray();
@@ -898,62 +750,7 @@ public class RouterManagerImpl implements RouterManager {
 		return ja;
 	}
 
-	public JSONArray getAdminRouterList(int page, int limit, String host,
-			int importance, String type) {
-		JSONArray ja = new JSONArray();
-		int totalNum = this.getRouterDAO()
-				.countRoutersOfAdmin(host, importance);
-		List<Router> rtList = this.getRouterDAO().getOnePageRoutersOfAdmin(
-				page, limit, host, importance);
-		ja.put(totalNum);
-		if (rtList != null) {
-			for (int i = 0; i < rtList.size(); i++) {
-				JSONObject jo = new JSONObject();
-				Router router = rtList.get(i);
-				jo.put("vmid", router.getRouterUuid());
-				jo.put("vmname", Utilities.encodeText(router.getRouterName()));
-				jo.put("state", router.getRouterPower());
-				jo.put("cpu", "1");
-				jo.put("memory", "1024");
-				String ip = router.getRouterIP();
-				if (ip == null) {
-					jo.put("ip", "null");
-				} else {
-					jo.put("ip", ip);
-				}
-				String timeUsed = Utilities.encodeText(Utilities
-						.dateToUsed(router.getCreateDate()));
-				jo.put("createdate", timeUsed);
-				jo.put("importance", router.getRouterImportance());
-				jo.put("userName",
-						Utilities.encodeText(this.getUserDAO()
-								.getUser(router.getRouterUID()).getUserName()));
-				ja.put(jo);
-			}
-		}
-		return ja;
-	}
-
-	public JSONArray getRoutersOfUser(int userId, int page, int limit,
-			String search) {
-		JSONArray ja = new JSONArray();
-		int totalNum = this.getRouterDAO().countRouters(userId, search);
-		ja.put(totalNum);
-		List<Router> rtList = this.getRouterDAO().getOnePageRouters(userId,
-				page, limit, search);
-		if (rtList != null) {
-			for (int i = 0; i < rtList.size(); i++) {
-				JSONObject jo = new JSONObject();
-				Router rt = rtList.get(i);
-				jo.put("vmid", rt.getRouterUuid());
-				jo.put("vmname", Utilities.encodeText(rt.getRouterName()));
-				ja.put(jo);
-			}
-		}
-		return ja;
-	}
-
-	*//**
+	/**
 	 * 获取路由器详细信息
 	 * 
 	 * @param routerUuid
@@ -1000,20 +797,6 @@ public class RouterManagerImpl implements RouterManager {
 		}
 		return jo;
 	}
-/*
-	public void routerAdminStartUp(String uuid, int userId) {
-		Router router = this.getRouterDAO().getRouter(uuid);
-		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
-				.getPoolUuid();
-		this.startRouter(uuid, userId, poolUuid);
-	}
-
-	public void routerAdminShutDown(String uuid, String force, int userId) {
-		Router router = this.getRouterDAO().getRouter(uuid);
-		String poolUuid = this.getHostDAO().getHost(router.getHostUuid())
-				.getPoolUuid();
-		this.shutdownRouter(uuid, force, userId, poolUuid);
-	}
 
 	public JSONArray routerQuota(int userId) {
 		JSONArray ja = new JSONArray();
@@ -1029,15 +812,75 @@ public class RouterManagerImpl implements RouterManager {
 		ja.put(jo);
 		return ja;
 	}
-
-	public void updateImportance(String uuid, int importance) {
-		this.getRouterDAO().updateImportance(uuid, importance);
+	
+	/**
+	 * @author hty
+	 * @param rtuuid
+	 * @return
+	 * @throws JSONException
+	 * @time 2014/08/14
+	 */
+	public JSONArray getVxnets(String rtuuid) {
+		JSONArray ja = new JSONArray();
+		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(rtuuid);
+		if (vxnetsList != null) {
+			for (Vnet vnet : vxnetsList) {
+				JSONObject jo = new JSONObject();
+				List<OCVM> ocvmList = this.getVmDAO().getVMsOfVnet(
+						vnet.getVnetUuid());
+				if (ocvmList.size() == 0) {
+					jo.put("ocvm", "null");
+				} else {
+					JSONArray javm = new JSONArray();
+					for (OCVM ocvm : ocvmList) {
+						JSONObject jovm = new JSONObject();
+						jovm.put("hostid", ocvm.getVmUuid());
+						jovm.put("hostname",
+								Utilities.encodeText(ocvm.getVmName()));
+						jovm.put("hoststatus", ocvm.getVmPower());
+						jovm.put("hostip", null == ocvm.getVmIP() ? "null"
+								: ocvm.getVmIP());
+						javm.put(jovm);
+					}
+					jo.put("ocvm", javm);
+				}
+				jo.put("vn_dhcp", vnet.getDhcpStatus());
+				jo.put("vn_uuid", vnet.getVnetUuid());
+				jo.put("vn_net", vnet.getVnetNet());
+				jo.put("vn_gate", vnet.getVnetGate());
+				jo.put("vn_dhcp_start", vnet.getVnetStart());
+				jo.put("vn_dhcp_end", vnet.getVnetEnd());
+				jo.put("vn_name", vnet.getVnetName());
+				jo.put("vn_uuid", vnet.getVnetUuid());
+				ja.put(jo);
+			}
+		}
+		return ja;
 	}
-
+	
+	public JSONArray getRoutersOfUser(int userId, int page, int limit,
+			String search) {
+		JSONArray ja = new JSONArray();
+		int totalNum = this.getRouterDAO().countRouters(userId, search);
+		ja.put(totalNum);
+		List<Router> rtList = this.getRouterDAO().getOnePageRouters(userId,
+				page, limit, search);
+		if (rtList != null) {
+			for (int i = 0; i < rtList.size(); i++) {
+				JSONObject jo = new JSONObject();
+				Router rt = rtList.get(i);
+				jo.put("vmid", rt.getRouterUuid());
+				jo.put("vmname", Utilities.encodeText(rt.getRouterName()));
+				ja.put(jo);
+			}
+		}
+		return ja;
+	}
+	
 	public JSONArray getRoutersOfUser(int userId) {
 		return this.getRouterDAO().getRoutersOfUser(userId);
 	}
-
+	
 	public JSONObject addPortForwarding(int userId, String allocate,
 			String protocol, String srcIP, String srcPort, String destIP,
 			String destPort, String pfName, String routerUuid) {
@@ -1069,7 +912,7 @@ public class RouterManagerImpl implements RouterManager {
 		}
 		return jo;
 	}
-
+	
 	public JSONObject delPortForwarding(int userId, String allocate,
 			String protocol, String srcIP, String srcPort, String destIP,
 			String destPort, String uuid) {
@@ -1098,7 +941,7 @@ public class RouterManagerImpl implements RouterManager {
 		}
 		return jo;
 	}
-
+	
 	public JSONArray getpfList(String routerUuid) {
 		JSONArray ja = new JSONArray();
 		List<ForwardPort> pfList = this.getForwardPortDAO().getpfListByRouter(
@@ -1115,7 +958,7 @@ public class RouterManagerImpl implements RouterManager {
 		}
 		return ja;
 	}
-
+	
 	public JSONObject checkPortForwarding(String routerUuid, String destIP, int destPort, int srcPort) {
 		JSONObject jo = new JSONObject();
 		List<Vnet> vxnetsList = this.getVnetDAO().getVnetsOfRouter(routerUuid);
@@ -1148,6 +991,160 @@ public class RouterManagerImpl implements RouterManager {
 		}
 		jo.put("pfLegal", pfLegal);
 		return jo;
+	}
+	
+	public JSONObject disableDHCP(String vnetUuid, int userId) {
+		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
+		JSONObject jo = new JSONObject();
+		boolean result = false;
+		if (vnet != null) {
+			if (vnet.getDhcpStatus() == 0) {
+				result = true;
+			} else {
+				try {
+					Connection c = this.getConstant().getConnection(userId);
+					String routerUuid = vnet.getVnetRouter();
+					Router router = this.getRouterDAO().getAliveRouter(
+							routerUuid);
+					String url = router.getRouterIP() + ":9090";
+					String subnet = "192.168." + vnet.getVnetNet() + ".0";
+					String netmask = "255.255.255.0";
+					JSONObject delJo = new JSONObject();
+					delJo.put("subnet", subnet);
+					delJo.put("netmask", netmask);
+					boolean delSubnetResult = Host.delSubnet(c, url,
+							delJo.toString());
+					if (delSubnetResult) {
+						vnet.setDhcpStatus(0);
+						this.getVnetDAO().updateVnet(vnet);
+						unAssginIpAddress(c, vnetUuid);
+						result = true;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		jo.put("result", result);
+		return jo;
+	}
+	
+	private void unAssginIpAddress(Connection c, String vnUuid) {
+		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
+		if (vmList != null) {
+			try {
+				for (OCVM vm : vmList) {
+					this.restartNetwork(c, vm.getVmUuid(), true);
+					vm.setVmIP(null);
+					this.getVmDAO().updateVM(vm);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private boolean restartNetwork(Connection c, String vmuuid, boolean sync) {
+		try {
+			VM temVM = VM.getByUuid(c, vmuuid);
+			JSONObject temjo = new JSONObject();
+			temjo.put("requestType", "Agent.RestartNetwork");
+			temVM.sendRequestViaSerial(c, temjo.toString(), sync);
+			return true;
+		} catch (BadServerResponse e) {
+			e.printStackTrace();
+			return false;
+		} catch (XenAPIException e) {
+			e.printStackTrace();
+			return false;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public JSONObject enableDHCP(String vnetUuid, int userId) {
+		Vnet vnet = this.getVnetDAO().getVnet(vnetUuid);
+		JSONObject jo = new JSONObject();
+		boolean result = false;
+		if (vnet != null) {
+			try {
+				if (vnet.getDhcpStatus() == 1) {
+					result = true;
+				} else {
+					Connection c = this.getConstant().getConnection(userId);
+					String routerUuid = vnet.getVnetRouter();
+					Router router = this.getRouterDAO().getAliveRouter(
+							routerUuid);
+					String url = router.getRouterIP() + ":9090";
+					int net = vnet.getVnetNet();
+					String subnet = "192.168." + net + ".0";
+					String netmask = "255.255.255.0";
+					String gateway = "192.168." + net + "."
+							+ vnet.getVnetGate();
+					String rangeStart = "192.168." + net + "." + "2";
+					String rangeEnd = "192.168." + net + "." + "254";
+					logger.info("Configure Subnet: URL [" + url + "] Netmask ["
+							+ netmask + "] RangeStart [" + rangeStart
+							+ "] RangeEnd [" + rangeEnd + "]");
+					boolean addSubnetResult = addSubnet(c, url,
+							subnet, netmask, gateway, rangeStart, rangeEnd);
+					if (addSubnetResult) {
+						vnet.setVnetStart(2);
+						vnet.setVnetEnd(254);
+						vnet.setDhcpStatus(1);
+						this.getVnetDAO().updateVnet(vnet);
+						assginIpAddress(c, url, subnet,
+								vnetUuid);
+						logger.info("Configure Subnet Result: "
+								+ addSubnetResult);
+						result = true;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		jo.put("result", result);
+		return jo;
+	}
+	
+	private static boolean addSubnet(Connection c, String url, String subnet,
+			String netmask, String gateway, String rangeStart, String rangeEnd) {
+		boolean result = false;
+		JSONObject params = new JSONObject();
+		params.put("subnet", subnet);
+		params.put("netmask", netmask);
+		params.put("router", gateway);
+		params.put("dns", "114.114.114.114");
+		params.put("rangeStart", rangeStart);
+		params.put("rangeEnd", rangeEnd);
+		params.put("defaultLease", 21600);
+		params.put("maxLease", 43200);
+		try {
+			result = Host.addSubnet(c, url, params.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	private void assginIpAddress(Connection c, String url, String subnet,
+			String vnUuid) {
+		List<OCVM> vmList = this.getVmDAO().getVMsOfVnet(vnUuid);
+		if (vmList != null) {
+			try {
+				for (OCVM vm : vmList) {
+					String mac = vm.getVmMac();
+					String vnetIp = Host.assignIpAddress(c, url, mac, subnet);
+					vm.setVmIP(vnetIp);
+					this.getVmDAO().updateVM(vm);
+					this.restartNetwork(c, vm.getVmUuid(), false);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public JSONObject savePPTPUser(String name, String pwd, String routerUuid) {
@@ -1250,5 +1247,5 @@ public class RouterManagerImpl implements RouterManager {
 					Utilities.stickyToError("PPTP服务关闭失败"));
 		}
 		return result;
-	}*/
+	}
 }

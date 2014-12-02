@@ -22,13 +22,13 @@ public interface VMDAO {
 	 */
 	public abstract String getVmName(String vmUuid);
 
-//	/**
-//	 * 获取使用中的主机
-//	 * 
-//	 * @param vmUuid
-//	 * @return
-//	 */
-//	public abstract OCVM getAliveVM(String vmUuid);
+	/**
+	 * 获取使用中的主机
+	 * 
+	 * @param vmUuid
+	 * @return
+	 */
+	public abstract OCVM getAliveVM(String vmUuid);
 
 	/**
 	 * 获取一页用户主机列表
@@ -53,39 +53,39 @@ public interface VMDAO {
 //	 */
 //	public abstract List<OCVM> getOnePageVMsOfAdmin(int page, int limit,
 //			String host, int importance);
-//
-//	/**
-//	 * 获取一页未设置监控警告的主机列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getOnePageVMsWithoutAlarm(int page, int limit,
-//			String search, int userId);
-//
-//	/**
-//	 * 获取一页没有绑定公网IP的主机列表
-//	 * 
-//	 * @param page
-//	 * @param limit
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
-//			String search, int userId);
-//
-//	/**
-//	 * 获取对应监控警告的主机列表
-//	 * 
-//	 * @param vmUID
-//	 * @param alarmUuid
-//	 * @return
-//	 */
-//	public abstract List<OCVM> getVMsOfAlarm(int vmUID, String alarmUuid);
+
+	/**
+	 * 获取一页未设置监控警告的主机列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract List<OCVM> getOnePageVMsWithoutAlarm(int page, int limit,
+			String search, int userId);
+
+	/**
+	 * 获取一页没有绑定公网IP的主机列表
+	 * 
+	 * @param page
+	 * @param limit
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
+			String search, int userId);
+
+	/**
+	 * 获取对应监控警告的主机列表
+	 * 
+	 * @param vmUID
+	 * @param alarmUuid
+	 * @return
+	 */
+	public abstract List<OCVM> getVMsOfAlarm(int vmUID, String alarmUuid);
 
 	/**
 	 * 获取对应私有网络的主机列表
@@ -129,33 +129,33 @@ public interface VMDAO {
 //	 * @throws Exception 
 //	 */
 //	public abstract int countVMsOfUser(int userId);
-//
-//	/**
-//	 * 获取未设置监控警告的主机总数
-//	 * 
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract int countVMsWithoutAlarm(String search, int userId);
-//
-//	/**
-//	 * 获取未绑定公网IP的主机总数
-//	 * 
-//	 * @param search
-//	 * @param userId
-//	 * @return
-//	 */
-//	public abstract int countVMsWithoutEIP(String search, int userId);
-//
-//	/**
-//	 * 获取指定私有网络的主机总数
-//	 * 
-//	 * @param vnetUuid
-//	 * @return
-//	 */
-//	public abstract int countVMsOfVnet(String vnetUuid);
-//
+
+	/**
+	 * 获取未设置监控警告的主机总数
+	 * 
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract int countVMsWithoutAlarm(String search, int userId);
+
+	/**
+	 * 获取未绑定公网IP的主机总数
+	 * 
+	 * @param search
+	 * @param userId
+	 * @return
+	 */
+	public abstract int countVMsWithoutEIP(String search, int userId);
+
+	/**
+	 * 获取指定私有网络的主机总数
+	 * 
+	 * @param vnetUuid
+	 * @return
+	 */
+	public abstract int countVMsOfVnet(String vnetUuid);
+
 //	/**
 //	 * 获取指定服务器的主机总数
 //	 * 
@@ -226,22 +226,22 @@ public interface VMDAO {
 	 */
 	public abstract void updateBackupDate(String vmUuid, Date date);
 
-//	/**
-//	 * 更新主机防火墙
-//	 * 
-//	 * @param vmUuid
-//	 * @param firewallId
-//	 */
-//	public abstract void updateFirewall(String vmUuid, String firewallId);
-//
-//	/**
-//	 * 更新主机监控警告
-//	 * 
-//	 * @param vmUuid
-//	 * @param alarmUuid
-//	 */
-//	public abstract boolean updateAlarm(String vmUuid, String alarmUuid);
-//
+	/**
+	 * 更新主机防火墙
+	 * 
+	 * @param vmUuid
+	 * @param firewallId
+	 */
+	public abstract void updateFirewall(String vmUuid, String firewallId);
+
+	/**
+	 * 更新主机监控警告
+	 * 
+	 * @param vmUuid
+	 * @param alarmUuid
+	 */
+	public abstract boolean updateAlarm(String vmUuid, String alarmUuid);
+
 //	/**
 //	 * 更新主机名称和描述
 //	 * 
@@ -321,11 +321,11 @@ public interface VMDAO {
 	 */
 	public abstract boolean returnToBasicNetwork(String vmuuid, String ip);
 
-//	/**
-//	 * 是否有主机具有该监控警告
-//	 * 
-//	 * @param alarmUuid
-//	 * @return
-//	 */
-//	public abstract boolean isNotExistAlarm(String alarmUuid);
+	/**
+	 * 是否有主机具有该监控警告
+	 * 
+	 * @param alarmUuid
+	 * @return
+	 */
+	public abstract boolean isNotExistAlarm(String alarmUuid);
 }

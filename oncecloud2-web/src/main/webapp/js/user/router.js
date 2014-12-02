@@ -226,6 +226,7 @@ function startRouter(uuid) {
 function destroyRouter(uuid) {
     var thistr = $("#tablebody").find('[rowid="' + uuid + '"]');
     var thisicon = thistr.find('[name="stateicon"]');
+    var stop = thisicon.hasClass("icon-stopped");
     thisicon.removeClass("icon-stopped");
     thisicon.removeClass("icon-running");
     thisicon.addClass('icon-process');
@@ -239,8 +240,13 @@ function destroyRouter(uuid) {
             if (obj == "no") {
                 thisicon.removeClass("icon-stopped");
                 thisicon.removeClass('icon-process');
-                thisicon.addClass("icon-running");
-                thistr.find('[name="stateword"]').text('活跃');
+                if (stop) {
+                	thisicon.addClass("icon-stopped");
+                	thistr.find('[name="stateword"]').text('已关机');
+                } else {
+	                thisicon.addClass("icon-running");
+	                thistr.find('[name="stateword"]').text('活跃');
+                }
                 bootbox.dialog({
                     message: '<div class="alert alert-danger" style="margin:10px"><span class="glyphicon glyphicon-warning-sign"></span>&nbsp;无法删除，依然有私有网络依赖于该路由器</div>',
                     title: "提示",

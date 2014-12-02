@@ -353,11 +353,14 @@ public class ImageManagerImpl implements ImageManager {
 		}
 		return ja;
 	}
-
+*/
 	public JSONObject deleteImage(int userId, String imageId, String imageName) {
 		JSONObject jo = new JSONObject();
 		Date startTime = new Date();
 		boolean result = this.getImageDAO().deleteImage(imageId);
+		this.getQuotaDAO().updateQuota(userId,
+				"quotaImage", 1, false);
+		this.getOverViewDAO().updateOverViewfield("viewImage", false);
 		jo.put("result", result);
 		// write log and push message
 		Date endTime = new Date();
@@ -407,7 +410,7 @@ public class ImageManagerImpl implements ImageManager {
 		}
 		return jo;
 	}
-	
+/*	
 	@SuppressWarnings("rawtypes")
 	public JSONArray getShareImageList(String poolUuid, String[] imageUuids) {
 		JSONArray ja = new JSONArray();

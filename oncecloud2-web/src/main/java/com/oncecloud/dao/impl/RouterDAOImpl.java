@@ -57,7 +57,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 		return router;
 	}
-/*
+
 	public void updateRouter(Router router) {
 		Session session = null;
 		try {
@@ -73,12 +73,12 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 	
-	*//**
+	/**
 	 * 获取路由器名称
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	public String getRouterName(String routerUuid) {
 		String name = "";
 		Router router = this.getRouter(routerUuid);
@@ -88,12 +88,12 @@ public class RouterDAOImpl implements RouterDAO {
 		return name;
 	}
 
-	*//**
+	/**
 	 * 获取使用中的路由器
 	 * 
 	 * @param routerUuid
 	 * @return
-	 *//*
+	 */
 	public Router getAliveRouter(String routerUuid) {
 		Router router = null;
 		Session session = null;
@@ -114,7 +114,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return router;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户路由器列表
 	 * 
 	 * @param userId
@@ -122,7 +122,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param limit
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRouters(int userId, int page, int limit,
 			String search) {
@@ -149,7 +149,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取一页管理员路由器列表
 	 * 
 	 * @param page
@@ -196,7 +196,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRoutersWithoutAlarm(int page, int limit,
 			String search, int userId) {
@@ -224,7 +224,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取一页没有绑定公网IP的路由器列表
 	 * 
 	 * @param page
@@ -232,7 +232,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getOnePageRoutersWithoutEip(int page, int limit,
 			String search, int userId) {
@@ -263,13 +263,13 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取对应监控警告的路由器列表
 	 * 
 	 * @param routerUID
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Router> getRoutersOfAlarm(int routerUID, String alarmUuid) {
 		List<Router> list = null;
@@ -293,12 +293,12 @@ public class RouterDAOImpl implements RouterDAO {
 		return list;
 	}
 
-	*//**
+	/**
 	 * 获取用户路由器列表
 	 * 
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONArray getRoutersOfUser(int userId) {
 		Session session = null;
@@ -327,13 +327,13 @@ public class RouterDAOImpl implements RouterDAO {
 		return routerList;
 	}
 
-	*//**
+	/**
 	 * 获取用户路由器总数
 	 * 
 	 * @param userId
 	 * @param search
 	 * @return
-	 *//*
+	 */
 	public int countRouters(int userId, String search) {
 		int count = 0;
 		Session session = null;
@@ -355,7 +355,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取管理员路由器总数
 	 * 
 	 * @param host
@@ -394,7 +394,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param search
 	 * @param routerUID
 	 * @return
-	 *//*
+	 */
 	public int countRoutersWithoutAlarm(String search, int uuid) {
 		int count = 0;
 		Session session = null;
@@ -417,13 +417,13 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取未绑定公网IP的路由器总数
 	 * 
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countRoutersWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -449,7 +449,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 预创建路由器
 	 * 
 	 * @param uuid
@@ -463,7 +463,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param status
 	 * @param createDate
 	 * @return
-	 *//*
+	 */
 	public boolean preCreateRouter(String uuid, String pwd, int userId,
 			String name, String mac, int capacity, String fwuuid, int power,
 			int status, Date createDate) {
@@ -475,8 +475,6 @@ public class RouterDAOImpl implements RouterDAO {
 			session = this.getSessionHelper().getMainSession();
 			session.beginTransaction();
 			session.save(router);
-			this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-					"quotaRoute", 1, true);
 			session.getTransaction().commit();
 			result = true;
 		} catch (Exception e) {
@@ -488,12 +486,12 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 删除路由器
 	 * 
 	 * @param userId
 	 * @param uuid
-	 *//*
+	 */
 	public void removeRouter(int userId, String uuid) {
 		Router toDelete = this.getRouter(uuid);
 		if (toDelete != null) {
@@ -503,8 +501,6 @@ public class RouterDAOImpl implements RouterDAO {
 				session = this.getSessionHelper().getMainSession();
 				session.beginTransaction();
 				session.update(toDelete);
-				this.getQuotaDAO().updateQuotaFieldNoTransaction(userId,
-						"quotaRoute", 1, false);
 				session.getTransaction().commit();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -515,7 +511,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新路由器
 	 * 
 	 * @param userId
@@ -525,7 +521,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param firewallId
 	 * @param hostUuid
 	 * @param ip
-	 *//*
+	 */
 	public void updateRouter(int userId, String uuid, String pwd, int power,
 			String firewallId, String hostUuid, String ip) {
 		Router router = this.getRouter(uuid);
@@ -550,7 +546,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新路由器状态
 	 * 
 	 * @param routerUuid
@@ -586,7 +582,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param uuid
 	 * @param powerStatus
 	 * @return
-	 *//*
+	 */
 	public boolean updatePowerStatus(String uuid, int powerStatus) {
 		boolean result = false;
 		Router router = this.getRouter(uuid);
@@ -608,7 +604,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 		return result;
 	}
-
+/*
 	public boolean updateImportance(String uuid, int routerImportance) {
 		boolean result = false;
 		Router router = this.getRouter(uuid);
@@ -636,7 +632,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * 
 	 * @param routerUuid
 	 * @param firewallId
-	 *//*
+	 */
 	public void updateFirewall(String routerUuid, String firewallId) {
 		Session session = null;
 		try {
@@ -657,12 +653,12 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 	
-	*//**
+	/**
 	 * 更新路由器防火墙
 	 * 
 	 * @param routerUuid
 	 * @param innerfirewallId
-	 *//*
+	 */
 	public void updateInnerFirewall(String routerUuid, String innerfirewallId) {
 		Session session = null;
 		try {
@@ -683,7 +679,7 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新路由器名称和描述
 	 * 
 	 * @param routeruuid
@@ -719,7 +715,7 @@ public class RouterDAOImpl implements RouterDAO {
 	 * @param uuid
 	 * @param hostUuid
 	 * @return
-	 *//*
+	 */
 	public boolean updateHostUuid(String uuid, String hostUuid) {
 		boolean result = false;
 		Router rt = getRouter(uuid);
@@ -739,12 +735,12 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新路由器监控警告
 	 * 
 	 * @param routerUuid
 	 * @param alarmUuid
-	 *//*
+	 */
 	public void updateAlarm(String routerUuid, String alarmUuid) {
 		Session session = null;
 		try {
@@ -764,12 +760,12 @@ public class RouterDAOImpl implements RouterDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 是否有路由器具有该监控警告
 	 * 
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
 		boolean result = true;
@@ -794,7 +790,7 @@ public class RouterDAOImpl implements RouterDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新路由器电源状态和所在服务器
 	 * 
 	 * @param session

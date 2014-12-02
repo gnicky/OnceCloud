@@ -75,15 +75,15 @@ public interface UserDAO {
 	 */
 	public abstract boolean disableUser(int userId);
 
-//	/**
-//	 * 申请代金券
-//	 * 
-//	 * @param userId
-//	 * @param voucher
-//	 * @return
-//	 */
-//	public abstract boolean applyVoucher(int userId, int voucher);
-//
+	/**
+	 * 申请代金券
+	 * 
+	 * @param userId
+	 * @param voucher
+	 * @return
+	 */
+	public abstract boolean applyVoucher(int userId, int voucher);
+
 //	/**
 //	 * 确认代金券
 //	 * 
@@ -114,14 +114,14 @@ public interface UserDAO {
 	public abstract boolean updateUser(Integer userid, String userName,
 			String userMail, String userPhone, String userCompany, int userLevel);
 
-//	/**
-//	 * 更新用户余额
-//	 * 
-//	 * @param userid
-//	 * @param bill
-//	 * @return
-//	 */
-//	public abstract boolean updateBalance(int userId, double bill);
+	/**
+	 * 更新用户余额
+	 * 
+	 * @param userid
+	 * @param bill
+	 * @return
+	 */
+	public abstract boolean updateBalance(int userId, double bill);
 
 	public abstract List<User> getUserList();
 }

@@ -62,7 +62,7 @@ public class SnapshotAction {
 		return jsonobect.toString();
 	}
 
-	/*@RequestMapping(value = "/DetailList", method = { RequestMethod.GET })
+	@RequestMapping(value = "/DetailList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String detailList(HttpServletRequest request,
 			CreateSnapshotModel createsnapshotModel) {
@@ -112,5 +112,5 @@ public class SnapshotAction {
 		int userId = user.getUserId();
 		JSONObject jo = this.getSnapshotManager().rollbackSnapshot(userId, snapshotId, resourceUuid, resourceType);
 		return jo.toString();
-	}*/
+	}
 }

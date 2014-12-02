@@ -207,8 +207,7 @@ function getVolumeList(page, limit, search) {
                 var backupdate = obj.backupdate;
                 var backupStr = decodeURIComponent(backupdate);
                 if (backupdate == "") {
-                    var basePath = basePath;
-                    backupStr = '<a class="glyphicon glyphicon-camera backup" url="' + basePath + 'user/create/createsnapshot.jsp?rsid=' + volumeid + '&rstype=volume&rsname=' + volumename + '"></a>';
+                    backupStr = '<a class="glyphicon glyphicon-camera backup" url="snapshot/create?rsid=' + volumeid + '&rstype=volume&rsname=' + volumename + '"></a>';
                 }
                 if (depenname != "") {
                     depenname = '<a><span class="glyphicon glyphicon-cloud"></span>&nbsp;&nbsp;' + depenname + '</a>';

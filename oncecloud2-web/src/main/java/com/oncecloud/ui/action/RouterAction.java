@@ -42,7 +42,7 @@ public class RouterAction {
 		this.routerManager = routerManager;
 	}
 
-/*
+
 	@RequestMapping(value = "/RouterList", method = { RequestMethod.GET })
 	@ResponseBody
 	public String routerList(HttpServletRequest request, ListModel list) {
@@ -52,7 +52,7 @@ public class RouterAction {
 				list.getPage(), list.getLimit(), list.getSearch());
 		return ja.toString();
 	}
-*/
+
 	@RequestMapping(value = "/RouterDetail", method = { RequestMethod.GET })
 	@ResponseBody
 	public String routerDetail(HttpServletRequest request,
@@ -60,7 +60,7 @@ public class RouterAction {
 		JSONObject jo = this.getRouterManager().getRouterDetail(uuid);
 		return jo.toString();
 	}
-/*
+
 	@RequestMapping(value = "/StartUp", method = { RequestMethod.POST })
 	@ResponseBody
 	public void startUp(HttpServletRequest request, @RequestParam String uuid) {
@@ -239,6 +239,6 @@ public class RouterAction {
 		JSONObject jo = new JSONObject();
 		jo.put("result", this.getRouterManager().closePPTP(routerUuid, user));
 		return jo.toString();
-	}*/
+	}
 	
 }

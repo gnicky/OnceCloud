@@ -32,7 +32,7 @@ public class FeeDAOImpl implements FeeDAO {
 		this.sessionHelper = sessionHelper;
 	}
 
-/*	public boolean abandonEip(Date endDate, String eipUuid) {
+	public boolean abandonEip(Date endDate, String eipUuid) {
 		boolean result = false;
 		Session session = null;
 		try {
@@ -408,7 +408,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return count;
 	}
-*/
+
 	@SuppressWarnings({ "unchecked" })
 	public boolean deleteSnapshot(Date endDate, String vmUuid) {
 		boolean result = false;
@@ -437,7 +437,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-/*
+
 	public boolean deleteVolume(Date endDate, String volumeUuid) {
 		boolean result = false;
 		Session session = null;
@@ -464,7 +464,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean destoryVM(Date endDate, String vmUuid) {
 		boolean result = false;
 		Session session = null;
@@ -491,7 +491,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-/*
+
 	public double getEipTotalFee(int uid) {
 		double result = 0.0;
 		Session session = null;
@@ -1063,7 +1063,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-*/
+
 	public boolean insertFeeSnapshot(Integer snapshotUID, Date startDate,
 			Date endDate, Double snapshotPrice, Integer snapshotState,
 			String vmUuid, String vmName) {
@@ -1128,7 +1128,7 @@ public class FeeDAOImpl implements FeeDAO {
 		}
 		return result;
 	}
-/*
+
 	@SuppressWarnings({ "unchecked" })
 	public boolean updateAliveEipEndDate(Date nowDate) {
 		boolean result = false;
@@ -1294,11 +1294,11 @@ public class FeeDAOImpl implements FeeDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @param eipuuid
 	 * @param newName
 	 * @author xpx 2014-7-8
-	 *//*
+	 */
 	public boolean updateEipName(String eipuuid, String newName) {
 		boolean result = false;
 		Session session = null;
@@ -1321,11 +1321,11 @@ public class FeeDAOImpl implements FeeDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @param imageuuid
 	 * @param newName
 	 * @author xpx 2014-7-8
-	 *//*
+	 */
 	public boolean updateImageName(String imageuuid, String newName) {
 		boolean result = false;
 		Session session = null;
@@ -1348,11 +1348,11 @@ public class FeeDAOImpl implements FeeDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @param vmUuid
 	 * @param newName
 	 * @author xpx 2014-7-8
-	 *//*
+	 */
 	public boolean updateSnapshotVMName(String vmUuid, String newName) {
 		boolean result = false;
 		Session session = null;
@@ -1375,11 +1375,11 @@ public class FeeDAOImpl implements FeeDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @param vmuuid
 	 * @param newName
 	 * @author xpx 2014-7-8
-	 *//*
+	 */
 	public boolean updateVmName(String vmuuid, String newName) {
 		boolean result = false;
 		Session session = null;
@@ -1403,11 +1403,11 @@ public class FeeDAOImpl implements FeeDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * @param volumeuuid
 	 * @param newName
 	 * @author xpx 2014-7-8
-	 *//*
+	 */
 	public boolean updateVolumeName(String volumeuuid, String newName) {
 		boolean result = false;
 		Session session = null;
@@ -1428,5 +1428,5 @@ public class FeeDAOImpl implements FeeDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

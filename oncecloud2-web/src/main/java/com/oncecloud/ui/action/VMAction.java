@@ -122,7 +122,7 @@ public class VMAction {
 				.getBasicNetworkList(user.getUserId());
 		return ja.toString();
 	}
-/*
+
 	@RequestMapping(value = "/VMsOfUser", method = { RequestMethod.POST })
 	@ResponseBody
 	public String getVMsOfUser(HttpServletRequest request, ListModel lm) {
@@ -131,7 +131,7 @@ public class VMAction {
 				lm.getPage(), lm.getLimit(), lm.getSearch());
 		return ja.toString();
 	}
-*/
+
 	@RequestMapping(value = "/VMAdjust", method = { RequestMethod.POST })
 	@ResponseBody
 	public String adjustVM(HttpServletRequest request,

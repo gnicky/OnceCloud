@@ -222,7 +222,7 @@ public class VolumeManagerImpl implements VolumeManager {
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-/*
+
 	public void deleteVolume(int userId, String volUuid) {
 		boolean result = false;
 		String showId = "vol-" + volUuid.substring(0, 8);
@@ -243,7 +243,11 @@ public class VolumeManagerImpl implements VolumeManager {
 			e.printStackTrace();
 		} finally {
 			try {
-				this.getVolumeDAO().deleteVolume(userId, volUuid);
+				int size = this.getVolumeDAO().deleteVolume(userId, volUuid);
+				if (size != -1) {
+					this.getQuotaDAO().updateQuota(userId, "quotaDiskN", 1, false);
+					this.getQuotaDAO().updateQuota(userId, "quotaDiskS", size, false);
+				}
 				result = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -389,7 +393,7 @@ public class VolumeManagerImpl implements VolumeManager {
 					Utilities.stickyToError(log.toString()));
 		}
 	}
-*/
+
 	public String getQuota(int userId, int count, int size) {
 		String quota = "ok";
 		Quota qt = this.getQuotaDAO().getQuotaTotal(userId);
@@ -437,7 +441,7 @@ public class VolumeManagerImpl implements VolumeManager {
 		}
 		return jo;
 	}
-/*
+
 	public JSONArray getAvailableVolumes(int userId) {
 		JSONArray ja = new JSONArray();
 		List<Volume> volumeList = this.getVolumeDAO().getAbledVolumes(userId);
@@ -453,7 +457,7 @@ public class VolumeManagerImpl implements VolumeManager {
 		}
 		return ja;
 	}
-*/
+
 	public JSONArray getVolumesOfVM(String vmUuid) {
 		JSONArray ja = new JSONArray();
 		List<Volume> volumeList = this.getVolumeDAO().getVolListByVM(vmUuid);

@@ -56,13 +56,20 @@ public class VnetAction {
 		return ja.toString();
 	}
 
-	/*@RequestMapping(value = "/VMs", method = { RequestMethod.GET })
+	@RequestMapping(value = "/VMs", method = { RequestMethod.GET })
 	@ResponseBody
 	public String vms(HttpServletRequest request, @RequestParam String vnetUuid) {
 		JSONArray ja = this.getVnetManager().getVMs(vnetUuid);
 		return ja.toString();
 	}
 
+	/**
+	 * 私有网络绑定主机
+	 * 
+	 * @param request
+	 * @param vnId
+	 * @param vmUuid
+	 */
 	@RequestMapping(value = "/BindVM", method = { RequestMethod.POST })
 	@ResponseBody
 	public void bindVM(HttpServletRequest request, @RequestParam String vnId,
@@ -91,7 +98,17 @@ public class VnetAction {
 				.deleteVnet(user.getUserId(), uuid);
 		return result;
 	}
-*/
+
+	/**
+	 * 主机加入私有网络
+	 * 
+	 * @param request
+	 * @param vnId
+	 * @param vmuuidStr
+	 * @param content
+	 * @param conid
+	 * @return
+	 */
 	@RequestMapping(value = "/AddVM", method = { RequestMethod.GET })
 	@ResponseBody
 	public String addVM(HttpServletRequest request, @RequestParam String vnId,
@@ -102,7 +119,7 @@ public class VnetAction {
 				vmuuidStr, vnId, poolUuid, content, conid);
 		return jo.toString();
 	}
-/*
+
 	@RequestMapping(value = "/CheckNet", method = { RequestMethod.POST })
 	@ResponseBody
 	public String checkNet(HttpServletRequest request,
@@ -149,5 +166,5 @@ public class VnetAction {
 		User user = (User) request.getSession().getAttribute("user");
 		JSONArray ja = this.getVnetManager().getAvailableVnet(user.getUserId());
 		return ja.toString();
-	}*/
+	}
 }

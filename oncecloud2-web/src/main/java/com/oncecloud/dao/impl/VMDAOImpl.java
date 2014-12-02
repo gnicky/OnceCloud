@@ -71,7 +71,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @return
-	 *//*
+	 */
 	public OCVM getAliveVM(String vmUuid) {
 		OCVM vm = null;
 		Session session = null;
@@ -92,7 +92,7 @@ public class VMDAOImpl implements VMDAO {
 		return vm;
 	}
 
-	*//**
+	/**
 	 * 获取一页用户主机列表
 	 * 
 	 * @param userId
@@ -175,7 +175,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutAlarm(int page, int limit,
 			String search, int userId) {
@@ -203,7 +203,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取一页没有绑定公网IP的主机列表
 	 * 
 	 * @param page
@@ -211,7 +211,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getOnePageVMsWithoutEIP(int page, int limit,
 			String search, int userId) {
@@ -242,13 +242,13 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取对应监控警告的主机列表
 	 * 
 	 * @param vmUID
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public List<OCVM> getVMsOfAlarm(int vmUID, String alarmUuid) {
 		List<OCVM> vmList = null;
@@ -271,7 +271,7 @@ public class VMDAOImpl implements VMDAO {
 		return vmList;
 	}
 
-	*//**
+	/**
 	 * 获取对应私有网络的主机列表
 	 * 
 	 * @param vmVlan
@@ -421,7 +421,7 @@ public class VMDAOImpl implements VMDAO {
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countVMsWithoutAlarm(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -444,13 +444,13 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取未绑定公网IP的主机总数
 	 * 
 	 * @param search
 	 * @param userId
 	 * @return
-	 *//*
+	 */
 	public int countVMsWithoutEIP(String search, int userId) {
 		int count = 0;
 		Session session = null;
@@ -476,12 +476,12 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取指定私有网络的主机总数
 	 * 
 	 * @param vnetUuid
 	 * @return
-	 *//*
+	 */
 	public int countVMsOfVnet(String vnetUuid) {
 		int count = -1;
 		Session session = null;
@@ -502,7 +502,7 @@ public class VMDAOImpl implements VMDAO {
 		return count;
 	}
 
-	*//**
+	/**
 	 * 获取指定服务器的主机总数
 	 * 
 	 * @param hostUuid
@@ -708,7 +708,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param vmUuid
 	 * @param firewallId
-	 *//*
+	 */
 	public void updateFirewall(String vmUuid, String firewallId) {
 		Session session = null;
 		try {
@@ -728,12 +728,12 @@ public class VMDAOImpl implements VMDAO {
 		}
 	}
 
-	*//**
+	/**
 	 * 更新主机监控警告
 	 * 
 	 * @param vmUuid
 	 * @param alarmUuid
-	 *//*
+	 */
 	public boolean updateAlarm(String vmUuid, String alarmUuid) {
 		boolean result = false;
 		Session session = null;
@@ -756,7 +756,7 @@ public class VMDAOImpl implements VMDAO {
 		return result;
 	}
 
-	*//**
+	/**
 	 * 更新主机名称和描述
 	 * 
 	 * @param vmUuid
@@ -1024,7 +1024,7 @@ public class VMDAOImpl implements VMDAO {
 	 * 
 	 * @param alarmUuid
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean isNotExistAlarm(String alarmUuid) {
 		boolean result = true;
@@ -1047,5 +1047,5 @@ public class VMDAOImpl implements VMDAO {
 			}
 		}
 		return result;
-	}*/
+	}
 }

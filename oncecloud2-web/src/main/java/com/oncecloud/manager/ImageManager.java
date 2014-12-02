@@ -27,12 +27,12 @@ public interface ImageManager {
 //	public abstract JSONArray createImage(int userId, int userLevel,
 //			String imageUuid, String imageName, String imageServer,
 //			int imageOs, String imageDesc, String imagePwd);
-//
-//	public abstract JSONObject deleteImage(int userId, String imageId,
-//			String imageName);
-//
-//	public abstract JSONObject getBasciList(String imageUuid);
-//
+
+	public abstract JSONObject deleteImage(int userId, String imageId,
+			String imageName);
+
+	public abstract JSONObject getBasciList(String imageUuid);
+
 //	public abstract JSONArray getShareImageList(String poolUuid,
 //			String[] imageUuids);
 //
