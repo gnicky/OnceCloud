@@ -358,7 +358,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 			String queryString1 = "select count(distinct ss.snapshotVm) "
 					+ "from Snapshot ss where ss.snapshotVm in "
 					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
-					+ "and vm.vmName like :search')";
+					+ "and vm.vmName like :search)";
 			Query query = session.createQuery(queryString1);
 			query.setInteger("userId", userId);
 			query.setString("search", "%" + search + "%");
@@ -388,7 +388,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 			String queryString1 = "select count(distinct ss.snapshotVm) "
 					+ "from Snapshot ss where ss.snapshotVm in "
 					+ "(select vm.vmUuid from OCVM vm where vm.vmUID= :userId "
-					+ "and vm.vmName like :search')";
+					+ "and vm.vmName like :search)";
 			Query query1 = session.createQuery(queryString1);
 			query1.setInteger("userId", userId);
 			query1.setString("search", "%" + search + "%");
@@ -396,7 +396,7 @@ public class SnapshotDAOImpl implements SnapshotDAO {
 			String queryString2 = "select count(distinct ss.snapshotVolume) "
 					+ "from Snapshot ss where ss.snapshotVolume in "
 					+ "(select v.volumeUuid from Volume v where v.volumeUID = :userId "
-					+ "and v.volumeName like :search')";
+					+ "and v.volumeName like :search)";
 			Query query2 = session.createQuery(queryString2);
 			query2.setInteger("userId", userId);
 			query2.setString("search", "%" + search + "%");

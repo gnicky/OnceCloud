@@ -367,6 +367,7 @@ public class VMManagerImpl implements VMManager {
 				port = Integer.parseInt(location.substring(len - 4));
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return port;
 	}

@@ -1,4 +1,4 @@
-<%@page import="com.oncecloud.listener.UserSessionListener"%>
+<%@page import="com.beyondbackend.listener.UserSessionListener"%>
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="utf-8"%>
 <div class="content" id="platformcontent" platformUserId="${user.userId}" platformBasePath="${basePath}">
 	<div class="intro">

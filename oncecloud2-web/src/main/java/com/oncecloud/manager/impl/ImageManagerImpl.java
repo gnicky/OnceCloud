@@ -254,7 +254,7 @@ public class ImageManagerImpl implements ImageManager {
 		return result;
 	}
 
-	public JSONObject makeImage(String uuid, String newName, int uid,
+	private JSONObject makeImage(String uuid, String newName, int uid,
 			String desc) {
 		JSONObject result = new JSONObject();
 		result.put("result", false);

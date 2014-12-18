@@ -294,31 +294,37 @@ public class HostManagerImpl implements HostManager{
 		JSONArray qaArray = new JSONArray();
 		boolean isSame = false;
 		if (ja.size() > 0) {
-			String firstUuid = ja.get(0).getAsString();
-			List<Storage> srlist1 = this.getHostDAO().getSROfHost(firstUuid);
-			Set<String> srSet1 = new HashSet<String>();
-			for (Storage sr : srlist1) {
-				srSet1.add(sr.getSrUuid());
-			}
-			for (int i = 1; i < ja.size(); i++) {
-				String uuid = ja.get(i).getAsString();
-				List<Storage> srlist2 = this.getHostDAO().getSROfHost(uuid);
-				Set<String> srSet2 = new HashSet<String>();
-				for (Storage sr : srlist2) {
-					srSet2.add(sr.getSrUuid());
+			if (ja.size() > 1) {
+				String firstUuid = ja.get(0).getAsString();
+				List<Storage> srlist1 = this.getHostDAO().getSROfHost(firstUuid);
+				Set<String> srSet1 = new HashSet<String>();
+				for (Storage sr : srlist1) {
+					srSet1.add(sr.getSrUuid());
 				}
-				if (isSameSr(srSet1, srSet2)) {
-					isSame = true;
-					break;
+				for (int i = 1; i < ja.size(); i++) {
+					String uuid = ja.get(i).getAsString();
+					List<Storage> srlist2 = this.getHostDAO().getSROfHost(uuid);
+					Set<String> srSet2 = new HashSet<String>();
+					for (Storage sr : srlist2) {
+						srSet2.add(sr.getSrUuid());
+					}
+					if (isSameSr(srSet1, srSet2)) {
+						isSame = true;
+						break;
+					}
 				}
-			}
-			if (isSame) {
-				JSONObject tObj1 = new JSONObject();
-				tObj1.put("isSuccess", true);
-				qaArray.put(tObj1);
+				if (isSame) {
+					JSONObject tObj1 = new JSONObject();
+					tObj1.put("isSuccess", true);
+					qaArray.put(tObj1);
+				} else {
+					JSONObject tObj = new JSONObject();
+					tObj.put("isSuccess", false);
+					qaArray.put(tObj);
+				}
 			} else {
 				JSONObject tObj = new JSONObject();
-				tObj.put("isSuccess", false);
+				tObj.put("isSuccess", true);
 				qaArray.put(tObj);
 			}
 		} else {
