@@ -26,6 +26,7 @@ import com.oncecloud.dao.VMDAO;
 import com.oncecloud.entity.OCHost;
 import com.oncecloud.entity.OCLog;
 import com.oncecloud.entity.OCPool;
+import com.oncecloud.ha.core.HaManager;
 import com.oncecloud.log.LogConstant;
 import com.oncecloud.main.Utilities;
 import com.oncecloud.manager.HostManager;
@@ -376,46 +377,27 @@ public class PoolManagerImpl implements PoolManager {
 	public String StartHa(String poolUuid,String masterIP,String haPath) {
 		// TODO Auto-generated method stub
 		saveHaPath(poolUuid,haPath);
-		
-		HttpClient client = new HttpClient();
-		PostMethod post = new PostMethod("http://127.0.0.1/haPool/start");
+
 		try {
-			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");// 在头文件中设置转码
-			NameValuePair[] data = { new NameValuePair("poolUUID", poolUuid),
-					new NameValuePair("masterIP",masterIP), new NameValuePair("haPath", haPath)};
-			post.setRequestBody(data);
-			client.executeMethod(post);
-			String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
-			System.out.println(result); // 打印返回消息状态
-			return result;
+			HaManager.startHAPool(poolUuid,haPath,masterIP);
+			return "成功";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "失败";
-		} finally {
-			post.releaseConnection();
-		}
+		} 
 	}
 	
 	public String StopHa(String poolUuid,String masterIP,String haPath) {
 		// TODO Auto-generated method stub
 		saveHaPath(poolUuid,haPath);
 		
-		HttpClient client = new HttpClient();
-		PostMethod post = new PostMethod("http://127.0.0.1/haPool/stop");
 		try {
-			post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");// 在头文件中设置转码
-			NameValuePair[] data = { new NameValuePair("poolUUID", poolUuid)};
-			post.setRequestBody(data);
-			client.executeMethod(post);
-			String result = new String(post.getResponseBodyAsString().getBytes("utf-8"));
-			System.out.println(result); // 打印返回消息状态
-			return result;
+			HaManager.stopPoolHA(poolUuid);
+			return "成功";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "失败";
-		} finally {
-			post.releaseConnection();
-		}
+		} 
 	}
 	
 	private boolean saveHaPath(String poolUuid,String haPath)
